@@ -160,6 +160,23 @@ const options = {
           y: 60
         }
       ]
+    },
+    {
+      name: "dfgdgsdf",
+      data: [
+        {
+          color: {
+            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+            stops: [
+              [0, "#FE2D2F"], // start
+              [1, "#CC0002"] // end
+            ]
+          },
+          radius: "68%",
+          innerRadius: "63%",
+          y: 80
+        }
+      ]
     }
   ]
 };
