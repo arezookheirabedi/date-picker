@@ -109,7 +109,9 @@ const Table: React.FC<IProps> = (props: IProps) => {
                   <tr className="transition-all border-b border-gray-100" key={i}>
                     {columns?.map((column, j) => (
                       <td
-                        className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${column.className}`}
+                        className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${
+                          column.className ? column.className : ''
+                        }`}
                         key={j}
                       >
                         {column.render
