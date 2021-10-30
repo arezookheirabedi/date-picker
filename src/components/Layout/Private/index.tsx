@@ -69,7 +69,7 @@ const PrivateLayout: React.FC<any> = () => {
     <>
       <div
         ref={wrapperRef}
-        className={`sidebar-menu border-l xl:border-none overflow-auto h-screen fixed z-50 overflow-hidden w-72 pb-12 bg-white transition-all ease-in-out duration-300 
+        className={`border-l xl:border-none overflow-auto h-screen fixed z-50 overflow-hidden w-72 pb-12 bg-white transition-all ease-in-out duration-300 
           ${collapsed && collapsible ? ' -right-72' : ' right-0'}
           `}
       >
@@ -142,9 +142,9 @@ const PrivateLayout: React.FC<any> = () => {
           </div>
           <div className="bg-white flex-grow flex flex-col relative">
             <Switch>
-              {routes.map((route, i) => (
+               {routes.map((route, i) => (
                 <Route path={route.link} exact={route.exact} key={i} component={route.main} />
-              ))}
+               ))}
               <Route component={Overview} />
             </Switch>
           </div>

@@ -1,9 +1,7 @@
 @import './fonts';
-@import './custom/otp';
-@import './custom/sidebar';
 @import "./components/dot-loading";
 * {
-  font-family: IRANSansX;
+  font-family: IRANSans;
 }
 
 html {
@@ -27,7 +25,7 @@ html::-webkit-scrollbar-thumb {
 }
 
 body {
-  font-family: IRANSansX !important;
+  font-family: IRANSans !important;
   background-color: #ffffff;
   margin: 0;
 }
