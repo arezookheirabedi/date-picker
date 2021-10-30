@@ -187,11 +187,11 @@ const Guild: React.FC<any> = () => (
       <div>
         head
       </div>
-      <div className="flex justify-between">
-        <div className="w-7/12">
+      <div className="flex flex-col lg:flex-row justify-between space-y-5 lg:space-y-0 space-x-0 lg:space-x-5 rtl:space-x-reverse">
+        <div className="lg:w-7/12">
           <HighchartsReact highcharts={Highcharts} options={options}/>
         </div>
-        <div className="w-5/12">
+        <div className="lg:w-5/12">
           <Gauge />
         </div>
       </div>
