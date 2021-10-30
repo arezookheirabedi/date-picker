@@ -3,6 +3,7 @@ import React from 'react';
 import {IRoute} from './models/route';
 import {IconWrapperStyle} from './components/IconWrapper';
 import Overview from './containers/Overview/Overview';
+import Guild from './containers/Guild/Guild';
 
 const routes: IRoute[] = [
   {
@@ -59,7 +60,7 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'داشبورد اصناف',
     // disabled: true,
-    main: () => <>guild</>,
+    main: Guild,
   },
   {
     keyIndex: '6',
