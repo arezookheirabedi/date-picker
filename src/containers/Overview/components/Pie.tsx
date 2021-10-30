@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect, useRef} from 'react';
 
 import Highcharts from 'highcharts';
-import PatternFill from 'highcharts/modules/pattern-fill.src';
+import PatternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
 import pattern1 from 'src/assets/images/patterns/pie-orange.svg';
 import pattern4 from 'src/assets/images/patterns/pie-dark-red.svg';
@@ -166,6 +166,8 @@ const options: (data: any[]) => any = data => {
 interface IProps {
   data: any[];
 }
+
+
 
 const Pie: React.FC<IProps> = ({data}) => {
   const chartRef = useRef<any>();
