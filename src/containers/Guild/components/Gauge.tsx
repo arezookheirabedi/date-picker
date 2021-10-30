@@ -10,10 +10,9 @@ HighchartsSolidGauge(Highcharts);
 const options = {
   chart: {
     type: "solidgauge",
-    // height: "200px",
-    // width: '1%',
-    spacing: [0, 0, 0, 0],
-
+    width: "250",
+    height : "250",
+    className: 'guild-gauge-chart',
     events: {
       //     render: renderIcons
     }
@@ -22,7 +21,8 @@ const options = {
   title: {
     text: "درصد رشد مبتلایان امروز",
     style: {
-      fontSize: "24px"
+      fontSize: "14px",
+      fontWeight : 600
     }
   },
   credits: {
@@ -183,7 +183,7 @@ const options = {
 
 const Gauge: React.FC<any> = () => {
   return (
-    <div>
+    <div className="h-full lg:w-1/2 mx-auto bg-gray-1 rounded-lg">
       <HighchartsReact highcharts={Highcharts} options={options}/>
     </div>
   )

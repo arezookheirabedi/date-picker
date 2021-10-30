@@ -1,5 +1,6 @@
 @import './fonts';
 @import "./components/dot-loading";
+@import "./components/guild-gauge-chart";
 * {
   font-family: IRANSans;
 }
@@ -82,6 +83,10 @@ h1 {
 }
 .text-bold {
   font-weight: bold;
+}
+
+.bg-gray-1{
+  background-color: #E5E5E559;
 }
 
 .text-extrabold {
