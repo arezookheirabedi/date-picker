@@ -1,29 +1,34 @@
 import React from 'react';
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 
 import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import guildIcon from 'src/assets/images/icons/guild-color.svg';
-import transportIcon from 'src/assets/images/icons/transport-color.svg';
-import passengerIcon from 'src/assets/images/icons/passenger-color.svg';
+import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
+import scanIcon from 'src/assets/images/icons/scan-color.svg';
+import scanDangerIcon from 'src/assets/images/icons/scan-danger-color.svg';
+import testIcon from 'src/assets/images/icons/test-color.svg';
+import Table from 'src/components/Table';
 import Statistic from './components/Statistic';
-import Gauge from "./components/Gauge";
+import Gauge from './components/Gauge';
+import Map from './components/Map';
+import CategoryDonut from './components/CategoryDonut';
 
 const options = {
   chart: {
-    type: "column",
+    type: 'column',
     direction: 'rtl',
     // styledMode: true
   },
   title: {
-    text: null
+    text: null,
   },
   credits: {
-    enabled: false
+    enabled: false,
   },
-  colors: ["#FE2D2F"],
+  colors: ['#FE2D2F'],
   plotOptions: {
     column: {
       marker: {
@@ -38,118 +43,126 @@ const options = {
               //   [1, "#FF9400"] // end
               // ]
             },
-            lineColor: "#fff",
-            lineWidth: 3
-          }
-        }
+            lineColor: '#fff',
+            lineWidth: 3,
+          },
+        },
       },
       lineWidth: 2,
       threshold: null,
       borderRadius: 14,
-      pointWidth: 28
-    }
+      pointWidth: 28,
+    },
   },
   yAxis: {
-    gridLineDashStyle: "dash",
-    lineDashStyle: "dash",
-    lineColor: "#000000",
+    gridLineDashStyle: 'dash',
+    lineDashStyle: 'dash',
+    lineColor: '#000000',
     lineWidth: 1,
     opposite: true,
     title: {
-      enabled: false
-    }
+      enabled: false,
+    },
   },
   legend: {
-    enabled: false
+    enabled: false,
   },
   xAxis: {
-    categories: ['دیگر رسته‌ها', 'باشگاه های ورزشی', 'سینما‌ها', 'آرایشگاه‌ها', 'رستوران‌ها', 'پاساژها', 'سوپر مارکت'],
-    lineDashStyle: "dash",
-    lineColor: "#000000",
+    categories: [
+      'دیگر رسته‌ها',
+      'باشگاه های ورزشی',
+      'سینما‌ها',
+      'آرایشگاه‌ها',
+      'رستوران‌ها',
+      'پاساژها',
+      'سوپر مارکت',
+    ],
+    lineDashStyle: 'dash',
+    lineColor: '#000000',
     lineWidth: 1,
   },
   tooltip: {
     shared: true,
     useHTML: true,
     borderRadius: 16,
-    borderWidth: 0
+    borderWidth: 0,
     // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
   series: [
     {
-      name: "save",
+      name: 'save',
       data: [
         {
           y: 10,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, 0.4)"], // start
-              [1, "rgba(204, 0, 2, 0.4)"] // end
+              [0, 'rgba(254, 45, 47, 0.4)'], // start
+              [1, 'rgba(204, 0, 2, 0.4)'], // end
             ],
-            opacity: 60
-          }
+            opacity: 60,
+          },
         },
         {
           y: 15,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, .6)"], // start
-              [1, "rgba(204, 0, 2, .6)"] // end
-            ]
-          }
+              [0, 'rgba(254, 45, 47, .6)'], // start
+              [1, 'rgba(204, 0, 2, .6)'], // end
+            ],
+          },
         },
         {
           y: 20,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, .6)"], // start
-              [1, "rgba(204, 0, 2, .6)"] // end
-            ]
-          }
+              [0, 'rgba(254, 45, 47, .6)'], // start
+              [1, 'rgba(204, 0, 2, .6)'], // end
+            ],
+          },
         },
         {
           y: 25,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, .8)"], // start
-              [1, "rgba(204, 0, 2, .8)"] // end
-            ]
-          }
+              [0, 'rgba(254, 45, 47, .8)'], // start
+              [1, 'rgba(204, 0, 2, .8)'], // end
+            ],
+          },
         },
         {
           y: 40,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, .8)"], // start
-              [1, "rgba(204, 0, 2, .8)"] // end
-            ]
-          }
+              [0, 'rgba(254, 45, 47, .8)'], // start
+              [1, 'rgba(204, 0, 2, .8)'], // end
+            ],
+          },
         },
         {
           y: 50,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, 1)"], // start
-              [1, "rgba(204, 0, 2, 1)"] // end
-            ]
-          }
+              [0, 'rgba(254, 45, 47, 1)'], // start
+              [1, 'rgba(204, 0, 2, 1)'], // end
+            ],
+          },
         },
         {
           y: 60,
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
-              [0, "rgba(254, 45, 47, 1)"], // start
-              [1, "rgba(204, 0, 2, 1)"] // end
-            ]
-          }
-        }
+              [0, 'rgba(254, 45, 47, 1)'], // start
+              [1, 'rgba(204, 0, 2, 1)'], // end
+            ],
+          },
+        },
         // ,
         // {
         //   y: 70,
@@ -171,25 +184,20 @@ const options = {
         //     ]
         //   }
         // }
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
 
 const Guild: React.FC<any> = () => (
   <div className="p-5 pl-8 lg:pl-12 pr-8 xl:pr-28 space-y-16">
-
     <fieldset className="text-center border rounded-xl p-4">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت مسافران
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران</legend>
 
-      <div>
-        head
-      </div>
+      <div>head</div>
       <div className="flex flex-col lg:flex-row justify-between space-y-5 lg:space-y-0 space-x-0 lg:space-x-5 rtl:space-x-reverse">
         <div className="lg:w-7/12">
-          <HighchartsReact highcharts={Highcharts} options={options}/>
+          <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
         <div className="lg:w-5/12">
           <Gauge />
@@ -197,45 +205,138 @@ const Guild: React.FC<any> = () => (
       </div>
     </fieldset>
 
-    <fieldset className="text-center border rounded-xl p-4">
-      <legend className="text-black mx-auto px-3">
-        وضعیت کلی مسافران کشور
-      </legend>
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت رسته‌ها</legend>
+      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+        <Table
+          dataSet={[
+            {
+              id: '617d54a39d4b1f0efd2d5904',
+              name: 'Lynne',
+              employeesCount: 60,
+              infectedCount: 2253,
+              saveCount: 2279,
+              deadCount: 91,
+              infectedPercent: 24,
+            },
+            {
+              id: '617d54a3e34765550c16dce3',
+              name: 'Olsen',
+              employeesCount: 840,
+              infectedCount: 605,
+              saveCount: 2930,
+              deadCount: 1294,
+              infectedPercent: 93,
+            },
+            {
+              id: '617d54a341381bf85e5b6eca',
+              name: 'Saunders',
+              employeesCount: 3565,
+              infectedCount: 3727,
+              saveCount: 3089,
+              deadCount: 741,
+              infectedPercent: 92,
+            },
+            {
+              id: '617d54a3b02e2e7d71ca9d12',
+              name: 'Alexis',
+              employeesCount: 1998,
+              infectedCount: 2748,
+              saveCount: 628,
+              deadCount: 2815,
+              infectedPercent: 35,
+            },
+            {
+              id: '617d54a35649c264fcd29dc7',
+              name: 'Gayle',
+              employeesCount: 3384,
+              infectedCount: 2138,
+              saveCount: 3535,
+              deadCount: 2525,
+              infectedPercent: 74,
+            },
+            {
+              id: '617d54a3feaea113cefef758',
+              name: 'Mercer',
+              employeesCount: 134,
+              infectedCount: 647,
+              saveCount: 807,
+              deadCount: 1156,
+              infectedPercent: 72,
+            },
+          ]}
+          pagination={{pageSize: 20, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت کلی',
+              key: '',
+              render: () => <CategoryDonut />,
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'نام رسته',
+              key: 'name',
+              render: (v: any, record, index: number) => (
+                <span>
+                  {(index + 1).toLocaleString('fa')}.{v}
+                </span>
+              ),
+            },
+            {
+              name: 'تعداد کارمندان',
+              key: 'employeesCount',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+            },
+            {
+              name: 'درصد ابتلا',
+              key: 'infectedPercent',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'تعداد مبتلایان',
+              key: 'infectedCount',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+            },
+            {
+              name: 'تعداد بهبودیافتگان',
+              key: 'saveCount',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+            },
+            {
+              name: 'تعداد فوت‌شدگان',
+              key: 'deadCount',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+            },
+          ]}
+          totalItems={0}
+        />
+      </div>
+    </fieldset>
+
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
+      <legend className="text-black mx-auto px-3">وضعیت کلی اصناف کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={guildIcon} text="مجموع کارمندان" count={2800}/>
-          <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800}/>
-          <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450}/>
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200}/>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={guildIcon} text="مجموع کارمندان" count={2800} />
+          <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800} />
+          <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200} />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={guildIcon} text="مجموع واکسیناسیون" count={654}/>
-          <Statistic icon={guildIcon} text="تعداد استعلام شهروندان" count={654}/>
-          <Statistic icon={transportIcon} text="تعداد استعلام های نتیجه مثبت" count={428}/>
-          <Statistic icon={passengerIcon} text="تعداد آزمایش های کاربران" count={864}/>
-        </div>
-
-        <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-          map
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={654} />
+          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={654} />
+          <Statistic icon={scanDangerIcon} text="تعداد استعلام های نتیجه مثبت" count={428} />
+          <Statistic icon={testIcon} text="تعداد آزمایش های کاربران" count={864} />
         </div>
       </div>
     </fieldset>
 
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت کرونا کشور</legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        chart
-      </div>
-    </fieldset>
-
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت اصناف استان‌ تهران</legend>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        chart
+        <Map />
       </div>
     </fieldset>
   </div>
