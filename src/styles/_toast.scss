@@ -1,0 +1,21 @@
+.ct-toast {
+  border: none !important;
+}
+
+.ct-text-group {
+  margin-left: 0 !important;
+  margin-right: 0.5rem;
+}
+
+#ct-p-0 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  .ct-toast {
+    padding: 0 !important;
+    .ct-text-group {
+      margin: 0 !important;
+    }
+  }
+}

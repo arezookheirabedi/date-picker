@@ -1,0 +1,22 @@
+.otp {
+  width: 100% !important;
+  direction: rtl;
+  > div {
+    direction: ltr !important;
+    display: flex !important;
+    justify-content: space-evenly !important;
+
+    input {
+      border-top: 1px solid transparent !important;
+      border-right: 1px solid transparent !important;
+      border-left: 1px solid transparent !important;
+      border-bottom: 2px solid #bcbec0 !important;
+      font-family: inherit !important;
+      width: 35px !important;
+      padding-bottom: 3px;
+      font-size: 1.5rem;
+      outline: none !important;
+      margin: 0 0.5rem;
+    }
+  }
+}
