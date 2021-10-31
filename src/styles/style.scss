@@ -1,6 +1,10 @@
 @import './fonts';
 @import "./components/dot-loading";
+@import "./components/gauge-sub-info";
 @import "./components/guild-gauge-chart";
+@import "./components/guild-column-chart";
+@import "./components/guild-map-chart";
+@import "./components/sign";
 * {
   font-family: IRANSans;
 }
