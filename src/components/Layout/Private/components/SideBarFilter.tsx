@@ -89,7 +89,7 @@ const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter})
 
   // @ts-ignore
   return (
-    <div className={`side-bar-filter ${filterCollapse ? 'w-0' : 'w-80'}`}>
+    <div className={`side-bar-filter fixed top-0 left-0 z-50 ${filterCollapse ? 'w-0' : 'w-80'}`}>
       <button
         type="button"
         className="side-bar-filter__button absolute top-1/2"
@@ -98,7 +98,7 @@ const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter})
         <SidebarFilterIcon/>
       </button>
 
-      <div className="side-bar-filter__holder relative z-10 h-full overflow-hidden bg-white">
+      <div className="side-bar-filter__holder relative z-10 h-screen overflow-auto bg-white">
         <h5 className="text-center  text-primary-color text-xl mb-4">فیلتر</h5>
         <Slider marks={marks} step={1} min={0} max={3}
                 onChange={detectSliderChange}
@@ -115,21 +115,121 @@ const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter})
         </div>
 
         <h5 className="text-right  text-primary-color text-base mb-3 mx-auto">جنسیت</h5>
-        <div className="form__group flex justify-between">
-          <div className="form__radio-group">
-            <input type="radio" id="male" name="gender" className="form__radio-input"/>
-            <label htmlFor="male" className="form__radio-label">
-              <span className="form__radio-button"/>
+        <div className="radio-holder flex justify-between mb-12">
+          <div className="radio-holder__group">
+            <input type="radio" id="male" name="gender" className="radio-holder__radio-input"/>
+            <label htmlFor="male" className="radio-holder__radio-label">
+              <span className="radio-holder__radio-button"/>
               مذکر
             </label>
           </div>
-          <div className="form__radio-group">
-            <input type="radio" id="female" name="gender" className="form__radio-input"/>
-            <label htmlFor="female" className="form__radio-label">
-              <span className="form__radio-button"/>
+          <div className="radio-holder__group">
+            <input type="radio" id="female" name="gender" className="radio-holder__radio-input"/>
+            <label htmlFor="female" className="radio-holder__radio-label">
+              <span className="radio-holder__radio-button"/>
               مونث
             </label>
           </div>
+        </div>
+
+        <h5 className="text-right  text-primary-color text-base mb-3 mx-auto">استان</h5>
+        <div className="input-holder mb-12">
+          <input type="text" placeholder="استان" />
+        </div>
+
+        <h5 className="text-right  text-primary-color text-base mb-4 mx-auto">واکسن</h5>
+        <div className="select-radio mb-12">
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="not-done"
+                   name="vaccine"/>
+            <label htmlFor="not-done"
+                   className="select-radio__label">
+              <span className="select-radio__button"/>
+              انجام نشده
+            </label>
+          </div>
+
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="first-dose-done" name="vaccine"/>
+            <label htmlFor="first-dose-done" className="select-radio__label">
+              <span className="select-radio__button"/>
+              دوز اول انجام شده
+            </label>
+          </div>
+
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="second-dose-done" name="vaccine"/>
+            <label htmlFor="second-dose-done" className="select-radio__label">
+              <span className="select-radio__button"/>
+              هر دو دوز انجام شده
+            </label>
+          </div>
+        </div>
+
+
+        <h5 className="text-right  text-primary-color text-base mb-4 mx-auto">برند واکسن</h5>
+        <div className="select-radio mb-12">
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="barekat"
+                   name="vaccine-type"/>
+            <label htmlFor="barekat"
+                   className="select-radio__label">
+              <span className="select-radio__button"/>
+              برکت
+            </label>
+          </div>
+
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="sinopharm" name="vaccine-type"/>
+            <label htmlFor="sinopharm" className="select-radio__label">
+              <span className="select-radio__button"/>
+              سینوفارم
+            </label>
+          </div>
+
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="astrazeneca" name="vaccine-type"/>
+            <label htmlFor="astrazeneca" className="select-radio__label">
+              <span className="select-radio__button"/>
+              آسترازنکا
+            </label>
+          </div>
+        </div>
+
+
+        <h5 className="text-right  text-primary-color text-base mb-4 mx-auto">وضعیت</h5>
+        <div className="select-radio mb-12">
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="improved"
+                   name="status"/>
+            <label htmlFor="improved"
+                   className="select-radio__label">
+              <span className="select-radio__button"/>
+              بهبود یافتگان
+            </label>
+          </div>
+
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="infected" name="status"/>
+            <label htmlFor="infected" className="select-radio__label">
+              <span className="select-radio__button"/>
+              مبتلا شدگان
+            </label>
+          </div>
+
+          <div className="select-radio__group">
+            <input type="radio" className="select-radio__input" id="dead" name="status"/>
+            <label htmlFor="dead" className="select-radio__label">
+              <span className="select-radio__button"/>
+              فوت شدگان
+            </label>
+          </div>
+        </div>
+
+        <div className="w-3/5 mx-auto" >
+          <button type="button" className="btn btn--primary">
+            اعمال فیلتر
+          </button>
         </div>
 
       </div>
