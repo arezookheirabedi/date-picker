@@ -1,8 +1,11 @@
 import React, {useState} from "react";
 import Slider from 'rc-slider';
-import {ReactComponent as SidebarFilterIcon} from "../../../../assets/images/icons/sidebar-filter.svg";
 
 import 'rc-slider/assets/index.css';
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import {Calendar} from "react-modern-calendar-datepicker";
+
+import {ReactComponent as SidebarFilterIcon} from "../../../../assets/images/icons/sidebar-filter.svg";
 
 interface ISideBarFilter {
   filterCollapse: any,
@@ -12,6 +15,7 @@ interface ISideBarFilter {
 
 const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter}) => {
 
+  const [selectedDay] = useState(null);
   const [marks, setMarks] = useState([
     {
       value: 0,
@@ -85,20 +89,49 @@ const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter})
 
   // @ts-ignore
   return (
-    <div className={`side-bar-filter relative ${filterCollapse ? 'w-0' : 'w-80'}`}>
+    <div className={`side-bar-filter ${filterCollapse ? 'w-0' : 'w-80'}`}>
       <button
         type="button"
-        className="absolute top-1/2"
+        className="side-bar-filter__button absolute top-1/2"
         onClick={toggleFilter}
       >
         <SidebarFilterIcon/>
       </button>
 
       <div className="side-bar-filter__holder relative z-10 h-full overflow-hidden bg-white">
+        <h5 className="text-center  text-primary-color text-xl mb-4">فیلتر</h5>
         <Slider marks={marks} step={1} min={0} max={3}
                 onChange={detectSliderChange}
                 className="filter-range-slider" railStyle={railStyle} trackStyle={trackStyle} dotStyle={dotStyle}
                 handleStyle={handleStyle}/>
+        <div className="side-bar-filter__holder__calendar mt-16">
+          <h5 className="text-right  text-primary-color text-base mb-3 mx-auto">تقویم</h5>
+          <Calendar
+            value={selectedDay}
+            calendarClassName="filter-calendar"
+            shouldHighlightWeekends
+            locale="fa"
+          />
+        </div>
+
+        <h5 className="text-right  text-primary-color text-base mb-3 mx-auto">جنسیت</h5>
+        <div className="form__group flex justify-between">
+          <div className="form__radio-group">
+            <input type="radio" id="male" name="gender" className="form__radio-input"/>
+            <label htmlFor="male" className="form__radio-label">
+              <span className="form__radio-button"/>
+              مذکر
+            </label>
+          </div>
+          <div className="form__radio-group">
+            <input type="radio" id="female" name="gender" className="form__radio-input"/>
+            <label htmlFor="female" className="form__radio-label">
+              <span className="form__radio-button"/>
+              مونث
+            </label>
+          </div>
+        </div>
+
       </div>
     </div>
   )
