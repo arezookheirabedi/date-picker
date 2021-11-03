@@ -1,6 +1,8 @@
 @import './fonts';
 @import "./components/dot-loading";
+@import "./components/filter-calendar";
 @import "./components/filter-range-slider";
+@import "./components/form-group";
 @import "./components/gauge-sub-info";
 @import "./components/guild-gauge-chart";
 @import "./components/guild-column-chart";
@@ -39,6 +41,10 @@ body {
 
 h1 {
   font-weight: bold;
+}
+
+.text-primary-color{
+  color : #21384F;
 }
 
 .ltr {
