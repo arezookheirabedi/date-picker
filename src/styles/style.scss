@@ -1,4 +1,5 @@
 @import './fonts';
+@import "./components/button";
 @import "./components/dot-loading";
 @import "./components/filter-calendar";
 @import "./components/filter-range-slider";
@@ -7,6 +8,8 @@
 @import "./components/guild-gauge-chart";
 @import "./components/guild-column-chart";
 @import "./components/guild-map-chart";
+@import "./components/input-holder";
+@import "./components/select-radio";
 @import "./components/side-bar-filter";
 @import "./components/sign";
 * {
