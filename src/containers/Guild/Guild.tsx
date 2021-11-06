@@ -23,7 +23,7 @@ const Guild: React.FC<any> = () => {
       <fieldset className="text-center border rounded-xl p-4">
         <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران</legend>
 
-        <div>head</div>
+        {/* <div>head</div> */}
         <div className="md:flex  justify-between space-y-5 lg:space-y-0">
           <div className="w-full lg:w-7/12">
             <Column/>
