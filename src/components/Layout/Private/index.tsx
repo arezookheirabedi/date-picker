@@ -129,7 +129,7 @@ const PrivateLayout: React.FC<any> = () => {
 
             <div className="flex w-full justify-end xl:justify-between space-x-5 rtl:space-x-reverse">
               <div
-                className="flex items-center flex-row-reverse xl:flex-row justify-between pr-0 xl:pr-14 py-5 space-x-5 rtl:space-x-reverse">
+                className="flex items-center flex-row-reverse xl:flex-row justify-between pr-0 py-5 space-x-5 rtl:space-x-reverse">
                 <div className="relative">
                   <UserArea/>
                 </div>

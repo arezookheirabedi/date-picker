@@ -2,6 +2,8 @@ import React from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
+import download from "../../assets/images/icons/download.svg";
+
 
 const Column: React.FC<any> = () => {
 
@@ -178,7 +180,14 @@ const Column: React.FC<any> = () => {
     ],
   };
   return <>
-    <HighchartsReact highcharts={Highcharts} options={options}/></>
+    <HighchartsReact highcharts={Highcharts} options={options}/>
+    <div className="w-1/5 ml-auto my-4">
+      <button type="button" className="btn btn--primary">
+        <img src={download} className="pl-2" alt=""/>
+        دانلود اطلاعات
+      </button>
+    </div>
+  </>
 }
 
 export default Column;
