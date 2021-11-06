@@ -1,5 +1,17 @@
 @import './fonts';
+@import "./components/button";
 @import "./components/dot-loading";
+@import "./components/filter-calendar";
+@import "./components/filter-range-slider";
+@import "./components/form-group";
+@import "./components/gauge-sub-info";
+@import "./components/guild-gauge-chart";
+@import "./components/guild-column-chart";
+@import "./components/guild-map-chart";
+@import "./components/input-holder";
+@import "./components/select-radio";
+@import "./components/side-bar-filter";
+@import "./components/sign";
 * {
   font-family: IRANSans;
 }
@@ -32,6 +44,10 @@ body {
 
 h1 {
   font-weight: bold;
+}
+
+.text-primary-color{
+  color : #21384F;
 }
 
 .ltr {
@@ -82,6 +98,10 @@ h1 {
 }
 .text-bold {
   font-weight: bold;
+}
+
+.bg-gray-1{
+  background-color: #E5E5E559;
 }
 
 .text-extrabold {
