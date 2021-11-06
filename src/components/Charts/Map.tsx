@@ -13,7 +13,8 @@ HighchartsMap(Highcharts);
 const options = {
   chart: {
     map,
-    height: "60%"
+    height: "60%",
+    className: 'guild-map-chart'
   },
 
   title: {

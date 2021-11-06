@@ -9,7 +9,7 @@ import passengerIcon from 'src/assets/images/icons/passenger-color.svg';
 import Statistic from './components/Statistic';
 
 const Overview: React.FC<any> = () => (
-  <div className="p-5 pl-8 lg:pl-12 pr-8 xl:pr-28 space-y-16">
+  <div className="space-y-16">
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">آمار کلی</legend>
 
