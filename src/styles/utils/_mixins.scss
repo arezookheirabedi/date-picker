@@ -1,0 +1,106 @@
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin absCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin boxshadow-1 {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+}
+
+/*
+0 - 600px: Phone
+600 - 900px: Tablet portrait
+900 - 1200px: Tablet landscape
+[1200 - 1800] is where our normal styles apply
+1800px + : Big desktop
+
+$breakpoint argument choices:
+- phone
+- tab-port
+- tab-land
+- big-desktop
+
+1em = 16px
+*/
+
+@mixin respond($breakpoint) {
+  @if $breakpoint == r415 {
+    @media (max-width: 25.9375em) {
+      //415px
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1024 {
+    //1024px
+    @media (max-width: 64em) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1080 {
+    //1080px
+    @media (max-width: 67.5em) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1280 {
+    //1280px
+    @media (max-width: 80em) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1366 {
+    @media (max-width: 85.375em) {
+      //1366px
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1440 {
+    //1440px
+    @media (max-width: 90em) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1536 {
+    //1536px
+    @media (max-width: 96em) {
+      @content;
+    }
+  }
+
+  @if $breakpoint == r1600 {
+    //1600px
+    @media (max-width: 100em) {
+      @content;
+    }
+  }
+  @if $breakpoint == r1920 {
+    //1920px
+    @media (max-width: 120em) {
+      @content;
+    }
+  }
+
+
+  @if $breakpoint == big-desktop {
+    // 1920px
+    @media (min-width: 120em) {
+      @content;
+    }
+  }
+}

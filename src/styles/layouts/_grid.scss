@@ -1,0 +1,76 @@
+.row {
+  max-width: $grid-width;
+  margin: 0 auto;
+  @include respond(tab-port) {
+    max-width: 56rem;
+  }
+
+  @include clearfix;
+
+  [class^="col-"] {
+    float: right;
+    font-size: 1.5rem;
+    &:not(:last-child) {
+      margin-left: $horizontal-gutter;
+      @include respond(tab-land) {
+        margin-left: $horizontal-gutter-small;
+      }
+      @include respond(tab-port) {
+        margin-left: 0;
+        margin-bottom: $vertical-gutter;
+      }
+      @include respond(r415){
+        margin-left: 0;
+      }
+    }
+
+    @include respond(tab-port) {
+      width: 100% !important;
+    }
+  }
+  .col-1-of-2 {
+    width: calc((100% - #{$horizontal-gutter}) / 2);
+    @include respond(tab-land) {
+      width: calc((100% - #{$horizontal-gutter-small}) / 2);
+    }
+  }
+
+  .col-1-of-3 {
+    width: calc((100% - 2 * #{$horizontal-gutter}) / 3);
+    @include respond(tab-land) {
+      width: calc((100% - 2 * #{$horizontal-gutter-small}) / 3);
+    }
+  }
+
+  .col-2-of-3 {
+    width: calc((2 * ((100% - 2 * #{$horizontal-gutter}) / 3)) + #{$horizontal-gutter});
+    @include respond(tab-land) {
+      width: calc(
+        (2 * ((100% - 2 * #{$horizontal-gutter-small}) / 3)) + #{$horizontal-gutter-small}
+      );
+    }
+  }
+
+  .col-1-of-4 {
+    width: calc((100% - 3 * #{$horizontal-gutter}) / 4);
+    @include respond(tab-land) {
+      width: calc((100% - 3 * #{$horizontal-gutter-small}) / 4);
+    }
+  }
+
+  .col-2-of-4 {
+    width: calc((2 * ((100% - 3 * #{$horizontal-gutter}) / 4)) + #{$horizontal-gutter});
+  }
+
+  .col-3-of-4 {
+    width: calc((3 * ((100% - 3 * #{$horizontal-gutter}) / 4)) + (2 * #{$horizontal-gutter}));
+  }
+
+  &:not(:last-child) {
+    margin-bottom: $vertical-gutter;
+
+    @include respond(tab-port) {
+      margin-bottom: $vertical-gutter-small;
+    }
+  }
+}
