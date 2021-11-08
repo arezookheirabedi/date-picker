@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // eslint-disable-next-line
 import {Redirect, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
@@ -164,6 +164,10 @@ export default PrivateLayout;
 // @ts-ignore
 export const PrivateRoute: (any) => any = props => {
   const {component: Component, ...rest} = props;
+  useEffect(() => {
+    document.getElementsByTagName('html')[0].style.fontSize = 'inherit';
+    document.getElementsByTagName('body')[0].style.fontSize = 'inherit';
+  }, [])
 
   return (
     // Show the component only when the user is logged in

@@ -1,0 +1,13 @@
+.input-wrapper {
+  input[type=text] {
+    border: 1px solid #d5d5d5 !important;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 100%;
+    padding: 0 10px;
+    &::placeholder{
+      font-weight: 200;
+    }
+  }
+}

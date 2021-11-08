@@ -1,0 +1,97 @@
+body {
+  font-family: IRANSans;
+  font-weight: normal;
+  font-size: 1.8rem;
+  //line-height: 1.7;
+  color: $color-black;
+  background-color: #ffffff;
+}
+
+.heading-primary {
+  &--main {
+    display: block;
+    font-size: 3.8rem;
+    font-weight: 700;
+  }
+
+  &--sub {
+    display: block;
+    font-size: 3rem;
+    font-weight: 500;
+  }
+
+  margin-bottom: 6rem;
+}
+
+.heading-secondary {
+  font-size: 2rem;
+  font-weight: normal;
+  width: 85%;
+  margin: 0 auto;
+  &--main {
+    display: block;
+    margin-bottom: 2rem;
+  }
+
+  &--sub {
+    display: block;
+  }
+}
+
+.heading-tertiary {
+  font-size: 4rem;
+  @include respond(big-desktop){
+    font-size: 3rem;
+  }
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  -webkit-background-clip: text;
+  transition: all 0.2s;
+
+  &--sub {
+    display: block;
+    font-size: 2rem;
+    font-weight: normal;
+    width: 114.2rem;
+    margin-top: 3.2rem;
+    @include respond(r415){
+      width: 88%;
+      text-align: center;
+      margin: 2rem auto;
+    }
+  }
+
+  // &:hover {
+  //   transform: skewY(2deg) skewX(15deg) scale(1.1);
+  //   text-shadow: 0.5rem 1rem 2rem rgba($color-black, 0.2);
+  // }
+}
+
+.heading-forth {
+  font-size: 4rem;
+  @include respond(big-desktop){
+    font-size: 3rem;
+  }
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  -webkit-background-clip: text;
+  transition: all 0.2s;
+
+  &--sub {
+    display: block;
+    font-size: 2rem;
+    font-weight: normal;
+    width: 73.4rem;
+    @include respond(r415){
+      width: 88%;
+    }
+    margin-top: 3.2rem;
+  }
+
+  // &:hover {
+  //   transform: skewY(2deg) skewX(15deg) scale(1.1);
+  //   text-shadow: 0.5rem 1rem 2rem rgba($color-black, 0.2);
+  // }
+}
