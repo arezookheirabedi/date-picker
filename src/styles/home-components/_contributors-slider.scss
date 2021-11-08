@@ -1,0 +1,45 @@
+.contributors-slider {
+  display: flex;
+  justify-content: center;
+
+  ul {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+
+    @include respond(r1920) {
+      justify-content: space-evenly;
+    }
+    @include respond(r1600) {
+      justify-content: space-evenly;
+    }
+    @include respond(r1536) {
+      justify-content: unset;
+    }
+    @include respond(big-desktop) {
+      justify-content: space-evenly;
+    }
+
+    li {
+      height: 25rem;
+      margin: 0 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        filter: grayscale(100%) ;
+        transition: all .3s ease;
+        &:hover{
+          filter : none;
+          transform: translateY(-8px);
+        }
+        height: 130px;
+        @include respond(r415){
+          height: 85%;
+        }
+
+      }
+    }
+  }
+}
