@@ -34,7 +34,10 @@
   },
   "rules": {
     "strict": ["error", "safe"],
+    "react/react-in-jsx-scope": 0,
     "arrow-body-style": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/click-events-have-key-events" : 0,
     "no-debugger": "warn",
     "filenames/match-regex": [
       "error",
