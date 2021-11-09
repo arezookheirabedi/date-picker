@@ -4,7 +4,6 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
 import {useOutsideSidebar} from 'src/hooks/useOutsideSidebar';
 import routes from 'src/routes';
-// eslint-disable-next-line
 import {isLogin} from 'src/helpers/utils';
 import logo from 'src/assets/images/logos/logo.svg';
 // eslint-disable-next-line
@@ -167,6 +166,10 @@ export const PrivateRoute: (any) => any = props => {
   useEffect(() => {
     document.getElementsByTagName('html')[0].style.fontSize = 'inherit';
     document.getElementsByTagName('body')[0].style.fontSize = 'inherit';
+    return () => {
+      document.getElementsByTagName('html')[0].style.fontSize = '';
+      document.getElementsByTagName('body')[0].style.fontSize = '';
+    }
   }, [])
 
   return (
@@ -174,8 +177,7 @@ export const PrivateRoute: (any) => any = props => {
     // Otherwise, redirect the user to /signin page
     <Route
       {...rest}
-      // render={comprops => (isLogin() ? <Component {...comprops} /> : <Redirect to="/" />)}
-      render={comprops => <Component {...comprops} />}
+      render={comprops => (isLogin() ? <Component {...comprops} /> : <Redirect to="/" />)}
     />
   );
 };
