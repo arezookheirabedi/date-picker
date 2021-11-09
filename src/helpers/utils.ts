@@ -52,17 +52,14 @@ export const setMediaTypeConfig: (config: EHEADER) => void = config => {
 
 export function isLogin() {
   // const profileStr = localStorage.getItem('userinfo');
-  // const tokenStr = localStorage.getItem('token');
-  // if (profileStr && profileStr.length > 0 && tokenStr && tokenStr.length > 0) {
-  //   const profile: IProfile = JSON.parse(profileStr);
-  //   const token: ILogin = JSON.parse(tokenStr);
-  //   if (profile && profile.guildCode.length > 0 && token && token.access_token.length > 0) {
-  //     return true;
-  //   }
-  // }
-  // return false;
-
-  return true;
+  const tokenStr = localStorage.getItem('token');
+  if (tokenStr) {
+    const token: ILogin = JSON.parse(tokenStr);
+    if (token && token.access_token.length > 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export const setLogin: (param: IProfile) => void = param => {
