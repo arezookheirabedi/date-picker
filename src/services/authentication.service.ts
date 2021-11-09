@@ -5,18 +5,18 @@ import EPUBLICROUTE from 'src/constants/PublicRoute.enum';
 import request from 'src/helpers/request';
 import { removeToken } from 'src/helpers/utils';
 import { IapiResponsecaptcha } from 'src/models/service.model';
-import { IInitialLogin, ILogin } from '../models/authentication.model';
-import { IResponseCaptcha } from '../models/captcha.model';
+import { ILogin } from '../models/authentication.model';
+// import { IResponseCaptcha } from '../models/captcha.model';
 
 
-function captcha(): Promise<IapiResponsecaptcha<IResponseCaptcha>> {
+function captcha(): Promise<IapiResponsecaptcha<any>> {
   return request
     .forFastUrl()
     .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().post(`/public/v1/fs/captcha?lang=fa`);
 }
 
-function login(params: any): Promise<AxiosResponse<IInitialLogin>> {
+function login(params: any): Promise<AxiosResponse<any>> {
   return request.forFastUrl()
     .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().post(`/public/v1/fs/users/registration/init/guild-owner?lang=fa`, params);
