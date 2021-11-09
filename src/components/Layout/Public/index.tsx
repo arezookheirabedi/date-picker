@@ -5,7 +5,8 @@ import {Redirect, Route} from 'react-router-dom';
 import {isLogin} from 'src/helpers/utils';
 
 // eslint-disable-next-line
-interface IProps {}
+interface IProps {
+}
 
 // @ts-ignore
 const PublicLayout: React.FC<IProps> = ({children}) => <>{children}</>;
@@ -30,12 +31,14 @@ export const PublicRoute: (any) => any = props => {
     //   ))}
     // />
 
+
     <Route
       {...rest}
       render={comprops => (
-        <PublicLayout>
-          <Component {...comprops} />
-        </PublicLayout>
+        restricted && isLogin() ? <Redirect to="/dashboard/overview"/> :
+          <PublicLayout>
+            <Component {...comprops} />
+          </PublicLayout>
       )}
     />
   );
