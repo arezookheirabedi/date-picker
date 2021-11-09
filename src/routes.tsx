@@ -4,6 +4,10 @@ import {IRoute} from './models/route';
 import {IconWrapperStyle} from './components/IconWrapper';
 import Overview from './containers/Overview/Overview';
 import Guild from './containers/Guild/Guild';
+import Transport from "./containers/Transport /Transport"
+import Passenger from "./containers/Passenger/Passenger";
+import Vaccination from './containers/Vaccination/Vaccination';
+import Citizens from "./containers/Citizens/Citizens";
 
 const routes: IRoute[] = [
   {
@@ -24,7 +28,7 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'داشبورد شهروندان',
     // disabled: true,
-    main: () => <>citizenship</>,
+    main: Citizens,
   },
   {
     keyIndex: '3',
@@ -36,7 +40,7 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'داشبورد واکسیناسیون',
     // disabled: true,
-    main: () => <>vaccine</>,
+    main: Vaccination,
   },
   {
     keyIndex: '4',
@@ -48,7 +52,7 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'داشبورد حمل و نقل عمومی',
     // disabled: true,
-    main: () => <>transport</>,
+    main: Transport,
   },
   {
     keyIndex: '5',
@@ -72,7 +76,7 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'داشبورد مسافران',
     // disabled: true,
-    main: () => <>passenger</>,
+    main: Passenger,
   },
 ];
 

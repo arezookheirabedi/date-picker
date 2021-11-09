@@ -1,28 +1,25 @@
-import React from 'react';
+import Charts from "../../components/Charts";
+import Table from "../../components/Table";
+import CategoryDonut from "../Guild/components/CategoryDonut";
+import Statistic from "../Guild/components/Statistic";
+import guildIcon from "../../assets/images/icons/guild-color.svg";
+import sufferingIcon from "../../assets/images/icons/suffering-color.svg";
+import saveIcon from "../../assets/images/icons/save-color.svg";
+import deadIcon from "../../assets/images/icons/dead-color.svg";
+import vaccineIcon from "../../assets/images/icons/vaccine-color.svg";
+import scanIcon from "../../assets/images/icons/scan-color.svg";
+import scanDangerIcon from "../../assets/images/icons/scan-danger-color.svg";
+import testIcon from "../../assets/images/icons/test-color.svg";
 
-import saveIcon from 'src/assets/images/icons/save-color.svg';
-import deadIcon from 'src/assets/images/icons/dead-color.svg';
-import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
-import guildIcon from 'src/assets/images/icons/guild-color.svg';
-import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
-import scanIcon from 'src/assets/images/icons/scan-color.svg';
-import scanDangerIcon from 'src/assets/images/icons/scan-danger-color.svg';
-import testIcon from 'src/assets/images/icons/test-color.svg';
-import Table from 'src/components/Table';
-import Statistic from './components/Statistic';
-
-import CategoryDonut from './components/CategoryDonut';
-import Charts from '../../components/Charts'
 
 const {Column, Gauge , Map} = Charts;
-
-const Guild: React.FC<any> = () => {
+const Transport = () => {
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 mb-8">
       <fieldset className="text-center border rounded-xl p-4">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی به وضعیت اصناف
+          نگاه کلی به وضعیت مسافران
         </legend>
 
         {/* <div>head</div> */}
@@ -37,7 +34,9 @@ const Guild: React.FC<any> = () => {
       </fieldset>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت رسته‌ها</legend>
+        <legend className="text-black mx-auto px-3">
+          نگاه کلی به وضعیت مسافران
+        </legend>
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
           <Table
             dataSet={[
@@ -105,7 +104,7 @@ const Guild: React.FC<any> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'نام رسته',
+                name: 'نام وسیله',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -114,7 +113,7 @@ const Guild: React.FC<any> = () => {
                 ),
               },
               {
-                name: 'تعداد کارمندان',
+                name: 'تعداد مسافران',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
@@ -145,12 +144,14 @@ const Guild: React.FC<any> = () => {
       </fieldset>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">وضعیت کلی اصناف کشور</legend>
+        <legend className="text-black mx-auto px-3">
+          وضعیت کلی مسافران کشور
+        </legend>
 
         <div className="flex flex-col justify-between space-y-8">
           <div
             className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-            <Statistic icon={guildIcon} text="مجموع کارمندان" count={2800}/>
+            <Statistic icon={guildIcon} text="مجموع مسافران" count={2800}/>
             <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800}/>
             <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450}/>
             <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200}/>
@@ -166,14 +167,16 @@ const Guild: React.FC<any> = () => {
       </fieldset>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت اصناف استان‌ تهران</legend>
+        <legend className="text-black mx-auto px-3">
+          نگاه کلی به وضعیت مسافران کشور
+        </legend>
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
           <Map/>
         </div>
       </fieldset>
+
     </div>
-  );
-};
+  )
+}
 
-
-export default Guild;
+export default Transport;
