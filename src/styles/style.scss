@@ -10,7 +10,6 @@
 @import "base/utilities";
 
 //// component folders
-@import "./components/authentication";
 @import "./components/button";
 @import "./components/dot-loading";
 @import "./components/filter-calendar";
@@ -26,6 +25,7 @@
 @import "./components/sign";
 
 // home-components folders
+@import "home-components/authentication";
 @import "home-components/button";
 @import "home-components/contact-us-form";
 @import "home-components/icon";
