@@ -5,24 +5,12 @@ export interface ILogin {
   token_type: string;
   scope: string;
 }
-export interface IInitialLogin {
-  data: any
+export interface ILoginForm {
+  captchaCode: string;
+  username: string;
+  password: string;
 }
-
-export interface IInitialLoginForm {
-  captcha: {
-    code: string;
-    id: string;
-  },
-  mobileNumber: string;
-  nationalId: string;
-}
-export interface ISendActivat {
-  activationCode: string;
-  mobileNumber: string
-}
-
-export interface IProfile {
+export interface IProfile{
   birthday: string
   categoryId: string
   firstName: string
