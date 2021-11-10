@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import Slider from 'rc-slider';
 
 import 'rc-slider/assets/index.css';
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import {Calendar} from "react-modern-calendar-datepicker";
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
+import {Calendar} from '@hassanmojab/react-modern-calendar-datepicker';
 
 import {ReactComponent as SidebarFilterIcon} from "../../../../assets/images/icons/sidebar-filter.svg";
 

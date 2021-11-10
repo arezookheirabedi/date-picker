@@ -15,8 +15,23 @@ class RequestBuilder {
             baseUrl: "",
             headers: {},
         };
+        this.detectBaseUrlBaseOnEnv();
     }
 
+    detectBaseUrlBaseOnEnv() {
+        switch (process.env.REACT_APP_ENVIRONMENT) {
+            case "local":
+                return this;
+            case "development":
+                this.self.baseUrl = `${process.env.REACT_APP_BASE_URL}`;
+                return this;
+            case "production" :
+                this.self.baseUrl = `${process.env.REACT_APP_BASE_URL}`;
+                return this;
+            default:
+                return this;
+        }
+    }
 
     forBaseUrl(baseUrl?: string): RequestBuilder {
         this.self.baseUrl = process.env.REACT_APP_BASE_API_URL || baseUrl || "";

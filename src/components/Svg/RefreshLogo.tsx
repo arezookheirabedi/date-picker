@@ -1,4 +1,5 @@
 import React, { useState , useRef } from "react";
+
 interface RefreshLogoProps {
   onHandleRefreshLogo : () => void;
 }
@@ -6,7 +7,7 @@ const RefreshLogo : React.FC<RefreshLogoProps> = ({onHandleRefreshLogo}) => {
   const [changeTransfom,setChangteTransform] = useState(true);
   const svgTag = useRef<any>(null);
   const refreshCaptcha = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    // eslint-disable-next-line
     changeTransfom ? svgTag.current.style.transform = 'rotate(180deg)' : svgTag.current.style.transform = 'rotate(-180deg)' ;
     setChangteTransform(!changeTransfom);
     onHandleRefreshLogo();

@@ -4,6 +4,7 @@ import GoToTopSvg from "./GoToTopSvg";
 import CloseIcon from "./CloseIcon";
 import OpenIcon from "./OpenIcon";
 import ProgressBarCircle3Svg from "./ProgressBarCircle3Svg";
+import RefreshLogo from "./RefreshLogo";
 
 export default {
   LoginLogoSvg,
@@ -11,5 +12,6 @@ export default {
   CloseIcon,
   OpenIcon,
   ProgressBarCircle3Svg,
-  GoToTopSvg
+  GoToTopSvg,
+  RefreshLogo
 };
