@@ -1,14 +1,20 @@
-import {useEffect, useState} from "react";
+import {useState, useEffect} from "react";
+import {useHistory} from 'react-router-dom';
+import {useForm} from "react-hook-form";
+import authService from "../../../services/authentication.service";
 // import { ILoginForm } from "../../../models/authentication.model";
 // import { ICaptcha } from "../../../models/captcha.model";
-// import { authenticateService } from "../../../services/authentication.service";
-// import { setToken } from "../../../services/BaseService/servicesUtils";
-// import useForm from "./useForm";
+// import  authenticateService  from "../../../services/authentication.service";
+import {setToken} from "../../../helpers/utils";
+import {loginValidation} from "../../../validations";
+
 import eyes from "../../../assets/images/icons/eye_icon.svg";
 import Svg from "../../../components/Svg";
+import DotLoading from "../../../components/DotLoading";
 
 
 import Checkbox from "../../../shared/Checkbox";
+import EPRIVATEROUTE from "../../../constants/PrivateRoute.enum";
 
 export enum EInputLogin {
   USERNAME = "username",
@@ -18,179 +24,160 @@ export enum EInputLogin {
 
 const {RefreshLogo} = Svg;
 
+
+type LoginForm = {
+  username: string | number;
+  password: string;
+  captcha: string;
+}
+
 export default function Login() {
-  // const [loading, setLoading] = useState<boolean>(false);
-  // const [submitted, setSubmitted] = useState<boolean>(false);
-  // const [captcha, setCaptcha] = useState<ICaptcha>({ id: "", code: "" });
+  const history = useHistory();
   const [typeInputText, setTypeInputText] = useState(false);
   const [remember, setRemember] = useState<boolean>(false);
-  // const [errorMessage, setErrorMessage] = useState<{
-  //   errorMsg: string;
-  //   showMsg: boolean;
-  // }>({ errorMsg: "", showMsg: false });
-  /**
-   * @params form value
-   * @return token
-   */
-  // const Login = async (values: ILoginForm) => {
-  //   setSubmitted(true);
-  //   try {
-  //     let res = await authenticateService.login(values);
-  //     setToken(res.data);
-  //     let storagePass = JSON.stringify({
-  //       depatrmentPass: values.password,
-  //       depdepartmentUsername: values.username,
-  //     });
-  //     let remmberme = JSON.stringify({ rememberme: remember });
-  //     localStorage.setItem("remmberme", remmberme);
-  //     remember
-  //       ? localStorage.setItem("storageRemember", storagePass)
-  //       : localStorage.removeItem("storageRemember");
-  //   } catch (error) {
-  //     getCaptcha();
-  //     setSubmitted(false);
-  //     handleErrorMessage(error.response.data.message);
-  //   }
-  // };
+  const [isLoading, setIsLoading] = useState(false);
+  const {register, handleSubmit, formState: {errors}, setError} = useForm<LoginForm>();
+  const [inputCaptchaId, setInputCaptchaId] = useState("");
+  const [captchaCode, setCaptchaCode] = useState("");
 
-  /**
-   * @params set error msg
-   * @return show msg box
-   */
-  // const handleErrorMessage = (value: string) => {
-  //   if (value !== "") {
-  //     setErrorMessage({ errorMsg: value, showMsg: true });
-  //     setTimeout(() => {
-  //       setErrorMessage({ errorMsg: "", showMsg: false });
-  //     }, 2000);
-  //   }
-  // };
-  /**
-   * @params  Login, captcha.id
-   * @return handleChange, values, handleSubmit, formValid, error
-   */
-  // const {handleChange, values, handleSubmit, formValid, error} = useForm(
-  //   Login,
-  //   captcha.id
-  // );
-  /**
-   * @params  checked value
-   * @return store  user pass in local storage if it is true
-   */
-  useEffect(() => {
-    // let remmberme = localStorage.getItem("remmberme");
-    // let checkremember = JSON.parse(remmberme!);
-    // if (checkremember) {
-    //   setRemember(checkremember.rememberme);
-    // }
-    // setTypeInputText(false);
-    // getCaptcha();
-  }, []);
 
-  // const getCaptcha = async () => {
-  //   setLoading(true);
-  //   try {
-  //     let res = await authenticateService.captcha();
-  //     setCaptcha({ id: res.data.id, code: res.data.captchaBase64 });
-  //   } catch (error) {
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const handleCaptcha = async () => {
+    try {
+      const {data} = await authService.captcha();
+      setCaptchaCode(data.captchaBase64);
+      setInputCaptchaId(data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  const refreshCaptchaHandler = () => {
-    console.log('refresh captcha')
-    // getCaptcha();
+  // eslint-disable-next-line consistent-return
+  const onSubmit = async (data: any) => {
+    const finalData = {
+      captchaCode: data.captcha,
+      captchaId: inputCaptchaId,
+      password: data.password,
+      username: data.username
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await authService.login(finalData);
+      setToken(response.data)
+      // localStorage.setItem(
+      //   "loginInfo",
+      //   JSON.stringify({
+      //     ...response.data,
+      //   })
+      // );
+      console.log('you are logged in');
+      history.push(EPRIVATEROUTE.DASHBOARDOVERVIEW);
+    } catch (error: any) {
+
+      handleCaptcha();
+      const {message} = error;
+
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const {errors} = error;
+      if (message) {
+        if (message.includes('کد امنیتی')) {
+          return setError("captcha", {
+            message
+          });
+        }
+        return setError("username", {
+          message
+        });
+      }
+      if (errors && errors.length) {
+        errors.map((item: any) => {
+          return setError(item.field, {
+            message: item.message
+          })
+        })
+      }
+
+    } finally {
+      setIsLoading(false);
+    }
+
   };
-  /**
-   * @params  checked value
-   * @return setRemember true or false
-   */
-  const onChange = (e: any) => {
+
+  const onRememberChange = (e: any) => {
     const newRemember = e.target.checked;
     setRemember(newRemember);
   };
 
-  const handleSubmit = () => {
-    console.log('submit');
-  }
-
-  const handleChange = () => {
-    console.log('submit');
-  }
+  useEffect(() => {
+    handleCaptcha();
+  }, [])
 
   return (
     <>
-      {/* {errorMessage.showMsg && */}
-      {/* <Message msg={errorMessage.errorMsg}/> */}
-      {/* } */}
-
-
-      <form className="loginWrapper" onSubmit={handleSubmit}>
+      <form className="loginWrapper" onSubmit={handleSubmit(onSubmit)}>
         <div className="login2">ورود به سامانه</div>
 
         <div className="inputwraper">
           <input
             style={{border: "1px solid #b2b2b2"}}
+            className={`${errors.username ? 'u-border-red u-color-red' : ""}`}
             type="text"
-            name="username"
+            {...register("username", loginValidation.username)}
             placeholder="پست الکترونیکی"
-            value=""
-            onChange={handleChange}
           />
-          {/* <span className="inputError">{error.email}</span> */}
+          {errors.username && <span className="inputError">{errors.username.message}</span>}
         </div>
 
         <div className="inputwraper icon ">
           <input
             style={{border: "1px solid #b2b2b2"}}
             autoComplete="new-password"
+            className={`${errors.password ? 'u-border-red u-color-red' : ""}`}
             type={`${typeInputText ? "text" : "password"}`}
-            name="password"
+            {...register("password", loginValidation.password)}
             placeholder="رمز عبور"
-            value=""
-            onChange={handleChange}
           />
+
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
           <img
             src={eyes}
             alt=""
             onClick={() => setTypeInputText(!typeInputText)}
           />
+          {errors.password && <span className="inputError"> {errors.password.message}</span>}
         </div>
 
         <div className="inputwraper captcha-input ">
           <div className="captcha-input__img">
             <img
               className="captcha-input__img--base64"
-              src={`data:image/png;base64, `}
+              src={`data:image/png;base64, ${captchaCode}`}
               alt=""
             />
-            <RefreshLogo onHandleRefreshLogo={refreshCaptchaHandler}/>
+            <RefreshLogo onHandleRefreshLogo={handleCaptcha}/>
           </div>
           <input
             style={{border: "1px solid #b2b2b2"}}
-            name="captchaCode"
-            value=""
-            onChange={handleChange}
+            {...register("captcha", loginValidation.captcha)}
             maxLength={7}
             autoComplete="off"
             type="text"
             placeholder="  کد امنیتی"
+            className={`${errors.captcha ? 'u-border-red u-color-red' : ""}`}
           />
+          {errors.captcha && <span className="inputError">{errors.captcha.message}</span>}
         </div>
 
-        <Checkbox checked={remember} onChange={onChange}/>
+        <Checkbox checked={remember} onChange={onRememberChange}/>
         <div className="landscape_button">
-
-          <button
-            type="submit"
-            className={`login_button ${
-              !1 ? " deactive" : " active"
-            }`}
-            disabled={!1}
+          {/* eslint-disable-next-line react/button-has-type */}
+          <button type={`${isLoading ? "button" : "submit"}`}
+                  className={`login_button ${
+                    !true ? " deactive" : " active"
+                  }`}
+                  disabled={!true}
           >
-            ورود
+            {!isLoading ? "ورود" : <DotLoading/>}
           </button>
         </div>
       </form>

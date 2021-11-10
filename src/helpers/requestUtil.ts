@@ -98,27 +98,14 @@ instance.interceptors.request.use(
     const {url} = config;
 
     const newConfig: AxiosRequestConfig = config;
-    if (
-      url?.startsWith('api') ||
-      url?.startsWith(`${process.env.REACT_APP_BASE_API_URL}/api`) ||
-      url?.startsWith('/api') ||
-      url?.startsWith('/guilds/api') ||
-      url?.startsWith(`${process.env.REACT_APP_GUILDS_BASE_API_URL}/api`) ||
-      url?.startsWith('/fast/api') ||
-      url?.startsWith(`${process.env.REACT_APP_FAST_BASE_API_URL}/api`)
-    ) {
+    if (url?.startsWith("/api") || url?.startsWith(`${process.env.REACT_APP_BASE_URL}/api`)) {
       if (!tokens) window.location.href = '/';
 
       newConfig.headers.Authorization = `Bearer ${tokens!.access_token}`;
       setRequestConfig({
         headers: {Authorization: `Bearer ${tokens!.access_token}`},
       });
-    } else if (
-      url?.startsWith('/oauth') ||
-      url?.startsWith(`${process.env.REACT_APP_BASE_API_URL}/oauth`) ||
-      url?.startsWith(`${process.env.REACT_APP_FAST_BASE_API_URL}/oauth`) ||
-      url?.startsWith('/fast/oauth')
-    ) {
+    } else if (url?.startsWith("/oauth") || url?.startsWith(`${process.env.REACT_APP_BASE_URL}/oauth`)) {
       setRequestConfig({
         headers: {
           Authorization: `Basic ${btoa(
@@ -152,6 +139,7 @@ instance.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
 
+
     if (!error.response) {
       return new Promise((resolve, reject) => {
         reject({
@@ -162,7 +150,8 @@ instance.interceptors.response.use(
       });
     }
 
-    if (error.response && error.response.status !== 401) {
+
+    if (newConfig.url?.startsWith(`${process.env.REACT_APP_BASE_URL}/public`) || (error.response && error.response.status !== 401)) {
       return new Promise((resolve, reject) => {
         if (error.response.data) reject(error.response.data);
         else {
@@ -192,6 +181,7 @@ instance.interceptors.response.use(
     isRefreshing = true;
 
     const tokens: ILogin | null = getToken();
+
 
     if (!tokens!.refresh_token) {
       authenticateService.logout();
