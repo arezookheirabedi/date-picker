@@ -4,7 +4,7 @@ import {IRoute} from './models/route';
 import {IconWrapperStyle} from './components/IconWrapper';
 import Overview from './containers/Overview/Overview';
 import Guild from './containers/Guild/Guild';
-import Transport from "./containers/Transport /Transport"
+import Transport from "./containers/Transport/Transport";
 import Passenger from "./containers/Passenger/Passenger";
 import Vaccination from './containers/Vaccination/Vaccination';
 import Citizens from "./containers/Citizens/Citizens";
