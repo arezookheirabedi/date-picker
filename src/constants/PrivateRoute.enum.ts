@@ -1,6 +1,4 @@
  enum EPRIVATEROUTE{
-
-  BUSINESSLICENSE="/auth/businessLicense",
-  WORKSTATIONCODE="/auth/:guildCode/workstationCode"
+  DASHBOARDOVERVIEW="/dashboard/overview",
 }
 export default EPRIVATEROUTE

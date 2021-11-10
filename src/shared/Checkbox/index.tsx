@@ -8,7 +8,7 @@ export default function Checkbox(props: IProps) {
       <label className={`ch-container ${  props.className}`} htmlFor="ch-id-1">
         <input type="checkbox" {...props} id="ch-id-1" />
 
-        <span> مرا بخاطر بسپار</span>
+        <span className="ch-container__text"> مرا بخاطر بسپار</span>
         <span className="checkmark"/>
       </label>
     </>
