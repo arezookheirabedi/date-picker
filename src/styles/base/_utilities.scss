@@ -79,6 +79,22 @@
   color : #21384F;
 }
 
+.sub-menu-open{
+  max-height: 100px;
+  overflow: unset;
+  transition: .3s max-height ease-in-out;
+}
+
+.sub-menu-close{
+  max-height: 0;
+  overflow: hidden;
+  transition: .3s max-height ease-in-out;
+}
+
+.color-primary{
+  color: #57687a;
+}
+
 .u-color-red{
   color: red !important;
 }
