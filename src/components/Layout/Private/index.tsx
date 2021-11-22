@@ -145,7 +145,9 @@ const PrivateLayout: React.FC<any> = () => {
           <div className="bg-white flex-grow flex flex-col relative">
             <Switch>
               {routes.map((route, i) => (
-                <Route path={route.link} exact={route.exact} key={i} component={route.main}/>
+                !route.subMenu ? <Route path={route.link} exact={route.exact} key={i} component={route.main}/> : route.subMenu.map((routeArg: any,ind: any)=>(
+                  <Route path={routeArg.link} exact={routeArg.exact} key={ind} component={routeArg.main}/>
+                ))
               ))}
               <Route component={Overview}/>
             </Switch>
