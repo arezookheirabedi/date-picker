@@ -91,6 +91,10 @@
   transition: .3s max-height ease-in-out;
 }
 
+.shadow{
+  box-shadow: 0 6px 20px #0000001A !important;
+}
+
 .color-primary{
   color: #57687a;
 }
