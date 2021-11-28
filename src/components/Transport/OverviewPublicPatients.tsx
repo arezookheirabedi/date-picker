@@ -12,6 +12,7 @@ const {Line} = Charts;
 const transportationType = ['کل حمل و نقل', 'اسنپ', 'تپسی', 'تاکسی پلاک ع', 'تاکسی پلاک ت', 'سرویس مدارس', 'تاکسی فرودگاهی', 'اتوبوس رانی'];
 
 const OverviewPublicPatients = ()=>{
+  const [serviceType, setServiceType] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -44,7 +45,7 @@ const OverviewPublicPatients = ()=>{
                   className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">اسنپ</span>
+                  <span className="ml-10 whitespace-nowrap truncate">{serviceType || 'کل حمل و نقل'}</span>
                   <DownIcon className="h-2 w-2.5 mr-2"/>
                 </Menu.Button>
               </div>
@@ -61,6 +62,7 @@ const OverviewPublicPatients = ()=>{
                             className={`${
                               active ? 'bg-gray-100' : ''
                             } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                            onClick={()=>setServiceType(value)}
                           >
                             {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                             {value}
