@@ -80,9 +80,29 @@ const options = {
 
 const CategoryDonut: React.FC<{}> = () => {
   return (
-    <div style={{width: '50px', height: '50px'}}>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-    </div>
+    <>
+      <div className="tooltip relative">
+        <div style={{width: '50px', height: '50px'}} >
+          <HighchartsReact highcharts={Highcharts} options={options} />
+        </div>
+        <ul className="tooltip__tooltippiechart">
+          <li>
+            <span className="recovered" />
+            تعداد بهبودیافتگان
+          </li>
+          <li>
+            <span className="victims" />
+            تعداد فوت‌شدگان
+          </li>
+          <li>
+            <span className="patients" />
+            تعداد مبتلایان
+          </li>
+        </ul>
+      </div>
+
+    </>
+
   );
 };
 
