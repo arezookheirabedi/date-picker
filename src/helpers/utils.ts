@@ -119,6 +119,11 @@ export const fixNumbers = (e: any) => {
   return str;
 };
 
+export const toPersianDigit = (str: any) => {
+  const id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  return str.replace(/[0-9]/g, (w: any) => id[+w]);
+}
+
 export const getBgColorGradientByStatus = (status: string) => {
   let bg = 'linear-gradient(217deg, #B2B2B2 0%, #D5D5D5 100%)';
   if (status === 'DISQUALIFIED') {
