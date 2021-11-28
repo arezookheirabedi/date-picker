@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState} from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
 const Line: React.FC<any> = () => {
 
-  const options = {
+  const [options] = useState({
+    chart: {
+      type: 'line',
+      className: 'transport-line-chart'
+    },
     title: {
       text: null
     },
@@ -97,8 +101,50 @@ const Line: React.FC<any> = () => {
         lineWidth : 4
       }
     ]
-  };
+  }) as any;
+
+  // const updateSeries = () => {
+  //   // The chart is updated only with new options.
+  //   setOptions({
+  //       series: [
+  //         { data: [Math.random() * 100, Math.random() * 250, Math.random() * 440 , Math.random() * 620 , Math.random() * 222 , Math.random() * 332, Math.random() * 777, Math.random() * 999, Math.random() * 122, Math.random() * 162, Math.random() * 462, Math.random() * 962  ]}
+  //       ]
+  //   });
+  // }
+
+  // useEffect(()=>{
+  //   console.log(options.series[0].data)
+  //    const id = setInterval(()=>{
+  //     updateSeries()
+  //   },2000)
+  //
+  //   return () => clearInterval(id);
+  // })
+
+
+
+  // const updateCategories = () => {
+  //   // The chart is updated only with new options.
+  //   setOptions({
+  //     xAxis: {
+  //       categories: [
+  //         1,
+  //         2,
+  //         3,
+  //         4,
+  //         5,
+  //         6
+  //       ],
+  //       lineDashStyle: "dash",
+  //       lineColor: "#000000",
+  //       lineWidth: 1
+  //     }
+  //   });
+  // }
+
   return <>
+    {/* <button onClick={updateSeries} type="button">update series</button> */}
+    {/* <button onClick={updateCategories} type="button">update categories</button> */}
     <HighchartsReact highcharts={Highcharts} options={options}/>
   </>
 }
