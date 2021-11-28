@@ -83,7 +83,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
 
   return (
     <>
-      <div className="relative pl-3 -ml-3 h-full w-full overflow-auto scrollbar scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
+      <div className="relative pl-3 -ml-3 h-full w-full  scrollbar-thumb-gray-400 scrollbar-track-gray-300">
         <table className="min-w-full overflow-x-scroll table-auto">
           <thead className="">
             <tr className="border-b border-gray-100">
