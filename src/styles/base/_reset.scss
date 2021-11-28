@@ -81,3 +81,7 @@ a {
   text-decoration: inherit;
   cursor: pointer !important;
 }
+
+button:focus-visible {
+  outline: none !important;
+}

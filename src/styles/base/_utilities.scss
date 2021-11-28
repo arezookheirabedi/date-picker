@@ -95,6 +95,17 @@
   box-shadow: 0 6px 20px #0000001A !important;
 }
 
+.dash-separator{
+  width: 12px;
+  height: 1px;
+  background: #606060;
+  display: inline-block;
+}
+
+.shadow-custom{
+  box-shadow: 0 6px 10px #0000001A;
+}
+
 .color-primary{
   color: #57687a;
 }
