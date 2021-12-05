@@ -10,7 +10,7 @@ function testsInTransport(params: any) {
 
 function overviewCategory(params: any) {
   return request
-    .withHeaders({ "Content-Type": "application/json;utf-8" })
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
     .build().get(`/api/v1/transport/cars/service-type-based/count?lang=fa`, params);
 }
 

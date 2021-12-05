@@ -19,7 +19,7 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 const instance: AxiosInstance = axios.create({
-  timeout: 300000,
+  timeout: 60000,
   headers: {
     'Accept-Language': 'fa',
   },
