@@ -71,9 +71,23 @@ function numberOfVaccination(){
 }
 
 
+function overviewVaccine(params: any) {
+  return request
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .build().get(`/api/v1/transport/reports/vaccine?lang=fa`, params);
+}
+
+function overviewVaccinePercent(params: any) {
+  return request
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .build().get(`/api/v1/transport/drivers/health/vaccination-doses/service-based/count?lang=fa`, params);
+}
+
 export default {
   testsInTransport,
   overviewCategory,
+  overviewVaccine,
+  overviewVaccinePercent,
   numberOfDrivers,
   numberOfPlaqueVisited,
   numberOfPositiveDrivers,

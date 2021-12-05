@@ -12,6 +12,7 @@ import positiveInquiryPlaque from "../../assets/images/icons/positive-inquiry-pl
 import testIcon from "../../assets/images/icons/test-color.svg";
 import transportService from "../../services/transport.service";
 
+
 const OverviewDrivers = () => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
