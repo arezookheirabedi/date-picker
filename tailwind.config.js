@@ -3,10 +3,9 @@ const colors = require('tailwindcss/colors');
 
 module.exports = {
   purge: {
-    content: ['./src/**/*.html', './src/**/*.js', './src/**/*.ts', './src/**/*.tsx'],
-    options: {
-      whitelistPattern: ["/ltr/", "/rtl/"],
-      whitelist: ['dir', 'rtl'],
+    content: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
+    safelist: {
+      standard: [/ltr/, /rtl/],
     },
   },
   darkMode: false, // or 'media' or 'class'
