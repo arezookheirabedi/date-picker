@@ -21,7 +21,7 @@ function login(params: any): Promise<AxiosResponse<any>> {
 }
 
 function token(params: any): Promise<AxiosResponse<ILogin>> {
-  return request.forFastUrl()
+  return request
     .withHeaders({ "Content-Type": "application/x-www-form-urlencoded;utf-8" })
     .build().post(`/oauth/token?lang=fa`, qs.stringify(params));
 }

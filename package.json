@@ -33,6 +33,7 @@
     "history": "^5.0.0",
     "jalaliday": "^2.3.0",
     "lodash": "^4.17.21",
+    "moment-jalaali": "^0.9.4",
     "qrcode.react": "^1.0.1",
     "qs": "^6.10.1",
     "rc-slider": "^9.7.4",

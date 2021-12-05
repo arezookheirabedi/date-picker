@@ -1,54 +1,66 @@
-import React, {useState} from "react";
-import {IDetail} from "../Charts/Pyramid";
+import React, {useEffect, useState} from "react";
+// @ts-ignore
+import moment from "moment-jalaali";
+
 import Charts from "../Charts";
 import DatePickerModal from "../DatePickerModal";
 import {toPersianDigit} from "../../helpers/utils";
 import calendar from "../../assets/images/icons/calendar.svg";
+import transportService from "../../services/transport.service";
+
 
 const {Pyramid} = Charts;
-const pyramidData: Array<IDetail> = [
-  {
-    title: 'اسنپ',
-    percentage: 90,
-    color: '#049975'
-  },
-  {
-    title: 'تپسی',
-    percentage: 80,
-    color: '#00F1E3'
-  },
-  {
-    title: 'تاکسی پلاک ع',
-    percentage: 70,
-    color: '#4EC4F2'
-  },
-  {
-    title: 'تاکسی پلاک ت',
-    percentage: 60,
-    color: '#9D19FA'
-  },
-  {
-    title: 'سرویس مدارس',
-    percentage: 50,
-    color: '#F534DB'
-  },
-  {
-    title: 'تاکسی فرودگاهی',
-    percentage: 40,
-    color: '#F5DF34'
-  },
-  {
-    title: 'اتوبوس رانی',
-    percentage: 30,
-    color: '#FE8007'
-  }
-];
-const TestsInTransport = ()=>{
-  const [showDatePicker, setShowDatePicker] = useState(false);
+
+const TestsInTransport = () => {
+
+
   // eslint-disable-next-line
+  // const pyramidD: Array<IDetail> = [
+  //   {
+  //     title: 'اسنپ',
+  //     percentage: 90,
+  //     color: '#049975'
+  //   },
+  //   {
+  //     title: 'تپسی',
+  //     percentage: 80,
+  //     color: '#00F1E3'
+  //   },
+  //   {
+  //     title: 'تاکسی پلاک ع',
+  //     percentage: 70,
+  //     color: '#4EC4F2'
+  //   },
+  //   {
+  //     title: 'تاکسی پلاک ت',
+  //     percentage: 60,
+  //     color: '#9D19FA'
+  //   },
+  //   {
+  //     title: 'سرویس مدارس',
+  //     percentage: 50,
+  //     color: '#F534DB'
+  //   },
+  //   {
+  //     title: 'تاکسی فرودگاهی',
+  //     percentage: 40,
+  //     color: '#F5DF34'
+  //   },
+  //   {
+  //     title: 'اتوبوس رانی',
+  //     percentage: 30,
+  //     color: '#FE8007'
+  //   }
+  // ];
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line
+  const [pyramidData, setPyramidData] = useState([]);
+
+  // {day: 20, month: 9, year: 1400}
   const [selectedDayRange, setSelectedDayRange] = useState({
-    from: {day: 1, month: 9, year: 1400},
-    to: {day: 20, month: 9, year: 1400}
+    from: null,
+    to: null
   }) as any;
 
   const focusFromDate = () => {
@@ -65,13 +77,88 @@ const TestsInTransport = ()=>{
     return selectedDayRange.to ? selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day : '';
   }
 
+  const getColorByServiceTypeName = (item: any) => {
+    switch (item) {
+      case  'PUBLIC':
+        return '#4EC4F2'
+      case 'TAXI_T':
+        return '#9D19FA'
+      case 'ONLINE':
+        return '#049975'
+      default:
+        return null;
+    }
+  }
+
+  const getServiceTypeName = (item: any) => {
+    switch (item) {
+      case  'PUBLIC':
+        return 'تاکسی پلاک ع'
+      case 'TAXI_T':
+        return 'تاکسی پلاک ت'
+      case 'ONLINE':
+        return 'تاکسی آنلاین'
+      default:
+        return null;
+    }
+  }
+
+  const getTestInTransport = async (params: any) => {
+    setLoading(true);
+    try {
+      const {data} = await transportService.testsInTransport(params);
+
+      let normalizedDate = [] as any;
+      data.map((item: any) => {
+        if (item.total !== 0) {
+          return normalizedDate.push({
+            title: getServiceTypeName(item.serviceType),
+            percentage: ((item.count * 100) / item.total).toFixed(2),
+            color: getColorByServiceTypeName(item.serviceType)
+          })
+        }
+        return null;
+      })
+
+      normalizedDate = normalizedDate.sort((a: any, b: any) => {
+        return b.percentage - a.percentage;
+      });
+
+      setPyramidData(normalizedDate);
+      // // setPyramidData(data);
+      // // console.log(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getTestInTransport({})
+  }, [])
+
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      getTestInTransport({
+        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss')
+      })
+    }
+  }, [selectedDayRange])
+
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">آزمایش در حمل و نقل</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <div className="flex align-center justify-start">
-          {showDatePicker ? <DatePickerModal setSelectedDayRange={setSelectedDayRange} selectedDayRange={selectedDayRange}
-                                             setShowDatePicker={setShowDatePicker} showDatePicker/> : null}
+          {showDatePicker ?
+            <DatePickerModal setSelectedDayRange={setSelectedDayRange} selectedDayRange={selectedDayRange}
+                             setShowDatePicker={setShowDatePicker} showDatePicker/> : null}
           <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
             <div
               className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
@@ -98,7 +185,7 @@ const TestsInTransport = ()=>{
             </div>
           </div>
         </div>
-        <Pyramid data={pyramidData}/>
+        <Pyramid data={pyramidData} loading={loading}/>
       </div>
 
     </fieldset>
