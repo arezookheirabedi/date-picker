@@ -114,21 +114,29 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
       <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-        <Statistic icon={totalDriver} text="مجموع رانندگان" count={counts.numberOfDrivers || 0} />
+        <Statistic
+          icon={totalDriver}
+          text="مجموع رانندگان"
+          count={counts.numberOfDrivers || 0}
+          loading={countsLoading}
+        />
         <Statistic
           icon={YellowVaccine}
           text="تعداد واکسیناسیون دوز اول"
           count={counts.numberOfFirstDose || 0}
+          loading={countsLoading}
         />
         <Statistic
           icon={GreenVaccine}
           text="تعداد واکسیناسیون دوز دوم"
           count={counts.numberOfSecondDose || 0}
+          loading={countsLoading}
         />
         <Statistic
           icon={GrayVaccine}
           text="تعداد واکسیناسیون انجام نشده"
           count={counts.numberOfUnvaccinated || 0}
+          loading={countsLoading}
         />
       </div>
       {loading ? (
@@ -145,9 +153,13 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                 {
                   name: 'وضعیت کلی',
                   key: '',
-                  render: () => (
+                  render: (v: any, record) => (
                     <CategoryDonut
-                      data={{infectedCount: 61.41, deadCount: 25.84, saveCount: 24.85}}
+                      data={{
+                        infectedCount: record.notVaccine,
+                        deadCount: 0,
+                        saveCount: record.twoDoseVaccine,
+                      }}
                     />
                   ),
                   className: 'flex justify-center w-full',
