@@ -100,7 +100,7 @@ const Transport = () => {
               {
                 name: 'وضعیت کلی',
                 key: '',
-                render: () => <CategoryDonut/>,
+                render: () => <CategoryDonut data={{infectedCount: 61.41, deadCount: 25.84, saveCount: 24.85}} />,
                 className: 'flex justify-center w-full',
               },
               {
