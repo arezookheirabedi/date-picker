@@ -2,7 +2,13 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-const options = {
+interface IProps {
+  deadCount: number;
+  infectedCount: number;
+  saveCount: number;
+}
+
+const getOptions = (data: IProps) => ({
   chart: {
     type: 'pie',
     plotBackgroundColor: null,
@@ -49,7 +55,7 @@ const options = {
               [1, '#039572'], // end
             ],
           },
-          y: 61.41,
+          y: data.saveCount,
         },
         {
           name: 'Internet Explorer',
@@ -60,7 +66,7 @@ const options = {
               [1, '#393939'], // end
             ],
           },
-          y: 25.84,
+          y: data.deadCount,
         },
         {
           name: 'Firefox',
@@ -71,19 +77,21 @@ const options = {
               [1, '#CC0002'], // end
             ],
           },
-          y: 24.85,
+          y: data.infectedCount,
         },
       ],
     },
   ],
-};
+});
 
-const CategoryDonut: React.FC<{}> = () => {
+const CategoryDonut: React.FC<{
+  data: IProps;
+}> = ({data}) => {
   return (
     <>
       <div className="tooltip relative">
-        <div style={{width: '50px', height: '50px'}} >
-          <HighchartsReact highcharts={Highcharts} options={options} />
+        <div style={{width: '50px', height: '50px'}}>
+          <HighchartsReact highcharts={Highcharts} options={getOptions(data)} />
         </div>
         <ul className="tooltip__tooltippiechart">
           <li>
@@ -100,9 +108,7 @@ const CategoryDonut: React.FC<{}> = () => {
           </li>
         </ul>
       </div>
-
     </>
-
   );
 };
 
