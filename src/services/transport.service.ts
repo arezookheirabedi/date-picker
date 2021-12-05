@@ -7,6 +7,70 @@ function testsInTransport(params: any) {
     .build().get(`/api/v1/transport/cars/health/test-results/service-type-based/count`, params);
 }
 
+function numberOfDrivers() {
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfDrivers : true
+    });
+}
+
+function numberOfPlaqueVisited() {
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfPlaqueVisited : true
+    });
+}
+
+function numberOfPositiveDrivers() {
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfPositiveDrivers : true
+    });
+}
+
+function numberOfPositivePlaqueVisited() {
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfPositivePlaqueVisited : true
+    });
+}
+
+function numberOfRecoveredDrivers(){
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfRecoveredDrivers : true
+    });
+}
+
+function numberOfTestResults(){
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfTestResults : true
+    });
+}
+
+function numberOfVaccination(){
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/general`, {
+      numberOfVaccination : true
+    });
+}
+
+
 export default {
-  testsInTransport
+  testsInTransport,
+  numberOfDrivers,
+  numberOfPlaqueVisited,
+  numberOfPositiveDrivers,
+  numberOfPositivePlaqueVisited,
+  numberOfRecoveredDrivers,
+  numberOfTestResults,
+  numberOfVaccination
 }
