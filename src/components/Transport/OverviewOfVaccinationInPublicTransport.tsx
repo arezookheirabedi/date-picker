@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-
+import React, {useEffect, useState} from 'react';
+import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalDriver from '../../assets/images/icons/transport-color.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
@@ -7,178 +7,181 @@ import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
 import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import DatePickerModal from '../DatePickerModal';
-import {toPersianDigit} from '../../helpers/utils';
-import calendar from '../../assets/images/icons/calendar.svg';
+import Spinner from '../Spinner';
 
-const OverviewOfVaccinationInPublicTransport = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
+const getServiceTypeName = (item: any) => {
+  switch (item) {
+    case 'PUBLIC':
+      return 'تاکسی پلاک ع';
+    case 'TAXI_T':
+      return 'تاکسی پلاک ت';
+    case 'ONLINE':
+      return 'تاکسی آنلاین';
+    default:
+      return null;
+  }
+};
+
+const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
+  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: {day: 1, month: 9, year: 1400},
-    to: {day: 20, month: 9, year: 1400},
-  }) as any;
+  const [countsLoading, setCountsLoading] = useState(false);
+  const [dataset, setDataset] = useState<any>([]);
+  const [counts, setCounts] = useState<any>({
+    numberOfDrivers: 0,
+    numberOfFirstDose: 0,
+    numberOfSecondDose: 0,
+    numberOfUnvaccinated: 0,
+  });
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  async function getOverviewByVaccine(params: any) {
+    setCountsLoading(true);
+    try {
+      const {data} = await transportService.overviewVaccine(params);
+      setCounts({
+        numberOfDrivers: data.numberOfDrivers || 0,
+        numberOfFirstDose: data.numberOfFirstDose || 0,
+        numberOfSecondDose: data.numberOfSecondDose || 0,
+        numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCountsLoading(false);
+    }
+  }
 
-  const generateFromDate: any = () => {
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
+  async function getOverviewByVaccinePercent(params: any) {
+    setLoading(true);
+    try {
+      const {data} = await transportService.overviewVaccinePercent(params);
+      const normalizedDate: any[] = [];
+      data.forEach((item: any, index: number) => {
+        let total = 0;
+        let twoDoseVaccine = 0;
+        let fullDoseVaccine = 0;
 
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+        if (item.doseCountMap) {
+          // eslint-disable-next-line
+          for (const [key, value] of Object.entries(item.doseCountMap)) {
+            total += Number(value);
+
+            if (Number(key) !== 0) {
+              fullDoseVaccine += Number(value);
+            }
+
+            if (Number(key) === 2) {
+              twoDoseVaccine += Number(value);
+            }
+          }
+        }
+
+        if (total !== 0) {
+          normalizedDate.push({
+            id: `ovvac_${index}`,
+            name: getServiceTypeName(item.serviceType),
+            twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
+            fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
+            // eslint-disable-next-line
+            notVaccine: item.doseCountMap
+              ? item.doseCountMap[0]
+                ? (item.doseCountMap[0] * 100) / total
+                : 0
+              : 0,
+          });
+        }
+      });
+      setDataset([...normalizedDate]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getOverviewByVaccine({
+      numberOfDrivers: true,
+      numberOfFirstDose: true,
+      numberOfSecondDose: true,
+      numberOfUnvaccinated: true,
+    });
+    getOverviewByVaccinePercent({});
+  }, []);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
+
       <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-        <Statistic icon={totalDriver} text="مجموع رانندگان" count={1257} />
-        <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428} />
-        <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون دوز دوم" count={864} />
-        <Statistic icon={GrayVaccine} text="تعداد واکسیناسیون انجام نشده" count={654} />
-      </div>
-      <div className="flex align-center justify-start mb-8">
-        {showDatePicker ? (
-          <DatePickerModal
-            setSelectedDayRange={setSelectedDayRange}
-            selectedDayRange={selectedDayRange}
-            setShowDatePicker={setShowDatePicker}
-            showDatePicker
-          />
-        ) : null}
-        <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateFromDate())}
-            </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
-        </div>
-        <div className=" shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateToDate())}
-            </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        <Table
-          dataSet={[
-            {
-              id: '617d54a39d4b1f0efd2d5904',
-              name: 'اسنپ',
-              employeesCount: 60,
-              infectedCount: 22,
-              saveCount: 22,
-              deadCount: 91,
-              infectedPercent: 24,
-            },
-            {
-              id: '617d54a3e34765550c16dce3',
-              name: 'تپسی',
-              employeesCount: 840,
-              infectedCount: 6,
-              saveCount: 29,
-              deadCount: 1294,
-              infectedPercent: 93,
-            },
-            {
-              id: '617d54a341381bf85e5b6eca',
-              name: 'سرویس مدارس',
-              employeesCount: 3565,
-              infectedCount: 37,
-              saveCount: 30,
-              deadCount: 741,
-              infectedPercent: 92,
-            },
-            {
-              id: '617d54a3b02e2e7d71ca9d12',
-              name: 'تاکسی فرودگاهی',
-              employeesCount: 1998,
-              infectedCount: 27,
-              saveCount: 62,
-              deadCount: 2815,
-              infectedPercent: 35,
-            },
-            {
-              id: '617d54a35649c264fcd29dc7',
-              name: 'اتوبوس رانی',
-              employeesCount: 3384,
-              infectedCount: 21,
-              saveCount: 35,
-              deadCount: 2525,
-              infectedPercent: 74,
-            },
-            {
-              id: '617d54a3feaea113cefef758',
-              name: 'تاکسی تلفنی',
-              employeesCount: 134,
-              infectedCount: 64,
-              saveCount: 80,
-              deadCount: 1156,
-              infectedPercent: 72,
-            },
-          ]}
-          pagination={{pageSize: 20, maxPages: 3}}
-          columns={[
-            {
-              name: 'وضعیت کلی',
-              key: '',
-              render: () => <CategoryDonut data={{infectedCount: 61.41, deadCount: 25.84, saveCount: 24.85}} />,
-              className: 'flex justify-center w-full',
-            },
-            {
-              name: 'رسته های حمل و نقل',
-              key: 'name',
-              render: (v: any, record, index: number) => (
-                <span>
-                  {(index + 1).toLocaleString('fa')}.{v}
-                </span>
-              ),
-            },
-            {
-              name: 'دو دوز',
-              key: 'infectedPercent',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'کل دوز',
-              key: 'infectedCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'واکسن نزده',
-              key: 'saveCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            },
-          ]}
-          totalItems={0}
+        <Statistic icon={totalDriver} text="مجموع رانندگان" count={counts.numberOfDrivers || 0} />
+        <Statistic
+          icon={YellowVaccine}
+          text="تعداد واکسیناسیون دوز اول"
+          count={counts.numberOfFirstDose || 0}
+        />
+        <Statistic
+          icon={GreenVaccine}
+          text="تعداد واکسیناسیون دوز دوم"
+          count={counts.numberOfSecondDose || 0}
+        />
+        <Statistic
+          icon={GrayVaccine}
+          text="تعداد واکسیناسیون انجام نشده"
+          count={counts.numberOfUnvaccinated || 0}
         />
       </div>
+      {loading ? (
+        <div className="mb-5">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+            <Table
+              dataSet={[...dataset]}
+              pagination={{pageSize: 20, maxPages: 3}}
+              columns={[
+                {
+                  name: 'وضعیت کلی',
+                  key: '',
+                  render: () => (
+                    <CategoryDonut
+                      data={{infectedCount: 61.41, deadCount: 25.84, saveCount: 24.85}}
+                    />
+                  ),
+                  className: 'flex justify-center w-full',
+                },
+                {
+                  name: 'رسته های حمل و نقل',
+                  key: 'name',
+                  render: (v: any, record, index: number) => (
+                    <span>
+                      {(index + 1).toLocaleString('fa')}.{v}
+                    </span>
+                  ),
+                },
+                {
+                  name: 'دو دوز',
+                  key: 'twoDoseVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'کل دوز',
+                  key: 'fullDoseVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'واکسن نزده',
+                  key: 'notVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+              ]}
+              totalItems={0}
+            />
+          </div>
+        </>
+      )}
     </fieldset>
   );
 };
