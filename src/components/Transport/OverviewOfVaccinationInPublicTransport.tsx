@@ -1,76 +1,87 @@
-import React, {useState} from "react";
+import React, {useState} from 'react';
 
-import Statistic from "../../containers/Guild/components/Statistic";
-import totalDriver from "../../assets/images/icons/transport-color.svg";
-import YellowVaccine from "../../assets/images/icons/yellow-vaccine.svg";
-import GreenVaccine from "../../assets/images/icons/green-vaccine.svg";
-import GrayVaccine from "../../assets/images/icons/gray-vaccine.svg";
-import Table from "../Table";
-import CategoryDonut from "../../containers/Guild/components/CategoryDonut";
-import DatePickerModal from "../DatePickerModal";
-import {toPersianDigit} from "../../helpers/utils";
-import calendar from "../../assets/images/icons/calendar.svg";
-
+import Statistic from '../../containers/Guild/components/Statistic';
+import totalDriver from '../../assets/images/icons/transport-color.svg';
+import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
+import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
+import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
+import Table from '../Table';
+import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
+import DatePickerModal from '../DatePickerModal';
+import {toPersianDigit} from '../../helpers/utils';
+import calendar from '../../assets/images/icons/calendar.svg';
 
 const OverviewOfVaccinationInPublicTransport = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: {day: 1, month: 9, year: 1400},
-    to: {day: 20, month: 9, year: 1400}
+    to: {day: 20, month: 9, year: 1400},
   }) as any;
 
   const focusFromDate = () => {
     setShowDatePicker(true);
-  }
+  };
 
   const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from ? selectedDayRange.from.year + '/' + selectedDayRange.from.month + '/' + selectedDayRange.from.day : '';
-  }
+    return selectedDayRange.from
+      ? // eslint-disable-next-line
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
+      : '';
+  };
 
   const generateToDate: any = () => {
     // eslint-disable-next-line
-    return selectedDayRange.to ? selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day : '';
-  }
+    return selectedDayRange.to
+      ? // eslint-disable-next-line
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      : '';
+  };
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی واکسیناسیون در حمل و نقل عمومی
-      </legend>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-        <Statistic icon={totalDriver} text="مجموع رانندگان" count={1257}/>
-        <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428}/>
-        <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون دوز دوم" count={864}/>
-        <Statistic icon={GrayVaccine} text="تعداد واکسیناسیون انجام نشده" count={654}/>
+      <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <Statistic icon={totalDriver} text="مجموع رانندگان" count={1257} />
+        <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428} />
+        <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون دوز دوم" count={864} />
+        <Statistic icon={GrayVaccine} text="تعداد واکسیناسیون انجام نشده" count={654} />
       </div>
       <div className="flex align-center justify-start mb-8">
-        {showDatePicker ? <DatePickerModal setSelectedDayRange={setSelectedDayRange} selectedDayRange={selectedDayRange}
-                                           setShowDatePicker={setShowDatePicker} showDatePicker/> : null}
+        {showDatePicker ? (
+          <DatePickerModal
+            setSelectedDayRange={setSelectedDayRange}
+            selectedDayRange={selectedDayRange}
+            setShowDatePicker={setShowDatePicker}
+            showDatePicker
+          />
+        ) : null}
         <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
           <div
             className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateFromDate())}
-                     </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <span className="ml-4 whitespace-nowrap truncate text-xs">
+              {toPersianDigit(generateFromDate())}
+            </span>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
             className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateToDate())}
-                     </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <span className="ml-4 whitespace-nowrap truncate text-xs">
+              {toPersianDigit(generateToDate())}
+            </span>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
       </div>
@@ -137,7 +148,7 @@ const OverviewOfVaccinationInPublicTransport = () => {
             {
               name: 'وضعیت کلی',
               key: '',
-              render: () => <CategoryDonut/>,
+              render: () => <CategoryDonut data={{infectedCount: 61.41, deadCount: 25.84, saveCount: 24.85}} />,
               className: 'flex justify-center w-full',
             },
             {
@@ -163,13 +174,13 @@ const OverviewOfVaccinationInPublicTransport = () => {
               name: 'واکسن نزده',
               key: 'saveCount',
               render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            }
+            },
           ]}
           totalItems={0}
         />
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
 export default OverviewOfVaccinationInPublicTransport;

@@ -49,7 +49,7 @@ class RequestBuilder {
     }
 
     withHeaders(headers: {}): RequestBuilder {
-        this.self.headers = headers;
+        this.self.headers = { ...this.self.headers, ...headers};
         return this;
     }
 
