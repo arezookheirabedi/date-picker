@@ -164,9 +164,11 @@ const TestsInTransport = () => {
               className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
               onClick={focusFromDate}
             >
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
+              {
+                selectedDayRange.from && <span className="ml-4 whitespace-nowrap truncate text-xs">
                       {toPersianDigit(generateFromDate())}
                      </span>
+              }
               <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
@@ -178,9 +180,10 @@ const TestsInTransport = () => {
               className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
               onClick={focusFromDate}
             >
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
+              {selectedDayRange.to && <span className="ml-4 whitespace-nowrap truncate text-xs">
                       {toPersianDigit(generateToDate())}
                      </span>
+              }
               <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>

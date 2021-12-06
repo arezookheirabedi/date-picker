@@ -140,7 +140,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         />
       </div>
       {loading ? (
-        <div className="mb-5">
+        <div className="p-20">
           <Spinner />
         </div>
       ) : (
