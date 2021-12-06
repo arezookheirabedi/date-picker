@@ -29,12 +29,14 @@ const dotStyle = {
   bottom: '0'
 }
 
-const RangeDateSliderFilter = () => {
+// eslint-disable-next-line
+const RangeDateSliderFilter: React.FC<any> = ({setQueryParams = null}) => {
 
   const [marks, setMarks] = useState([
     {
       value: 0,
       label: 'سالیانه',
+      enLabel: 'ANNUAL',
       style: {
         color: '#193149'
       }
@@ -42,6 +44,7 @@ const RangeDateSliderFilter = () => {
     {
       value: 1,
       label: 'ماهانه',
+      enLabel: 'MONTHLY',
       style: {
         color: '#B2B2B2'
       }
@@ -49,6 +52,7 @@ const RangeDateSliderFilter = () => {
     {
       value: 2,
       label: 'هفتگی',
+      enLabel: 'WEEKLY',
       style: {
         color: '#B2B2B2'
       }
@@ -56,16 +60,24 @@ const RangeDateSliderFilter = () => {
     {
       value: 3,
       label: 'روزانه',
+      enLabel: 'DAILY',
       style: {
         color: '#B2B2B2'
       }
     },
   ]) as any;
 
+  // eslint-disable-next-line
+
   const detectSliderChange = (value: any) => {
+
+
     return setMarks((prevState: any) => {
       return prevState.map((it: any) => {
         if (it.value === value) {
+          setQueryParams((prevS: any) => {
+            return {...prevS, type: it.enLabel}
+          })
           return {...it, style: {color: '#193149'}};
         }
         return {...it, style: {color: '#B2B2B2'}};
