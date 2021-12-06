@@ -66,6 +66,7 @@ const OverviewPublicPatients = () => {
     serviceType: '',
   });
 
+
   const getLinearOverviewPublicTransport = async (params: any) => {
     setLoading(true);
     try {
@@ -94,7 +95,7 @@ const OverviewPublicPatients = () => {
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getLinearOverviewPublicTransport({
+      setQueryParams({
         ...queryParams,
         fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD')
@@ -176,7 +177,7 @@ const OverviewPublicPatients = () => {
                   onClick={focusFromDate}
                 >
                   {
-                    selectedDayRange.to &&  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                    selectedDayRange.to && <span className="ml-4 whitespace-nowrap truncate text-xs">
                       {toPersianDigit(generateToDate())}
                      </span>
                   }
