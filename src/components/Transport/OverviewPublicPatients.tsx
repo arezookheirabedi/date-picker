@@ -1,4 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+// @ts-ignore
+import moment from "moment-jalaali";
 
 import {Menu} from "@headlessui/react";
 import {ReactComponent as DownIcon} from "../../assets/images/icons/down.svg";
@@ -7,17 +9,39 @@ import calendar from "../../assets/images/icons/calendar.svg";
 import RangeDateSliderFilter from "../RangeDateSliderFliter";
 import Charts from "../Charts";
 import {toPersianDigit} from "../../helpers/utils";
+import transportService from "../../services/transport.service";
+import Spinner from "../Spinner";
 
 const {Line} = Charts;
-const transportationType = ['کل حمل و نقل', 'اسنپ', 'تپسی', 'تاکسی پلاک ع', 'تاکسی پلاک ت', 'سرویس مدارس', 'تاکسی فرودگاهی', 'اتوبوس رانی'];
 
-const OverviewPublicPatients = ()=>{
-  const [serviceType, setServiceType] = useState(null);
+const transportationType = [{
+  name: 'کل حمل و نقل',
+  enName: ''
+},
+  {
+    name: 'تاکسی آنلاین',
+    enName: 'ONLINE'
+  },
+  {
+    name: 'تاکسی پلاک ع',
+    enName: 'PUBLIC'
+  },
+  {
+    name: 'تاکسی پلاک ت',
+    enName: 'TAXI_T'
+  },
+];
+
+const OverviewPublicPatients = () => {
+  const [data, setData] = useState([]);
+  const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
+  const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
-    from: {day: 1, month: 9, year: 1400},
-    to: {day: 20, month: 9, year: 1400}
+    from: null,
+    to: null
   }) as any;
 
   const focusFromDate = () => {
@@ -33,6 +57,50 @@ const OverviewPublicPatients = ()=>{
     // eslint-disable-next-line
     return selectedDayRange.to ? selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day : '';
   }
+
+  const [queryParams, setQueryParams] = useState({
+    status: 'POSITIVE',
+    type: 'ANNUAL',
+    fromDate: '',
+    toDate: '',
+    serviceType: '',
+  });
+
+  const getLinearOverviewPublicTransport = async (params: any) => {
+    setLoading(true);
+    try {
+      const response = await transportService.linearOverviewPublicTransport(params);
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  useEffect(() => {
+
+    const idSetTimeOut = setTimeout(() => {
+      getLinearOverviewPublicTransport(queryParams);
+    }, 500);
+
+    return () => clearTimeout(idSetTimeOut);
+
+  }, [queryParams])
+
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      getLinearOverviewPublicTransport({
+        ...queryParams,
+        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD')
+      })
+    }
+  }, [selectedDayRange])
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان حمل و نقل عمومی</legend>
@@ -45,7 +113,7 @@ const OverviewPublicPatients = ()=>{
                   className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">{serviceType || 'کل حمل و نقل'}</span>
+                  <span className="ml-10 whitespace-nowrap truncate">{serviceType?.name || 'کل حمل و نقل'}</span>
                   <DownIcon className="h-2 w-2.5 mr-2"/>
                 </Menu.Button>
               </div>
@@ -54,18 +122,25 @@ const OverviewPublicPatients = ()=>{
                 className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {
-                    transportationType.map((value: any) => {
-                      return (<Menu.Item>
+                    transportationType.map((value: any, index: any) => {
+                      // console.log(value);
+                      return (<Menu.Item key={index}>
                         {({active}) => (
                           <button
                             type="button"
                             className={`${
                               active ? 'bg-gray-100' : ''
                             } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                            onClick={()=>setServiceType(value)}
+                            onClick={() => {
+                              setServiceType(value)
+                              setQueryParams({
+                                ...queryParams,
+                                serviceType : value.enName
+                              })
+                            }}
                           >
                             {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value}
+                            {value.name}
                           </button>
                         )}
                       </Menu.Item>)
@@ -108,11 +183,14 @@ const OverviewPublicPatients = ()=>{
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter/>
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
-        <Line/>
+        {
+          // eslint-disable-next-line
+          loading ? <div className="p-40"><Spinner/></div> : data.length ? <Line data={data}/> :
+            <div className="p-40">موری برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   )

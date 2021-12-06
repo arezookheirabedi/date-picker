@@ -1,10 +1,16 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
-const Line: React.FC<any> = () => {
+Highcharts.setOptions({
+  lang: {
+    decimalPoint: '.',
+    thousandsSep: ','
+  },
+})
+const Line: React.FC<any> = ({data}) => {
 
-  const [options] = useState({
+  const [options, setOptions] = useState({
     chart: {
       type: 'line',
       className: 'transport-line-chart'
@@ -91,17 +97,50 @@ const Line: React.FC<any> = () => {
       shared: true,
       useHTML: true,
       borderRadius: 16,
-      borderWidth: 0
+      borderWidth: 0,
+      valueDecimals: 0,
+      style : {
+        direction : "rtl",
+        textAlign : 'right',
+        fontFamily : 'inherit'
+      }
+
       // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
       {
         name: "مبتلایان ",
         data: [50, 550, 330, 100, 400, 210, 270, 400, 300, 350, 200, 150],
-        lineWidth : 4
+        lineWidth: 4
       }
     ]
   }) as any;
+
+  useEffect(() => {
+    if (data.length) {
+      const series = [] as any;
+      const categories = [] as any;
+      data.map((value: any) => {
+        series.push(value.count)
+        return categories.push(value.date);
+      })
+      // console.log('series => ', series);
+      // console.log('categories => ', categories);
+      setOptions({
+        xAxis: {
+          categories,
+          lineDashStyle: "dash",
+          lineColor: "#000000",
+          lineWidth: 1
+        },
+        series: [
+          {data: series}
+        ]
+      });
+    }
+
+  }, [data])
+
 
   // const updateSeries = () => {
   //   // The chart is updated only with new options.
@@ -120,7 +159,6 @@ const Line: React.FC<any> = () => {
   //
   //   return () => clearInterval(id);
   // })
-
 
 
   // const updateCategories = () => {
