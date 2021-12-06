@@ -1,42 +1,36 @@
-import Charts from "../../components/Charts";
-import Table from "../../components/Table";
-import CategoryDonut from "../Guild/components/CategoryDonut";
-import Statistic from "../Guild/components/Statistic";
-import guildIcon from "../../assets/images/icons/guild-color.svg";
-import sufferingIcon from "../../assets/images/icons/suffering-color.svg";
-import saveIcon from "../../assets/images/icons/save-color.svg";
-import deadIcon from "../../assets/images/icons/dead-color.svg";
-import vaccineIcon from "../../assets/images/icons/vaccine-color.svg";
-import scanIcon from "../../assets/images/icons/scan-color.svg";
-import scanDangerIcon from "../../assets/images/icons/scan-danger-color.svg";
-import testIcon from "../../assets/images/icons/test-color.svg";
+import Charts from '../../components/Charts';
+import Table from '../../components/Table';
+import CategoryDonut from '../Guild/components/CategoryDonut';
+import Statistic from '../Guild/components/Statistic';
+import guildIcon from '../../assets/images/icons/guild-color.svg';
+import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
+import saveIcon from '../../assets/images/icons/save-color.svg';
+import deadIcon from '../../assets/images/icons/dead-color.svg';
+import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
+import scanIcon from '../../assets/images/icons/scan-color.svg';
+import scanDangerIcon from '../../assets/images/icons/scan-danger-color.svg';
+import testIcon from '../../assets/images/icons/test-color.svg';
 
-
-const {Column, Gauge , Map} = Charts;
+const {Column, Gauge, Map} = Charts;
 const Transport = () => {
-
   return (
     <div className="space-y-16 mb-8">
       <fieldset className="text-center border rounded-xl p-4">
-        <legend className="text-black mx-auto px-3">
-          نگاه کلی به وضعیت مسافران
-        </legend>
+        <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران</legend>
 
         {/* <div>head</div> */}
         <div className="md:flex  justify-between space-y-5 lg:space-y-0">
           <div className="w-full lg:w-7/12">
-            <Column/>
+            <Column />
           </div>
           <div className="w-full lg:w-5/12">
-            <Gauge/>
+            <Gauge />
           </div>
         </div>
       </fieldset>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
-          نگاه کلی به وضعیت مسافران
-        </legend>
+        <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران</legend>
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
           <Table
             dataSet={[
@@ -100,7 +94,48 @@ const Transport = () => {
               {
                 name: 'وضعیت کلی',
                 key: '',
-                render: () => <CategoryDonut data={{infectedCount: 61.41, deadCount: 25.84, saveCount: 24.85}} />,
+                render: () => (
+                  <CategoryDonut
+                    data={[
+                      {
+                        name: 'deadCount',
+                        title: 'تعداد فوت‌شدگان',
+                        y: 25.84,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#6E6E6E'], // start
+                            [1, '#393939'], // end
+                          ],
+                        },
+                      },
+                      {
+                        name: 'saveCount',
+                        title: 'تعداد بهبودیافتگان',
+                        y: 61.41,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#05D8A4'], // start
+                            [1, '#039572'], // end
+                          ],
+                        },
+                      },
+                      {
+                        name: 'infectedCount',
+                        title: 'تعداد مبتلایان',
+                        y: 24.85,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#FE2D2F'], // start
+                            [1, '#CC0002'], // end
+                          ],
+                        },
+                      },
+                    ]}
+                  />
+                ),
                 className: 'flex justify-center w-full',
               },
               {
@@ -108,8 +143,8 @@ const Transport = () => {
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
-                  {(index + 1).toLocaleString('fa')}.{v}
-                </span>
+                    {(index + 1).toLocaleString('fa')}.{v}
+                  </span>
                 ),
               },
               {
@@ -144,39 +179,32 @@ const Transport = () => {
       </fieldset>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
-          وضعیت کلی مسافران کشور
-        </legend>
+        <legend className="text-black mx-auto px-3">وضعیت کلی مسافران کشور</legend>
 
         <div className="flex flex-col justify-between space-y-8">
-          <div
-            className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-            <Statistic icon={guildIcon} text="مجموع مسافران" count={2800}/>
-            <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800}/>
-            <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450}/>
-            <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200}/>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+            <Statistic icon={guildIcon} text="مجموع مسافران" count={2800} />
+            <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800} />
+            <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450} />
+            <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200} />
           </div>
-          <div
-            className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-            <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={654}/>
-            <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={654}/>
-            <Statistic icon={scanDangerIcon} text="تعداد استعلام های نتیجه مثبت" count={428}/>
-            <Statistic icon={testIcon} text="تعداد آزمایش های کاربران" count={864}/>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+            <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={654} />
+            <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={654} />
+            <Statistic icon={scanDangerIcon} text="تعداد استعلام های نتیجه مثبت" count={428} />
+            <Statistic icon={testIcon} text="تعداد آزمایش های کاربران" count={864} />
           </div>
         </div>
       </fieldset>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
-          نگاه کلی به وضعیت مسافران کشور
-        </legend>
+        <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران کشور</legend>
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-          <Map/>
+          <Map />
         </div>
       </fieldset>
-
     </div>
-  )
-}
+  );
+};
 
 export default Transport;
