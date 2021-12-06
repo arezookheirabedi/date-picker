@@ -46,7 +46,7 @@ const OverviewCategories: React.FC<{}> = () => {
             employeesCount: item.total || 0,
             infectedCount: item.count || 0,
             infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            // saveCount: 2279,
+            saveCount: item.recoveredCount || 0,
             // deadCount: 120,
           });
         }
@@ -71,11 +71,11 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -83,7 +83,7 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -118,35 +118,35 @@ const OverviewCategories: React.FC<{}> = () => {
             className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-            {
-              selectedDayRange.from && <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateFromDate())}
-            </span>
-            }
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            {selectedDayRange.from && (
+              <span className="ml-4 whitespace-nowrap truncate text-xs">
+                {toPersianDigit(generateFromDate())}
+              </span>
+            )}
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
             className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-            {
-              selectedDayRange.to && <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateToDate())}
-            </span>
-            }
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            {selectedDayRange.to && (
+              <span className="ml-4 whitespace-nowrap truncate text-xs">
+                {toPersianDigit(generateToDate())}
+              </span>
+            )}
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table
@@ -158,11 +158,44 @@ const OverviewCategories: React.FC<{}> = () => {
                 key: '',
                 render: (v: any, record) => (
                   <CategoryDonut
-                    data={{
-                      infectedCount: record.infectedCount || 0,
-                      saveCount: record.saveCount || 0,
-                      deadCount: record.deadCount || 0,
-                    }}
+                    data={[
+                      {
+                        name: 'deadCount',
+                        title: 'تعداد فوت‌شدگان',
+                        y: record.deadCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#6E6E6E'], // start
+                            [1, '#393939'], // end
+                          ],
+                        },
+                      },
+                      {
+                        name: 'saveCount',
+                        title: 'تعداد بهبودیافتگان',
+                        y: record.saveCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#05D8A4'], // start
+                            [1, '#039572'], // end
+                          ],
+                        },
+                      },
+                      {
+                        name: 'infectedCount',
+                        title: 'تعداد مبتلایان',
+                        y: record.infectedCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#FE2D2F'], // start
+                            [1, '#CC0002'], // end
+                          ],
+                        },
+                      },
+                    ]}
                   />
                 ),
                 className: 'flex justify-center w-full',

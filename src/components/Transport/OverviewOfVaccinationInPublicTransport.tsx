@@ -155,11 +155,32 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                   key: '',
                   render: (v: any, record) => (
                     <CategoryDonut
-                      data={{
-                        infectedCount: record.notVaccine,
-                        deadCount: 0,
-                        saveCount: record.twoDoseVaccine,
-                      }}
+                      data={[
+                        {
+                          name: 'fullDoseVaccine',
+                          title: 'دوز کل',
+                          y: record.fullDoseVaccine || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#05D8A4'], // start
+                              [1, '#039572'], // end
+                            ],
+                          },
+                        },
+                        {
+                          name: 'notVaccine',
+                          title: 'واکسن نزده',
+                          y: record.notVaccine || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#FE2D2F'], // start
+                              [1, '#CC0002'], // end
+                            ],
+                          },
+                        },
+                      ]}
                     />
                   ),
                   className: 'flex justify-center w-full',
