@@ -71,11 +71,11 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -83,7 +83,7 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -118,31 +118,35 @@ const OverviewCategories: React.FC<{}> = () => {
             className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
+            {
+              selectedDayRange.from && <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateFromDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            }
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
+          <span className="dash-separator"/>
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
             className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
+            {
+              selectedDayRange.to && <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateToDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            }
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
-          <div className="mb-5">
-            <Spinner />
+          <div className="p-20">
+            <Spinner/>
           </div>
         ) : (
           <Table
