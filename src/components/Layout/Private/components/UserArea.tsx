@@ -42,7 +42,7 @@ const UserArea: React.FC<any> = () => {
           <Menu.Button className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             <img src={avatar} alt={profile.nationalId} className="w-5 h-5" />
-            <span className="mx-3 whitespace-nowrap truncate">{profile.nationalId || "نگین آساده"}</span>
+            <span className="mx-3 whitespace-nowrap truncate">{window.localStorage.getItem('ministers-username') || ""}</span>
             <DownIcon className="h-2 w-2.5 mr-2" />
           </Menu.Button>
         </div>
