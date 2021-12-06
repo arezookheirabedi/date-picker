@@ -4,7 +4,7 @@ import request from "../helpers/request";
 function testsInTransport(params: any) {
   return request
     .withHeaders({ "Content-Type": "application/json;utf-8" })
-    .build().get(`/api/v1/transport/cars/health/test-results/service-type-based/count?lang=fa`, params);
+    .build().get(`/api/v1/transport/cars/health/test-results/service-type-based/count?lang=fa&status=POSITIVE&status=NEGATIVE`, params);
 }
 
 
@@ -83,6 +83,12 @@ function overviewVaccinePercent(params: any) {
     .build().get(`/api/v1/transport/drivers/health/vaccination-doses/service-based/count?lang=fa`, params);
 }
 
+function linearOverviewPublicTransport(params : any){
+  return request
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .build().get(`/api/v1/transport/drivers/health/test-result/time-based/count?lang=fa`, params);
+}
+
 export default {
   testsInTransport,
   overviewCategory,
@@ -94,5 +100,6 @@ export default {
   numberOfPositivePlaqueVisited,
   numberOfRecoveredDrivers,
   numberOfTestResults,
-  numberOfVaccination
+  numberOfVaccination,
+  linearOverviewPublicTransport
 }
