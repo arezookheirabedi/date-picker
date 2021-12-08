@@ -36,6 +36,7 @@ const OverviewPublicPatients = () => {
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
@@ -69,10 +70,12 @@ const OverviewPublicPatients = () => {
 
   const getLinearOverviewPublicTransport = async (params: any) => {
     setLoading(true);
+    setErrorMessage(null)
     try {
       const response = await transportService.linearOverviewPublicTransport(params);
       setData(response.data);
     } catch (error) {
+      setErrorMessage(error.message)
       console.log(error);
     } finally {
       setLoading(false)
@@ -192,10 +195,10 @@ const OverviewPublicPatients = () => {
           </div>
         </div>
 
-        {
-          // eslint-disable-next-line
-          loading ? <div className="p-40"><Spinner/></div> : data.length ? <Line data={data}/> :
-            <div className="p-40">موردی برای نمایش وجود ندارد.</div>}
+        {loading && <div className="p-40"><Spinner/></div>}
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/> }
+        {data.length === 0 && !loading && !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   )
