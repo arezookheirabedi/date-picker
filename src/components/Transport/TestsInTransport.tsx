@@ -7,6 +7,7 @@ import DatePickerModal from "../DatePickerModal";
 import {toPersianDigit} from "../../helpers/utils";
 import calendar from "../../assets/images/icons/calendar.svg";
 import transportService from "../../services/transport.service";
+import Spinner from "../Spinner";
 
 
 const {Pyramid} = Charts;
@@ -54,6 +55,7 @@ const TestsInTransport = () => {
   // ];
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [pyramidData, setPyramidData] = useState([]);
 
@@ -105,6 +107,7 @@ const TestsInTransport = () => {
 
   const getTestInTransport = async (params: any) => {
     setLoading(true);
+    setErrorMessage(null);
     try {
       const {data} = await transportService.testsInTransport(params);
 
@@ -129,6 +132,7 @@ const TestsInTransport = () => {
       // // console.log(data);
     } catch (error) {
       console.log(error);
+      setErrorMessage(error.message)
     } finally {
       setLoading(false);
     }
@@ -188,7 +192,12 @@ const TestsInTransport = () => {
             </div>
           </div>
         </div>
-        <Pyramid data={pyramidData} loading={loading}/>
+        {loading && <div className="p-40"><Spinner/></div>}
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && pyramidData.length > 0 && !errorMessage && <Pyramid data={pyramidData}/>}
+        {pyramidData.length === 0 && !loading && !errorMessage &&
+        <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
+
       </div>
 
     </fieldset>
