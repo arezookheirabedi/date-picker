@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import Slider from 'rc-slider';
 
 import 'rc-slider/assets/index.css';
-import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import {Calendar} from "react-modern-calendar-datepicker";
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
+import {Calendar} from '@hassanmojab/react-modern-calendar-datepicker';
 
 import {ReactComponent as SidebarFilterIcon} from "../../../../assets/images/icons/sidebar-filter.svg";
 
@@ -133,7 +133,7 @@ const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter})
         </div>
 
         <h5 className="text-right  text-primary-color text-base mb-3 mx-auto">استان</h5>
-        <div className="input-holder mb-12">
+        <div className="input-wrapper mb-12">
           <input type="text" placeholder="استان" />
         </div>
 
@@ -227,7 +227,7 @@ const SideBarFilter: React.FC<ISideBarFilter> = ({filterCollapse, toggleFilter})
         </div>
 
         <div className="w-3/5 mx-auto" >
-          <button type="button" className="btn btn--primary">
+          <button type="button" className="button button--primary">
             اعمال فیلتر
           </button>
         </div>

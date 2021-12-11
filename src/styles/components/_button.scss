@@ -1,4 +1,4 @@
-.btn {
+.button {
   &,
   &:link,
   &:visited {
@@ -52,7 +52,7 @@
     //  fill: $color-white;
     //}
 
-    @at-root .btn--primary.medium {
+    @at-root .button--primary.medium {
       font-size: 1.6rem;
       padding: 1.3rem 5rem;
       display: block !important;
@@ -60,7 +60,7 @@
       width: 100%;
     }
 
-    @at-root .btn--primary.small {
+    @at-root .button--primary.small {
       font-size: 1.6rem;
       padding: 1.3rem 0;
       display: block !important;
@@ -68,7 +68,7 @@
       width: 100%;
     }
 
-    @at-root .btn--primary.download {
+    @at-root .button--primary.download {
       font-size: 1.4rem;
       padding: 0.5rem !important;
       border-radius: 4px !important;
@@ -77,7 +77,7 @@
       width: 100%;
     }
 
-    @at-root .btn--primary.download2 {
+    @at-root .button--primary.download2 {
       font-size: 1.3rem;
       padding: 0.5rem 1rem !important;
       border-radius: 4px !important;
@@ -115,7 +115,7 @@
     //  fill: $color-white;
     //}
 
-    @at-root .btn--secondary.medium {
+    @at-root .button--secondary.medium {
       font-size: 1.6rem;
       padding: 1.3rem 5rem;
       display: block !important;
@@ -123,7 +123,7 @@
       width: 100%;
     }
 
-    @at-root .btn--secondary.small {
+    @at-root .button--secondary.small {
       font-size: 1.6rem;
       padding: 1.3rem 0;
       display: block !important;
@@ -131,7 +131,7 @@
       width: 100%;
     }
 
-    @at-root .btn--secondary.download {
+    @at-root .button--secondary.download {
       font-size: 1.4rem;
       padding: 0.5rem !important;
       border-radius: 4px !important;
@@ -140,7 +140,7 @@
       width: 100%;
     }
 
-    @at-root .btn--secondary.download2 {
+    @at-root .button--secondary.download2 {
       font-size: 1.3rem;
       padding: 0.5rem 1rem !important;
       border-radius: 4px !important;

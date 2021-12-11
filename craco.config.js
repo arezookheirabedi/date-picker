@@ -20,6 +20,13 @@ module.exports = {
         pathRewrite: {'^/guilds': ''},
         secure : false
       },
+      '/transport': {
+        target: 'https://gateway.new.vaslapp.com',
+        // target: 'https://gateway.new.vaslapp.com',
+        changeOrigin: true,
+        pathRewrite: {'^/transport': ''},
+        secure : false
+      },
     },
   },
 };
