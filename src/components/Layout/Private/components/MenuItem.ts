@@ -6,6 +6,7 @@ import menu from 'src/assets/images/patterns/menu.svg';
 const MenuItem = styled.div`
   font-weight: 500;
   font-size: 0.9rem;
+
   a,
   button {
     color: ${colors.gray['400']};
@@ -15,6 +16,21 @@ const MenuItem = styled.div`
       color: #57687a;
       font-weight: bold;
       background-color: transparent !important;
+
+      ~ ul {
+        li {
+          a.active {
+            > div {
+              background: #57687a;
+            }
+
+          }
+        }
+      }
+
+      > div {
+        background: #57687a;
+      }
 
       &:before {
         content: '';

@@ -1,0 +1,57 @@
+.go-to-bottom {
+  position: relative;
+  height: 7rem;
+  width: 3rem;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  cursor: pointer;
+  animation: MoveUpDown .3s linear infinite;
+
+  &__top {
+    width: 2.5rem;
+    height: 3.5rem;
+    border: 2px solid #000;
+    margin: 0 auto;
+    border-radius: 42%;
+    position: relative;
+
+    &--line {
+      width: 0rem;
+      height: 8px;
+      border: 1px solid $color-black;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      transition: all 0.3s ease;
+      @include respond(r415){
+        height: 4px;
+      }
+    }
+  }
+
+  &__bottom {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid $color-black;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    margin: 0 auto;
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+    top: -2px;
+    position: relative;
+  }
+
+  //&:hover &__top--line {
+  //  top: 20%;
+  //  height: 9px;
+  //}
+  //
+  //&:hover &__bottom {
+  //  top: 3px;
+  //  position: relative;
+  //}
+}

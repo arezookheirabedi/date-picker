@@ -1,10 +1,9 @@
-import React, {useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // eslint-disable-next-line
 import {Redirect, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
 import {useOutsideSidebar} from 'src/hooks/useOutsideSidebar';
 import routes from 'src/routes';
-// eslint-disable-next-line
 import {isLogin} from 'src/helpers/utils';
 import logo from 'src/assets/images/logos/logo.svg';
 // eslint-disable-next-line
@@ -146,7 +145,9 @@ const PrivateLayout: React.FC<any> = () => {
           <div className="bg-white flex-grow flex flex-col relative">
             <Switch>
               {routes.map((route, i) => (
-                <Route path={route.link} exact={route.exact} key={i} component={route.main}/>
+                !route.subMenu ? <Route path={route.link} exact={route.exact} key={i} component={route.main}/> : route.subMenu.map((routeArg: any,ind: any)=>(
+                  <Route path={routeArg.link} exact={routeArg.exact} key={ind} component={routeArg.main}/>
+                ))
               ))}
               <Route component={Overview}/>
             </Switch>
@@ -164,14 +165,21 @@ export default PrivateLayout;
 // @ts-ignore
 export const PrivateRoute: (any) => any = props => {
   const {component: Component, ...rest} = props;
+  useEffect(() => {
+    document.getElementsByTagName('html')[0].style.fontSize = 'inherit';
+    document.getElementsByTagName('body')[0].style.fontSize = 'inherit';
+    return () => {
+      document.getElementsByTagName('html')[0].style.fontSize = '';
+      document.getElementsByTagName('body')[0].style.fontSize = '';
+    }
+  }, [])
 
   return (
     // Show the component only when the user is logged in
     // Otherwise, redirect the user to /signin page
     <Route
       {...rest}
-      // render={comprops => (isLogin() ? <Component {...comprops} /> : <Redirect to="/" />)}
-      render={comprops => <Component {...comprops} />}
+      render={comprops => (isLogin() ? <Component {...comprops} /> : <Redirect to="/" />)}
     />
   );
 };

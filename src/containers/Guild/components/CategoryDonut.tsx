@@ -2,7 +2,17 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-const options = {
+interface IData {
+  color: {
+    linearGradient: any;
+    stops: Array<Array<any>>;
+  };
+  name: string;
+  title: string;
+  y: number;
+}
+
+const getOptions = (opt: IData[]) => ({
   chart: {
     type: 'pie',
     plotBackgroundColor: null,
@@ -37,52 +47,47 @@ const options = {
   },
   series: [
     {
-      name: 'Brands',
+      name: '',
       colorByPoint: true,
-      data: [
-        {
-          name: 'Chrome',
-          color: {
-            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-            stops: [
-              [0, '#05D8A4'], // start
-              [1, '#039572'], // end
-            ],
-          },
-          y: 61.41,
+      data: opt.map((item: IData, index: number) => ({
+        index,
+        name: item.name,
+        color: item.color || {
+          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+          stops: [
+            [0, '#05D8A4'], // start
+            [1, '#039572'], // end
+          ],
         },
-        {
-          name: 'Internet Explorer',
-          color: {
-            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-            stops: [
-              [0, '#6E6E6E'], // start
-              [1, '#393939'], // end
-            ],
-          },
-          y: 25.84,
-        },
-        {
-          name: 'Firefox',
-          color: {
-            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-            stops: [
-              [0, '#FE2D2F'], // start
-              [1, '#CC0002'], // end
-            ],
-          },
-          y: 24.85,
-        },
-      ],
+        y: item.y,
+      })),
     },
   ],
-};
+});
 
-const CategoryDonut: React.FC<{}> = () => {
+const CategoryDonut: React.FC<{
+  data: IData[];
+}> = ({data}) => {
   return (
-    <div style={{width: '50px', height: '50px'}}>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-    </div>
+    <>
+      <div className="tooltip relative">
+        <div style={{width: '50px', height: '50px'}}>
+          <HighchartsReact highcharts={Highcharts} options={getOptions(data)} />
+        </div>
+        <ul className="tooltip__tooltippiechart">
+          {data.map((item: IData, index: number) => (
+            <li key={`${item.name}_${index}`}>
+              <span
+                style={{
+                  background: `transparent linear-gradient(180deg, ${item.color.stops[0][1]} 0%, ${item.color.stops[1][1]} 100%) 0 0 no-repeat`,
+                }}
+              />
+              {item.title}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
