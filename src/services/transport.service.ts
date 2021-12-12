@@ -10,82 +10,82 @@ function testsInTransport(params: any) {
 
 function overviewCategory(params: any) {
   return request
-    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (3 * 60 * 1000) })
     .build().get(`/api/v1/transport/cars/service-type-based/count?lang=fa`, params);
 }
 
 function numberOfDrivers() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfDrivers : true
+      numberOfDrivers: true
     });
 }
 
 function numberOfPlaqueVisited() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfPlaqueVisited : true
+      numberOfPlaqueVisited: true
     });
 }
 
 function numberOfPositiveDrivers() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfPositiveDrivers : true
+      numberOfPositiveDrivers: true
     });
 }
 
 function numberOfPositivePlaqueVisited() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfPositivePlaqueVisited : true
+      numberOfPositivePlaqueVisited: true
     });
 }
 
-function numberOfRecoveredDrivers(){
+function numberOfRecoveredDrivers() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfRecoveredDrivers : true
+      numberOfRecoveredDrivers: true
     });
 }
 
-function numberOfTestResults(){
+function numberOfTestResults() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfTestResults : true
+      numberOfTestResults: true
     });
 }
 
-function numberOfVaccination(){
+function numberOfVaccination() {
   return request
-    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .withHeaders({ "Content-Type": "application/json;utf-8" })
     .build().get(`/api/v1/transport/reports/general`, {
-      numberOfVaccination : true
+      numberOfVaccination: true
     });
 }
 
 
 function overviewVaccine(params: any) {
   return request
-    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (3 * 60 * 1000) })
     .build().get(`/api/v1/transport/reports/vaccine?lang=fa`, params);
 }
 
 function overviewVaccinePercent(params: any) {
   return request
-    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (3 * 60 * 1000) })
     .build().get(`/api/v1/transport/drivers/health/vaccination-doses/service-based/count?lang=fa`, params);
 }
 
-function linearOverviewPublicTransport(params : any){
+function linearOverviewPublicTransport(params: any) {
   return request
-    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (60 * 1000) })
+    .withHeaders({ "Content-Type": "application/json;utf-8", timeout: (3 * 60 * 1000) })
     .build().get(`/api/v1/transport/drivers/health/test-result/time-based/count?lang=fa`, params);
 }
 
