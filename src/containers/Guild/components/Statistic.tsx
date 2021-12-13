@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Information from "../../../assets/images/icons/information.svg";
 
 const Statistic: React.FC<{ icon: any; text: string; count: any; hasInfo?: boolean; loading?: any }> = ({
@@ -25,7 +24,7 @@ const Statistic: React.FC<{ icon: any; text: string; count: any; hasInfo?: boole
         height : '12px',
         borderRadius : '10px',
         marginBottom : '10px'
-      }} /> : (count || 0).toLocaleString('fa')}</div>
+      }} /> : (count || 0).commaSeprator().toPersianDigits()}</div>
     <div className="flex text-gray-500 text-sm  mx-auto">{text || ''}</div>
   </fieldset>
 );
