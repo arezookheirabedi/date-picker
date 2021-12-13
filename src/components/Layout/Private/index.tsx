@@ -99,7 +99,7 @@ const PrivateLayout: React.FC<any> = () => {
       </div>
       <div className="mr-0 xl:mr-72 flex relative min-h-screen">
         <div className="flex-grow flex flex-col lg:pl-12 xl:pr-32 xl:pl-14 sm:px-12 sm:py-6 px-4 py-2 xl:py-0">
-          <div className="lg:py-8">
+          <div className="lg:py-4">
             {collapsible
               ? React.createElement(
                 props => (
