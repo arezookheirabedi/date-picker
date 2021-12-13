@@ -144,7 +144,6 @@ const sideCities = [
 ]
 
 const itemStatistics = [
-  [
     {
       title: "مجموع رانندگان",
       count: "1257",
@@ -165,8 +164,6 @@ const itemStatistics = [
       count: 564,
       icon: deadIcon,
     },
-  ],
-  [
     {
       title: "مجموع واکسیناسیون",
       count: 436,
@@ -187,7 +184,6 @@ const itemStatistics = [
       count: 564,
       icon: testIcon,
     }
-  ]
 ];
 
 const mockDate = [
