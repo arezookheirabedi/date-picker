@@ -14,13 +14,12 @@ const {Line} = Charts;
 const transportationType = ['کل حمل و نقل', 'اسنپ', 'تپسی', 'تاکسی پلاک ع', 'تاکسی پلاک ت', 'سرویس مدارس', 'تاکسی فرودگاهی', 'اتوبوس رانی'];
 
 
-
-interface OverviewPublicPatientsProvinceProps{
-  data : any;
-  cityTitle : string;
+interface OverviewPublicPatientsProvinceProps {
+  data: any;
+  cityTitle: string;
 }
 
-const OverviewPublicPatientsProvince : React.FC<OverviewPublicPatientsProvinceProps> = ({cityTitle,data}) => {
+const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({cityTitle, data}) => {
   const [serviceType, setServiceType] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
@@ -90,21 +89,25 @@ const OverviewPublicPatientsProvince : React.FC<OverviewPublicPatientsProvincePr
                 className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {
-                    transportationType.map((value: any) => {
-                      return (<Menu.Item>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                            onClick={()=>setServiceType(value)}
-                          >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value}
-                          </button>
-                        )}
-                      </Menu.Item>)
+                    transportationType.map((value: any, index: any) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <Menu.Item>
+                            {({active}) => (
+                              <button
+                                type="button"
+                                className={`${
+                                  active ? 'bg-gray-100' : ''
+                                } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                                onClick={() => setServiceType(value)}
+                              >
+                                {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
+                                {value}
+                              </button>
+                            )}
+                          </Menu.Item>
+                        </React.Fragment>
+                      )
                     })
                   }
 
@@ -144,11 +147,11 @@ const OverviewPublicPatientsProvince : React.FC<OverviewPublicPatientsProvincePr
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
-        <Line data={data} />
+        <Line data={data}/>
       </div>
     </fieldset>
   )
