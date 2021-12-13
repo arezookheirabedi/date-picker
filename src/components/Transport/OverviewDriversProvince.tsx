@@ -1,4 +1,5 @@
 import React from "react";
+
 import Statistic from "../../containers/Guild/components/Statistic";
 
 
@@ -18,10 +19,10 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
 
       <div className="flex flex-col justify-between space-y-8">
         {
-          itemStatistics.map((item: any, index: any) => {
+          itemStatistics.chunk(4).map((item: any, index: any) => {
             return (
+              <React.Fragment key={index} >
               <div
-                key={index}
                 className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
                 {
                   item.map((it: any, ind: any) => {
@@ -33,6 +34,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
                   })
                 }
               </div>
+              </React.Fragment>
             )
           })
         }
