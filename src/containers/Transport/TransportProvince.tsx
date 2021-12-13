@@ -147,7 +147,7 @@ const itemStatistics = [
   [
     {
       title: "مجموع رانندگان",
-      count: 1257,
+      count: "1257",
       icon: totalDriver,
     },
     {
