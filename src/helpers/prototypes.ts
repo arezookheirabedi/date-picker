@@ -1,7 +1,12 @@
+import { fixNumbers } from "./utils";
+
 declare global {
   interface String {
     toPersianDigits(): string;
     toEnglishDigits(): string;
+  }
+  interface Number {
+    toPersianDigits(): string;
   }
 }
 
@@ -9,6 +14,11 @@ declare global {
 String.prototype.toPersianDigits = function () {
   const id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return this.replace(/[0-9]/g, w => id[+w]);
+};
+
+// eslint-disable-next-line
+Number.prototype.toPersianDigits = function () {
+  return fixNumbers(this);
 };
 
 
@@ -29,4 +39,4 @@ String.prototype.toEnglishDigits = function () {
   return this.replace(/[^0-9.]/g, (w: any) => id[w] || w);
 };
 
-export {};
+export { };
