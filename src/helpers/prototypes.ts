@@ -8,6 +8,11 @@ declare global {
     commaSeprator(): string;
     toPersianDigits(): string;
   }
+
+  // eslint-disable-next-line
+  interface Array<T> {
+    chunk(p:number) : string[][];
+  }
 }
 
 // eslint-disable-next-line
@@ -53,7 +58,13 @@ Number.prototype.toPersianDigits = function () {
   return (this + "").replace(/[0-9]/g, w => id[+w]);
 };
 
-
-
+// eslint-disable-next-line
+Array.prototype.chunk = function (n : number) {
+  if ( !this.length ) {
+    return [];
+  }
+  // eslint-disable-next-line
+  return [ this.slice( 0, n ) ].concat( this.slice(n).chunk(n) );
+};
 
 export { };
