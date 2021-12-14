@@ -1,3 +1,5 @@
+import {useEffect, useState} from "react";
+
 import OverviewDriversMap from "../../components/Transport/OverviewDriversMap";
 import OverviewDriversProvince from "../../components/Transport/OverviewDriversProvince";
 
@@ -15,6 +17,7 @@ import {IDetail} from "../../components/Charts/Pyramid";
 import OverviewCategoriesProvince from "../../components/Transport/OverviewCategoriesProvince";
 import OverviewOfVaccinationInPublicTransportProvince
   from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
+
 
 const sideCities = [
   {
@@ -144,96 +147,96 @@ const sideCities = [
 ]
 
 const itemStatistics = [
-    {
-      title: "مجموع رانندگان",
-      count: "1257",
-      icon: totalDriver,
-    },
-    {
-      title: "مجموع مبتلایان",
-      count: 1257,
-      icon: sufferingIcon,
-    },
-    {
-      title: "مجموع بهبودیافتگان",
-      count: 832,
-      icon: saveIcon,
-    },
-    {
-      title: "مجموع فوت‌شدگان",
-      count: 564,
-      icon: deadIcon,
-    },
-    {
-      title: "مجموع واکسیناسیون",
-      count: 436,
-      icon: vaccineIcon,
-    },
-    {
-      title: "تعداد استعلام پلاک",
-      count: 1257,
-      icon: inquiryPlaque,
-    },
-    {
-      title: "تعداد استعلام‌های نتیجه مثبت",
-      count: 832,
-      icon: positiveInquiryPlaque,
-    },
-    {
-      title: "تعداد آزمایش‌های رانندگان",
-      count: 564,
-      icon: testIcon,
-    }
+  {
+    title: "مجموع رانندگان",
+    count: "1257",
+    icon: totalDriver,
+  },
+  {
+    title: "مجموع مبتلایان",
+    count: 1257,
+    icon: sufferingIcon,
+  },
+  {
+    title: "مجموع بهبودیافتگان",
+    count: 832,
+    icon: saveIcon,
+  },
+  {
+    title: "مجموع فوت‌شدگان",
+    count: 564,
+    icon: deadIcon,
+  },
+  {
+    title: "مجموع واکسیناسیون",
+    count: 436,
+    icon: vaccineIcon,
+  },
+  {
+    title: "تعداد استعلام پلاک",
+    count: 1257,
+    icon: inquiryPlaque,
+  },
+  {
+    title: "تعداد استعلام‌های نتیجه مثبت",
+    count: 832,
+    icon: positiveInquiryPlaque,
+  },
+  {
+    title: "تعداد آزمایش‌های رانندگان",
+    count: 564,
+    icon: testIcon,
+  }
 ];
 
 const mockDate = [
   {
-    count : 50,
-    data : "اسفند"
+    count: 50,
+    data: "اسفند"
   },
   {
-    count : 550,
-    data : "بهمن"
+    count: 550,
+    data: "بهمن"
   },
   {
-    count : 330,
-    data : "دی"
+    count: 330,
+    data: "دی"
   },
   {
-    count : 100,
-    data : "آذر"
+    count: 100,
+    data: "آذر"
   },
   {
-    count : 400,
-    data : "آبان"
+    count: 400,
+    data: "آبان"
   },
   {
-    count : 210,
-    data : "مهر"
+    count: 210,
+    data: "مهر"
   },
   {
-    count : 270,
-    data : "شهریور"
+    count: 270,
+    data: "شهریور"
   },
   {
-    count : 400,
-    data : "مرداد"
+    count: 400,
+    data: "مرداد"
   },
   {
-    count : 300,
-    data : "تیر"
+    count: 300,
+    data: "تیر"
   },
   {
-    count : 350,
-    data : "خرداد"
+    count: 350,
+    data: "خرداد"
   },
   {
-    count : 200,
-    data : "اردیبهشت"
+    count: 200,
+    data: "اردیبهشت"
   },
   {
-    count : 150,
-    data : "فروردین"
+    count: 150,
+    data: "فروردین"
   },
 ];
 
@@ -276,14 +279,23 @@ const pyramidData: Array<IDetail> = [
 ];
 
 const TransportProvince = () => {
+
+  const [queryParams, setQueryParams] = useState({
+    provinceId: null
+  })
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('query param has changed', queryParams);
+  }, [queryParams.provinceId])
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle="تهران" sideCityStatus={sideCities}/>
+      <OverviewDriversMap cityTitle="تهران" sideCityStatus={sideCities} setQueryParams={setQueryParams}/>
       <OverviewDriversProvince cityTitle="تهران" itemStatistics={itemStatistics}/>
-      <OverviewCategoriesProvince cityTitle="تهران" />
-      <OverviewPublicPatientsProvince cityTitle="تهران" data={mockDate} />
-      <OverviewOfVaccinationInPublicTransportProvince cityTitle="تهران" />
-      <TestsInTransportProvince cityTitle="تهران" data={pyramidData} />
+      <OverviewCategoriesProvince cityTitle="تهران"/>
+      <OverviewPublicPatientsProvince cityTitle="تهران" data={mockDate}/>
+      <OverviewOfVaccinationInPublicTransportProvince cityTitle="تهران"/>
+      <TestsInTransportProvince cityTitle="تهران" data={pyramidData}/>
     </div>
   )
 }
