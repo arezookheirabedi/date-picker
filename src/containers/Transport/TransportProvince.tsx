@@ -175,7 +175,7 @@ const itemStatistics = [
       icon: inquiryPlaque,
     },
     {
-      title: "تعداد استعلام‌های نتیجه مثبت",
+      title: "تعداد استعلام‌های کوید مثبت",
       count: 832,
       icon: positiveInquiryPlaque,
     },

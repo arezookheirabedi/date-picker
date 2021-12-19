@@ -45,7 +45,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
         {/*  <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={numberOfVaccination} loading={false}/> */}
         {/*  <Statistic icon={inquiryPlaque} text="تعداد استعلام پلاک" count={numberOfPlaqueVisited} hasInfo */}
         {/*             loading={false}/> */}
-        {/*  <Statistic icon={positiveInquiryPlaque} text="تعداد استعلام های نتیجه مثبت" */}
+        {/*  <Statistic icon={positiveInquiryPlaque} text="تعداد استعلام‌های کوید مثبت" */}
         {/*             count={numberOfPositivePlaqueVisited} hasInfo loading={false}/> */}
         {/*  <Statistic icon={testIcon} text="تعداد آزمایش های رانندگان" count={numberOfTestResults} */}
         {/*             loading={false}/> */}
