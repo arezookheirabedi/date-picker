@@ -10,7 +10,7 @@ const {Map} = Charts;
 
 interface OverviewDriversMapProps {
   sideCityStatus?: any;
-  cityTitle: string;
+  cityTitle: any;
   setQueryParams: any;
 }
 
@@ -44,9 +44,9 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
           events: {
             click(e: any) {
               history.push({
-                search: `?provinceId=${e.point.name}`
+                search: `?provinceName=${e.point.properties['fa-name']}`
               })
-              setQueryParams({provinceId: e.point.name})
+              setQueryParams({provinceName: e.point.properties['fa-name']})
               // console.log(e.point.name);
               // history.push({
               //   pathname: '/dresses',
@@ -82,42 +82,48 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
       symbolRadius: 4,
       symbolHeight: 7,
       symbolWidth: 85,
-      itemDistance: -40
+      itemDistance: -40,
     },
     colorAxis: {
       dataClasses: [
         {
           from: 500,
           to: 1000,
-          color: '#AB0A0A',
+          // color: '#AB0A0A',
+          color: '#9e9e9e',
           name: 'بیشتر از ۵۰٪',
         },
         {
           from: 400,
           to: 500,
-          color: '#CF0D0D',
+          // color: '#CF0D0D',
+          color: '#9e9e9e',
           name: '%۲۰ الی ۵۰%',
         },
         {
           from: 300,
           to: 400,
-          color: '#FF9114',
+          // color: '#FF9114',
+          color: '#9e9e9e',
           name: '%۱۰ الی ۲۰%',
         }, {
           from: 200,
           to: 300,
-          color: '#FFC700',
+          // color: '#FFC700',
+          color: '#9e9e9e',
           name: '%۵ الی ۱۰%',
         }, {
           from: 100,
           to: 200,
-          color: '#F8D354',
+          // color: '#F8D354',
+          color: '#9e9e9e',
           name: '%۲ الی ۵%',
 
         }, {
           from: 1,
           to: 100,
-          color: '#FBE186',
+          // color: '#FBE186',
+          color: '#9e9e9e',
           name: '%کمتر از ۲'
         }]
     },
@@ -163,9 +169,9 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         {cityTitle}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow">
-        <ul className="w-5/6">
+        <div className="w-5/6 map-wrapper">
           <Map options={options}/>
-        </ul>
+        </div>
         <ul className="w-1/6">
           {
             sideCityStatus.map((item: any, index: any) => {
