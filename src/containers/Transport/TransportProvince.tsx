@@ -1,4 +1,6 @@
 import {useEffect, useState} from "react";
+import {useLocation} from "react-router-dom";
+// import {useLocation} from "react-router-dom";
 
 import OverviewDriversMap from "../../components/Transport/OverviewDriversMap";
 import OverviewDriversProvince from "../../components/Transport/OverviewDriversProvince";
@@ -22,127 +24,127 @@ import OverviewOfVaccinationInPublicTransportProvince
 const sideCities = [
   {
     name: "هرمزگان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "بوشهر",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "کهگیلویه و بویراحمد",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "فارس",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "اصفهان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "سمنان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "گلستان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "مازندران",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "تهران",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "مرکزی",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "یزد",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "چهارمحال و بختیاری",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "خوزستان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "لرستان",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "ایلام",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "اردبیل",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "قم",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "همدان",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "زنجان",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "قزوین",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "آذربایجان غربی",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "آذربایجان شرقی",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "کرمانشاه",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "گیلان",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "کردستان",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "خراسان جنوبی",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "خراسان رضوی",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "خراسان شمالی",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "سیستان و بلوچستان",
-    color: "#CF0D0D"
+    color: "#ccc"
   },
   {
     name: "کرمان",
-    color: "#CF0D0D"
+    color: "#ccc"
   },
   {
     name: "البرز",
-    color: "#AB0A0A"
+    color: "#ccc"
   },
 ]
 
@@ -280,22 +282,46 @@ const pyramidData: Array<IDetail> = [
 
 const TransportProvince = () => {
 
+  const location = useLocation();
   const [queryParams, setQueryParams] = useState({
-    provinceId: null
-  })
+    provinceName: null
+  }) as any;
+
+  const [cityTitle, setCityTitle] = useState('تهران');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') as any;
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    })
+
+    if (existsCity) {
+      setCityTitle(provinceName);
+    }
+  }, [])
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log('query param has changed', queryParams);
-  }, [queryParams.provinceId])
+    setQueryParams((pre: any) => {
+      return {...pre, provinceName: queryParams.provinceName}
+    })
+
+    if (queryParams.provinceName) {
+      setCityTitle(queryParams.provinceName);
+    }
+
+  }, [queryParams.provinceName])
+
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle="تهران" sideCityStatus={sideCities} setQueryParams={setQueryParams}/>
-      <OverviewDriversProvince cityTitle="تهران" itemStatistics={itemStatistics}/>
-      <OverviewCategoriesProvince cityTitle="تهران"/>
-      <OverviewPublicPatientsProvince cityTitle="تهران" data={mockDate}/>
-      <OverviewOfVaccinationInPublicTransportProvince cityTitle="تهران"/>
-      <TestsInTransportProvince cityTitle="تهران" data={pyramidData}/>
+      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities}
+                          setQueryParams={setQueryParams}/>
+      <OverviewDriversProvince cityTitle={cityTitle} itemStatistics={itemStatistics}/>
+      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+      <OverviewPublicPatientsProvince cityTitle={cityTitle} data={mockDate}/>
+      <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
+      <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData}/>
     </div>
   )
 }
