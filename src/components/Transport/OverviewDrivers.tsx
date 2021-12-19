@@ -144,7 +144,7 @@ const OverviewDrivers = () => {
           <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={numberOfVaccination} loading={numberOfVaccinationLoading}/>
           <Statistic icon={inquiryPlaque} text="تعداد استعلام پلاک" count={numberOfPlaqueVisited} hasInfo
                      loading={numberOfPlaqueVisitedLoading}/>
-          <Statistic icon={positiveInquiryPlaque} text="تعداد استعلام های نتیجه مثبت"
+          <Statistic icon={positiveInquiryPlaque} text="تعداد استعلام‌های کوید مثبت"
                      count={numberOfPositivePlaqueVisited} hasInfo loading={numberOfPositivePlaqueVisitedLoading}/>
           <Statistic icon={testIcon} text="تعداد آزمایش های رانندگان" count={numberOfTestResults}
                      loading={numberOfTestResultsLoading}/>
