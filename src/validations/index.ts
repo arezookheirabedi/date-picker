@@ -2,7 +2,7 @@ export const loginValidation = {
   username: {
     required: {value: true, message: "* وارد کردن شناسه کاربری اجباری است."},
     maxLength: {value: 30, message: "* شناسه کاربری نمیتواند بیشتر از ۳۰ کاراکتر باشد."},
-    pattern: {value: /^\S+@\S+$/i, message: "* فرمت ایمیل درست نمیباشد."}
+    // pattern: {value: /^\S+@\S+$/i, message: "* فرمت ایمیل درست نمیباشد."}
   },
   password: {
     required: {value: true, message: "* وارد کردن رمز عبور اجباری است."},
