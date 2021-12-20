@@ -5,20 +5,14 @@ import {useLocation} from "react-router-dom";
 import OverviewDriversMap from "../../components/Transport/OverviewDriversMap";
 import OverviewDriversProvince from "../../components/Transport/OverviewDriversProvince";
 
-import totalDriver from "../../assets/images/icons/transport-color.svg";
-import sufferingIcon from "../../assets/images/icons/suffering-color.svg";
-import saveIcon from "../../assets/images/icons/save-color.svg";
-import deadIcon from "../../assets/images/icons/dead-color.svg";
-import vaccineIcon from "../../assets/images/icons/vaccine-color.svg";
-import inquiryPlaque from "../../assets/images/icons/inquiry-plaque.svg";
-import positiveInquiryPlaque from "../../assets/images/icons/positive-inquiry-plaque.svg";
-import testIcon from "../../assets/images/icons/test-color.svg";
+
 import OverviewPublicPatientsProvince from "../../components/Transport/OverviewPublicPatientsProvince";
 import TestsInTransportProvince from "../../components/Transport/TestsInTransportProvince";
 import {IDetail} from "../../components/Charts/Pyramid";
 import OverviewCategoriesProvince from "../../components/Transport/OverviewCategoriesProvince";
 import OverviewOfVaccinationInPublicTransportProvince
   from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
+
 
 
 const sideCities = [
@@ -148,48 +142,7 @@ const sideCities = [
   },
 ]
 
-const itemStatistics = [
-  {
-    title: "مجموع رانندگان",
-    count: "1257",
-    icon: totalDriver,
-  },
-  {
-    title: "مجموع مبتلایان",
-    count: 1257,
-    icon: sufferingIcon,
-  },
-  {
-    title: "مجموع بهبودیافتگان",
-    count: 832,
-    icon: saveIcon,
-  },
-  {
-    title: "مجموع فوت‌شدگان",
-    count: 564,
-    icon: deadIcon,
-  },
-  {
-    title: "مجموع واکسیناسیون",
-    count: 436,
-    icon: vaccineIcon,
-  },
-  {
-    title: "تعداد استعلام پلاک",
-    count: 1257,
-    icon: inquiryPlaque,
-  },
-  {
-    title: "تعداد استعلام‌های نتیجه مثبت",
-    count: 832,
-    icon: positiveInquiryPlaque,
-  },
-  {
-    title: "تعداد آزمایش‌های رانندگان",
-    count: 564,
-    icon: testIcon,
-  }
-];
+
 
 const mockDate = [
   {
@@ -281,17 +234,15 @@ const pyramidData: Array<IDetail> = [
 ];
 
 const TransportProvince = () => {
-
   const location = useLocation();
-  const [queryParams, setQueryParams] = useState({
-    provinceName: null
-  }) as any;
+
 
   const [cityTitle, setCityTitle] = useState('تهران');
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') as any;
+    console.log(provinceName)
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     })
@@ -299,25 +250,13 @@ const TransportProvince = () => {
     if (existsCity) {
       setCityTitle(provinceName);
     }
-  }, [])
+  }, [location.search])
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    setQueryParams((pre: any) => {
-      return {...pre, provinceName: queryParams.provinceName}
-    })
-
-    if (queryParams.provinceName) {
-      setCityTitle(queryParams.provinceName);
-    }
-
-  }, [queryParams.provinceName])
 
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities}
-                          setQueryParams={setQueryParams}/>
-      <OverviewDriversProvince cityTitle={cityTitle} itemStatistics={itemStatistics}/>
+      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} />
+      <OverviewDriversProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle}/>
       <OverviewPublicPatientsProvince cityTitle={cityTitle} data={mockDate}/>
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
