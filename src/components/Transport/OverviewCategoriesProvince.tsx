@@ -1,70 +1,229 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from 'react';
 
-import DatePickerModal from "../DatePickerModal";
-import calendar from "../../assets/images/icons/calendar.svg";
-import Table from "../Table";
-import CategoryDonut from "../../containers/Guild/components/CategoryDonut";
-import {toPersianDigit} from "../../helpers/utils";
+import {useHistory, useLocation} from 'react-router-dom';
+import DatePickerModal from '../DatePickerModal';
+import calendar from '../../assets/images/icons/calendar.svg';
+import Table from '../Table';
+import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit} from '../../helpers/utils';
 
-interface OverviewCategoriesProvinceProps{
-  cityTitle?: any
+interface OverviewCategoriesProvinceProps {
+  cityTitle?: any;
 }
 
-const OverviewCategoriesProvince : React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
+const sideCities = [
+  {
+    name: 'هرمزگان',
+    color: '#ccc',
+  },
+  {
+    name: 'بوشهر',
+    color: '#ccc',
+  },
+  {
+    name: 'کهگیلویه و بویراحمد',
+    color: '#ccc',
+  },
+  {
+    name: 'فارس',
+    color: '#ccc',
+  },
+  {
+    name: 'اصفهان',
+    color: '#ccc',
+  },
+  {
+    name: 'سمنان',
+    color: '#ccc',
+  },
+  {
+    name: 'گلستان',
+    color: '#ccc',
+  },
+  {
+    name: 'مازندران',
+    color: '#ccc',
+  },
+  {
+    name: 'تهران',
+    color: '#ccc',
+  },
+  {
+    name: 'مرکزی',
+    color: '#ccc',
+  },
+  {
+    name: 'یزد',
+    color: '#ccc',
+  },
+  {
+    name: 'چهارمحال و بختیاری',
+    color: '#ccc',
+  },
+  {
+    name: 'خوزستان',
+    color: '#ccc',
+  },
+  {
+    name: 'لرستان',
+    color: '#ccc',
+  },
+  {
+    name: 'ایلام',
+    color: '#ccc',
+  },
+  {
+    name: 'اردبیل',
+    color: '#ccc',
+  },
+  {
+    name: 'قم',
+    color: '#ccc',
+  },
+  {
+    name: 'همدان',
+    color: '#ccc',
+  },
+  {
+    name: 'زنجان',
+    color: '#ccc',
+  },
+  {
+    name: 'قزوین',
+    color: '#ccc',
+  },
+  {
+    name: 'آذربایجان غربی',
+    color: '#ccc',
+  },
+  {
+    name: 'آذربایجان شرقی',
+    color: '#ccc',
+  },
+  {
+    name: 'کرمانشاه',
+    color: '#ccc',
+  },
+  {
+    name: 'گیلان',
+    color: '#ccc',
+  },
+  {
+    name: 'کردستان',
+    color: '#ccc',
+  },
+  {
+    name: 'خراسان جنوبی',
+    color: '#ccc',
+  },
+  {
+    name: 'خراسان رضوی',
+    color: '#ccc',
+  },
+  {
+    name: 'خراسان شمالی',
+    color: '#ccc',
+  },
+  {
+    name: 'سیستان و بلوچستان',
+    color: '#ccc',
+  },
+  {
+    name: 'کرمان',
+    color: '#ccc',
+  },
+  {
+    name: 'البرز',
+    color: '#ccc',
+  },
+];
+
+const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
-    to: null
+    to: null,
   }) as any;
 
   const focusFromDate = () => {
     setShowDatePicker(true);
-  }
+  };
 
   const generateFromDate: any = () => {
     // eslint-disable-next-line
-    return selectedDayRange.from ? selectedDayRange.from.year + '/' + selectedDayRange.from.month + '/' + selectedDayRange.from.day : '';
-  }
+    return selectedDayRange.from
+      ? // eslint-disable-next-line
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
+      : '';
+  };
 
   const generateToDate: any = () => {
     // eslint-disable-next-line
-    return selectedDayRange.to ? selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day : '';
-  }
+    return selectedDayRange.to
+      ? // eslint-disable-next-line
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      : '';
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    console.log(provinceName);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      //
+    } else {
+      history.push('/dashboard/transport/province');
+    }
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی رسته‌های حمل و نقل در استان
-        &nbsp;
+        نگاه کلی رسته‌های حمل و نقل در استان &nbsp;
         {cityTitle}
       </legend>
       <div className="flex align-center justify-start mb-8">
-        {showDatePicker ? <DatePickerModal setSelectedDayRange={setSelectedDayRange} selectedDayRange={selectedDayRange}
-                                           setShowDatePicker={setShowDatePicker} showDatePicker/> : null}
+        {showDatePicker ? (
+          <DatePickerModal
+            setSelectedDayRange={setSelectedDayRange}
+            selectedDayRange={selectedDayRange}
+            setShowDatePicker={setShowDatePicker}
+            showDatePicker
+          />
+        ) : null}
         <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
           <div
             className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateFromDate())}
-                     </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <span className="ml-4 whitespace-nowrap truncate text-xs">
+              {toPersianDigit(generateFromDate())}
+            </span>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
             className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateToDate())}
-                     </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <span className="ml-4 whitespace-nowrap truncate text-xs">
+              {toPersianDigit(generateToDate())}
+            </span>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
       </div>
@@ -131,46 +290,48 @@ const OverviewCategoriesProvince : React.FC<OverviewCategoriesProvinceProps> = (
             {
               name: 'وضعیت کلی',
               key: '',
-              render: (v: any, record) => <CategoryDonut
-                data={[
-                  {
-                    name: 'deadCount',
-                    title: 'تعداد فوت‌شدگان',
-                    y: record.deadCount || 0,
-                    color: {
-                      linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                      stops: [
-                        [0, '#6E6E6E'], // start
-                        [1, '#393939'], // end
-                      ],
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'deadCount',
+                      title: 'تعداد فوت‌شدگان',
+                      y: record.deadCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
+                      },
                     },
-                  },
-                  {
-                    name: 'saveCount',
-                    title: 'تعداد بهبودیافتگان',
-                    y: record.saveCount || 0,
-                    color: {
-                      linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                      stops: [
-                        [0, '#05D8A4'], // start
-                        [1, '#039572'], // end
-                      ],
+                    {
+                      name: 'saveCount',
+                      title: 'تعداد بهبودیافتگان',
+                      y: record.saveCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
+                      },
                     },
-                  },
-                  {
-                    name: 'infectedCount',
-                    title: 'تعداد مبتلایان',
-                    y: record.infectedCount || 0,
-                    color: {
-                      linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                      stops: [
-                        [0, '#FE2D2F'], // start
-                        [1, '#CC0002'], // end
-                      ],
+                    {
+                      name: 'infectedCount',
+                      title: 'تعداد مبتلایان',
+                      y: record.infectedCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
+                        ],
+                      },
                     },
-                  },
-                ]}
-              />,
+                  ]}
+                />
+              ),
               className: 'flex justify-center w-full',
             },
             {
@@ -212,7 +373,7 @@ const OverviewCategoriesProvince : React.FC<OverviewCategoriesProvinceProps> = (
         />
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
 export default OverviewCategoriesProvince;
