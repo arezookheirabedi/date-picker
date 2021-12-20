@@ -1,14 +1,11 @@
+import {useEffect, useState} from "react";
+import {useLocation} from "react-router-dom";
+// import {useLocation} from "react-router-dom";
+
 import OverviewDriversMap from "../../components/Transport/OverviewDriversMap";
 import OverviewDriversProvince from "../../components/Transport/OverviewDriversProvince";
 
-import totalDriver from "../../assets/images/icons/transport-color.svg";
-import sufferingIcon from "../../assets/images/icons/suffering-color.svg";
-import saveIcon from "../../assets/images/icons/save-color.svg";
-import deadIcon from "../../assets/images/icons/dead-color.svg";
-import vaccineIcon from "../../assets/images/icons/vaccine-color.svg";
-import inquiryPlaque from "../../assets/images/icons/inquiry-plaque.svg";
-import positiveInquiryPlaque from "../../assets/images/icons/positive-inquiry-plaque.svg";
-import testIcon from "../../assets/images/icons/test-color.svg";
+
 import OverviewPublicPatientsProvince from "../../components/Transport/OverviewPublicPatientsProvince";
 import TestsInTransportProvince from "../../components/Transport/TestsInTransportProvince";
 import {IDetail} from "../../components/Charts/Pyramid";
@@ -16,224 +13,183 @@ import OverviewCategoriesProvince from "../../components/Transport/OverviewCateg
 import OverviewOfVaccinationInPublicTransportProvince
   from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
 
+
+
 const sideCities = [
   {
     name: "هرمزگان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "بوشهر",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "کهگیلویه و بویراحمد",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "فارس",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "اصفهان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "سمنان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "گلستان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "مازندران",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "تهران",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "مرکزی",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "یزد",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "چهارمحال و بختیاری",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "خوزستان",
-    color: "#FBE186"
+    color: "#ccc"
   },
   {
     name: "لرستان",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "ایلام",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "اردبیل",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "قم",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "همدان",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "زنجان",
-    color: "#F8D354"
+    color: "#ccc"
   },
   {
     name: "قزوین",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "آذربایجان غربی",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "آذربایجان شرقی",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "کرمانشاه",
-    color: "#FFC700"
+    color: "#ccc"
   },
   {
     name: "گیلان",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "کردستان",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "خراسان جنوبی",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "خراسان رضوی",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "خراسان شمالی",
-    color: "#FF9114"
+    color: "#ccc"
   },
   {
     name: "سیستان و بلوچستان",
-    color: "#CF0D0D"
+    color: "#ccc"
   },
   {
     name: "کرمان",
-    color: "#CF0D0D"
+    color: "#ccc"
   },
   {
     name: "البرز",
-    color: "#AB0A0A"
+    color: "#ccc"
   },
 ]
 
-const itemStatistics = [
-    {
-      title: "مجموع رانندگان",
-      count: "1257",
-      icon: totalDriver,
-    },
-    {
-      title: "مجموع مبتلایان",
-      count: 1257,
-      icon: sufferingIcon,
-    },
-    {
-      title: "مجموع بهبودیافتگان",
-      count: 832,
-      icon: saveIcon,
-    },
-    {
-      title: "مجموع فوت‌شدگان",
-      count: 564,
-      icon: deadIcon,
-    },
-    {
-      title: "مجموع واکسیناسیون",
-      count: 436,
-      icon: vaccineIcon,
-    },
-    {
-      title: "تعداد استعلام پلاک",
-      count: 1257,
-      icon: inquiryPlaque,
-    },
-    {
-      title: "تعداد استعلام‌های کوید مثبت",
-      count: 832,
-      icon: positiveInquiryPlaque,
-    },
-    {
-      title: "تعداد آزمایش‌های رانندگان",
-      count: 564,
-      icon: testIcon,
-    }
-];
-
 const mockDate = [
   {
-    count : 50,
-    data : "اسفند"
+    count: 50,
+    data: "اسفند"
   },
   {
-    count : 550,
-    data : "بهمن"
+    count: 550,
+    data: "بهمن"
   },
   {
-    count : 330,
-    data : "دی"
+    count: 330,
+    data: "دی"
   },
   {
-    count : 100,
-    data : "آذر"
+    count: 100,
+    data: "آذر"
   },
   {
-    count : 400,
-    data : "آبان"
+    count: 400,
+    data: "آبان"
   },
   {
-    count : 210,
-    data : "مهر"
+    count: 210,
+    data: "مهر"
   },
   {
-    count : 270,
-    data : "شهریور"
+    count: 270,
+    data: "شهریور"
   },
   {
-    count : 400,
-    data : "مرداد"
+    count: 400,
+    data: "مرداد"
   },
   {
-    count : 300,
-    data : "تیر"
+    count: 300,
+    data: "تیر"
   },
   {
-    count : 350,
-    data : "خرداد"
+    count: 350,
+    data: "خرداد"
   },
   {
-    count : 200,
-    data : "اردیبهشت"
+    count: 200,
+    data: "اردیبهشت"
   },
   {
-    count : 150,
-    data : "فروردین"
+    count: 150,
+    data: "فروردین"
   },
 ];
 
@@ -276,14 +232,33 @@ const pyramidData: Array<IDetail> = [
 ];
 
 const TransportProvince = () => {
+  const location = useLocation();
+
+
+  const [cityTitle, setCityTitle] = useState('تهران');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') as any;
+    console.log(provinceName)
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    })
+
+    if (existsCity) {
+      setCityTitle(provinceName);
+    }
+  }, [location.search])
+
+
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle="تهران" sideCityStatus={sideCities}/>
-      <OverviewDriversProvince cityTitle="تهران" itemStatistics={itemStatistics}/>
-      <OverviewCategoriesProvince cityTitle="تهران" />
-      <OverviewPublicPatientsProvince cityTitle="تهران" data={mockDate} />
-      <OverviewOfVaccinationInPublicTransportProvince cityTitle="تهران" />
-      <TestsInTransportProvince cityTitle="تهران" data={pyramidData} />
+      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} />
+      <OverviewDriversProvince cityTitle={cityTitle} />
+      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+      <OverviewPublicPatientsProvince cityTitle={cityTitle} data={mockDate}/>
+      <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
+      <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData}/>
     </div>
   )
 }

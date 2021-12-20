@@ -12,7 +12,7 @@ import {toPersianDigit} from "../../helpers/utils";
 import calendar from "../../assets/images/icons/calendar.svg";
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps{
-  cityTitle : string
+  cityTitle : any
 }
 
 const OverviewOfVaccinationInPublicTransportProvince : React.FC<OverviewOfVaccinationInPublicTransportProvinceProps> = ({cityTitle}) => {

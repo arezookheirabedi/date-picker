@@ -16,7 +16,7 @@ const transportationType = ['کل حمل و نقل', 'اسنپ', 'تپسی', 'ت
 
 interface OverviewPublicPatientsProvinceProps {
   data: any;
-  cityTitle: string;
+  cityTitle: any;
 }
 
 const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({cityTitle, data}) => {

@@ -60,10 +60,7 @@ Number.prototype.toPersianDigits = function () {
 
 // eslint-disable-next-line
 Array.prototype.chunk = function (n : number) {
-  if ( !this.length ) {
-    return [];
-  }
-  // eslint-disable-next-line
+  if ( !this.length ) return [];
   return [ this.slice( 0, n ) ].concat( this.slice(n).chunk(n) );
 };
 
