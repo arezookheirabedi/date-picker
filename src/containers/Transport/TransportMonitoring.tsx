@@ -202,7 +202,7 @@ const TransportProvince = () => {
   return (
     <div className="space-y-16 mb-8">
       <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} />
-      <OverviewDriverStatus cityTitle={cityTitle} />
+      <OverviewDriverStatus />
     </div>
   );
 };
