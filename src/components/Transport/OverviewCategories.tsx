@@ -60,7 +60,7 @@ const OverviewCategories: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    getOverviewByCategory({resultStatus: 'POSITIVE'});
+    getOverviewByCategory({resultStatus: 'POSITIVE', recoveredCount: true, total: true, count: true});
   }, []);
 
   const focusFromDate = () => {
