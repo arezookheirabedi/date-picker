@@ -40,7 +40,7 @@ const Pagination: React.FC<IProps> = props => {
 
   return (
     <div
-      className="mt-6 grid gap-1"
+      className="mt-6 grid gap-1 w-full"
       style={{
         gridTemplateColumns: 'repeat(auto-fill, minmax(1.75rem, 1fr))',
       }}
