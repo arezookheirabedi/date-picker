@@ -142,56 +142,6 @@ const sideCities = [
   },
 ]
 
-const mockDate = [
-  {
-    count: 50,
-    data: "اسفند"
-  },
-  {
-    count: 550,
-    data: "بهمن"
-  },
-  {
-    count: 330,
-    data: "دی"
-  },
-  {
-    count: 100,
-    data: "آذر"
-  },
-  {
-    count: 400,
-    data: "آبان"
-  },
-  {
-    count: 210,
-    data: "مهر"
-  },
-  {
-    count: 270,
-    data: "شهریور"
-  },
-  {
-    count: 400,
-    data: "مرداد"
-  },
-  {
-    count: 300,
-    data: "تیر"
-  },
-  {
-    count: 350,
-    data: "خرداد"
-  },
-  {
-    count: 200,
-    data: "اردیبهشت"
-  },
-  {
-    count: 150,
-    data: "فروردین"
-  },
-];
 
 const pyramidData: Array<IDetail> = [
   {
@@ -256,7 +206,7 @@ const TransportProvince = () => {
       <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} />
       <OverviewDriversProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle}/>
-      <OverviewPublicPatientsProvince cityTitle={cityTitle} data={mockDate}/>
+      <OverviewPublicPatientsProvince cityTitle={cityTitle} />
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
       <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData}/>
     </div>
