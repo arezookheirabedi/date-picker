@@ -1,0 +1,100 @@
+## master branch for STAGE purposes.
+#variables:
+#  DOCKER_DRIVER: overlay2
+#  DOCKER_TLS_CERTDIR: ""
+#  DOCKER_HOST: tcp://localhost:2375
+# cache: &global_cache
+#   key: ${CI_JOB_I}
+#   paths:
+#     - node_modules/
+#     - public/
+#     - vendor/
+
+stages:
+  #- test
+  - build
+  - dockerize
+  - rollout
+
+# sonarqube-check:
+#   tags: 
+#     - master1
+#   stage: test
+#   image: 
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "3"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   script: 
+#     - sonar-scanner
+#   allow_failure: true
+#   only:
+#     - develop # or the name of your main branch
+
+
+
+node-build-Develop:
+  tags: 
+    - master1
+  image: node:14.17.2-alpine3.13
+  stage: build
+
+  artifacts:
+    expire_in: 4h
+    paths:
+      - build/
+  cache: &global_cache
+   key: ${CI_JOB_I}
+   paths:
+    - node_modules/
+    - public/
+    - vendor/
+  script:
+    - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+#    - sleep 100000s
+    - npm version
+    - CI=false yarn install
+    - CI=false yarn run build:development
+
+  only:
+    - develop
+  #when: manual        
+
+dockerize-Develop:
+  tags: 
+    - master1
+#  image: registry.vaslapp.com/docker:18.09
+  image: buildah/buildah
+  stage: dockerize
+  dependencies:
+    - node-build-Develop
+
+
+    
+  script:
+    - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
+    - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers-dev:latest .
+    - buildah push registry.vaslapp.com/docker/ministers-dev:latest
+  only:
+    - develop
+  #when: manual    
+    
+    
+rollout-Develop:
+  tags:
+    - k8s-gov
+  image:
+    name: bitnami/kubectl
+#    name: registry.vaslapp.com/kubectl:latest
+    entrypoint: [ "" ]
+  stage: rollout
+  script:
+    - echo "$KUBERGOV_CONFIG" | base64 -d >.config
+    - kubectl rollout restart deployment ministers --kubeconfig .config --namespace discovery
+  only:
+    - develop
