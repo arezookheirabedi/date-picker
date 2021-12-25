@@ -11,12 +11,14 @@ const {Map} = Charts;
 interface OverviewDriversMapProps {
   sideCityStatus?: any;
   cityTitle: any;
+  destinationId: any
 }
 
 
 const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
                                                                  sideCityStatus,
-                                                                 cityTitle
+                                                                 cityTitle,
+                                                                 destinationId
                                                                }) => {
   const history = useHistory();
   const options = {
@@ -41,7 +43,7 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         point: {
           events: {
             click(e: any) {
-              document.getElementById('province-overview')!.scrollIntoView({behavior: "smooth"});
+              document.getElementById(destinationId)!.scrollIntoView({behavior: "smooth"});
               history.push({
                 search: `?provinceName=${e.point.properties['fa-name']}`
               })
