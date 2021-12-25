@@ -2,9 +2,15 @@ import React, {useEffect, useState} from 'react';
 import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalDriver from '../../assets/images/icons/transport-color.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
+// import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
+// import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
+import GreenVaccine from '../../assets/images/icons/GreenVaccine.svg';
+import GrayVaccine from '../../assets/images/icons/GrayVaccine1.svg';
+import GrayVaccine2 from '../../assets/images/icons/GrayVaccine2.svg';
+import BlueVaccine from '../../assets/images/icons/BlueVaccine.svg';
+import YellowVaccineMd from '../../assets/images/icons/YellowVaccineMd.svg';
+import PurppleVaccineMd from '../../assets/images/icons/PurppleVaccineMd.svg';
+import NavyVaccineMd from '../../assets/images/icons/NavyVaccineMd.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
@@ -121,19 +127,45 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           loading={countsLoading}
         />
         <Statistic
-          icon={YellowVaccine}
+          icon={YellowVaccineMd}
           text="تعداد واکسیناسیون دوز اول"
           count={counts.numberOfFirstDose || 0}
           loading={countsLoading}
         />
         <Statistic
-          icon={GreenVaccine}
+          icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز دوم"
           count={counts.numberOfSecondDose || 0}
           loading={countsLoading}
         />
         <Statistic
+          icon={NavyVaccineMd}
+          text="تعداد واکسیناسیون دوز سوم"
+          count={counts.numberOfUnvaccinated || 0}
+          loading={countsLoading}
+        />
+      </div>
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <Statistic
+          icon={GreenVaccine}
+          text="تعداد کل واکسیناسیون"
+          count={counts.numberOfDrivers || 0}
+          loading={countsLoading}
+        />
+        <Statistic
+          icon={BlueVaccine}
+          text="بیش از ۳ دوز"
+          count={counts.numberOfFirstDose || 0}
+          loading={countsLoading}
+        />
+        <Statistic
           icon={GrayVaccine}
+          text="تعداد اطلاعات مخدوش"
+          count={counts.numberOfSecondDose || 0}
+          loading={countsLoading}
+        />
+        <Statistic
+          icon={GrayVaccine2}
           text="تعداد واکسیناسیون انجام نشده"
           count={counts.numberOfUnvaccinated || 0}
           loading={countsLoading}
@@ -195,12 +227,32 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                   ),
                 },
                 {
-                  name: 'دو دوز',
+                  name: 'دوز اول',
+                  key: 'twoDoseVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'دوز دوم',
+                  key: 'twoDoseVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'دوز سوم',
+                  key: 'twoDoseVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'سایر دوزها',
                   key: 'twoDoseVaccine',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'کل دوز',
+                  key: 'fullDoseVaccine',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'اطلاعات مخدوش',
                   key: 'fullDoseVaccine',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
