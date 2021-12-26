@@ -114,7 +114,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        وضعیت آزمایش کارکنان دولت استان‌ &nbsp;
+      آزمایش در آموزش و پرورش در استان‌ &nbsp;
         {cityTitle}
       </legend>
       <div className="flex align-center justify-start mb-8">
@@ -214,7 +214,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'سازمان',
+                name: 'دسته',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -223,12 +223,12 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 ),
               },
               {
-                name: 'تعداد کارکنان',
+                name: 'تعداد آزمایش‌های انجام شده',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
-                name: 'درصد ابتلا',
+                name: 'درصد تست‌های مثبت',
                 key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
@@ -240,20 +240,13 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 ),
               },
               {
-                name: 'تعداد مبتلایان',
+                name: 'درصد تست‌های منفی',
                 key: 'infectedCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
-                name: 'تعداد بهبودیافتگان',
+                name: 'درصد تست‌های نامشخص',
                 key: 'saveCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-                ),
-              },
-              {
-                name: 'تعداد فوت‌شدگان',
-                key: 'deadCount',
                 render: (v: any) => (
                   <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
                 ),

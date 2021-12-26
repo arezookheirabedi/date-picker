@@ -2,6 +2,9 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
 import OverviewMap from '../../components/Education/OverviewMap';
+import OverviewProvince from '../../components/Education/OverviewProvince';
+import OverviewEducationEmployeProvince from '../../components/Education/OverviewEducationEmployeProvince';
+import OverviewEducationStudentProvince from '../../components/Education/OverviewEducationStudentProvince';
 import OverviewPatientsProvince from '../../components/Education/OverviewPatientsProvince';
 import TestsStatusProvince from '../../components/Education/TestStatusProvince';
 import OverviewCategoriesProvince from '../../components/Education/OverviewCategoriesProvince';
@@ -160,6 +163,9 @@ const EducationProvince = () => {
         destinationId="education-overview"
       />
 
+      <OverviewProvince cityTitle={cityTitle} />
+      <OverviewEducationEmployeProvince cityTitle={cityTitle} />
+      <OverviewEducationStudentProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
       <OverviewPatientsProvince cityTitle={cityTitle} />
       <OverviewOfVaccinationProvince cityTitle={cityTitle} />

@@ -257,7 +257,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="education-overview">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به کارکنان دولت کشور در استان &nbsp;
+        نگاه کلی به آموزش و پرورش در استان &nbsp;
         {cityTitle}
       </legend>
       <div className="flex align-center justify-start mb-8">

@@ -3,13 +3,13 @@ import {useLocation, useHistory} from 'react-router-dom';
 
 import Statistic from '../../containers/Guild/components/Statistic';
 import transportService from '../../services/transport.service';
-import totalDriver from '../../assets/images/icons/transport-color.svg';
+import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
 import saveIcon from '../../assets/images/icons/save-color.svg';
 import deadIcon from '../../assets/images/icons/dead-color.svg';
 import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import inquiryPlaque from '../../assets/images/icons/inquiry-plaque.svg';
-import positiveInquiryPlaque from '../../assets/images/icons/positive-inquiry-plaque.svg';
+import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
+import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 
 interface OverviewProvinceProps {
@@ -270,15 +270,15 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   return (
     <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="province-overview">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به کارکنان دولت در استان &nbsp;
+      نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان &nbsp;
         {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalDriver}
-            text="مجموع رانندگان"
+            icon={totalRecritment}
+            text="مجموع کارمندان آموزش پرورش"
             count={numberOfDrivers}
             loading={numberOfDriversLoading}
           />
@@ -299,27 +299,25 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
-            text="مجموع واکسیناسیون"
+            text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
             loading={numberOfVaccinationLoading}
           />
           <Statistic
-            icon={inquiryPlaque}
-            text="تعداد استعلام پلاک"
-            count={numberOfPlaqueVisited}
-            hasInfo
-            loading={numberOfPlaqueVisitedLoading}
-          />
-          <Statistic
-            icon={positiveInquiryPlaque}
-            text="تعداد استعلام های نتیجه مثبت"
+            icon={prescriptionIcon}
+            text="مجموع استعلام‌های آموزش و پرورش"
             count={numberOfPositivePlaqueVisited}
-            hasInfo
             loading={numberOfPositivePlaqueVisitedLoading}
           />
           <Statistic
+            icon={grayVaccineIcon}
+            text="مجموع افراد واکسینه نشده"
+            count={numberOfPlaqueVisited}
+            loading={numberOfPlaqueVisitedLoading}
+          />
+          <Statistic
             icon={testIcon}
-            text="تعداد آزمایش های رانندگان"
+            text="تعداد آزمایش‌های کارمندان"
             count={numberOfTestResults}
             loading={numberOfTestResultsLoading}
           />
