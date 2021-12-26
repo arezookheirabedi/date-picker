@@ -210,7 +210,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     try {
       const response = await transportService.linearOverviewPublicTransport(params);
       setData(response.data);
-    } catch (error) {
+    } catch (error: any) {
       setErrorMessage(error.message)
       console.log(error);
     } finally {
