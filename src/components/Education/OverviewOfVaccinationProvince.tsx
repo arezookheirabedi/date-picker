@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
 
 import Statistic from '../../containers/Guild/components/Statistic';
-import totalDriver from '../../assets/images/icons/transport-color.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
+import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
+import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
+import totalStudent from '../../assets/images/icons/graduation.svg';
+import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
+import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
+import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
+import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
+import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
+import GrayVaccine1 from '../../assets/images/icons/gray-vaccine-lg.svg';
+import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import DatePickerModal from '../DatePickerModal';
@@ -51,14 +57,28 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به واکسیناسیون کارکنان دولت در &nbsp;
+        نگاه کلی واکسیناسیون در آموزش و پرورش در استان &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-        <Statistic icon={totalDriver} text="مجموع رانندگان" count={1257} />
-        <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428} />
-        <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون دوز دوم" count={864} />
-        <Statistic icon={GrayVaccine} text="تعداد واکسیناسیون انجام نشده" count={654} />
+      <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={totalEmploye1} text="مجموع کارمندان آموزشی" count={3334} />
+          <Statistic icon={totalEmploye2} text="مجموع کارمندان اداری" count={23233} />
+          <Statistic icon={totalStudent} text="مجموع دانش آموزان" count={3432242} />
+          <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={43} />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={PurppleVaccine} text="تعداد واکسیناسیون دوز دوم" count={534} />
+          <Statistic icon={NavyVaccine} text="تعداد واکسیناسیون دوز سوم" count={876} />
+          <Statistic icon={BlueVaccine} text="بیش از ۳ دوز" count={332} />
+          <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون کل دوز" count={1234} />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={GrayVaccine1} text="تعداد اطلاعات مخدوش" count={34} />
+          <Statistic icon={GrayVaccine2} text="تعداد واکسیناسیون انجام نشده" count={12} />
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+        </div>
       </div>
       <div className="flex align-center justify-start mb-8">
         {showDatePicker ? (
@@ -191,7 +211,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
               className: 'flex justify-center w-full',
             },
             {
-              name: 'رسته های حمل و نقل',
+              name: 'دسته',
               key: 'name',
               render: (v: any, record, index: number) => (
                 <span>
@@ -200,19 +220,39 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
               ),
             },
             {
-              name: 'دو دوز',
-              key: 'infectedPercent',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
+              name: 'دوز اول',
+              key: 'firstDosePercentage',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+            },
+            {
+              name: 'دوز دوم',
+              key: 'secondDosePercentage',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+            },
+            {
+              name: 'دوز سوم',
+              key: 'thirdDosePercentage',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+            },
+            {
+              name: 'سایر دوزها',
+              key: 'otherDose',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
             },
             {
               name: 'کل دوز',
-              key: 'infectedCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
+              key: 'allDoses',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+            },
+            {
+              name: 'اطلاعات مخدوش',
+              key: 'unknownInformation',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
             },
             {
               name: 'واکسن نزده',
-              key: 'saveCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
+              key: 'noDose',
+              render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
             },
           ]}
           totalItems={0}
