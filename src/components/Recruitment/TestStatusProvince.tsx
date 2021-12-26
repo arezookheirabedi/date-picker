@@ -23,12 +23,11 @@ const getServiceTypeName = (item: any) => {
 };
 
 interface TestStatusProvinceProps {
-  data: any;
   cityTitle: any;
 }
 
 // eslint-disable-next-line
-const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({data: dataSet, cityTitle}) => {
+const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);

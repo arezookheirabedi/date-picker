@@ -255,7 +255,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="recruitment-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به کارکنان دولت کشور در استان &nbsp;
         {cityTitle}
