@@ -14,7 +14,6 @@ import OverviewOfVaccinationInPublicTransportProvince
   from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
 
 
-
 const sideCities = [
   {
     name: "هرمزگان",
@@ -203,12 +202,12 @@ const TransportProvince = () => {
 
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="province-overview" />
-      <OverviewDriversProvince cityTitle={cityTitle} />
-      <OverviewCategoriesProvince cityTitle={cityTitle}/>
-      <OverviewPublicPatientsProvince cityTitle={cityTitle} />
+      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="province-overview"/>
+       <OverviewDriversProvince cityTitle={cityTitle} />
+       <OverviewCategoriesProvince cityTitle={cityTitle}/>
+       <OverviewPublicPatientsProvince cityTitle={cityTitle}/>
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
-      <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData}/>
+       <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData}/>
     </div>
   )
 }

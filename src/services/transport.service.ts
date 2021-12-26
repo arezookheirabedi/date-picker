@@ -88,10 +88,10 @@ function overviewVaccine(params: any) {
     .build().get(`/api/v1/transport/reports/vaccine?lang=fa`, params);
 }
 
-function reportsDose() {
+function reportsDose(params: any = {}) {
   return request
     .withHeaders({"Content-Type": "application/json;utf-8"})
-    .build().get(`/api/v1/transport/reports/dose?lang=fa`);
+    .build().get(`/api/v1/transport/reports/dose?lang=fa`, params);
 }
 
 function overviewVaccinePercent(params: any) {
