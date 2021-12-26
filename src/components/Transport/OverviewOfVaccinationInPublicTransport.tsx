@@ -349,37 +349,37 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                 {
                   name: 'دوز اول',
                   key: 'firstDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 },
                 {
                   name: 'دوز دوم',
                   key: 'secondDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 },
                 {
                   name: 'دوز سوم',
                   key: 'thirdDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 },
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 },
                 {
                   name: 'کل دوز',
                   key: 'allDoses',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 },
                 {
                   name: 'اطلاعات مخدوش',
                   key: 'unknownInformation',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 },
                 {
                   name: 'واکسن نزده',
                   key: 'noDose',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
                 }
               ]}
               totalItems={0}
