@@ -4,7 +4,6 @@ import {useLocation} from 'react-router-dom';
 import OverviewMap from '../../components/Recruitment/OverviewMap';
 import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
 import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
-import {IDetail} from '../../components/Charts/Pyramid';
 import OverviewCategoriesProvince from '../../components/Recruitment/OverviewCategoriesProvince';
 import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
 
@@ -135,44 +134,6 @@ const sideCities = [
   },
 ];
 
-const pyramidData: Array<IDetail> = [
-  {
-    title: 'اسنپ',
-    percentage: 90,
-    color: '#049975',
-  },
-  {
-    title: 'تپسی',
-    percentage: 80,
-    color: '#00F1E3',
-  },
-  {
-    title: 'تاکسی پلاک ع',
-    percentage: 70,
-    color: '#4EC4F2',
-  },
-  {
-    title: 'تاکسی پلاک ت',
-    percentage: 60,
-    color: '#9D19FA',
-  },
-  {
-    title: 'سرویس مدارس',
-    percentage: 50,
-    color: '#F534DB',
-  },
-  {
-    title: 'تاکسی فرودگاهی',
-    percentage: 40,
-    color: '#F5DF34',
-  },
-  {
-    title: 'اتوبوس رانی',
-    percentage: 30,
-    color: '#FE8007',
-  },
-];
-
 const RecruitmentProvince = () => {
   const location = useLocation();
 
@@ -196,13 +157,13 @@ const RecruitmentProvince = () => {
       <OverviewMap
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
-        destinationId="province-overview"
+        destinationId="recruitment-overview"
       />
 
       <OverviewCategoriesProvince cityTitle={cityTitle} />
       <OverviewPatientsProvince cityTitle={cityTitle} />
       <OverviewOfVaccinationProvince cityTitle={cityTitle} />
-      <TestsStatusProvince cityTitle={cityTitle} data={pyramidData} />
+      <TestsStatusProvince cityTitle={cityTitle} />
     </div>
   );
 };
