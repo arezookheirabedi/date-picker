@@ -103,7 +103,7 @@ const OverviewCategories: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به کارکنان دولت کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به آموزش و پرورش کشور</legend>
       <div className="flex align-center justify-start mb-8">
         {showDatePicker ? (
           <DatePickerModal
@@ -201,7 +201,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'سازمان',
+                name: 'دسته',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>

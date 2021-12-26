@@ -1,10 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
-import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
+import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
+import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
+import totalStudent from '../../assets/images/icons/graduation.svg';
+import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
+import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
+import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
+import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
+import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
+import GrayVaccine1 from '../../assets/images/icons/gray-vaccine-lg.svg';
+import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
@@ -111,14 +117,26 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در آموزش و پرورش</legend>
 
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalEmploye}
-            text="مجموع کارکنان دولت"
+            icon={totalEmploye1}
+            text="مجموع کارمندان آموزشی"
             count={counts.numberOfDrivers || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={totalEmploye2}
+            text="مجموع کارمندان اداری"
+            count={counts.numberOfUnvaccinated || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={totalStudent}
+            text="مجموع دانش آموزان"
+            count={counts.numberOfFirstDose || 0}
             loading={countsLoading}
           />
           <Statistic
@@ -127,22 +145,22 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             count={counts.numberOfFirstDose || 0}
             loading={countsLoading}
           />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={GreenVaccine}
+            icon={PurppleVaccine}
             text="تعداد واکسیناسیون دوز دوم"
             count={counts.numberOfSecondDose || 0}
             loading={countsLoading}
           />
           <Statistic
-            icon={GrayVaccine}
+            icon={NavyVaccine}
             text="تعداد واکسیناسیون دوز سوم"
             count={counts.numberOfUnvaccinated || 0}
             loading={countsLoading}
           />
-        </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalEmploye}
+            icon={BlueVaccine}
             text="بیش از ۳ دوز"
             count={counts.numberOfDrivers || 0}
             loading={countsLoading}
@@ -153,18 +171,22 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             count={counts.numberOfSecondDose || 0}
             loading={countsLoading}
           />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={GrayVaccine}
+            icon={GrayVaccine1}
             text="تعداد اطلاعات مخدوش"
-            count={counts.numberOfUnvaccinated || 0}
+            count={counts.numberOfDrivers || 0}
             loading={countsLoading}
           />
           <Statistic
-            icon={YellowVaccine}
+            icon={GrayVaccine2}
             text="تعداد واکسیناسیون انجام نشده"
-            count={counts.numberOfFirstDose || 0}
+            count={counts.numberOfSecondDose || 0}
             loading={countsLoading}
           />
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
         </div>
       </div>
       {loading ? (
@@ -214,7 +236,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   className: 'flex justify-center w-full',
                 },
                 {
-                  name: 'سازمان',
+                  name: 'دسته',
                   key: 'name',
                   render: (v: any, record, index: number) => (
                     <span>
