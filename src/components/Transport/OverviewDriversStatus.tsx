@@ -47,7 +47,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
       : '';
   };
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به وضعیت رانندگان حمل و نقل عمومی
       </legend>
