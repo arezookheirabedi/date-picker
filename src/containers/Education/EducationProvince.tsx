@@ -1,15 +1,11 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
-
-import OverviewDriversMap from '../../components/Transport/OverviewDriversMap';
-import OverviewDriversProvince from '../../components/Transport/OverviewDriversProvince';
-
-import OverviewPublicPatientsProvince from '../../components/Transport/OverviewPublicPatientsProvince';
-import TestsInTransportProvince from '../../components/Transport/TestsInTransportProvince';
-import {IDetail} from '../../components/Charts/Pyramid';
-import OverviewCategoriesProvince from '../../components/Transport/OverviewCategoriesProvince';
-import OverviewOfVaccinationInPublicTransportProvince from '../../components/Transport/OverviewOfVaccinationInPublicTransportProvince';
+import OverviewMap from '../../components/Education/OverviewMap';
+import OverviewPatientsProvince from '../../components/Education/OverviewPatientsProvince';
+import TestsStatusProvince from '../../components/Education/TestStatusProvince';
+import OverviewCategoriesProvince from '../../components/Education/OverviewCategoriesProvince';
+import OverviewOfVaccinationProvince from '../../components/Education/OverviewOfVaccinationProvince';
 
 const sideCities = [
   {
@@ -138,44 +134,6 @@ const sideCities = [
   },
 ];
 
-const pyramidData: Array<IDetail> = [
-  {
-    title: 'اسنپ',
-    percentage: 90,
-    color: '#049975',
-  },
-  {
-    title: 'تپسی',
-    percentage: 80,
-    color: '#00F1E3',
-  },
-  {
-    title: 'تاکسی پلاک ع',
-    percentage: 70,
-    color: '#4EC4F2',
-  },
-  {
-    title: 'تاکسی پلاک ت',
-    percentage: 60,
-    color: '#9D19FA',
-  },
-  {
-    title: 'سرویس مدارس',
-    percentage: 50,
-    color: '#F534DB',
-  },
-  {
-    title: 'تاکسی فرودگاهی',
-    percentage: 40,
-    color: '#F5DF34',
-  },
-  {
-    title: 'اتوبوس رانی',
-    percentage: 30,
-    color: '#FE8007',
-  },
-];
-
 const EducationProvince = () => {
   const location = useLocation();
 
@@ -196,16 +154,16 @@ const EducationProvince = () => {
 
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap
+      <OverviewMap
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
-        destinationId="province-overview"
+        destinationId="education-overview"
       />
-      <OverviewDriversProvince cityTitle={cityTitle} />
+
       <OverviewCategoriesProvince cityTitle={cityTitle} />
-      <OverviewPublicPatientsProvince cityTitle={cityTitle} />
-      <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle} />
-      <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData} />
+      <OverviewPatientsProvince cityTitle={cityTitle} />
+      <OverviewOfVaccinationProvince cityTitle={cityTitle} />
+      <TestsStatusProvince cityTitle={cityTitle} />
     </div>
   );
 };
