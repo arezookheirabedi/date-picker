@@ -39,7 +39,7 @@ function numberOfVaccination(province: any = null) {
 }
 
 
-function numberOfPlaqueVisited(province:any = null) {
+function numberOfPlaqueVisited(province: any = null) {
   return request
     .withHeaders({"Content-Type": "application/json;utf-8"})
     .build().get(`/api/v1/transport/reports/general${province ? '/province' : ''}`, {
@@ -49,7 +49,7 @@ function numberOfPlaqueVisited(province:any = null) {
 }
 
 
-function numberOfTestResults(province:any = null) {
+function numberOfTestResults(province: any = null) {
   return request
     .withHeaders({"Content-Type": "application/json;utf-8"})
     .build().get(`/api/v1/transport/reports/general${province ? '/province' : ''}`, {
@@ -59,7 +59,7 @@ function numberOfTestResults(province:any = null) {
 }
 
 
-function numberOfPositivePlaqueVisited(province:any = null) {
+function numberOfPositivePlaqueVisited(province: any = null) {
   return request
     .withHeaders({"Content-Type": "application/json;utf-8"})
     .build().get(`/api/v1/transport/reports/general${province ? '/province' : ''}`, {
@@ -88,6 +88,12 @@ function overviewVaccine(params: any) {
     .build().get(`/api/v1/transport/reports/vaccine?lang=fa`, params);
 }
 
+function reportsDose() {
+  return request
+    .withHeaders({"Content-Type": "application/json;utf-8"})
+    .build().get(`/api/v1/transport/reports/dose?lang=fa`);
+}
+
 function overviewVaccinePercent(params: any) {
   return request
     .withHeaders({"Content-Type": "application/json;utf-8", timeout: (3 * 60 * 1000)})
@@ -104,6 +110,7 @@ export default {
   testsInTransport,
   overviewCategory,
   overviewVaccine,
+  reportsDose,
   overviewVaccinePercent,
   numberOfDrivers,
   numberOfPlaqueVisited,

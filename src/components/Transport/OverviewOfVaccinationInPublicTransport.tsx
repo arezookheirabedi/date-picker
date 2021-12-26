@@ -23,6 +23,10 @@ const getServiceTypeName = (item: any) => {
       return 'تاکسی پلاک ت';
     case 'ONLINE':
       return 'تاکسی آنلاین';
+    case 'MOTOR_PEYK':
+      return 'موتور سیکلت';
+    case 'SCHOOL_SERVICE':
+      return 'سرویس مدارس'
     default:
       return null;
   }
@@ -39,6 +43,10 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     numberOfSecondDose: 0,
     numberOfUnvaccinated: 0,
   });
+
+  const [reportsDose, setReportsDose] = useState({}) as any;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [reportsDoseLoading, setReportsDoseLoading] = useState(false) as any;
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
@@ -57,46 +65,136 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     }
   }
 
+
+  async function getReportsDose() {
+    setReportsDoseLoading(true);
+    try {
+      const {data} = await transportService.reportsDose();
+      const normalizedData: any[] = [];
+      let threeDose = 0;
+      let allVaccination = 0;
+      let moreThanThreeDose = 0;
+      let unknownInformation = 0;
+      data.dosesCount.forEach((item: any) => {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [key, value] of Object.entries(item)) {
+          if (Number(key) === 3) {
+            threeDose += Number(value);
+          }
+          if (Number(key) !== 0 && key !== 'null') {
+            allVaccination += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+
+          if (key === 'null') {
+            unknownInformation += Number(value);
+          }
+        }
+      })
+      normalizedData.push({
+        threeDose,
+        allVaccination,
+        moreThanThreeDose,
+        unknownInformation
+      });
+
+
+      setReportsDose({
+        threeDose,
+        allVaccination,
+        moreThanThreeDose,
+        unknownInformation
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setReportsDoseLoading(false);
+    }
+  }
+
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
       const {data} = await transportService.overviewVaccinePercent(params);
       const normalizedDate: any[] = [];
+
+
       data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+        let secondDose = 0;
+        let thirdDose = 0;
+        let moreThanThreeDose = 0;
+        let allVaccination = 0;
+        let unknownInformation = 0;
+        let noDose = 0;
         let total = 0;
-        let twoDoseVaccine = 0;
-        let fullDoseVaccine = 0;
-
-        if (item.doseCountMap) {
-          // eslint-disable-next-line
-          for (const [key, value] of Object.entries(item.doseCountMap)) {
-            total += Number(value);
-
-            if (Number(key) !== 0) {
-              fullDoseVaccine += Number(value);
-            }
-
-            if (Number(key) === 2) {
-              twoDoseVaccine += Number(value);
-            }
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.doseCountMap)) {
+          if (Number(key) === 0) {
+            noDose += Number(value);
           }
+
+
+          if (Number(key) === 1) {
+            firstDose += Number(value);
+          }
+
+          if (Number(key) === 2) {
+            secondDose += Number(value);
+          }
+
+          if (Number(key) === 3) {
+            thirdDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            allVaccination += Number(value);
+          }
+
+          if (key === 'null') {
+            unknownInformation += Number(value);
+          }
+
+          total = allVaccination + noDose + unknownInformation;
+
         }
 
-        if (total !== 0) {
-          normalizedDate.push({
-            id: `ovvac_${index}`,
-            name: getServiceTypeName(item.serviceType),
-            twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
-            fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
-            // eslint-disable-next-line
-            notVaccine: item.doseCountMap
-              ? item.doseCountMap[0]
-                ? (item.doseCountMap[0] * 100) / total
-                : 0
-              : 0,
-          });
-        }
+
+        console.log('allvaccination => ', allVaccination)
+        console.log('no dose  => ', noDose)
+        console.log('unknonw information  => ', unknownInformation)
+        console.log('total  => ', total)
+
+
+        normalizedDate.push({
+          id: `ovvac_${index}`,
+          name: getServiceTypeName(item.serviceType),
+          firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: (secondDose * 100) / total,
+          thirdDosePercentage: (thirdDose * 100) / total,
+          otherDose: (moreThanThreeDose * 100) / total,
+          unknownInformation: (unknownInformation * 100) / total,
+          allDoses: ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
+          noDose: (noDose * 100) / total
+          // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
+          // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
+          // // eslint-disable-next-line
+          // notVaccine: item.doseCountMap
+          //   ? item.doseCountMap[0]
+          //     ? (item.doseCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
+        });
+
       });
+      console.log('normali =>  ', normalizedDate)
       setDataset([...normalizedDate]);
     } catch (error) {
       console.log(error);
@@ -106,6 +204,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   }
 
   useEffect(() => {
+    getReportsDose();
     getOverviewByVaccine({
       numberOfDrivers: true,
       numberOfFirstDose: true,
@@ -119,7 +218,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div
+        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان"
@@ -141,28 +241,29 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={NavyVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
-          count={counts.numberOfUnvaccinated || 0}
-          loading={countsLoading}
+          count={reportsDose.threeDose || 0}
+          loading={reportsDoseLoading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div
+        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={GreenVaccine}
           text="تعداد کل واکسیناسیون"
-          count={counts.numberOfDrivers || 0}
-          loading={countsLoading}
+          count={reportsDose.allVaccination || 0}
+          loading={reportsDoseLoading}
         />
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
-          count={counts.numberOfFirstDose || 0}
-          loading={countsLoading}
+          count={reportsDose.moreThanThreeDose || 0}
+          loading={reportsDoseLoading}
         />
         <Statistic
           icon={GrayVaccine}
           text="تعداد اطلاعات مخدوش"
-          count={counts.numberOfSecondDose || 0}
-          loading={countsLoading}
+          count={reportsDose.unknownInformation || 0}
+          loading={reportsDoseLoading}
         />
         <Statistic
           icon={GrayVaccine2}
@@ -173,7 +274,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
@@ -185,36 +286,55 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                 {
                   name: 'وضعیت کلی',
                   key: '',
-                  render: (v: any, record) => (
-                    <CategoryDonut
-                      data={[
-                        {
-                          name: 'fullDoseVaccine',
-                          title: 'دوز کل',
-                          y: record.fullDoseVaccine || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#05D8A4'], // start
-                              [1, '#039572'], // end
-                            ],
-                          },
-                        },
-                        {
-                          name: 'notVaccine',
-                          title: 'واکسن نزده',
-                          y: record.notVaccine || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#FE2D2F'], // start
-                              [1, '#CC0002'], // end
-                            ],
-                          },
-                        },
-                      ]}
-                    />
-                  ),
+                  render: (v: any, record) => {
+
+                    console.log('v => ', v);
+                    console.log('record => ', record);
+                    return (
+                      (
+                        <CategoryDonut
+                          data={[
+                            {
+                              name: 'fullDoseVaccine',
+                              title: 'دوز کل',
+                              y: record.allDoses || 0,
+                              color: {
+                                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                                stops: [
+                                  [0, '#05D8A4'], // start
+                                  [1, '#039572'], // end
+                                ],
+                              },
+                            },
+                            {
+                              name: 'notVaccine',
+                              title: 'واکسن نزده',
+                              y: record.noDose || 0,
+                              color: {
+                                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                                stops: [
+                                  [0, '#FE2D2F'], // start
+                                  [1, '#CC0002'], // end
+                                ],
+                              },
+                            },
+                            {
+                              name: 'notVaccine',
+                              title: 'اطلاعات مخدوش',
+                              y: record.unknownInformation || 0,
+                              color: {
+                                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                                stops: [
+                                  [0, '#eee'], // start
+                                  [1, '#a8a8a8'], // end
+                                ],
+                              },
+                            },
+                          ]}
+                        />
+                      )
+                    )
+                  },
                   className: 'flex justify-center w-full',
                 },
                 {
@@ -228,39 +348,39 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                 },
                 {
                   name: 'دوز اول',
-                  key: 'twoDoseVaccine',
+                  key: 'firstDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز دوم',
-                  key: 'twoDoseVaccine',
+                  key: 'secondDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز سوم',
-                  key: 'twoDoseVaccine',
+                  key: 'thirdDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'سایر دوزها',
-                  key: 'twoDoseVaccine',
+                  key: 'otherDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'کل دوز',
-                  key: 'fullDoseVaccine',
+                  key: 'allDoses',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'اطلاعات مخدوش',
-                  key: 'fullDoseVaccine',
+                  key: 'unknownInformation',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'واکسن نزده',
-                  key: 'notVaccine',
+                  key: 'noDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
+                }
               ]}
               totalItems={0}
             />
