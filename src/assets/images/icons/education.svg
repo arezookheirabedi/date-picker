@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5745" data-name="Rectangle 5745" width="24" height="24" transform="translate(-17146 -10089)" fill="#b2b2b2" stroke="#ababab" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_44569" data-name="Mask Group 44569" transform="translate(17146 10089)" clip-path="url(#clip-path)">
+    <g id="_6590498_and_cap_education_graduation_learning_icon" data-name="6590498_and_cap_education_graduation_learning_icon" transform="translate(-17144.588 -10084.765)">
+      <path id="Path_79762" data-name="Path 79762" d="M11.588,4,1,9.647l10.588,5.647L22.176,9.647Z" transform="translate(-1 -4)" fill="none" stroke="#ababab" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      <path id="Path_79763" data-name="Path 79763" d="M7,15.2V20c0,1.553,2.824,3.529,6.353,3.529S19.706,21.553,19.706,20V15.2" transform="translate(-2.765 -7.294)" fill="none" stroke="#ababab" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      <line id="Line_3" data-name="Line 3" y2="9.176" transform="translate(21.176 5.647)" fill="none" stroke="#ababab" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>
