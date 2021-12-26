@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
 
 import Statistic from '../../containers/Guild/components/Statistic';
-import totalDriver from '../../assets/images/icons/transport-color.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
+import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
+import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
+import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
+import Gray1Vaccine from '../../assets/images/icons/gray-vaccine-1.svg';
+import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
+import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
+import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
+import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import DatePickerModal from '../DatePickerModal';
@@ -54,12 +58,21 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         نگاه کلی به واکسیناسیون کارکنان دولت در &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-        <Statistic icon={totalDriver} text="مجموع رانندگان" count={1257} />
-        <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428} />
-        <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون دوز دوم" count={864} />
-        <Statistic icon={GrayVaccine} text="تعداد واکسیناسیون انجام نشده" count={654} />
+      <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={totalEmploye} text="مجموع کارکنان دولت" count={1257} />
+          <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428} />
+          <Statistic icon={PurppleVaccine} text="تعداد واکسیناسیون دوز دوم" count={232} />
+          <Statistic icon={NavyVaccine} text="تعداد واکسیناسیون دوز سوم" count={12} />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic icon={BlueVaccine} text="بیش از ۳ دوز" count={321} />
+          <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون کل دوز" count={432} />
+          <Statistic icon={Gray1Vaccine} text="تعداد اطلاعات مخدوش" count={132} />
+          <Statistic icon={Gray2Vaccine} text="تعداد واکسیناسیون انجام نشده" count={65} />
+        </div>
       </div>
+
       <div className="flex align-center justify-start mb-8">
         {showDatePicker ? (
           <DatePickerModal

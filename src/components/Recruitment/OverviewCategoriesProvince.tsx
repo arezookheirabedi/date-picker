@@ -6,7 +6,7 @@ import transportService from 'src/services/transport.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
+// import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
@@ -305,53 +305,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             dataSet={[...dataset]}
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
-              {
-                name: 'وضعیت کلی',
-                key: '',
-                render: (v: any, record) => (
-                  <CategoryDonut
-                    data={[
-                      {
-                        name: 'deadCount',
-                        title: 'تعداد فوت‌شدگان',
-                        y: record.deadCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#6E6E6E'], // start
-                            [1, '#393939'], // end
-                          ],
-                        },
-                      },
-                      {
-                        name: 'saveCount',
-                        title: 'تعداد بهبودیافتگان',
-                        y: record.saveCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#05D8A4'], // start
-                            [1, '#039572'], // end
-                          ],
-                        },
-                      },
-                      {
-                        name: 'infectedCount',
-                        title: 'تعداد مبتلایان',
-                        y: record.infectedCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#FE2D2F'], // start
-                            [1, '#CC0002'], // end
-                          ],
-                        },
-                      },
-                    ]}
-                  />
-                ),
-                className: 'flex justify-center w-full',
-              },
               {
                 name: 'رسته های حمل و نقل',
                 key: 'name',

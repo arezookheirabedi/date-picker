@@ -9,11 +9,11 @@ import GrayVaccine from "../../assets/images/icons/gray-vaccine.svg";
 import Table from "../Table";
 import CategoryDonut from "../../containers/Guild/components/CategoryDonut";
 import transportService from "../../services/transport.service";
-import YellowVaccineMd from "../../assets/images/icons/YellowVaccineMd.svg";
-import PurppleVaccineMd from "../../assets/images/icons/PurppleVaccineMd.svg";
-import NavyVaccineMd from "../../assets/images/icons/NavyVaccineMd.svg";
-import BlueVaccine from "../../assets/images/icons/BlueVaccine.svg";
-import GrayVaccine2 from "../../assets/images/icons/GrayVaccine2.svg";
+import YellowVaccineMd from "../../assets/images/icons/yellow-vaccine-lg.svg";
+import PurppleVaccineMd from "../../assets/images/icons/purpple-vaccine-lg.svg";
+import NavyVaccineMd from "../../assets/images/icons/navy-vaccine-lg.svg";
+import BlueVaccine from "../../assets/images/icons/blue-vaccine.svg";
+import GrayVaccine2 from "../../assets/images/icons/gray-vaccine-2.svg";
 import Spinner from "../Spinner";
 
 

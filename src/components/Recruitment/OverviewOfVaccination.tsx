@@ -2,9 +2,13 @@ import React, {useEffect, useState} from 'react';
 import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
+import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
+import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
+import Gray1Vaccine from '../../assets/images/icons/gray-vaccine-1.svg';
+import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
+import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
+import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
+import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
@@ -128,13 +132,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
           <Statistic
-            icon={GreenVaccine}
+            icon={PurppleVaccine}
             text="تعداد واکسیناسیون دوز دوم"
             count={counts.numberOfSecondDose || 0}
             loading={countsLoading}
           />
           <Statistic
-            icon={GrayVaccine}
+            icon={NavyVaccine}
             text="تعداد واکسیناسیون دوز سوم"
             count={counts.numberOfUnvaccinated || 0}
             loading={countsLoading}
@@ -142,7 +146,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalEmploye}
+            icon={BlueVaccine}
             text="بیش از ۳ دوز"
             count={counts.numberOfDrivers || 0}
             loading={countsLoading}
@@ -154,13 +158,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
           <Statistic
-            icon={GrayVaccine}
+            icon={Gray1Vaccine}
             text="تعداد اطلاعات مخدوش"
             count={counts.numberOfUnvaccinated || 0}
             loading={countsLoading}
           />
           <Statistic
-            icon={YellowVaccine}
+            icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
             count={counts.numberOfFirstDose || 0}
             loading={countsLoading}
