@@ -108,7 +108,7 @@ const TestStatus: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">وضعیت آزمایش کارکنان دولت</legend>
+      <legend className="text-black mx-auto px-3">آزمایش در آموزش و پرورش</legend>
       <div className="flex align-center justify-start mb-8">
         {showDatePicker ? (
           <DatePickerModal

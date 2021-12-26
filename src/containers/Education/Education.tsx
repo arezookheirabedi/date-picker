@@ -5,13 +5,17 @@ import OverviewCategories from '../../components/Education/OverviewCategories';
 import OverviewPatients from '../../components/Education/OverviewPatients';
 import OverviewOfVaccination from '../../components/Education/OverviewOfVaccination';
 import TestStatus from '../../components/Education/TestStatus';
-import OverviewRecruitment from '../../components/Education/OverviewRecruitment';
+import OverviewEducation from '../../components/Education/OverviewEducation';
+import OverviewEducationEmploye from '../../components/Education/OverviewEducationEmploye';
+import OverviewEducationStudent from '../../components/Education/OverviewEducationStudent';
 
 // import IconWrapper from "../../components/IconWrapper";
 const Education = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewRecruitment />
+      <OverviewEducation />
+      <OverviewEducationEmploye />
+      <OverviewEducationStudent />
       <OverviewCategories />
       <OverviewPatients />
       <OverviewOfVaccination />
