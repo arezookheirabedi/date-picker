@@ -1,7 +1,11 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import OverviewDriversMap from 'src/components/Transport/OverviewDriversMap';
-import OverviewDriverStatus from 'src/components/Transport/OverviewDriversStatus';
+// import {useLocation} from "react-router-dom";
+import OverviewMap from '../../components/Recruitment/OverviewMap';
+import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
+import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
+import OverviewCategoriesProvince from '../../components/Recruitment/OverviewCategoriesProvince';
+import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
 
 const sideCities = [
   {
@@ -130,59 +134,7 @@ const sideCities = [
   },
 ];
 
-// eslint-disable-next-line
-const mockDate = [
-  {
-    count: 50,
-    data: 'اسفند',
-  },
-  {
-    count: 550,
-    data: 'بهمن',
-  },
-  {
-    count: 330,
-    data: 'دی',
-  },
-  {
-    count: 100,
-    data: 'آذر',
-  },
-  {
-    count: 400,
-    data: 'آبان',
-  },
-  {
-    count: 210,
-    data: 'مهر',
-  },
-  {
-    count: 270,
-    data: 'شهریور',
-  },
-  {
-    count: 400,
-    data: 'مرداد',
-  },
-  {
-    count: 300,
-    data: 'تیر',
-  },
-  {
-    count: 350,
-    data: 'خرداد',
-  },
-  {
-    count: 200,
-    data: 'اردیبهشت',
-  },
-  {
-    count: 150,
-    data: 'فروردین',
-  },
-];
-
-const TransportProvince = () => {
+const RecruitmentProvince = () => {
   const location = useLocation();
 
   const [cityTitle, setCityTitle] = useState('تهران');
@@ -190,6 +142,7 @@ const TransportProvince = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') as any;
+    console.log(provinceName);
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
@@ -201,10 +154,18 @@ const TransportProvince = () => {
 
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="drivers-overview" />
-      <OverviewDriverStatus />
+      <OverviewMap
+        cityTitle={cityTitle}
+        sideCityStatus={sideCities}
+        destinationId="recruitment-overview"
+      />
+
+      <OverviewCategoriesProvince cityTitle={cityTitle} />
+      <OverviewPatientsProvince cityTitle={cityTitle} />
+      <OverviewOfVaccinationProvince cityTitle={cityTitle} />
+      <TestsStatusProvince cityTitle={cityTitle} />
     </div>
   );
 };
 
-export default TransportProvince;
+export default RecruitmentProvince;
