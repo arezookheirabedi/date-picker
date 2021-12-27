@@ -17,6 +17,10 @@ const getServiceTypeName = (item: any) => {
       return 'تاکسی پلاک ت';
     case 'ONLINE':
       return 'تاکسی آنلاین';
+    case 'MOTOR_PEYK':
+      return 'موتور سیکلت';
+    case 'SCHOOL_SERVICE':
+      return 'سرویس مدارس'
     default:
       return null;
   }
