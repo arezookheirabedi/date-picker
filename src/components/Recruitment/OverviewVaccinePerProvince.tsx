@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFliter';
 import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import transportService from '../../services/transport.service';
@@ -140,8 +139,29 @@ const OverviewVaccinePerProvince = () => {
             </div>
           </div>
 
-          <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+          <div className="w-2/4">
+            <div className="flex flex-col lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#FFC700'}} />
+                  <span>دوز اول</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#883BA4'}} />
+                  <span>دوز دوم</span>
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#175A76'}} />
+                  <span>دوز سوم</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#00AAB1'}} />
+                  <span>بیش از ۳ دوز</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -155,7 +175,9 @@ const OverviewVaccinePerProvince = () => {
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )} */}
-        <Stacked data={data} />
+        {/* <div className="flex justify-center items-center w-full"> */}
+          <Stacked data={data} />
+        {/* </div> */}
       </div>
     </fieldset>
   );

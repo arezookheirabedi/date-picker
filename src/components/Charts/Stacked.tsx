@@ -5,9 +5,9 @@ import Highcharts from 'highcharts';
 Highcharts.setOptions({
   lang: {
     decimalPoint: '.',
-    thousandsSep: ','
+    thousandsSep: ',',
   },
-})
+});
 
 const Column: React.FC<any> = () => {
   const options = {
@@ -92,7 +92,10 @@ const Column: React.FC<any> = () => {
 
   return (
     <>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+      />
     </>
   );
 };
