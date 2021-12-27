@@ -8,7 +8,6 @@ import OverviewDriversProvince from "../../components/Transport/OverviewDriversP
 
 import OverviewPublicPatientsProvince from "../../components/Transport/OverviewPublicPatientsProvince";
 import TestsInTransportProvince from "../../components/Transport/TestsInTransportProvince";
-import {IDetail} from "../../components/Charts/Pyramid";
 import OverviewCategoriesProvince from "../../components/Transport/OverviewCategoriesProvince";
 import OverviewOfVaccinationInPublicTransportProvince
   from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
@@ -142,44 +141,6 @@ const sideCities = [
 ]
 
 
-const pyramidData: Array<IDetail> = [
-  {
-    title: 'اسنپ',
-    percentage: 90,
-    color: '#049975'
-  },
-  {
-    title: 'تپسی',
-    percentage: 80,
-    color: '#00F1E3'
-  },
-  {
-    title: 'تاکسی پلاک ع',
-    percentage: 70,
-    color: '#4EC4F2'
-  },
-  {
-    title: 'تاکسی پلاک ت',
-    percentage: 60,
-    color: '#9D19FA'
-  },
-  {
-    title: 'سرویس مدارس',
-    percentage: 50,
-    color: '#F534DB'
-  },
-  {
-    title: 'تاکسی فرودگاهی',
-    percentage: 40,
-    color: '#F5DF34'
-  },
-  {
-    title: 'اتوبوس رانی',
-    percentage: 30,
-    color: '#FE8007'
-  }
-];
-
 const TransportProvince = () => {
   const location = useLocation();
 
@@ -203,11 +164,11 @@ const TransportProvince = () => {
   return (
     <div className="space-y-16 mb-8">
       <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="province-overview"/>
-       <OverviewDriversProvince cityTitle={cityTitle} />
-       <OverviewCategoriesProvince cityTitle={cityTitle}/>
-       <OverviewPublicPatientsProvince cityTitle={cityTitle}/>
+      <OverviewDriversProvince cityTitle={cityTitle}/>
+      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+      <OverviewPublicPatientsProvince cityTitle={cityTitle}/>
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
-       <TestsInTransportProvince cityTitle={cityTitle} data={pyramidData}/>
+      <TestsInTransportProvince cityTitle={cityTitle}/>
     </div>
   )
 }
