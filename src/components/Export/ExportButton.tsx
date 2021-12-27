@@ -2,38 +2,36 @@ import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
 import OtpInput from 'react-otp-input';
 import cogoToast from 'cogo-toast';
+import transportService from 'src/services/transport.service';
 import download from '../../assets/images/icons/download.svg';
 import DotLoading from '../DotLoading';
 
-const ExportButton: React.FC<{}> = () => {
+// eslint-disable-next-line react/prop-types
+const ExportButton: React.FC<{params: {from: string; to: string}}> = ({params}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [fetchCode, setFetchCode] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [otp, setOtp] = useState<string>('');
 
-  const requestExport = () => {
-    setFetchCode(true);
-    setTimeout(() => {
-      cogoToast.success('کد به شماره همراه ارسال شد');
-      setFetchCode(false);
-    }, 1000);
-
-    // guildService
-    //   .requestDeleteGuild(id)
-    //   .then(() => {
-    //     cogoToast.success('کد به شماره همراه صاحب صنف ارسال شد');
-    //   })
-    //   .catch(error => {
-    //     cogoToast.error(error.message || 'خطایی در عملیات');
-    //     closeModal();
-    //   })
-    //   .finally(() => {
-    //     setFetchCode(false);
-    //   });
-  };
-
   const closeModal: () => void = () => {
     setIsOpen(false);
+  };
+
+  const requestExport = () => {
+    setFetchCode(true);
+
+    transportService
+      .requestReport(params)
+      .then(() => {
+        cogoToast.success('کد به شماره همراه ارسال شد');
+      })
+      .catch(error => {
+        cogoToast.error(error.message || 'خطایی در عملیات');
+        closeModal();
+      })
+      .finally(() => {
+        setFetchCode(false);
+      });
   };
 
   const openModal: () => void = () => {
@@ -49,10 +47,18 @@ const ExportButton: React.FC<{}> = () => {
     e.stopPropagation();
     setSubmitted(true);
 
-    setTimeout(() => {
-      cogoToast.success('');
-      setSubmitted(false);
-    }, 3000);
+    transportService
+      .confirmRequestReport(otp)
+      .then(() => {
+        cogoToast.success('لینک دانلود به شماره همراه ارسال شد');
+      })
+      .catch(error => {
+        cogoToast.error(error.message || 'خطایی در عملیات');
+        // closeModal();
+      })
+      .finally(() => {
+        setFetchCode(false);
+      });
   };
 
   return (
