@@ -57,7 +57,7 @@ const ExportButton: React.FC<{params: {from: string; to: string}}> = ({params}) 
         // closeModal();
       })
       .finally(() => {
-        setFetchCode(false);
+        setSubmitted(false);
       });
   };
 

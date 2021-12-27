@@ -101,10 +101,10 @@ const Table: React.FC<IProps> = (props: IProps) => {
           <tbody className="bg-white dark:bg-gray-900 max-h-screen overflow-hidden overflow-y-scroll">
             {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
               dataSet
-                .slice(
-                  (parseInt(queryStringParams.get('page') || '1', 10) - 1) * pageSize,
-                  parseInt(queryStringParams.get('page') || '1', 10) * pageSize
-                )
+                // .slice(
+                //   (parseInt(queryStringParams.get('page') || '1', 10) - 1) * pageSize,
+                //   parseInt(queryStringParams.get('page') || '1', 10) * pageSize
+                // )
                 .map((data, i) => (
                   <tr className="transition-all border-b border-gray-100" key={i}>
                     {columns?.map((column, j) => (

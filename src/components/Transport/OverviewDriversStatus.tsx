@@ -39,19 +39,12 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
   const queryStringParams = new URLSearchParams(search);
   const history = useHistory();
 
-  // const [queryParams, setQueryParams] = useState({
-  //   pageNumber: 1,
-  //   pageSize: 10,
-  //   sort: 'ASC',
-  //   from: '',
-  //   to: '',
-  // });
   const [exportType, setExportType] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  const [data, setData] = useState([]);
+  const [dataSet, setDataSet] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -84,18 +77,19 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
   };
 
   const getOverviewTransportReport = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response: any = await transportService.overviewReport(params);
-      console.log(response.data.content)
-      setData(response.data.content);
-      setTotalItems(response.data.totalElements);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      console.log(error);
-    } finally {
-      setLoading(false);
+    if (!loading) {
+      setLoading(true);
+      setErrorMessage(null);
+      try {
+        const response: any = await transportService.overviewReport(params);
+        setDataSet([...response.data.content]);
+        setTotalItems(response.data.totalElements);
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -103,7 +97,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
     const qst = new URLSearchParams(search);
     getOverviewTransportReport({
       pageNumber: qst.get('page') || 1,
-      pageSize: 10,
+      pageSize: 20,
       sort: 'ASC',
       from: qst.get('from'),
       to: qst.get('to'),
@@ -232,7 +226,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
         <>
           <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
-              dataSet={data}
+              dataSet={dataSet}
               pagination={{pageSize: 20, maxPages: 3}}
               columns={[
                 {
