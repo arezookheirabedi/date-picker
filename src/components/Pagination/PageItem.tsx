@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {NavLink, useRouteMatch} from 'react-router-dom';
+import {NavLink, useRouteMatch, useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
 const DisableItem = styled.span``;
@@ -16,8 +16,13 @@ interface IProps {
 
 const PageItem: React.FC<IProps> = props => {
   const {url} = useRouteMatch();
+  const {search} = useLocation();
 
   const {disabled, currentPage, value, label, shadow = true} = props;
+
+  const queryParams = new URLSearchParams(search);
+
+  queryParams.set('page', `${value}`);
 
   return disabled ? (
     <DisableItem
@@ -31,7 +36,7 @@ const PageItem: React.FC<IProps> = props => {
     </DisableItem>
   ) : (
     <Item
-      to={`${url}?page=${value}`}
+      to={`${url}?${queryParams.toString()}`}
       className={`inline-flex justify-center rounded-md ${shadow && 'shadow'} ${
         currentPage === value
           ? 'bg-primary-500 hover:bg-primary-700 border-transparent text-white dark:border-primary-500 dark:bg-dark dark:hover:bg-primary-800 dark:text-primary-500 dark:hover:text-light dark:hover:border-transparent cursor-default'
