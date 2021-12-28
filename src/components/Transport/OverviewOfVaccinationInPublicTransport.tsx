@@ -167,10 +167,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         }
 
 
-        console.log('allvaccination => ', allVaccination)
-        console.log('no dose  => ', noDose)
-        console.log('unknonw information  => ', unknownInformation)
-        console.log('total  => ', total)
 
 
         normalizedDate.push({
@@ -194,7 +190,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         });
 
       });
-      console.log('normali =>  ', normalizedDate)
+
       setDataset([...normalizedDate]);
     } catch (error) {
       console.log(error);
@@ -288,8 +284,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                   key: '',
                   render: (v: any, record) => {
 
-                    console.log('v => ', v);
-                    console.log('record => ', record);
                     return (
                       (
                         <CategoryDonut
