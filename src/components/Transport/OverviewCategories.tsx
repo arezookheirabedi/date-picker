@@ -20,7 +20,7 @@ const getServiceTypeName = (item: any) => {
     case 'MOTOR_PEYK':
       return 'موتور سیکلت';
     case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
+      return 'سرویس مدارس';
     default:
       return null;
   }
@@ -43,17 +43,17 @@ const OverviewCategories: React.FC<{}> = () => {
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
-        if (item.total !== 0) {
-          normalizedDate.push({
-            id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
-            employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
-          });
-        }
+        // if (item.total !== 0) {
+        normalizedDate.push({
+          id: `ovca_${index}`,
+          name: getServiceTypeName(item.serviceType),
+          employeesCount: item.total || 0,
+          infectedCount: item.count || 0,
+          infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
+          saveCount: item.recoveredCount || 0,
+          // deadCount: 120,
+        });
+        // }
       });
       setDataset([...normalizedDate]);
     } catch (error) {
@@ -64,7 +64,12 @@ const OverviewCategories: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    getOverviewByCategory({resultStatus: 'POSITIVE', recoveredCount: true, total: true, count: true});
+    getOverviewByCategory({
+      resultStatus: 'POSITIVE',
+      recoveredCount: true,
+      total: true,
+      count: true,
+    });
   }, []);
 
   const focusFromDate = () => {
@@ -223,7 +228,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
-                    {Number(v).toLocaleString('fa', {
+                    {Number(v || 0).toLocaleString('fa', {
                       minimumFractionDigits: 4,
                     })}
                     %
