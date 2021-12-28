@@ -25,6 +25,7 @@ const routes: IRoute[] = [
     title: 'داشبورد جامع',
     main: Overview,
     showGuildList: true,
+    disabled: true,
   },
   {
     keyIndex: '2',
@@ -33,7 +34,7 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     title: 'داشبورد شهروندان',
-    // disabled: true,
+    disabled: true,
     main: Citizens,
   },
   {
@@ -45,7 +46,7 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     title: 'داشبورد واکسیناسیون',
-    // disabled: true,
+    disabled: true,
     main: Vaccination,
   },
   {
@@ -93,7 +94,7 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     title: 'داشبورد اصناف',
-    // disabled: true,
+    disabled: true,
     main: Guild,
   },
   {
@@ -105,7 +106,7 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     title: 'داشبورد مسافران',
-    // disabled: true,
+    disabled: true,
     main: Passenger,
   },
   {
