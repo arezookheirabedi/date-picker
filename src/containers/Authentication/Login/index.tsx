@@ -72,7 +72,7 @@ export default function Login() {
       //   })
       // );
       console.log('you are logged in');
-      history.push(EPRIVATEROUTE.DASHBOARDOVERVIEW);
+      history.push(EPRIVATEROUTE.DASHBOARDTRANSPORTPUBLIC);
     } catch (error: any) {
 
       handleCaptcha();
