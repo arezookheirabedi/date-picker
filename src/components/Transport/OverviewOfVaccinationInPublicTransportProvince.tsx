@@ -296,12 +296,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         }
 
 
-        console.log('allvaccination => ', allVaccination)
-        console.log('no dose  => ', noDose)
-        console.log('unknonw information  => ', unknownInformation)
-        console.log('total  => ', total)
-
-
         normalizedDate.push({
           id: `ovvac_${index}`,
           name: getServiceTypeName(item.serviceType),
@@ -323,7 +317,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         });
 
       });
-      console.log('normali =>  ', normalizedDate)
+
       setDataset([...normalizedDate]);
     } catch (error) {
       console.log(error);
@@ -447,8 +441,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
                   key: '',
                   render: (v: any, record) => {
 
-                    console.log('v => ', v);
-                    console.log('record => ', record);
                     return (
                       (
                         <CategoryDonut
