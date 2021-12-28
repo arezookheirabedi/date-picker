@@ -140,8 +140,8 @@ const OverviewVaccinePerProvince = () => {
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-3 rounded" style={{backgroundColor: '#FFC700'}} />
                   <span>دوز اول</span>
@@ -151,7 +151,7 @@ const OverviewVaccinePerProvince = () => {
                   <span>دوز دوم</span>
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-3 rounded" style={{backgroundColor: '#175A76'}} />
                   <span>دوز سوم</span>
