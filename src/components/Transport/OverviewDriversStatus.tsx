@@ -28,7 +28,7 @@ const getServiceTypeName = (item: any) => {
     case 'SCHOOL_SERVICE':
       return 'سرویس مدارس';
     default:
-      return null;
+      return 'دیگر';
   }
 };
 
@@ -246,10 +246,36 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                   name: 'پلاک',
                   key: 'plaque',
                   render: (v: any) => (
-                    <span>
-                      {/* eslint-disable-next-line react/destructuring-assignment */}
-                      {`${v.iranNumber} | ${v.firstNumber} ${v.letter} ${v.secondNumber}`.toPersianDigits()}
-                    </span>
+                    // <span>
+                    //   {/* eslint-disable-next-line react/destructuring-assignment */}
+                    //   {`${v.iranNumber} | ${v.secondNumber} ${v.letter} ${v.firstNumber}`.toPersianDigits()}
+                    // </span>
+                    <div className="flex items-center">
+                      <div className="license-plate">
+                        <div className="blue-column">
+                          <div className="flag">
+                            <div />
+                            <div />
+                            <div />
+                          </div>
+                          <div className="text">
+                            <div>I.R.</div>
+                            <div>IRAN</div>
+                          </div>
+                        </div>
+                        {/* eslint-disable-next-line react/destructuring-assignment */}
+                        <span>{v.firstNumber}</span>
+                        {/* eslint-disable-next-line react/destructuring-assignment */}
+                        <span className="alphabet-column">{v.letter}</span>
+                        {/* eslint-disable-next-line react/destructuring-assignment */}
+                        <span>{v.secondNumber}</span>
+                        <div className="iran-column">
+                          <span>ایــران</span>
+                          {/* eslint-disable-next-line react/destructuring-assignment */}
+                          <strong>{v.iranNumber}</strong>
+                        </div>
+                      </div>
+                    </div>
                   ),
                 },
                 {
@@ -260,7 +286,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                 {
                   name: 'استان',
                   key: 'province',
-                  render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                  render: (v: any) => <span>{v || '-'}</span>,
                 },
                 {
                   name: 'وضعیت',

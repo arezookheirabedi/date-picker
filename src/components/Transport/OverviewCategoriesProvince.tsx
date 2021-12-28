@@ -152,7 +152,7 @@ const getServiceTypeName = (item: any) => {
     case 'MOTOR_PEYK':
       return 'موتور سیکلت';
     case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
+      return 'سرویس مدارس';
     default:
       return null;
   }
@@ -177,17 +177,17 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
-        if (item.total !== 0) {
-          normalizedDate.push({
-            id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
-            employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
-          });
-        }
+        // if (item.total !== 0) {
+        normalizedDate.push({
+          id: `ovca_${index}`,
+          name: getServiceTypeName(item.serviceType),
+          employeesCount: item.total || 0,
+          infectedCount: item.count || 0,
+          infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
+          saveCount: item.recoveredCount || 0,
+          // deadCount: 120,
+        });
+        // }
       });
       setDataset([...normalizedDate]);
     } catch (error) {
@@ -241,7 +241,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     }
   }, [location.search]);
 
-  
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
@@ -307,103 +306,103 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           </div>
         ) : (
           <Table
-          dataSet={[...dataset]}
-          pagination={{pageSize: 20, maxPages: 3}}
-          columns={[
-            {
-              name: 'وضعیت کلی',
-              key: '',
-              render: (v: any, record) => (
-                <CategoryDonut
-                  data={[
-                    {
-                      name: 'deadCount',
-                      title: 'تعداد فوت‌شدگان',
-                      y: record.deadCount || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
+            dataSet={[...dataset]}
+            pagination={{pageSize: 20, maxPages: 3}}
+            columns={[
+              {
+                name: 'وضعیت کلی',
+                key: '',
+                render: (v: any, record) => (
+                  <CategoryDonut
+                    data={[
+                      {
+                        name: 'deadCount',
+                        title: 'تعداد فوت‌شدگان',
+                        y: record.deadCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#6E6E6E'], // start
+                            [1, '#393939'], // end
+                          ],
+                        },
                       },
-                    },
-                    {
-                      name: 'saveCount',
-                      title: 'تعداد بهبودیافتگان',
-                      y: record.saveCount || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
-                        ],
+                      {
+                        name: 'saveCount',
+                        title: 'تعداد بهبودیافتگان',
+                        y: record.saveCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#05D8A4'], // start
+                            [1, '#039572'], // end
+                          ],
+                        },
                       },
-                    },
-                    {
-                      name: 'infectedCount',
-                      title: 'تعداد مبتلایان',
-                      y: record.infectedCount || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#FE2D2F'], // start
-                          [1, '#CC0002'], // end
-                        ],
+                      {
+                        name: 'infectedCount',
+                        title: 'تعداد مبتلایان',
+                        y: record.infectedCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#FE2D2F'], // start
+                            [1, '#CC0002'], // end
+                          ],
+                        },
                       },
-                    },
-                  ]}
-                />
-              ),
-              className: 'flex justify-center w-full',
-            },
-            {
-              name: 'رسته های حمل و نقل',
-              key: 'name',
-              render: (v: any, record, index: number) => (
-                <span>
-                  {(index + 1).toLocaleString('fa')}.{v}
-                </span>
-              ),
-            },
-            {
-              name: 'تعداد رانندگان',
-              key: 'employeesCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-            },
-            {
-              name: 'درصد ابتلا',
-              key: 'infectedPercent',
-              render: (v: any) => (
-                <span>
-                  {Number(v).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
-            },
-            {
-              name: 'تعداد مبتلایان',
-              key: 'infectedCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-            },
-            {
-              name: 'تعداد بهبودیافتگان',
-              key: 'saveCount',
-              render: (v: any) => (
-                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-              ),
-            },
-            {
-              name: 'تعداد فوت‌شدگان',
-              key: 'deadCount',
-              render: (v: any) => (
-                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-              ),
-            },
-          ]}
-          totalItems={(dataset || []).length}
+                    ]}
+                  />
+                ),
+                className: 'flex justify-center w-full',
+              },
+              {
+                name: 'رسته های حمل و نقل',
+                key: 'name',
+                render: (v: any, record, index: number) => (
+                  <span>
+                    {(index + 1).toLocaleString('fa')}.{v}
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد رانندگان',
+                key: 'employeesCount',
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              },
+              {
+                name: 'درصد ابتلا',
+                key: 'infectedPercent',
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0).toLocaleString('fa', {
+                      minimumFractionDigits: 4,
+                    })}
+                    %
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد مبتلایان',
+                key: 'infectedCount',
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              },
+              {
+                name: 'تعداد بهبودیافتگان',
+                key: 'saveCount',
+                render: (v: any) => (
+                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                ),
+              },
+              {
+                name: 'تعداد فوت‌شدگان',
+                key: 'deadCount',
+                render: (v: any) => (
+                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                ),
+              },
+            ]}
+            totalItems={(dataset || []).length}
           />
         )}
       </div>
