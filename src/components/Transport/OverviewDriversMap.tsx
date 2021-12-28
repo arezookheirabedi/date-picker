@@ -1,5 +1,5 @@
 import React from "react";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 import Charts from "../Charts";
 import map from "../Charts/ir-all.geo.json";
@@ -170,7 +170,10 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow">
+      <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow relative">
+        <Link to="/dashboard/transport/public" className="absolute right-20 top-8 z-50">
+          <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
+        </Link>
         <div className="w-5/6 map-wrapper">
           <Map options={options}/>
         </div>
