@@ -55,7 +55,7 @@ node-build-Prod:
     - CI=false yarn run build:production
 
   only:
-    - master
+    - develop
 
 dockerize-Develop:
   tags: 
@@ -88,7 +88,7 @@ dockerize-Prod:
     - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers:latest .
     - buildah push registry.vaslapp.com/docker/ministers:latest
   only:
-    - master
+    - develop
 
     
 rollout-Develop:
