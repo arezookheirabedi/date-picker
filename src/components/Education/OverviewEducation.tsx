@@ -10,6 +10,7 @@ import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
 import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import transportService from '../../services/transport.service';
+import educationService from '../../services/education.service';
 
 const OverviewEducation = () => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
@@ -31,7 +32,9 @@ const OverviewEducation = () => {
   const getNumberOfDrivers = async () => {
     setNumberOfDriversLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers();
+      const {data} = await educationService.numberOf({
+
+      });
       setNumberOfDrivers(data.numberOfDrivers);
     } catch (error) {
       // eslint-disable-next-line
@@ -130,7 +133,9 @@ const OverviewEducation = () => {
   }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به پرسنل آموزشی آموزش و پرورش کل کشور</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به پرسنل آموزشی آموزش و پرورش کل کشور
+      </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
