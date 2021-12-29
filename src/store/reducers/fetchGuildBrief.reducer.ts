@@ -16,6 +16,7 @@ try {
     data = JSON.parse(guildBrief)
   }
 } catch (error) {
+  // eslint-disable-next-line
   console.info("not found guild brief")
 }
 

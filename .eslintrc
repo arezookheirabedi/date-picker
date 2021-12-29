@@ -46,7 +46,7 @@
     ],
     "filenames/match-exported": "off",
     "react/no-array-index-key": ["warn"],
-    "react/prop-types": ["warn"],
+    "react/prop-types": ["off"],
     "jsx-a11y/label-has-associated-control": [
       "error",
       {
@@ -63,8 +63,8 @@
         }
       }
     ],
-    "import/prefer-default-export": "warn",
-    "react/jsx-props-no-spreading": "warn",
+    "import/prefer-default-export": "off",
+    "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "warn",
     "react/no-unused-prop-types": "warn",
     "prefer-promise-reject-errors": "warn"

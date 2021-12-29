@@ -62,6 +62,7 @@ const OverviewVaccinePerProvince = () => {
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);

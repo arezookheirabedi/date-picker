@@ -76,6 +76,7 @@ const CategoryDonut: React.FC<{
         </div>
         <ul className="tooltip__tooltippiechart">
           {data.map((item: IData, index: number) => (
+            // eslint-disable-next-line
             <li key={`${item.name}_${index}`}>
               <span
                 style={{

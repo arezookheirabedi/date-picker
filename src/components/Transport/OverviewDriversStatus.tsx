@@ -86,6 +86,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
         setTotalItems(response.data.totalElements);
       } catch (error: any) {
         setErrorMessage(error.message);
+        // eslint-disable-next-line
         console.log(error);
       } finally {
         setLoading(false);
@@ -159,6 +160,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
               <div className="px-1 py-1 ">
                 {['PDF', 'CSV'].map((value: any, index: any) => {
                   return (
+                    // eslint-disable-next-line
                     <React.Fragment key={index}>
                       <Menu.Item>
                         {({active}) => (

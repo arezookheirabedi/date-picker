@@ -68,13 +68,23 @@ const TestsInTransport = () => {
 
   const generateFromDate: any = () => {
     // eslint-disable-next-line
-    return selectedDayRange.from ? selectedDayRange.from.year + '/' + selectedDayRange.from.month + '/' + selectedDayRange.from.day : '';
-  }
+    return selectedDayRange.from
+      ? // eslint-disable-next-line
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
+      : '';
+  };
 
   const generateToDate: any = () => {
     // eslint-disable-next-line
-    return selectedDayRange.to ? selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day : '';
-  }
+    return selectedDayRange.to
+      ? // eslint-disable-next-line
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      : '';
+  };
 
   const getColorByServiceTypeName = (item: any) => {
     switch (item) {
@@ -87,7 +97,7 @@ const TestsInTransport = () => {
       case 'MOTOR_PEYK':
         return '#ffc400';
       case 'SCHOOL_SERVICE':
-        return '#ff00bf'
+        return '#ff00bf';
       default:
         return null;
     }
@@ -104,7 +114,7 @@ const TestsInTransport = () => {
       case 'MOTOR_PEYK':
         return 'موتور سیکلت';
       case 'SCHOOL_SERVICE':
-        return 'سرویس مدارس'
+        return 'سرویس مدارس';
       default:
         return null;
     }
@@ -136,6 +146,7 @@ const TestsInTransport = () => {
       // // setPyramidData(data);
       // // console.log(data);
     } catch (error: any) {
+      // eslint-disable-next-line
       console.log(error);
       setErrorMessage(error.message);
     } finally {
@@ -185,11 +196,11 @@ const TestsInTransport = () => {
                   {toPersianDigit(generateFromDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5"/>
+              <img src={calendar} alt="x" className="w-5 h-5" />
             </div>
           </div>
           <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator"/>
+            <span className="dash-separator" />
           </div>
           <div className="shadow-custom rounded-lg px-4 py-1">
             <div
@@ -201,17 +212,17 @@ const TestsInTransport = () => {
                   {toPersianDigit(generateToDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5"/>
+              <img src={calendar} alt="x" className="w-5 h-5" />
             </div>
           </div>
         </div>
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && pyramidData.length > 0 && !errorMessage && <Pyramid data={pyramidData}/>}
+        {!loading && pyramidData.length > 0 && !errorMessage && <Pyramid data={pyramidData} />}
         {pyramidData.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}

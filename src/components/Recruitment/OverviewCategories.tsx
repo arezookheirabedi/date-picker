@@ -57,6 +57,7 @@ const OverviewCategories: React.FC<{}> = () => {
       });
       setDataset([...normalizedDate]);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
