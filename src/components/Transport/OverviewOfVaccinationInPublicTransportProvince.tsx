@@ -238,6 +238,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         allDrivers: unknownInformation + noDose + allVaccination
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setReportsDoseLoading(false);
@@ -320,6 +321,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
 
       setDataset([...normalizedDate]);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);

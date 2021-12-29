@@ -26,7 +26,7 @@ const getServiceTypeName = (item: any) => {
     case 'MOTOR_PEYK':
       return 'موتور سیکلت';
     case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
+      return 'سرویس مدارس';
     default:
       return null;
   }
@@ -59,12 +59,12 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setCountsLoading(false);
     }
   }
-
 
   async function getReportsDose() {
     setReportsDoseLoading(true);
@@ -93,22 +93,22 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             unknownInformation += Number(value);
           }
         }
-      })
+      });
       normalizedData.push({
         threeDose,
         allVaccination,
         moreThanThreeDose,
-        unknownInformation
+        unknownInformation,
       });
-
 
       setReportsDose({
         threeDose,
         allVaccination,
         moreThanThreeDose,
-        unknownInformation
+        unknownInformation,
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setReportsDoseLoading(false);
@@ -120,7 +120,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     try {
       const {data} = await transportService.overviewVaccinePercent(params);
       const normalizedDate: any[] = [];
-
 
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
@@ -136,7 +135,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           if (Number(key) === 0) {
             noDose += Number(value);
           }
-
 
           if (Number(key) === 1) {
             firstDose += Number(value);
@@ -163,11 +161,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           }
 
           total = allVaccination + noDose + unknownInformation;
-
         }
-
-
-
 
         normalizedDate.push({
           id: `ovvac_${index}`,
@@ -178,7 +172,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           otherDose: (moreThanThreeDose * 100) / total,
           unknownInformation: (unknownInformation * 100) / total,
           allDoses: ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
-          noDose: (noDose * 100) / total
+          noDose: (noDose * 100) / total,
           // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
           // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
           // // eslint-disable-next-line
@@ -188,11 +182,11 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           //     : 0
           //   : 0,
         });
-
       });
 
       setDataset([...normalizedDate]);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
@@ -214,8 +208,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان"
@@ -241,8 +234,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           loading={reportsDoseLoading}
         />
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={GreenVaccine}
           text="تعداد کل واکسیناسیون"
@@ -270,7 +262,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>
@@ -283,51 +275,48 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                   name: 'وضعیت کلی',
                   key: '',
                   render: (v: any, record) => {
-
                     return (
-                      (
-                        <CategoryDonut
-                          data={[
-                            {
-                              name: 'fullDoseVaccine',
-                              title: 'دوز کل',
-                              y: record.allDoses || 0,
-                              color: {
-                                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                                stops: [
-                                  [0, '#05D8A4'], // start
-                                  [1, '#039572'], // end
-                                ],
-                              },
+                      <CategoryDonut
+                        data={[
+                          {
+                            name: 'fullDoseVaccine',
+                            title: 'دوز کل',
+                            y: record.allDoses || 0,
+                            color: {
+                              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                              stops: [
+                                [0, '#05D8A4'], // start
+                                [1, '#039572'], // end
+                              ],
                             },
-                            {
-                              name: 'notVaccine',
-                              title: 'واکسن نزده',
-                              y: record.noDose || 0,
-                              color: {
-                                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                                stops: [
-                                  [0, '#FE2D2F'], // start
-                                  [1, '#CC0002'], // end
-                                ],
-                              },
+                          },
+                          {
+                            name: 'notVaccine',
+                            title: 'واکسن نزده',
+                            y: record.noDose || 0,
+                            color: {
+                              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                              stops: [
+                                [0, '#FE2D2F'], // start
+                                [1, '#CC0002'], // end
+                              ],
                             },
-                            {
-                              name: 'notVaccine',
-                              title: 'اطلاعات مخدوش',
-                              y: record.unknownInformation || 0,
-                              color: {
-                                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                                stops: [
-                                  [0, '#eee'], // start
-                                  [1, '#a8a8a8'], // end
-                                ],
-                              },
+                          },
+                          {
+                            name: 'notVaccine',
+                            title: 'اطلاعات مخدوش',
+                            y: record.unknownInformation || 0,
+                            color: {
+                              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                              stops: [
+                                [0, '#eee'], // start
+                                [1, '#a8a8a8'], // end
+                              ],
                             },
-                          ]}
-                        />
-                      )
-                    )
+                          },
+                        ]}
+                      />
+                    );
                   },
                   className: 'flex justify-center w-full',
                 },
@@ -343,38 +332,52 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                 {
                   name: 'دوز اول',
                   key: 'firstDosePercentage',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
                 },
                 {
                   name: 'دوز دوم',
                   key: 'secondDosePercentage',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
                 },
                 {
                   name: 'دوز سوم',
                   key: 'thirdDosePercentage',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
                 },
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
                 },
                 {
                   name: 'کل دوز',
                   key: 'allDoses',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
                 },
                 {
                   name: 'اطلاعات مخدوش',
                   key: 'unknownInformation',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
                 },
                 {
                   name: 'واکسن نزده',
                   key: 'noDose',
-                  render: (v: any) => <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>,
-                }
+                  render: (v: any) => (
+                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                  ),
+                },
               ]}
               totalItems={0}
             />

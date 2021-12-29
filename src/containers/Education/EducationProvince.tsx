@@ -145,6 +145,7 @@ const EducationProvince = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') as any;
+    // eslint-disable-next-line
     console.log(provinceName);
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;

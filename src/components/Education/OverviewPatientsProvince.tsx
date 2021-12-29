@@ -221,6 +221,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
@@ -268,7 +269,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-      نگاه کلی مبتلایان آموزش و پرورش در استان &nbsp;
+        نگاه کلی مبتلایان آموزش و پرورش در استان &nbsp;
         {cityTitle}
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
@@ -294,6 +295,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                   {transportationType.map((value: any, index: any) => {
                     // console.log(value);
                     return (
+                      // eslint-disable-next-line
                       <Menu.Item key={index}>
                         {({active}) => (
                           <button
