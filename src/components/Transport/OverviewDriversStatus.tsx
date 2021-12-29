@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 import dayjs from 'dayjs';
 // @ts-ignore
 import moment from 'moment-jalaali';
@@ -14,6 +15,7 @@ import calendar from '../../assets/images/icons/calendar.svg';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 import {ReactComponent as FolderIcon} from '../../assets/images/icons/folder.svg';
 import Spinner from '../Spinner';
+
 
 const getServiceTypeName = (item: any) => {
   switch (item) {
@@ -32,10 +34,12 @@ const getServiceTypeName = (item: any) => {
   }
 };
 
-interface OverviewDriverStatusProps {}
+interface OverviewDriverStatusProps {
+}
 
 const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
   const {search} = useLocation();
+  // const location = useLocation();
   const queryStringParams = new URLSearchParams(search);
   const history = useHistory();
 
@@ -52,6 +56,9 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
     to: {day: 20, month: 9, year: 1400},
   }) as any;
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
@@ -60,11 +67,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -72,30 +79,28 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
   const getOverviewTransportReport = async (params: any) => {
-    if (!loading) {
-      setLoading(true);
-      setErrorMessage(null);
-      try {
-        const response: any = await transportService.overviewReport(params);
-        setDataSet([...response.data.content]);
-        setTotalItems(response.data.totalElements);
-      } catch (error: any) {
-        setErrorMessage(error.message);
-        // eslint-disable-next-line
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
+    // setErrorMessage(null);
+    try {
+      const response: any = await transportService.overviewReport(params, {cancelToken: source.token});
+      setDataSet([...response.data.content]);
+      setTotalItems(response.data.totalElements);
+    } catch (error: any) {
+      // setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     const qst = new URLSearchParams(search);
+    setLoading(true);
     getOverviewTransportReport({
       pageNumber: qst.get('page') || 1,
       pageSize: 20,
@@ -103,7 +108,20 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
       from: qst.get('from'),
       to: qst.get('to'),
     });
-  }, [search]);
+    // return () => {
+    //   source.cancel('Operation canceled by the user.');
+    // }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setDataSet([]);
+      setTotalItems(0);
+      setLoading(false);
+    }
+  }, [history])
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -147,16 +165,18 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button
+                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 <div className="flex items-center">
-                  <FolderIcon className="h-5 w-5 ml-2 text-gray-500" />
+                  <FolderIcon className="h-5 w-5 ml-2 text-gray-500"/>
                   <span className="ml-10 whitespace-nowrap truncate">{exportType || 'PDF'}</span>
                 </div>
-                <DownIcon className="h-2 w-2.5 mr-2 text-gray-500" />
+                <DownIcon className="h-2 w-2.5 mr-2 text-gray-500"/>
               </Menu.Button>
             </div>
 
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1 ">
                 {['PDF', 'CSV'].map((value: any, index: any) => {
                   return (
@@ -199,11 +219,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                 <span className="ml-4 whitespace-nowrap truncate text-xs">
                   {toPersianDigit(generateFromDate())}
                 </span>
-                <img src={calendar} alt="x" className="w-5 h-5" />
+                <img src={calendar} alt="x" className="w-5 h-5"/>
               </div>
             </div>
             <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
+              <span className="dash-separator"/>
             </div>
             <div className=" shadow-custom rounded-lg px-4 py-1">
               <div
@@ -213,7 +233,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                 <span className="ml-4 whitespace-nowrap truncate text-xs">
                   {toPersianDigit(generateToDate())}
                 </span>
-                <img src={calendar} alt="x" className="w-5 h-5" />
+                <img src={calendar} alt="x" className="w-5 h-5"/>
               </div>
             </div>
           </div>
@@ -222,7 +242,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
 
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
@@ -256,9 +276,9 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                       <div className="license-plate">
                         <div className="blue-column">
                           <div className="flag">
-                            <div />
-                            <div />
-                            <div />
+                            <div/>
+                            <div/>
+                            <div/>
                           </div>
                           <div className="text">
                             <div>I.R.</div>
@@ -352,14 +372,14 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                       {/* eslint-disable-next-line */}
                       {v || v === 0
                         ? // eslint-disable-next-line no-nested-ternary
-                          v > 2
+                        v > 2
                           ? 'دوز سوم و بیشتر'
                           : // eslint-disable-next-line no-nested-ternary
                           v > 1
-                          ? 'دوز دوم'
-                          : v > 0
-                          ? 'دوز اول'
-                          : 'انجام نشده'
+                            ? 'دوز دوم'
+                            : v > 0
+                            ? 'دوز اول'
+                            : 'انجام نشده'
                         : 'نامشخص'}
                     </span>
                   ),
