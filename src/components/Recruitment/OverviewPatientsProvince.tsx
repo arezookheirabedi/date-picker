@@ -221,6 +221,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
@@ -294,6 +295,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                   {transportationType.map((value: any, index: any) => {
                     // console.log(value);
                     return (
+                      // eslint-disable-next-line
                       <Menu.Item key={index}>
                         {({active}) => (
                           <button

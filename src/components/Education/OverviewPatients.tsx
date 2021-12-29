@@ -85,6 +85,7 @@ const OverviewPatients = () => {
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
@@ -138,6 +139,7 @@ const OverviewPatients = () => {
                   {transportationType.map((value: any, index: any) => {
                     // console.log(value);
                     return (
+                      // eslint-disable-next-line
                       <Menu.Item key={index}>
                         {({active}) => (
                           <button

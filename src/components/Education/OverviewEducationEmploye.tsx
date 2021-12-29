@@ -34,6 +34,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfDrivers();
       setNumberOfDrivers(data.numberOfDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfDriversLoading(false);
@@ -46,6 +47,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfPlaqueVisited();
       setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPlaqueVisitedLoading(false);
@@ -58,6 +60,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfPositiveDrivers();
       setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositiveDriversLoading(false);
@@ -70,6 +73,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfPositivePlaqueVisited();
       setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositivePlaqueVisitedLoading(false);
@@ -82,6 +86,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfRecoveredDrivers();
       setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfRecoveredDriversLoading(false);
@@ -94,6 +99,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfTestResults();
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfTestResultsLoading(false);
@@ -106,6 +112,7 @@ const OverviewEducationEmploye = () => {
       const {data} = await transportService.numberOfVaccination();
       setNumberOfVaccination(data.numberOfVaccination);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfVaccinationLoading(false);
@@ -123,7 +130,9 @@ const OverviewEducationEmploye = () => {
   }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به پرسنل اداری آموزش و پرورش کل کشور</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به پرسنل اداری آموزش و پرورش کل کشور
+      </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">

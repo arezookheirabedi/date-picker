@@ -55,6 +55,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setCountsLoading(false);
@@ -103,6 +104,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       });
       setDataset([...normalizedDate]);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);

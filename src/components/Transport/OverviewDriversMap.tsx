@@ -1,30 +1,28 @@
-import React from "react";
-import {Link, useHistory} from "react-router-dom";
+import React from 'react';
+import {Link, useHistory} from 'react-router-dom';
 
-import Charts from "../Charts";
-import map from "../Charts/ir-all.geo.json";
-import mapData from "../Charts/mapData.json";
-
+import Charts from '../Charts';
+import map from '../Charts/ir-all.geo.json';
+import mapData from '../Charts/mapData.json';
 
 const {Map} = Charts;
 
 interface OverviewDriversMapProps {
   sideCityStatus?: any;
   cityTitle: any;
-  destinationId: any
+  destinationId: any;
 }
 
-
 const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
-                                                                 sideCityStatus,
-                                                                 cityTitle,
-                                                                 destinationId
-                                                               }) => {
+  sideCityStatus,
+  cityTitle,
+  destinationId,
+}) => {
   const history = useHistory();
   const options = {
     chart: {
       map,
-      height: "70%",
+      height: '70%',
       className: 'guild-map-chart',
       // backgroundColor: '#F3F5F9',
       margin: [0, 0, 50, 0],
@@ -43,10 +41,10 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         point: {
           events: {
             click(e: any) {
-              document.getElementById(destinationId)!.scrollIntoView({behavior: "smooth"});
+              document.getElementById(destinationId)!.scrollIntoView({behavior: 'smooth'});
               history.push({
-                search: `?provinceName=${e.point.properties['fa-name']}`
-              })
+                search: `?provinceName=${e.point.properties['fa-name']}`,
+              });
               // setQueryParams({provinceName: e.point.properties['fa-name']})
 
               // console.log(e.point.name);
@@ -54,10 +52,10 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
               //   pathname: '/dresses',
               //   search: '?color=blue'
               // })
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     subtitle: {
       text: '',
@@ -70,15 +68,15 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
     },
     legend: {
       itemStyle: {
-        fontSize: "12px",
+        fontSize: '12px',
         fontWeight: '400',
         color: '#707070',
         transform: 'translate(-20px,20px)',
         direction: 'rtl',
         textAlign: 'right',
       },
-      align: "center",
-      verticalAlign: "bottom",
+      align: 'center',
+      verticalAlign: 'bottom',
       squareSymbol: false,
       valueDecimals: 0,
       symbolRadius: 4,
@@ -108,26 +106,29 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
           // color: '#FF9114',
           color: '#9e9e9e',
           name: '%۱۰ الی ۲۰%',
-        }, {
+        },
+        {
           from: 200,
           to: 300,
           // color: '#FFC700',
           color: '#9e9e9e',
           name: '%۵ الی ۱۰%',
-        }, {
+        },
+        {
           from: 100,
           to: 200,
           // color: '#F8D354',
           color: '#9e9e9e',
           name: '%۲ الی ۵%',
-
-        }, {
+        },
+        {
           from: 1,
           to: 100,
           // color: '#FBE186',
           color: '#9e9e9e',
-          name: '%کمتر از ۲'
-        }]
+          name: '%کمتر از ۲',
+        },
+      ],
     },
 
     mapNavigation: {
@@ -154,20 +155,19 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
           enabled: true,
           format: '{point.properties.fa-name}',
           style: {
-            fontWeight: "400",
+            fontWeight: '400',
             color: '#ffffff',
             fontFamily: 'inherit',
-            backgroundColor: "transparent"
-          }
+            backgroundColor: 'transparent',
+          },
         },
-
       },
     ],
   };
   return (
     <fieldset className="text-center border rounded-xl p-4">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت حمل و نقل عمومی استان‌
-        &nbsp;
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به وضعیت حمل و نقل عمومی استان‌ &nbsp;
         {cityTitle}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow relative">
@@ -175,24 +175,29 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
           <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
         </Link>
         <div className="w-5/6 map-wrapper">
-          <Map options={options}/>
+          <Map options={options} />
         </div>
         <ul className="w-1/6">
-          {
-            sideCityStatus.map((item: any, index: any) => {
-              return (
-                <li key={index} className="flex justify-start items-center mb-2.5">
-                  <span style={{width: '12px', height: '12px', backgroundColor: item.color, borderRadius: '2px'}}/>
-                  <span className="text-xs mr-2">{item.name}</span>
-
-                </li>
-              )
-            })
-          }
+          {sideCityStatus.map((item: any, index: any) => {
+            return (
+              // eslint-disable-next-line
+              <li key={index} className="flex justify-start items-center mb-2.5">
+                <span
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    backgroundColor: item.color,
+                    borderRadius: '2px',
+                  }}
+                />
+                <span className="text-xs mr-2">{item.name}</span>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
 export default OverviewDriversMap;

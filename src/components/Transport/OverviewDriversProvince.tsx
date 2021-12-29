@@ -170,6 +170,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfDrivers(province);
       setNumberOfDrivers(data.numberOfDrivers)
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfDriversLoading(false)
@@ -182,6 +183,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfPositiveDrivers(province);
       setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositiveDriversLoading(false)
@@ -194,6 +196,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfRecoveredDrivers(province);
       setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfRecoveredDriversLoading(false)
@@ -206,6 +209,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfVaccination(province);
       setNumberOfVaccination(data.numberOfVaccination);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfVaccinationLoading(false)
@@ -218,6 +222,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfPlaqueVisited(province);
       setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPlaqueVisitedLoading(false)
@@ -230,6 +235,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfPositivePlaqueVisited(province);
       setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositivePlaqueVisitedLoading(false)
@@ -242,6 +248,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       const {data} = await transportService.numberOfTestResults(province);
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfTestResultsLoading(false)

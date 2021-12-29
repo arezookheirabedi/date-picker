@@ -241,6 +241,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
       // // setPyramidData(data);
       // // console.log(data);
     } catch (error: any) {
+      // eslint-disable-next-line
       console.log(error);
       setErrorMessage(error.message);
     } finally {
