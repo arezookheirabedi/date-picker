@@ -150,7 +150,7 @@ const TransportProvince = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') as any;
-    console.log(provinceName)
+    // console.log(provinceName)
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     })

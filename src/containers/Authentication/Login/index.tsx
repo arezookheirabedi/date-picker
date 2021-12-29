@@ -1,45 +1,47 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
-import {useForm} from "react-hook-form";
-import authService from "../../../services/authentication.service";
+import {useForm} from 'react-hook-form';
+import authService from '../../../services/authentication.service';
 // import { ILoginForm } from "../../../models/authentication.model";
 // import { ICaptcha } from "../../../models/captcha.model";
 // import  authenticateService  from "../../../services/authentication.service";
-import {setToken} from "../../../helpers/utils";
-import {loginValidation} from "../../../validations";
+import {setToken} from '../../../helpers/utils';
+import {loginValidation} from '../../../validations';
 
-import eyes from "../../../assets/images/icons/eye_icon.svg";
-import Svg from "../../../components/Svg";
-import DotLoading from "../../../components/DotLoading";
+import eyes from '../../../assets/images/icons/eye_icon.svg';
+import Svg from '../../../components/Svg';
+import DotLoading from '../../../components/DotLoading';
 
-
-import Checkbox from "../../../shared/Checkbox";
-import EPRIVATEROUTE from "../../../constants/PrivateRoute.enum";
+import Checkbox from '../../../shared/Checkbox';
+import EPRIVATEROUTE from '../../../constants/PrivateRoute.enum';
 
 export enum EInputLogin {
-  USERNAME = "username",
-  PASSWORD = "pasword",
-  CAPTCHACODE = "captchaCode",
+  USERNAME = 'username',
+  PASSWORD = 'pasword',
+  CAPTCHACODE = 'captchaCode',
 }
 
 const {RefreshLogo} = Svg;
-
 
 type LoginForm = {
   username: string | number;
   password: string;
   captcha: string;
-}
+};
 
 export default function Login() {
   const history = useHistory();
   const [typeInputText, setTypeInputText] = useState(false);
   const [remember, setRemember] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const {register, handleSubmit, formState: {errors}, setError} = useForm<LoginForm>();
-  const [inputCaptchaId, setInputCaptchaId] = useState("");
-  const [captchaCode, setCaptchaCode] = useState("");
-
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+    setError,
+  } = useForm<LoginForm>();
+  const [inputCaptchaId, setInputCaptchaId] = useState('');
+  const [captchaCode, setCaptchaCode] = useState('');
 
   const handleCaptcha = async () => {
     try {
@@ -47,9 +49,10 @@ export default function Login() {
       setCaptchaCode(data.captchaBase64);
       setInputCaptchaId(data.id);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     }
-  }
+  };
 
   // eslint-disable-next-line consistent-return
   const onSubmit = async (data: any) => {
@@ -57,8 +60,8 @@ export default function Login() {
       captchaCode: data.captcha,
       captchaId: inputCaptchaId,
       password: data.password,
-      username: data.username
-    }
+      username: data.username,
+    };
 
     try {
       setIsLoading(true);
@@ -71,10 +74,10 @@ export default function Login() {
       //     ...response.data,
       //   })
       // );
+      // eslint-disable-next-line
       console.log('you are logged in');
       history.push(EPRIVATEROUTE.DASHBOARDTRANSPORTPUBLIC);
     } catch (error: any) {
-
       handleCaptcha();
       const {message} = error;
 
@@ -82,26 +85,24 @@ export default function Login() {
       const {errors} = error;
       if (message) {
         if (message.includes('کد امنیتی')) {
-          return setError("captcha", {
-            message
+          return setError('captcha', {
+            message,
           });
         }
-        return setError("username", {
-          message
+        return setError('username', {
+          message,
         });
       }
       if (errors && errors.length) {
         errors.map((item: any) => {
           return setError(item.field, {
-            message: item.message
-          })
-        })
+            message: item.message,
+          });
+        });
       }
-
     } finally {
       setIsLoading(false);
     }
-
   };
 
   const onRememberChange = (e: any) => {
@@ -111,7 +112,7 @@ export default function Login() {
 
   useEffect(() => {
     handleCaptcha();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -120,10 +121,10 @@ export default function Login() {
 
         <div className="inputwraper">
           <input
-            style={{border: "1px solid #b2b2b2"}}
-            className={`${errors.username ? 'u-border-red u-color-red' : ""}`}
+            style={{border: '1px solid #b2b2b2'}}
+            className={`${errors.username ? 'u-border-red u-color-red' : ''}`}
             type="text"
-            {...register("username", loginValidation.username)}
+            {...register('username', loginValidation.username)}
             placeholder="پست الکترونیکی"
           />
           {errors.username && <span className="inputError">{errors.username.message}</span>}
@@ -131,20 +132,16 @@ export default function Login() {
 
         <div className="inputwraper icon ">
           <input
-            style={{border: "1px solid #b2b2b2"}}
+            style={{border: '1px solid #b2b2b2'}}
             autoComplete="new-password"
-            className={`${errors.password ? 'u-border-red u-color-red' : ""}`}
-            type={`${typeInputText ? "text" : "password"}`}
-            {...register("password", loginValidation.password)}
+            className={`${errors.password ? 'u-border-red u-color-red' : ''}`}
+            type={`${typeInputText ? 'text' : 'password'}`}
+            {...register('password', loginValidation.password)}
             placeholder="رمز عبور"
           />
 
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-          <img
-            src={eyes}
-            alt=""
-            onClick={() => setTypeInputText(!typeInputText)}
-          />
+          <img src={eyes} alt="" onClick={() => setTypeInputText(!typeInputText)} />
           {errors.password && <span className="inputError"> {errors.password.message}</span>}
         </div>
 
@@ -155,30 +152,31 @@ export default function Login() {
               src={`data:image/png;base64, ${captchaCode}`}
               alt=""
             />
-            <RefreshLogo onHandleRefreshLogo={handleCaptcha}/>
+            <RefreshLogo onHandleRefreshLogo={handleCaptcha} />
           </div>
           <input
-            style={{border: "1px solid #b2b2b2"}}
-            {...register("captcha", loginValidation.captcha)}
+            style={{border: '1px solid #b2b2b2'}}
+            {...register('captcha', loginValidation.captcha)}
             maxLength={7}
             autoComplete="off"
             type="text"
             placeholder="  کد امنیتی"
-            className={`${errors.captcha ? 'u-border-red u-color-red' : ""}`}
+            className={`${errors.captcha ? 'u-border-red u-color-red' : ''}`}
           />
           {errors.captcha && <span className="inputError">{errors.captcha.message}</span>}
         </div>
 
-        <Checkbox checked={remember} onChange={onRememberChange}/>
+        <Checkbox checked={remember} onChange={onRememberChange} />
         <div className="landscape_button">
           {/* eslint-disable-next-line react/button-has-type */}
-          <button type={`${isLoading ? "button" : "submit"}`}
-                  className={`login_button ${
-                    !true ? " deactive" : " active"
-                  }`}
-                  disabled={!true}
+          <button
+            // eslint-disable-next-line
+            type={`${isLoading ? 'button' : 'submit'}`}
+            // eslint-disable-next-line
+            className={`login_button ${!true ? ' deactive' : ' active'}`}
+            disabled={!true}
           >
-            {!isLoading ? "ورود" : <DotLoading/>}
+            {!isLoading ? 'ورود' : <DotLoading />}
           </button>
         </div>
       </form>

@@ -191,6 +191,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       });
       setDataset([...normalizedDate]);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);

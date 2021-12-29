@@ -169,6 +169,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfDrivers(province);
       setNumberOfDrivers(data.numberOfDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfDriversLoading(false);
@@ -181,6 +182,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfPositiveDrivers(province);
       setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositiveDriversLoading(false);
@@ -193,6 +195,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfRecoveredDrivers(province);
       setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfRecoveredDriversLoading(false);
@@ -205,6 +208,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfVaccination(province);
       setNumberOfVaccination(data.numberOfVaccination);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfVaccinationLoading(false);
@@ -217,6 +221,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfPlaqueVisited(province);
       setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPlaqueVisitedLoading(false);
@@ -229,6 +234,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfPositivePlaqueVisited(province);
       setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositivePlaqueVisitedLoading(false);
@@ -241,6 +247,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       const {data} = await transportService.numberOfTestResults(province);
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfTestResultsLoading(false);
@@ -270,7 +277,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   return (
     <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="province-overview">
       <legend className="text-black mx-auto px-3">
-      نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان &nbsp;
+        نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان &nbsp;
         {cityTitle}
       </legend>
 

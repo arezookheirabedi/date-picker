@@ -173,6 +173,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
         <ul className="w-1/6">
           {sideCityStatus.map((item: any, index: any) => {
             return (
+              // eslint-disable-next-line
               <li key={index} className="flex justify-start items-center mb-2.5">
                 <span
                   style={{

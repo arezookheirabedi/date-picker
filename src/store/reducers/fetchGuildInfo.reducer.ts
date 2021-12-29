@@ -8,7 +8,6 @@ interface FetchGuildInfoReducer {
   loading: boolean
 }
 
-
 let data = {}
 
 try {
@@ -17,6 +16,7 @@ try {
     data = JSON.parse(guildInfo)
   }
 } catch (error) {
+  // eslint-disable-next-line
   console.info("not found guild info")
 }
 

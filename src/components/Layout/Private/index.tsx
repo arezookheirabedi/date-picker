@@ -69,7 +69,8 @@ const PrivateLayout: React.FC<any> = () => {
     <>
       <div
         ref={wrapperRef}
-        className={`border-l xl:border-none overflow-auto h-screen fixed z-50 overflow-hidden w-72 pb-12 bg-white transition-all ease-in-out duration-300 
+        // className={`border-l xl:border-none overflow-auto h-screen fixed z-50 overflow-hidden w-72 pb-12 bg-white transition-all ease-in-out duration-300
+        className={`border-l xl:border-none overflow-auto h-screen fixed z-50 w-72 pb-12 bg-white transition-all ease-in-out duration-300 
           ${collapsed && collapsible ? ' -right-72' : ' right-0'}
           `}
       >
@@ -85,8 +86,9 @@ const PrivateLayout: React.FC<any> = () => {
         </ScrollNavbar>
 
         <div className="absolute bottom-0 z-20 w-full bg-white">
-          
-          <div className="flex justify-end text-xs text-gray-400 pl-9 rtl:pl-0 pr-0 rtl:pr-9">{process.env.REACT_APP_VERSION}</div>
+          <div className="flex justify-end text-xs text-gray-400 pl-9 rtl:pl-0 pr-0 rtl:pr-9">
+            {process.env.REACT_APP_VERSION}
+          </div>
           <Logout isMenuItem />
         </div>
 
@@ -105,6 +107,7 @@ const PrivateLayout: React.FC<any> = () => {
             {collapsible
               ? React.createElement(
                   props => (
+                    // eslint-disable-next-line
                     <div {...props} className="inline-flex w-6 h-6 ml-10">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -146,12 +149,14 @@ const PrivateLayout: React.FC<any> = () => {
             <Switch>
               {routes.map((route, i) =>
                 !route.subMenu ? (
+                  // eslint-disable-next-line
                   <Route path={route.link} exact={route.exact} key={i} component={route.main} />
                 ) : (
                   route.subMenu.map((routeArg: any, ind: any) => (
                     <Route
                       path={routeArg.link}
                       exact={routeArg.exact}
+                      // eslint-disable-next-line
                       key={ind}
                       component={routeArg.main}
                     />
@@ -187,7 +192,9 @@ export const PrivateRoute: (any) => any = props => {
     // Show the component only when the user is logged in
     // Otherwise, redirect the user to /signin page
     <Route
+      // eslint-disable-next-line
       {...rest}
+      // eslint-disable-next-line
       render={comprops => (isLogin() ? <Component {...comprops} /> : <Redirect to="/" />)}
     />
   );

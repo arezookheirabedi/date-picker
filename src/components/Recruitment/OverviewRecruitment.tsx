@@ -34,6 +34,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfDrivers();
       setNumberOfDrivers(data.numberOfDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfDriversLoading(false);
@@ -46,6 +47,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfPlaqueVisited();
       setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPlaqueVisitedLoading(false);
@@ -58,6 +60,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfPositiveDrivers();
       setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositiveDriversLoading(false);
@@ -70,6 +73,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfPositivePlaqueVisited();
       setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositivePlaqueVisitedLoading(false);
@@ -82,6 +86,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfRecoveredDrivers();
       setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfRecoveredDriversLoading(false);
@@ -94,6 +99,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfTestResults();
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfTestResultsLoading(false);
@@ -106,6 +112,7 @@ const OverviewRecruitment = () => {
       const {data} = await transportService.numberOfVaccination();
       setNumberOfVaccination(data.numberOfVaccination);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfVaccinationLoading(false);
