@@ -128,5 +128,4 @@ rollout-Prod:
   script:
     - echo "$KUBERBOH_CONFIG" | base64 -d >.config
     - kubectl rollout restart deployment ministers --kubeconfig .config --namespace connect
-  only:
-    - manual
+  when: manual
