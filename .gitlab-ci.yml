@@ -55,7 +55,12 @@ node-build-Prod:
     - CI=false yarn run build:production
 
   only:
-    - develop
+    refs:
+      - develop
+    variables:
+      - $DO == "prod"
+      - $CI_COMMIT_MESSAGE =~ /prod/
+      - $CI_COMMIT_MESSAGE =~ /PROD/
 
 dockerize-Develop:
   tags: 
@@ -88,7 +93,13 @@ dockerize-Prod:
     - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers:latest .
     - buildah push registry.vaslapp.com/docker/ministers:latest
   only:
-    - develop
+    refs:
+      - develop
+    variables:
+      - $DO == "prod"
+      - $CI_COMMIT_MESSAGE =~ /prod/
+      - $CI_COMMIT_MESSAGE =~ /PROD/
+
 
     
 rollout-Develop:
