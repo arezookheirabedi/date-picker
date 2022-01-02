@@ -70,11 +70,11 @@ function numberOfPositivePlaqueVisited(province: any = null, config?: any) {
     }, {...config});
 }
 
-function testsInTransport(params: any) {
+function testsInTransport(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/transport/cars/health/test-results/service-type-based/count?lang=fa`, params);
+    .get(`/api/v1/transport/cars/health/test-results/service-type-based/count?lang=fa`, params, {...config});
 }
 
 function overviewCategory(params: any, config?: any) {
@@ -84,32 +84,32 @@ function overviewCategory(params: any, config?: any) {
     .get(`/api/v1/transport/cars/service-type-based/count?lang=fa`, params, {...config});
 }
 
-function overviewVaccine(params: any) {
+function overviewVaccine(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000})
     .build()
-    .get(`/api/v1/transport/reports/vaccine?lang=fa`, params);
+    .get(`/api/v1/transport/reports/vaccine?lang=fa`, params, {...config});
 }
 
-function reportsDose(params: any = {}) {
+function reportsDose(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/transport/reports/dose?lang=fa`, params);
+    .get(`/api/v1/transport/reports/dose?lang=fa`, params, {...config});
 }
 
-function overviewVaccinePercent(params: any) {
+function overviewVaccinePercent(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000})
     .build()
-    .get(`/api/v1/transport/drivers/health/vaccination-doses/service-based/count?lang=fa`, params);
+    .get(`/api/v1/transport/drivers/health/vaccination-doses/service-based/count?lang=fa`, params, {...config});
 }
 
-function linearOverviewPublicTransport(params: any) {
+function linearOverviewPublicTransport(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000})
     .build()
-    .get(`/api/v1/transport/drivers/health/test-result/time-based/count?lang=fa`, params);
+    .get(`/api/v1/transport/drivers/health/test-result/time-based/count?lang=fa`, params, {...config});
 }
 
 function requestReport(params: { from: string; to: string }) {
