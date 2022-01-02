@@ -24,11 +24,11 @@ const Transport = () => {
       {/*    </div> */}
       {/*  </div> */}
       {/* </fieldset> */}
-      <OverviewDrivers />
+      <OverviewDrivers/>
       <OverviewCategories/>
       <OverviewPublicPatients/>
       <OverviewOfVaccinationInPublicTransport/>
-      <TestsInTransport />
+      <TestsInTransport/>
     </div>
   )
 }

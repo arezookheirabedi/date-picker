@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import axios from "axios";
 import {useHistory, useLocation} from "react-router-dom";
 
 import Statistic from "../../containers/Guild/components/Statistic";
@@ -176,10 +177,13 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
   // eslint-disable-next-line
   const [reportsDoseLoading, setReportsDoseLoading] = useState(false) as any;
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   async function getReportsDose(param: any) {
     setReportsDoseLoading(true);
     try {
-      const {data} = await transportService.reportsDose(param);
+      const {data} = await transportService.reportsDose(param, {cancelToken: source.token});
       const normalizedData: any[] = [];
       let noDose = 0;
       let firstDose = 0;
@@ -248,7 +252,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewVaccinePercent(params);
+      const {data} = await transportService.overviewVaccinePercent(params, {cancelToken: source.token});
       const normalizedDate: any[] = [];
 
 
@@ -359,6 +363,9 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
 
     return () => {
       if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        setDataset([]);
+        setReportsDose({});
         clearTimeout(idSetTimeOut)
       }
     };
@@ -366,7 +373,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
   }, [location.search])
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی واکسیناسیون در حمل و نقل عمومی در
         &nbsp;
@@ -378,25 +385,25 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان"
-          count={reportsDose.allDrivers || 0}
+          count={reportsDose.allDrivers}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={YellowVaccineMd}
           text="تعداد واکسیناسیون دوز اول"
-          count={reportsDose.firstDose || 0}
+          count={reportsDose.firstDose}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز دوم"
-          count={reportsDose.secondDose || 0}
+          count={reportsDose.secondDose}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={NavyVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
-          count={reportsDose.threeDose || 0}
+          count={reportsDose.threeDose}
           loading={reportsDoseLoading}
         />
       </div>
@@ -405,25 +412,25 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         <Statistic
           icon={GreenVaccine}
           text="تعداد کل واکسیناسیون"
-          count={reportsDose.allVaccination || 0}
+          count={reportsDose.allVaccination}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
-          count={reportsDose.moreThanThreeDose || 0}
+          count={reportsDose.moreThanThreeDose}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={GrayVaccine}
           text="تعداد اطلاعات مخدوش"
-          count={reportsDose.unknownInformation || 0}
+          count={reportsDose.unknownInformation}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={GrayVaccine2}
           text="تعداد واکسیناسیون انجام نشده"
-          count={reportsDose.noDose || 0}
+          count={reportsDose.noDose}
           loading={reportsDoseLoading}
         />
       </div>

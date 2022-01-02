@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { ILogin } from 'src/models/authentication.model';
 import authenticateService from 'src/services/authentication.service';
-import { getToken, setRequestConfig, setToken } from './utils';
+import {getToken, setRequestConfig, setToken} from './utils';
 
 let isRefreshing: boolean = false;
 let failedQueue: Array<any> = [];
@@ -62,13 +62,14 @@ class Request {
     });
   };
 
-  get: (endpoint: string, params?: any) => AxiosPromise<any> = (endpoint, params) => {
+  get: (endpoint: string, params?: any, config?: any) => AxiosPromise<any> = (endpoint, params, config) => {
     const url = `${this.self.baseUrl}${endpoint}`;
     return this.self.instance({
       url,
       params,
       method: 'GET',
       headers: this.self.headers,
+      ...config
     });
   };
 
@@ -107,7 +108,7 @@ class Request {
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     const tokens = getToken();
-    const { url } = config;
+    const {url} = config;
 
     const newConfig: AxiosRequestConfig = config;
     if (url?.startsWith("/api") || url?.startsWith(`${process.env.REACT_APP_BASE_URL}/api`)) {
@@ -115,7 +116,7 @@ instance.interceptors.request.use(
 
       newConfig.headers.Authorization = `Bearer ${tokens!.access_token}`;
       setRequestConfig({
-        headers: { Authorization: `Bearer ${tokens!.access_token}` },
+        headers: {Authorization: `Bearer ${tokens!.access_token}`},
       });
     } else if (url?.startsWith("/oauth") || url?.startsWith(`${process.env.REACT_APP_BASE_URL}/oauth`)) {
       setRequestConfig({
@@ -147,9 +148,22 @@ instance.interceptors.response.use(
 
     response,
   error => {
+
     const newConfig = error.config;
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+
+
+    if (axios.isCancel(error)) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line
+        reject({
+          errors: null,
+          fingerPrint: null,
+          message: 'cancel',
+        });
+      });
+    }
 
 
     if (!error.response) {
@@ -181,7 +195,7 @@ instance.interceptors.response.use(
     // Return any error which is not due to authentication back to the calling service
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
+        failedQueue.push({resolve, reject});
       })
         .then(token => {
           newConfig.headers.Authorization = `Bearer ${token}`;

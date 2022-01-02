@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
 
@@ -11,6 +12,7 @@ import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
+
 
 const {Line} = Charts;
 
@@ -46,6 +48,10 @@ const OverviewPublicPatients = () => {
     to: null,
   }) as any;
 
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
@@ -54,11 +60,11 @@ const OverviewPublicPatients = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -66,7 +72,7 @@ const OverviewPublicPatients = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -82,7 +88,7 @@ const OverviewPublicPatients = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params);
+      const response = await transportService.linearOverviewPublicTransport(params, {cancelToken: source.token});
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -98,7 +104,11 @@ const OverviewPublicPatients = () => {
       getLinearOverviewPublicTransport(queryParams);
     }, 500);
 
-    return () => clearTimeout(idSetTimeOut);
+    return () => {
+      setData([]);
+      source.cancel('Operation canceled by the user.');
+      clearTimeout(idSetTimeOut);
+    };
   }, [queryParams]);
 
   useEffect(() => {
@@ -125,17 +135,19 @@ const OverviewPublicPatients = () => {
               className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
             >
               <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <Menu.Button
+                  className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
                     {serviceType?.name || 'کل حمل و نقل'}
                   </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
+                  <DownIcon className="h-2 w-2.5 mr-2"/>
                 </Menu.Button>
               </div>
 
-              <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items
+                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {transportationType.map((value: any, index: any) => {
                     // console.log(value);
@@ -185,11 +197,11 @@ const OverviewPublicPatients = () => {
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -201,24 +213,24 @@ const OverviewPublicPatients = () => {
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
