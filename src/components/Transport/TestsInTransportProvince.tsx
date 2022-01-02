@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import axios from "axios";
 import {useHistory, useLocation} from "react-router-dom";
 // @ts-ignore
 import moment from 'moment-jalaali';
@@ -9,6 +10,7 @@ import {toPersianDigit} from "../../helpers/utils";
 import calendar from "../../assets/images/icons/calendar.svg";
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
+
 
 const {Pyramid} = Charts;
 
@@ -159,6 +161,9 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   const location = useLocation();
   const history = useHistory();
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const [queryParams, setQueryParams] = useState({
     count: true,
     total: true,
@@ -219,7 +224,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await transportService.testsInTransport(params);
+      const {data} = await transportService.testsInTransport(params, {cancelToken: source.token});
 
       let normalizedDate = [] as any;
       data.map((item: any) => {
@@ -264,6 +269,8 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     }
     return () => {
       if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        setPyramidData([]);
         clearTimeout(idSetTimeOut)
       }
     };
@@ -284,7 +291,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   }, [selectedDayRange])
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" >
       <legend className="text-black mx-auto px-3">
         آزمایش در حمل و نقل عمومی استان
         &nbsp;
