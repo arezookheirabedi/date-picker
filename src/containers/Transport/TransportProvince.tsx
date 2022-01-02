@@ -6,11 +6,11 @@ import OverviewDriversMap from "../../components/Transport/OverviewDriversMap";
 import OverviewDriversProvince from "../../components/Transport/OverviewDriversProvince";
 
 
-// import OverviewPublicPatientsProvince from "../../components/Transport/OverviewPublicPatientsProvince";
-// import TestsInTransportProvince from "../../components/Transport/TestsInTransportProvince";
-// import OverviewCategoriesProvince from "../../components/Transport/OverviewCategoriesProvince";
-// import OverviewOfVaccinationInPublicTransportProvince
-//   from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
+import OverviewPublicPatientsProvince from "../../components/Transport/OverviewPublicPatientsProvince";
+import TestsInTransportProvince from "../../components/Transport/TestsInTransportProvince";
+import OverviewCategoriesProvince from "../../components/Transport/OverviewCategoriesProvince";
+import OverviewOfVaccinationInPublicTransportProvince
+  from "../../components/Transport/OverviewOfVaccinationInPublicTransportProvince";
 
 
 const sideCities = [
@@ -165,10 +165,10 @@ const TransportProvince = () => {
     <div className="space-y-16 mb-8">
       <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="province-overview"/>
       <OverviewDriversProvince cityTitle={cityTitle}/>
-      {/* <OverviewCategoriesProvince cityTitle={cityTitle}/> */}
-      {/* <OverviewPublicPatientsProvince cityTitle={cityTitle}/> */}
-      {/* <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/> */}
-      {/* <TestsInTransportProvince cityTitle={cityTitle}/> */}
+      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+      <OverviewPublicPatientsProvince cityTitle={cityTitle}/>
+      <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
+      <TestsInTransportProvince cityTitle={cityTitle}/>
     </div>
   )
 }
