@@ -9,14 +9,13 @@ import HighchartsReact from 'highcharts-react-official';
 HighchartsMap(Highcharts);
 
 
-
-const Map: React.FC<any> = ({options}) => {
+const Map: React.FC<any> = React.forwardRef(({options}, ref: any) => {
   return (
     // eslint-disable-next-line
     <>
-      <HighchartsReact highcharts={Highcharts} constructorType="mapChart" options={options} />
+      <HighchartsReact highcharts={Highcharts} ref={ref} constructorType="mapChart" options={options}/>
     </>
   );
-};
+});
 
 export default Map;
