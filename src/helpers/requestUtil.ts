@@ -136,9 +136,22 @@ instance.interceptors.response.use(
 
     response,
   error => {
+
     const newConfig = error.config;
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+
+
+    if (axios.isCancel(error)) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line
+        reject({
+          errors: null,
+          fingerPrint: null,
+          message: 'cancel',
+        });
+      });
+    }
 
 
     if (!error.response) {
@@ -186,12 +199,9 @@ instance.interceptors.response.use(
 
 
     if (!tokens!.refresh_token) {
-      console.log('189 log out')
       authenticateService.logout();
       return Promise.reject(error);
     }
-
-    console.log('194 log out')
     return authenticateService
       .token({
         scope: tokens!.scope,
