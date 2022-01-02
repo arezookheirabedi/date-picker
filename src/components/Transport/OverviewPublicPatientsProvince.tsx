@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
@@ -12,6 +13,7 @@ import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
+
 
 const {Line} = Charts;
 
@@ -166,19 +168,23 @@ interface OverviewPublicPatientsProvinceProps {
 }
 
 const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({
-  cityTitle,
-}) => {
+                                                                                         cityTitle,
+                                                                                       }) => {
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const location = useLocation();
   const history = useHistory();
@@ -199,11 +205,11 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -211,18 +217,26 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
   const getLinearOverviewPublicTransport = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
+    setIsCancel(false);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params);
+      const response = await transportService.linearOverviewPublicTransport(params, {cancelToken: source.token});
       setData(response.data);
+      setIsCancel(false);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      if (error.message !== 'cancel') {
+        setErrorMessage(error.message);
+      }
+
+      if (error && error.message === 'cancel') {
+        setIsCancel(true);
+      }
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -249,10 +263,19 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
 
     return () => {
       if (existsCity) {
+        source.cancel('Operation canceled by the user.');
         clearTimeout(idSetTimeOut);
       }
     };
   }, [queryParams, location.search]);
+
+  useEffect(() => {
+
+    return () => {
+      setData([]);
+      setIsCancel(false);
+    }
+  }, [history])
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -269,7 +292,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی مبتلایان حمل و نقل عمومی در &nbsp;
         {cityTitle}
@@ -282,17 +305,19 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
               className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
             >
               <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <Menu.Button
+                  className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
                     {serviceType?.name || 'کل حمل و نقل'}
                   </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
+                  <DownIcon className="h-2 w-2.5 mr-2"/>
                 </Menu.Button>
               </div>
 
-              <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items
+                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {transportationType.map((value: any, index: any) => {
                     return (
@@ -341,11 +366,11 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -357,25 +382,25 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
-        {loading && (
+        {(loading || isCancel) && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+        {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data}/>}
+        {data.length === 0 && !loading && !errorMessage && !isCancel && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

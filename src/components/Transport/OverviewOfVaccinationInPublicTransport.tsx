@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalDriver from '../../assets/images/icons/transport-color.svg';
@@ -14,6 +16,7 @@ import NavyVaccineMd from '../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
+
 
 const getServiceTypeName = (item: any) => {
   switch (item) {
@@ -38,11 +41,14 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [countsLoading, setCountsLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [counts, setCounts] = useState<any>({
-    numberOfDrivers: 0,
-    numberOfFirstDose: 0,
-    numberOfSecondDose: 0,
-    numberOfUnvaccinated: 0,
+    numberOfDrivers: null,
+    numberOfFirstDose: null,
+    numberOfSecondDose: null,
+    numberOfUnvaccinated: null,
   });
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const [reportsDose, setReportsDose] = useState({}) as any;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -51,7 +57,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
-      const {data} = await transportService.overviewVaccine(params);
+      const {data} = await transportService.overviewVaccine(params, {cancelToken: source.token});
       setCounts({
         numberOfDrivers: data.numberOfDrivers || 0,
         numberOfFirstDose: data.numberOfFirstDose || 0,
@@ -69,7 +75,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   async function getReportsDose() {
     setReportsDoseLoading(true);
     try {
-      const {data} = await transportService.reportsDose();
+      const {data} = await transportService.reportsDose({}, {cancelToken: source.token});
       const normalizedData: any[] = [];
       let threeDose = 0;
       let allVaccination = 0;
@@ -118,7 +124,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewVaccinePercent(params);
+      const {data} = await transportService.overviewVaccinePercent(params, {cancelToken: source.token});
       const normalizedDate: any[] = [];
 
       data.forEach((item: any, index: number) => {
@@ -202,67 +208,81 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       numberOfUnvaccinated: true,
     });
     getOverviewByVaccinePercent({});
+
+    return () => {
+      setReportsDose({})
+      setCounts({
+        numberOfDrivers: 0,
+        numberOfFirstDose: 0,
+        numberOfSecondDose: 0,
+        numberOfUnvaccinated: 0,
+      });
+      setDataset({});
+      source.cancel('Operation canceled by the user.');
+    }
   }, []);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div
+        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان"
-          count={counts.numberOfDrivers || 0}
+          count={counts.numberOfDrivers}
           loading={countsLoading}
         />
         <Statistic
           icon={YellowVaccineMd}
           text="تعداد واکسیناسیون دوز اول"
-          count={counts.numberOfFirstDose || 0}
+          count={counts.numberOfFirstDose}
           loading={countsLoading}
         />
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز دوم"
-          count={counts.numberOfSecondDose || 0}
+          count={counts.numberOfSecondDose}
           loading={countsLoading}
         />
         <Statistic
           icon={NavyVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
-          count={reportsDose.threeDose || 0}
+          count={reportsDose.threeDose}
           loading={reportsDoseLoading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div
+        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={GreenVaccine}
           text="تعداد کل واکسیناسیون"
-          count={reportsDose.allVaccination || 0}
+          count={reportsDose.allVaccination}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
-          count={reportsDose.moreThanThreeDose || 0}
+          count={reportsDose.moreThanThreeDose}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={GrayVaccine}
           text="تعداد اطلاعات مخدوش"
-          count={reportsDose.unknownInformation || 0}
+          count={reportsDose.unknownInformation}
           loading={reportsDoseLoading}
         />
         <Statistic
           icon={GrayVaccine2}
           text="تعداد واکسیناسیون انجام نشده"
-          count={counts.numberOfUnvaccinated || 0}
+          count={counts.numberOfUnvaccinated}
           loading={countsLoading}
         />
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
