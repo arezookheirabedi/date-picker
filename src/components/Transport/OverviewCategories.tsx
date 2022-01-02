@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
 import transportService from 'src/services/transport.service';
@@ -8,6 +9,7 @@ import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
+
 
 const getServiceTypeName = (item: any) => {
   switch (item) {
@@ -26,6 +28,8 @@ const getServiceTypeName = (item: any) => {
   }
 };
 
+
+
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,10 +40,13 @@ const OverviewCategories: React.FC<{}> = () => {
     to: null,
   }) as any;
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
@@ -71,6 +78,10 @@ const OverviewCategories: React.FC<{}> = () => {
       total: true,
       count: true,
     });
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setDataset([])
+    }
   }, []);
 
   const focusFromDate = () => {
@@ -81,11 +92,11 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -93,7 +104,7 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -133,11 +144,11 @@ const OverviewCategories: React.FC<{}> = () => {
                 {toPersianDigit(generateFromDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
+          <span className="dash-separator"/>
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -149,14 +160,14 @@ const OverviewCategories: React.FC<{}> = () => {
                 {toPersianDigit(generateToDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {useLocation , useHistory } from "react-router-dom";
+import {useLocation, useHistory} from "react-router-dom";
+import axios from "axios";
 
 import Statistic from "../../containers/Guild/components/Statistic";
 import transportService from "../../services/transport.service";
@@ -164,10 +165,13 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const location = useLocation();
   const history = useHistory();
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const getNumberOfDrivers = async (province: any) => {
     setNumberOfDriversLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers(province);
+      const {data} = await transportService.numberOfDrivers(province, {cancelToken: source.token});
       setNumberOfDrivers(data.numberOfDrivers)
     } catch (error) {
       // eslint-disable-next-line
@@ -180,7 +184,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const getNumberOfPositiveDrivers = async (province: any) => {
     setNumberOfPositiveDriversLoading(true)
     try {
-      const {data} = await transportService.numberOfPositiveDrivers(province);
+      const {data} = await transportService.numberOfPositiveDrivers(province, {cancelToken: source.token});
       setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
     } catch (error) {
       // eslint-disable-next-line
@@ -193,7 +197,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const getNumberOfRecoveredDrivers = async (province: any) => {
     setNumberOfRecoveredDriversLoading(true)
     try {
-      const {data} = await transportService.numberOfRecoveredDrivers(province);
+      const {data} = await transportService.numberOfRecoveredDrivers(province, {cancelToken: source.token});
       setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
     } catch (error) {
       // eslint-disable-next-line
@@ -206,7 +210,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const getNumberOfVaccination = async (province: any) => {
     setNumberOfVaccinationLoading(true)
     try {
-      const {data} = await transportService.numberOfVaccination(province);
+      const {data} = await transportService.numberOfVaccination(province, {cancelToken: source.token});
       setNumberOfVaccination(data.numberOfVaccination);
     } catch (error) {
       // eslint-disable-next-line
@@ -219,7 +223,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const getNumberOfPlaqueVisited = async (province: any) => {
     setNumberOfPlaqueVisitedLoading(true)
     try {
-      const {data} = await transportService.numberOfPlaqueVisited(province);
+      const {data} = await transportService.numberOfPlaqueVisited(province, {cancelToken: source.token});
       setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
     } catch (error) {
       // eslint-disable-next-line
@@ -232,7 +236,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const getNumberOfPositivePlaqueVisited = async (province: any) => {
     setNumberOfPositivePlaqueVisitedLoading(true)
     try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited(province);
+      const {data} = await transportService.numberOfPositivePlaqueVisited(province, {cancelToken: source.token});
       setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
     } catch (error) {
       // eslint-disable-next-line
@@ -245,7 +249,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   const getNumberOfTestResults = async (province: any) => {
     setNumberOfTestResultsLoading(true)
     try {
-      const {data} = await transportService.numberOfTestResults(province);
+      const {data} = await transportService.numberOfTestResults(province, {cancelToken: source.token});
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
       // eslint-disable-next-line
@@ -254,8 +258,6 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       setNumberOfTestResultsLoading(false)
     }
   };
-
-
 
 
   useEffect(() => {
@@ -274,15 +276,25 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       getNumberOfPlaqueVisited(provinceName);
       getNumberOfPositivePlaqueVisited(provinceName);
       getNumberOfTestResults(provinceName)
-    }else{
+    } else {
       history.push('/dashboard/transport/province');
     }
 
+    return () => {
+      setNumberOfDrivers(null);
+      setNumberOfPlaqueVisited(null);
+      setNumberOfPositiveDrivers(null);
+      setNumberOfPositivePlaqueVisited(null);
+      setNumberOfRecoveredDrivers(null);
+      setNumberOfTestResults(null);
+      setNumberOfVaccination(null);
+      source.cancel('Operation canceled by the user.');
+    }
   }, [location.search])
 
 
   return (
-    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="province-overview">
+    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="province-overview" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی رانندگان در استان
         &nbsp;
