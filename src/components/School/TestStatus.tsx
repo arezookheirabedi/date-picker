@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
@@ -39,7 +39,7 @@ const TestStatus: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await hcsService.testResultTagBased(params);
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
@@ -66,6 +66,7 @@ const TestStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByCategory({
+      organization: 'school',
       resultStatus: 'POSITIVE',
       recoveredCount: true,
       total: true,
