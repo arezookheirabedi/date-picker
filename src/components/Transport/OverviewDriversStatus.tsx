@@ -10,29 +10,11 @@ import transportService from 'src/services/transport.service';
 import Table from '../Table';
 import ExportButton from '../Export/ExportButton';
 import DatePickerModal from '../DatePickerModal';
-import {toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit , getServiceTypeName} from '../../helpers/utils';
 import calendar from '../../assets/images/icons/calendar.svg';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 import {ReactComponent as FolderIcon} from '../../assets/images/icons/folder.svg';
 import Spinner from '../Spinner';
-
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس';
-    default:
-      return 'دیگر';
-  }
-};
 
 interface OverviewDriverStatusProps {
 }

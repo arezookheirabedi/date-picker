@@ -4,8 +4,6 @@ import axios from "axios";
 import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalDriver from '../../assets/images/icons/transport-color.svg';
-// import YellowVaccine from '../../assets/images/icons/yellow-vaccine.svg';
-// import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
 import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
 import GrayVaccine from '../../assets/images/icons/gray-vaccine-1.svg';
 import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
@@ -16,24 +14,7 @@ import NavyVaccineMd from '../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
-
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس';
-    default:
-      return null;
-  }
-};
+import {getServiceTypeName} from "../../helpers/utils";
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -126,7 +107,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     try {
       const {data} = await transportService.overviewVaccinePercent(params, {cancelToken: source.token});
       const normalizedDate: any[] = [];
-
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
@@ -217,7 +197,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         numberOfSecondDose: 0,
         numberOfUnvaccinated: 0,
       });
-      setDataset({});
+      setDataset([]);
       source.cancel('Operation canceled by the user.');
     }
   }, []);

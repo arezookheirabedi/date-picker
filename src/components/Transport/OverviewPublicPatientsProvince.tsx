@@ -10,158 +10,11 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../RangeDateSliderFliter';
 import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit, sideCities, transportationTypes} from '../../helpers/utils';
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
 
-
 const {Line} = Charts;
-
-const sideCities = [
-  {
-    name: 'هرمزگان',
-    color: '#ccc',
-  },
-  {
-    name: 'بوشهر',
-    color: '#ccc',
-  },
-  {
-    name: 'کهگیلویه و بویراحمد',
-    color: '#ccc',
-  },
-  {
-    name: 'فارس',
-    color: '#ccc',
-  },
-  {
-    name: 'اصفهان',
-    color: '#ccc',
-  },
-  {
-    name: 'سمنان',
-    color: '#ccc',
-  },
-  {
-    name: 'گلستان',
-    color: '#ccc',
-  },
-  {
-    name: 'مازندران',
-    color: '#ccc',
-  },
-  {
-    name: 'تهران',
-    color: '#ccc',
-  },
-  {
-    name: 'مرکزی',
-    color: '#ccc',
-  },
-  {
-    name: 'یزد',
-    color: '#ccc',
-  },
-  {
-    name: 'چهارمحال و بختیاری',
-    color: '#ccc',
-  },
-  {
-    name: 'خوزستان',
-    color: '#ccc',
-  },
-  {
-    name: 'لرستان',
-    color: '#ccc',
-  },
-  {
-    name: 'ایلام',
-    color: '#ccc',
-  },
-  {
-    name: 'اردبیل',
-    color: '#ccc',
-  },
-  {
-    name: 'قم',
-    color: '#ccc',
-  },
-  {
-    name: 'همدان',
-    color: '#ccc',
-  },
-  {
-    name: 'زنجان',
-    color: '#ccc',
-  },
-  {
-    name: 'قزوین',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان غربی',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان شرقی',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمانشاه',
-    color: '#ccc',
-  },
-  {
-    name: 'گیلان',
-    color: '#ccc',
-  },
-  {
-    name: 'کردستان',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان جنوبی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان رضوی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان شمالی',
-    color: '#ccc',
-  },
-  {
-    name: 'سیستان و بلوچستان',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمان',
-    color: '#ccc',
-  },
-  {
-    name: 'البرز',
-    color: '#ccc',
-  },
-];
-
-const transportationType = [
-  {
-    name: 'کل حمل و نقل',
-    enName: '',
-  },
-  {
-    name: 'تاکسی آنلاین',
-    enName: 'ONLINE',
-  },
-  {
-    name: 'تاکسی پلاک ع',
-    enName: 'PUBLIC',
-  },
-  {
-    name: 'تاکسی پلاک ت',
-    enName: 'TAXI_T',
-  },
-];
 
 interface OverviewPublicPatientsProvinceProps {
   cityTitle: any;
@@ -233,7 +86,6 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
       if (error.message !== 'cancel') {
         setErrorMessage(error.message);
       }
-
       if (error && error.message === 'cancel') {
         setIsCancel(true);
       }
@@ -270,7 +122,6 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   }, [queryParams, location.search]);
 
   useEffect(() => {
-
     return () => {
       setData([]);
       setIsCancel(false);
@@ -292,7 +143,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی مبتلایان حمل و نقل عمومی در &nbsp;
         {cityTitle}
@@ -319,7 +170,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
               <Menu.Items
                 className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {transportationType.map((value: any, index: any) => {
+                  {transportationTypes.map((value: any, index: any) => {
                     return (
                       // eslint-disable-next-line
                       <Menu.Item key={index}>

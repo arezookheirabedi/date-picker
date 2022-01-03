@@ -6,140 +6,12 @@ import moment from 'moment-jalaali';
 
 import Charts from "../Charts";
 import DatePickerModal from "../DatePickerModal";
-import {toPersianDigit} from "../../helpers/utils";
+import {toPersianDigit, sideCities, getColorByServiceTypeName, getServiceTypeName} from "../../helpers/utils";
 import calendar from "../../assets/images/icons/calendar.svg";
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
 
-
 const {Pyramid} = Charts;
-
-const sideCities = [
-  {
-    name: "هرمزگان",
-    color: "#ccc"
-  },
-  {
-    name: "بوشهر",
-    color: "#ccc"
-  },
-  {
-    name: "کهگیلویه و بویراحمد",
-    color: "#ccc"
-  },
-  {
-    name: "فارس",
-    color: "#ccc"
-  },
-  {
-    name: "اصفهان",
-    color: "#ccc"
-  },
-  {
-    name: "سمنان",
-    color: "#ccc"
-  },
-  {
-    name: "گلستان",
-    color: "#ccc"
-  },
-  {
-    name: "مازندران",
-    color: "#ccc"
-  },
-  {
-    name: "تهران",
-    color: "#ccc"
-  },
-  {
-    name: "مرکزی",
-    color: "#ccc"
-  },
-  {
-    name: "یزد",
-    color: "#ccc"
-  },
-  {
-    name: "چهارمحال و بختیاری",
-    color: "#ccc"
-  },
-  {
-    name: "خوزستان",
-    color: "#ccc"
-  },
-  {
-    name: "لرستان",
-    color: "#ccc"
-  },
-  {
-    name: "ایلام",
-    color: "#ccc"
-  },
-  {
-    name: "اردبیل",
-    color: "#ccc"
-  },
-  {
-    name: "قم",
-    color: "#ccc"
-  },
-  {
-    name: "همدان",
-    color: "#ccc"
-  },
-  {
-    name: "زنجان",
-    color: "#ccc"
-  },
-  {
-    name: "قزوین",
-    color: "#ccc"
-  },
-  {
-    name: "آذربایجان غربی",
-    color: "#ccc"
-  },
-  {
-    name: "آذربایجان شرقی",
-    color: "#ccc"
-  },
-  {
-    name: "کرمانشاه",
-    color: "#ccc"
-  },
-  {
-    name: "گیلان",
-    color: "#ccc"
-  },
-  {
-    name: "کردستان",
-    color: "#ccc"
-  },
-  {
-    name: "خراسان جنوبی",
-    color: "#ccc"
-  },
-  {
-    name: "خراسان رضوی",
-    color: "#ccc"
-  },
-  {
-    name: "خراسان شمالی",
-    color: "#ccc"
-  },
-  {
-    name: "سیستان و بلوچستان",
-    color: "#ccc"
-  },
-  {
-    name: "کرمان",
-    color: "#ccc"
-  },
-  {
-    name: "البرز",
-    color: "#ccc"
-  },
-]
 
 interface TestsInTransportProvinceProps {
   cityTitle: any
@@ -149,7 +21,6 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [pyramidData, setPyramidData] = useState([]);
 
   // {day: 20, month: 9, year: 1400}
@@ -186,40 +57,6 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     return selectedDayRange.to ? selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day : '';
   }
 
-  const getColorByServiceTypeName = (item: any) => {
-    switch (item) {
-      case 'PUBLIC':
-        return '#4EC4F2';
-      case 'TAXI_T':
-        return '#9D19FA';
-      case 'ONLINE':
-        return '#049975';
-      case 'MOTOR_PEYK':
-        return '#ffc400';
-      case 'SCHOOL_SERVICE':
-        return '#ff00bf'
-      default:
-        return null;
-    }
-  };
-
-  const getServiceTypeName = (item: any) => {
-    switch (item) {
-      case 'PUBLIC':
-        return 'تاکسی پلاک ع';
-      case 'TAXI_T':
-        return 'تاکسی پلاک ت';
-      case 'ONLINE':
-        return 'تاکسی آنلاین';
-      case 'MOTOR_PEYK':
-        return 'موتور سیکلت';
-      case 'SCHOOL_SERVICE':
-        return 'سرویس مدارس'
-      default:
-        return null;
-    }
-  };
-
   const getTestInTransport = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
@@ -243,8 +80,6 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
       });
 
       setPyramidData(normalizedDate);
-      // // setPyramidData(data);
-      // // console.log(data);
     } catch (error: any) {
       // eslint-disable-next-line
       console.log(error);
@@ -291,7 +126,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   }, [selectedDayRange])
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         آزمایش در حمل و نقل عمومی استان
         &nbsp;
