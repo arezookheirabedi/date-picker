@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
 import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
@@ -26,7 +26,7 @@ const getServiceTypeName = (item: any) => {
     case 'MOTOR_PEYK':
       return 'موتور سیکلت';
     case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
+      return 'سرویس مدارس';
     default:
       return null;
   }
@@ -47,7 +47,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
-      const {data} = await transportService.overviewVaccine(params);
+      const {data} = await hcsService.testResultTagBased(params);
       setCounts({
         numberOfDrivers: data.numberOfDrivers || 0,
         numberOfFirstDose: data.numberOfFirstDose || 0,
@@ -65,7 +65,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewVaccinePercent(params);
+      const {data} = await hcsService.testResultTagBased(params);
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         let total = 0;
@@ -113,12 +113,17 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByVaccine({
-      numberOfDrivers: true,
-      numberOfFirstDose: true,
-      numberOfSecondDose: true,
-      numberOfUnvaccinated: true,
+      organization: 'school',
+      from: '',
+      to: '',
+      tag_pattern: '',
     });
-    getOverviewByVaccinePercent({});
+    getOverviewByVaccinePercent({
+      organization: 'school',
+      from: '',
+      to: '',
+      tag_pattern: '',
+    });
   }, []);
 
   return (

@@ -12,35 +12,32 @@ import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
 
 const Overview = () => {
-  const [numberOfDrivers, setNumberOfDrivers] = useState(null);
-  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfLoading, setNumberOfLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
   const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
-  const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
-  const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
-  const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
-  const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
-    useState(false);
-  const [numberOfRecoveredDrivers, setNumberOfRecoveredDrivers] = useState(null);
-  const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
+  const [numberOfPositive, setNumberOfPositive] = useState(null);
+  const [numberOfPositiveLoading, setNumberOfPositiveLoading] = useState(false);
+  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
+  const [numberOfRecoveredLoading, setNumberOfRecoveredLoading] = useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
 
-  const getNumberOfDrivers = async () => {
-    setNumberOfDriversLoading(true);
+  const getNumberOf = async () => {
+    setNumberOfLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
         tag: 'school',
       });
-      setNumberOfDrivers(data.numberOfPositive);
+      setNumberOf(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfDriversLoading(false);
+      setNumberOfLoading(false);
     }
   };
 
@@ -57,42 +54,29 @@ const Overview = () => {
     }
   };
 
-  const getNumberOfPositiveDrivers = async () => {
-    setNumberOfPositiveDriversLoading(true);
+  const getNumberOfPositive = async () => {
+    setNumberOfPositiveLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfPositiveDrivers(data.numberOfPositive);
+      setNumberOfPositive(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositiveDriversLoading(false);
+      setNumberOfPositiveLoading(false);
     }
   };
 
-  const getNumberOfPositivePlaqueVisited = async () => {
-    setNumberOfPositivePlaqueVisitedLoading(true);
+  const getNumberOfRecovered = async () => {
+    setNumberOfRecoveredLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfPositivePlaqueVisited(data.numberOfPositive);
+      setNumberOfRecovered(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositivePlaqueVisitedLoading(false);
-    }
-  };
-
-  const getNumberOfRecoveredDrivers = async () => {
-    setNumberOfRecoveredDriversLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfRecoveredDrivers(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfRecoveredDriversLoading(false);
+      setNumberOfRecoveredLoading(false);
     }
   };
 
@@ -123,11 +107,10 @@ const Overview = () => {
   };
 
   useEffect(() => {
-    getNumberOfDrivers();
+    getNumberOf();
     getNumberOfPlaqueVisited();
-    getNumberOfPositiveDrivers();
-    getNumberOfPositivePlaqueVisited();
-    getNumberOfRecoveredDrivers();
+    getNumberOfPositive();
+    getNumberOfRecovered();
     getNumberOfTestResults();
     getNumberOfVaccination();
   }, []);
@@ -142,20 +125,20 @@ const Overview = () => {
           <Statistic
             icon={totalRecritment}
             text="مجموع کارمندان آموزش پرورش"
-            count={numberOfDrivers}
-            loading={numberOfDriversLoading}
+            count={numberOf}
+            loading={numberOfLoading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositiveDrivers}
-            loading={numberOfPositiveDriversLoading}
+            count={numberOfPositive}
+            loading={numberOfPositiveLoading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecoveredDrivers}
-            loading={numberOfRecoveredDriversLoading}
+            count={numberOfRecovered}
+            loading={numberOfRecoveredLoading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
@@ -166,12 +149,7 @@ const Overview = () => {
             count={numberOfVaccination}
             loading={numberOfVaccinationLoading}
           />
-          <Statistic
-            icon={prescriptionIcon}
-            text="مجموع استعلام‌های آموزش و پرورش"
-            count={numberOfPositivePlaqueVisited}
-            loading={numberOfPositivePlaqueVisitedLoading}
-          />
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
@@ -20,7 +20,7 @@ const getTagName = (item: any) => {
     case 'MOTOR_PEYK':
       return 'موتور سیکلت';
     case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
+      return 'سرویس مدارس';
     default:
       return null;
   }
@@ -39,7 +39,7 @@ const OverviewCategories: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await hcsService.membersTagBased(params);
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
@@ -48,9 +48,9 @@ const OverviewCategories: React.FC<{}> = () => {
             id: `ovca_${index}`,
             name: getTagName(item.tag),
             employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+            saveCount: item.recoverdCount || 0,
             // deadCount: 120,
           });
         }
@@ -65,7 +65,16 @@ const OverviewCategories: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    getOverviewByCategory({resultStatus: 'POSITIVE', recoveredCount: true, total: true, count: true});
+    getOverviewByCategory({
+      organization: 'school',
+      resultStatus: 'POSITIVE',
+      recoveredCount: true,
+      total: true,
+      count: true,
+      from: '',
+      to: '',
+      tag_pattern: '',
+    });
   }, []);
 
   const focusFromDate = () => {
