@@ -11,11 +11,7 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import transportService from '../../services/transport.service';
 
-interface OverviewEducationEmployeProps {
-  cityTitle: any;
-}
-
-const OverviewEducationEmploye: React.FC<OverviewEducationEmployeProps> = ({cityTitle}) => {
+const OverviewSchoolEmploye = () => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
@@ -135,7 +131,7 @@ const OverviewEducationEmploye: React.FC<OverviewEducationEmployeProps> = ({city
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به پرسنل اداری آموزش و پرورش در استان &nbsp; {cityTitle}
+        نگاه کلی به پرسنل اداری آموزش و پرورش کل کشور
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
@@ -190,4 +186,4 @@ const OverviewEducationEmploye: React.FC<OverviewEducationEmployeProps> = ({city
     </fieldset>
   );
 };
-export default OverviewEducationEmploye;
+export default OverviewSchoolEmploye;

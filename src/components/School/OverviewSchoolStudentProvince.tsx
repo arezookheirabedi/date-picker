@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import Statistic from '../../containers/Guild/components/Statistic';
-import totalRecritment from '../../assets/images/icons/people-navy.svg';
+import totalStudent from '../../assets/images/icons/graduation.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
 import saveIcon from '../../assets/images/icons/save-color.svg';
 import deadIcon from '../../assets/images/icons/dead-color.svg';
@@ -11,7 +11,11 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import transportService from '../../services/transport.service';
 
-const OverviewEducationEmploye = () => {
+interface OverviewSchoolStudentsProps {
+  cityTitle: any;
+}
+
+const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
@@ -131,14 +135,14 @@ const OverviewEducationEmploye = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به پرسنل اداری آموزش و پرورش کل کشور
+        نگاه کلی به دانش آموزان در استان &nbsp; {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalRecritment}
-            text="مجموع کارمندان آموزش پرورش"
+            icon={totalStudent}
+            text="مجموع دانش آموزان"
             count={numberOfDrivers}
             loading={numberOfDriversLoading}
           />
@@ -177,7 +181,7 @@ const OverviewEducationEmploye = () => {
           />
           <Statistic
             icon={testIcon}
-            text="تعداد آزمایش‌های کارمندان"
+            text="تعداد آزمایش‌های دانش آموزان"
             count={numberOfTestResults}
             loading={numberOfTestResultsLoading}
           />
@@ -186,4 +190,4 @@ const OverviewEducationEmploye = () => {
     </fieldset>
   );
 };
-export default OverviewEducationEmploye;
+export default OverviewSchoolStudents;

@@ -9,7 +9,7 @@ import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
-const getServiceTypeName = (item: any) => {
+const getTagName = (item: any) => {
   switch (item) {
     case 'PUBLIC':
       return 'تاکسی پلاک ع';
@@ -46,7 +46,7 @@ const OverviewCategories: React.FC<{}> = () => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: getTagName(item.tag),
             employeesCount: item.total || 0,
             infectedCount: item.count || 0,
             infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),

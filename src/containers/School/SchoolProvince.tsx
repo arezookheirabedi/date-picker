@@ -1,14 +1,14 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
-import OverviewMap from '../../components/Education/OverviewMap';
-import OverviewProvince from '../../components/Education/OverviewProvince';
-import OverviewEducationEmployeProvince from '../../components/Education/OverviewEducationEmployeProvince';
-import OverviewEducationStudentProvince from '../../components/Education/OverviewEducationStudentProvince';
-import OverviewPatientsProvince from '../../components/Education/OverviewPatientsProvince';
-import TestsStatusProvince from '../../components/Education/TestStatusProvince';
-import OverviewCategoriesProvince from '../../components/Education/OverviewCategoriesProvince';
-import OverviewOfVaccinationProvince from '../../components/Education/OverviewOfVaccinationProvince';
+import OverviewMap from '../../components/School/OverviewMap';
+import OverviewProvince from '../../components/School/OverviewProvince';
+import OverviewSchoolEmployeProvince from '../../components/School/OverviewSchoolEmployeProvince';
+import OverviewSchoolStudentProvince from '../../components/School/OverviewSchoolStudentProvince';
+import OverviewPatientsProvince from '../../components/School/OverviewPatientsProvince';
+import TestsStatusProvince from '../../components/School/TestStatusProvince';
+import OverviewCategoriesProvince from '../../components/School/OverviewCategoriesProvince';
+import OverviewOfVaccinationProvince from '../../components/School/OverviewOfVaccinationProvince';
 
 const sideCities = [
   {
@@ -137,7 +137,7 @@ const sideCities = [
   },
 ];
 
-const EducationProvince = () => {
+const SchoolProvince = () => {
   const location = useLocation();
 
   const [cityTitle, setCityTitle] = useState('تهران');
@@ -165,8 +165,8 @@ const EducationProvince = () => {
       />
 
       <OverviewProvince cityTitle={cityTitle} />
-      <OverviewEducationEmployeProvince cityTitle={cityTitle} />
-      <OverviewEducationStudentProvince cityTitle={cityTitle} />
+      <OverviewSchoolEmployeProvince cityTitle={cityTitle} />
+      <OverviewSchoolStudentProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
       <OverviewPatientsProvince cityTitle={cityTitle} />
       <OverviewOfVaccinationProvince cityTitle={cityTitle} />
@@ -175,4 +175,4 @@ const EducationProvince = () => {
   );
 };
 
-export default EducationProvince;
+export default SchoolProvince;

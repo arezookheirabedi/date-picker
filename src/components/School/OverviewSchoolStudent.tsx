@@ -11,11 +11,7 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import transportService from '../../services/transport.service';
 
-interface OverviewEducationStudentsProps {
-  cityTitle: any;
-}
-
-const OverviewEducationStudents: React.FC<OverviewEducationStudentsProps> = ({cityTitle}) => {
+const OverviewSchoolStudents = () => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
@@ -134,9 +130,7 @@ const OverviewEducationStudents: React.FC<OverviewEducationStudentsProps> = ({ci
   }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به دانش آموزان در استان &nbsp; {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به دانش آموزان کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -190,4 +184,4 @@ const OverviewEducationStudents: React.FC<OverviewEducationStudentsProps> = ({ci
     </fieldset>
   );
 };
-export default OverviewEducationStudents;
+export default OverviewSchoolStudents;

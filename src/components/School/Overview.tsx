@@ -9,10 +9,9 @@ import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
 import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
 import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
-import transportService from '../../services/transport.service';
-import educationService from '../../services/education.service';
+import hcsService from '../../services/hcs.service';
 
-const OverviewEducation = () => {
+const Overview = () => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
@@ -32,10 +31,11 @@ const OverviewEducation = () => {
   const getNumberOfDrivers = async () => {
     setNumberOfDriversLoading(true);
     try {
-      const {data} = await educationService.numberOf({
-
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
       });
-      setNumberOfDrivers(data.numberOfDrivers);
+      setNumberOfDrivers(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -47,8 +47,8 @@ const OverviewEducation = () => {
   const getNumberOfPlaqueVisited = async () => {
     setNumberOfPlaqueVisitedLoading(true);
     try {
-      const {data} = await transportService.numberOfPlaqueVisited();
-      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      setNumberOfPlaqueVisited(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -60,8 +60,8 @@ const OverviewEducation = () => {
   const getNumberOfPositiveDrivers = async () => {
     setNumberOfPositiveDriversLoading(true);
     try {
-      const {data} = await transportService.numberOfPositiveDrivers();
-      setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      setNumberOfPositiveDrivers(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -73,8 +73,8 @@ const OverviewEducation = () => {
   const getNumberOfPositivePlaqueVisited = async () => {
     setNumberOfPositivePlaqueVisitedLoading(true);
     try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited();
-      setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      setNumberOfPositivePlaqueVisited(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -86,8 +86,8 @@ const OverviewEducation = () => {
   const getNumberOfRecoveredDrivers = async () => {
     setNumberOfRecoveredDriversLoading(true);
     try {
-      const {data} = await transportService.numberOfRecoveredDrivers();
-      setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      setNumberOfRecoveredDrivers(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -99,8 +99,8 @@ const OverviewEducation = () => {
   const getNumberOfTestResults = async () => {
     setNumberOfTestResultsLoading(true);
     try {
-      const {data} = await transportService.numberOfTestResults();
-      setNumberOfTestResults(data.numberOfTestResults);
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      setNumberOfTestResults(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -112,8 +112,8 @@ const OverviewEducation = () => {
   const getNumberOfVaccination = async () => {
     setNumberOfVaccinationLoading(true);
     try {
-      const {data} = await transportService.numberOfVaccination();
-      setNumberOfVaccination(data.numberOfVaccination);
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      setNumberOfVaccination(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -189,4 +189,4 @@ const OverviewEducation = () => {
     </fieldset>
   );
 };
-export default OverviewEducation;
+export default Overview;
