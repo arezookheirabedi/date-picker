@@ -16,165 +16,16 @@ import NavyVaccineMd from "../../assets/images/icons/navy-vaccine-lg.svg";
 import BlueVaccine from "../../assets/images/icons/blue-vaccine.svg";
 import GrayVaccine2 from "../../assets/images/icons/gray-vaccine-2.svg";
 import Spinner from "../Spinner";
-
-
-const sideCities = [
-  {
-    name: "هرمزگان",
-    color: "#ccc"
-  },
-  {
-    name: "بوشهر",
-    color: "#ccc"
-  },
-  {
-    name: "کهگیلویه و بویراحمد",
-    color: "#ccc"
-  },
-  {
-    name: "فارس",
-    color: "#ccc"
-  },
-  {
-    name: "اصفهان",
-    color: "#ccc"
-  },
-  {
-    name: "سمنان",
-    color: "#ccc"
-  },
-  {
-    name: "گلستان",
-    color: "#ccc"
-  },
-  {
-    name: "مازندران",
-    color: "#ccc"
-  },
-  {
-    name: "تهران",
-    color: "#ccc"
-  },
-  {
-    name: "مرکزی",
-    color: "#ccc"
-  },
-  {
-    name: "یزد",
-    color: "#ccc"
-  },
-  {
-    name: "چهارمحال و بختیاری",
-    color: "#ccc"
-  },
-  {
-    name: "خوزستان",
-    color: "#ccc"
-  },
-  {
-    name: "لرستان",
-    color: "#ccc"
-  },
-  {
-    name: "ایلام",
-    color: "#ccc"
-  },
-  {
-    name: "اردبیل",
-    color: "#ccc"
-  },
-  {
-    name: "قم",
-    color: "#ccc"
-  },
-  {
-    name: "همدان",
-    color: "#ccc"
-  },
-  {
-    name: "زنجان",
-    color: "#ccc"
-  },
-  {
-    name: "قزوین",
-    color: "#ccc"
-  },
-  {
-    name: "آذربایجان غربی",
-    color: "#ccc"
-  },
-  {
-    name: "آذربایجان شرقی",
-    color: "#ccc"
-  },
-  {
-    name: "کرمانشاه",
-    color: "#ccc"
-  },
-  {
-    name: "گیلان",
-    color: "#ccc"
-  },
-  {
-    name: "کردستان",
-    color: "#ccc"
-  },
-  {
-    name: "خراسان جنوبی",
-    color: "#ccc"
-  },
-  {
-    name: "خراسان رضوی",
-    color: "#ccc"
-  },
-  {
-    name: "خراسان شمالی",
-    color: "#ccc"
-  },
-  {
-    name: "سیستان و بلوچستان",
-    color: "#ccc"
-  },
-  {
-    name: "کرمان",
-    color: "#ccc"
-  },
-  {
-    name: "البرز",
-    color: "#ccc"
-  },
-]
-
+import {sideCities,getServiceTypeName} from "../../helpers/utils";
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps {
   cityTitle: any
 }
 
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
-    default:
-      return null;
-  }
-};
-
 const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccinationInPublicTransportProvinceProps> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [countsLoading, setCountsLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
-// eslint-disable-next-line
   const [reportsDose, setReportsDose] = useState({}) as any;
-  // eslint-disable-next-line
   const [reportsDoseLoading, setReportsDoseLoading] = useState(false) as any;
 
   const {CancelToken} = axios;
@@ -230,7 +81,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         unknownInformation
       });
 
-
       setReportsDose({
         noDose,
         firstDose,
@@ -255,7 +105,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
       const {data} = await transportService.overviewVaccinePercent(params, {cancelToken: source.token});
       const normalizedDate: any[] = [];
 
-
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
@@ -270,7 +119,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           if (Number(key) === 0) {
             noDose += Number(value);
           }
-
 
           if (Number(key) === 1) {
             firstDose += Number(value);
@@ -299,7 +147,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           total = allVaccination + noDose + unknownInformation;
 
         }
-
 
         normalizedDate.push({
           id: `ovvac_${index}`,
@@ -332,19 +179,12 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
     }
   }
 
-  // useEffect(() => {
-  //   getReportsDose();
-  //   getOverviewByVaccinePercent({});
-  // }, []);
-
   const location = useLocation();
   const history = useHistory();
 
   useEffect(() => {
-
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || 'تهران' as any;
-
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     })
@@ -359,7 +199,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
     } else {
       history.push('/dashboard/transport/province');
     }
-
 
     return () => {
       if (existsCity) {

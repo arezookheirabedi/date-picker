@@ -136,3 +136,193 @@ export const getBgColorGradientByStatus = (status: string) => {
 
   return bg;
 };
+
+
+export const getServiceTypeName = (item: any) => {
+  switch (item) {
+    case 'PUBLIC':
+      return 'تاکسی پلاک ع';
+    case 'TAXI_T':
+      return 'تاکسی پلاک ت';
+    case 'ONLINE':
+      return 'تاکسی آنلاین';
+    case 'MOTOR_PEYK':
+      return 'موتور سیکلت';
+    case 'SCHOOL_SERVICE':
+      return 'سرویس مدارس';
+    default:
+      return null;
+  }
+};
+
+export const getColorByServiceTypeName = (item: any) => {
+  switch (item) {
+    case 'PUBLIC':
+      return '#4EC4F2';
+    case 'TAXI_T':
+      return '#9D19FA';
+    case 'ONLINE':
+      return '#049975';
+    case 'MOTOR_PEYK':
+      return '#ffc400';
+    case 'SCHOOL_SERVICE':
+      return '#ff00bf';
+    default:
+      return null;
+  }
+};
+
+
+export const transportationTypes = [
+  {
+    name: 'کل حمل و نقل',
+    enName: '',
+  },
+  {
+    name: 'تاکسی آنلاین',
+    enName: 'ONLINE',
+  },
+  {
+    name: 'تاکسی پلاک ع',
+    enName: 'PUBLIC',
+  },
+  {
+    name: 'تاکسی پلاک ت',
+    enName: 'TAXI_T',
+  },
+  {
+    name : 'پیک موتوری',
+    enName: 'MOTOR_PEYK'
+  },
+  {
+    name : 'سرویس مدارس',
+    enName: 'SCHOOL_SERVICE'
+  }
+];
+
+export const sideCities = [
+  {
+    name: "هرمزگان",
+    color: "#ccc"
+  },
+  {
+    name: "بوشهر",
+    color: "#ccc"
+  },
+  {
+    name: "کهگیلویه و بویراحمد",
+    color: "#ccc"
+  },
+  {
+    name: "فارس",
+    color: "#ccc"
+  },
+  {
+    name: "اصفهان",
+    color: "#ccc"
+  },
+  {
+    name: "سمنان",
+    color: "#ccc"
+  },
+  {
+    name: "گلستان",
+    color: "#ccc"
+  },
+  {
+    name: "مازندران",
+    color: "#ccc"
+  },
+  {
+    name: "تهران",
+    color: "#ccc"
+  },
+  {
+    name: "مرکزی",
+    color: "#ccc"
+  },
+  {
+    name: "یزد",
+    color: "#ccc"
+  },
+  {
+    name: "چهارمحال و بختیاری",
+    color: "#ccc"
+  },
+  {
+    name: "خوزستان",
+    color: "#ccc"
+  },
+  {
+    name: "لرستان",
+    color: "#ccc"
+  },
+  {
+    name: "ایلام",
+    color: "#ccc"
+  },
+  {
+    name: "اردبیل",
+    color: "#ccc"
+  },
+  {
+    name: "قم",
+    color: "#ccc"
+  },
+  {
+    name: "همدان",
+    color: "#ccc"
+  },
+  {
+    name: "زنجان",
+    color: "#ccc"
+  },
+  {
+    name: "قزوین",
+    color: "#ccc"
+  },
+  {
+    name: "آذربایجان غربی",
+    color: "#ccc"
+  },
+  {
+    name: "آذربایجان شرقی",
+    color: "#ccc"
+  },
+  {
+    name: "کرمانشاه",
+    color: "#ccc"
+  },
+  {
+    name: "گیلان",
+    color: "#ccc"
+  },
+  {
+    name: "کردستان",
+    color: "#ccc"
+  },
+  {
+    name: "خراسان جنوبی",
+    color: "#ccc"
+  },
+  {
+    name: "خراسان رضوی",
+    color: "#ccc"
+  },
+  {
+    name: "خراسان شمالی",
+    color: "#ccc"
+  },
+  {
+    name: "سیستان و بلوچستان",
+    color: "#ccc"
+  },
+  {
+    name: "کرمان",
+    color: "#ccc"
+  },
+  {
+    name: "البرز",
+    color: "#ccc"
+  },
+]

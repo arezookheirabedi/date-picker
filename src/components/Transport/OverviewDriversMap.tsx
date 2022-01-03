@@ -1,10 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
-
 import Charts from '../Charts';
 import map from '../Charts/ir-all.geo.json';
 import mapData from '../Charts/mapData.json';
-
+import {sideCities} from "../../helpers/utils";
 
 const {Map} = Charts;
 
@@ -21,135 +20,7 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
                                                                }) => {
 
   const chartRef = useRef<any>(null);
-
   const {search} = useLocation();
-
-  const sideCities = [
-    {
-      name: 'هرمزگان',
-      color: '#ccc',
-    },
-    {
-      name: 'بوشهر',
-      color: '#ccc',
-    },
-    {
-      name: 'کهگیلویه و بویراحمد',
-      color: '#ccc',
-    },
-    {
-      name: 'فارس',
-      color: '#ccc',
-    },
-    {
-      name: 'اصفهان',
-      color: '#ccc',
-    },
-    {
-      name: 'سمنان',
-      color: '#ccc',
-    },
-    {
-      name: 'گلستان',
-      color: '#ccc',
-    },
-    {
-      name: 'مازندران',
-      color: '#ccc',
-    },
-    {
-      name: 'تهران',
-      color: '#ccc',
-    },
-    {
-      name: 'مرکزی',
-      color: '#ccc',
-    },
-    {
-      name: 'یزد',
-      color: '#ccc',
-    },
-    {
-      name: 'چهارمحال و بختیاری',
-      color: '#ccc',
-    },
-    {
-      name: 'خوزستان',
-      color: '#ccc',
-    },
-    {
-      name: 'لرستان',
-      color: '#ccc',
-    },
-    {
-      name: 'ایلام',
-      color: '#ccc',
-    },
-    {
-      name: 'اردبیل',
-      color: '#ccc',
-    },
-    {
-      name: 'قم',
-      color: '#ccc',
-    },
-    {
-      name: 'همدان',
-      color: '#ccc',
-    },
-    {
-      name: 'زنجان',
-      color: '#ccc',
-    },
-    {
-      name: 'قزوین',
-      color: '#ccc',
-    },
-    {
-      name: 'آذربایجان غربی',
-      color: '#ccc',
-    },
-    {
-      name: 'آذربایجان شرقی',
-      color: '#ccc',
-    },
-    {
-      name: 'کرمانشاه',
-      color: '#ccc',
-    },
-    {
-      name: 'گیلان',
-      color: '#ccc',
-    },
-    {
-      name: 'کردستان',
-      color: '#ccc',
-    },
-    {
-      name: 'خراسان جنوبی',
-      color: '#ccc',
-    },
-    {
-      name: 'خراسان رضوی',
-      color: '#ccc',
-    },
-    {
-      name: 'خراسان شمالی',
-      color: '#ccc',
-    },
-    {
-      name: 'سیستان و بلوچستان',
-      color: '#ccc',
-    },
-    {
-      name: 'کرمان',
-      color: '#ccc',
-    },
-    {
-      name: 'البرز',
-      color: '#ccc',
-    },
-  ];
 
   useEffect(() => {
     const data = chartRef?.current?.chart.get('covid').data;
@@ -159,7 +30,6 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
       return item.name === provinceName;
     });
     if (existsCity) {
-
       const city = data.find((x: any) => x.properties['fa-name'] === provinceName)
       city?.select()
     } else {
@@ -167,7 +37,6 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
       city?.select()
     }
   }, [])
-
 
   const history = useHistory();
   const [options] = useState({
@@ -192,19 +61,6 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         point: {
           events: {
             click(e: any) {
-              //
-              // const tag: any = this;
-              //
-              // const changeColor = (param: any) => {
-              //   console.log(previousPoint);
-              //   if (previousPoint) {
-              //     previousPoint.update({color: '#7cb5ec'});
-              //   }
-              //   previousPoint = param;
-              //   tag.update({color: '#fe5800'});
-              // }
-              //
-              // changeColor(tag);
               document.getElementById(destinationId)!.scrollIntoView({behavior: 'smooth'});
               history.push({
                 search: `?provinceName=${e.point.properties['fa-name']}`,
