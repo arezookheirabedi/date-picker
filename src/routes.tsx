@@ -8,8 +8,8 @@ import Transport from './containers/Transport/Transport';
 import TransportProvince from './containers/Transport/TransportProvince';
 import TransportMonitoring from './containers/Transport/TransportMonitoring';
 import Passenger from './containers/Passenger/Passenger';
-import Education from './containers/Education/Education';
-import EducationProvince from './containers/Education/EducationProvince';
+import School from './containers/School/School';
+import SchoolProvince from './containers/School/SchoolProvince';
 import Recruitment from './containers/Recruitment/Recruitment';
 import RecruitmentProvince from './containers/Recruitment/RecruitmentProvince';
 import Vaccination from './containers/Vaccination/Vaccination';
@@ -125,18 +125,18 @@ const routes: IRoute[] = [
         title: 'عمومی',
         link: '/dashboard/education/public',
         icon: active => <IconWrapperStyle name="sub-education" active={active} />,
-        main: Education,
+        main: School,
       },
       {
         keyIndex: '2',
         title: 'استانی',
         link: '/dashboard/education/province',
         icon: active => <IconWrapperStyle name="sub-education" active={active} />,
-        main: EducationProvince,
+        main: SchoolProvince,
       },
     ],
     // disabled: true,
-    main: Education,
+    main: School,
   },
   {
     keyIndex: '8',
