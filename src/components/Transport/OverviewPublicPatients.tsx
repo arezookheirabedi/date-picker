@@ -2,38 +2,17 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
-
 import {Menu} from '@headlessui/react';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../RangeDateSliderFliter';
 import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit , transportationTypes} from '../../helpers/utils';
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
 
-
 const {Line} = Charts;
-
-const transportationType = [
-  {
-    name: 'کل حمل و نقل',
-    enName: '',
-  },
-  {
-    name: 'تاکسی آنلاین',
-    enName: 'ONLINE',
-  },
-  {
-    name: 'تاکسی پلاک ع',
-    enName: 'PUBLIC',
-  },
-  {
-    name: 'تاکسی پلاک ت',
-    enName: 'TAXI_T',
-  },
-];
 
 const OverviewPublicPatients = () => {
   const [data, setData] = useState([]);
@@ -145,12 +124,10 @@ const OverviewPublicPatients = () => {
                   <DownIcon className="h-2 w-2.5 mr-2"/>
                 </Menu.Button>
               </div>
-
               <Menu.Items
                 className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {transportationType.map((value: any, index: any) => {
-                    // console.log(value);
+                  {transportationTypes.map((value: any, index: any) => {
                     return (
                       // eslint-disable-next-line
                       <Menu.Item key={index}>
@@ -218,12 +195,10 @@ const OverviewPublicPatients = () => {
               </div>
             </div>
           </div>
-
           <div className="w-1/4">
             <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner/>
