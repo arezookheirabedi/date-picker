@@ -2,56 +2,16 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
-
 import Charts from '../Charts';
 import DatePickerModal from '../DatePickerModal';
-import {toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit, getColorByServiceTypeName, getServiceTypeName} from '../../helpers/utils';
 import calendar from '../../assets/images/icons/calendar.svg';
 import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
 
-
 const {Pyramid} = Charts;
 
 const TestsInTransport = () => {
-  // eslint-disable-next-line
-  // const pyramidD: Array<IDetail> = [
-  //   {
-  //     title: 'اسنپ',
-  //     percentage: 90,
-  //     color: '#049975'
-  //   },
-  //   {
-  //     title: 'تپسی',
-  //     percentage: 80,
-  //     color: '#00F1E3'
-  //   },
-  //   {
-  //     title: 'تاکسی پلاک ع',
-  //     percentage: 70,
-  //     color: '#4EC4F2'
-  //   },
-  //   {
-  //     title: 'تاکسی پلاک ت',
-  //     percentage: 60,
-  //     color: '#9D19FA'
-  //   },
-  //   {
-  //     title: 'سرویس مدارس',
-  //     percentage: 50,
-  //     color: '#F534DB'
-  //   },
-  //   {
-  //     title: 'تاکسی فرودگاهی',
-  //     percentage: 40,
-  //     color: '#F5DF34'
-  //   },
-  //   {
-  //     title: 'اتوبوس رانی',
-  //     percentage: 30,
-  //     color: '#FE8007'
-  //   }
-  // ];
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -89,40 +49,6 @@ const TestsInTransport = () => {
       ? // eslint-disable-next-line
       selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
-  };
-
-  const getColorByServiceTypeName = (item: any) => {
-    switch (item) {
-      case 'PUBLIC':
-        return '#4EC4F2';
-      case 'TAXI_T':
-        return '#9D19FA';
-      case 'ONLINE':
-        return '#049975';
-      case 'MOTOR_PEYK':
-        return '#ffc400';
-      case 'SCHOOL_SERVICE':
-        return '#ff00bf';
-      default:
-        return null;
-    }
-  };
-
-  const getServiceTypeName = (item: any) => {
-    switch (item) {
-      case 'PUBLIC':
-        return 'تاکسی پلاک ع';
-      case 'TAXI_T':
-        return 'تاکسی پلاک ت';
-      case 'ONLINE':
-        return 'تاکسی آنلاین';
-      case 'MOTOR_PEYK':
-        return 'موتور سیکلت';
-      case 'SCHOOL_SERVICE':
-        return 'سرویس مدارس';
-      default:
-        return null;
-    }
   };
 
   const getTestInTransport = async (params: any) => {
