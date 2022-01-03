@@ -31,12 +31,16 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
     });
     if (existsCity) {
       const city = data.find((x: any) => x.properties['fa-name'] === provinceName)
-      city?.select()
+      if (!city.selected) {
+        city?.select()
+      }
     } else {
       const city = data.find((x: any) => x.properties['fa-name'] === 'تهران')
-      city?.select()
+      if (!city.selected) {
+        city?.select()
+      }
     }
-  }, [])
+  }, [search])
 
   const history = useHistory();
   const [options] = useState({
@@ -88,10 +92,10 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
     },
     legend: {
       itemStyle: {
-        fontSize: '12px',
+        fontSize: '10px',
         fontWeight: '400',
         color: '#707070',
-        transform: 'translate(-20px,20px)',
+        transform: 'translate(-10px,20px)',
         direction: 'rtl',
         textAlign: 'right',
       },
@@ -100,8 +104,8 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
       squareSymbol: false,
       valueDecimals: 0,
       symbolRadius: 4,
-      symbolHeight: 7,
-      symbolWidth: 85,
+      symbolHeight: 6,
+      symbolWidth: 55,
       itemDistance: -40,
     },
     colorAxis: {
@@ -146,7 +150,7 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
           to: 100,
           // color: '#FBE186',
           color: '#9e9e9e',
-          name: '%کمتر از ۲',
+          name: 'کمتر از ۲%',
         },
       ],
     },
