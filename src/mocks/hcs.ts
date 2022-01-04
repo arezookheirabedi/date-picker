@@ -5,12 +5,12 @@ instanceMockAdapter
   .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/member\/general\/(.*)/g, {})
   .reply(() => {
     const res: any = {
-      numberOfPositive: 10,
-      numberOfRecovered: 20,
-      numberOfVaccinated: 30,
-      numberOfNanVaccinated: 40,
-      numberOfTestResults: 50,
-      total: 60,
+      numberOfPositive: 3314,
+      numberOfRecovered: 0,
+      numberOfVaccinated: 2444302,
+      numberOfNanVaccinated: 137517,
+      numberOfTestResults: 19342,
+      total: 2581819,
     };
 
     return [200, {...res}];
@@ -185,34 +185,6 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/doses/g, {})
-  .reply(() => {
-    const res: any = [
-      {
-        '1': 10,
-      },
-      {
-        '0': 10,
-      },
-      {
-        '2': 10,
-      },
-      {
-        '3': 10,
-      },
-      {
-        '5': 10,
-      },
-      {
-        null: 10,
-      },
-    ];
-
-    return [200, res];
-  });
-
-instanceMockAdapter
-  // eslint-disable-next-line
   .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/doses\/tag\-based/g, {})
   .reply(() => {
     const res: any = [
@@ -284,6 +256,31 @@ instanceMockAdapter
             null: 10,
           },
         ],
+      },
+    ];
+
+    return [200, res];
+  });
+
+instanceMockAdapter
+  // eslint-disable-next-line
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/doses/g, {})
+  .reply(() => {
+    const res: any = [
+      {
+        '1': 468588,
+      },
+      {
+        '0': 251618,
+      },
+      {
+        '2': 1816182,
+      },
+      {
+        '3': 45205,
+      },
+      {
+        '5': 226,
       },
     ];
 

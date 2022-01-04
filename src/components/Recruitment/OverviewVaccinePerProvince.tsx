@@ -176,9 +176,9 @@ const OverviewVaccinePerProvince = () => {
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )} */}
-        {/* <div className="flex justify-center items-center w-full"> */}
+        <div className="flex justify-center items-center w-full">
           <Stacked data={data} />
-        {/* </div> */}
+        </div>
       </div>
     </fieldset>
   );
