@@ -34,9 +34,9 @@ const Statistic: React.FC<IStatistic> = ({
         borderRadius: '10px',
         marginBottom: '10px'
       }}/>}
-        {count === 0 && '۰'}
-        {count === '-' && '-'}
-        {count > 0 && (count || 'بدون داده').commaSeprator().toPersianDigits()}
+        {!loading && count === 0 && '۰'}
+        {!loading && count === '-' && '-'}
+        {!loading && count > 0 && (count || 'بدون داده').commaSeprator().toPersianDigits()}
       </div>
       <div className="flex text-gray-500 text-sm  mx-auto">{text || ''}</div>
     </fieldset>

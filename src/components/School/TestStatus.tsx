@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
@@ -9,21 +9,21 @@ import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس';
-    default:
-      return null;
-  }
+const getTagName: {[key: string]: any} = {
+  a1: 'دانش آموزان پایه اول',
+  a2: 'دانش آموزان پایه دوم',
+  a3: 'دانش آموزان پایه سوم',
+  a4: 'دانش آموزان پایه چهارم',
+  a5: 'دانش آموزان پایه پنجم',
+  a6: 'دانش آموزان پایه ششم',
+  a7: 'دانش آموزان پایه هفتم',
+  a8: 'دانش آموزان پایه هشتم',
+  a9: 'دانش آموزان پایه نهم',
+  a10: 'دانش آموزان پایه دهم',
+  a11: 'دانش آموزان پایه یازدهم',
+  a12: 'دانش آموزان پایه دوازدهم',
+  a13: 'پرسنل آموزشی',
+  a14: 'پرسنل اداری',
 };
 
 const TestStatus: React.FC<{}> = () => {
@@ -39,21 +39,18 @@ const TestStatus: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
-
+      const {data} = await hcsService.testResultTagBased(params);
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
-        if (item.total !== 0) {
-          normalizedDate.push({
-            id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
-            employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
-          });
-        }
+        normalizedDate.push({
+          id: `ovca_${index}`,
+          name: getTagName[item.tag] || 'نامشخص',
+          employeesCount: item.total || 0,
+          infectedCount: item.positiveCount || 0,
+          infectedPercent: ((item.positiveCount || 0) * 100) / (item.total || 0) || 0,
+          saveCount: item.negativeCount || 0,
+          // deadCount: 120,
+        });
       });
       setDataset([...normalizedDate]);
     } catch (error) {
@@ -66,6 +63,7 @@ const TestStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByCategory({
+      organization: 'school',
       resultStatus: 'POSITIVE',
       recoveredCount: true,
       total: true,
@@ -164,14 +162,14 @@ const TestStatus: React.FC<{}> = () => {
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'وضعیت کلی',
+                name: 'وضعیت',
                 key: '',
                 render: (v: any, record) => (
                   <CategoryDonut
                     data={[
                       {
                         name: 'deadCount',
-                        title: 'تعداد فوت‌شدگان',
+                        title: 'درصد تست‌های نامشخص',
                         y: record.deadCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -183,7 +181,7 @@ const TestStatus: React.FC<{}> = () => {
                       },
                       {
                         name: 'saveCount',
-                        title: 'تعداد بهبودیافتگان',
+                        title: 'درصد تست‌های منفی',
                         y: record.saveCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -195,7 +193,7 @@ const TestStatus: React.FC<{}> = () => {
                       },
                       {
                         name: 'infectedCount',
-                        title: 'تعداد مبتلایان',
+                        title: 'درصد تست‌های مثبت',
                         y: record.infectedCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -211,48 +209,56 @@ const TestStatus: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'سازمان',
+                name: 'دسته',
                 key: 'name',
                 render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                  <div className="flex">
+                    {(index + 1).toPersianDigits()}.{v}
+                  </div>
                 ),
               },
               {
-                name: 'تعداد کارکنان',
-                key: 'employeesCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                name: 'تعداد آزمایش‌های انجام شده',
+                key: 'total',
+                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
               },
               {
-                name: 'درصد ابتلا',
-                key: 'infectedPercent',
-                render: (v: any) => (
+                name: 'درصد تست‌های مثبت',
+                key: 'positiveCount',
+                render: (v: any, record: any) => (
                   <span>
-                    {Number(v).toLocaleString('fa', {
-                      minimumFractionDigits: 4,
-                    })}
+                    {(Number(record.total || 0) / (Number(v || 0) * 100) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
                     %
                   </span>
                 ),
               },
               {
-                name: 'تعداد مبتلایان',
-                key: 'infectedCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-              },
-              {
-                name: 'تعداد بهبودیافتگان',
-                key: 'saveCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                name: 'درصد تست‌های منفی',
+                key: 'negativeCount',
+                render: (v: any, record: any) => (
+                  <span>
+                    {(Number(record.total || 0) / (Number(v || 0) * 100) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
+                    %
+                  </span>
                 ),
               },
               {
-                name: 'تعداد فوت‌شدگان',
-                key: 'deadCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                name: 'درصد تست‌های نامشخص',
+                key: '',
+                render: (v: any, record: any) => (
+                  <span>
+                    {(
+                      (record.total || 0) -
+                        (record.positiveCount || 0 + record.negativeCount || 0) || 0
+                    )
+                      .toFixed(4)
+                      .toPersianDigits()}
+                    %
+                  </span>
                 ),
               },
             ]}
