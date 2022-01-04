@@ -40,7 +40,6 @@ const TestStatus: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsService.testResultTagBased(params);
-      console.log(data);
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         normalizedDate.push({

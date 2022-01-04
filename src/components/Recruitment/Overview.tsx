@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
@@ -11,7 +10,7 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsServices from '../../services/hcs.service';
 
-const OverviewRecruitment = () => {
+const OverviewRecruitment : React.FC<{}> = () => {
   const [numberOf, setNumberOf] = useState(null);
   const [numberOfLoading, setNumberOfLoading] = useState(false);
   const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
