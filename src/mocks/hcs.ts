@@ -64,7 +64,7 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/*\/test\-result\/tag\-based/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/test\-result\/tag\-based/g, {})
   .reply(() => {
     const res: any = [
       {
