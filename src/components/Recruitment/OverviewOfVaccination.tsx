@@ -32,12 +32,12 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   const [countsLoading, setCountsLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [counts, setCounts] = useState<any>({
-    numberOfDrivers: 0,
-    numberOfFirstDose: 0,
-    numberOfSecondDose: 0,
-    numberOfThirdDose: 0,
-    numberOfMoreThirdDose: 0,
-    numberOfUnvaccinated: 0,
+    numberOfDrivers: null,
+    numberOfFirstDose: null,
+    numberOfSecondDose: null,
+    numberOfThirdDose: null,
+    numberOfMoreThirdDose: null,
+    numberOfUnvaccinated: null,
   });
 
   async function getOverviewByVaccine(params: any) {
@@ -76,10 +76,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           ...tmp,
           numberOfNull: 0,
           total: 2581819,
-          //   numberOfDrivers: data.numberOfDrivers || 0,
-          //   numberOfFirstDose: data.numberOfFirstDose || 0,
-          //   numberOfSecondDose: data.numberOfSecondDose || 0,
-          //   numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
         });
       });
     } catch (error) {
@@ -115,18 +111,19 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           }
         }
 
-        normalizedDate.push({
-          id: `ovvac_${index}`,
-          name: getTagName[item.tag] || 'نامشخص',
-          twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
-          fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
-          // eslint-disable-next-line
-          notVaccine: item.doseCountMap
-            ? item.doseCountMap[0]
-              ? (item.doseCountMap[0] * 100) / total
-              : 0
-            : 0,
-        });
+        if (total > 0)
+          normalizedDate.push({
+            id: `ovvac_${index}`,
+            name: getTagName[item.tag] || 'نامشخص',
+            twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
+            fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
+            // eslint-disable-next-line
+            notVaccine: item.doseCountMap
+              ? item.doseCountMap[0]
+                ? (item.doseCountMap[0] * 100) / total
+                : 0
+              : 0,
+          });
       });
       setDataset([...normalizedDate]);
     } catch (error) {
@@ -206,11 +203,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
             count={
-              (2581819 -
-                ((counts.numberOfFirstDose || 0) +
-                  (counts.numberOfSecondDose || 0) +
-                  (counts.numberOfMoreThirdDose || 0) +
-                    (counts.numberOfThirdDose || 0)))
+              2581819 -
+              ((counts.numberOfFirstDose || 0) +
+                (counts.numberOfSecondDose || 0) +
+                (counts.numberOfMoreThirdDose || 0) +
+                (counts.numberOfThirdDose || 0))
             }
             loading={countsLoading}
           />
