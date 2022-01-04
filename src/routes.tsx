@@ -118,6 +118,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/education',
     exact: true,
     inMenu: true,
+    disabled: true,
     title: 'داشبورد آموزش و پرورش',
     subMenu: [
       {
@@ -135,7 +136,6 @@ const routes: IRoute[] = [
         main: SchoolProvince,
       },
     ],
-    // disabled: true,
     main: School,
   },
   {
@@ -164,7 +164,6 @@ const routes: IRoute[] = [
         main: RecruitmentProvince,
       },
     ],
-    // disabled: true,
     main: Recruitment,
   },
 ];
