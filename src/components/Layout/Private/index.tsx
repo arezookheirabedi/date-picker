@@ -17,7 +17,7 @@ import SideBarFilter from './components/SideBarFilter';
 
 const ScrollNavbar = styled.div`
   height: 100vh;
-  max-height: calc(100vh - 10rem);
+  max-height: calc(100vh - 18.5rem);
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 
@@ -86,7 +86,7 @@ const PrivateLayout: React.FC<any> = () => {
         </ScrollNavbar>
 
         <div className="absolute bottom-0 z-20 w-full bg-white">
-          <div className="flex justify-end text-xs text-gray-400 pl-9 rtl:pl-0 pr-0 rtl:pr-9">
+          <div className="flex justify-end text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
             {process.env.REACT_APP_VERSION}
           </div>
           <Logout isMenuItem />

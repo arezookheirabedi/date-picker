@@ -7,6 +7,7 @@ import {store} from './store/index';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import './mocks';
 
 ReactDOM.render(
   <React.StrictMode>

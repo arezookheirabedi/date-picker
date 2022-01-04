@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import transportService from 'src/services/transport.service';
+import hcsServices from 'src/services/hcs.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -13,21 +13,17 @@ import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
-    default:
-      return null;
-  }
+const getTagName: {[key: string]: any} = {
+  a1: 'نقشه‌برداری کشور',
+  a2: 'نظام مهندسی ساختمان',
+  a3: 'هواشناسی ایران',
+  a4: 'زمین‌شناسی کشور',
+  a5: 'سازمان ملی زمین و مسکن',
+  a6: 'شرکت پست جمهوری',
+  a7: 'اداره ارشاد اسلامی',
+  a8: 'اداره برق',
+  a9: 'اداره خدمات آموزشی',
+  a10: 'اداره گذرنامه',
 };
 
 const OverviewOfVaccination: React.FC<{}> = () => {
@@ -36,21 +32,51 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   const [countsLoading, setCountsLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [counts, setCounts] = useState<any>({
-    numberOfDrivers: 0,
-    numberOfFirstDose: 0,
-    numberOfSecondDose: 0,
-    numberOfUnvaccinated: 0,
+    numberOfDrivers: null,
+    numberOfFirstDose: null,
+    numberOfSecondDose: null,
+    numberOfThirdDose: null,
+    numberOfMoreThirdDose: null,
+    numberOfUnvaccinated: null,
   });
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
-      const {data} = await transportService.overviewVaccine(params);
-      setCounts({
-        numberOfDrivers: data.numberOfDrivers || 0,
-        numberOfFirstDose: data.numberOfFirstDose || 0,
-        numberOfSecondDose: data.numberOfSecondDose || 0,
-        numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
+      const {data} = await hcsServices.doses(params);
+
+      let tmp = {...counts};
+
+      data.forEach((item: any) => {
+        const v: any = Object.entries(item);
+        const [key, value] = v[0];
+
+        switch (key) {
+          case '1':
+            tmp = {...tmp, numberOfFirstDose: value || 0};
+            break;
+          case '2':
+            tmp = {...tmp, numberOfSecondDose: value || 0};
+            break;
+          case '3':
+            tmp = {...tmp, numberOfThirdDose: value || 0};
+            break;
+          case '5':
+            tmp = {...tmp, numberOfMoreThirdDose: value || 0};
+            break;
+          case 'null':
+            tmp = {...tmp, numberOfUnvaccinated: value || 0};
+            break;
+          default:
+            break;
+        }
+
+        setCounts({
+          ...counts,
+          ...tmp,
+          numberOfNull: 0,
+          total: 2581819,
+        });
       });
     } catch (error) {
       // eslint-disable-next-line
@@ -63,7 +89,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewVaccinePercent(params);
+      const {data} = await hcsServices.dosesTagBased(params);
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         let total = 0;
@@ -85,10 +111,10 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           }
         }
 
-        if (total !== 0) {
+        if (total > 0)
           normalizedDate.push({
             id: `ovvac_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: getTagName[item.tag] || 'نامشخص',
             twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
             fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
             // eslint-disable-next-line
@@ -98,7 +124,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 : 0
               : 0,
           });
-        }
       });
       setDataset([...normalizedDate]);
     } catch (error) {
@@ -111,12 +136,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByVaccine({
+      organization: 'recruitment',
       numberOfDrivers: true,
       numberOfFirstDose: true,
       numberOfSecondDose: true,
       numberOfUnvaccinated: true,
     });
-    getOverviewByVaccinePercent({});
+    getOverviewByVaccinePercent({organization: 'recruitment'});
   }, []);
 
   return (
@@ -128,7 +154,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
-            count={counts.numberOfDrivers || 0}
+            count={counts.total || 0}
             loading={countsLoading}
           />
           <Statistic
@@ -146,7 +172,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={NavyVaccine}
             text="تعداد واکسیناسیون دوز سوم"
-            count={counts.numberOfUnvaccinated || 0}
+            count={counts.numberOfThirdDose || 0}
             loading={countsLoading}
           />
         </div>
@@ -154,13 +180,17 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={BlueVaccine}
             text="بیش از ۳ دوز"
-            count={counts.numberOfDrivers || 0}
+            count={counts.numberOfMoreThirdDose || 0}
             loading={countsLoading}
           />
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={counts.numberOfSecondDose || 0}
+            count={
+              (counts.numberOfSecondDose || 0) +
+              (counts.numberOfMoreThirdDose || 0) +
+              (counts.numberOfThirdDose || 0)
+            }
             loading={countsLoading}
           />
           <Statistic
@@ -172,7 +202,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
-            count={counts.numberOfFirstDose || 0}
+            count={
+              2581819 -
+              ((counts.numberOfFirstDose || 0) +
+                (counts.numberOfSecondDose || 0) +
+                (counts.numberOfMoreThirdDose || 0) +
+                (counts.numberOfThirdDose || 0))
+            }
             loading={countsLoading}
           />
         </div>

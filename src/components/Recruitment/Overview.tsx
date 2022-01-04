@@ -1,102 +1,104 @@
 import React, {useEffect, useState} from 'react';
-
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
 import saveIcon from '../../assets/images/icons/save-color.svg';
 import deadIcon from '../../assets/images/icons/dead-color.svg';
 import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
+import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-lg.svg';
 import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
-import transportService from '../../services/transport.service';
+import hcsServices from '../../services/hcs.service';
 
-const OverviewEducation = () => {
-  const [numberOfDrivers, setNumberOfDrivers] = useState(null);
-  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
-  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
-  const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
-  const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
-  const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
-  const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
+const OverviewRecruitment : React.FC<{}> = () => {
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfLoading, setNumberOfLoading] = useState(false);
+  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
+  const [numberOfNanVaccinatedLoading, setNumberOfNanVaccinatedLoading] = useState(false);
+  const [numberOfPositive, setNumberOfPositive] = useState(null);
+  const [numberOfPositiveLoading, setNumberOfPositiveLoading] = useState(false);
+  const [numberOfPositiveNanVaccinated, setNumberOfPositiveNanVaccinated] = useState(null);
+  const [numberOfPositiveNanVaccinatedLoading, setNumberOfPositiveNanVaccinatedLoading] =
     useState(false);
-  const [numberOfRecoveredDrivers, setNumberOfRecoveredDrivers] = useState(null);
-  const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
+  // eslint-disable-next-line
+  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
+  // eslint-disable-next-line
+  const [numberOfRecoveredLoading, setNumberOfRecoveredLoading] = useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
 
-  const getNumberOfDrivers = async () => {
-    setNumberOfDriversLoading(true);
+  const getNumberOf = async () => {
+    setNumberOfLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers();
-      setNumberOfDrivers(data.numberOfDrivers);
+      const {data} = await hcsServices.membersGeneral();
+      setNumberOf(data.total);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfDriversLoading(false);
+      setNumberOfLoading(false);
     }
   };
 
-  const getNumberOfPlaqueVisited = async () => {
-    setNumberOfPlaqueVisitedLoading(true);
+  const getNumberOfNanVaccinated = async () => {
+    setNumberOfNanVaccinatedLoading(true);
     try {
-      const {data} = await transportService.numberOfPlaqueVisited();
-      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+      const {data} = await hcsServices.membersGeneral();
+      setNumberOfNanVaccinated(data.numberOfNanVaccinated);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPlaqueVisitedLoading(false);
+      setNumberOfNanVaccinatedLoading(false);
     }
   };
 
-  const getNumberOfPositiveDrivers = async () => {
-    setNumberOfPositiveDriversLoading(true);
+  const getNumberOfPositive = async () => {
+    setNumberOfPositiveLoading(true);
     try {
-      const {data} = await transportService.numberOfPositiveDrivers();
-      setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
+      const {data} = await hcsServices.membersGeneral();
+      setNumberOfPositive(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositiveDriversLoading(false);
+      setNumberOfPositiveLoading(false);
     }
   };
 
-  const getNumberOfPositivePlaqueVisited = async () => {
-    setNumberOfPositivePlaqueVisitedLoading(true);
+  const getNumberOfPositiveNanVaccinated = async () => {
+    setNumberOfPositiveNanVaccinatedLoading(true);
     try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited();
-      setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
+      // const {data} = await hcsServices.membersGeneral();
+      // @ts-ignore
+      setNumberOfPositiveNanVaccinated(0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositivePlaqueVisitedLoading(false);
+      setNumberOfPositiveNanVaccinatedLoading(false);
     }
   };
 
-  const getNumberOfRecoveredDrivers = async () => {
-    setNumberOfRecoveredDriversLoading(true);
+  const getNumberOfRecovered = async () => {
+    setNumberOfRecoveredLoading(true);
     try {
-      const {data} = await transportService.numberOfRecoveredDrivers();
-      setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
+      const {data} = await hcsServices.membersGeneral();
+      setNumberOfRecovered(data.numberOfRecovered);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfRecoveredDriversLoading(false);
+      setNumberOfRecoveredLoading(false);
     }
   };
 
   const getNumberOfTestResults = async () => {
     setNumberOfTestResultsLoading(true);
     try {
-      const {data} = await transportService.numberOfTestResults();
+      const {data} = await hcsServices.membersGeneral();
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
       // eslint-disable-next-line
@@ -109,8 +111,8 @@ const OverviewEducation = () => {
   const getNumberOfVaccination = async () => {
     setNumberOfVaccinationLoading(true);
     try {
-      const {data} = await transportService.numberOfVaccination();
-      setNumberOfVaccination(data.numberOfVaccination);
+      const {data} = await hcsServices.membersGeneral();
+      setNumberOfVaccination(data.numberOfVaccinated);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -120,37 +122,37 @@ const OverviewEducation = () => {
   };
 
   useEffect(() => {
-    getNumberOfDrivers();
-    getNumberOfPlaqueVisited();
-    getNumberOfPositiveDrivers();
-    getNumberOfPositivePlaqueVisited();
-    getNumberOfRecoveredDrivers();
+    getNumberOf();
+    getNumberOfNanVaccinated();
+    getNumberOfPositive();
+    getNumberOfPositiveNanVaccinated();
+    getNumberOfRecovered();
     getNumberOfTestResults();
     getNumberOfVaccination();
   }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به پرسنل آموزشی آموزش و پرورش کل کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت کارکنان دولت در کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalRecritment}
-            text="مجموع کارمندان آموزش پرورش"
-            count={numberOfDrivers}
-            loading={numberOfDriversLoading}
+            text="مجموع کارکنان دولت"
+            count={numberOf}
+            loading={numberOfLoading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositiveDrivers}
-            loading={numberOfPositiveDriversLoading}
+            count={numberOfPositive}
+            loading={numberOfPositiveLoading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecoveredDrivers}
-            loading={numberOfRecoveredDriversLoading}
+            count="-"
+            // loading={numberOfRecoveredLoading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
@@ -162,16 +164,10 @@ const OverviewEducation = () => {
             loading={numberOfVaccinationLoading}
           />
           <Statistic
-            icon={prescriptionIcon}
-            text="مجموع استعلام‌های آموزش و پرورش"
-            count={numberOfPositivePlaqueVisited}
-            loading={numberOfPositivePlaqueVisitedLoading}
-          />
-          <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
-            count={numberOfPlaqueVisited}
-            loading={numberOfPlaqueVisitedLoading}
+            count={numberOfNanVaccinated}
+            loading={numberOfNanVaccinatedLoading}
           />
           <Statistic
             icon={testIcon}
@@ -179,9 +175,15 @@ const OverviewEducation = () => {
             count={numberOfTestResults}
             loading={numberOfTestResultsLoading}
           />
+          <Statistic
+            icon={prescriptionIcon}
+            text="مجموع استعلام از مراجعین دولتی"
+            count={numberOfPositiveNanVaccinated}
+            loading={numberOfPositiveNanVaccinatedLoading}
+          />
         </div>
       </div>
     </fieldset>
   );
 };
-export default OverviewEducation;
+export default OverviewRecruitment;

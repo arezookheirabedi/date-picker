@@ -1,10 +1,15 @@
 
-import Request from "./requestUtil";
+import { AxiosInstance } from "axios";
+import Request, { instanceMock } from "./requestUtil";
 
 
 interface IRequestBuilder {
     baseUrl: string;
     headers?: {};
+    instance?: AxiosInstance
+}
+interface IOption {
+    mock?: boolean;
 }
 
 class RequestBuilder {
@@ -25,7 +30,7 @@ class RequestBuilder {
             case "development":
                 this.self.baseUrl = `${process.env.REACT_APP_BASE_URL}`;
                 return this;
-            case "production" :
+            case "production":
                 this.self.baseUrl = `${process.env.REACT_APP_BASE_URL}`;
                 return this;
             default:
@@ -49,12 +54,12 @@ class RequestBuilder {
     }
 
     withHeaders(headers: {}): RequestBuilder {
-        this.self.headers = { ...this.self.headers, ...headers};
+        this.self.headers = { ...this.self.headers, ...headers };
         return this;
     }
 
-    build(): Request {
-        return new Request(this.self.baseUrl, this.self.headers);
+    build(option?: IOption): Request {
+        return new Request(option?.mock ? "" : this.self.baseUrl, this.self.headers, option?.mock ? instanceMock : undefined);
     }
 
 }

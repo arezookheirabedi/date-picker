@@ -1,23 +1,21 @@
 import React from 'react';
 
-// import avatar from "../../assets/images/logos/avatar.svg";
-import OverviewCategories from '../../components/Recruitment/OverviewCategories';
-import OverviewPatients from '../../components/Recruitment/OverviewPatients';
+import Overview from '../../components/Recruitment/Overview';
+// import OverviewCategories from '../../components/Recruitment/OverviewCategories';
+// import OverviewPatients from '../../components/Recruitment/OverviewPatients';
 import OverviewOfVaccination from '../../components/Recruitment/OverviewOfVaccination';
-import TestStatus from '../../components/Recruitment/TestStatus';
-import OverviewRecruitment from '../../components/Recruitment/OverviewRecruitment';
+// import TestStatus from '../../components/Recruitment/TestStatus';
 import OverviewVaccinePerProvince from '../../components/Recruitment/OverviewVaccinePerProvince';
 
-// import IconWrapper from "../../components/IconWrapper";
-const Recruitment = () => {
+const Recruitment: React.FC<{}> = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewRecruitment />
-      <OverviewCategories />
+      <Overview />
+      {/* <OverviewCategories /> */}
       <OverviewVaccinePerProvince />
-      <OverviewPatients />
+      {/* <OverviewPatients /> */}
       <OverviewOfVaccination />
-      <TestStatus />
+      {/* <TestStatus /> */}
     </div>
   );
 };
