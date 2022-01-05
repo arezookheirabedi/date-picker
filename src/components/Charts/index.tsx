@@ -4,6 +4,7 @@ import Gauge from "./Gauge";
 import Map from "./Map"
 import Line from "./Line"
 import Pyramid from "./Pyramid";
+import Stacked from "./Stacked";
 
 export default {
   Column,
@@ -11,5 +12,6 @@ export default {
   Gauge,
   Map,
   Line,
+  Stacked,
   Pyramid
 };

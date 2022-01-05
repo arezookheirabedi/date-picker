@@ -195,7 +195,7 @@ const Guild: React.FC<any> = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={654} />
             <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={654} />
-            <Statistic icon={scanDangerIcon} text="تعداد استعلام های نتیجه مثبت" count={428} />
+            <Statistic icon={scanDangerIcon} text="تعداد استعلام‌های کوید مثبت" count={428} />
             <Statistic icon={testIcon} text="تعداد آزمایش های کاربران" count={864} />
           </div>
         </div>

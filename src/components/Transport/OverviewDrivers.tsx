@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-
+import axios from "axios";
 
 import Statistic from "../../containers/Guild/components/Statistic";
 import totalDriver from "../../assets/images/icons/transport-color.svg";
@@ -29,12 +29,17 @@ const OverviewDrivers = () => {
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
 
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const getNumberOfDrivers = async () => {
     setNumberOfDriversLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers();
+      const {data} = await transportService.numberOfDrivers(null, {cancelToken: source.token});
       setNumberOfDrivers(data.numberOfDrivers)
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfDriversLoading(false)
@@ -44,9 +49,10 @@ const OverviewDrivers = () => {
   const getNumberOfPlaqueVisited = async () => {
     setNumberOfPlaqueVisitedLoading(true)
     try {
-      const {data} = await transportService.numberOfPlaqueVisited();
+      const {data} = await transportService.numberOfPlaqueVisited(null, {cancelToken: source.token});
       setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPlaqueVisitedLoading(false)
@@ -56,9 +62,10 @@ const OverviewDrivers = () => {
   const getNumberOfPositiveDrivers = async () => {
     setNumberOfPositiveDriversLoading(true)
     try {
-      const {data} = await transportService.numberOfPositiveDrivers();
+      const {data} = await transportService.numberOfPositiveDrivers(null, {cancelToken: source.token});
       setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositiveDriversLoading(false)
@@ -68,9 +75,10 @@ const OverviewDrivers = () => {
   const getNumberOfPositivePlaqueVisited = async () => {
     setNumberOfPositivePlaqueVisitedLoading(true)
     try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited();
+      const {data} = await transportService.numberOfPositivePlaqueVisited(null, {cancelToken: source.token});
       setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfPositivePlaqueVisitedLoading(false)
@@ -80,9 +88,10 @@ const OverviewDrivers = () => {
   const getNumberOfRecoveredDrivers = async () => {
     setNumberOfRecoveredDriversLoading(true)
     try {
-      const {data} = await transportService.numberOfRecoveredDrivers();
+      const {data} = await transportService.numberOfRecoveredDrivers(null, {cancelToken: source.token});
       setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfRecoveredDriversLoading(false)
@@ -92,9 +101,10 @@ const OverviewDrivers = () => {
   const getNumberOfTestResults = async () => {
     setNumberOfTestResultsLoading(true)
     try {
-      const {data} = await transportService.numberOfTestResults();
+      const {data} = await transportService.numberOfTestResults(null, {cancelToken: source.token});
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfTestResultsLoading(false)
@@ -104,9 +114,10 @@ const OverviewDrivers = () => {
   const getNumberOfVaccination = async () => {
     setNumberOfVaccinationLoading(true)
     try {
-      const {data} = await transportService.numberOfVaccination();
+      const {data} = await transportService.numberOfVaccination(null, {cancelToken: source.token});
       setNumberOfVaccination(data.numberOfVaccination);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfVaccinationLoading(false)
@@ -122,6 +133,17 @@ const OverviewDrivers = () => {
     getNumberOfRecoveredDrivers();
     getNumberOfTestResults();
     getNumberOfVaccination();
+
+    return () => {
+      setNumberOfDrivers(null);
+      setNumberOfPlaqueVisited(null);
+      setNumberOfPositiveDrivers(null);
+      setNumberOfPositivePlaqueVisited(null);
+      setNumberOfRecoveredDrivers(null);
+      setNumberOfTestResults(null);
+      setNumberOfVaccination(null);
+      source.cancel('Operation canceled by the user.');
+    };
   }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -141,10 +163,11 @@ const OverviewDrivers = () => {
         </div>
         <div
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={numberOfVaccination} loading={numberOfVaccinationLoading}/>
+          <Statistic icon={vaccineIcon} text="مجموع واکسیناسیون" count={numberOfVaccination}
+                     loading={numberOfVaccinationLoading}/>
           <Statistic icon={inquiryPlaque} text="تعداد استعلام پلاک" count={numberOfPlaqueVisited} hasInfo
                      loading={numberOfPlaqueVisitedLoading}/>
-          <Statistic icon={positiveInquiryPlaque} text="تعداد استعلام های نتیجه مثبت"
+          <Statistic icon={positiveInquiryPlaque} text="تعداد استعلام‌های کوید مثبت"
                      count={numberOfPositivePlaqueVisited} hasInfo loading={numberOfPositivePlaqueVisitedLoading}/>
           <Statistic icon={testIcon} text="تعداد آزمایش های رانندگان" count={numberOfTestResults}
                      loading={numberOfTestResultsLoading}/>

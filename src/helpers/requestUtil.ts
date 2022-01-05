@@ -1,5 +1,6 @@
-import axios, {AxiosInstance, AxiosPromise, AxiosRequestConfig} from 'axios';
-import {ILogin} from 'src/models/authentication.model';
+import axios, { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
+import AxiosMockAdapter from 'axios-mock-adapter';
+import { ILogin } from 'src/models/authentication.model';
 import authenticateService from 'src/services/authentication.service';
 import {getToken, setRequestConfig, setToken} from './utils';
 
@@ -25,24 +26,35 @@ const instance: AxiosInstance = axios.create({
   },
 });
 
+export const instanceMock: AxiosInstance = axios.create({
+  timeout: 60000,
+  headers: {
+    'Accept-Language': 'fa',
+  },
+});
+
+export const instanceMockAdapter = new AxiosMockAdapter(instanceMock, { delayResponse: 3000 });
+
 interface IRequest {
   baseUrl: string;
   headers?: {};
+  instance: AxiosInstance;
 }
 
 class Request {
   private readonly self: IRequest;
 
-  constructor(baseUrl: string, headers?: {}) {
+  constructor(baseUrl: string, headers?: {}, axiosInstance?: AxiosInstance) {
     this.self = {
       baseUrl,
       headers,
+      instance: axiosInstance || instance
     };
   }
 
   post: (endpoint: string, data?: any) => AxiosPromise<any> = (endpoint, data) => {
     const url = `${this.self.baseUrl}${endpoint}`;
-    return instance({
+    return this.self.instance({
       url,
       data,
       method: 'POST',
@@ -50,19 +62,20 @@ class Request {
     });
   };
 
-  get: (endpoint: string, params?: any) => AxiosPromise<any> = (endpoint, params) => {
+  get: (endpoint: string, params?: any, config?: any) => AxiosPromise<any> = (endpoint, params, config) => {
     const url = `${this.self.baseUrl}${endpoint}`;
-    return instance({
+    return this.self.instance({
       url,
       params,
       method: 'GET',
       headers: this.self.headers,
+      ...config
     });
   };
 
   put: (endpoint: string, data?: any) => AxiosPromise<any> = (endpoint, data) => {
     const url = `${this.self.baseUrl}${endpoint}`;
-    return instance({
+    return this.self.instance({
       url,
       data,
       method: 'PUT',
@@ -72,7 +85,7 @@ class Request {
 
   patch: (endpoint: string, data?: any) => AxiosPromise<any> = (endpoint, data) => {
     const url = `${this.self.baseUrl}${endpoint}`;
-    return instance({
+    return this.self.instance({
       url,
       data,
       method: 'PATCH',
@@ -82,7 +95,7 @@ class Request {
 
   delete: (endpoint: string, data?: any) => AxiosPromise<any> = (endpoint, data) => {
     const url = `${this.self.baseUrl}${endpoint}`;
-    return instance({
+    return this.self.instance({
       url,
       data,
       method: 'DELETE',
@@ -135,13 +148,27 @@ instance.interceptors.response.use(
 
     response,
   error => {
+
     const newConfig = error.config;
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
 
 
+    if (axios.isCancel(error)) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line
+        reject({
+          errors: null,
+          fingerPrint: null,
+          message: 'cancel',
+        });
+      });
+    }
+
+
     if (!error.response) {
       return new Promise((resolve, reject) => {
+        // eslint-disable-next-line
         reject({
           errors: null,
           fingerPrint: null,
