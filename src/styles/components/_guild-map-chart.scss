@@ -1,6 +1,16 @@
 .guild-map-chart{
   width: auto !important;
+  display: flex;
+  justify-content: right;
+  align-items: flex-start;
+  height: inherit !important;
   svg {
     width: 100% !important;
+    height: 100% !important;
   }
+}
+
+.highcharts-text-outline{
+  fill: #FFFFFF !important;
+  stroke: none !important;
 }

@@ -12,6 +12,10 @@ import passengerIcon from '../assets/images/icons/passenger.svg';
 import passengerActiveIcon from '../assets/images/icons/passenger-active.svg';
 import guildIcon from '../assets/images/icons/guild.svg';
 import guildActiveIcon from '../assets/images/icons/guild-active.svg';
+import educationIcon from '../assets/images/icons/education.svg';
+import educationActiveIcon from '../assets/images/icons/education-active.svg';
+import recruitmentIcon from '../assets/images/icons/recruitment.svg';
+import recruitmentActiveIcon from '../assets/images/icons/recruitment-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';
 
@@ -46,6 +50,18 @@ const icons = [
     icon: passengerIcon,
     disableIcon: passengerIcon,
     activeIcon: passengerActiveIcon,
+  },
+  {
+    name: 'education',
+    icon: educationIcon,
+    disableIcon: educationIcon,
+    activeIcon: educationActiveIcon,
+  },
+  {
+    name: 'recruitment',
+    icon: recruitmentIcon,
+    disableIcon: recruitmentIcon,
+    activeIcon: recruitmentActiveIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
 ];

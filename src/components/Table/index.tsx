@@ -90,6 +90,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
               {columns.map((column, i) => (
                 <th
                   scope="col"
+                  // eslint-disable-next-line
                   key={i}
                   className="px-3 pb-4 py-1 text-xs font-medium tracking-wider text-gray-500 uppercase whitespace-nowrap"
                 >
@@ -101,17 +102,19 @@ const Table: React.FC<IProps> = (props: IProps) => {
           <tbody className="bg-white dark:bg-gray-900 max-h-screen overflow-hidden overflow-y-scroll">
             {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
               dataSet
-                .slice(
-                  (parseInt(queryStringParams.get('page') || '1', 10) - 1) * pageSize,
-                  parseInt(queryStringParams.get('page') || '1', 10) * pageSize
-                )
+                // .slice(
+                //   (parseInt(queryStringParams.get('page') || '1', 10) - 1) * pageSize,
+                //   parseInt(queryStringParams.get('page') || '1', 10) * pageSize
+                // )
                 .map((data, i) => (
+                  // eslint-disable-next-line
                   <tr className="transition-all border-b border-gray-100" key={i}>
                     {columns?.map((column, j) => (
                       <td
                         className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${
                           column.className ? column.className : ''
                         }`}
+                        // eslint-disable-next-line
                         key={j}
                       >
                         {column.render
