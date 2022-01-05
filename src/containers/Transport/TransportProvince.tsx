@@ -17,7 +17,7 @@ const TransportProvince = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') as any;
+    const provinceName = params.get('provinceName') || ('تهران' as any);
     // console.log(provinceName)
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
@@ -32,9 +32,9 @@ const TransportProvince = () => {
     <div className="space-y-16 mb-8">
       <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="province-overview"/>
       <OverviewDriversProvince cityTitle={cityTitle}/>
-      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+       <OverviewCategoriesProvince cityTitle={cityTitle}/>
       <OverviewPublicPatientsProvince cityTitle={cityTitle}/>
-      <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
+       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
       <TestsInTransportProvince cityTitle={cityTitle}/>
     </div>
   )
