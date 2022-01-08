@@ -263,7 +263,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       getNumberOfPositivePlaqueVisited(provinceName);
       getNumberOfTestResults(provinceName);
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/recruitment/province');
     }
   }, [location.search]);
 

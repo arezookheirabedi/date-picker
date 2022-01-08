@@ -53,7 +53,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       });
       setDataset([...normalizedDate]);
       setIsCancel(false)
-    } catch (error) {
+    } catch (error: any) {
       // eslint-disable-next-line
       if (error && error.message === 'cancel') {
         setIsCancel(true);
