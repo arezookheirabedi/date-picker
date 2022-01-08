@@ -10,7 +10,7 @@ import calendar from '../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../RangeDateSliderFliter';
 import Charts from '../Charts';
 import {sideCities, toPersianDigit} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
+import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
 
 const {Line} = Charts;
@@ -58,9 +58,9 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const [queryParams, setQueryParams] = useState({
     status: 'POSITIVE',
     type: 'ANNUAL',
-    fromDate: '',
-    toDate: '',
-    serviceType: '',
+    from: '',
+    to: '',
+    tag: '',
   });
 
   const focusFromDate = () => {
@@ -91,7 +91,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params);
+      const response = await hcsService.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -113,10 +113,10 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     let idSetTimeOut: any;
     if (existsCity) {
       idSetTimeOut = setTimeout(() => {
-        getLinearOverviewPublicTransport({...queryParams, province: provinceName});
+        getLinearOverviewPublicTransport({organization: 'school', province: provinceName, ...queryParams});
       }, 500);
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/school/province');
     }
 
     return () => {
@@ -134,8 +134,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     }
   }, [selectedDayRange]);
@@ -181,7 +181,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                serviceType: value.enName,
+                                tag: value.enName,
                               });
                             }}
                           >

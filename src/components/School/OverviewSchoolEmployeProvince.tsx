@@ -151,7 +151,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
       getNumberOfTestResults(provinceName);
       getNumberOfVaccination(provinceName);
     } else {
-      history.push('/dashboard//province');
+      history.push('/dashboard/school/province');
     }
   }, []);
   
