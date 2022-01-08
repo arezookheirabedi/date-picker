@@ -29,12 +29,6 @@ function testResultTagBased({ organization, ...params }: { organization: string;
     .get(`/api/v1/hcs-reporter/organizations/${organization}/test-result/tag-based`, params);
 }
 
-function doses({ organization }: { organization: string; }) {
-  return request
-    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
-    .build({ mock: true })
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/doses`, {});
-}
 
 function dosesTagBased({ organization }: { organization: string; }) {
   return request
@@ -42,6 +36,14 @@ function dosesTagBased({ organization }: { organization: string; }) {
     .build({ mock: true })
     .get(`/api/v1/hcs-reporter/organizations/${organization}/doses/tag-based`, {});
 }
+
+function doses({ organization }: { organization: string; }) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+    .build({ mock: true })
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/doses`, {});
+}
+
 
 
 const hcsService = {

@@ -45,10 +45,11 @@ const TestStatus: React.FC<{}> = () => {
         normalizedDate.push({
           id: `ovca_${index}`,
           name: getTagName[item.tag] || 'نامشخص',
-          employeesCount: item.total || 0,
-          infectedCount: item.positiveCount || 0,
-          infectedPercent: ((item.positiveCount || 0) * 100) / (item.total || 0) || 0,
-          saveCount: item.negativeCount || 0,
+          total: item.total || 0,
+          positiveCount: item.positiveCount || 0,
+          negativeCount: item.negativeCount || 0,
+          unknownCount:
+            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
           // deadCount: 120,
         });
       });
@@ -168,9 +169,9 @@ const TestStatus: React.FC<{}> = () => {
                   <CategoryDonut
                     data={[
                       {
-                        name: 'deadCount',
+                        name: 'unknownCount',
                         title: 'درصد تست‌های نامشخص',
-                        y: record.deadCount || 0,
+                        y: record.unknownCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -180,9 +181,9 @@ const TestStatus: React.FC<{}> = () => {
                         },
                       },
                       {
-                        name: 'saveCount',
+                        name: 'negativeCount',
                         title: 'درصد تست‌های منفی',
-                        y: record.saveCount || 0,
+                        y: record.negativeCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -192,9 +193,9 @@ const TestStatus: React.FC<{}> = () => {
                         },
                       },
                       {
-                        name: 'infectedCount',
+                        name: 'positiveCount',
                         title: 'درصد تست‌های مثبت',
-                        y: record.infectedCount || 0,
+                        y: record.positiveCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -227,7 +228,7 @@ const TestStatus: React.FC<{}> = () => {
                 key: 'positiveCount',
                 render: (v: any, record: any) => (
                   <span>
-                    {(Number(record.total || 0) / (Number(v || 0) * 100) || 0)
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
                       .toFixed(4)
                       .toPersianDigits()}
                     %
@@ -239,7 +240,7 @@ const TestStatus: React.FC<{}> = () => {
                 key: 'negativeCount',
                 render: (v: any, record: any) => (
                   <span>
-                    {(Number(record.total || 0) / (Number(v || 0) * 100) || 0)
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
                       .toFixed(4)
                       .toPersianDigits()}
                     %
@@ -248,13 +249,10 @@ const TestStatus: React.FC<{}> = () => {
               },
               {
                 name: 'درصد تست‌های نامشخص',
-                key: '',
+                key: 'unknownCount',
                 render: (v: any, record: any) => (
                   <span>
-                    {(
-                      (record.total || 0) -
-                        (record.positiveCount || 0 + record.negativeCount || 0) || 0
-                    )
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
                       .toFixed(4)
                       .toPersianDigits()}
                     %
