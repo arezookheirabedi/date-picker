@@ -1,5 +1,4 @@
 stages:
-  #- test
   - build
   - dockerize
   - rollout
@@ -9,107 +8,46 @@ node-build-Develop:
     - master1
   image: node:14.17.2-alpine3.13
   stage: build
-
   artifacts:
     expire_in: 4h
     paths:
       - build/
-  cache: &global_cache
+  cache: 
    key: ${CI_JOB_I}
    paths:
     - node_modules/
     - public/
-    - vendor/
   script:
     - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
-#    - sleep 100000s
     - npm version
     - CI=false yarn install
     - CI=false yarn run build:development
-
   only:
     - develop
-  #when: manual       
-  
-node-build-Prod:
-  tags: 
-    - master1
-  image: node:14.17.2-alpine3.13
-  stage: build
 
-  artifacts:
-    expire_in: 4h
-    paths:
-      - build/
-  cache: &global_cache
-   key: ${CI_JOB_I}
-   paths:
-    - node_modules/
-    - public/
-    - vendor/
-  script:
-    - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
-#    - sleep 100000s
-    - npm version
-    - CI=false yarn install
-    - CI=false yarn run build:production
-
-  only:
-    refs:
-      - develop
-    variables:
-      - $DO == "prod"
-      - $CI_COMMIT_MESSAGE =~ /prod/
-      - $CI_COMMIT_MESSAGE =~ /PROD/
 
 dockerize-Develop:
+  stage: dockerize
   tags: 
     - master1
-#  image: registry.vaslapp.com/docker:18.09
   image: buildah/buildah
-  stage: dockerize
   dependencies:
     - node-build-Develop
-    
   script:
     - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
     - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers-dev:latest .
     - buildah push registry.vaslapp.com/docker/ministers-dev:latest
   only:
     - develop
-  #when: manual    
-    
-dockerize-Prod:
-  tags: 
-    - master1
-#  image: registry.vaslapp.com/docker:18.09
-  image: buildah/buildah
-  stage: dockerize
-  dependencies:
-    - node-build-Develop
-    
-  script:
-    - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
-    - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers:latest .
-    - buildah push registry.vaslapp.com/docker/ministers:latest
-  only:
-    refs:
-      - develop
-    variables:
-      - $DO == "prod"
-      - $CI_COMMIT_MESSAGE =~ /prod/
-      - $CI_COMMIT_MESSAGE =~ /PROD/
-
 
     
 rollout-Develop:
+  stage: rollout
   tags:
     - k8s-gov
   image:
     name: bitnami/kubectl
-#    name: registry.vaslapp.com/kubectl:latest
     entrypoint: [ "" ]
-  stage: rollout
   script:
     - echo "$KUBERGOV_CONFIG" | base64 -d >.config
     - kubectl rollout restart deployment ministers --kubeconfig .config --namespace discovery
@@ -117,14 +55,50 @@ rollout-Develop:
     - develop
 
 
+node-build-Prod:
+  stage: build
+  tags: 
+    - master1
+  image: node:14.17.2-alpine3.13
+  artifacts:
+    expire_in: 4h
+    paths:
+      - build/
+  cache:
+   key: ${CI_JOB_I}
+   paths:
+    - node_modules/
+    - public/
+  script:
+    - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+    - npm version
+    - CI=false yarn install
+    - CI=false yarn run build:production
+  only:
+    - master
+
+dockerize-Prod:
+  stage: dockerize
+  tags: 
+    - master1
+  image: buildah/buildah
+  dependencies:
+    - node-build-Prod
+  script:
+    - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
+    - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers:latest .
+    - buildah push registry.vaslapp.com/docker/ministers:latest
+  only:
+    - master
+
+
 rollout-Prod:
+  stage: rollout
   tags:
     - omid-prod
   image:
     name: bitnami/kubectl
-#    name: registry.vaslapp.com/kubectl:latest
     entrypoint: [ "" ]
-  stage: rollout
   script:
     - echo "$KUBERBOH_CONFIG" | base64 -d >.config
     - kubectl rollout restart deployment ministers --kubeconfig .config --namespace connect
