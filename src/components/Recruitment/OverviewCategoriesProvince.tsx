@@ -168,7 +168,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'رسته های حمل و نقل',
+                name: 'سازمان',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -177,7 +177,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 ),
               },
               {
-                name: 'تعداد رانندگان',
+                name: 'تعداد کارکنان',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
