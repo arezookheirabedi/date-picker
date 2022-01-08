@@ -29,7 +29,6 @@ function testResultTagBased({ organization, ...params }: { organization: string;
     .get(`/api/v1/hcs-reporter/organizations/${organization}/test-result/tag-based`, params);
 }
 
-
 function dosesTagBased({ organization }: { organization: string; }) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
