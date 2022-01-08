@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
+import {sideCities} from 'src/helpers/utils';
+import {useHistory, useLocation} from 'react-router-dom';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalStudent from '../../assets/images/icons/graduation.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
@@ -9,47 +11,55 @@ import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
 import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
 import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
-import transportService from '../../services/transport.service';
+import hcsService from '../../services/hcs.service';
 
 interface OverviewSchoolStudentsProps {
   cityTitle: any;
 }
 
 const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
-  const [numberOfDrivers, setNumberOfDrivers] = useState(null);
-  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfLoading, setNumberOfLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
   const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
-  const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
-  const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
-  const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
-  const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
-    useState(false);
-  const [numberOfRecoveredDrivers, setNumberOfRecoveredDrivers] = useState(null);
-  const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
+  const [numberOfPositive, setNumberOfPositive] = useState(null);
+  const [numberOfPositiveLoading, setNumberOfPositiveLoading] = useState(false);
+  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
+  const [numberOfRecoveredLoading, setNumberOfRecoveredLoading] = useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
 
-  const getNumberOfDrivers = async () => {
-    setNumberOfDriversLoading(true);
+  const location = useLocation();
+  const history = useHistory();
+
+  const getNumberOf = async (province: string) => {
+    setNumberOfLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers();
-      setNumberOfDrivers(data.numberOfDrivers);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOf(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfDriversLoading(false);
+      setNumberOfLoading(false);
     }
   };
 
-  const getNumberOfPlaqueVisited = async () => {
+  const getNumberOfPlaqueVisited = async (province: string) => {
     setNumberOfPlaqueVisitedLoading(true);
     try {
-      const {data} = await transportService.numberOfPlaqueVisited();
-      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfPlaqueVisited(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -58,50 +68,49 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
     }
   };
 
-  const getNumberOfPositiveDrivers = async () => {
-    setNumberOfPositiveDriversLoading(true);
+  const getNumberOfPositive = async (province: string) => {
+    setNumberOfPositiveLoading(true);
     try {
-      const {data} = await transportService.numberOfPositiveDrivers();
-      setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfPositive(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositiveDriversLoading(false);
+      setNumberOfPositiveLoading(false);
     }
   };
 
-  const getNumberOfPositivePlaqueVisited = async () => {
-    setNumberOfPositivePlaqueVisitedLoading(true);
+  const getNumberOfRecovered = async (province: string) => {
+    setNumberOfRecoveredLoading(true);
     try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited();
-      setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfRecovered(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositivePlaqueVisitedLoading(false);
+      setNumberOfRecoveredLoading(false);
     }
   };
 
-  const getNumberOfRecoveredDrivers = async () => {
-    setNumberOfRecoveredDriversLoading(true);
-    try {
-      const {data} = await transportService.numberOfRecoveredDrivers();
-      setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfRecoveredDriversLoading(false);
-    }
-  };
-
-  const getNumberOfTestResults = async () => {
+  const getNumberOfTestResults = async (province: string) => {
     setNumberOfTestResultsLoading(true);
     try {
-      const {data} = await transportService.numberOfTestResults();
-      setNumberOfTestResults(data.numberOfTestResults);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfTestResults(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -110,11 +119,15 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
     }
   };
 
-  const getNumberOfVaccination = async () => {
+  const getNumberOfVaccination = async (province: string) => {
     setNumberOfVaccinationLoading(true);
     try {
-      const {data} = await transportService.numberOfVaccination();
-      setNumberOfVaccination(data.numberOfVaccination);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfVaccination(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -124,14 +137,25 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
   };
 
   useEffect(() => {
-    getNumberOfDrivers();
-    getNumberOfPlaqueVisited();
-    getNumberOfPositiveDrivers();
-    getNumberOfPositivePlaqueVisited();
-    getNumberOfRecoveredDrivers();
-    getNumberOfTestResults();
-    getNumberOfVaccination();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getNumberOf(provinceName);
+      getNumberOfPlaqueVisited(provinceName);
+      getNumberOfPositive(provinceName);
+      getNumberOfRecovered(provinceName);
+      getNumberOfTestResults(provinceName);
+      getNumberOfVaccination(provinceName);
+    } else {
+      history.push('/dashboard/school/province');
+    }
   }, []);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -143,20 +167,20 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
           <Statistic
             icon={totalStudent}
             text="مجموع دانش آموزان"
-            count={numberOfDrivers}
-            loading={numberOfDriversLoading}
+            count={numberOf}
+            loading={numberOfLoading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositiveDrivers}
-            loading={numberOfPositiveDriversLoading}
+            count={numberOfPositive}
+            loading={numberOfPositiveLoading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecoveredDrivers}
-            loading={numberOfRecoveredDriversLoading}
+            count={numberOfRecovered}
+            loading={numberOfRecoveredLoading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
@@ -167,12 +191,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             count={numberOfVaccination}
             loading={numberOfVaccinationLoading}
           />
-          <Statistic
-            icon={prescriptionIcon}
-            text="مجموع استعلام‌های آموزش و پرورش"
-            count={numberOfPositivePlaqueVisited}
-            loading={numberOfPositivePlaqueVisitedLoading}
-          />
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"

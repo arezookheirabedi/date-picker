@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import hcsServices from 'src/services/hcs.service';
+import { getSchoolTagName } from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -13,18 +14,6 @@ import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
-const getTagName: {[key: string]: any} = {
-  a1: 'نقشه‌برداری کشور',
-  a2: 'نظام مهندسی ساختمان',
-  a3: 'هواشناسی ایران',
-  a4: 'زمین‌شناسی کشور',
-  a5: 'سازمان ملی زمین و مسکن',
-  a6: 'شرکت پست جمهوری',
-  a7: 'اداره ارشاد اسلامی',
-  a8: 'اداره برق',
-  a9: 'اداره خدمات آموزشی',
-  a10: 'اداره گذرنامه',
-};
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -114,7 +103,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         if (total > 0)
           normalizedDate.push({
             id: `ovvac_${index}`,
-            name: getTagName[item.tag] || 'نامشخص',
+            name: getSchoolTagName[item.tag] || 'نامشخص',
             twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
             fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
             // eslint-disable-next-line

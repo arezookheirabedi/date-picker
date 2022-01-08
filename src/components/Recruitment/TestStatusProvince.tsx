@@ -6,25 +6,9 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {getRecruitmentTagName, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس';
-    default:
-      return null;
-  }
-};
 
 interface TestStatusProvinceProps {
   cityTitle: any;
@@ -51,7 +35,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: getRecruitmentTagName[(item.serviceType)] || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.count || 0,
             infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),

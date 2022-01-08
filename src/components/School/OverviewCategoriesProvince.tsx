@@ -2,161 +2,17 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {getSchoolTagName, sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 interface OverviewCategoriesProvinceProps {
   cityTitle?: any;
 }
-
-const sideCities = [
-  {
-    name: 'هرمزگان',
-    color: '#ccc',
-  },
-  {
-    name: 'بوشهر',
-    color: '#ccc',
-  },
-  {
-    name: 'کهگیلویه و بویراحمد',
-    color: '#ccc',
-  },
-  {
-    name: 'فارس',
-    color: '#ccc',
-  },
-  {
-    name: 'اصفهان',
-    color: '#ccc',
-  },
-  {
-    name: 'سمنان',
-    color: '#ccc',
-  },
-  {
-    name: 'گلستان',
-    color: '#ccc',
-  },
-  {
-    name: 'مازندران',
-    color: '#ccc',
-  },
-  {
-    name: 'تهران',
-    color: '#ccc',
-  },
-  {
-    name: 'مرکزی',
-    color: '#ccc',
-  },
-  {
-    name: 'یزد',
-    color: '#ccc',
-  },
-  {
-    name: 'چهارمحال و بختیاری',
-    color: '#ccc',
-  },
-  {
-    name: 'خوزستان',
-    color: '#ccc',
-  },
-  {
-    name: 'لرستان',
-    color: '#ccc',
-  },
-  {
-    name: 'ایلام',
-    color: '#ccc',
-  },
-  {
-    name: 'اردبیل',
-    color: '#ccc',
-  },
-  {
-    name: 'قم',
-    color: '#ccc',
-  },
-  {
-    name: 'همدان',
-    color: '#ccc',
-  },
-  {
-    name: 'زنجان',
-    color: '#ccc',
-  },
-  {
-    name: 'قزوین',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان غربی',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان شرقی',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمانشاه',
-    color: '#ccc',
-  },
-  {
-    name: 'گیلان',
-    color: '#ccc',
-  },
-  {
-    name: 'کردستان',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان جنوبی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان رضوی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان شمالی',
-    color: '#ccc',
-  },
-  {
-    name: 'سیستان و بلوچستان',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمان',
-    color: '#ccc',
-  },
-  {
-    name: 'البرز',
-    color: '#ccc',
-  },
-];
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
-    default:
-      return null;
-  }
-};
 
 const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
@@ -173,18 +29,18 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await hcsService.membersTagBased(params);
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: getSchoolTagName[item.tag] || 'نامشخص',
             employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+            saveCount: item.recoverdCount || 0,
             // deadCount: 120,
           });
         }
@@ -230,37 +86,55 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     });
     if (existsCity) {
       getOverviewByCategory({
+        organization: 'school',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,
         count: true,
+        from: '',
+        to: '',
+        tag_pattern: '',
         province: provinceName,
       });
       //
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/school/province');
     }
   }, [location.search]);
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-      });
+
+      if (existsCity) {
+        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+        getOverviewByCategory({
+          organization: 'school',
+          resultStatus: 'POSITIVE',
+          recoveredCount: true,
+          total: true,
+          count: true,
+          tag_pattern: '',
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          province: provinceName,
+        });
+      } else {
+        history.push('/dashboard/school/province');
+      }
     }
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="education-overview">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="school-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آموزش و پرورش در استان &nbsp;
         {cityTitle}
@@ -279,9 +153,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateFromDate())}
-            </span>
+            {selectedDayRange.from && (
+              <span className="ml-4 whitespace-nowrap truncate text-xs">
+                {toPersianDigit(generateFromDate())}
+              </span>
+            )}
             <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
@@ -293,9 +169,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
             onClick={focusFromDate}
           >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateToDate())}
-            </span>
+            {selectedDayRange.to && (
+              <span className="ml-4 whitespace-nowrap truncate text-xs">
+                {toPersianDigit(generateToDate())}
+              </span>
+            )}
             <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
@@ -358,7 +236,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'رسته های حمل و نقل',
+                name: 'دسته',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -367,7 +245,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 ),
               },
               {
-                name: 'تعداد رانندگان',
+                name: 'تعداد کارکنان',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },

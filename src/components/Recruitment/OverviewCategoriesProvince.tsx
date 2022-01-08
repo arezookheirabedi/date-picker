@@ -7,156 +7,13 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 // import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {getRecruitmentTagName, sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 interface OverviewCategoriesProvinceProps {
   cityTitle?: any;
 }
 
-const sideCities = [
-  {
-    name: 'هرمزگان',
-    color: '#ccc',
-  },
-  {
-    name: 'بوشهر',
-    color: '#ccc',
-  },
-  {
-    name: 'کهگیلویه و بویراحمد',
-    color: '#ccc',
-  },
-  {
-    name: 'فارس',
-    color: '#ccc',
-  },
-  {
-    name: 'اصفهان',
-    color: '#ccc',
-  },
-  {
-    name: 'سمنان',
-    color: '#ccc',
-  },
-  {
-    name: 'گلستان',
-    color: '#ccc',
-  },
-  {
-    name: 'مازندران',
-    color: '#ccc',
-  },
-  {
-    name: 'تهران',
-    color: '#ccc',
-  },
-  {
-    name: 'مرکزی',
-    color: '#ccc',
-  },
-  {
-    name: 'یزد',
-    color: '#ccc',
-  },
-  {
-    name: 'چهارمحال و بختیاری',
-    color: '#ccc',
-  },
-  {
-    name: 'خوزستان',
-    color: '#ccc',
-  },
-  {
-    name: 'لرستان',
-    color: '#ccc',
-  },
-  {
-    name: 'ایلام',
-    color: '#ccc',
-  },
-  {
-    name: 'اردبیل',
-    color: '#ccc',
-  },
-  {
-    name: 'قم',
-    color: '#ccc',
-  },
-  {
-    name: 'همدان',
-    color: '#ccc',
-  },
-  {
-    name: 'زنجان',
-    color: '#ccc',
-  },
-  {
-    name: 'قزوین',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان غربی',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان شرقی',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمانشاه',
-    color: '#ccc',
-  },
-  {
-    name: 'گیلان',
-    color: '#ccc',
-  },
-  {
-    name: 'کردستان',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان جنوبی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان رضوی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان شمالی',
-    color: '#ccc',
-  },
-  {
-    name: 'سیستان و بلوچستان',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمان',
-    color: '#ccc',
-  },
-  {
-    name: 'البرز',
-    color: '#ccc',
-  },
-];
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
-    default:
-      return null;
-  }
-};
 
 const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
@@ -180,7 +37,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: getRecruitmentTagName[item.serviceType] || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.count || 0,
             infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -238,7 +95,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       });
       //
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/recruitment/province');
     }
   }, [location.search]);
 
