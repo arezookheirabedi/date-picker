@@ -98,7 +98,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       });
       //
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/school/province');
     }
   }, [location.search]);
 

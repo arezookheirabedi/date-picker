@@ -242,7 +242,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
         getLinearOverviewPublicTransport({...queryParams, province: provinceName});
       }, 500);
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/recruitment/province');
     }
 
     return () => {
