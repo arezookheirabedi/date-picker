@@ -1,4 +1,4 @@
-import {instanceMockAdapter} from '../helpers/requestUtil';
+import { instanceMockAdapter } from '../helpers/requestUtil';
 
 instanceMockAdapter
   // eslint-disable-next-line
@@ -13,7 +13,7 @@ instanceMockAdapter
       total: 2581819,
     };
 
-    return [200, {...res}];
+    return [200, { ...res }];
   });
 
 instanceMockAdapter
@@ -207,7 +207,7 @@ instanceMockAdapter
             '5': 10,
           },
           {
-            null: 10,
+            null: 50,
           },
         ],
       },
@@ -257,6 +257,9 @@ instanceMockAdapter
           },
         ],
       },
+      {
+        tag: "a4"
+      }
     ];
 
     return [200, res];
@@ -282,6 +285,9 @@ instanceMockAdapter
       {
         '5': 226,
       },
+      {
+        null: 10,
+      }
     ];
 
     return [200, res];

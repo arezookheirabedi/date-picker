@@ -6,25 +6,8 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {getSchoolTagName, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
-
-const getTagName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس';
-    default:
-      return null;
-  }
-};
 
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -46,7 +29,7 @@ const OverviewCategories: React.FC<{}> = () => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getTagName(item.tag),
+            name: getSchoolTagName[item.tag] || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -109,8 +92,12 @@ const OverviewCategories: React.FC<{}> = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
         resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        recoveredCount: true,
+        total: true,
+        count: true,
+        tag_pattern: '',
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
