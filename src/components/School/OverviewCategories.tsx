@@ -6,25 +6,9 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {getSchoolTagName, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
-const getTagName: {[key: string]: any} = {
-  a1: 'دانش آموزان پایه اول',
-  a2: 'دانش آموزان پایه دوم',
-  a3: 'دانش آموزان پایه سوم',
-  a4: 'دانش آموزان پایه چهارم',
-  a5: 'دانش آموزان پایه پنجم',
-  a6: 'دانش آموزان پایه ششم',
-  a7: 'دانش آموزان پایه هفتم',
-  a8: 'دانش آموزان پایه هشتم',
-  a9: 'دانش آموزان پایه نهم',
-  a10: 'دانش آموزان پایه دهم',
-  a11: 'دانش آموزان پایه یازدهم',
-  a12: 'دانش آموزان پایه دوازدهم',
-  a13: 'پرسنل آموزشی',
-  a14: 'پرسنل اداری',
-};
 
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -46,7 +30,7 @@ const OverviewCategories: React.FC<{}> = () => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getTagName[item.tag] || 'نامشخص',
+            name: getSchoolTagName[item.tag] || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),

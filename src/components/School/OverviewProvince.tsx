@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
-
+import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
-import transportService from '../../services/transport.service';
+import hcsService from '../../services/hcs.service';
 import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
 import saveIcon from '../../assets/images/icons/save-color.svg';
@@ -16,210 +16,49 @@ interface OverviewProvinceProps {
   cityTitle: any;
 }
 
-const sideCities = [
-  {
-    name: 'هرمزگان',
-    color: '#ccc',
-  },
-  {
-    name: 'بوشهر',
-    color: '#ccc',
-  },
-  {
-    name: 'کهگیلویه و بویراحمد',
-    color: '#ccc',
-  },
-  {
-    name: 'فارس',
-    color: '#ccc',
-  },
-  {
-    name: 'اصفهان',
-    color: '#ccc',
-  },
-  {
-    name: 'سمنان',
-    color: '#ccc',
-  },
-  {
-    name: 'گلستان',
-    color: '#ccc',
-  },
-  {
-    name: 'مازندران',
-    color: '#ccc',
-  },
-  {
-    name: 'تهران',
-    color: '#ccc',
-  },
-  {
-    name: 'مرکزی',
-    color: '#ccc',
-  },
-  {
-    name: 'یزد',
-    color: '#ccc',
-  },
-  {
-    name: 'چهارمحال و بختیاری',
-    color: '#ccc',
-  },
-  {
-    name: 'خوزستان',
-    color: '#ccc',
-  },
-  {
-    name: 'لرستان',
-    color: '#ccc',
-  },
-  {
-    name: 'ایلام',
-    color: '#ccc',
-  },
-  {
-    name: 'اردبیل',
-    color: '#ccc',
-  },
-  {
-    name: 'قم',
-    color: '#ccc',
-  },
-  {
-    name: 'همدان',
-    color: '#ccc',
-  },
-  {
-    name: 'زنجان',
-    color: '#ccc',
-  },
-  {
-    name: 'قزوین',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان غربی',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان شرقی',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمانشاه',
-    color: '#ccc',
-  },
-  {
-    name: 'گیلان',
-    color: '#ccc',
-  },
-  {
-    name: 'کردستان',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان جنوبی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان رضوی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان شمالی',
-    color: '#ccc',
-  },
-  {
-    name: 'سیستان و بلوچستان',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمان',
-    color: '#ccc',
-  },
-  {
-    name: 'البرز',
-    color: '#ccc',
-  },
-];
-
 const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
-  const [numberOfDrivers, setNumberOfDrivers] = useState(null);
-  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
-  const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
-  const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
-  const [numberOfRecoveredDrivers, setNumberOfRecoveredDrivers] = useState(null);
-  const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfLoading, setNumberOfLoading] = useState(false);
+  const [numberOfPositive, setNumberOfPositive] = useState(null);
+  const [numberOfPositiveLoading, setNumberOfPositiveLoading] = useState(false);
+  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
+  const [numberOfRecoveredLoading, setNumberOfRecoveredLoading] = useState(false);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
   const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
-  const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
-  const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
-    useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
 
-  const getNumberOfDrivers = async (province: any) => {
-    setNumberOfDriversLoading(true);
+  const getNumberOf = async (province: string) => {
+    setNumberOfLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers(province);
-      setNumberOfDrivers(data.numberOfDrivers);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOf(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfDriversLoading(false);
+      setNumberOfLoading(false);
     }
   };
 
-  const getNumberOfPositiveDrivers = async (province: any) => {
-    setNumberOfPositiveDriversLoading(true);
-    try {
-      const {data} = await transportService.numberOfPositiveDrivers(province);
-      setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPositiveDriversLoading(false);
-    }
-  };
-
-  const getNumberOfRecoveredDrivers = async (province: any) => {
-    setNumberOfRecoveredDriversLoading(true);
-    try {
-      const {data} = await transportService.numberOfRecoveredDrivers(province);
-      setNumberOfRecoveredDrivers(data.numberOfRecoveredDrivers);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfRecoveredDriversLoading(false);
-    }
-  };
-
-  const getNumberOfVaccination = async (province: any) => {
-    setNumberOfVaccinationLoading(true);
-    try {
-      const {data} = await transportService.numberOfVaccination(province);
-      setNumberOfVaccination(data.numberOfVaccination);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfVaccinationLoading(false);
-    }
-  };
-
-  const getNumberOfPlaqueVisited = async (province: any) => {
+  const getNumberOfPlaqueVisited = async (province: string) => {
     setNumberOfPlaqueVisitedLoading(true);
     try {
-      const {data} = await transportService.numberOfPlaqueVisited(province);
-      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfPlaqueVisited(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -228,29 +67,71 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
     }
   };
 
-  const getNumberOfPositivePlaqueVisited = async (province: any) => {
-    setNumberOfPositivePlaqueVisitedLoading(true);
+  const getNumberOfPositive = async (province: string) => {
+    setNumberOfPositiveLoading(true);
     try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited(province);
-      setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfPositive(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfPositivePlaqueVisitedLoading(false);
+      setNumberOfPositiveLoading(false);
     }
   };
 
-  const getNumberOfTestResults = async (province: any) => {
+  const getNumberOfRecovered = async (province: string) => {
+    setNumberOfRecoveredLoading(true);
+    try {
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfRecovered(data.numberOfPositive);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setNumberOfRecoveredLoading(false);
+    }
+  };
+
+  const getNumberOfTestResults = async (province: string) => {
     setNumberOfTestResultsLoading(true);
     try {
-      const {data} = await transportService.numberOfTestResults(province);
-      setNumberOfTestResults(data.numberOfTestResults);
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfTestResults(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
       setNumberOfTestResultsLoading(false);
+    }
+  };
+
+  const getNumberOfVaccination = async (province: string) => {
+    setNumberOfVaccinationLoading(true);
+    try {
+      const {data} = await hcsService.membersGeneral({
+        organization: 'school',
+        tag: 'school',
+        province,
+      });
+      setNumberOfVaccination(data.numberOfPositive);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setNumberOfVaccinationLoading(false);
     }
   };
 
@@ -262,15 +143,14 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getNumberOfDrivers(provinceName);
-      getNumberOfPositiveDrivers(provinceName);
-      getNumberOfRecoveredDrivers(provinceName);
-      getNumberOfVaccination(provinceName);
+      getNumberOf(provinceName);
       getNumberOfPlaqueVisited(provinceName);
-      getNumberOfPositivePlaqueVisited(provinceName);
+      getNumberOfPositive(provinceName);
+      getNumberOfRecovered(provinceName);
       getNumberOfTestResults(provinceName);
+      getNumberOfVaccination(provinceName);
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard//province');
     }
   }, [location.search]);
 
@@ -286,20 +166,20 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
           <Statistic
             icon={totalRecritment}
             text="مجموع کارمندان آموزش پرورش"
-            count={numberOfDrivers}
-            loading={numberOfDriversLoading}
+            count={numberOf}
+            loading={numberOfLoading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositiveDrivers}
-            loading={numberOfPositiveDriversLoading}
+            count={numberOfPositive}
+            loading={numberOfPositiveLoading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecoveredDrivers}
-            loading={numberOfRecoveredDriversLoading}
+            count={numberOfRecovered}
+            loading={numberOfRecoveredLoading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
@@ -310,12 +190,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
             count={numberOfVaccination}
             loading={numberOfVaccinationLoading}
           />
-          <Statistic
-            icon={prescriptionIcon}
-            text="مجموع استعلام‌های آموزش و پرورش"
-            count={numberOfPositivePlaqueVisited}
-            loading={numberOfPositivePlaqueVisitedLoading}
-          />
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"

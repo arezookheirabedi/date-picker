@@ -6,21 +6,8 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {getSchoolTagName, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    default:
-      return null;
-  }
-};
 
 interface TestStatusProvinceProps {
   cityTitle: any;
@@ -47,7 +34,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: getSchoolTagName[item.serviceType] || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.count || 0,
             infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -115,7 +102,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-      آزمایش در آموزش و پرورش در استان‌ &nbsp;
+        آزمایش در آموزش و پرورش در استان‌ &nbsp;
         {cityTitle}
       </legend>
       <div className="flex align-center justify-start mb-8">

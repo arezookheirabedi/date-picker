@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
+import { getSchoolTagName } from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
 import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
@@ -15,22 +16,6 @@ import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
-const getTagName: {[key: string]: any} = {
-  a1: 'دانش آموزان پایه اول',
-  a2: 'دانش آموزان پایه دوم',
-  a3: 'دانش آموزان پایه سوم',
-  a4: 'دانش آموزان پایه چهارم',
-  a5: 'دانش آموزان پایه پنجم',
-  a6: 'دانش آموزان پایه ششم',
-  a7: 'دانش آموزان پایه هفتم',
-  a8: 'دانش آموزان پایه هشتم',
-  a9: 'دانش آموزان پایه نهم',
-  a10: 'دانش آموزان پایه دهم',
-  a11: 'دانش آموزان پایه یازدهم',
-  a12: 'دانش آموزان پایه دوازدهم',
-  a13: 'پرسنل آموزشی',
-  a14: 'پرسنل اداری',
-};
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -155,7 +140,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
         normalizedDate.push({
           id: `ovvac_${index}`,
-          name: getTagName[item.tag] || 'نامشخص',
+          name: getSchoolTagName[item.tag] || 'نامشخص',
           total: total || 0,
           firstDose: firstDose || 0,
           secondDose: secondDose || 0,
