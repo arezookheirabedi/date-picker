@@ -150,7 +150,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       getNumberOfTestResults(provinceName);
       getNumberOfVaccination(provinceName);
     } else {
-      history.push('/dashboard//province');
+      history.push('/dashboard/school/province');
     }
   }, [location.search]);
 

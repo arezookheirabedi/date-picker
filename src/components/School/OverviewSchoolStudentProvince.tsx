@@ -152,7 +152,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
       getNumberOfTestResults(provinceName);
       getNumberOfVaccination(provinceName);
     } else {
-      history.push('/dashboard//province');
+      history.push('/dashboard/school/province');
     }
   }, []);
 
