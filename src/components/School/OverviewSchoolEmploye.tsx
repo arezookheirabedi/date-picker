@@ -28,7 +28,7 @@ const OverviewSchoolEmploye = () => {
   const getNumberOf = async () => {
     setNumberOfLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOf(data.total);
     } catch (error) {
       // eslint-disable-next-line
@@ -41,7 +41,7 @@ const OverviewSchoolEmploye = () => {
   const getNumberOfPlaqueVisited = async () => {
     setNumberOfPlaqueVisitedLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfPlaqueVisited(data.numberOfNanVaccinated);
     } catch (error) {
       // eslint-disable-next-line
@@ -54,7 +54,7 @@ const OverviewSchoolEmploye = () => {
   const getNumberOfPositive = async () => {
     setNumberOfPositiveLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfPositive(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
@@ -69,7 +69,7 @@ const OverviewSchoolEmploye = () => {
   const getNumberOfRecovered = async () => {
     setNumberOfRecoveredLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfRecovered(data.numberOfRecovered);
     } catch (error) {
       // eslint-disable-next-line
@@ -82,7 +82,7 @@ const OverviewSchoolEmploye = () => {
   const getNumberOfTestResults = async () => {
     setNumberOfTestResultsLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfTestResults(data.numberOfTestResults);
     } catch (error) {
       // eslint-disable-next-line
@@ -95,7 +95,7 @@ const OverviewSchoolEmploye = () => {
   const getNumberOfVaccination = async () => {
     setNumberOfVaccinationLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfVaccination(data.numberOfVaccinated);
     } catch (error) {
       // eslint-disable-next-line

@@ -93,7 +93,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         count: true,
         from: '',
         to: '',
-        tag_pattern: '',
+        tagPattern: 'school*',
         province: provinceName,
       });
       //
@@ -122,7 +122,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           recoveredCount: true,
           total: true,
           count: true,
-          tag_pattern: '',
+          tagPattern: 'school*',
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           province: provinceName,

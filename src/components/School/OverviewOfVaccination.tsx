@@ -165,13 +165,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       organization: 'school',
       from: '',
       to: '',
-      tag_pattern: '',
+      tagPattern: 'school*',
     });
     getOverviewByVaccinePercent({
       organization: 'school',
       from: '',
       to: '',
-      tag_pattern: '',
+      tagPattern: 'school*',
     });
   }, []);
 
