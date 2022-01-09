@@ -87,7 +87,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       : '';
   };
 
-  const getLinearOverviewPublicTransport = async (params: any) => {
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -113,7 +113,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     let idSetTimeOut: any;
     if (existsCity) {
       idSetTimeOut = setTimeout(() => {
-        getLinearOverviewPublicTransport({organization: 'school', province: provinceName, ...queryParams});
+        getLinearOverview({organization: 'school', province: provinceName, ...queryParams});
       }, 500);
     } else {
       history.push('/dashboard/school/province');
