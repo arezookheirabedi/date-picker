@@ -91,6 +91,7 @@ const OverviewCategories: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
+        organization: 'school',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
@@ -22,18 +22,18 @@ const OverviewCategories: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await hcsService.membersTagBased(params);
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getRecruitmentTagName[item.serviceType] || 'نامشخص',
+            name: getRecruitmentTagName[item.tag] || 'نامشخص',
             employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+            saveCount: item.recoverdCount || 0,
             // deadCount: 120,
           });
         }
@@ -49,10 +49,14 @@ const OverviewCategories: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByCategory({
+      organization: 'recruitment',
       resultStatus: 'POSITIVE',
       recoveredCount: true,
       total: true,
       count: true,
+      from: '',
+      to: '',
+      tag_pattern: '',
     });
   }, []);
 
@@ -87,9 +91,14 @@ const OverviewCategories: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
+        organization: 'recruitment',
         resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        recoveredCount: true,
+        total: true,
+        count: true,
+        tag_pattern: '',
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
@@ -194,7 +203,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'سازمان',
+                name: 'دسته',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>

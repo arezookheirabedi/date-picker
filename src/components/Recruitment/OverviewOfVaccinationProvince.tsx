@@ -1,19 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
+import {useHistory, useLocation} from 'react-router-dom';
+import hcsService from 'src/services/hcs.service';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
 import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
-import Gray1Vaccine from '../../assets/images/icons/gray-vaccine-1.svg';
-import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
 import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
 import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
 import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
+import GrayVaccine1 from '../../assets/images/icons/gray-vaccine-lg.svg';
+import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import DatePickerModal from '../DatePickerModal';
-import {toPersianDigit} from '../../helpers/utils';
-import calendar from '../../assets/images/icons/calendar.svg';
+import {sideCities, getRecruitmentTagName} from '../../helpers/utils';
+import Spinner from '../Spinner';
 
 interface OverviewOfVaccinationProvinceProps {
   cityTitle: any;
@@ -22,36 +23,176 @@ interface OverviewOfVaccinationProvinceProps {
 const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
   cityTitle,
 }) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: {day: 1, month: 9, year: 1400},
-    to: {day: 20, month: 9, year: 1400},
-  }) as any;
+  const [countsLoading, setCountsLoading] = useState(false);
+  const [dataset, setDataset] = useState<any>([]);
+  const [counts, setCounts] = useState<any>({
+    numberOfEmployees: 0,
+    numberOfFirstDose: 0,
+    numberOfSecondDose: 0,
+    numberOfThirdDose: 0,
+    numberOfMoreThreeDose: 0,
+    numberOfAllDose: 0,
+    numberOfUnknownDose: 0,
+    numberOfUnvaccinated: 0,
+  });
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  const location = useLocation();
+  const history = useHistory();
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
+  async function getOverviewByVaccine(params: any) {
+    setCountsLoading(true);
+    try {
+      const {data} = await hcsService.doses(params);
+      let tmp = {...counts};
 
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+      // eslint-disable-next-line no-plusplus
+      for (let j: number = 0; j < data.length; j++) {
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(data[j])) {
+          if (Number(key) === 0) {
+            tmp = {...tmp, numberOfUnvaccinated: Number(value)};
+          }
+
+          if (Number(key) === 1) {
+            tmp = {...tmp, numberOfFirstDose: Number(value)};
+          }
+
+          if (Number(key) === 2) {
+            tmp = {...tmp, numberOfSecondDose: Number(value)};
+          }
+
+          if (Number(key) === 3) {
+            tmp = {...tmp, numberOfThirdDose: Number(value)};
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            tmp = {...tmp, numberOfMoreThreeDose: Number(value)};
+          }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            tmp = {...tmp, numberOfAllDose: Number(value)};
+          }
+
+          if (key === 'null') {
+            tmp = {...tmp, numberOfUnknownDose: Number(value)};
+          }
+        }
+      }
+
+      setCounts({...tmp});
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setCountsLoading(false);
+    }
+  }
+
+  async function getOverviewByVaccinePercent(params: any) {
+    setLoading(true);
+    try {
+      const {data} = await hcsService.dosesTagBased(params);
+
+      const normalizedDate: any[] = [];
+      data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+        let secondDose = 0;
+        let thirdDose = 0;
+        let moreThanThreeDose = 0;
+        let allVaccination = 0;
+        let unknownInformation = 0;
+        let noDose = 0;
+        let total = 0;
+
+        if (item.dosesCountMap) {
+          // eslint-disable-next-line
+          for (let i = 0; i < item.dosesCountMap.length; i++) {
+            // eslint-disable-next-line
+            for (const [key, value] of Object.entries(item.dosesCountMap[i])) {
+              if (Number(key) === 0) {
+                noDose += Number(value);
+              }
+
+              if (Number(key) === 1) {
+                firstDose += Number(value);
+              }
+
+              if (Number(key) === 2) {
+                secondDose += Number(value);
+              }
+
+              if (Number(key) === 3) {
+                thirdDose += Number(value);
+              }
+
+              if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+                moreThanThreeDose += Number(value);
+              }
+
+              if (Number(key) !== 0 && key !== 'null') {
+                allVaccination += Number(value);
+              }
+
+              if (key === 'null') {
+                unknownInformation += Number(value);
+              }
+
+              total = allVaccination + noDose + unknownInformation;
+            }
+          }
+        }
+
+        normalizedDate.push({
+          id: `ovvac_${index}`,
+          name: getRecruitmentTagName[item.tag] || 'نامشخص',
+          total: total || 0,
+          firstDose: firstDose || 0,
+          secondDose: secondDose || 0,
+          thirdDose: thirdDose || 0,
+          otherDose: moreThanThreeDose || 0,
+          unknownInformation: unknownInformation || 0,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose || 0,
+          noDose: (noDose * 100) / total || 0,
+        });
+      });
+      setDataset([...normalizedDate]);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getOverviewByVaccine({
+        organization: 'recruitment',
+        from: '',
+        to: '',
+        tag_pattern: '',
+        province: provinceName,
+      });
+      getOverviewByVaccinePercent({
+        organization: 'recruitment',
+        from: '',
+        to: '',
+        tag_pattern: '',
+        province: provinceName,
+      });
+    } else {
+      history.push('/dashboard/recruitment/province');
+    }
+  }, []);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -60,177 +201,201 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       </legend>
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={totalEmploye} text="مجموع کارکنان دولت" count={1257} />
-          <Statistic icon={YellowVaccine} text="تعداد واکسیناسیون دوز اول" count={428} />
-          <Statistic icon={PurppleVaccine} text="تعداد واکسیناسیون دوز دوم" count={232} />
-          <Statistic icon={NavyVaccine} text="تعداد واکسیناسیون دوز سوم" count={12} />
+          <Statistic
+            icon={totalEmploye}
+            text="مجموع کارکنان دولت"
+            count={counts.numberOfEmployees || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={YellowVaccine}
+            text="تعداد واکسیناسیون دوز اول"
+            count={counts.numberOfFirstDose || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={PurppleVaccine}
+            text="تعداد واکسیناسیون دوز دوم"
+            count={counts.numberOfSecondDose || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={NavyVaccine}
+            text="تعداد واکسیناسیون دوز سوم"
+            count={counts.numberOfThirdDose || 0}
+            loading={countsLoading}
+          />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={BlueVaccine} text="بیش از ۳ دوز" count={321} />
-          <Statistic icon={GreenVaccine} text="تعداد واکسیناسیون کل دوز" count={432} />
-          <Statistic icon={Gray1Vaccine} text="تعداد اطلاعات مخدوش" count={132} />
-          <Statistic icon={Gray2Vaccine} text="تعداد واکسیناسیون انجام نشده" count={65} />
-        </div>
-      </div>
-
-      <div className="flex align-center justify-start mb-8">
-        {showDatePicker ? (
-          <DatePickerModal
-            setSelectedDayRange={setSelectedDayRange}
-            selectedDayRange={selectedDayRange}
-            setShowDatePicker={setShowDatePicker}
-            showDatePicker
+          <Statistic
+            icon={BlueVaccine}
+            text="بیش از ۳ دوز"
+            count={counts.numberOfMoreThreeDose || 0}
+            loading={countsLoading}
           />
-        ) : null}
-        <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateFromDate())}
-            </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
-        </div>
-        <div className=" shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            <span className="ml-4 whitespace-nowrap truncate text-xs">
-              {toPersianDigit(generateToDate())}
-            </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
-          </div>
+          <Statistic
+            icon={GreenVaccine}
+            text="تعداد واکسیناسیون کل دوز"
+            count={counts.numberOfAllDose || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={GrayVaccine1}
+            text="تعداد اطلاعات مخدوش"
+            count={counts.numberOfUnknownDose || 0}
+            loading={countsLoading}
+          />
+          <Statistic
+            icon={GrayVaccine2}
+            text="تعداد واکسیناسیون انجام نشده"
+            count={counts.numberOfUnvaccinated || 0}
+            loading={countsLoading}
+          />
         </div>
       </div>
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        <Table
-          dataSet={[
-            {
-              id: '617d54a39d4b1f0efd2d5904',
-              name: 'اسنپ',
-              employeesCount: 60,
-              infectedCount: 22,
-              saveCount: 22,
-              deadCount: 91,
-              infectedPercent: 24,
-            },
-            {
-              id: '617d54a3e34765550c16dce3',
-              name: 'تپسی',
-              employeesCount: 840,
-              infectedCount: 6,
-              saveCount: 29,
-              deadCount: 1294,
-              infectedPercent: 93,
-            },
-            {
-              id: '617d54a341381bf85e5b6eca',
-              name: 'سرویس مدارس',
-              employeesCount: 3565,
-              infectedCount: 37,
-              saveCount: 30,
-              deadCount: 741,
-              infectedPercent: 92,
-            },
-            {
-              id: '617d54a3b02e2e7d71ca9d12',
-              name: 'تاکسی فرودگاهی',
-              employeesCount: 1998,
-              infectedCount: 27,
-              saveCount: 62,
-              deadCount: 2815,
-              infectedPercent: 35,
-            },
-            {
-              id: '617d54a35649c264fcd29dc7',
-              name: 'اتوبوس رانی',
-              employeesCount: 3384,
-              infectedCount: 21,
-              saveCount: 35,
-              deadCount: 2525,
-              infectedPercent: 74,
-            },
-            {
-              id: '617d54a3feaea113cefef758',
-              name: 'تاکسی تلفنی',
-              employeesCount: 134,
-              infectedCount: 64,
-              saveCount: 80,
-              deadCount: 1156,
-              infectedPercent: 72,
-            },
-          ]}
-          pagination={{pageSize: 20, maxPages: 3}}
-          columns={[
-            {
-              name: 'وضعیت کلی',
-              key: '',
-              render: (v: any, record) => (
-                <CategoryDonut
-                  data={[
-                    {
-                      name: 'fullDoseVaccine',
-                      title: 'دوز کل',
-                      y: record.fullDoseVaccine || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'notVaccine',
-                      title: 'واکسن نزده',
-                      y: record.notVaccine || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#FE2D2F'], // start
-                          [1, '#CC0002'], // end
-                        ],
-                      },
-                    },
-                  ]}
-                />
-              ),
-              className: 'flex justify-center w-full',
-            },
-            {
-              name: 'رسته های حمل و نقل',
-              key: 'name',
-              render: (v: any, record, index: number) => (
-                <span>
-                  {(index + 1).toLocaleString('fa')}.{v}
-                </span>
-              ),
-            },
-            {
-              name: 'دو دوز',
-              key: 'infectedPercent',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'کل دوز',
-              key: 'infectedCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'واکسن نزده',
-              key: 'saveCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}%</span>,
-            },
-          ]}
-          totalItems={0}
-        />
-      </div>
+      {loading ? (
+        <div className="p-20">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+            <Table
+              dataSet={[...dataset]}
+              pagination={{pageSize: 20, maxPages: 3}}
+              columns={[
+                {
+                  name: 'وضعیت کلی',
+                  key: '',
+                  render: (v: any, record) => (
+                    <CategoryDonut
+                      data={[
+                        {
+                          name: 'unknownInformation',
+                          title: 'مخدوش',
+                          y: record.unknownInformation || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#6E6E6E'], // start
+                              [1, '#393939'], // end
+                            ],
+                          },
+                        },
+                        {
+                          name: 'allDoses',
+                          title: 'دوز کل',
+                          y: record.allDoses || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#05D8A4'], // start
+                              [1, '#039572'], // end
+                            ],
+                          },
+                        },
+                        {
+                          name: 'noDose',
+                          title: 'واکسن نزده',
+                          y: record.noDose || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#FE2D2F'], // start
+                              [1, '#CC0002'], // end
+                            ],
+                          },
+                        },
+                      ]}
+                    />
+                  ),
+                  className: 'flex justify-center w-full',
+                },
+                {
+                  name: 'دسته',
+                  key: 'name',
+                  render: (v: any, record, index: number) => (
+                    <span>
+                      {(index + 1).toPersianDigits()}.{v}
+                    </span>
+                  ),
+                },
+                {
+                  name: 'دوز اول',
+                  key: 'firstDose',
+                  render: (v: any, record) => (
+                    <span>
+                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                        .toFixed(4)
+                        .toPersianDigits()}
+                      %
+                    </span>
+                  ),
+                },
+                {
+                  name: 'دوز دوم',
+                  key: 'secondDose',
+                  render: (v: any, record) => (
+                    <span>
+                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                        .toFixed(4)
+                        .toPersianDigits()}
+                      %
+                    </span>
+                  ),
+                },
+                {
+                  name: 'دوز سوم',
+                  key: 'thirdDose',
+                  render: (v: any, record) => (
+                    <span>
+                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                        .toFixed(4)
+                        .toPersianDigits()}
+                      %
+                    </span>
+                  ),
+                },
+                {
+                  name: 'سایر دوزها',
+                  key: 'otherDose',
+                  render: (v: any, record) => (
+                    <span>
+                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                        .toFixed(4)
+                        .toPersianDigits()}
+                      %
+                    </span>
+                  ),
+                },
+                {
+                  name: 'واکسن نزده',
+                  key: 'noDose',
+                  render: (v: any, record) => (
+                    <span>
+                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                        .toFixed(4)
+                        .toPersianDigits()}
+                      %
+                    </span>
+                  ),
+                },
+                {
+                  name: 'اطلاعات مخدوش',
+                  key: 'unknownInformation',
+                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+                },
+                {
+                  name: 'کل دوزها',
+                  key: 'allDoses',
+                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+                },
+              ]}
+              totalItems={0}
+            />
+          </div>
+        </>
+      )}
     </fieldset>
   );
 };

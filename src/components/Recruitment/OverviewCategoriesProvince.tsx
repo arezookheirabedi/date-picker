@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
@@ -30,18 +30,18 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await hcsService.membersTagBased(params);
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getRecruitmentTagName[item.serviceType] || 'نامشخص',
+            name: getRecruitmentTagName[item.tag] || 'نامشخص',
             employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+            saveCount: item.recoverdCount || 0,
             // deadCount: 120,
           });
         }
@@ -87,6 +87,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     });
     if (existsCity) {
       getOverviewByCategory({
+        organization: 'recruitment',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,
@@ -106,12 +107,13 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
+        organization: 'recruitment',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,
         count: true,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
@@ -168,7 +170,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'رسته های حمل و نقل',
+                name: 'سازمان',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -177,7 +179,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 ),
               },
               {
-                name: 'تعداد رانندگان',
+                name: 'تعداد کارکنان',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
