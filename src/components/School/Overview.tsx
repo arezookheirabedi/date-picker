@@ -30,7 +30,7 @@ const Overview = () => {
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
       });
       setNumberOf(data.numberOfPositive);
     } catch (error) {
@@ -44,7 +44,7 @@ const Overview = () => {
   const getNumberOfPlaqueVisited = async () => {
     setNumberOfPlaqueVisitedLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfPlaqueVisited(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
@@ -57,7 +57,7 @@ const Overview = () => {
   const getNumberOfPositive = async () => {
     setNumberOfPositiveLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfPositive(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
@@ -70,7 +70,7 @@ const Overview = () => {
   const getNumberOfRecovered = async () => {
     setNumberOfRecoveredLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfRecovered(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
@@ -83,7 +83,7 @@ const Overview = () => {
   const getNumberOfTestResults = async () => {
     setNumberOfTestResultsLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfTestResults(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line
@@ -96,7 +96,7 @@ const Overview = () => {
   const getNumberOfVaccination = async () => {
     setNumberOfVaccinationLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
+      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'student'});
       setNumberOfVaccination(data.numberOfPositive);
     } catch (error) {
       // eslint-disable-next-line

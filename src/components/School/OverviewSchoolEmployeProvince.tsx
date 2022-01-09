@@ -38,7 +38,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
         province,
       });
       setNumberOf(data.numberOfPositive);
@@ -55,7 +55,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
         province,
       });
       setNumberOfPlaqueVisited(data.numberOfPositive);
@@ -72,7 +72,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
         province,
       });
       setNumberOfPositive(data.numberOfPositive);
@@ -89,7 +89,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
         province,
       });
       setNumberOfRecovered(data.numberOfPositive);
@@ -106,7 +106,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
         province,
       });
       setNumberOfTestResults(data.numberOfPositive);
@@ -123,7 +123,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tag: 'student',
         province,
       });
       setNumberOfVaccination(data.numberOfPositive);

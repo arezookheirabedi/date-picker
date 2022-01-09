@@ -178,14 +178,14 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         organization: 'recruitment',
         from: '',
         to: '',
-        tag_pattern: '',
+        tagPattern: '',
         province: provinceName,
       });
       getOverviewByVaccinePercent({
         organization: 'recruitment',
         from: '',
         to: '',
-        tag_pattern: '',
+        tagPattern: '',
         province: provinceName,
       });
     } else {
