@@ -8,7 +8,7 @@ import calendar from '../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../RangeDateSliderFliter';
 import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
+import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
 
 const {Line} = Charts;
@@ -72,16 +72,16 @@ const OverviewPatients = () => {
   const [queryParams, setQueryParams] = useState({
     status: 'POSITIVE',
     type: 'ANNUAL',
-    fromDate: '',
-    toDate: '',
-    serviceType: '',
+    from: '',
+    to: '',
+    tag: '',
   });
 
-  const getLinearOverviewPublicTransport = async (params: any) => {
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params);
+      const response = await hcsService.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -94,7 +94,7 @@ const OverviewPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverviewPublicTransport(queryParams);
+      getLinearOverview({organization: 'recruitment', ...queryParams});
     }, 500);
 
     return () => clearTimeout(idSetTimeOut);
@@ -108,11 +108,12 @@ const OverviewPatients = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     }
   }, [selectedDayRange]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان کارکنان دولت</legend>
@@ -151,7 +152,7 @@ const OverviewPatients = () => {
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                serviceType: value.enName,
+                                tag: value.enName,
                               });
                             }}
                           >
