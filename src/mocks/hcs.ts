@@ -2,7 +2,7 @@ import { instanceMockAdapter } from '../helpers/requestUtil';
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/member\/general\/(.*)/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/members\/general\/(.*)/g, {})
   .reply(() => {
     const res: any = {
       numberOfPositive: 3314,
@@ -18,7 +18,7 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/member\/tag\-based/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/members\/tag\-based/g, {})
   .reply(() => {
     const res: any = [
       {
@@ -46,7 +46,7 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/test\-result\/time\-based/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/test\-results\/time\-based/g, {})
   .reply(() => {
     const res: any = [
       {
@@ -64,7 +64,7 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/test\-result\/tag\-based/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/test\-results\/tag\-based/g, {})
   .reply(() => {
     /*
     [
@@ -185,7 +185,7 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/doses\/tag\-based/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/vaccines\/\/doses\/tag\-based/g, {})
   .reply(() => {
     const res: any = [
       {
@@ -267,7 +267,7 @@ instanceMockAdapter
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/doses/g, {})
+  .onGet(/\/api\/v1\/hcs\-reporter\/organizations\/(.*)\/vaccines\/doses/g, {})
   .reply(() => {
     const res: any = [
       {
