@@ -19,122 +19,41 @@ interface OverviewSchoolStudentsProps {
 
 const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
   const [numberOf, setNumberOf] = useState(null);
-  const [numberOfLoading, setNumberOfLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
   const [numberOfPositive, setNumberOfPositive] = useState(null);
-  const [numberOfPositiveLoading, setNumberOfPositiveLoading] = useState(false);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfRecoveredLoading, setNumberOfRecoveredLoading] = useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
 
   const getNumberOf = async (province: string) => {
-    setNumberOfLoading(true);
+    setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
         tag: 'student',
+        testResultCount: true,
+        vaccinationCount: true,
+        total: true,
         province,
       });
-      setNumberOf(data.numberOfPositive);
+      setNumberOf(data.total || 0);
+      setNumberOfPlaqueVisited(data.numberOfPositive || 0);
+      setNumberOfPositive(data.numberOfPositive || 0);
+      setNumberOfRecovered(data.numberOfRecovered || 0);
+      setNumberOfTestResults(data.testResultCount || 0);
+      setNumberOfVaccination(data.numberOfVaccinated || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfLoading(false);
+      setLoading(false);
     }
   };
 
-  const getNumberOfPlaqueVisited = async (province: string) => {
-    setNumberOfPlaqueVisitedLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tag: 'student',
-        province,
-      });
-      setNumberOfPlaqueVisited(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPlaqueVisitedLoading(false);
-    }
-  };
-
-  const getNumberOfPositive = async (province: string) => {
-    setNumberOfPositiveLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tag: 'student',
-        province,
-      });
-      setNumberOfPositive(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPositiveLoading(false);
-    }
-  };
-
-  const getNumberOfRecovered = async (province: string) => {
-    setNumberOfRecoveredLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tag: 'student',
-        province,
-      });
-      setNumberOfRecovered(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfRecoveredLoading(false);
-    }
-  };
-
-  const getNumberOfTestResults = async (province: string) => {
-    setNumberOfTestResultsLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tag: 'student',
-        province,
-      });
-      setNumberOfTestResults(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfTestResultsLoading(false);
-    }
-  };
-
-  const getNumberOfVaccination = async (province: string) => {
-    setNumberOfVaccinationLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tag: 'student',
-        province,
-      });
-      setNumberOfVaccination(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfVaccinationLoading(false);
-    }
-  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -146,11 +65,6 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
 
     if (existsCity) {
       getNumberOf(provinceName);
-      getNumberOfPlaqueVisited(provinceName);
-      getNumberOfPositive(provinceName);
-      getNumberOfRecovered(provinceName);
-      getNumberOfTestResults(provinceName);
-      getNumberOfVaccination(provinceName);
     } else {
       history.push('/dashboard/school/province');
     }
@@ -168,19 +82,19 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={totalStudent}
             text="مجموع دانش آموزان"
             count={numberOf}
-            loading={numberOfLoading}
+            loading={loading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={numberOfPositive}
-            loading={numberOfPositiveLoading}
+            loading={loading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={numberOfRecovered}
-            loading={numberOfRecoveredLoading}
+            loading={loading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
@@ -189,20 +103,20 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
-            loading={numberOfVaccinationLoading}
+            loading={loading}
           />
           <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
             count={numberOfPlaqueVisited}
-            loading={numberOfPlaqueVisitedLoading}
+            loading={loading}
           />
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش‌های دانش آموزان"
             count={numberOfTestResults}
-            loading={numberOfTestResultsLoading}
+            loading={loading}
           />
         </div>
       </div>
