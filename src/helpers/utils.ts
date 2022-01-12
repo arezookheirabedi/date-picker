@@ -1,7 +1,7 @@
-import { AxiosRequestConfig } from 'axios';
+import {AxiosRequestConfig} from 'axios';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
-import { ILogin, IProfile } from 'src/models/authentication.model';
+import {ILogin, IProfile} from 'src/models/authentication.model';
 
 const baseUrl = Setup.endpoint;
 
@@ -20,31 +20,31 @@ export const setRequestConfig: (config: AxiosRequestConfig) => AxiosRequestConfi
       ...config.headers,
     };
   }
-  axiosRequestConfig = { ...axiosRequestConfig, ...config };
+  axiosRequestConfig = {...axiosRequestConfig, ...config};
 
-  return { ...axiosRequestConfig, ...config };
+  return {...axiosRequestConfig, ...config};
 };
 
 export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   switch (config) {
     case EHEADER.HEADER_JSON:
       setRequestConfig({
-        headers: { 'Content-Type': 'application/json;utf-8' },
+        headers: {'Content-Type': 'application/json;utf-8'},
       });
       break;
     case EHEADER.HEADER_MULTIPART:
       setRequestConfig({
-        headers: { 'Content-Type': 'multipart/form-data;utf-8' },
+        headers: {'Content-Type': 'multipart/form-data;utf-8'},
       });
       break;
     case EHEADER.HEADER_URL_ENCODE:
       setRequestConfig({
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;utf-8' },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;utf-8'},
       });
       break;
     default:
       setRequestConfig({
-        headers: { 'Content-Type': 'application/json;utf-8' },
+        headers: {'Content-Type': 'application/json;utf-8'},
       });
       break;
   }
@@ -122,7 +122,7 @@ export const fixNumbers = (e: any) => {
 export const toPersianDigit = (str: any) => {
   const id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return str.replace(/[0-9]/g, (w: any) => id[+w]);
-}
+};
 
 export const getBgColorGradientByStatus = (status: string) => {
   let bg = 'linear-gradient(217deg, #B2B2B2 0%, #D5D5D5 100%)';
@@ -136,7 +136,6 @@ export const getBgColorGradientByStatus = (status: string) => {
 
   return bg;
 };
-
 
 export const getServiceTypeName = (item: any) => {
   switch (item) {
@@ -172,8 +171,7 @@ export const getColorByServiceTypeName = (item: any) => {
   }
 };
 
-
-export const getSchoolTagName: { [key: string]: any } = {
+export const getSchoolTagName: {[key: string]: any} = {
   a1: 'دانش آموزان پایه اول',
   a2: 'دانش آموزان پایه دوم',
   a3: 'دانش آموزان پایه سوم',
@@ -190,7 +188,7 @@ export const getSchoolTagName: { [key: string]: any } = {
   a14: 'پرسنل اداری',
 };
 
-export const getRecruitmentTagName: { [key: string]: any } = {
+export const getRecruitmentTagName: {[key: string]: any} = {
   a1: 'نقشه‌برداری کشور',
   a2: 'نظام مهندسی ساختمان',
   a3: 'هواشناسی ایران',
@@ -202,7 +200,6 @@ export const getRecruitmentTagName: { [key: string]: any } = {
   a9: 'اداره خدمات آموزشی',
   a10: 'اداره گذرنامه',
 };
-
 
 export const transportationTypes = [
   {
@@ -223,137 +220,137 @@ export const transportationTypes = [
   },
   {
     name: 'پیک موتوری',
-    enName: 'MOTOR_PEYK'
+    enName: 'MOTOR_PEYK',
   },
   {
     name: 'سرویس مدارس',
-    enName: 'SCHOOL_SERVICE'
-  }
+    enName: 'SCHOOL_SERVICE',
+  },
 ];
 
 export const sideCities = [
   {
-    name: "هرمزگان",
-    color: "#ccc"
+    name: 'هرمزگان',
+    color: '#ccc',
   },
   {
-    name: "بوشهر",
-    color: "#ccc"
+    name: 'بوشهر',
+    color: '#ccc',
   },
   {
-    name: "کهگیلویه و بویراحمد",
-    color: "#ccc"
+    name: 'کهگیلویه و بویراحمد',
+    color: '#ccc',
   },
   {
-    name: "فارس",
-    color: "#ccc"
+    name: 'فارس',
+    color: '#ccc',
   },
   {
-    name: "اصفهان",
-    color: "#ccc"
+    name: 'اصفهان',
+    color: '#ccc',
   },
   {
-    name: "سمنان",
-    color: "#ccc"
+    name: 'سمنان',
+    color: '#ccc',
   },
   {
-    name: "گلستان",
-    color: "#ccc"
+    name: 'گلستان',
+    color: '#ccc',
   },
   {
-    name: "مازندران",
-    color: "#ccc"
+    name: 'مازندران',
+    color: '#ccc',
   },
   {
-    name: "تهران",
-    color: "#ccc"
+    name: 'تهران',
+    color: '#ccc',
   },
   {
-    name: "مرکزی",
-    color: "#ccc"
+    name: 'مرکزی',
+    color: '#ccc',
   },
   {
-    name: "یزد",
-    color: "#ccc"
+    name: 'یزد',
+    color: '#ccc',
   },
   {
-    name: "چهارمحال و بختیاری",
-    color: "#ccc"
+    name: 'چهارمحال و بختیاری',
+    color: '#ccc',
   },
   {
-    name: "خوزستان",
-    color: "#ccc"
+    name: 'خوزستان',
+    color: '#ccc',
   },
   {
-    name: "لرستان",
-    color: "#ccc"
+    name: 'لرستان',
+    color: '#ccc',
   },
   {
-    name: "ایلام",
-    color: "#ccc"
+    name: 'ایلام',
+    color: '#ccc',
   },
   {
-    name: "اردبیل",
-    color: "#ccc"
+    name: 'اردبیل',
+    color: '#ccc',
   },
   {
-    name: "قم",
-    color: "#ccc"
+    name: 'قم',
+    color: '#ccc',
   },
   {
-    name: "همدان",
-    color: "#ccc"
+    name: 'همدان',
+    color: '#ccc',
   },
   {
-    name: "زنجان",
-    color: "#ccc"
+    name: 'زنجان',
+    color: '#ccc',
   },
   {
-    name: "قزوین",
-    color: "#ccc"
+    name: 'قزوین',
+    color: '#ccc',
   },
   {
-    name: "آذربایجان غربی",
-    color: "#ccc"
+    name: 'آذربایجان غربی',
+    color: '#ccc',
   },
   {
-    name: "آذربایجان شرقی",
-    color: "#ccc"
+    name: 'آذربایجان شرقی',
+    color: '#ccc',
   },
   {
-    name: "کرمانشاه",
-    color: "#ccc"
+    name: 'کرمانشاه',
+    color: '#ccc',
   },
   {
-    name: "گیلان",
-    color: "#ccc"
+    name: 'گیلان',
+    color: '#ccc',
   },
   {
-    name: "کردستان",
-    color: "#ccc"
+    name: 'کردستان',
+    color: '#ccc',
   },
   {
-    name: "خراسان جنوبی",
-    color: "#ccc"
+    name: 'خراسان جنوبی',
+    color: '#ccc',
   },
   {
-    name: "خراسان رضوی",
-    color: "#ccc"
+    name: 'خراسان رضوی',
+    color: '#ccc',
   },
   {
-    name: "خراسان شمالی",
-    color: "#ccc"
+    name: 'خراسان شمالی',
+    color: '#ccc',
   },
   {
-    name: "سیستان و بلوچستان",
-    color: "#ccc"
+    name: 'سیستان و بلوچستان',
+    color: '#ccc',
   },
   {
-    name: "کرمان",
-    color: "#ccc"
+    name: 'کرمان',
+    color: '#ccc',
   },
   {
-    name: "البرز",
-    color: "#ccc"
+    name: 'البرز',
+    color: '#ccc',
   },
-]
+];

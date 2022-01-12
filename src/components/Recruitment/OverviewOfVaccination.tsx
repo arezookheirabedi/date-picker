@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import hcsServices from 'src/services/hcs.service';
-import { getSchoolTagName } from 'src/helpers/utils';
+import {getSchoolTagName} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -13,7 +13,6 @@ import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
-
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -33,7 +32,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setCountsLoading(true);
     try {
       const {data} = await hcsServices.doses(params);
-
+      let total = 0;
       let tmp = {...counts};
 
       data.forEach((item: any) => {
@@ -43,28 +42,34 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         switch (key) {
           case '1':
             tmp = {...tmp, numberOfFirstDose: value || 0};
+            total += value || 0;
             break;
           case '2':
             tmp = {...tmp, numberOfSecondDose: value || 0};
+            total += value || 0;
             break;
           case '3':
             tmp = {...tmp, numberOfThirdDose: value || 0};
+            total += value || 0;
             break;
           case '5':
             tmp = {...tmp, numberOfMoreThirdDose: value || 0};
+            total += value || 0;
             break;
           case 'null':
             tmp = {...tmp, numberOfUnvaccinated: value || 0};
+            total += value || 0;
             break;
           default:
+            tmp = {...tmp, numberOfNull: value || 0};
+            total += value || 0;
             break;
         }
 
         setCounts({
           ...counts,
           ...tmp,
-          numberOfNull: 0,
-          total: 2581819,
+          total,
         });
       });
     } catch (error) {
@@ -192,11 +197,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
             count={
-              2581819 -
+              counts.total -
               ((counts.numberOfFirstDose || 0) +
                 (counts.numberOfSecondDose || 0) +
                 (counts.numberOfMoreThirdDose || 0) +
-                (counts.numberOfThirdDose || 0))
+                (counts.numberOfThirdDose || 0)) || 0
             }
             loading={countsLoading}
           />
