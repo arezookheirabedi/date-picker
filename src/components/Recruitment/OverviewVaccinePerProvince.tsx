@@ -97,8 +97,8 @@ const OverviewVaccinePerProvince = () => {
         نگاه کلی به وضعیت واکسیناسیون کارکنان دولت
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between w-3/4 px-8">
+        <div className="flex items-center justify-between mb-10 mt-6 px-8">
+          <div className="flex align-center justify-between w-3/4">
             <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
@@ -144,21 +144,21 @@ const OverviewVaccinePerProvince = () => {
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#FFC700'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FFC700'}} />
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#883BA4'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#883BA4'}} />
                   <span>دوز دوم</span>
                 </div>
               </div>
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#175A76'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#175A76'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#00AAB1'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00AAB1'}} />
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>

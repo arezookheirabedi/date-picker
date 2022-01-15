@@ -11,21 +11,20 @@ import OverviewOfVaccinationProvince from '../../components/Recruitment/Overview
 
 const RecruitmentProvince = () => {
   const location = useLocation();
-
   const [cityTitle, setCityTitle] = useState('تهران');
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') as any;
-    // console.log(provinceName);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    // console.log(provinceName)
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
-    });
+    })
 
     if (existsCity) {
       setCityTitle(provinceName);
     }
-  }, [location.search]);
+  }, [location.search])
 
   return (
     <div className="space-y-16 mb-8">
