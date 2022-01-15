@@ -203,7 +203,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'دسته',
+                name: 'سازمان',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
