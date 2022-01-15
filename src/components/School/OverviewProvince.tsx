@@ -68,7 +68,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   }, [location.search]);
 
   return (
-    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="province-overview">
+    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="school-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان &nbsp;
         {cityTitle}
