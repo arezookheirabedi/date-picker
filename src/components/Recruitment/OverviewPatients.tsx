@@ -13,22 +13,38 @@ import Spinner from '../Spinner';
 
 const {Line} = Charts;
 
-const transportationType = [
+const recruitmentType = [
   {
-    name: 'کل حمل و نقل',
+    name: 'کل کارکنان',
     enName: '',
   },
   {
-    name: 'تاکسی آنلاین',
-    enName: 'ONLINE',
+    name: 'نقشه برداری کشور',
+    enName: 'sdfs',
   },
   {
-    name: 'تاکسی پلاک ع',
-    enName: 'PUBLIC',
+    name: 'هواشناسی ایران',
+    enName: 'dsfsd',
   },
   {
-    name: 'تاکسی پلاک ت',
-    enName: 'TAXI_T',
+    name: 'زمین شناسی کشور',
+    enName: 'sfsdfs',
+  },
+  {
+    name: 'اداره ارشاد اسلامی',
+    enName: 'sfsdfs',
+  },
+  {
+    name: 'اداره برق',
+    enName: 'sfsdfs',
+  },
+  {
+    name: 'اداره خدمات آموزشی',
+    enName: 'sfsdfs',
+  },
+  {
+    name: 'اداره گذرنامه',
+    enName: 'sfsdfs',
   },
 ];
 
@@ -129,7 +145,7 @@ const OverviewPatients = () => {
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
-                    {serviceType?.name || 'کل حمل و نقل'}
+                    {serviceType?.name || 'کل کارکنان'}
                   </span>
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
@@ -137,7 +153,7 @@ const OverviewPatients = () => {
 
               <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {transportationType.map((value: any, index: any) => {
+                  {recruitmentType.map((value: any, index: any) => {
                     // console.log(value);
                     return (
                       // eslint-disable-next-line
