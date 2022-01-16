@@ -79,7 +79,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     });
     if (existsCity) {
       getOverviewByCategory({
-        organization: 'recruitment',
+        organization: 'employment',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,
@@ -130,7 +130,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       if (existsCity) {
         getOverviewByCategory({
-          organization: 'recruitment',
+          organization: 'employment',
           resultStatus: 'POSITIVE',
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),

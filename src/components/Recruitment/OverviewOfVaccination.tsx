@@ -136,7 +136,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       numberOfSecondDose: true,
       numberOfUnvaccinated: true,
     });
-    getOverviewByVaccinePercent({organization: 'recruitment'});
+    getOverviewByVaccinePercent({organization: 'employment'});
   }, []);
 
   return (

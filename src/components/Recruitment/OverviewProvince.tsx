@@ -34,7 +34,14 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   const getNumberOf = async (province: any) => {
     setLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({province});
+      const {data} = await hcsService.membersGeneral({
+        organization: 'employment',
+        tag: 'student',
+        testResultCount: true,
+        vaccinationCount: true,
+        total: true,
+        province,
+      });
       setNumberOf(data.total || 0);
       setNumberOfNanVaccinated(data.numberOfNanVaccinated || 0);
       setNumberOfPositive(data.numberOfPositive || 0);
@@ -65,7 +72,10 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   }, [location.search]);
 
   return (
-    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="recruitment-overview">
+    <fieldset
+      className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16"
+      id="recruitment-overview"
+    >
       <legend className="text-black mx-auto px-3">
         نگاه کلی به کارکنان دولت در استان &nbsp;
         {cityTitle}

@@ -24,7 +24,13 @@ const OverviewRecruitment: React.FC<{}> = () => {
   const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await hcsServices.membersGeneral();
+      const {data} = await hcsServices.membersGeneral({
+        organization: 'employment',
+        tag: 'student',
+        testResultCount: true,
+        vaccinationCount: true,
+        total: true,
+      });
       setNumberOf(data.total || 0);
       setNumberOfNanVaccinated(data.numberOfNanVaccinated || 0);
       setNumberOfPositive(data.numberOfPositive || 0);
@@ -96,7 +102,6 @@ const OverviewRecruitment: React.FC<{}> = () => {
             count={numberOfPositiveNanVaccinated}
             loading={loading}
           />
-          
         </div>
       </div>
     </fieldset>
