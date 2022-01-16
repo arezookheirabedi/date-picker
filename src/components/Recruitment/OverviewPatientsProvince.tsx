@@ -129,7 +129,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     let idSetTimeOut: any;
     if (existsCity) {
       idSetTimeOut = setTimeout(() => {
-        getLinearOverview({organization: 'recruitment', province: provinceName, ...queryParams});
+        getLinearOverview({organization: 'employment', province: provinceName, ...queryParams});
       }, 500);
     } else {
       history.push('/dashboard/recruitment/province');

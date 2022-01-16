@@ -175,14 +175,14 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     });
     if (existsCity) {
       getOverviewByVaccine({
-        organization: 'recruitment',
+        organization: 'employment',
         from: '',
         to: '',
         tagPattern: '',
         province: provinceName,
       });
       getOverviewByVaccinePercent({
-        organization: 'recruitment',
+        organization: 'employment',
         from: '',
         to: '',
         tagPattern: '',

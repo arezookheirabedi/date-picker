@@ -87,7 +87,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     });
     if (existsCity) {
       getOverviewByCategory({
-        organization: 'recruitment',
+        organization: 'employment',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,
@@ -107,7 +107,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        organization: 'recruitment',
+        organization: 'employment',
         resultStatus: 'POSITIVE',
         recoveredCount: true,
         total: true,

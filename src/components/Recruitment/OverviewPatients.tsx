@@ -110,7 +110,7 @@ const OverviewPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({organization: 'recruitment', ...queryParams});
+      getLinearOverview({organization: 'employment', ...queryParams});
     }, 500);
 
     return () => clearTimeout(idSetTimeOut);
