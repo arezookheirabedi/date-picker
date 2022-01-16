@@ -3,6 +3,7 @@ import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
 import {ILogin, IProfile} from 'src/models/authentication.model';
 
+
 const baseUrl = Setup.endpoint;
 
 let axiosRequestConfig: AxiosRequestConfig = {
@@ -50,17 +51,6 @@ export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   }
 };
 
-export function isLogin() {
-  // const profileStr = localStorage.getItem('userinfo');
-  const tokenStr = localStorage.getItem('token');
-  if (tokenStr) {
-    const token: ILogin = JSON.parse(tokenStr);
-    if (token && token.access_token.length > 0) {
-      return true;
-    }
-  }
-  return false;
-}
 
 export const setLogin: (param: IProfile) => void = param => {
   localStorage.setItem('userinfo', JSON.stringify(param));
@@ -124,6 +114,24 @@ export const toPersianDigit = (str: any) => {
   return str.replace(/[0-9]/g, (w: any) => id[+w]);
 };
 
+export function isLogin() {
+  // const profileStr = localStorage.getItem('userinfo');
+  const tokenStr = localStorage.getItem('token');
+  const firstLogin = localStorage.getItem('ministers-first-login');
+  if (tokenStr && firstLogin) {
+    if (new Date().getTime() > (Number(firstLogin) + (24 * 60 * 60 * 1000))) {
+      removeToken();
+      console.log('on day finished')
+      return false;
+    }
+    const token: ILogin = JSON.parse(tokenStr);
+    if (token && token.access_token.length > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const getBgColorGradientByStatus = (status: string) => {
   let bg = 'linear-gradient(217deg, #B2B2B2 0%, #D5D5D5 100%)';
   if (status === 'DISQUALIFIED') {
@@ -171,7 +179,7 @@ export const getColorByServiceTypeName = (item: any) => {
   }
 };
 
-export const getSchoolTagName: {[key: string]: any} = {
+export const getSchoolTagName: { [key: string]: any } = {
   a1: 'دانش آموزان پایه اول',
   a2: 'دانش آموزان پایه دوم',
   a3: 'دانش آموزان پایه سوم',
@@ -188,7 +196,7 @@ export const getSchoolTagName: {[key: string]: any} = {
   a14: 'پرسنل اداری',
 };
 
-export const getRecruitmentTagName: {[key: string]: any} = {
+export const getRecruitmentTagName: { [key: string]: any } = {
   a1: 'نقشه‌برداری کشور',
   a2: 'نظام مهندسی ساختمان',
   a3: 'هواشناسی ایران',
