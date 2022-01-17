@@ -54,9 +54,7 @@ const OverviewCategories: React.FC<{}> = () => {
       // recoveredCount: true,
       // total: true,
       // count: true,
-      from: '',
-      to: '',
-      tags: [],
+
     });
   }, []);
 

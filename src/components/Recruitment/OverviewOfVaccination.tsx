@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import hcsServices from 'src/services/hcs.service';
-import {getSchoolTagName} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -10,7 +9,7 @@ import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
 import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
 import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
 import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
-import Table from '../Table';
+import Table from '../Table/TableFullData';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
@@ -84,15 +83,16 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsServices.dosesTagBased(params);
-      const normalizedDate: any[] = [];
+      console.log(data);
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         let total = 0;
         let twoDoseVaccine = 0;
         let fullDoseVaccine = 0;
 
-        if (item.doseCountMap) {
+        if (item.dosesCountMap) {
           // eslint-disable-next-line
-          for (const [key, value] of Object.entries(item.doseCountMap)) {
+          for (const [key, value] of Object.entries(item.dosesCountMap)) {
             total += Number(value);
 
             if (Number(key) !== 0) {
@@ -106,20 +106,20 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         }
 
         if (total > 0)
-          normalizedDate.push({
+          normalizedData.push({
             id: `ovvac_${index}`,
-            name: getSchoolTagName[item.tag] || 'نامشخص',
+            name: item.tag || 'نامشخص',
             twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
             fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
             // eslint-disable-next-line
-            notVaccine: item.doseCountMap
-              ? item.doseCountMap[0]
-                ? (item.doseCountMap[0] * 100) / total
+            notVaccine: item.dosesCountMap
+              ? item.dosesCountMap[0]
+                ? (item.dosesCountMap[0] * 100) / total
                 : 0
               : 0,
           });
       });
-      setDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -144,7 +144,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
 
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
@@ -170,7 +171,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={BlueVaccine}
             text="بیش از ۳ دوز"
@@ -209,7 +211,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
@@ -298,7 +300,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}
-              totalItems={0}
+              totalItems={dataset.length || 0}
             />
           </div>
         </>
