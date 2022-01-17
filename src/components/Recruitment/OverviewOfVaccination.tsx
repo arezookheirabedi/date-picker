@@ -216,7 +216,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
               dataSet={[...dataset]}
-              pagination={{pageSize: 20, maxPages: 3}}
+              pagination={{pageSize: 10, maxPages: 3}}
               columns={[
                 {
                   name: 'وضعیت کلی',
@@ -258,7 +258,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   key: 'name',
                   render: (v: any, record, index: number, page: number) => (
                     <div className="flex">
-                      {((page - 1) * 20 + (index + 1)).toLocaleString('fa')}.{v}
+                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
                     </div>
                   ),
                 },
