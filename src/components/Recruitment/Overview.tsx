@@ -13,32 +13,29 @@ import hcsServices from '../../services/hcs.service';
 const OverviewRecruitment: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState(null);
-  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfPositive, setNumberOfPositive] = useState(null);
-  const [numberOfPositiveNanVaccinated, setNumberOfPositiveNanVaccinated] = useState(null);
-  // eslint-disable-next-line
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
+  const [numberOfEmployeeTests, setNumberOfEmployeeTests] = useState(null);
 
   const getNumberOf = async () => {
     setLoading(true);
     try {
       const {data} = await hcsServices.membersGeneral({
         organization: 'employment',
-        tags: ['student'],
         testResultCount: true,
         vaccinationCount: true,
         total: true,
       });
+
       setNumberOf(data.total || 0);
-      setNumberOfNanVaccinated(data.numberOfNanVaccinated || 0);
-      setNumberOfPositive(data.numberOfPositive || 0);
-      // @ts-ignore
-      setNumberOfPositiveNanVaccinated(0);
+      setNumberOfPositive(data.numberOfPositives || 0);
       setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfTestResults(data.numberOfTestResults || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
+      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+      setNumberOfEmployeeTests((data.numberOfNegatives + data.numberOfPositives) || 0);
+
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -56,7 +53,8 @@ const OverviewRecruitment: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت کارکنان دولت در کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalRecritment}
             text="مجموع کارکنان دولت"
@@ -72,12 +70,13 @@ const OverviewRecruitment: React.FC<{}> = () => {
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count="-"
+            count={numberOfRecovered}
             // loading={loading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
@@ -93,14 +92,14 @@ const OverviewRecruitment: React.FC<{}> = () => {
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش‌های کارمندان"
-            count={numberOfTestResults}
+            count={numberOfEmployeeTests}
             loading={loading}
           />
           <Statistic
             icon={prescriptionIcon}
             text="مجموع استعلام از مراجعین دولتی"
-            count={numberOfPositiveNanVaccinated}
-            loading={loading}
+            count="-"
+            loading={false}
           />
         </div>
       </div>
