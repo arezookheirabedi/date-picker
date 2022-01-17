@@ -98,6 +98,7 @@ const options = {
         console.log('redraw');
       },
     },
+    // zoomType: 'x'
     // styledMode: true
   },
   title: {
@@ -194,6 +195,7 @@ const Column: React.FC<any> = ({data, categories}) => {
   useEffect(() => {
     if (chartRef && chartRef.current) {
       chartRef.current.chart.xAxis[0].setCategories(categories, true);
+      chartRef.current.chart.xAxis[0].setExtremes(0, 5);
       chartRef.current.chart.redraw();
     }
   }, [categories]);
