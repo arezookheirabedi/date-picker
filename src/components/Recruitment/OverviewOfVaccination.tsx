@@ -9,22 +9,9 @@ import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
 import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
 import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
 import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
-
-const getTagName: {[key: string]: any} = {
-  a1: 'نقشه‌برداری کشور',
-  a2: 'نظام مهندسی ساختمان',
-  a3: 'هواشناسی ایران',
-  a4: 'زمین‌شناسی کشور',
-  a5: 'سازمان ملی زمین و مسکن',
-  a6: 'شرکت پست جمهوری',
-  a7: 'اداره ارشاد اسلامی',
-  a8: 'اداره برق',
-  a9: 'اداره خدمات آموزشی',
-  a10: 'اداره گذرنامه',
-};
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -44,7 +31,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setCountsLoading(true);
     try {
       const {data} = await hcsServices.doses(params);
-
+      let total = 0;
       let tmp = {...counts};
 
       data.forEach((item: any) => {
@@ -54,28 +41,34 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         switch (key) {
           case '1':
             tmp = {...tmp, numberOfFirstDose: value || 0};
+            total += value || 0;
             break;
           case '2':
             tmp = {...tmp, numberOfSecondDose: value || 0};
+            total += value || 0;
             break;
           case '3':
             tmp = {...tmp, numberOfThirdDose: value || 0};
+            total += value || 0;
             break;
           case '5':
             tmp = {...tmp, numberOfMoreThirdDose: value || 0};
+            total += value || 0;
             break;
           case 'null':
             tmp = {...tmp, numberOfUnvaccinated: value || 0};
+            total += value || 0;
             break;
           default:
+            tmp = {...tmp, numberOfNull: value || 0};
+            total += value || 0;
             break;
         }
 
         setCounts({
           ...counts,
           ...tmp,
-          numberOfNull: 0,
-          total: 2581819,
+          total,
         });
       });
     } catch (error) {
@@ -90,42 +83,70 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsServices.dosesTagBased(params);
-      const normalizedDate: any[] = [];
+      const normalizedData: any[] = [];
+
       data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+        let secondDose = 0;
+        let thirdDose = 0;
+        let moreThanThreeDose = 0;
+        let allVaccination = 0;
+        let unknownInformation = 0;
+        let noDose = 0;
         let total = 0;
-        let twoDoseVaccine = 0;
-        let fullDoseVaccine = 0;
-
-        if (item.doseCountMap) {
-          // eslint-disable-next-line
-          for (const [key, value] of Object.entries(item.doseCountMap)) {
-            total += Number(value);
-
-            if (Number(key) !== 0) {
-              fullDoseVaccine += Number(value);
-            }
-
-            if (Number(key) === 2) {
-              twoDoseVaccine += Number(value);
-            }
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+          if (Number(key) === 0) {
+            noDose += Number(value);
           }
-        }
 
-        if (total > 0)
-          normalizedDate.push({
-            id: `ovvac_${index}`,
-            name: getTagName[item.tag] || 'نامشخص',
-            twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
-            fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
-            // eslint-disable-next-line
-            notVaccine: item.doseCountMap
-              ? item.doseCountMap[0]
-                ? (item.doseCountMap[0] * 100) / total
-                : 0
-              : 0,
-          });
+          if (Number(key) === 1) {
+            firstDose += Number(value);
+          }
+
+          if (Number(key) === 2) {
+            secondDose += Number(value);
+          }
+
+          if (Number(key) === 3) {
+            thirdDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            allVaccination += Number(value);
+          }
+
+          if (key === 'null') {
+            unknownInformation += Number(value);
+          }
+
+          total = allVaccination + noDose + unknownInformation;
+        }
+        
+        // if (total > 0)
+        normalizedData.push({
+          id: `ovvac_${index}`,
+          name: item.tag || 'نامشخص',
+          firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: (secondDose * 100) / total,
+          thirdDosePercentage: (thirdDose * 100) / total,
+          otherDose: (moreThanThreeDose * 100) / total,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
+          unknownInformation,
+          noDose: (noDose * 100) / total,
+          // eslint-disable-next-line
+          // notVaccine: item.dosesCountMap
+          //   ? item.dosesCountMap[0]
+          //     ? (item.dosesCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
+        });
       });
-      setDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -136,13 +157,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByVaccine({
-      organization: 'recruitment',
+      organization: 'employment',
       numberOfDrivers: true,
       numberOfFirstDose: true,
       numberOfSecondDose: true,
       numberOfUnvaccinated: true,
     });
-    getOverviewByVaccinePercent({organization: 'recruitment'});
+    getOverviewByVaccinePercent({organization: 'employment'});
   }, []);
 
   return (
@@ -203,11 +224,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
             count={
-              2581819 -
-              ((counts.numberOfFirstDose || 0) +
-                (counts.numberOfSecondDose || 0) +
-                (counts.numberOfMoreThirdDose || 0) +
-                (counts.numberOfThirdDose || 0))
+              counts.total -
+                ((counts.numberOfFirstDose || 0) +
+                  (counts.numberOfSecondDose || 0) +
+                  (counts.numberOfMoreThirdDose || 0) +
+                  (counts.numberOfThirdDose || 0)) || 0
             }
             loading={countsLoading}
           />
@@ -222,7 +243,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
               dataSet={[...dataset]}
-              pagination={{pageSize: 20, maxPages: 3}}
+              pagination={{pageSize: 10, maxPages: 3}}
               columns={[
                 {
                   name: 'وضعیت کلی',
@@ -231,9 +252,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                     <CategoryDonut
                       data={[
                         {
-                          name: 'fullDoseVaccine',
+                          name: 'allDoses',
                           title: 'دوز کل',
-                          y: record.fullDoseVaccine || 0,
+                          y: record.allDoses || 0,
                           color: {
                             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                             stops: [
@@ -243,9 +264,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                           },
                         },
                         {
-                          name: 'notVaccine',
+                          name: 'noDose',
                           title: 'واکسن نزده',
-                          y: record.notVaccine || 0,
+                          y: record.noDose || 0,
                           color: {
                             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                             stops: [
@@ -262,49 +283,49 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 {
                   name: 'سازمان',
                   key: 'name',
-                  render: (v: any, record, index: number) => (
-                    <span>
-                      {(index + 1).toLocaleString('fa')}.{v}
-                    </span>
+                  render: (v: any, record, index: number, page: number) => (
+                    <div className="flex">
+                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                    </div>
                   ),
                 },
                 {
                   name: 'دوز اول',
-                  key: 'twoDoseVaccine',
+                  key: 'firstDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز دوم',
-                  key: 'twoDoseVaccine',
+                  key: 'secondDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز سوم',
-                  key: 'twoDoseVaccine',
+                  key: 'thirdDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'سایر دوزها',
-                  key: 'fullDoseVaccine',
+                  key: 'otherDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'واکسن نزده',
-                  key: 'notVaccine',
+                  key: 'noDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'اطلاعات مخدوش',
-                  key: 'notVaccine',
+                  key: 'unknownInformation',
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
                 {
                   name: 'کل دوزها',
-                  key: 'notVaccine',
+                  key: 'allDoses',
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}
-              totalItems={0}
+              totalItems={dataset.length || 0}
             />
           </div>
         </>

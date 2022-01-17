@@ -9,23 +9,6 @@ import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
-const getTagName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس';
-    default:
-      return null;
-  }
-};
-
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,7 +29,7 @@ const OverviewCategories: React.FC<{}> = () => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getTagName(item.tag),
+            name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -67,13 +50,13 @@ const OverviewCategories: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByCategory({
       organization: 'school',
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
       from: '',
       to: '',
-      tag_pattern: '',
+      tags: ['school*'].join(','),
     });
   }, []);
 
@@ -108,9 +91,14 @@ const OverviewCategories: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        organization: 'school',
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tags: ['school*'].join(','),
       });
     }
   }, [selectedDayRange]);

@@ -1,34 +1,42 @@
 import React, {useEffect, useState} from 'react';
+import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+import {useHistory, useLocation} from 'react-router-dom';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    default:
-      return null;
-  }
-};
+import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
 interface TestStatusProvinceProps {
   cityTitle: any;
 }
 
+const filterTypes = [
+  {
+    name: 'مرتب‌سازی بر اساس پیشفرض',
+    enName: '',
+  },
+  {
+    name: 'بیشترین',
+    enName: 'HIGHEST',
+  },
+  {
+    name: 'کمترین',
+    enName: 'LOWEST',
+  },
+];
+
 // eslint-disable-next-line
 const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [filterType, setFilterType] = useState({name: null, enName: null});
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
@@ -40,21 +48,19 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
-
+      const {data} = await hcsService.testResultTagBased(params);
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
-        if (item.total !== 0) {
-          normalizedDate.push({
-            id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
-            employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
-          });
-        }
+        normalizedDate.push({
+          id: `ovca_${index}`,
+          name: item.tag || 'نامشخص',
+          total: item.total || 0,
+          positiveCount: item.positiveCount || 0,
+          negativeCount: item.negativeCount || 0,
+          unknownCount:
+            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
+          // deadCount: 120,
+        });
       });
       setDataset([...normalizedDate]);
     } catch (error) {
@@ -66,12 +72,27 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   }
 
   useEffect(() => {
-    getOverviewByCategory({
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
     });
+    if (existsCity) {
+      getOverviewByCategory({
+        organization: 'school',
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        from: '',
+        to: '',
+        // province: provinceName,
+        tags: [],
+      });
+      //
+    } else {
+      history.push('/dashboard/school/province');
+    }
   }, []);
 
   const focusFromDate = () => {
@@ -99,61 +120,125 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-      });
+      if (existsCity) {
+        getOverviewByCategory({
+          organization: 'recruitment',
+          // resultStatus: 'POSITIVE',
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          // province: provinceName,
+          tags: [],
+        });
+      } else {
+        history.push('/dashboard/school/province');
+      }
     }
   }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-      آزمایش در آموزش و پرورش در استان‌ &nbsp;
+        آزمایش در آموزش و پرورش در استان‌ &nbsp;
         {cityTitle}
       </legend>
       <div className="flex align-center justify-start mb-8">
-        {showDatePicker ? (
-          <DatePickerModal
-            setSelectedDayRange={setSelectedDayRange}
-            selectedDayRange={selectedDayRange}
-            setShowDatePicker={setShowDatePicker}
-            showDatePicker
-          />
-        ) : null}
-        <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
+        <div className="flex items-center">
+          <Menu
+            as="div"
+            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
-            {selectedDayRange.from && (
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateFromDate())}
-              </span>
-            )}
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <div>
+              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
+                {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
+                <span className="ml-10 whitespace-nowrap truncate">
+                  {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
+                </span>
+                <DownIcon className="h-2 w-2.5 mr-2" />
+              </Menu.Button>
+            </div>
+
+            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className="px-1 py-1 ">
+                {filterTypes.map((value: any, index: any) => {
+                  // console.log(value);
+                  return (
+                    // eslint-disable-next-line
+                    <Menu.Item key={index}>
+                      {({active}) => (
+                        <button
+                          type="button"
+                          className={`${
+                            active ? 'bg-gray-100' : ''
+                          } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
+                          onClick={() => {
+                            setFilterType(value);
+                            // setQueryParams({
+                            //   ...queryParams,
+                            //   tag: value.enName,
+                            // });
+                          }}
+                        >
+                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
+                          {value.name}
+                        </button>
+                      )}
+                    </Menu.Item>
+                  );
+                })}
+              </div>
+            </Menu.Items>
+          </Menu>
+        </div>
+
+        <div className="flex items-center">
+          {showDatePicker ? (
+            <DatePickerModal
+              setSelectedDayRange={setSelectedDayRange}
+              selectedDayRange={selectedDayRange}
+              setShowDatePicker={setShowDatePicker}
+              showDatePicker
+            />
+          ) : null}
+          <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
+            <div
+              className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+              onClick={focusFromDate}
+            >
+              {selectedDayRange.from && (
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateFromDate())}
+                </span>
+              )}
+              <img src={calendar} alt="x" className="w-5 h-5" />
+            </div>
           </div>
-        </div>
-        <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
-        </div>
-        <div className=" shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            {selectedDayRange.to && (
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateToDate())}
-              </span>
-            )}
-            <img src={calendar} alt="x" className="w-5 h-5" />
+          <div className="flex items-center justify-start mx-4">
+            <span className="dash-separator" />
+          </div>
+          <div className=" shadow-custom rounded-lg px-4 py-1">
+            <div
+              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+              onClick={focusFromDate}
+            >
+              {selectedDayRange.to && (
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateToDate())}
+                </span>
+              )}
+              <img src={calendar} alt="x" className="w-5 h-5" />
+            </div>
           </div>
         </div>
       </div>
@@ -168,15 +253,15 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'وضعیت کلی',
+                name: 'وضعیت',
                 key: '',
                 render: (v: any, record) => (
                   <CategoryDonut
                     data={[
                       {
-                        name: 'deadCount',
-                        title: 'تعداد فوت‌شدگان',
-                        y: record.deadCount || 0,
+                        name: 'unknownCount',
+                        title: 'درصد تست‌های نامشخص',
+                        y: record.unknownCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -186,9 +271,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                         },
                       },
                       {
-                        name: 'saveCount',
-                        title: 'تعداد بهبودیافتگان',
-                        y: record.saveCount || 0,
+                        name: 'negativeCount',
+                        title: 'درصد تست‌های منفی',
+                        y: record.negativeCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -198,9 +283,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                         },
                       },
                       {
-                        name: 'infectedCount',
-                        title: 'تعداد مبتلایان',
-                        y: record.infectedCount || 0,
+                        name: 'positiveCount',
+                        title: 'درصد تست‌های مثبت',
+                        y: record.positiveCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -217,43 +302,55 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               {
                 name: 'دسته',
                 key: 'name',
-                render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
+                  </div>
                 ),
               },
               {
                 name: 'تعداد آزمایش‌های انجام شده',
-                key: 'employeesCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                key: 'total',
+                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
               },
               {
                 name: 'درصد تست‌های مثبت',
-                key: 'infectedPercent',
-                render: (v: any) => (
+                key: 'positiveCount',
+                render: (v: any, record: any) => (
                   <span>
-                    {Number(v).toLocaleString('fa', {
-                      minimumFractionDigits: 4,
-                    })}
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
                     %
                   </span>
                 ),
               },
               {
                 name: 'درصد تست‌های منفی',
-                key: 'infectedCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                key: 'negativeCount',
+                render: (v: any, record: any) => (
+                  <span>
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
+                    %
+                  </span>
+                ),
               },
               {
                 name: 'درصد تست‌های نامشخص',
-                key: 'saveCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                key: 'unknownCount',
+                render: (v: any, record: any) => (
+                  <span>
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
+                    %
+                  </span>
                 ),
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length || 0}
           />
         )}
       </div>

@@ -1,30 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
-
-const getServiceTypeName = (item: any) => {
-  switch (item) {
-    case 'PUBLIC':
-      return 'تاکسی پلاک ع';
-    case 'TAXI_T':
-      return 'تاکسی پلاک ت';
-    case 'ONLINE':
-      return 'تاکسی آنلاین';
-    case 'MOTOR_PEYK':
-      return 'موتور سیکلت';
-    case 'SCHOOL_SERVICE':
-      return 'سرویس مدارس'
-    default:
-      return null;
-  }
-};
 
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -39,17 +22,17 @@ const OverviewCategories: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewCategory(params);
+      const {data} = await hcsService.membersTagBased(params);
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getServiceTypeName(item.serviceType),
+            name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
-            infectedCount: item.count || 0,
-            infectedPercent: (((item.count || 0) * 100) / (item.total || 0)).toFixed(4),
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
             saveCount: item.recoveredCount || 0,
             // deadCount: 120,
           });
@@ -65,7 +48,13 @@ const OverviewCategories: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    getOverviewByCategory({resultStatus: 'POSITIVE', recoveredCount: true, total: true, count: true});
+    getOverviewByCategory({
+      organization: 'employment',
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
+    });
   }, []);
 
   const focusFromDate = () => {
@@ -99,9 +88,14 @@ const OverviewCategories: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        organization: 'employment',
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        tags: [],
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
@@ -156,7 +150,7 @@ const OverviewCategories: React.FC<{}> = () => {
         ) : (
           <Table
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
                 name: 'وضعیت کلی',
@@ -208,10 +202,10 @@ const OverviewCategories: React.FC<{}> = () => {
               {
                 name: 'سازمان',
                 key: 'name',
-                render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                  </div>
                 ),
               },
               {

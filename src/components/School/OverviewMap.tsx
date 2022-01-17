@@ -1,9 +1,10 @@
-import React from 'react';
-import {useHistory} from 'react-router-dom';
+import React, {useEffect, useRef, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 
 import Charts from '../Charts';
 import map from '../Charts/ir-all.geo.json';
 import mapData from '../Charts/mapData.json';
+import {sideCities} from "../../helpers/utils";
 
 const {Map} = Charts;
 
@@ -14,8 +15,33 @@ interface OverviewMapProps {
 }
 
 const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, destinationId}) => {
+
+  const chartRef = useRef<any>(null);
+  const {search} = useLocation();
+
+  useEffect(() => {
+    const data = chartRef?.current?.chart.get('covid').data;
+    const params = new URLSearchParams(search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      const city = data.find((x: any) => x.properties['fa-name'] === provinceName)
+      if (!city.selected) {
+        city?.select()
+      }
+    } else {
+      const city = data.find((x: any) => x.properties['fa-name'] === 'تهران')
+      if (!city.selected) {
+        city?.select()
+      }
+    }
+  }, [search])
+
+
   const history = useHistory();
-  const options = {
+  const [options] = useState({
     chart: {
       map,
       height: '70%',
@@ -64,10 +90,10 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
     },
     legend: {
       itemStyle: {
-        fontSize: '12px',
+        fontSize: '10px',
         fontWeight: '400',
         color: '#707070',
-        transform: 'translate(-20px,20px)',
+        transform: 'translate(-10px,20px)',
         direction: 'rtl',
         textAlign: 'right',
       },
@@ -76,8 +102,8 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
       squareSymbol: false,
       valueDecimals: 0,
       symbolRadius: 4,
-      symbolHeight: 7,
-      symbolWidth: 85,
+      symbolHeight: 6,
+      symbolWidth: 55,
       itemDistance: -40,
     },
     colorAxis: {
@@ -122,7 +148,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
           to: 100,
           // color: '#FBE186',
           color: '#9e9e9e',
-          name: '%کمتر از ۲',
+          name: 'کمتر از ۲%',
         },
       ],
     },
@@ -138,13 +164,31 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
         verticalAlign: 'bottom',
       },
     },
-
+    tooltip: {
+      borderRadius: 16,
+      borderWidth: 0,
+      valueDecimals: 0,
+      style: {
+        color: "#fff",
+        fontFamily: 'inherit',
+      },
+      headerFormat: "",
+      pointFormat: '<div>{point.properties.fa-name}</div>',
+      backgroundColor: {
+        linearGradient: [0, 0, 0, 60],
+        stops: [
+          [0, '#374151'],
+          [1, '#6B7280'],
+        ],
+      },
+    },
     series: [
       {
         data: mapData,
+        id: 'covid',
         keys: ['hasc', 'value'],
         joinBy: 'hasc',
-        name: 'covid',
+        name: 'کوید',
         borderColor: '#ffffff',
         borderWidth: 1,
         dataLabels: {
@@ -157,9 +201,15 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
             backgroundColor: 'transparent',
           },
         },
+        states: {
+          select: {
+            color: '#3b3b3b'
+          }
+        },
+        allowPointSelect: true
       },
     ],
-  };
+  });
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
@@ -168,7 +218,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow">
         <div className="w-5/6 map-wrapper">
-          <Map options={options} />
+          <Map options={options} ref={chartRef}/>
         </div>
         <ul className="w-1/6">
           {sideCityStatus.map((item: any, index: any) => {
