@@ -33,7 +33,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tags: ['student'],
+        tags: ['student'].join(','),
         testResultCount: true,
         vaccinationCount: true,
         total: true,
@@ -48,6 +48,19 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
+      
+      // @ts-ignore
+      setNumberOf(0);
+      // @ts-ignore
+      setNumberOfPlaqueVisited(0);
+      // @ts-ignore
+      setNumberOfPositive(0);
+      // @ts-ignore
+      setNumberOfRecovered(0);
+      // @ts-ignore
+      setNumberOfTestResults(0);
+      // @ts-ignore
+      setNumberOfVaccination(0);
     } finally {
       setLoading(false);
     }
