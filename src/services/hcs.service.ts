@@ -29,11 +29,11 @@ function testResultTagBased({ organization, ...params }: { organization: string;
     .get(`/api/v1/hcs-reporter/organizations/${organization}/test-results/tag-based`, params);
 }
 
-function dosesTagBased({ organization }: { organization: string; }) {
+function dosesTagBased({ organization, ...params }: { organization: string; params: any }) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses/tag-based`, {});
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses/tag-based`, params);
 }
 
 function doses({ organization }: { organization: string; }) {
