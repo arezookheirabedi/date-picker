@@ -83,41 +83,78 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsServices.dosesTagBased(params);
-      console.log(data);
       const normalizedData: any[] = [];
+
       data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+        let secondDose = 0;
+        let thirdDose = 0;
+        let moreThanThreeDose = 0;
+        let allVaccination = 0;
+        let unknownInformation = 0;
+        let noDose = 0;
         let total = 0;
-        let twoDoseVaccine = 0;
-        let fullDoseVaccine = 0;
-
-        if (item.dosesCountMap) {
-          // eslint-disable-next-line
-          for (const [key, value] of Object.entries(item.dosesCountMap)) {
-            total += Number(value);
-
-            if (Number(key) !== 0) {
-              fullDoseVaccine += Number(value);
-            }
-
-            if (Number(key) === 2) {
-              twoDoseVaccine += Number(value);
-            }
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+          if (Number(key) === 0) {
+            noDose += Number(value);
           }
+
+          if (Number(key) === 1) {
+            firstDose += Number(value);
+          }
+
+          if (Number(key) === 2) {
+            secondDose += Number(value);
+          }
+
+          if (Number(key) === 3) {
+            thirdDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            allVaccination += Number(value);
+          }
+
+          if (key === 'null') {
+            unknownInformation += Number(value);
+          }
+
+          total = allVaccination + noDose + unknownInformation;
         }
 
-        if (total > 0)
-          normalizedData.push({
-            id: `ovvac_${index}`,
-            name: item.tag || 'نامشخص',
-            twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
-            fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
-            // eslint-disable-next-line
-            notVaccine: item.dosesCountMap
-              ? item.dosesCountMap[0]
-                ? (item.dosesCountMap[0] * 100) / total
-                : 0
-              : 0,
-          });
+        console.log(item.tag, {
+          firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: (secondDose * 100) / total,
+          thirdDosePercentage: (thirdDose * 100) / total,
+          otherDose: (moreThanThreeDose * 100) / total,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
+          unknownInformation,
+          noDose: (noDose * 100) / total,
+        });
+        
+        // if (total > 0)
+        normalizedData.push({
+          id: `ovvac_${index}`,
+          name: item.tag || 'نامشخص',
+          firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: (secondDose * 100) / total,
+          thirdDosePercentage: (thirdDose * 100) / total,
+          otherDose: (moreThanThreeDose * 100) / total,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
+          unknownInformation,
+          noDose: (noDose * 100) / total,
+          // eslint-disable-next-line
+          // notVaccine: item.dosesCountMap
+          //   ? item.dosesCountMap[0]
+          //     ? (item.dosesCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
+        });
       });
       setDataset([...normalizedData]);
     } catch (error) {
@@ -130,7 +167,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByVaccine({
-      organization: 'recruitment',
+      organization: 'employment',
       numberOfDrivers: true,
       numberOfFirstDose: true,
       numberOfSecondDose: true,
@@ -225,9 +262,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                     <CategoryDonut
                       data={[
                         {
-                          name: 'fullDoseVaccine',
+                          name: 'allDoses',
                           title: 'دوز کل',
-                          y: record.fullDoseVaccine || 0,
+                          y: record.allDoses || 0,
                           color: {
                             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                             stops: [
@@ -237,9 +274,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                           },
                         },
                         {
-                          name: 'notVaccine',
+                          name: 'noDose',
                           title: 'واکسن نزده',
-                          y: record.notVaccine || 0,
+                          y: record.noDose || 0,
                           color: {
                             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                             stops: [
@@ -264,37 +301,37 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 },
                 {
                   name: 'دوز اول',
-                  key: 'twoDoseVaccine',
+                  key: 'firstDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز دوم',
-                  key: 'twoDoseVaccine',
+                  key: 'secondDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز سوم',
-                  key: 'twoDoseVaccine',
+                  key: 'thirdDosePercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'سایر دوزها',
-                  key: 'fullDoseVaccine',
+                  key: 'otherDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'واکسن نزده',
-                  key: 'notVaccine',
+                  key: 'noDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'اطلاعات مخدوش',
-                  key: 'notVaccine',
+                  key: 'unknownInformation',
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
                 {
                   name: 'کل دوزها',
-                  key: 'notVaccine',
+                  key: 'allDoses',
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}

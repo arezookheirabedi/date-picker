@@ -143,22 +143,26 @@ const OverviewVaccinePerProvince = () => {
           <div className="w-2/4">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+              <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FE2D2F'}} />
+                  <span>واکسن نزده</span>
+                </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: '#FFC700'}} />
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#883BA4'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#039572'}} />
                   <span>دوز دوم</span>
                 </div>
               </div>
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#175A76'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00cfd6'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00AAB1'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#1db7ff'}} />
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>

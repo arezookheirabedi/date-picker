@@ -4,9 +4,9 @@ import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getRecruitmentTagName, toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 const OverviewCategories: React.FC<{}> = () => {
@@ -29,7 +29,7 @@ const OverviewCategories: React.FC<{}> = () => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getRecruitmentTagName[item.tag] || 'نامشخص',
+            name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -54,7 +54,6 @@ const OverviewCategories: React.FC<{}> = () => {
       // recoveredCount: true,
       // total: true,
       // count: true,
-
     });
   }, []);
 
@@ -151,7 +150,7 @@ const OverviewCategories: React.FC<{}> = () => {
         ) : (
           <Table
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
                 name: 'وضعیت کلی',
@@ -203,10 +202,10 @@ const OverviewCategories: React.FC<{}> = () => {
               {
                 name: 'سازمان',
                 key: 'name',
-                render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                  </div>
                 ),
               },
               {
