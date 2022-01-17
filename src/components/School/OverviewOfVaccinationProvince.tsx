@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
 import {useHistory, useLocation} from 'react-router-dom';
-import {getSchoolTagName, sideCities} from 'src/helpers/utils';
+import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
 import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
@@ -13,7 +13,7 @@ import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
 import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
 import GrayVaccine1 from '../../assets/images/icons/gray-vaccine-lg.svg';
 import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
@@ -149,7 +149,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
 
         normalizedDate.push({
           id: `ovvac_${index}`,
-          name: getSchoolTagName[item.tag] || 'نامشخص',
+          name: item.tag || 'نامشخص',
           total: total || 0,
           firstDose: firstDose || 0,
           secondDose: secondDose || 0,
@@ -333,10 +333,10 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                 {
                   name: 'دسته',
                   key: 'name',
-                  render: (v: any, record, index: number) => (
-                    <span>
-                      {(index + 1).toPersianDigits()}.{v}
-                    </span>
+                  render: (v: any, record, index: number, page: number) => (
+                    <div className="flex">
+                      {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
+                    </div>
                   ),
                 },
                 {
@@ -410,7 +410,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}
-              totalItems={0}
+              totalItems={(dataset || []).length || 0}
             />
           </div>
         </>

@@ -6,9 +6,9 @@ import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getSchoolTagName, toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
@@ -46,7 +46,7 @@ const TestStatus: React.FC<{}> = () => {
       data.forEach((item: any, index: number) => {
         normalizedDate.push({
           id: `ovca_${index}`,
-          name: getSchoolTagName[item.tag] || 'نامشخص',
+          name: item.tag || 'نامشخص',
           total: item.total || 0,
           positiveCount: item.positiveCount || 0,
           negativeCount: item.negativeCount || 0,
@@ -271,9 +271,9 @@ const TestStatus: React.FC<{}> = () => {
               {
                 name: 'سازمان',
                 key: 'name',
-                render: (v: any, record, index: number) => (
+                render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {(index + 1).toPersianDigits()}.{v}
+                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
                   </div>
                 ),
               },
@@ -319,7 +319,7 @@ const TestStatus: React.FC<{}> = () => {
                 ),
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length || 0}
           />
         )}
       </div>

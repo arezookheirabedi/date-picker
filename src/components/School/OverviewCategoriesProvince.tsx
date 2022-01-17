@@ -7,7 +7,7 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getSchoolTagName, sideCities, toPersianDigit} from '../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 interface OverviewCategoriesProvinceProps {
@@ -36,7 +36,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getSchoolTagName[item.tag] || 'نامشخص',
+            name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -93,7 +93,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         // count: true,
         from: '',
         to: '',
-        tags: ['school*'],
+        tags: ['school*'].join(','),
         // province: provinceName,
       });
       //
@@ -122,7 +122,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           // recoveredCount: true,
           // total: true,
           // count: true,
-          tags: ['school*'],
+          tags: ['school*'].join(','),
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           // province: provinceName,

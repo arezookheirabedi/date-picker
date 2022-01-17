@@ -6,9 +6,9 @@ import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getSchoolTagName, sideCities, toPersianDigit} from '../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
@@ -53,7 +53,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       data.forEach((item: any, index: number) => {
         normalizedDate.push({
           id: `ovca_${index}`,
-          name: getSchoolTagName[item.tag] || 'نامشخص',
+          name: item.tag || 'نامشخص',
           total: item.total || 0,
           positiveCount: item.positiveCount || 0,
           negativeCount: item.negativeCount || 0,
@@ -302,9 +302,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               {
                 name: 'دسته',
                 key: 'name',
-                render: (v: any, record, index: number) => (
+                render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {(index + 1).toPersianDigits()}.{v}
+                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
                   </div>
                 ),
               },
@@ -350,7 +350,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 ),
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length || 0}
           />
         )}
       </div>
