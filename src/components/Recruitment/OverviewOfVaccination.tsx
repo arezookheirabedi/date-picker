@@ -9,7 +9,7 @@ import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
 import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
 import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
 import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
-import Table from '../Table/TableFullData';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
@@ -144,8 +144,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
 
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
@@ -171,8 +170,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={BlueVaccine}
             text="بیش از ۳ دوز"
@@ -200,10 +198,10 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             text="تعداد واکسیناسیون انجام نشده"
             count={
               counts.total -
-              ((counts.numberOfFirstDose || 0) +
-                (counts.numberOfSecondDose || 0) +
-                (counts.numberOfMoreThirdDose || 0) +
-                (counts.numberOfThirdDose || 0)) || 0
+                ((counts.numberOfFirstDose || 0) +
+                  (counts.numberOfSecondDose || 0) +
+                  (counts.numberOfMoreThirdDose || 0) +
+                  (counts.numberOfThirdDose || 0)) || 0
             }
             loading={countsLoading}
           />
@@ -211,7 +209,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>
@@ -258,9 +256,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 {
                   name: 'سازمان',
                   key: 'name',
-                  render: (v: any, record, index: number) => (
+                  render: (v: any, record, index: number, page: number) => (
                     <span>
-                      {(index + 1).toLocaleString('fa')}.{v}
+                      {((page - 1) * 20 + (index + 1)).toLocaleString('fa')}.{v}
                     </span>
                   ),
                 },
