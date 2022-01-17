@@ -5,9 +5,9 @@ import hcsService from 'src/services/hcs.service';
 import {Menu} from '@headlessui/react';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getRecruitmentTagName, toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
@@ -46,7 +46,7 @@ const TestStatus: React.FC<{}> = () => {
       data.forEach((item: any, index: number) => {
         normalizedDate.push({
           id: `ovca_${index}`,
-          name: getRecruitmentTagName[item.tag] || 'نامشخص',
+          name: item.tag || 'نامشخص',
           total: item.total || 0,
           positiveCount: item.positiveCount || 0,
           negativeCount: item.negativeCount || 0,
@@ -85,11 +85,11 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -97,7 +97,7 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -128,17 +128,19 @@ const TestStatus: React.FC<{}> = () => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button
+                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
                   {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
+                <DownIcon className="h-2 w-2.5 mr-2"/>
               </Menu.Button>
             </div>
 
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1 ">
                 {filterTypes.map((value: any, index: any) => {
                   // console.log(value);
@@ -191,11 +193,11 @@ const TestStatus: React.FC<{}> = () => {
                   {toPersianDigit(generateFromDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5" />
+              <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
           <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
+            <span className="dash-separator"/>
           </div>
           <div className=" shadow-custom rounded-lg px-4 py-1">
             <div
@@ -207,7 +209,7 @@ const TestStatus: React.FC<{}> = () => {
                   {toPersianDigit(generateToDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5" />
+              <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
         </div>
@@ -216,7 +218,7 @@ const TestStatus: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table
@@ -273,9 +275,9 @@ const TestStatus: React.FC<{}> = () => {
               {
                 name: 'سازمان',
                 key: 'name',
-                render: (v: any, record, index: number) => (
+                render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {(index + 1).toPersianDigits()}.{v}
+                    {(((page - 1) * 20) + index + 1).toPersianDigits()}.{v}
                   </div>
                 ),
               },
