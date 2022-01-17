@@ -257,9 +257,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   name: 'سازمان',
                   key: 'name',
                   render: (v: any, record, index: number, page: number) => (
-                    <span>
+                    <div className="flex">
                       {((page - 1) * 20 + (index + 1)).toLocaleString('fa')}.{v}
-                    </span>
+                    </div>
                   ),
                 },
                 {

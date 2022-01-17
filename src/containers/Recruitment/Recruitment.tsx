@@ -5,7 +5,7 @@ import Overview from '../../components/Recruitment/Overview';
 // import OverviewVaccinePerProvince from '../../components/Recruitment/OverviewVaccinePerProvince';
 // import OverviewPatients from '../../components/Recruitment/OverviewPatients';
 import OverviewOfVaccination from '../../components/Recruitment/OverviewOfVaccination';
-// import TestStatus from '../../components/Recruitment/TestStatus';
+import TestStatus from '../../components/Recruitment/TestStatus';
 
 const Recruitment: React.FC<{}> = () => {
   return (
@@ -15,7 +15,7 @@ const Recruitment: React.FC<{}> = () => {
       {/* <OverviewVaccinePerProvince/> */}
       {/* <OverviewPatients/> */}
       <OverviewOfVaccination/>
-      {/* <TestStatus/> */}
+      <TestStatus/>
     </div>
   );
 };
