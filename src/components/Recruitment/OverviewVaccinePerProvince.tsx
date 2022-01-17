@@ -73,7 +73,7 @@ const OverviewVaccinePerProvince = () => {
       // eslint-disable-next-line
       let noDose: any[] = [];
 
-      data.forEach((item: any) => {
+      data.forEach((item: any, index: number) => {
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.dosesCountMap)) {
           if (Number(key) === 0) {
@@ -96,6 +96,12 @@ const OverviewVaccinePerProvince = () => {
             moreThanThreeDose.push(Number(value));
           }
         }
+
+        if (noDose.length < index + 1) noDose.push(0);
+        if (firstDose.length < index + 1) firstDose.push(0);
+        if (secondDose.length < index + 1) secondDose.push(0);
+        if (thirdDose.length < index + 1) thirdDose.push(0);
+        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(0);
 
         provinces.push(item.tag);
       });
@@ -246,7 +252,9 @@ const OverviewVaccinePerProvince = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && dataset.length > 0 && !errorMessage && <Stacked data={dataset} categories={categories} />}
+        {!loading && dataset.length > 0 && !errorMessage && (
+          <Stacked data={dataset} categories={categories} />
+        )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
