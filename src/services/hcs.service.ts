@@ -5,7 +5,7 @@ function membersGeneral({ organization, tag, ...params }: any = {}) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general/${tag}`, params);
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params);
 }
 
 function membersTagBased({ organization, ...params }: { organization: string; params?: { tagPattern: string; from: string; to: string } }) {

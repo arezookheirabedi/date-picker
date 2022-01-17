@@ -15,6 +15,13 @@ import Spinner from '../Spinner';
 
 const {Line} = Charts;
 
+interface IParams {
+  status: string,
+  type: string,
+  from: any,
+  to: any,
+  tags: any[],
+}
 
 const transportationType = [
   {
@@ -55,12 +62,12 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const location = useLocation();
   const history = useHistory();
 
-  const [queryParams, setQueryParams] = useState({
+  const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
     type: 'ANNUAL',
     from: '',
     to: '',
-    tag: '',
+    tags: [],
   });
 
   const focusFromDate = () => {
@@ -181,7 +188,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                tag: value.enName,
+                                tags: [value.enName],
                               });
                             }}
                           >

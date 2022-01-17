@@ -13,6 +13,14 @@ import Spinner from '../Spinner';
 
 const {Line} = Charts;
 
+interface IParams {
+  status: string,
+  type: string,
+  from: any,
+  to: any,
+  tags: any[],
+}
+
 const recruitmentType = [
   {
     name: 'کل کارکنان',
@@ -85,12 +93,12 @@ const OverviewPatients = () => {
       : '';
   };
 
-  const [queryParams, setQueryParams] = useState({
+  const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
     type: 'ANNUAL',
     from: '',
     to: '',
-    tag: '',
+    tags: [],
   });
 
   const getLinearOverview = async (params: any) => {
@@ -168,7 +176,7 @@ const OverviewPatients = () => {
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                tag: value.enName,
+                                tags: [value.enName],
                               });
                             }}
                           >

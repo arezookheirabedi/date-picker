@@ -33,7 +33,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'student',
+        tags: ['student'],
         testResultCount: true,
         vaccinationCount: true,
         total: true,
