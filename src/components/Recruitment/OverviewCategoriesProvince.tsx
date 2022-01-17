@@ -14,7 +14,6 @@ interface OverviewCategoriesProvinceProps {
   cityTitle?: any;
 }
 
-
 const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
@@ -88,11 +87,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     if (existsCity) {
       getOverviewByCategory({
         organization: 'employment',
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        province: provinceName,
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        to: '',
+        from: '',
+        tags: [],
+        // province: provinceName,
       });
       //
     } else {
@@ -101,25 +103,37 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   }, [location.search]);
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getOverviewByCategory({
-        organization: 'employment',
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-      });
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      if (selectedDayRange.from && selectedDayRange.to) {
+        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+        getOverviewByCategory({
+          organization: 'employment',
+          // resultStatus: 'POSITIVE',
+          // recoveredCount: true,
+          // total: true,
+          // count: true,
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          tags: [],
+          // province: provinceName,
+        });
+      }
+    } else {
+      history.push('/dashboard/recruitment/province');
     }
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به کارکنان دولت کشور در استان &nbsp;
         {cityTitle}

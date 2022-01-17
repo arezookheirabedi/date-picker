@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import { useHistory, useLocation } from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
-import {Menu} from "@headlessui/react";
+import {Menu} from '@headlessui/react';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {getRecruitmentTagName, sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from "../../assets/images/icons/down.svg";
-
+import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
 interface TestStatusProvinceProps {
   cityTitle: any;
@@ -80,11 +79,14 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     if (existsCity) {
       getOverviewByCategory({
         organization: 'employment',
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        province: provinceName,
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        from: '',
+        to: '',
+        // province: provinceName,
+        tags: [],
       });
       //
     } else {
@@ -131,10 +133,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       if (existsCity) {
         getOverviewByCategory({
           organization: 'employment',
-          resultStatus: 'POSITIVE',
+          // resultStatus: 'POSITIVE',
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          province: provinceName,
+          // province: provinceName,
+          tags: [],
         });
       } else {
         history.push('/dashboard/recruitment/province');

@@ -50,13 +50,13 @@ const OverviewCategories: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByCategory({
       organization: 'school',
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
       from: '',
       to: '',
-      tagPattern: 'school*',
+      tags: ['school*'],
     });
   }, []);
 
@@ -92,13 +92,13 @@ const OverviewCategories: React.FC<{}> = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
         organization: 'school',
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        tagPattern: 'school*',
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tags: ['school*'],
       });
     }
   }, [selectedDayRange]);

@@ -26,7 +26,7 @@ const OverviewRecruitment: React.FC<{}> = () => {
     try {
       const {data} = await hcsServices.membersGeneral({
         organization: 'employment',
-        tag: 'student',
+        tags: ['student'],
         testResultCount: true,
         vaccinationCount: true,
         total: true,

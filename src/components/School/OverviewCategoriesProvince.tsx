@@ -87,14 +87,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     if (existsCity) {
       getOverviewByCategory({
         organization: 'school',
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
         from: '',
         to: '',
-        tagPattern: 'school*',
-        province: provinceName,
+        tags: ['school*'],
+        // province: provinceName,
       });
       //
     } else {
@@ -118,14 +118,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
         getOverviewByCategory({
           organization: 'school',
-          resultStatus: 'POSITIVE',
-          recoveredCount: true,
-          total: true,
-          count: true,
-          tagPattern: 'school*',
+          // resultStatus: 'POSITIVE',
+          // recoveredCount: true,
+          // total: true,
+          // count: true,
+          tags: ['school*'],
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          province: provinceName,
+          // province: provinceName,
         });
       } else {
         history.push('/dashboard/school/province');

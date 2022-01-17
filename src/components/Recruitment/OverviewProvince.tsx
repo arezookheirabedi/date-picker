@@ -36,7 +36,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'employment',
-        tag: 'student',
+        tags: ['student'],
         testResultCount: true,
         vaccinationCount: true,
         total: true,

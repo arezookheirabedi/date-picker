@@ -80,11 +80,14 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     if (existsCity) {
       getOverviewByCategory({
         organization: 'school',
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        province: provinceName,
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        from: '',
+        to: '',
+        // province: provinceName,
+        tags: [],
       });
       //
     } else {
@@ -131,10 +134,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       if (existsCity) {
         getOverviewByCategory({
           organization: 'recruitment',
-          resultStatus: 'POSITIVE',
+          // resultStatus: 'POSITIVE',
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          province: provinceName,
+          // province: provinceName,
+          tags: [],
         });
       } else {
         history.push('/dashboard/school/province');

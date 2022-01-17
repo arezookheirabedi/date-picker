@@ -67,10 +67,13 @@ const TestStatus: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByCategory({
       organization: 'employment',
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
+      from: '',
+      to: '',
+      tags: [],
     });
   }, []);
 
@@ -106,9 +109,10 @@ const TestStatus: React.FC<{}> = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
         organization: 'employment',
-        resultStatus: 'POSITIVE',
+        // resultStatus: 'POSITIVE',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tags: [],
       });
     }
   }, [selectedDayRange]);
