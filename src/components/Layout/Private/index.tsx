@@ -79,7 +79,7 @@ const PrivateLayout: React.FC<any> = () => {
             <img src={logo} alt="logo" />
           </div>
         </div>
-        <ScrollNavbar className="border-0 z-20 relative overflow-hidden overflow-y-auto pb-5 pt-8 pb-32">
+        <ScrollNavbar className="border-0 z-20 relative overflow-hidden overflow-y-auto pt-8 pb-32">
           {routes.map(route => (
             <MenuItemWrapper route={route} key={route.keyIndex} />
           ))}
@@ -101,8 +101,8 @@ const PrivateLayout: React.FC<any> = () => {
           }}
         />
       </div>
-      <div className="mr-0 xl:mr-72 flex relative min-h-screen">
-        <div className="flex-grow flex flex-col lg:pl-12 xl:pr-32 xl:pl-14 sm:px-12 sm:py-6 px-4 py-2 xl:py-0">
+      <div className="mr-0 xl:mr-72 relative min-h-screen overflow-hidden overflow-y-auto">
+        <div className="lg:pl-12 xl:pr-32 xl:pl-14 sm:px-12 sm:py-6 px-4 py-2 xl:py-0">
           <div className="lg:py-4">
             {collapsible
               ? React.createElement(
@@ -145,7 +145,7 @@ const PrivateLayout: React.FC<any> = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white flex-grow flex flex-col relative">
+          <div className="bg-white relative">
             <Switch>
               {routes.map((route, i) =>
                 !route.subMenu ? (

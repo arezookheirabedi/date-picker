@@ -15,7 +15,6 @@ const School: React.FC<{}> = () => {
       <OverviewSchool />
       <OverviewSchoolEmploye />
       <OverviewSchoolStudent />
-
       <OverviewCategories />
       <OverviewPatients />
       <OverviewOfVaccination />

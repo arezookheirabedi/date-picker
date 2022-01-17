@@ -13,23 +13,31 @@ import Spinner from '../Spinner';
 
 const {Line} = Charts;
 
-const transportationType = [
-  {
-    name: 'کل حمل و نقل',
-    enName: '',
-  },
-  {
-    name: 'تاکسی آنلاین',
-    enName: 'ONLINE',
-  },
-  {
-    name: 'تاکسی پلاک ع',
-    enName: 'PUBLIC',
-  },
-  {
-    name: 'تاکسی پلاک ت',
-    enName: 'TAXI_T',
-  },
+
+interface IParams {
+  status: string,
+  type: string,
+  from: any,
+  to: any,
+  tags: any[],
+}
+
+
+const filterTypes = [
+  {name: 'دانش آموزان پایه اول', enName: 'a1'},
+  {name: 'دانش آموزان پایه دوم', enName: 'a1'},
+  {name: 'دانش آموزان پایه سوم', enName: 'a1'},
+  {name: 'دانش آموزان پایه چهارم', enName: 'a1'},
+  {name: 'دانش آموزان پایه پنجم', enName: 'a1'},
+  {name: 'دانش آموزان پایه ششم', enName: 'a1'},
+  {name: 'دانش آموزان پایه هفتم', enName: 'a1'},
+  {name: 'دانش آموزان پایه هشتم', enName: 'a1'},
+  {name: 'دانش آموزان پایه نهم', enName: 'a1'},
+  {name: 'دانش آموزان پایه دهم', enName: 'a1'},
+  {name: 'دانش آموزان پایه یازدهم', enName: 'a1'},
+  {name: 'دانش آموزان پایه دوازدهم', enName: 'a1'},
+  {name: 'پرسنل آموزشی', enName: 'a1'},
+  {name: 'پرسنل اداری', enName: 'a1'},
 ];
 
 const OverviewPatients = () => {
@@ -69,12 +77,12 @@ const OverviewPatients = () => {
       : '';
   };
 
-  const [queryParams, setQueryParams] = useState({
+  const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
     type: 'ANNUAL',
     from: '',
     to: '',
-    tag: '',
+    tags: [],
   });
 
   const getLinearOverviewPublicTransport = async (params: any) => {
@@ -113,6 +121,7 @@ const OverviewPatients = () => {
       });
     }
   }, [selectedDayRange]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان آموزش و پرورش</legend>
@@ -128,7 +137,7 @@ const OverviewPatients = () => {
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
-                    {serviceType?.name || 'کل حمل و نقل'}
+                    {serviceType?.name || 'کل آموزش و پرورش'}
                   </span>
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
@@ -136,7 +145,7 @@ const OverviewPatients = () => {
 
               <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {transportationType.map((value: any, index: any) => {
+                  {filterTypes.map((value: any, index: any) => {
                     // console.log(value);
                     return (
                       // eslint-disable-next-line
@@ -151,7 +160,7 @@ const OverviewPatients = () => {
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                tag: value.enName,
+                                tags: [value.enName],
                               });
                             }}
                           >

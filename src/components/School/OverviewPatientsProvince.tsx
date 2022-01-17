@@ -9,138 +9,19 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../RangeDateSliderFliter';
 import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
+import {sideCities, toPersianDigit} from '../../helpers/utils';
+import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
 
 const {Line} = Charts;
 
-const sideCities = [
-  {
-    name: 'هرمزگان',
-    color: '#ccc',
-  },
-  {
-    name: 'بوشهر',
-    color: '#ccc',
-  },
-  {
-    name: 'کهگیلویه و بویراحمد',
-    color: '#ccc',
-  },
-  {
-    name: 'فارس',
-    color: '#ccc',
-  },
-  {
-    name: 'اصفهان',
-    color: '#ccc',
-  },
-  {
-    name: 'سمنان',
-    color: '#ccc',
-  },
-  {
-    name: 'گلستان',
-    color: '#ccc',
-  },
-  {
-    name: 'مازندران',
-    color: '#ccc',
-  },
-  {
-    name: 'تهران',
-    color: '#ccc',
-  },
-  {
-    name: 'مرکزی',
-    color: '#ccc',
-  },
-  {
-    name: 'یزد',
-    color: '#ccc',
-  },
-  {
-    name: 'چهارمحال و بختیاری',
-    color: '#ccc',
-  },
-  {
-    name: 'خوزستان',
-    color: '#ccc',
-  },
-  {
-    name: 'لرستان',
-    color: '#ccc',
-  },
-  {
-    name: 'ایلام',
-    color: '#ccc',
-  },
-  {
-    name: 'اردبیل',
-    color: '#ccc',
-  },
-  {
-    name: 'قم',
-    color: '#ccc',
-  },
-  {
-    name: 'همدان',
-    color: '#ccc',
-  },
-  {
-    name: 'زنجان',
-    color: '#ccc',
-  },
-  {
-    name: 'قزوین',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان غربی',
-    color: '#ccc',
-  },
-  {
-    name: 'آذربایجان شرقی',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمانشاه',
-    color: '#ccc',
-  },
-  {
-    name: 'گیلان',
-    color: '#ccc',
-  },
-  {
-    name: 'کردستان',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان جنوبی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان رضوی',
-    color: '#ccc',
-  },
-  {
-    name: 'خراسان شمالی',
-    color: '#ccc',
-  },
-  {
-    name: 'سیستان و بلوچستان',
-    color: '#ccc',
-  },
-  {
-    name: 'کرمان',
-    color: '#ccc',
-  },
-  {
-    name: 'البرز',
-    color: '#ccc',
-  },
-];
+interface IParams {
+  status: string,
+  type: string,
+  from: any,
+  to: any,
+  tags: any[],
+}
 
 const transportationType = [
   {
@@ -181,12 +62,12 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const location = useLocation();
   const history = useHistory();
 
-  const [queryParams, setQueryParams] = useState({
+  const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
     type: 'ANNUAL',
-    fromDate: '',
-    toDate: '',
-    serviceType: '',
+    from: '',
+    to: '',
+    tags: [],
   });
 
   const focusFromDate = () => {
@@ -213,11 +94,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       : '';
   };
 
-  const getLinearOverviewPublicTransport = async (params: any) => {
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params);
+      const response = await hcsService.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -239,10 +120,10 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     let idSetTimeOut: any;
     if (existsCity) {
       idSetTimeOut = setTimeout(() => {
-        getLinearOverviewPublicTransport({...queryParams, province: provinceName});
+        getLinearOverview({organization: 'school', province: provinceName, ...queryParams});
       }, 500);
     } else {
-      history.push('/dashboard/transport/province');
+      history.push('/dashboard/school/province');
     }
 
     return () => {
@@ -260,8 +141,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     }
   }, [selectedDayRange]);
@@ -307,7 +188,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                serviceType: value.enName,
+                                tags: [value.enName],
                               });
                             }}
                           >

@@ -68,6 +68,7 @@ export default function Login() {
       const response = await authService.login(finalData);
       setToken(response.data);
       window.localStorage.setItem('ministers-username', data.username);
+      window.localStorage.setItem('ministers-first-login', String(new Date().getTime()));
       // localStorage.setItem(
       //   "loginInfo",
       //   JSON.stringify({

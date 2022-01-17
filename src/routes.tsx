@@ -112,27 +112,27 @@ const routes: IRoute[] = [
   {
     keyIndex: '7',
     icon: (active, disabled) => (
-      <IconWrapperStyle name="education" active={active} disabled={disabled} />
+      <IconWrapperStyle name="school" active={active} disabled={disabled} />
     ),
-    link: '/dashboard/education/public',
-    simLink: '/dashboard/education',
+    link: '/dashboard/school/public',
+    simLink: '/dashboard/school',
     exact: true,
     inMenu: true,
-    disabled: true,
+    // disabled: true,
     title: 'داشبورد آموزش و پرورش',
     subMenu: [
       {
         keyIndex: '1',
         title: 'عمومی',
-        link: '/dashboard/education/public',
-        icon: active => <IconWrapperStyle name="sub-education" active={active} />,
+        link: '/dashboard/school/public',
+        icon: active => <IconWrapperStyle name="sub-school" active={active} />,
         main: School,
       },
       {
         keyIndex: '2',
         title: 'استانی',
-        link: '/dashboard/education/province',
-        icon: active => <IconWrapperStyle name="sub-education" active={active} />,
+        link: '/dashboard/school/province',
+        icon: active => <IconWrapperStyle name="sub-school" active={active} />,
         main: SchoolProvince,
       },
     ],

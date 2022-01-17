@@ -3,6 +3,7 @@ import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
 import {ILogin, IProfile} from 'src/models/authentication.model';
 
+
 const baseUrl = Setup.endpoint;
 
 let axiosRequestConfig: AxiosRequestConfig = {
@@ -50,17 +51,6 @@ export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   }
 };
 
-export function isLogin() {
-  // const profileStr = localStorage.getItem('userinfo');
-  const tokenStr = localStorage.getItem('token');
-  if (tokenStr) {
-    const token: ILogin = JSON.parse(tokenStr);
-    if (token && token.access_token.length > 0) {
-      return true;
-    }
-  }
-  return false;
-}
 
 export const setLogin: (param: IProfile) => void = param => {
   localStorage.setItem('userinfo', JSON.stringify(param));
@@ -122,6 +112,24 @@ export const fixNumbers = (e: any) => {
 export const toPersianDigit = (str: any) => {
   const id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return str.replace(/[0-9]/g, (w: any) => id[+w]);
+};
+
+export function isLogin() {
+  // const profileStr = localStorage.getItem('userinfo');
+  const tokenStr = localStorage.getItem('token');
+  const firstLogin = localStorage.getItem('ministers-first-login');
+  if (tokenStr && firstLogin) {
+    if (new Date().getTime() > (Number(firstLogin) + (24 * 60 * 60 * 1000))) {
+      removeToken();
+      console.log('on day finished')
+      return false;
+    }
+    const token: ILogin = JSON.parse(tokenStr);
+    if (token && token.access_token.length > 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export const getBgColorGradientByStatus = (status: string) => {
@@ -136,7 +144,6 @@ export const getBgColorGradientByStatus = (status: string) => {
 
   return bg;
 };
-
 
 export const getServiceTypeName = (item: any) => {
   switch (item) {
@@ -172,6 +179,35 @@ export const getColorByServiceTypeName = (item: any) => {
   }
 };
 
+export const getSchoolTagName: { [key: string]: any } = {
+  a1: 'دانش آموزان پایه اول',
+  a2: 'دانش آموزان پایه دوم',
+  a3: 'دانش آموزان پایه سوم',
+  a4: 'دانش آموزان پایه چهارم',
+  a5: 'دانش آموزان پایه پنجم',
+  a6: 'دانش آموزان پایه ششم',
+  a7: 'دانش آموزان پایه هفتم',
+  a8: 'دانش آموزان پایه هشتم',
+  a9: 'دانش آموزان پایه نهم',
+  a10: 'دانش آموزان پایه دهم',
+  a11: 'دانش آموزان پایه یازدهم',
+  a12: 'دانش آموزان پایه دوازدهم',
+  a13: 'پرسنل آموزشی',
+  a14: 'پرسنل اداری',
+};
+
+export const getRecruitmentTagName: { [key: string]: any } = {
+  a1: 'نقشه‌برداری کشور',
+  a2: 'نظام مهندسی ساختمان',
+  a3: 'هواشناسی ایران',
+  a4: 'زمین‌شناسی کشور',
+  a5: 'سازمان ملی زمین و مسکن',
+  a6: 'شرکت پست جمهوری',
+  a7: 'اداره ارشاد اسلامی',
+  a8: 'اداره برق',
+  a9: 'اداره خدمات آموزشی',
+  a10: 'اداره گذرنامه',
+};
 
 export const transportationTypes = [
   {
@@ -191,138 +227,138 @@ export const transportationTypes = [
     enName: 'TAXI_T',
   },
   {
-    name : 'پیک موتوری',
-    enName: 'MOTOR_PEYK'
+    name: 'پیک موتوری',
+    enName: 'MOTOR_PEYK',
   },
   {
-    name : 'سرویس مدارس',
-    enName: 'SCHOOL_SERVICE'
-  }
+    name: 'سرویس مدارس',
+    enName: 'SCHOOL_SERVICE',
+  },
 ];
 
 export const sideCities = [
   {
-    name: "هرمزگان",
-    color: "#ccc"
+    name: 'هرمزگان',
+    color: '#ccc',
   },
   {
-    name: "بوشهر",
-    color: "#ccc"
+    name: 'بوشهر',
+    color: '#ccc',
   },
   {
-    name: "کهگیلویه و بویراحمد",
-    color: "#ccc"
+    name: 'کهگیلویه و بویراحمد',
+    color: '#ccc',
   },
   {
-    name: "فارس",
-    color: "#ccc"
+    name: 'فارس',
+    color: '#ccc',
   },
   {
-    name: "اصفهان",
-    color: "#ccc"
+    name: 'اصفهان',
+    color: '#ccc',
   },
   {
-    name: "سمنان",
-    color: "#ccc"
+    name: 'سمنان',
+    color: '#ccc',
   },
   {
-    name: "گلستان",
-    color: "#ccc"
+    name: 'گلستان',
+    color: '#ccc',
   },
   {
-    name: "مازندران",
-    color: "#ccc"
+    name: 'مازندران',
+    color: '#ccc',
   },
   {
-    name: "تهران",
-    color: "#ccc"
+    name: 'تهران',
+    color: '#ccc',
   },
   {
-    name: "مرکزی",
-    color: "#ccc"
+    name: 'مرکزی',
+    color: '#ccc',
   },
   {
-    name: "یزد",
-    color: "#ccc"
+    name: 'یزد',
+    color: '#ccc',
   },
   {
-    name: "چهارمحال و بختیاری",
-    color: "#ccc"
+    name: 'چهارمحال و بختیاری',
+    color: '#ccc',
   },
   {
-    name: "خوزستان",
-    color: "#ccc"
+    name: 'خوزستان',
+    color: '#ccc',
   },
   {
-    name: "لرستان",
-    color: "#ccc"
+    name: 'لرستان',
+    color: '#ccc',
   },
   {
-    name: "ایلام",
-    color: "#ccc"
+    name: 'ایلام',
+    color: '#ccc',
   },
   {
-    name: "اردبیل",
-    color: "#ccc"
+    name: 'اردبیل',
+    color: '#ccc',
   },
   {
-    name: "قم",
-    color: "#ccc"
+    name: 'قم',
+    color: '#ccc',
   },
   {
-    name: "همدان",
-    color: "#ccc"
+    name: 'همدان',
+    color: '#ccc',
   },
   {
-    name: "زنجان",
-    color: "#ccc"
+    name: 'زنجان',
+    color: '#ccc',
   },
   {
-    name: "قزوین",
-    color: "#ccc"
+    name: 'قزوین',
+    color: '#ccc',
   },
   {
-    name: "آذربایجان غربی",
-    color: "#ccc"
+    name: 'آذربایجان غربی',
+    color: '#ccc',
   },
   {
-    name: "آذربایجان شرقی",
-    color: "#ccc"
+    name: 'آذربایجان شرقی',
+    color: '#ccc',
   },
   {
-    name: "کرمانشاه",
-    color: "#ccc"
+    name: 'کرمانشاه',
+    color: '#ccc',
   },
   {
-    name: "گیلان",
-    color: "#ccc"
+    name: 'گیلان',
+    color: '#ccc',
   },
   {
-    name: "کردستان",
-    color: "#ccc"
+    name: 'کردستان',
+    color: '#ccc',
   },
   {
-    name: "خراسان جنوبی",
-    color: "#ccc"
+    name: 'خراسان جنوبی',
+    color: '#ccc',
   },
   {
-    name: "خراسان رضوی",
-    color: "#ccc"
+    name: 'خراسان رضوی',
+    color: '#ccc',
   },
   {
-    name: "خراسان شمالی",
-    color: "#ccc"
+    name: 'خراسان شمالی',
+    color: '#ccc',
   },
   {
-    name: "سیستان و بلوچستان",
-    color: "#ccc"
+    name: 'سیستان و بلوچستان',
+    color: '#ccc',
   },
   {
-    name: "کرمان",
-    color: "#ccc"
+    name: 'کرمان',
+    color: '#ccc',
   },
   {
-    name: "البرز",
-    color: "#ccc"
+    name: 'البرز',
+    color: '#ccc',
   },
-]
+];

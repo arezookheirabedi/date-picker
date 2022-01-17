@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
 import Spinner from '../Spinner';
 
 const {Stacked} = Charts;
 
 const OverviewVaccinePerProvince = () => {
-  const [data, setData] = useState([]);
+  const [dataset, setDataset] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
@@ -46,20 +47,87 @@ const OverviewVaccinePerProvince = () => {
   };
 
   const [queryParams, setQueryParams] = useState({
-    status: 'POSITIVE',
-    type: 'ANNUAL',
-    fromDate: '',
-    toDate: '',
-    serviceType: '',
+    from: '',
+    to: '',
+    tags: ['province'].join(','),
+    organization: 'employment',
   });
 
   // eslint-disable-next-line
-  const getLinearOverviewPublicTransport = async (params: any) => {
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params);
-      setData(response.data);
+      const {data} = await hcsService.dosesTagBased(params);
+
+      const provinces: any[] = [];
+
+      // eslint-disable-next-line
+      let firstDose: any[] = [];
+      // eslint-disable-next-line
+      let secondDose: any[] = [];
+      // eslint-disable-next-line
+      let thirdDose: any[] = [];
+      // eslint-disable-next-line
+      let moreThanThreeDose: any[] = [];
+      // eslint-disable-next-line
+      let noDose: any[] = [];
+
+      data.forEach((item: any) => {
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+          if (Number(key) === 0) {
+            noDose.push(Number(value));
+          }
+
+          if (Number(key) === 1) {
+            firstDose.push(Number(value));
+          }
+
+          if (Number(key) === 2) {
+            secondDose.push(Number(value));
+          }
+
+          if (Number(key) === 3) {
+            thirdDose.push(Number(value));
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose.push(Number(value));
+          }
+        }
+
+        provinces.push(item.tag);
+      });
+
+      setDataset([
+        {
+          name: 'واکسن نزده',
+          color: '#FE2D2F',
+          data: [...noDose],
+        },
+        {
+          name: 'دوز اول',
+          color: '#FFC700',
+          data: [...firstDose],
+        },
+        {
+          name: 'دوز دوم',
+          color: '#039572',
+          data: [...secondDose],
+        },
+        {
+          name: 'دوز سوم',
+          color: '#00cfd6',
+          data: [...thirdDose],
+        },
+        {
+          name: 'بیش از ۳ دوز',
+          color: '#1db7ff',
+          data: [...moreThanThreeDose],
+        },
+      ]);
+      setCategories([...provinces]);
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -71,7 +139,7 @@ const OverviewVaccinePerProvince = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      // getLinearOverviewPublicTransport(queryParams);
+      getLinearOverview(queryParams);
     }, 500);
 
     return () => clearTimeout(idSetTimeOut);
@@ -85,8 +153,10 @@ const OverviewVaccinePerProvince = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        organization: 'employment',
+        tags: ['province'].join(','),
       });
     }
   }, [selectedDayRange]);
@@ -97,8 +167,8 @@ const OverviewVaccinePerProvince = () => {
         نگاه کلی به وضعیت واکسیناسیون کارکنان دولت
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between w-3/4 px-8">
+        <div className="flex items-center justify-between mb-10 mt-6 px-8">
+          <div className="flex align-center justify-between w-3/4">
             <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
@@ -144,21 +214,25 @@ const OverviewVaccinePerProvince = () => {
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#FFC700'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FE2D2F'}} />
+                  <span>واکسن نزده</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FFC700'}} />
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#883BA4'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#039572'}} />
                   <span>دوز دوم</span>
                 </div>
               </div>
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#175A76'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00cfd6'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-3 rounded" style={{backgroundColor: '#00AAB1'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#1db7ff'}} />
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>
@@ -171,14 +245,14 @@ const OverviewVaccinePerProvince = () => {
             <Spinner />
           </div>
         )}
-        {/* {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Stacked data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && dataset.length > 0 && !errorMessage && <Stacked data={dataset} categories={categories} />}
+        {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )} */}
-        <div className="flex justify-center items-center w-full">
-          <Stacked data={data} />
-        </div>
+        )}
+        {/* <div className="flex justify-center items-center w-full">
+          <Stacked data={dataset} categories={categories} />
+        </div> */}
       </div>
     </fieldset>
   );

@@ -13,107 +13,54 @@ import hcsService from '../../services/hcs.service';
 
 const Overview = () => {
   const [numberOf, setNumberOf] = useState(null);
-  const [numberOfLoading, setNumberOfLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
   const [numberOfPositive, setNumberOfPositive] = useState(null);
-  const [numberOfPositiveLoading, setNumberOfPositiveLoading] = useState(false);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfRecoveredLoading, setNumberOfRecoveredLoading] = useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
 
   const getNumberOf = async () => {
-    setNumberOfLoading(true);
+    setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'school',
-        tag: 'school',
+        tags: ['student'].join(','),
+        testResultCount: true,
+        vaccinationCount: true,
+        total: true,
       });
-      setNumberOf(data.numberOfPositive);
+      setNumberOf(data.total || 0);
+      setNumberOfPlaqueVisited(data.numberOfPositive || 0);
+      setNumberOfPositive(data.numberOfPositive || 0);
+      setNumberOfRecovered(data.numberOfRecovered || 0);
+      setNumberOfTestResults(data.testResultCount || 0);
+      setNumberOfVaccination(data.numberOfVaccinated || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
-    } finally {
-      setNumberOfLoading(false);
-    }
-  };
 
-  const getNumberOfPlaqueVisited = async () => {
-    setNumberOfPlaqueVisitedLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfPlaqueVisited(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
+      // @ts-ignore
+      setNumberOf(0);
+      // @ts-ignore
+      setNumberOfPlaqueVisited(0);
+      // @ts-ignore
+      setNumberOfPositive(0);
+      // @ts-ignore
+      setNumberOfRecovered(0);
+      // @ts-ignore
+      setNumberOfTestResults(0);
+      // @ts-ignore
+      setNumberOfVaccination(0);
     } finally {
-      setNumberOfPlaqueVisitedLoading(false);
-    }
-  };
-
-  const getNumberOfPositive = async () => {
-    setNumberOfPositiveLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfPositive(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPositiveLoading(false);
-    }
-  };
-
-  const getNumberOfRecovered = async () => {
-    setNumberOfRecoveredLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfRecovered(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfRecoveredLoading(false);
-    }
-  };
-
-  const getNumberOfTestResults = async () => {
-    setNumberOfTestResultsLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfTestResults(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfTestResultsLoading(false);
-    }
-  };
-
-  const getNumberOfVaccination = async () => {
-    setNumberOfVaccinationLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral({organization: 'school', tag: 'school'});
-      setNumberOfVaccination(data.numberOfPositive);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfVaccinationLoading(false);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getNumberOf();
-    getNumberOfPlaqueVisited();
-    getNumberOfPositive();
-    getNumberOfRecovered();
-    getNumberOfTestResults();
-    getNumberOfVaccination();
   }, []);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -126,19 +73,19 @@ const Overview = () => {
             icon={totalRecritment}
             text="مجموع کارمندان آموزش پرورش"
             count={numberOf}
-            loading={numberOfLoading}
+            loading={loading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={numberOfPositive}
-            loading={numberOfPositiveLoading}
+            loading={loading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={numberOfRecovered}
-            loading={numberOfRecoveredLoading}
+            loading={loading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
@@ -147,20 +94,20 @@ const Overview = () => {
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
-            loading={numberOfVaccinationLoading}
+            loading={loading}
           />
           <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
             count={numberOfPlaqueVisited}
-            loading={numberOfPlaqueVisitedLoading}
+            loading={loading}
           />
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش‌های کارمندان"
             count={numberOfTestResults}
-            loading={numberOfTestResultsLoading}
+            loading={loading}
           />
         </div>
       </div>
