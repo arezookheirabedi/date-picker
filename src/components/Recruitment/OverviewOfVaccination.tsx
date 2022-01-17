@@ -126,16 +126,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
           total = allVaccination + noDose + unknownInformation;
         }
-
-        console.log(item.tag, {
-          firstDosePercentage: (firstDose * 100) / total,
-          secondDosePercentage: (secondDose * 100) / total,
-          thirdDosePercentage: (thirdDose * 100) / total,
-          otherDose: (moreThanThreeDose * 100) / total,
-          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
-          unknownInformation,
-          noDose: (noDose * 100) / total,
-        });
         
         // if (total > 0)
         normalizedData.push({
