@@ -39,7 +39,6 @@ const RecruitmentProvince = () => {
       <OverviewPatientsProvince cityTitle={cityTitle}/>
       <OverviewOfVaccinationProvince cityTitle={cityTitle} />
       <TestsStatusProvince cityTitle={cityTitle} />
-
     </div>
   );
 };
