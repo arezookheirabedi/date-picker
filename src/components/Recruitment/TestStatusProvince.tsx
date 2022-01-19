@@ -6,9 +6,9 @@ import hcsService from 'src/services/hcs.service';
 import {Menu} from '@headlessui/react';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getRecruitmentTagName, sideCities, toPersianDigit} from '../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
@@ -37,6 +37,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   const [filterType, setFilterType] = useState({name: null, enName: null});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -52,7 +53,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       data.forEach((item: any, index: number) => {
         normalizedDate.push({
           id: `ovca_${index}`,
-          name: getRecruitmentTagName[item.tag] || 'نامشخص',
+          name: item.tag || 'نامشخص',
           total: item.total || 0,
           positiveCount: item.positiveCount || 0,
           negativeCount: item.negativeCount || 0,
@@ -62,6 +63,8 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         });
       });
       setDataset([...normalizedDate]);
+      setOrgDataset([...normalizedDate]);
+      setFilterType({name: null, enName: null});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -79,20 +82,14 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     if (existsCity) {
       getOverviewByCategory({
         organization: 'employment',
-        // resultStatus: 'POSITIVE',
-        // recoveredCount: true,
-        // total: true,
-        // count: true,
         from: '',
         to: '',
-        // province: provinceName,
-        tags: [],
+        tags: [` استان ${provinceName}`].join(','),
       });
-      //
     } else {
       history.push('/dashboard/recruitment/province');
     }
-  }, []);
+  }, [location.search]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -102,11 +99,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -114,7 +111,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -137,13 +134,32 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           // province: provinceName,
-          tags: [],
+          tags: [` استان ${provinceName}`].join(','),
         });
       } else {
         history.push('/dashboard/recruitment/province');
       }
     }
   }, [selectedDayRange]);
+
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
+
+      if (a.total < b.total) {
+        return reverse * 1;
+      }
+
+      if (a.total > b.total) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -159,20 +175,23 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button
+                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
                   {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
+                <DownIcon className="h-2 w-2.5 mr-2"/>
               </Menu.Button>
             </div>
 
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items
+              style={{minWidth: '200px'}}
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
               <div className="px-1 py-1 ">
                 {filterTypes.map((value: any, index: any) => {
-                  // console.log(value);
                   return (
                     // eslint-disable-next-line
                     <Menu.Item key={index}>
@@ -184,13 +203,8 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                           } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
                           onClick={() => {
                             setFilterType(value);
-                            // setQueryParams({
-                            //   ...queryParams,
-                            //   tag: value.enName,
-                            // });
                           }}
                         >
-                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                           {value.name}
                         </button>
                       )}
@@ -222,11 +236,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                   {toPersianDigit(generateFromDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5" />
+              <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
           <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
+            <span className="dash-separator"/>
           </div>
           <div className=" shadow-custom rounded-lg px-4 py-1">
             <div
@@ -238,7 +252,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                   {toPersianDigit(generateToDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5" />
+              <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
         </div>
@@ -247,12 +261,12 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
                 name: 'وضعیت',
@@ -304,9 +318,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               {
                 name: 'دسته',
                 key: 'name',
-                render: (v: any, record, index: number) => (
+                render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {(index + 1).toPersianDigits()}.{v}
+                    {((page - 1) * 10 + (index + 1)).toPersianDigits()}.{v}
                   </div>
                 ),
               },
@@ -352,7 +366,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 ),
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length || 0}
           />
         )}
       </div>

@@ -9,11 +9,11 @@ import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
 import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
 import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
 import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
-import GrayVaccine1 from '../../assets/images/icons/gray-vaccine-lg.svg';
-import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
-import Table from '../Table';
+import Gray1Vaccine from '../../assets/images/icons/gray-vaccine-1.svg';
+import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
+import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities, getRecruitmentTagName} from '../../helpers/utils';
+import {sideCities} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 interface OverviewOfVaccinationProvinceProps {
@@ -45,43 +45,47 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     setCountsLoading(true);
     try {
       const {data} = await hcsService.doses(params);
+      let total = 0;
       let tmp = {...counts};
 
       // eslint-disable-next-line no-plusplus
-      for (let j: number = 0; j < data.length; j++) {
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries(data[j])) {
-          if (Number(key) === 0) {
-            tmp = {...tmp, numberOfUnvaccinated: Number(value)};
-          }
+      data.forEach((item: any) => {
+        const v: any = Object.entries(item);
+        const [key, value] = v[0];
 
-          if (Number(key) === 1) {
-            tmp = {...tmp, numberOfFirstDose: Number(value)};
-          }
-
-          if (Number(key) === 2) {
-            tmp = {...tmp, numberOfSecondDose: Number(value)};
-          }
-
-          if (Number(key) === 3) {
-            tmp = {...tmp, numberOfThirdDose: Number(value)};
-          }
-
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            tmp = {...tmp, numberOfMoreThreeDose: Number(value)};
-          }
-
-          if (Number(key) !== 0 && key !== 'null') {
-            tmp = {...tmp, numberOfAllDose: Number(value)};
-          }
-
-          if (key === 'null') {
-            tmp = {...tmp, numberOfUnknownDose: Number(value)};
-          }
+        switch (key) {
+          case '1':
+            tmp = {...tmp, numberOfFirstDose: value || 0};
+            total += value || 0;
+            break;
+          case '2':
+            tmp = {...tmp, numberOfSecondDose: value || 0};
+            total += value || 0;
+            break;
+          case '3':
+            tmp = {...tmp, numberOfThirdDose: value || 0};
+            total += value || 0;
+            break;
+          case '5':
+            tmp = {...tmp, numberOfMoreThirdDose: value || 0};
+            total += value || 0;
+            break;
+          case 'null':
+            tmp = {...tmp, numberOfUnvaccinated: value || 0};
+            total += value || 0;
+            break;
+          default:
+            tmp = {...tmp, numberOfNull: value || 0};
+            total += value || 0;
+            break;
         }
-      }
 
-      setCounts({...tmp});
+        setCounts({
+          ...counts,
+          ...tmp,
+          total,
+        });
+      });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -94,8 +98,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     setLoading(true);
     try {
       const {data} = await hcsService.dosesTagBased(params);
+      const normalizedData: any[] = [];
 
-      const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
@@ -105,59 +109,59 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         let unknownInformation = 0;
         let noDose = 0;
         let total = 0;
-
-        if (item.dosesCountMap) {
-          // eslint-disable-next-line
-          for (let i = 0; i < item.dosesCountMap.length; i++) {
-            // eslint-disable-next-line
-            for (const [key, value] of Object.entries(item.dosesCountMap[i])) {
-              if (Number(key) === 0) {
-                noDose += Number(value);
-              }
-
-              if (Number(key) === 1) {
-                firstDose += Number(value);
-              }
-
-              if (Number(key) === 2) {
-                secondDose += Number(value);
-              }
-
-              if (Number(key) === 3) {
-                thirdDose += Number(value);
-              }
-
-              if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-                moreThanThreeDose += Number(value);
-              }
-
-              if (Number(key) !== 0 && key !== 'null') {
-                allVaccination += Number(value);
-              }
-
-              if (key === 'null') {
-                unknownInformation += Number(value);
-              }
-
-              total = allVaccination + noDose + unknownInformation;
-            }
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+          if (Number(key) === 0) {
+            noDose += Number(value);
           }
+
+          if (Number(key) === 1) {
+            firstDose += Number(value);
+          }
+
+          if (Number(key) === 2) {
+            secondDose += Number(value);
+          }
+
+          if (Number(key) === 3) {
+            thirdDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            allVaccination += Number(value);
+          }
+
+          if (key === 'null') {
+            unknownInformation += Number(value);
+          }
+
+          total = allVaccination + noDose + unknownInformation;
         }
 
-        normalizedDate.push({
+        // if (total > 0)
+        normalizedData.push({
           id: `ovvac_${index}`,
-          name: getRecruitmentTagName[item.tag] || 'نامشخص',
-          total: total || 0,
-          firstDose: firstDose || 0,
-          secondDose: secondDose || 0,
-          thirdDose: thirdDose || 0,
-          otherDose: moreThanThreeDose || 0,
-          unknownInformation: unknownInformation || 0,
-          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose || 0,
-          noDose: (noDose * 100) / total || 0,
+          name: item.tag || 'نامشخص',
+          firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: (secondDose * 100) / total,
+          thirdDosePercentage: (thirdDose * 100) / total,
+          otherDose: (moreThanThreeDose * 100) / total,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
+          unknownInformation,
+          noDose: (noDose * 100) / total,
+          // eslint-disable-next-line
+          // notVaccine: item.dosesCountMap
+          //   ? item.dosesCountMap[0]
+          //     ? (item.dosesCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
         });
       });
-      setDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -178,20 +182,21 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         organization: 'employment',
         from: '',
         to: '',
-        tagPattern: '',
+        tags: [` استان ${provinceName}`].join(','),
         province: provinceName,
       });
+
       getOverviewByVaccinePercent({
         organization: 'employment',
         from: '',
         to: '',
-        tagPattern: '',
+        tags: [` استان ${provinceName}`].join(','),
         province: provinceName,
       });
     } else {
       history.push('/dashboard/recruitment/province');
     }
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -204,7 +209,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
-            count={counts.numberOfEmployees || 0}
+            count={counts.total || 0}
             loading={countsLoading}
           />
           <Statistic
@@ -230,25 +235,35 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={BlueVaccine}
             text="بیش از ۳ دوز"
-            count={counts.numberOfMoreThreeDose || 0}
+            count={counts.numberOfMoreThirdDose || 0}
             loading={countsLoading}
           />
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={counts.numberOfAllDose || 0}
+            count={
+              (counts.numberOfSecondDose || 0) +
+              (counts.numberOfMoreThirdDose || 0) +
+              (counts.numberOfThirdDose || 0)
+            }
             loading={countsLoading}
           />
           <Statistic
-            icon={GrayVaccine1}
+            icon={Gray1Vaccine}
             text="تعداد اطلاعات مخدوش"
-            count={counts.numberOfUnknownDose || 0}
+            count={counts.numberOfUnvaccinated || 0}
             loading={countsLoading}
           />
           <Statistic
-            icon={GrayVaccine2}
+            icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
-            count={counts.numberOfUnvaccinated || 0}
+            count={
+              counts.total -
+                ((counts.numberOfFirstDose || 0) +
+                  (counts.numberOfSecondDose || 0) +
+                  (counts.numberOfMoreThirdDose || 0) +
+                  (counts.numberOfThirdDose || 0)) || 0
+            }
             loading={countsLoading}
           />
         </div>
@@ -262,7 +277,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
               dataSet={[...dataset]}
-              pagination={{pageSize: 20, maxPages: 3}}
+              pagination={{pageSize: 10, maxPages: 3}}
               columns={[
                 {
                   name: 'وضعیت کلی',
@@ -314,71 +329,36 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                 {
                   name: 'دسته',
                   key: 'name',
-                  render: (v: any, record, index: number) => (
-                    <span>
-                      {(index + 1).toPersianDigits()}.{v}
-                    </span>
+                  render: (v: any, record, index: number, page: number) => (
+                    <div className="flex">
+                      {((page - 1) * 10 + (index + 1)).toPersianDigits()}.{v}
+                    </div>
                   ),
                 },
                 {
                   name: 'دوز اول',
-                  key: 'firstDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  key: 'firstDosePercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز دوم',
-                  key: 'secondDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  key: 'secondDosePercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز سوم',
-                  key: 'thirdDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  key: 'thirdDosePercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'واکسن نزده',
                   key: 'noDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'اطلاعات مخدوش',
@@ -391,7 +371,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}
-              totalItems={0}
+              totalItems={(dataset || []).length || 0}
             />
           </div>
         </>
