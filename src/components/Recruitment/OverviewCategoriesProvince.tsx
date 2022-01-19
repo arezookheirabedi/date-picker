@@ -100,6 +100,10 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     } else {
       history.push('/dashboard/recruitment/province');
     }
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    })
   }, [location.search]);
 
   useEffect(() => {
