@@ -5,9 +5,9 @@ import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
+import Table from '../TableScope';
 // import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {getRecruitmentTagName, sideCities, toPersianDigit} from '../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 interface OverviewCategoriesProvinceProps {
@@ -36,7 +36,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
-            name: getRecruitmentTagName[item.tag] || 'نامشخص',
+            name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
@@ -62,11 +62,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -74,7 +74,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -93,7 +93,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         // count: true,
         to: '',
         from: '',
-        tags: [],
+        tags: [` استان ${provinceName}`].join(','),
         // province: provinceName,
       });
       //
@@ -123,7 +123,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           // count: true,
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          tags: [],
+          tags: [` استان ${provinceName}`].join(','),
           // province: provinceName,
         });
       }
@@ -133,7 +133,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="recruitment-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به کارکنان دولت کشور در استان &nbsp;
         {cityTitle}
@@ -155,11 +155,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateFromDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
+          <span className="dash-separator"/>
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -169,27 +169,27 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateToDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
                 name: 'سازمان',
                 key: 'name',
-                render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                  </div>
                 ),
               },
               {

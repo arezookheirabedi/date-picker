@@ -3,11 +3,11 @@ import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/Recruitment/OverviewMap';
-import OverviewProvince from '../../components/Recruitment/OverviewProvince';
-import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
-import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
+// import OverviewProvince from '../../components/Recruitment/OverviewProvince';
+// import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
+// import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
 import OverviewCategoriesProvince from '../../components/Recruitment/OverviewCategoriesProvince';
-import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
+// import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
 
 const RecruitmentProvince = () => {
   const location = useLocation();
@@ -33,11 +33,11 @@ const RecruitmentProvince = () => {
         sideCityStatus={sideCities}
         destinationId="recruitment-overview"
       />
-      <OverviewProvince cityTitle={cityTitle} />
+      {/* <OverviewProvince cityTitle={cityTitle} /> */}
       <OverviewCategoriesProvince cityTitle={cityTitle} />
-      <OverviewPatientsProvince cityTitle={cityTitle} />
-      <OverviewOfVaccinationProvince cityTitle={cityTitle} />
-      <TestsStatusProvince cityTitle={cityTitle} />
+      {/* <OverviewPatientsProvince cityTitle={cityTitle} /> */}
+      {/* <OverviewOfVaccinationProvince cityTitle={cityTitle} /> */}
+      {/* <TestsStatusProvince cityTitle={cityTitle} /> */}
     </div>
   );
 };
