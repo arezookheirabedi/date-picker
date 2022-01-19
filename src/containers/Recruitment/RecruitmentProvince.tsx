@@ -4,7 +4,7 @@ import {useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/Recruitment/OverviewMap';
 // import OverviewProvince from '../../components/Recruitment/OverviewProvince';
-// import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
+import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
 // import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
 import OverviewCategoriesProvince from '../../components/Recruitment/OverviewCategoriesProvince';
 // import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
@@ -34,8 +34,8 @@ const RecruitmentProvince = () => {
         destinationId="recruitment-overview"
       />
       {/* <OverviewProvince cityTitle={cityTitle} /> */}
-      <OverviewCategoriesProvince cityTitle={cityTitle} />
-      {/* <OverviewPatientsProvince cityTitle={cityTitle} /> */}
+      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+      <OverviewPatientsProvince cityTitle={cityTitle}/>
       {/* <OverviewOfVaccinationProvince cityTitle={cityTitle} /> */}
       {/* <TestsStatusProvince cityTitle={cityTitle} /> */}
     </div>
