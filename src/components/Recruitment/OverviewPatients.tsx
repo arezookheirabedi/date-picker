@@ -18,42 +18,141 @@ interface IParams {
   type: string,
   from: any,
   to: any,
-  tags: any[],
+  tags: any,
 }
 
 const recruitmentType = [
-  {
-    name: 'کل کارکنان',
-    enName: '',
-  },
-  {
-    name: 'نقشه برداری کشور',
-    enName: 'sdfs',
-  },
-  {
-    name: 'هواشناسی ایران',
-    enName: 'dsfsd',
-  },
-  {
-    name: 'زمین شناسی کشور',
-    enName: 'sfsdfs',
-  },
-  {
-    name: 'اداره ارشاد اسلامی',
-    enName: 'sfsdfs',
-  },
-  {
-    name: 'اداره برق',
-    enName: 'sfsdfs',
-  },
-  {
-    name: 'اداره خدمات آموزشی',
-    enName: 'sfsdfs',
-  },
-  {
-    name: 'اداره گذرنامه',
-    enName: 'sfsdfs',
-  },
+  "کل کارکنان",
+  "استان آذربایجان شرقی",
+  "استان آذربایجان غربی",
+  "استان اردبیل",
+  "استان اصفهان",
+  "استان البرز",
+  "استان ایلام",
+  "استان بوشهر",
+  "استان تهران",
+  "استان خراسان جنوبی",
+  "استان خراسان رضوی",
+  "استان خراسان شمالی",
+  "استان خوزستان",
+  "استان زنجان",
+  "استان سمنان",
+  "استان سیستان و بلوچستان",
+  "استان فارس",
+  "استان قزوین",
+  "استان قم",
+  "استان لرستان",
+  "استان مازندران",
+  "استان مرکزی",
+  "استان هرمزگان",
+  "استان همدان",
+  "استان چهارمحال و بختیاری",
+  "استان کردستان",
+  "استان کرمان",
+  "استان کرمانشاه",
+  "استان کهگیلویه و بویراحمد",
+  "استان گلستان",
+  "استان گیلان",
+  "استان یزد",
+  "بانک توسعه تعاون",
+  "بانک مرکزی جمهوری اسلامی ایران",
+  "بنیاد شهید و امور ایثارگران",
+  "بیمه مرکزی ایران",
+  "حوزه هنری سازمان تبلیغات اسلامی",
+  "دانشگاه جامع علمی، کاربردی",
+  "دانشگاه علوم پزشکی و خدمات بهداشتی، درمانی تهران",
+  "دانشگاه علوم پزشکی و خدمات بهداشتی، درمانی شهید بهشتی",
+  "دانشگاه فرهنگیان",
+  "دانشگاه پیام نور",
+  "دبیرخانه شورای عالی مناطق آزاد تجاری، صنعتی و ویژه اقتصادی",
+  "سازمان آموزش فنی و حرفه ای کشور",
+  "سازمان اسناد و کتابخانه ملی جمهوری اسلامی ایران",
+  "سازمان امور عشایر",
+  "سازمان امور مالیاتی کشور",
+  "سازمان انتقال خون ایران",
+  "سازمان اوقاف و امور خیریه",
+  "سازمان بازرسی کل کشور",
+  "سازمان برنامه و بودجه کشور",
+  "سازمان بنادر و دریانوردی",
+  "سازمان بهزیستی کشور",
+  "سازمان بیمه سلامت ایران",
+  "سازمان تبلیغات اسلامی",
+  "سازمان تحقیقات، آموزش و ترویج کشاورزی",
+  "سازمان تعزیرات حکومتی",
+  "سازمان تنظیم مقررات و ارتباطات رادیویی",
+  "سازمان توسعه و نوسازی معادن و صنایع معدنی ایران (شرکت مادر تخصصی)",
+  "سازمان ثبت احوال کشور",
+  "سازمان ثبت اسناد و املاک کشور",
+  "سازمان جنگلها، مراتع و آبخیزداری کشور",
+  "سازمان حج و زیارت",
+  "سازمان حسابرسی",
+  "سازمان حفاظت محیط زیست",
+  "سازمان خبرگزاری جمهوری اسلامی",
+  "سازمان دامپزشکی کشور",
+  "سازمان راهداری و حمل و نقل جاده ای",
+  "سازمان زمین شناسی و اکتشافات معدنی کشور",
+  "سازمان زندان ها و اقدامات تامینی و تربیتی کشور",
+  "سازمان شهرداری ها و دهیاری های کشور",
+  "سازمان شیلات ایران",
+  "سازمان فوریت های پیش بیمارستانی اورژانس کشور",
+  "سازمان قضایی نیروهای مسلح",
+  "سازمان مرکزی تعاون روستایی ایران",
+  "سازمان ملی استاندارد",
+  "سازمان نوسازی، توسعه و تجهیز مدارس کشور",
+  "سازمان هواشناسی کشور",
+  "سازمان پزشکی قانونی کشور",
+  "سازمان گسترش و نوسازی صنایع ایران (مادر تخصصی)",
+  "سازمان‌های زیر نظر رییس جمهور",
+  "ستاد قوه قضاییه",
+  "شرکت ارتباطات زیرساخت",
+  "شرکت دولتی پست بانک",
+  "شرکت سهامی بیمه ایران",
+  "شرکت سهامی راه آهن جمهوری اسلامی ایران",
+  "شرکت سهامی پشتیبانی امور دام کشور",
+  "شرکت شهرک های کشاورزی",
+  "شرکت فرودگاه ها و ناوبری هوایی ایران (مادر تخصصی)",
+  "شرکت مادر تخصصی آزمایشگاه فنی و مکانیک خاک",
+  "شرکت مادر تخصصی بازرگانی دولتی ایران",
+  "شرکت مادر تخصصی تولید نیروی برق حرارتی",
+  "شرکت مادر تخصصی خدمات کشاورزی",
+  "شرکت مادر تخصصی سازمان صنایع کوچک و شهرک های صنعتی ایران",
+  "شرکت مادر تخصصی سهامی عمران شهرهای جدید",
+  "شرکت مادر تخصصی مدیریت تولید، انتقال و توزیع نیروی برق ایران (توانیر)",
+  "شرکت مادر تخصصی مدیریت منابع آب ایران",
+  "شرکت ملی مناطق نفت خیز جنوب",
+  "شرکت ملی نفت ایران",
+  "شرکت ملی پخش و پالایش فراورده های نفتی ایران",
+  "شرکت ملی پست جمهوری اسلامی ایران",
+  "شرکت ملی گاز ایران",
+  "شرکت نفت مناطق مرکزی ایران",
+  "شورای نظارت بر صدا و سیمای جمهوری اسلامی ایران",
+  "صندوق تامین خسارت های بدنی",
+  "قوه قضاییه",
+  "قوه مجریه",
+  "قوه مقننه",
+  "مجمع جهانی اهل بیت (ع)",
+  "معاونت علمی و فناوری رییس جمهور",
+  "نهادهای زیر نظر مقام معظم رهبری",
+  "نهادهای فرا قوه‌ای",
+  "وزارت آموزش و پرورش",
+  "وزارت ارتباطات و فناوری اطلاعات",
+  "وزارت امور اقتصادی و دارایی",
+  "وزارت بهداشت، درمان و آموزش پزشکی",
+  "وزارت تعاون، کار و رفاه اجتماعی",
+  "وزارت جهاد کشاورزی",
+  "وزارت دادگستری",
+  "وزارت راه و شهرسازی",
+  "وزارت صنعت، معدن و تجارت",
+  "وزارت علوم، تحقیقات و فناوری",
+  "وزارت فرهنگ و ارشاد اسلامی",
+  "وزارت میراث فرهنگی، گردشگری و صنایع دستی",
+  "وزارت نفت",
+  "وزارت نیرو",
+  "وزارت ورزش و جوانان",
+  "وزارت کشور",
+  "کانون پرورش فکری کودکان و نوجوانان",
+  "کمیته امداد امام خمینی (ره)",
+  "گمرک جمهوری اسلامی ایران"
 ];
 
 const OverviewPatients = () => {
@@ -77,11 +176,11 @@ const OverviewPatients = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -89,7 +188,7 @@ const OverviewPatients = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -98,8 +197,8 @@ const OverviewPatients = () => {
     type: 'ANNUAL',
     from: '',
     to: '',
-    tags: [],
-  });
+    tags: ''
+  }) as any;
 
   const getLinearOverview = async (params: any) => {
     setLoading(true);
@@ -132,8 +231,8 @@ const OverviewPatients = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
@@ -149,17 +248,19 @@ const OverviewPatients = () => {
               className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
             >
               <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <Menu.Button
+                  className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
-                    {serviceType?.name || 'کل کارکنان'}
+                    {serviceType || 'کل کارکنان'}
                   </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
+                  <DownIcon className="h-2 w-2.5 mr-2"/>
                 </Menu.Button>
               </div>
 
-              <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items
+                className="z-40 max-h-60 overflow-y-auto absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {recruitmentType.map((value: any, index: any) => {
                     // console.log(value);
@@ -171,17 +272,17 @@ const OverviewPatients = () => {
                             type="button"
                             className={`${
                               active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-xs`}
                             onClick={() => {
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                tags: [value.enName],
+                                tags: index !== 0 ? [value].join(',') : '',
                               });
                             }}
                           >
                             {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value.name}
+                            {value}
                           </button>
                         )}
                       </Menu.Item>
@@ -209,11 +310,11 @@ const OverviewPatients = () => {
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -225,24 +326,24 @@ const OverviewPatients = () => {
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
