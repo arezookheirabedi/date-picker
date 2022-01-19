@@ -36,11 +36,11 @@ function dosesTagBased({ organization, ...params }: { organization: string; para
     .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses/tag-based`, params);
 }
 
-function doses({ organization }: { organization: string; }) {
+function doses({ organization, ...params }: { organization: string; params: any}) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, {});
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params);
 }
 
 

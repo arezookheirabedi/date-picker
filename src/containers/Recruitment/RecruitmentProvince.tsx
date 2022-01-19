@@ -7,7 +7,7 @@ import OverviewMap from '../../components/Recruitment/OverviewMap';
 // import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
 import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
 import OverviewCategoriesProvince from '../../components/Recruitment/OverviewCategoriesProvince';
-// import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
+import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
 
 const RecruitmentProvince = () => {
   const location = useLocation();
@@ -36,7 +36,7 @@ const RecruitmentProvince = () => {
       {/* <OverviewProvince cityTitle={cityTitle} /> */}
       <OverviewCategoriesProvince cityTitle={cityTitle} />
       {/* <OverviewPatientsProvince cityTitle={cityTitle} /> */}
-      {/* <OverviewOfVaccinationProvince cityTitle={cityTitle} /> */}
+      <OverviewOfVaccinationProvince cityTitle={cityTitle} />
       <TestsStatusProvince cityTitle={cityTitle} />
     </div>
   );
