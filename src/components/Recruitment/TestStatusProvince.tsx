@@ -89,7 +89,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     } else {
       history.push('/dashboard/recruitment/province');
     }
-  }, []);
+  }, [location.search]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -99,11 +99,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -111,7 +111,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -175,13 +175,14 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button
+                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
                   {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
+                <DownIcon className="h-2 w-2.5 mr-2"/>
               </Menu.Button>
             </div>
 
@@ -235,11 +236,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                   {toPersianDigit(generateFromDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5" />
+              <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
           <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
+            <span className="dash-separator"/>
           </div>
           <div className=" shadow-custom rounded-lg px-4 py-1">
             <div
@@ -251,7 +252,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                   {toPersianDigit(generateToDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5" />
+              <img src={calendar} alt="x" className="w-5 h-5"/>
             </div>
           </div>
         </div>
@@ -260,7 +261,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table
