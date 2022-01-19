@@ -132,8 +132,8 @@ const OverviewPatients = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
