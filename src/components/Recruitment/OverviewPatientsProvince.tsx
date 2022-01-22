@@ -100,11 +100,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       idSetTimeOut = setTimeout(() => {
         getLinearOverview({
           ...queryParams,
+          tags: [...(queryParams.tags || []), `استان ${provinceName}`].join(','),
           organization: 'employment',
-          // tags: `${queryParams.tags !== '' ? `${queryParams.tags},` : ''}${'استان '.concat(
-          //   provinceName
-          // )}`,
-          tags: [`استان ${provinceName}`, ''].join(','),
         });
       }, 500);
     } else {
@@ -121,8 +118,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   useEffect(() => {
     setQueryParams({
       ...queryParams,
-      from: '',
-      to: '',
     });
     setSelectedDayRange({
       from: null,
@@ -134,8 +129,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
@@ -153,7 +146,13 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between w-3/4 px-8">
-            <TagsSelect organization="employment" />
+            {cityTitle && (
+              <TagsSelect
+                organization="employment"
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              />
+            )}
 
             <div className="flex align-center justify-between">
               {showDatePicker ? (
