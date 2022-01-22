@@ -6,7 +6,7 @@ import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../TableScope';
-// import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
+import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import {sideCities, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
@@ -40,7 +40,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoverdCount || 0,
+            saveCount: item.recoveredCount || 0,
             // deadCount: 120,
           });
         }
@@ -62,11 +62,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -74,7 +74,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -87,13 +87,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     if (existsCity) {
       getOverviewByCategory({
         organization: 'employment',
+        tagPattern: `^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`,
+        tags: [` استان ${provinceName}`, '^((?!استان).)*$'],
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
         // count: true,
-        to: '',
-        from: '',
-        tags: [` استان ${provinceName}`].join(','),
+        // to: '',
+        // from: '',
         // province: provinceName,
       });
       //
@@ -103,7 +104,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     setSelectedDayRange({
       from: null,
       to: null,
-    })
+    });
   }, [location.search]);
 
   useEffect(() => {
@@ -121,14 +122,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
         getOverviewByCategory({
           organization: 'employment',
+          tagPattern: `^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`,
+          tags: [`استان ${provinceName}`, '^((?!استان).)*$'],
           // resultStatus: 'POSITIVE',
           // recoveredCount: true,
           // total: true,
           // count: true,
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          tags: [` استان ${provinceName}`].join(','),
-          // province: provinceName,
         });
       }
     } else {
@@ -159,11 +160,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateFromDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -173,14 +174,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateToDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table
@@ -188,11 +189,60 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
+                name: 'وضعیت کلی',
+                key: '',
+                render: (v: any, record) => (
+                  <CategoryDonut
+                    data={[
+                      {
+                        name: 'deadCount',
+                        title: 'تعداد فوت‌شدگان',
+                        y: record.deadCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#6E6E6E'], // start
+                            [1, '#393939'], // end
+                          ],
+                        },
+                      },
+                      {
+                        name: 'saveCount',
+                        title: 'تعداد بهبودیافتگان',
+                        y: record.saveCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#05D8A4'], // start
+                            [1, '#039572'], // end
+                          ],
+                        },
+                      },
+                      {
+                        name: 'infectedCount',
+                        title: 'تعداد مبتلایان',
+                        y: record.infectedCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#FE2D2F'], // start
+                            [1, '#CC0002'], // end
+                          ],
+                        },
+                      },
+                    ]}
+                  />
+                ),
+                className: 'flex justify-center w-full',
+              },
+              {
                 name: 'سازمان',
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.
+                    {/* eslint-disable-next-line */}
+                    {v.replace(/استان\s(.*)_/, '')}
                   </div>
                 ),
               },
