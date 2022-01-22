@@ -32,6 +32,7 @@ const TestStatus: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -56,6 +57,9 @@ const TestStatus: React.FC<{}> = () => {
         });
       });
       setDataset([...normalizedDate]);
+      setOrgDataset([...normalizedDate]);
+      setFilterType({name: null, enName: null});
+
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -67,13 +71,13 @@ const TestStatus: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByCategory({
       organization: 'employment',
+      tags: ['^((?!استان).)*$'].join(','),
       // resultStatus: 'POSITIVE',
       // recoveredCount: true,
       // total: true,
       // count: true,
       from: '',
       to: '',
-      tags: [],
     });
   }, []);
 
@@ -85,11 +89,11 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -97,7 +101,7 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -117,6 +121,25 @@ const TestStatus: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
 
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
+
+      if (a.total < b.total) {
+        return reverse * 1;
+      }
+
+      if (a.total > b.total) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">وضعیت آزمایش کارکنان دولت</legend>
@@ -128,19 +151,20 @@ const TestStatus: React.FC<{}> = () => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button
-                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
                   {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2"/>
+                <DownIcon className="h-2 w-2.5 mr-2" />
               </Menu.Button>
             </div>
 
             <Menu.Items
-              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              style={{width: '250px'}}
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
               <div className="px-1 py-1 ">
                 {filterTypes.map((value: any, index: any) => {
                   // console.log(value);
@@ -193,11 +217,11 @@ const TestStatus: React.FC<{}> = () => {
                   {toPersianDigit(generateFromDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5"/>
+              <img src={calendar} alt="x" className="w-5 h-5" />
             </div>
           </div>
           <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator"/>
+            <span className="dash-separator" />
           </div>
           <div className=" shadow-custom rounded-lg px-4 py-1">
             <div
@@ -209,7 +233,7 @@ const TestStatus: React.FC<{}> = () => {
                   {toPersianDigit(generateToDate())}
                 </span>
               )}
-              <img src={calendar} alt="x" className="w-5 h-5"/>
+              <img src={calendar} alt="x" className="w-5 h-5" />
             </div>
           </div>
         </div>
@@ -218,7 +242,7 @@ const TestStatus: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table
@@ -277,7 +301,7 @@ const TestStatus: React.FC<{}> = () => {
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {(((page - 1) * 10) + index + 1).toPersianDigits()}.{v}
+                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
                   </div>
                 ),
               },
