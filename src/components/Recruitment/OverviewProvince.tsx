@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
-
+import {useDispatch} from 'react-redux';
+import {addTotalMembersAc} from 'src/store/action_creators';
 import hcsService from 'src/services/hcs.service';
 import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
@@ -21,12 +22,12 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState(null);
   const [numberOfPositive, setNumberOfPositive] = useState(null);
-  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
-  const [numberOfPositiveNanVaccinated, setNumberOfPositiveNanVaccinated] = useState(null);
-  // eslint-disable-next-line
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
+  const [numberOfEmployeeTests, setNumberOfEmployeeTests] = useState(null);
+
+  const dispatch = useDispatch();
 
   const location = useLocation();
   const history = useHistory();
@@ -36,20 +37,18 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'employment',
-        tags: ['student'],
+        tags: [`استان ${province}`].join(','),
         testResultCount: true,
         vaccinationCount: true,
         total: true,
-        province,
       });
+      dispatch(addTotalMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
-      setNumberOfNanVaccinated(data.numberOfNanVaccinated || 0);
-      setNumberOfPositive(data.numberOfPositive || 0);
-      // @ts-ignore
-      setNumberOfPositiveNanVaccinated(0);
+      setNumberOfPositive(data.numberOfPositives || 0);
       setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfTestResults(data.numberOfTestResults || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
+      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+      setNumberOfEmployeeTests(data.numberOfNegatives + data.numberOfPositives || 0);
     } catch (error) {
       console.log(error);
     } finally {
@@ -65,7 +64,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getNumberOf({province: provinceName});
+      getNumberOf(provinceName);
     } else {
       history.push('/dashboard/recruitment/province');
     }
@@ -98,7 +97,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count="-"
+            count={numberOfRecovered}
             // loading={loading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
@@ -119,14 +118,14 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش‌های کارمندان"
-            count={numberOfTestResults}
+            count={numberOfEmployeeTests}
             loading={loading}
           />
           <Statistic
             icon={prescriptionIcon}
             text="مجموع استعلام از مراجعین دولتی"
-            count={numberOfPositiveNanVaccinated}
-            loading={loading}
+            count="-"
+            loading={false}
           />
         </div>
       </div>

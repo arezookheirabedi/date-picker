@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import hcsServices from 'src/services/hcs.service';
+import {useSelector} from 'src/hooks/useTypedSelector';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -26,6 +27,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     numberOfMoreThirdDose: null,
     numberOfUnvaccinated: null,
   });
+
+  const {total: totalMembers} = useSelector(state => state.recruitmentsMembers);
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
@@ -126,7 +129,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
           total = allVaccination + noDose + unknownInformation;
         }
-        
+
         // if (total > 0)
         normalizedData.push({
           id: `ovvac_${index}`,
@@ -158,12 +161,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByVaccine({
       organization: 'employment',
-      numberOfDrivers: true,
-      numberOfFirstDose: true,
-      numberOfSecondDose: true,
-      numberOfUnvaccinated: true,
     });
-    getOverviewByVaccinePercent({organization: 'employment'});
+    getOverviewByVaccinePercent({
+      organization: 'employment',
+      tags: [`^(?!.*(استان|_)).*$`].join(','),
+    });
   }, []);
 
   return (
@@ -175,7 +177,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
-            count={counts.total || 0}
+            count={totalMembers || 0}
             loading={countsLoading}
           />
           <Statistic

@@ -1,4 +1,4 @@
-// import qs from 'qs';
+import qs from 'qs';
 import request from '../helpers/request';
 
 function membersGeneral({ organization, tag, ...params }: any = {}) {
@@ -8,11 +8,11 @@ function membersGeneral({ organization, tag, ...params }: any = {}) {
     .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params);
 }
 
-function membersTagBased({ organization, ...params }: { organization: string; params?: { tagPattern: string; from: string; to: string } }) {
+function membersTagBased({ organization, ...params }: { organization: string; params?: { tagPattern: string, tags: any; from: string; to: string } }) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/tag-based`, params);
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/tag-based?${qs.stringify(params, { arrayFormat: 'comma' })}`, {}, {});
 }
 
 function testResultTimeBased({ organization, ...params }: { organization: string; params?: { status: string; type: string; from: string; to: string; tag: string; } }) {
@@ -33,17 +33,22 @@ function dosesTagBased({ organization, ...params }: { organization: string; para
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses/tag-based`, params);
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses/tag-based?${qs.stringify(params)}`, {});
 }
 
-function doses({ organization, ...params }: { organization: string; params: any}) {
+function doses({ organization, ...params }: { organization: string; params: any }) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
     .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params);
 }
 
-
+function tags({ organization, ...params }: { organization: string; params?: any }) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+    .build()
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/tags`, params);
+}
 
 const hcsService = {
   membersGeneral,
@@ -52,6 +57,7 @@ const hcsService = {
   testResultTimeBased,
   doses,
   dosesTagBased,
+  tags
 }
 
 export default hcsService;
