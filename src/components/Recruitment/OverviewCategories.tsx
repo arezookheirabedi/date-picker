@@ -50,6 +50,8 @@ const OverviewCategories: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByCategory({
       organization: 'employment',
+      tagPattern: '^(?!.*(استان|_)).*$',
+      tags: ['^((?!استان).)*$'].join(','),
       // resultStatus: 'POSITIVE',
       // recoveredCount: true,
       // total: true,
@@ -89,11 +91,12 @@ const OverviewCategories: React.FC<{}> = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
         organization: 'employment',
+        tagPattern: '^(?!.*(استان|_)).*$',
+        tags: ['^((?!استان).)*$'].join(','),
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
         // count: true,
-        tags: [],
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });

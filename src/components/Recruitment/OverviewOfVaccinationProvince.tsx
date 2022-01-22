@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
+import {useSelector} from 'src/hooks/useTypedSelector';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -23,6 +24,8 @@ interface OverviewOfVaccinationProvinceProps {
 const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
   cityTitle,
 }) => {
+  const {total: totalMembers} = useSelector(state => state.recruitmentsMembers);
+
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [countsLoading, setCountsLoading] = useState(false);
@@ -180,18 +183,12 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     if (existsCity) {
       getOverviewByVaccine({
         organization: 'employment',
-        from: '',
-        to: '',
-        tags: [` استان ${provinceName}`].join(','),
-        province: provinceName,
+        tags: [`استان ${provinceName}`].join(','),
       });
 
       getOverviewByVaccinePercent({
         organization: 'employment',
-        from: '',
-        to: '',
-        tags: [` استان ${provinceName}`].join(','),
-        province: provinceName,
+        tags: [`^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`].join(','),
       });
     } else {
       history.push('/dashboard/recruitment/province');
@@ -209,7 +206,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
-            count={counts.total || 0}
+            count={totalMembers || 0}
             loading={countsLoading}
           />
           <Statistic
@@ -331,7 +328,9 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   key: 'name',
                   render: (v: any, record, index: number, page: number) => (
                     <div className="flex">
-                      {((page - 1) * 10 + (index + 1)).toPersianDigits()}.{v}
+                      {((page - 1) * 10 + (index + 1)).toPersianDigits()}.
+                      {/* eslint-disable-next-line */}
+                      {v.replace(/استان\s(.*)_/, '')}
                     </div>
                   ),
                 },
