@@ -3,7 +3,6 @@ import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
-
 interface ITagsSelect {
   organization: string;
 }
@@ -17,6 +16,7 @@ const TagsSelect = ({organization}: ITagsSelect) => {
       const res = await hcsService.tags({organization});
       setTags(res.data);
     } catch (error: any) {
+      // eslint-disable-next-line
       console.log(error);
     }
   };
