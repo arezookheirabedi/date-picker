@@ -71,3 +71,9 @@ fieldset {
   min-width: -webkit-min-content;
   min-width: 0;
 }
+
+.scrollbar.overflow-x-scroll,
+.scrollbar-thin.overflow-x-scroll {
+  overflow: hidden;
+  overflow-x: scroll;
+}
