@@ -62,6 +62,7 @@ const ExportButton: React.FC<{
       .confirmRequestReport(otp)
       .then(() => {
         toast.success('لینک دانلود به شماره همراه ارسال شد');
+        closeModal();
       })
       .catch(error => {
         toast.error(error.message || 'خطایی در عملیات');
