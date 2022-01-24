@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-
+import React, { useEffect, useState } from 'react';
+import driverInfectedIcon from '../../assets/images/icons/driver-infected.svg';
+import deactiveFuelCardIcon from '../../assets/images/icons/deactive-fuel-card.svg';
+import informationUpdatedIcon from '../../assets/images/icons/information-updated.svg';
+import deactivateInquiryIcon from '../../assets/images/icons/deactivate-inquiry.svg';
 import Statistic from '../../containers/Guild/components/Statistic';
-import totalDriver from '../../assets/images/icons/transport-color.svg';
-import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
-import deadIcon from '../../assets/images/icons/dead-color.svg';
-import inquiryPlaque from '../../assets/images/icons/inquiry-plaque.svg';
 import transportService from '../../services/transport.service';
+
 
 const OverviewSamas = () => {
   const [numberOfDrivers, setNumberOfDrivers] = useState(null);
@@ -81,33 +81,36 @@ const OverviewSamas = () => {
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalDriver}
+            icon={driverInfectedIcon}
             text="موارد مثبت اعلامی به سماس"
             count={numberOfDrivers}
             loading={numberOfDriversLoading}
             hasInfo
-            infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
+            infoText="این عدد مشتمل بر تمامی رانندگانی است که تا تاریخ روز در حوزه های مختلف مثبت شناسایی شده اند و به سماس اعلام شده اند"
           />
           <Statistic
-            icon={sufferingIcon}
+            icon={deactivateInquiryIcon}
             text="غیر فعالسازی‌های انجام شده"
             count={numberOfPositiveDrivers}
             loading={numberOfPositiveDriversLoading}
             hasInfo
+            infoText="این عدد مشتمل بر نتایج غیرفعالسازی دریافتی از سماس هستند"
           />
           <Statistic
-            icon={inquiryPlaque}
+            icon={informationUpdatedIcon}
             text="اطلاعات به روز رسانی شده"
             count={numberOfPlaqueVisited}
-            hasInfo
             loading={numberOfPlaqueVisitedLoading}
+            hasInfo
+            infoText="این عدد مشتمل بر مجموع اطلاعات به روز رسانی دریافتی از سماس از تاریخ 1400/10/01 است"
           />
           <Statistic
-            icon={deadIcon}
+            icon={deactiveFuelCardIcon}
             text="مجموع تعلیق‌های کارت سوخت"
             count="-"
             loading={false}
             hasInfo
+            infoText="این عدد نشان دهنده ی مجموع تعلیق های کارت سوخت رانندگان شناسایی شده با تست مثبت است"
           />
         </div>
       </div>

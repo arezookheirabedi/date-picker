@@ -16,6 +16,8 @@ import schoolIcon from '../assets/images/icons/school.svg';
 import schoolActiveIcon from '../assets/images/icons/school-active.svg';
 import recruitmentIcon from '../assets/images/icons/recruitment.svg';
 import recruitmentActiveIcon from '../assets/images/icons/recruitment-active.svg';
+import reportsRequestedIcon from '../assets/images/icons/reports-requested.svg';
+import reportsRequestedActiveIcon from '../assets/images/icons/reports-requested-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';
 
@@ -62,6 +64,12 @@ const icons = [
     icon: recruitmentIcon,
     disableIcon: recruitmentIcon,
     activeIcon: recruitmentActiveIcon,
+  },
+  {
+    name: 'reports-requested',
+    icon: reportsRequestedIcon,
+    disableIcon: reportsRequestedIcon,
+    activeIcon: reportsRequestedActiveIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
 ];

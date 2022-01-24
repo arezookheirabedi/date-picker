@@ -10,18 +10,30 @@ const {Map} = Charts;
 interface OverviewDriversMapProps {
   sideCityStatus?: any;
   cityTitle: any;
+  selectDefault?: boolean;
   destinationId: any;
 }
 
 const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
   sideCityStatus,
   cityTitle,
+  selectDefault,
   destinationId,
 }) => {
   const chartRef = useRef<any>(null);
-  const {search} = useLocation();
+  const {search, ...location} = useLocation();
 
   useEffect(() => {
+    try {
+      const selectedPoints = chartRef?.current?.chart.getSelectedPoints();
+
+      selectedPoints.forEach((item: any) => {
+        item.select();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     const data = chartRef?.current?.chart.get('covid').data;
     const params = new URLSearchParams(search);
     const provinceName = params.get('provinceName') || '';
@@ -33,11 +45,11 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
       if (!city.selected) {
         city?.select();
       }
-      // } else {
-      //   const city = data.find((x: any) => x.properties['fa-name'] === 'تهران');
-      //   if (!city.selected) {
-      //     city?.select();
-      //   }
+    } else if (selectDefault) {
+      const city = data.find((x: any) => x.properties['fa-name'] === 'تهران');
+      if (!city.selected) {
+        city?.select();
+      }
     }
   }, [search]);
 
@@ -218,7 +230,7 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         نگاه کلی به وضعیت حمل و نقل عمومی {cityTitle ? ` استان‌ ${cityTitle}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow relative">
-        <Link to="/dashboard/transport/monitoring" className="absolute right-20 top-8 z-50">
+        <Link to={location.pathname} className="absolute right-20 top-8 z-50">
           <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
         </Link>
         <div className="w-5/6 map-wrapper">
