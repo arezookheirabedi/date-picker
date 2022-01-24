@@ -69,7 +69,7 @@ const PrivateLayout: React.FC<any> = () => {
     <>
       <div
         ref={wrapperRef}
-        // className={`border-l xl:border-none overflow-auto h-screen fixed z-50 overflow-hidden w-72 pb-12 bg-white transition-all ease-in-out duration-300
+        // className={`border-l xl:border-none overflow-auto h-screen fixed z-50 w-72 pb-12 bg-white transition-all ease-in-out duration-300
         className={`border-l xl:border-none overflow-auto h-screen fixed z-50 w-72 pb-12 bg-white transition-all ease-in-out duration-300 
           ${collapsed && collapsible ? ' -right-72' : ' right-0'}
           `}

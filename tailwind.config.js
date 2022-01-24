@@ -55,6 +55,7 @@ module.exports = {
       float: ['responsive', 'direction'],
       padding: ['responsive', 'direction'],
       space: ['responsive', 'direction'],
+      textAlign: ['responsive', 'direction'],
     },
   },
   plugins: [
