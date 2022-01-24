@@ -190,6 +190,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={numberOfDrivers}
             loading={numberOfDriversLoading}
             hasInfo
+            infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
           />
           <Statistic
             icon={sufferingIcon}
@@ -212,26 +213,43 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             text="مجموع واکسن زده ها"
             count={numberOfVaccination}
             loading={numberOfVaccinationLoading}
+            hasInfo
+            infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
           />
-          <Statistic icon={grayVaccineIcon} text="مجموع واکسن نزده‌ها" count={0} hasInfo />
+          <Statistic
+            icon={grayVaccineIcon}
+            text="مجموع واکسن نزده‌ها"
+            count={0}
+            hasInfo
+            infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
+          />
           <Statistic icon={vaccineIcon} text="درصد واکسن زده‌ها" count={0} isPercentage />
           <Statistic icon={grayVaccineIcon} text="درصد واکسن نزده‌ها" count={0} isPercentage />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={vaccineIcon} text="درصد ابتلا به کل" count={0} isPercentage hasInfo />
+          <Statistic
+            icon={vaccineIcon}
+            text="درصد ابتلا به کل"
+            count={0}
+            isPercentage
+            hasInfo
+            infoText="این عدد استخراج شده از مجموع افراد فعال در این حوزه با نتایج مثبت آزمایش هایشان است"
+          />
           <Statistic
             icon={inquiryPlaque}
             text="تعداد استعلام پلاک"
             count={numberOfPlaqueVisited}
-            hasInfo
             loading={numberOfPlaqueVisitedLoading}
+            hasInfo
+            infoText="تعداد استعلام‌های وسیله نقلیه عمومی که توسط مسافران انجام شده است"
           />
           <Statistic
             icon={positiveInquiryPlaque}
             text="تعداد استعلام های نتیجه مثبت"
             count={numberOfPositivePlaqueVisited}
-            hasInfo
             loading={numberOfPositivePlaqueVisitedLoading}
+            hasInfo
+            infoText="تعداد استعلام‌های وسیله نقلیه عمومی با نتیجه مثبت که توسط مسافران انجام شده است"
           />
           <Statistic
             icon={testIcon}
@@ -239,6 +257,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={numberOfTestResults}
             loading={numberOfTestResultsLoading}
             hasInfo
+            infoText="تعداد رانندگانی که برای تست به آزمایشگاه مراجعه کرده‌اند"
           />
         </div>
       </div>

@@ -49,6 +49,7 @@ const TransportProvince = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="province-overview"
+        selectDefault
       />
       <OverviewDriversProvince cityTitle={cityTitle} />
       <OverviewSamasProvince cityTitle={cityTitle} />
