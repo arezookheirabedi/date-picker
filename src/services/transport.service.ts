@@ -112,6 +112,16 @@ function linearOverviewPublicTransport(params: any, config?: any) {
     .get(`/api/v1/transport/drivers/health/test-result/time-based/count?lang=fa`, params, { ...config });
 }
 
+function fetchRequestedReports(params: any, config: any) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000 })
+    .build()
+    .get(
+      `/api/v1/transport/reports/drivers?lang=fa&${qs.stringify(params)}`,
+      {}, { ...config }
+    );
+}
+
 function requestReport(params: { from: string; to: string }) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000 })
@@ -150,6 +160,7 @@ export default {
   numberOfTestResults,
   numberOfVaccination,
   linearOverviewPublicTransport,
+  fetchRequestedReports,
   overviewReport,
   requestReport,
   confirmRequestReport,
