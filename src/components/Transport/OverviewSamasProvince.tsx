@@ -1,0 +1,123 @@
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+
+import Statistic from '../../containers/Guild/components/Statistic';
+import totalDriver from '../../assets/images/icons/transport-color.svg';
+import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
+import deadIcon from '../../assets/images/icons/dead-color.svg';
+import inquiryPlaque from '../../assets/images/icons/inquiry-plaque.svg';
+import transportService from '../../services/transport.service';
+
+interface OverviewSamasProvinceProps {
+  cityTitle: any;
+}
+
+const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}) => {
+  const [numberOfDrivers, setNumberOfDrivers] = useState(null);
+  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
+  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
+  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
+  const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
+  const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+  const getNumberOfDrivers = async () => {
+    setNumberOfDriversLoading(true);
+    try {
+      const {data} = await transportService.numberOfDrivers(null, {cancelToken: source.token});
+      setNumberOfDrivers(data.numberOfDrivers);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setNumberOfDriversLoading(false);
+    }
+  };
+
+  const getNumberOfPlaqueVisited = async () => {
+    setNumberOfPlaqueVisitedLoading(true);
+    try {
+      const {data} = await transportService.numberOfPlaqueVisited(null, {
+        cancelToken: source.token,
+      });
+      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setNumberOfPlaqueVisitedLoading(false);
+    }
+  };
+
+  const getNumberOfPositiveDrivers = async () => {
+    setNumberOfPositiveDriversLoading(true);
+    try {
+      const {data} = await transportService.numberOfPositiveDrivers(null, {
+        cancelToken: source.token,
+      });
+      setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setNumberOfPositiveDriversLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getNumberOfDrivers();
+    getNumberOfPlaqueVisited();
+    getNumberOfPositiveDrivers();
+
+    return () => {
+      setNumberOfDrivers(null);
+      setNumberOfPlaqueVisited(null);
+      setNumberOfPositiveDrivers(null);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, []);
+  return (
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
+      <legend className="text-black mx-auto px-3">
+        سامانه ملی اطلاعات سفر (سماس) استان {cityTitle}
+      </legend>
+
+      <div className="flex flex-col justify-between space-y-8">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic
+            icon={totalDriver}
+            text="موارد مثبت اعلامی به سماس"
+            count={numberOfDrivers}
+            loading={numberOfDriversLoading}
+            hasInfo
+            infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
+          />
+          <Statistic
+            icon={sufferingIcon}
+            text="غیر فعالسازی‌های انجام شده"
+            count={numberOfPositiveDrivers}
+            loading={numberOfPositiveDriversLoading}
+            hasInfo
+          />
+          <Statistic
+            icon={inquiryPlaque}
+            text="اطلاعات به روز رسانی شده"
+            count={numberOfPlaqueVisited}
+            hasInfo
+            loading={numberOfPlaqueVisitedLoading}
+          />
+          <Statistic
+            icon={deadIcon}
+            text="مجموع تعلیق‌های کارت سوخت"
+            count="-"
+            loading={false}
+            hasInfo
+          />
+        </div>
+      </div>
+    </fieldset>
+  );
+};
+export default OverviewSamasProvince;

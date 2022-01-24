@@ -1,23 +1,40 @@
-import React from "react";
+import React from 'react';
 
 // import avatar from "../../assets/images/logos/avatar.svg";
-import OverviewCategories from "../../components/Transport/OverviewCategories";
-import OverviewPublicPatients from "../../components/Transport/OverviewPublicPatients";
-import OverviewOfVaccinationInPublicTransport from "../../components/Transport/OverviewOfVaccinationInPublicTransport";
-import TestsInTransport from "../../components/Transport/TestsInTransport";
-import OverviewDrivers from "../../components/Transport/OverviewDrivers";
+import OverviewSamas from '../../components/Transport/OverviewSamas';
+import OverviewCategories from '../../components/Transport/OverviewCategories';
+import OverviewPublicPatients from '../../components/Transport/OverviewPublicPatients';
+import OverviewOfVaccinationInPublicTransport from '../../components/Transport/OverviewOfVaccinationInPublicTransport';
+import TestsInTransport from '../../components/Transport/TestsInTransport';
+import OverviewDrivers from '../../components/Transport/OverviewDrivers';
+import Information from '../../assets/images/icons/information.svg';
+import AlertPattern from '../../assets/images/patterns/alert-white.svg';
 
 // import IconWrapper from "../../components/IconWrapper";
 const Transport = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDrivers/>
-      <OverviewCategories/>
-      <OverviewPublicPatients/>
-      <OverviewOfVaccinationInPublicTransport/>
-      <TestsInTransport/>
+      <div className="relative flex items-center mt-8 p-6 shadow rounded-md bg-gradient-to-r from-gray-200">
+        <div className="relative z-20 flex items-start space-x-2 rtl:space-x-reverse">
+          <img src={Information} className="inline " width="18" height="18" alt="" />
+          <span className="text-sm">
+            کاربر گرامی توجه داشته باشید که تمامی آمار و گزارشات قابل مشاهده از زمان شیوع ویروس
+            کرونا تا روز جاری است.
+          </span>
+        </div>
+        <div
+          className="absolute z-10 left-0 top-0 h-full w-full bg-contain bg-no-repeat"
+          style={{backgroundImage: `url(${AlertPattern})`}}
+        />
+      </div>
+      <OverviewDrivers />
+      <OverviewSamas />
+      <OverviewCategories />
+      <OverviewPublicPatients />
+      <OverviewOfVaccinationInPublicTransport />
+      <TestsInTransport />
     </div>
-  )
-}
+  );
+};
 
 export default Transport;

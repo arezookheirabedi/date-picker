@@ -1,13 +1,20 @@
 import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
 import OtpInput from 'react-otp-input';
-import cogoToast from 'cogo-toast';
+import toast from 'cogo-toast';
 import transportService from 'src/services/transport.service';
 import download from '../../assets/images/icons/download.svg';
 import DotLoading from '../DotLoading';
 
 // eslint-disable-next-line react/prop-types
-const ExportButton: React.FC<{params: {from: string; to: string}}> = ({params}) => {
+const ExportButton: React.FC<{
+  params: {
+    from: string;
+    to: string;
+    healthStatusSet: Array<'POSITIVE' | 'NEGATIVE' | 'UNKNOWN' | ''>;
+    province?: string;
+  };
+}> = ({params}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [fetchCode, setFetchCode] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -23,10 +30,10 @@ const ExportButton: React.FC<{params: {from: string; to: string}}> = ({params}) 
     transportService
       .requestReport(params)
       .then(() => {
-        cogoToast.success('کد به شماره همراه ارسال شد');
+        toast.success('کد به شماره همراه ارسال شد');
       })
       .catch(error => {
-        cogoToast.error(error.message || 'خطایی در عملیات');
+        toast.error(error.message || 'خطایی در عملیات');
         closeModal();
       })
       .finally(() => {
@@ -35,8 +42,12 @@ const ExportButton: React.FC<{params: {from: string; to: string}}> = ({params}) 
   };
 
   const openModal: () => void = () => {
-    requestExport();
-    setIsOpen(true);
+    if (params.from !== null && params.to !== null) {
+      requestExport();
+      setIsOpen(true);
+    } else {
+      toast.warn('مقدار تاریخ انتخاب نشده است');
+    }
   };
 
   const handleOtpChange = (otpValue: any) => {
@@ -50,10 +61,10 @@ const ExportButton: React.FC<{params: {from: string; to: string}}> = ({params}) 
     transportService
       .confirmRequestReport(otp)
       .then(() => {
-        cogoToast.success('لینک دانلود به شماره همراه ارسال شد');
+        toast.success('لینک دانلود به شماره همراه ارسال شد');
       })
       .catch(error => {
-        cogoToast.error(error.message || 'خطایی در عملیات');
+        toast.error(error.message || 'خطایی در عملیات');
         // closeModal();
       })
       .finally(() => {
