@@ -1,26 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../components/DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../../components/TableScope';
+import Table from '../../components/Table';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
 
 const Requested: React.FC<{}> = () => {
-  // eslint-disable-next-line
   const location = useLocation();
-  // eslint-disable-next-line
   const history = useHistory();
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [dataset, setDataset] = useState<any>([]);
+  // eslint-disable-next-line
+  const [totalItems, setTotalItems] = useState(0);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -38,7 +41,6 @@ const Requested: React.FC<{}> = () => {
       : '';
   };
 
-
   const generateToDate: any = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
@@ -47,7 +49,34 @@ const Requested: React.FC<{}> = () => {
       : '';
   };
 
-  useEffect(() => {}, []);
+  async function fetchReports(params: any) {
+    setLoading(true);
+    try {
+      const response = await transportService.fetchRequestedReports(params, {
+        cancelToken: source.token,
+      });
+      setDataset([...response.data.content]);
+      setTotalItems(response.data.totalElements);
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setDataset([]);
+      setTotalItems(0);
+      setLoading(false);
+    };
+  }, [history]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
+  }, [location.search]);
 
   return (
     <>
@@ -97,61 +126,57 @@ const Requested: React.FC<{}> = () => {
           ) : (
             <Table
               dataSet={[...dataset]}
-              pagination={{pageSize: 10, maxPages: 3}}
+              pagination={{pageSize: 20, maxPages: 3}}
               columns={[
                 {
                   name: 'نام گزارش',
-                  key: 'name',
-                  render: (v: any, record, index: number, page: number) => (
-                    <div className="flex">
-                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.
-                      {/* eslint-disable-next-line */}
-                      {v.replace(/استان\s(.*)_/, '')}
-                    </div>
+                  key: '',
+                  render: (v, record, index: number) => (
+                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
                   ),
                 },
                 {
                   name: 'دسته‌بندی',
-                  key: 'employeesCount',
-                  render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                  key: '',
+                  render: (v, record, index: number) => (
+                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
+                  ),
                 },
                 {
                   name: 'تاریخ گزارش',
-                  key: 'infectedPercent',
-                  render: (v: any) => (
-                    <span>
-                      {Number(v).toLocaleString('fa', {
-                        minimumFractionDigits: 4,
-                      })}
-                      %
-                    </span>
+                  key: '',
+                  render: (v, record: any) => (
+                    <div className="flex flex-col text-gray-500">
+                      <span>{record.from}</span>
+                      <span>{record.to}</span>
+                    </div>
                   ),
                 },
                 {
                   name: 'شماره شناسه',
-                  key: 'infectedCount',
-                  render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                  key: '',
+                  render: (v, record, index: number) => (
+                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
+                  ),
                 },
                 {
                   name: 'تاریخ درخواست',
-                  key: 'saveCount',
-                  render: (v: any) => (
-                    <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                  key: '',
+                  render: (v, record, index: number) => (
+                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
                   ),
                 },
                 {
                   name: 'آخرین به روز رسانی',
-                  key: 'deadCount',
-                  render: (v: any) => (
-                    <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                  key: '',
+                  render: (v, record, index: number) => (
+                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
                   ),
                 },
                 {
                   name: 'وضعیت',
-                  key: 'deadCount',
-                  render: (v: any) => (
-                    <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-                  ),
+                  key: 'reportStatus',
+                  render: (v, record) => <a href={record.filePreparationLink}>{v}</a>,
                 },
               ]}
               totalItems={(dataset || []).length}
