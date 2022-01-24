@@ -215,6 +215,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={counts.numberOfDrivers}
           loading={countsLoading}
           hasInfo
+          infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
         />
         <Statistic
           icon={YellowVaccineMd}
@@ -222,6 +223,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={counts.numberOfFirstDose}
           loading={countsLoading}
           hasInfo
+          infoText="تعداد افرادی که فقط یک دوز واکسن دریافت کردند"
         />
         <Statistic
           icon={PurppleVaccineMd}
@@ -229,6 +231,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={counts.numberOfSecondDose}
           loading={countsLoading}
           hasInfo
+          infoText="تعداد افرادی که دو دوز واکسن رو دریافت کردند"
         />
         <Statistic
           icon={NavyVaccineMd}
@@ -236,6 +239,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={reportsDose.threeDose}
           loading={reportsDoseLoading}
           hasInfo
+          infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
         />
       </div>
       <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
@@ -245,6 +249,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={reportsDose.moreThanThreeDose}
           loading={reportsDoseLoading}
           hasInfo
+          infoText="تعداد افرادی که بیش از ۳ دوز واکسن دریافت کرده‌اند"
         />
         <Statistic
           icon={GreenVaccine}
@@ -252,6 +257,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={reportsDose.allVaccination}
           loading={reportsDoseLoading}
           hasInfo
+          infoText="مجموع افرادی که واکسن دریافت کرده‌اند، ( یک دوز ،دو دوز ، سه دور)"
         />
         <Statistic
           icon={GrayVaccine}
@@ -259,6 +265,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={reportsDose.unknownInformation}
           loading={reportsDoseLoading}
           hasInfo
+          infoText="تعداد افرادی که اطلاعات آن‌ها در سامانه به درستی ثبت نشده است"
         />
         <Statistic
           icon={GrayVaccine2}
@@ -266,6 +273,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           count={counts.numberOfUnvaccinated}
           loading={countsLoading}
           hasInfo
+          infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده‌اند"
         />
       </div>
       {loading ? (
