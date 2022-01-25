@@ -83,8 +83,8 @@ const Table: React.FC<IProps> = (props: IProps) => {
 
   return (
     <>
-      <div className="relative pl-3 -ml-3 h-full w-full  scrollbar-thumb-gray-400 scrollbar-track-gray-300">
-        <table className="min-w-full overflow-x-scroll table-auto">
+      <div className="relative pl-3 -ml-3 h-full w-full overflow-hidden overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
+        <table className="w-full table-auto">
           <thead className="">
             <tr className="border-b border-gray-100">
               {columns.map((column, i) => (
