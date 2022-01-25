@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
+import dayjs from 'dayjs';
 import axios from 'axios';
 import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../components/DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
+import download from '../../assets/images/icons/download.svg';
 import Table from '../../components/Table';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
@@ -83,38 +85,63 @@ const Requested: React.FC<{}> = () => {
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">لیست درخواست دانلود گزارش</legend>
 
-        <div className="flex align-center justify-start mb-8">
-          {showDatePicker ? (
-            <DatePickerModal
-              setSelectedDayRange={setSelectedDayRange}
-              selectedDayRange={selectedDayRange}
-              setShowDatePicker={setShowDatePicker}
-              showDatePicker
-            />
-          ) : null}
-          <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateFromDate())}
-              </span>
-              <img src={calendar} alt="x" className="w-5 h-5" />
+        <div className="flex align-center justify-between mb-8">
+          <div className="flex align-center justify-start">
+            {showDatePicker ? (
+              <DatePickerModal
+                setSelectedDayRange={setSelectedDayRange}
+                selectedDayRange={selectedDayRange}
+                setShowDatePicker={setShowDatePicker}
+                showDatePicker
+              />
+            ) : null}
+            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
+              <div
+                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                onClick={focusFromDate}
+              >
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateFromDate())}
+                </span>
+                <img src={calendar} alt="x" className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="flex items-center justify-start mx-4">
+              <span className="dash-separator" />
+            </div>
+            <div className=" shadow-custom rounded-lg px-4 py-1">
+              <div
+                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                onClick={focusFromDate}
+              >
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateToDate())}
+                </span>
+                <img src={calendar} alt="x" className="w-5 h-5" />
+              </div>
             </div>
           </div>
-          <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
-          </div>
-          <div className=" shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateToDate())}
-              </span>
-              <img src={calendar} alt="x" className="w-5 h-5" />
+          <div className="flex align-center">
+            <div className="relative inline-flex align-center leading-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder="جستجو"
+                className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              />
             </div>
           </div>
         </div>
@@ -132,51 +159,114 @@ const Requested: React.FC<{}> = () => {
                   name: 'نام گزارش',
                   key: '',
                   render: (v, record, index: number) => (
-                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
+                    <span>گزارش شماره {(index + 1).toLocaleString('fa')}</span>
                   ),
                 },
                 {
                   name: 'دسته‌بندی',
-                  key: '',
-                  render: (v, record, index: number) => (
-                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
-                  ),
+                  key: 'category',
+                  render: v => <span>{v || '-'}</span>,
                 },
                 {
                   name: 'تاریخ گزارش',
                   key: '',
                   render: (v, record: any) => (
                     <div className="flex flex-col text-gray-500">
-                      <span>{record.from}</span>
-                      <span>{record.to}</span>
+                      <span>
+                        {record.from
+                          ? toPersianDigit(
+                              dayjs(record.from).calendar('jalali').format('YYYY/MM/DD')
+                            )
+                          : ''}
+                      </span>
+                      <span>-</span>
+                      <span>
+                        {record.to
+                          ? toPersianDigit(dayjs(record.to).calendar('jalali').format('YYYY/MM/DD'))
+                          : ''}
+                      </span>
                     </div>
                   ),
                 },
                 {
                   name: 'شماره شناسه',
-                  key: '',
-                  render: (v, record, index: number) => (
-                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
-                  ),
+                  key: 'id',
+                  render: v => <span>{v || '-'}</span>,
                 },
                 {
                   name: 'تاریخ درخواست',
-                  key: '',
-                  render: (v, record, index: number) => (
-                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
+                  key: 'createdDate',
+                  render: v => (
+                    <div className="flex justify-center">
+                      <div style={{width: '64px'}}>
+                        <span className="text-gray-400 whitespace-normal">
+                          {v
+                            ? toPersianDigit(dayjs(v).calendar('jalali').format('YYYY/MM/DD HH:mm'))
+                            : ''}
+                        </span>
+                      </div>
+                    </div>
                   ),
                 },
                 {
-                  name: 'آخرین به روز رسانی',
-                  key: '',
-                  render: (v, record, index: number) => (
-                    <span>گزارش شماره{(index + 1).toLocaleString('fa')}</span>
+                  name: 'آخرین به‌روزرسانی',
+                  key: 'lastModifiedDate',
+                  render: v => (
+                    <div className="flex justify-center">
+                      <div style={{width: '64px'}}>
+                        <span className="text-gray-500 whitespace-normal">
+                          {v
+                            ? toPersianDigit(dayjs(v).calendar('jalali').format('YYYY/MM/DD HH:mm'))
+                            : ''}
+                        </span>
+                      </div>
+                    </div>
                   ),
                 },
                 {
                   name: 'وضعیت',
                   key: 'reportStatus',
-                  render: (v, record) => <a href={record.filePreparationLink}>{v}</a>,
+                  render: (v: string, record: any) =>
+                    (() => {
+                      switch (v) {
+                        case 'PROCESSING':
+                          return <span className="text-yellow-500">در حال پردازش</span>;
+                        case 'READY_FOR_DOWNLOAD':
+                          return (
+                            <div className="inline-flex">
+                              <a
+                                className="button button--primary px-8 inline-flex w-auto justify-center items-center space-x-2 rtl:space-x-reverse"
+                                href={record.filePreparationLink}
+                              >
+                                <img src={download} alt="download" className="w-5 h-4" />
+                                <span>دانلود</span>
+                              </a>
+                            </div>
+                          );
+                        case 'DOWNLOADED':
+                          return <span className="text-gray-400">دانلود شده</span>;
+                        default:
+                          return (
+                            <div className="text-red-600 flex justify-center items-center space-x-1 rtl:space-x-reverse">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
+                              </svg>
+                              <span>خطا</span>
+                            </div>
+                          );
+                      }
+                    })(),
                 },
               ]}
               totalItems={(dataset || []).length}
