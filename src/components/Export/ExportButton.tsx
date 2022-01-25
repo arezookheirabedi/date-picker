@@ -13,6 +13,7 @@ const ExportButton: React.FC<{
     to: string;
     healthStatusSet: Array<'POSITIVE' | 'NEGATIVE' | 'UNKNOWN' | ''>;
     province?: string;
+    reportName?: string;
   };
 }> = ({params}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

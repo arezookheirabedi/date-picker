@@ -198,6 +198,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                   ).format('YYYY-MM-DD')
                 : null,
               healthStatusSet: ['POSITIVE'],
+              reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${cityTitle ? `استان ${cityTitle}` : ''}`
             }}
           />
         </div>
