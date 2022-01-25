@@ -157,9 +157,11 @@ const Requested: React.FC<{}> = () => {
               columns={[
                 {
                   name: 'نام گزارش',
-                  key: '',
-                  render: (v, record, index: number) => (
-                    <span>گزارش شماره {(index + 1).toLocaleString('fa')}</span>
+                  key: 'reportName',
+                  render: (v, record, index: number, page: number) => (
+                    <span>
+                      {v || `گزارش شماره ${((page - 1) * 20 + (index + 1)).toLocaleString('fa')}`}
+                    </span>
                   ),
                 },
                 {
