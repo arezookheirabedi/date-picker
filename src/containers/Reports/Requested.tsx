@@ -80,6 +80,23 @@ const Requested: React.FC<{}> = () => {
     fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
   }, [location.search]);
 
+  async function handlePreDownload(id: string) {
+    try {
+      const params = new URLSearchParams(location.search);
+
+      const response = await transportService.preDownloadReport(id, {
+        cancelToken: source.token,
+      });
+
+      const newWindow = window.open(response.data.downloadLink, '_blank', 'noopener,noreferrer');
+      if (newWindow) newWindow.opener = null;
+      fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
+
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -236,13 +253,14 @@ const Requested: React.FC<{}> = () => {
                         case 'READY_FOR_DOWNLOAD':
                           return (
                             <div className="inline-flex">
-                              <a
+                              <button
+                                type="button"
                                 className="button button--primary px-8 inline-flex w-auto justify-center items-center space-x-2 rtl:space-x-reverse"
-                                href={record.filePreparationLink}
+                                onClick={() => handlePreDownload(record.id)}
                               >
                                 <img src={download} alt="download" className="w-5 h-4" />
                                 <span>دانلود</span>
-                              </a>
+                              </button>
                             </div>
                           );
                         case 'DOWNLOADED':
