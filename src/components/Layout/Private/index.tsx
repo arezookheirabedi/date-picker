@@ -13,7 +13,7 @@ import Logout from './components/Logout';
 import UserArea from './components/UserArea';
 import MenuItemWrapper from './components/MenuItemWrapper';
 import Today from './components/Today';
-import SideBarFilter from './components/SideBarFilter';
+// import SideBarFilter from './components/SideBarFilter';
 
 const ScrollNavbar = styled.div`
   height: 100vh;
@@ -30,7 +30,7 @@ const ScrollNavbar = styled.div`
 
 const PrivateLayout: React.FC<any> = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const [filterCollapse, setFilterCollapse] = useState(true);
+  // const [filterCollapse, setFilterCollapse] = useState(true);
   const [collapsible, setCollapsible] = useState(false);
 
   const wrapperRef = useRef(null);
@@ -43,9 +43,9 @@ const PrivateLayout: React.FC<any> = () => {
     if (collapsible) setCollapsed(true);
   };
 
-  const toggleFilter: () => void = () => {
-    setFilterCollapse(!filterCollapse);
-  };
+  // const toggleFilter: () => void = () => {
+  //   setFilterCollapse(!filterCollapse);
+  // };
 
   useOutsideSidebar(wrapperRef, closeMenu);
 
@@ -168,7 +168,7 @@ const PrivateLayout: React.FC<any> = () => {
           </div>
         </div>
 
-        <SideBarFilter filterCollapse={filterCollapse} toggleFilter={toggleFilter} />
+        {/* <SideBarFilter filterCollapse={filterCollapse} toggleFilter={toggleFilter} /> */}
       </div>
     </>
   );
