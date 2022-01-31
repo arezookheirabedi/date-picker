@@ -5266,9 +5266,9 @@
     "color-string" "^1.6.0"
 
 "color@^4.0.1":
-  "integrity" "sha512-o2rkkxyLGgYoeUy1OodXpbPAQNmlNBrirQ8ODO8QutzDiDMNdezSOZLNnusQ6pUpCQJUsaJIo9DZJKqa2HgH7A=="
-  "resolved" "https://registry.npmjs.org/color/-/color-4.1.0.tgz"
-  "version" "4.1.0"
+  "integrity" "sha512-hHTcrbvEnGjC7WBMk6ibQWFVDgEFTVmjrz2Q5HlU6ltwxv0JJN2Z8I7uRbWeQLF04dikxs8zgyZkazRJvSMtyQ=="
+  "resolved" "https://registry.npmjs.org/color/-/color-4.2.0.tgz"
+  "version" "4.2.0"
   dependencies:
     "color-convert" "^2.0.1"
     "color-string" "^1.9.0"
