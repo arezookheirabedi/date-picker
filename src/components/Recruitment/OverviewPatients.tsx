@@ -8,7 +8,7 @@ import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
-import TagsSelect from './TagsSelect';
+import TagsSelect from '../TagsSelect';
 
 const {Line} = Charts;
 
@@ -110,6 +110,7 @@ const OverviewPatients = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between w-3/4 px-8">
             <TagsSelect
+              placeholder="کل کارکنان"
               organization="employment"
               setQueryParams={setQueryParams}
               queryParams={queryParams}

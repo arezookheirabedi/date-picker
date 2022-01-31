@@ -1,15 +1,16 @@
 import React from 'react';
 import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
   organization: string;
   queryParams: any;
+  placeholder?: any;
   setQueryParams: (v: any) => void;
 }
 
-const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) => {
+const TagsSelect = ({organization, placeholder = '', setQueryParams, queryParams}: ITagsSelect) => {
   const [serviceType, setServiceType] = React.useState<any>();
   const [tags, setTags] = React.useState<any[]>([]);
 
@@ -51,7 +52,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
           <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-            <span className="ml-10 whitespace-nowrap truncate">{serviceType || 'کل کارکنان'}</span>
+            <span className="ml-10 whitespace-nowrap truncate">{serviceType || placeholder}</span>
             <DownIcon className="h-2 w-2.5 mr-2" />
           </Menu.Button>
         </div>
@@ -72,7 +73,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
                     setServiceType('');
                   }}
                 >
-                  <span className="truncate">کل کارکنان</span>
+                  <span className="truncate">{placeholder}</span>
                 </button>
               )}
             </Menu.Item>

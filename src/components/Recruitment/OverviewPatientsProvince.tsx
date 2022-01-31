@@ -9,7 +9,7 @@ import Charts from '../Charts';
 import {sideCities, toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
-import TagsSelect from './TagsSelect';
+import TagsSelect from '../TagsSelect';
 
 const {Line} = Charts;
 
@@ -148,6 +148,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
           <div className="flex align-center justify-between w-3/4 px-8">
             {cityTitle && (
               <TagsSelect
+                placeholder="کل کارکنان"
                 organization="employment"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}

@@ -14,10 +14,6 @@ import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
 const filterTypes = [
   {
-    name: 'مرتب‌سازی بر اساس پیشفرض',
-    enName: '',
-  },
-  {
     name: 'بیشترین',
     enName: 'HIGHEST',
   },
@@ -28,9 +24,13 @@ const filterTypes = [
 ];
 
 const TestStatus: React.FC<{}> = () => {
-  const [filterType, setFilterType] = useState({name: null, enName: null});
+  const [filterType, setFilterType] = useState({
+    name: 'بیشترین',
+    enName: 'HIGHEST',
+  });
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -56,6 +56,11 @@ const TestStatus: React.FC<{}> = () => {
         });
       });
       setDataset([...normalizedDate]);
+      setOrgDataset([...normalizedDate]);
+      setFilterType({
+        name: 'بیشترین',
+        enName: 'HIGHEST',
+      });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -117,6 +122,26 @@ const TestStatus: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
 
+
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+
+      if (a.total < b.total) {
+        return reverse * 1;
+      }
+
+      if (a.total > b.total) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">آزمایش در آموزش و پرورش</legend>
@@ -131,7 +156,7 @@ const TestStatus: React.FC<{}> = () => {
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
+                  {filterType?.name || 'بیشترین'}
                 </span>
                 <DownIcon className="h-2 w-2.5 mr-2" />
               </Menu.Button>
