@@ -16,6 +16,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
   const fetcher = async () => {
     try {
       const res = await hcsService.tags({organization});
+      console.log(res);
       setTags([...res.data]);
     } catch (error: any) {
       // eslint-disable-next-line
