@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {addTotalStudentMembersAc} from 'src/store/action_creators';
 
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalStudent from '../../assets/images/icons/graduation.svg';
@@ -20,6 +22,7 @@ const OverviewSchoolStudents = () => {
   const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  const dispatch = useDispatch();
 
   const getNumberOf = async () => {
     setLoading(true);
@@ -31,6 +34,8 @@ const OverviewSchoolStudents = () => {
         vaccinationCount: true,
         total: true,
       });
+
+      dispatch(addTotalStudentMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
       setNumberOfPositives(data.numberOfPositives || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
