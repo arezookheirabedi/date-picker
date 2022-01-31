@@ -17,6 +17,8 @@ const OverviewSchoolStudents = () => {
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState(null);
   const [numberOfPositives, setNumberOfPositives] = useState(null);
+  // eslint-disable-next-line
+  const [numberOfNegatives, setNumberOfNegatives] = useState(null);
 
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
