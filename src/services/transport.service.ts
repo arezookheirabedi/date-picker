@@ -153,6 +153,13 @@ function preDownloadReport(id: string, config?: any) {
     .post(`/api/v1/transport/reports/drivers/prepare/${id}?lang=fa`, {}, { ...config });
 }
 
+function retryReport(id: string, config?: any) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000 })
+    .build()
+    .post(`/api/v1/transport/reports/drivers/request/retry/${id}?lang=fa`, {}, { ...config });
+}
+
 export default {
   testsInTransport,
   overviewCategory,
@@ -171,5 +178,6 @@ export default {
   overviewReport,
   requestReport,
   confirmRequestReport,
-  preDownloadReport
+  preDownloadReport,
+  retryReport
 };
