@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
+import {useSelector} from 'src/hooks/useTypedSelector';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
 import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
@@ -32,6 +33,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     numberOfUnknownDose: 0,
     numberOfUnvaccinated: 0,
   });
+
+  const {total: totalMembers} = useSelector(state => state.studentMembers);
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
@@ -160,16 +163,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByVaccine({
-      organization: 'school',
-      from: '',
-      to: '',
-      tagPattern: 'school*',
+      organization: 'education',
     });
     getOverviewByVaccinePercent({
-      organization: 'school',
-      from: '',
-      to: '',
-      tagPattern: 'school*',
+      organization: 'education',
+      tags: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
     });
   }, []);
 
@@ -194,7 +192,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={totalStudent}
             text="مجموع دانش آموزان"
-            count={counts.numberOfStudents || 0}
+            count={totalMembers || 0}
             loading={countsLoading}
           />
           <Statistic

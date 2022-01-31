@@ -6,7 +6,7 @@ import OverviewSchoolStudent from '../../components/School/OverviewSchoolStudent
 // import OverviewCategories from '../../components/School/OverviewCategories';
 // import OverviewPatients from '../../components/School/OverviewPatients';
 // import OverviewOfVaccination from '../../components/School/OverviewOfVaccination';
-// import TestStatus from '../../components/School/TestStatus';
+import TestStatus from '../../components/School/TestStatus';
 
 // import IconWrapper from "../../components/IconWrapper";
 const School: React.FC<{}> = () => {
@@ -18,7 +18,7 @@ const School: React.FC<{}> = () => {
       {/* <OverviewCategories /> */}
       {/* <OverviewPatients /> */}
       {/* <OverviewOfVaccination /> */}
-      {/* <TestStatus /> */}
+      <TestStatus />
     </div>
   );
 };

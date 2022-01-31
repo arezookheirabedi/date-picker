@@ -2,3 +2,4 @@ export { fetchGuildInfoAc, updateGuildEmployeeHealthStatusAc } from "./guildInfo
 export { fetchGuildBriefAc, deleteGuildAc, createGuildAc } from "./guildBriefAc";
 export { fetchMessagesAc } from "./fetchMessagesAc";
 export { addTotalMembersAc } from "./recruitments/membersAc";
+export { addTotalStudentMembersAc } from "./educations/totalStudentsAc"
