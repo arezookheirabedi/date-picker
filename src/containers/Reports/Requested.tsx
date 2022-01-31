@@ -89,12 +89,29 @@ const Requested: React.FC<{}> = () => {
       });
 
       // eslint-disable-next-line
-      const {access_token = ""} = getToken();
+      const {access_token = ''} = getToken();
 
-      const newWindow = window.open(`${response.data.downloadLink}/${access_token}` , '_blank', 'noopener,noreferrer');
+      const newWindow = window.open(
+        `${response.data.downloadLink}/${access_token}`,
+        '_blank',
+        'noopener,noreferrer'
+      );
       if (newWindow) newWindow.opener = null;
       fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
 
+  async function handleRetry(id: string) {
+    try {
+      const params = new URLSearchParams(location.search);
+
+      await transportService.preDownloadReport(id, {
+        cancelToken: source.token,
+      });
+
+      fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
     } catch (error: any) {
       console.log(error);
     }
@@ -179,9 +196,9 @@ const Requested: React.FC<{}> = () => {
                   name: 'نام گزارش',
                   key: 'reportName',
                   render: (v, record, index: number, page: number) => (
-                    <span>
+                    <div className="flex">
                       {v || `گزارش شماره ${((page - 1) * 20 + (index + 1)).toLocaleString('fa')}`}
-                    </span>
+                    </div>
                   ),
                 },
                 {
@@ -270,7 +287,11 @@ const Requested: React.FC<{}> = () => {
                           return <span className="text-gray-400">دانلود شده</span>;
                         default:
                           return (
-                            <div className="text-red-600 flex justify-center items-center space-x-1 rtl:space-x-reverse">
+                            <button
+                              type="button"
+                              onClick={() => handleRetry(record.id)}
+                              className="text-red-600 flex justify-center items-center space-x-1 rtl:space-x-reverse"
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-4 w-4"
@@ -286,7 +307,7 @@ const Requested: React.FC<{}> = () => {
                                 />
                               </svg>
                               <span>خطا</span>
-                            </div>
+                            </button>
                           );
                       }
                     })(),
