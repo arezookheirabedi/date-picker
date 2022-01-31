@@ -68,7 +68,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
         if (item.total !== 0) {
           return normalizedDate.push({
             title: getServiceTypeName(item.serviceType),
-            percentage: ((item.count * 100) / item.total).toFixed(2),
+            percentage: ((item.count * 100) / item.total).toFixed(4),
             color: getColorByServiceTypeName(item.serviceType),
           });
         }
