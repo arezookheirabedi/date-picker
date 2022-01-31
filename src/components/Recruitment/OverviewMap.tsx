@@ -1,42 +1,59 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 
 import Charts from '../Charts';
 import map from '../Charts/ir-all.geo.json';
 import mapData from '../Charts/mapData.json';
-import {sideCities} from "../../helpers/utils";
+import {sideCities} from '../../helpers/utils';
 
 const {Map} = Charts;
 
 interface OverviewMapProps {
   sideCityStatus?: any;
   cityTitle: any;
+  selectDefault?: boolean;
   destinationId: any;
 }
 
-const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, destinationId}) => {
+const OverviewMap: React.FC<OverviewMapProps> = ({
+  sideCityStatus,
+  selectDefault,
+  destinationId,
+}) => {
   const chartRef = useRef<any>(null);
-  const {search} = useLocation();
+  const {search, ...location} = useLocation();
+
+  const query = new URLSearchParams(search);
 
   useEffect(() => {
+    try {
+      const selectedPoints = chartRef?.current?.chart.getSelectedPoints();
+
+      selectedPoints.forEach((item: any) => {
+        item.select();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     const data = chartRef?.current?.chart.get('covid').data;
     const params = new URLSearchParams(search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const provinceName = params.get('provinceName') || '';
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      const city = data.find((x: any) => x.properties['fa-name'] === provinceName)
+      const city = data.find((x: any) => x.properties['fa-name'] === provinceName);
       if (!city.selected) {
-        city?.select()
+        city?.select();
       }
-    } else {
-      const city = data.find((x: any) => x.properties['fa-name'] === 'تهران')
+    } else if (selectDefault) {
+      const city = data.find((x: any) => x.properties['fa-name'] === 'تهران');
       if (!city.selected) {
-        city?.select()
+        city?.select();
       }
     }
-  }, [search])
+  }, [search]);
 
   const history = useHistory();
   const [options] = useState({
@@ -167,10 +184,10 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
       borderWidth: 0,
       valueDecimals: 0,
       style: {
-        color: "#fff",
+        color: '#fff',
         fontFamily: 'inherit',
       },
-      headerFormat: "",
+      headerFormat: '',
       pointFormat: '<div>{point.properties.fa-name}</div>',
       backgroundColor: {
         linearGradient: [0, 0, 0, 60],
@@ -201,22 +218,25 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, cityTitle, des
         },
         states: {
           select: {
-            color: '#3b3b3b'
-          }
+            color: '#3b3b3b',
+          },
         },
-        allowPointSelect: true
+        allowPointSelect: true,
       },
     ],
   });
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به کارکنان دولت استان‌ &nbsp;
-        {cityTitle}
+        نگاه کلی به کارکنان دولت{' '}
+        {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
       </legend>
-      <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow">
+      <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
+        <Link to={location.pathname} className="absolute right-20 top-8 z-50">
+          <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
+        </Link>
         <div className="w-5/6 map-wrapper">
-          <Map options={options} ref={chartRef}/>
+          <Map options={options} ref={chartRef} />
         </div>
         <ul className="w-1/6">
           {sideCityStatus.map((item: any, index: any) => {
