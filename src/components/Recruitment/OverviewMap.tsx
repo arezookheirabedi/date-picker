@@ -232,7 +232,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
-        <Link to={location.pathname} className="absolute right-20 top-8 z-50">
+        <Link to={location.pathname} className="absolute right-20 top-8 z-40">
           <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
         </Link>
         <div className="w-5/6 map-wrapper">
