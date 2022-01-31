@@ -66,14 +66,14 @@ const TestStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByCategory({
-      organization: 'school',
+      organization: 'education',
       // resultStatus: 'POSITIVE',
       // recoveredCount: true,
       // total: true,
       // count: true,
       from: '',
       to: '',
-      tags: [],
+      tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
     });
   }, []);
 

@@ -13,15 +13,13 @@ import Spinner from '../Spinner';
 
 const {Line} = Charts;
 
-
 interface IParams {
-  status: string,
-  type: string,
-  from: any,
-  to: any,
-  tags: any[],
+  status: string;
+  type: string;
+  from: any;
+  to: any;
+  tags: any;
 }
-
 
 const filterTypes = [
   {name: 'دانش آموزان پایه اول', enName: 'a1'},
@@ -82,7 +80,7 @@ const OverviewPatients = () => {
     type: 'ANNUAL',
     from: '',
     to: '',
-    tags: [],
+    tags: ['#grade# دانش آموز پایه هشتم'].join(','),
   });
 
   const getLinearOverviewPublicTransport = async (params: any) => {
@@ -102,7 +100,7 @@ const OverviewPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverviewPublicTransport({organization: 'school', ...queryParams});
+      getLinearOverviewPublicTransport({organization: 'education', ...queryParams});
     }, 500);
 
     return () => clearTimeout(idSetTimeOut);
@@ -116,8 +114,8 @@ const OverviewPatients = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
@@ -160,7 +158,7 @@ const OverviewPatients = () => {
                               setServiceType(value);
                               setQueryParams({
                                 ...queryParams,
-                                tags: [value.enName],
+                                tags: [`#grade# ${value.name}`].join(','),
                               });
                             }}
                           >
