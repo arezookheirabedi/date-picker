@@ -74,6 +74,8 @@ const OverviewVaccinePerProvince = () => {
       let noDose: any[] = [];
 
       data.forEach((item: any, index: number) => {
+        let more = 0;
+
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.dosesCountMap)) {
           if (Number(key) === 0) {
@@ -93,7 +95,7 @@ const OverviewVaccinePerProvince = () => {
           }
 
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose.push(Number(value));
+            more += Number(value);
           }
         }
 
@@ -101,7 +103,7 @@ const OverviewVaccinePerProvince = () => {
         if (firstDose.length < index + 1) firstDose.push(0);
         if (secondDose.length < index + 1) secondDose.push(0);
         if (thirdDose.length < index + 1) thirdDose.push(0);
-        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(0);
+        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
 
         provinces.push(item.tag);
       });
@@ -109,27 +111,27 @@ const OverviewVaccinePerProvince = () => {
       setDataset([
         {
           name: 'واکسن نزده',
-          color: '#FE2D2F',
+          color: '#FF0060',
           data: [...noDose],
         },
         {
           name: 'دوز اول',
-          color: '#FFC700',
+          color: '#F3BC06',
           data: [...firstDose],
         },
         {
           name: 'دوز دوم',
-          color: '#039572',
+          color: '#209F92',
           data: [...secondDose],
         },
         {
           name: 'دوز سوم',
-          color: '#00cfd6',
+          color: '#004D65',
           data: [...thirdDose],
         },
         {
           name: 'بیش از ۳ دوز',
-          color: '#1db7ff',
+          color: '#BFDDE7',
           data: [...moreThanThreeDose],
         },
       ]);
@@ -220,25 +222,25 @@ const OverviewVaccinePerProvince = () => {
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FE2D2F'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FFC700'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#039572'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
               </div>
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00cfd6'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#1db7ff'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>

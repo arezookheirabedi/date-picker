@@ -127,6 +127,8 @@ const options = {
   plotOptions: {
     series: {
       stacking: 'normal',
+      // borderRadius: 5,
+      pointWidth: 15,
     },
     column: {
       threshold: null,
@@ -151,6 +153,9 @@ const options = {
   xAxis: {
     categories: [],
     type: 'category',
+    labels: {
+      rotation: 45,
+    },
     // lineDashStyle: 'dash',
     // lineColor: '#000000',
     // lineWidth: 1
@@ -158,7 +163,7 @@ const options = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valuePrefix: '',
+    valueSuffix: ' نفر',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -195,7 +200,7 @@ const Column: React.FC<any> = ({data, categories}) => {
   useEffect(() => {
     if (chartRef && chartRef.current) {
       chartRef.current.chart.xAxis[0].setCategories(categories, true);
-      chartRef.current.chart.xAxis[0].setExtremes(0, 5);
+      chartRef.current.chart.xAxis[0].setExtremes(0, 30);
       chartRef.current.chart.redraw();
     }
   }, [categories]);
