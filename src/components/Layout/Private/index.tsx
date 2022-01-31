@@ -2,6 +2,8 @@ import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // eslint-disable-next-line
 import {Redirect, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
+import 'rc-slider/assets/index.css';
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
 import {useOutsideSidebar} from 'src/hooks/useOutsideSidebar';
 import routes from 'src/routes';
 import {isLogin} from 'src/helpers/utils';
