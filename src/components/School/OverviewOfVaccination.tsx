@@ -221,14 +221,14 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             count={counts.numberOfMoreThreeDose || 0}
             loading={countsLoading}
           />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
             count={counts.numberOfAllDose || 0}
             loading={countsLoading}
           />
-        </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GrayVaccine1}
             text="تعداد اطلاعات مخدوش"
@@ -241,8 +241,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             count={counts.numberOfUnvaccinated || 0}
             loading={countsLoading}
           />
-          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+          {/* <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+          {/* <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
         </div>
       </div>
       {loading ? (
