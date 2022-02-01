@@ -246,7 +246,6 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             count={counts.numberOfMoreThreeDose || 0}
             loading={countsLoading}
           />
-          
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
