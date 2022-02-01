@@ -117,7 +117,7 @@ const TestStatus: React.FC<{}> = () => {
         // resultStatus: 'POSITIVE',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        tags: [],
+        tags: ["^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$"],
       });
     }
   }, [selectedDayRange]);

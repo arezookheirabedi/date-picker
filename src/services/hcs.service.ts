@@ -59,7 +59,13 @@ function testResultTagBased({
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/test-results/tag-based`, params);
+    .get(
+      `/api/v1/hcs-reporter/organizations/${organization}/test-results/tag-based?${qs.stringify(
+        params,
+        {arrayFormat: 'comma'}
+      )}`,
+      {}
+    );
 }
 
 function dosesTagBased({organization, ...params}: {organization: string; params: any}) {

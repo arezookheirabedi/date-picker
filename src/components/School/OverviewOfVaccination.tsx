@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import Statistic from '../../containers/Guild/components/Statistic';
-import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
+// import totalEmploye1 from '../../assets/images/icons/people-dark-green.svg';
 import totalEmploye2 from '../../assets/images/icons/people-navy.svg';
 import totalStudent from '../../assets/images/icons/graduation.svg';
 import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
@@ -177,12 +177,12 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic
+          {/* <Statistic
             icon={totalEmploye1}
             text="مجموع کارمندان آموزشی"
             count={counts.numberOfTeachers || 0}
             loading={countsLoading}
-          />
+          /> */}
           <Statistic
             icon={totalEmploye2}
             text="مجموع کارمندان اداری"
