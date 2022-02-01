@@ -122,7 +122,6 @@ const TestStatus: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
 
-
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
       // eslint-disable-next-line
@@ -305,7 +304,7 @@ const TestStatus: React.FC<{}> = () => {
               {
                 name: 'تعداد آزمایش‌های انجام شده',
                 key: 'total',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
+                render: (v: any) => <span>{Number(v || 0).commaSeprator().toPersianDigits()}</span>,
               },
               {
                 name: 'درصد تست‌های مثبت',
@@ -331,18 +330,18 @@ const TestStatus: React.FC<{}> = () => {
                   </span>
                 ),
               },
-              {
-                name: 'درصد تست‌های نامشخص',
-                key: 'unknownCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
+              // {
+              //   name: 'درصد تست‌های نامشخص',
+              //   key: 'unknownCount',
+              //   render: (v: any, record: any) => (
+              //     <span>
+              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+              //         .toFixed(4)
+              //         .toPersianDigits()}
+              //       %
+              //     </span>
+              //   ),
+              // },
             ]}
             totalItems={(dataset || []).length || 0}
           />

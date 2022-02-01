@@ -5,19 +5,27 @@ import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
   organization: string;
+  tagPattern?: string;
   queryParams: any;
   placeholder?: any;
   setQueryParams: (v: any) => void;
 }
 
-const TagsSelect = ({organization, placeholder = '', setQueryParams, queryParams}: ITagsSelect) => {
+const TagsSelect = ({
+  organization,
+  tagPattern = '',
+  placeholder = '',
+  setQueryParams,
+  queryParams,
+}: ITagsSelect) => {
   const [serviceType, setServiceType] = React.useState<any>();
   const [tags, setTags] = React.useState<any[]>([]);
 
   const fetcher = async () => {
     try {
-      const res = await hcsService.tags({organization});
-      console.log(res);
+      // @ts-ignore
+      const res = await hcsService.tags({organization, tagPattern});
+      // console.log(res);
       setTags([...res.data]);
     } catch (error: any) {
       // eslint-disable-next-line
@@ -89,7 +97,7 @@ const TagsSelect = ({organization, placeholder = '', setQueryParams, queryParams
                         active ? 'bg-gray-100' : ''
                       } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-xs text-left rtl:text-right truncate`}
                       onClick={() => {
-                        setServiceType(value);
+                        setServiceType(value.key);
                         //   setQueryParams({
                         //     ...queryParams,
                         //     tags: index !== 0 ? [value].join(',') : '',
@@ -98,7 +106,7 @@ const TagsSelect = ({organization, placeholder = '', setQueryParams, queryParams
                     >
                       <span className="truncate">
                         {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                        {value}
+                        {value.value}
                       </span>
                     </button>
                   )}

@@ -330,7 +330,13 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               {
                 name: 'تعداد آزمایش‌های انجام شده',
                 key: 'total',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0)
+                      .commaSeprator()
+                      .toPersianDigits()}
+                  </span>
+                ),
               },
               {
                 name: 'درصد تست‌های مثبت',

@@ -89,8 +89,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsService.dosesTagBased(params);
+      const normalizedData: any[] = [];
 
-      const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
@@ -100,59 +100,59 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         let unknownInformation = 0;
         let noDose = 0;
         let total = 0;
-
-        if (item.dosesCountMap) {
-          // eslint-disable-next-line
-          for (let i = 0; i < item.dosesCountMap.length; i++) {
-            // eslint-disable-next-line
-            for (const [key, value] of Object.entries(item.dosesCountMap[i])) {
-              if (Number(key) === 0) {
-                noDose += Number(value);
-              }
-
-              if (Number(key) === 1) {
-                firstDose += Number(value);
-              }
-
-              if (Number(key) === 2) {
-                secondDose += Number(value);
-              }
-
-              if (Number(key) === 3) {
-                thirdDose += Number(value);
-              }
-
-              if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-                moreThanThreeDose += Number(value);
-              }
-
-              if (Number(key) !== 0 && key !== 'null') {
-                allVaccination += Number(value);
-              }
-
-              if (key === 'null') {
-                unknownInformation += Number(value);
-              }
-
-              total = allVaccination + noDose + unknownInformation;
-            }
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+          if (Number(key) === 0) {
+            noDose += Number(value);
           }
+
+          if (Number(key) === 1) {
+            firstDose += Number(value);
+          }
+
+          if (Number(key) === 2) {
+            secondDose += Number(value);
+          }
+
+          if (Number(key) === 3) {
+            thirdDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            allVaccination += Number(value);
+          }
+
+          if (key === 'null') {
+            unknownInformation += Number(value);
+          }
+
+          total = allVaccination + noDose + unknownInformation;
         }
 
-        normalizedDate.push({
+        // if (total > 0)
+        normalizedData.push({
           id: `ovvac_${index}`,
           name: item.tag || 'نامشخص',
-          total: total || 0,
-          firstDose: firstDose || 0,
-          secondDose: secondDose || 0,
-          thirdDose: thirdDose || 0,
-          otherDose: moreThanThreeDose || 0,
-          unknownInformation: unknownInformation || 0,
-          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose || 0,
-          noDose: (noDose * 100) / total || 0,
+          firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: (secondDose * 100) / total,
+          thirdDosePercentage: (thirdDose * 100) / total,
+          otherDose: (moreThanThreeDose * 100) / total,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
+          unknownInformation,
+          noDose: (noDose * 100) / total,
+          // eslint-disable-next-line
+          // notVaccine: item.dosesCountMap
+          //   ? item.dosesCountMap[0]
+          //     ? (item.dosesCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
         });
       });
-      setDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -314,63 +314,28 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 },
                 {
                   name: 'دوز اول',
-                  key: 'firstDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  key: 'firstDosePercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز دوم',
-                  key: 'secondDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  key: 'secondDosePercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'دوز سوم',
-                  key: 'thirdDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  key: 'thirdDosePercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'واکسن نزده',
                   key: 'noDose',
-                  render: (v: any, record) => (
-                    <span>
-                      {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                        .toFixed(4)
-                        .toPersianDigits()}
-                      %
-                    </span>
-                  ),
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
                   name: 'اطلاعات مخدوش',
@@ -383,7 +348,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}
-              totalItems={(dataset || []).length || 0}
+              totalItems={dataset.length || 0}
             />
           </div>
         </>

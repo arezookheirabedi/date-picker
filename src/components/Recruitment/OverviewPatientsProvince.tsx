@@ -150,6 +150,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
               <TagsSelect
                 placeholder="کل کارکنان"
                 organization="employment"
+                tagPattern="^(?!.*(استان)).*$"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />

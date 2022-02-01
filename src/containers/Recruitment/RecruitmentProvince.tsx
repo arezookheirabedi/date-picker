@@ -43,5 +43,4 @@ const RecruitmentProvince = () => {
   );
 };
 
-
 export default RecruitmentProvince;

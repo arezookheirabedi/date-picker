@@ -37,7 +37,16 @@ function testResultTimeBased({
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/test-results/time-based`, params);
+    .get(
+      `/api/v1/hcs-reporter/organizations/${organization}/test-results/time-based?${qs.stringify(
+        params,
+        {
+          arrayFormat: 'comma',
+        }
+      )}`,
+      {},
+      {}
+    );
 }
 
 function testResultTagBased({

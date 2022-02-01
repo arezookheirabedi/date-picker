@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import hcsServices from 'src/services/hcs.service';
+import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
@@ -33,7 +33,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
-      const {data} = await hcsServices.doses(params);
+      const {data} = await hcsService.doses(params);
       let total = 0;
       let tmp = {...counts};
 
@@ -85,7 +85,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsServices.dosesTagBased(params);
+      const {data} = await hcsService.dosesTagBased(params);
       const normalizedData: any[] = [];
 
       data.forEach((item: any, index: number) => {
