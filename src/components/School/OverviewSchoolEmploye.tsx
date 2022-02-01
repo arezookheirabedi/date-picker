@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-
+import {useDispatch} from 'react-redux';
+import { addTotalEmployeMembersAc } from 'src/store/action_creators';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
@@ -19,17 +20,20 @@ const OverviewSchoolEmploye = () => {
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  const dispatch = useDispatch();
 
   const getNumberOf = async () => {
     setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'education',
-        tags: ['student'].join(','),
+        tags: ['#type# پرسنل اداری'].join(','),
         testResultCount: true,
         vaccinationCount: true,
         total: true,
       });
+
+      dispatch(addTotalEmployeMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
       setNumberOfPlaqueVisited(data.numberOfPositive || 0);
       setNumberOfPositive(data.numberOfPositive || 0);

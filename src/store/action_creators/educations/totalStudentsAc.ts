@@ -8,3 +8,9 @@ export const addTotalStudentMembersAc = (count: number) => async (dispatch: Disp
         payload: count
     })
 }
+export const addTotalEmployeMembersAc = (count: number) => async (dispatch: Dispatch<Action>) => {
+    dispatch({
+        type: ActionType.ADD_TOTAL_MEMBERS_EMPLOYE,
+        payload: count
+    })
+}
