@@ -107,7 +107,7 @@ const Requested: React.FC<{}> = () => {
     try {
       const params = new URLSearchParams(location.search);
 
-      await transportService.preDownloadReport(id, {
+      await transportService.retryReport(id, {
         cancelToken: source.token,
       });
 
