@@ -178,23 +178,17 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     });
     if (existsCity) {
       getOverviewByVaccine({
-        organization: 'school',
-        from: '',
-        to: '',
-        tagPattern: 'school*',
-        province: provinceName,
+        organization: 'education',
+        tags: `#province# استان ${provinceName}`,
       });
       getOverviewByVaccinePercent({
-        organization: 'school',
-        from: '',
-        to: '',
-        tagPattern: 'school*',
-        province: provinceName,
+        organization: 'education',
+        tags: `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
       });
     } else {
       history.push('/dashboard/school/province');
     }
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
