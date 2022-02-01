@@ -20,23 +20,6 @@ interface IParams {
   tags: any;
 }
 
-// const filterTypes = [
-//   {name: 'دانش آموزان پایه اول', enName: 'a1'},
-//   {name: 'دانش آموزان پایه دوم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه سوم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه چهارم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه پنجم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه ششم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه هفتم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه هشتم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه نهم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه دهم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه یازدهم', enName: 'a1'},
-//   {name: 'دانش آموزان پایه دوازدهم', enName: 'a1'},
-//   {name: 'پرسنل آموزشی', enName: 'a1'},
-//   {name: 'پرسنل اداری', enName: 'a1'},
-// ];
-
 const OverviewPatients = () => {
   const [data, setData] = useState([]);
   // const [serviceType, setServiceType] = useState(null) as any;
@@ -79,7 +62,7 @@ const OverviewPatients = () => {
     type: 'ANNUAL',
     from: '',
     to: '',
-    tags: ['#grade# دانش آموز پایه هشتم'].join(','),
+    tags: '',
   });
 
   const getLinearOverviewPublicTransport = async (params: any) => {
@@ -127,7 +110,8 @@ const OverviewPatients = () => {
           <div className="flex align-center justify-between w-3/4 px-8">
             <TagsSelect
               placeholder="کل آموزش و پرورش"
-              organization="school"
+              tagPattern="^(?!.*(province|city)).*$"
+              organization="education"
               setQueryParams={setQueryParams}
               queryParams={queryParams}
             />

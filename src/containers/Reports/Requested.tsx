@@ -7,7 +7,7 @@ import DatePickerModal from '../../components/DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import download from '../../assets/images/icons/download.svg';
 import Table from '../../components/Table';
-import {getToken, toPersianDigit} from '../../helpers/utils';
+import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
 
 const Requested: React.FC<{}> = () => {
@@ -88,14 +88,7 @@ const Requested: React.FC<{}> = () => {
         cancelToken: source.token,
       });
 
-      // eslint-disable-next-line
-      const {access_token = ''} = getToken();
-
-      const newWindow = window.open(
-        `${response.data.downloadLink}/${access_token}`,
-        '_blank',
-        'noopener,noreferrer'
-      );
+      const newWindow = window.open(response.data.downloadLink, '_blank', 'noopener,noreferrer');
       if (newWindow) newWindow.opener = null;
       fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
     } catch (error: any) {

@@ -225,6 +225,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
       },
     ],
   });
+  
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">

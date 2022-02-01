@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/School/OverviewMap';
-import OverviewProvince from '../../components/School/OverviewProvince';
+// import OverviewProvince from '../../components/School/OverviewProvince';
 import OverviewSchoolEmployeProvince from '../../components/School/OverviewSchoolEmployeProvince';
 import OverviewSchoolStudentProvince from '../../components/School/OverviewSchoolStudentProvince';
 import OverviewPatientsProvince from '../../components/School/OverviewPatientsProvince';
@@ -36,7 +36,7 @@ const SchoolProvince = () => {
         destinationId="school-overview"
       />
 
-       <OverviewProvince cityTitle={cityTitle} />
+      {/* <OverviewProvince cityTitle={cityTitle} /> */}
       <OverviewSchoolEmployeProvince cityTitle={cityTitle} />
       <OverviewSchoolStudentProvince cityTitle={cityTitle} />
 

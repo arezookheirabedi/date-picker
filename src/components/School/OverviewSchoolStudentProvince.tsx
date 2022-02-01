@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-
-import {sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addTotalStudentMembersAc } from 'src/store/action_creators';
+import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalStudent from '../../assets/images/icons/graduation.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
@@ -13,6 +14,7 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
 
+
 interface OverviewSchoolStudentsProps {
   cityTitle: any;
 }
@@ -21,7 +23,8 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState(null);
   const [numberOfPositives, setNumberOfPositives] = useState(null);
-
+  // eslint-disable-next-line
+  const [numberOfNegatives, setNumberOfNegatives] = useState(null);
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
@@ -29,6 +32,8 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
 
   const location = useLocation();
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const getNumberOf = async (province: string) => {
     setLoading(true);
@@ -41,6 +46,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
         total: true,
       });
 
+      dispatch(addTotalStudentMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
       setNumberOfPositives(data.numberOfPositives || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);

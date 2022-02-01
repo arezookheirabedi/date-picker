@@ -24,7 +24,7 @@ const filterTypes = [
 ];
 
 const TestStatus: React.FC<{}> = () => {
-  const [filterType, setFilterType] = useState({name: "بیشترین", enName: "HIGHEST"});
+  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
@@ -54,8 +54,7 @@ const TestStatus: React.FC<{}> = () => {
       });
       setDataset([...normalizedDate]);
       setOrgDataset([...normalizedDate]);
-      setFilterType({name: "بیشترین", enName: "HIGHEST"});
-
+      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -304,7 +303,13 @@ const TestStatus: React.FC<{}> = () => {
               {
                 name: 'تعداد آزمایش‌های انجام شده',
                 key: 'total',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0)
+                      .commaSeprator()
+                      .toPersianDigits()}
+                  </span>
+                ),
               },
               {
                 name: 'درصد تست‌های مثبت',
