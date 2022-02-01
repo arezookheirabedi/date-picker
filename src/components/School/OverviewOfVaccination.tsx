@@ -34,7 +34,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     numberOfUnvaccinated: 0,
   });
 
-  const {total: totalMembers} = useSelector(state => state.studentMembers);
+  const {total: totalMembers, employe: totalEmploye} = useSelector(state => state.studentMembers);
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
@@ -186,7 +186,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={totalEmploye2}
             text="مجموع کارمندان اداری"
-            count={counts.numberOfEmployees || 0}
+            count={totalEmploye || 0}
+            // count={counts.numberOfEmployees || 0}
             loading={countsLoading}
           />
           <Statistic
