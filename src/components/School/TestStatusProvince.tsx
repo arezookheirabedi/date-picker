@@ -37,6 +37,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   const history = useHistory();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [filterType, setFilterType] = useState({name: null, enName: null});
+  const [provinceTitle, setProvinceTitle] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
@@ -78,8 +79,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       return item.name === provinceName;
     });
     if (existsCity) {
+      setProvinceTitle(provinceName);
       getOverviewByCategory({
-        organization: 'school',
+        organization: 'education',
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
@@ -87,13 +89,16 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         from: '',
         to: '',
         // province: provinceName,
-        tags: [],
+        tags: [
+          `#province# استان ${provinceName}`,
+          '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        ].join(','),
       });
       //
     } else {
       history.push('/dashboard/school/province');
     }
-  }, []);
+  }, [location.search]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -138,7 +143,10 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           // province: provinceName,
-          tags: [],
+          tags: [
+            `#province# استان ${provinceTitle}`,
+            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+          ].join(','),
         });
       } else {
         history.push('/dashboard/school/province');

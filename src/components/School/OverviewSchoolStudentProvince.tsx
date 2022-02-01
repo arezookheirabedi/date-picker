@@ -18,13 +18,14 @@ interface OverviewSchoolStudentsProps {
 }
 
 const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
-  const [numberOf, setNumberOf] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPositive, setNumberOfPositive] = useState(null);
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfPositives, setNumberOfPositives] = useState(null);
+
+  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
 
   const location = useLocation();
   const history = useHistory();
@@ -33,23 +34,23 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
     setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tags: ['student'].join(','),
+        organization: 'education',
+        tags: ['#type# دانش آموز', `#province# استان ${province}`].join(','),
         testResultCount: true,
         vaccinationCount: true,
         total: true,
-        province,
       });
+
       setNumberOf(data.total || 0);
-      setNumberOfPlaqueVisited(data.numberOfPositive || 0);
-      setNumberOfPositive(data.numberOfPositive || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfTestResults(data.testResultCount || 0);
+      setNumberOfPositives(data.numberOfPositives || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
+      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+      setNumberOfRecovered(data.numberOfRecovered || 0);
+      setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
-      
+
       // @ts-ignore
       setNumberOf(0);
       // @ts-ignore
@@ -62,12 +63,10 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
       setNumberOfTestResults(0);
       // @ts-ignore
       setNumberOfVaccination(0);
-
     } finally {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -82,7 +81,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
     } else {
       history.push('/dashboard/school/province');
     }
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -101,7 +100,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositive}
+            count={numberOfPositives}
             loading={loading}
           />
           <Statistic
@@ -123,7 +122,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
-            count={numberOfPlaqueVisited}
+            count={numberOfNanVaccinated}
             loading={loading}
           />
           <Statistic
