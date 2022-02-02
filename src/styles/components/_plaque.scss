@@ -1,4 +1,5 @@
-.license-plate {
+.license-plate,
+.license-plate-motor {
   margin: 0 auto;
   min-width: 6.8em;
   display: inline-flex;
@@ -15,42 +16,43 @@
   overflow: hidden;
 }
 
-.license-plate > .blue-column {
+.license-plate > .blue-column,
+.license-plate-motor .blue-column {
   width: 1em;
   height: inherit;
   float: left;
   background-color: #042591;
   position: relative;
-}
 
-.license-plate > .blue-column > .flag {
-  margin: 0.2em;
-}
+  & > .flag {
+    margin: 0.2em;
+  }
 
-.license-plate > .blue-column > .flag :nth-child(1) {
-  height: 0.2em;
-  background-color: green;
-}
+  & > .flag :nth-child(1) {
+    height: 0.2em;
+    background-color: green;
+  }
 
-.license-plate > .blue-column > .flag :nth-child(2) {
-  height: 0.2em;
-  background-color: #fff;
-}
+  & > .flag :nth-child(2) {
+    height: 0.2em;
+    background-color: #fff;
+  }
 
-.license-plate > .blue-column > .flag :nth-child(3) {
-  height: 0.2em;
-  background-color: red;
-}
+  & > .flag :nth-child(3) {
+    height: 0.2em;
+    background-color: red;
+  }
 
-.license-plate > .blue-column > .text {
-  color: #ffffff;
-  font-size: 0.2em;
-  line-height: 2em;
-  text-align: left;
-  font-family: sans-serif;
-  position: absolute;
-  bottom: 0.5em;
-  left: 0.5em;
+  & > .text {
+    color: #ffffff;
+    font-size: 0.2em;
+    line-height: 2em;
+    text-align: left;
+    font-family: sans-serif;
+    position: absolute;
+    bottom: 0.5em;
+    left: 0.5em;
+  }
 }
 
 .license-plate > span {
@@ -88,4 +90,18 @@
   font-size: 0.9em;
   line-height: 1em;
   text-shadow: 0.03em 0.03em 0.03em rgba(0, 0, 0, 0.3), -0.04em -0.04em 0.02em #fff;
+}
+
+.license-plate.taxi {
+  background-color: #f1df37;
+}
+
+.license-plate-motor {
+  flex-direction: column;
+  min-width: 5em;
+  height: 3.5em;
+
+  span {
+    font-size: 1em;
+  }
 }

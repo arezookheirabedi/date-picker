@@ -49,14 +49,11 @@ const OverviewCategories: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByCategory({
-      organization: 'school',
-      // resultStatus: 'POSITIVE',
-      // recoveredCount: true,
-      // total: true,
-      // count: true,
+      organization: 'education',
       from: '',
       to: '',
-      tags: ['school*'].join(','),
+      tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+      tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
     });
   }, []);
 
@@ -91,14 +88,11 @@ const OverviewCategories: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        organization: 'school',
-        // resultStatus: 'POSITIVE',
-        // recoveredCount: true,
-        // total: true,
-        // count: true,
+        organization: 'education',
+        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        tags: ['school*'].join(','),
       });
     }
   }, [selectedDayRange]);

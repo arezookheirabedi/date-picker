@@ -16,9 +16,11 @@ import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 import {ReactComponent as FolderIcon} from '../../assets/images/icons/folder.svg';
 import Spinner from '../Spinner';
 
-interface OverviewDriverStatusProps {}
+interface OverviewDriverStatusProps {
+  cityTitle?: string;
+}
 
-const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
+const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) => {
   const {search} = useLocation();
   // const location = useLocation();
   const queryStringParams = new URLSearchParams(search);
@@ -33,8 +35,8 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
-    from: {day: 1, month: 9, year: 1400},
-    to: {day: 20, month: 9, year: 1400},
+    from: null,
+    to: null,
   }) as any;
 
   const {CancelToken} = axios;
@@ -81,20 +83,21 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
     }
   };
 
-  useEffect(() => {
-    const qst = new URLSearchParams(search);
-    setLoading(true);
-    getOverviewTransportReport({
-      pageNumber: qst.get('page') || 1,
-      pageSize: 20,
-      sort: 'ASC',
-      from: qst.get('from'),
-      to: qst.get('to'),
-    });
-    // return () => {
-    //   source.cancel('Operation canceled by the user.');
-    // }
-  }, []);
+  // useEffect(() => {
+  //   const qst = new URLSearchParams(search);
+  //   setLoading(true);
+  //   getOverviewTransportReport({
+  //     healthStatusSet: 'POSITIVE',
+  //     pageNumber: qst.get('page') || 1,
+  //     pageSize: 20,
+  //     sort: 'ASC',
+  //     from: qst.get('from'),
+  //     to: qst.get('to'),
+  //   });
+  //   // return () => {
+  //   //   source.cancel('Operation canceled by the user.');
+  //   // }
+  // }, []);
 
   useEffect(() => {
     return () => {
@@ -106,11 +109,26 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
   }, [history]);
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
+    let latestQuery: any = {};
+
+    if (search && search.length > 1) {
+      latestQuery = JSON.parse(
+        // eslint-disable-next-line
+        '{"' +
+          decodeURI((search || ' ').substring(1))
+            .replace(/"/g, '\\"')
+            .replace(/&/g, '","')
+            .replace(/=/g, '":"') +
+          '"}'
+      );
+    }
+
+    if (!loading && selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       history.push(
         `/dashboard/transport/monitoring?${qs.stringify({
+          ...latestQuery,
           page: 1,
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
@@ -119,24 +137,68 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
     }
   }, [selectedDayRange]);
 
+  useEffect(() => {
+    const qst = new URLSearchParams(search);
+
+    let query: any = {
+      healthStatusSet: 'POSITIVE',
+      pageNumber: Number(qst.get('page') || "1") - 1,
+      pageSize: 20,
+      sort: 'ASC',
+      from: qst.get('from'),
+      to: qst.get('to'),
+    };
+
+    if (qst.has('provinceName')) query = {...query, province: qst.get('provinceName')};
+
+    // if (qst.get('from') && qst.get('to')) {
+    //   let from: any = qst.get('from');
+    //   let to: any = qst.get('from');
+
+    //   from = moment(from, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
+    //   to = moment(to, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
+
+    //   setSelectedDayRange({
+    //     from: {year: from[0], month: from[1], day: from[2]},
+    //     to: {year: to[0], month: to[1], day: to[2]},
+    //   });
+    // }
+
+    setLoading(true);
+    getOverviewTransportReport(query);
+  }, [search]);
+
+  useEffect(() => {
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    });
+  }, [cityTitle]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت رانندگان حمل و نقل عمومی
+        نگاه کلی به وضعیت رانندگان حمل و نقل عمومی {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
 
       <div className="flex justify-between items-center mb-8">
         <div className="inline-flex">
           <ExportButton
             params={{
-              from: moment(
-                `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-                'jYYYY/jM/jD'
-              ).format('YYYY-MM-DD'),
-              to: moment(
-                `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-                'jYYYY/jM/jD'
-              ).format('YYYY-MM-DD'),
+              from: selectedDayRange.from
+                ? moment(
+                    `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
+                    'jYYYY/jM/jD'
+                  ).format('YYYY-MM-DD')
+                : null,
+              to: selectedDayRange.to
+                ? moment(
+                    `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
+                    'jYYYY/jM/jD'
+                  ).format('YYYY-MM-DD')
+                : null,
+              healthStatusSet: ['POSITIVE'],
+              reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${cityTitle ? `استان ${cityTitle}` : ''}`
             }}
           />
         </div>
@@ -246,15 +308,18 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                 },
                 {
                   name: 'پلاک',
-                  key: 'plaque',
-                  render: (v: any) =>
-                    // <span>
-                    //   {/* eslint-disable-next-line react/destructuring-assignment */}
-                    //   {`${v.iranNumber} | ${v.secondNumber} ${v.letter} ${v.firstNumber}`.toPersianDigits()}
-                    // </span>
-                    v && (
+                  key: '',
+                  render: (v: any, record: any) =>
+                    // eslint-disable-next-line
+                    record.plaque ? (
                       <div className="flex items-center">
-                        <div className="license-plate">
+                        <div
+                          className={`license-plate ${
+                            record.serviceType === 'TAXI_T' || record.serviceType === 'PUBLIC'
+                              ? 'taxi'
+                              : ''
+                          }`}
+                        >
                           <div className="blue-column">
                             <div className="flag">
                               <div />
@@ -266,19 +331,42 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = () => {
                               <div>IRAN</div>
                             </div>
                           </div>
-                          {/* eslint-disable-next-line react/destructuring-assignment */}
-                          <span>{v.firstNumber}</span>
-                          {/* eslint-disable-next-line react/destructuring-assignment */}
-                          <span className="alphabet-column">{v.letter}</span>
-                          {/* eslint-disable-next-line react/destructuring-assignment */}
-                          <span>{v.secondNumber}</span>
+                          <span>{record.plaque.firstNumber}</span>
+                          <span className="alphabet-column">{record.plaque.letter}</span>
+                          <span>{record.plaque.secondNumber}</span>
                           <div className="iran-column">
                             <span>ایــران</span>
-                            {/* eslint-disable-next-line react/destructuring-assignment */}
-                            <strong>{v.iranNumber}</strong>
+                            <strong>{record.plaque.iranNumber}</strong>
                           </div>
                         </div>
                       </div>
+                    ) : record.motorCyclePlaque ? (
+                      <div className="flex items-center">
+                        <div className="license-plate-motor">
+                          <div className="flex w-full justify-between">
+                            <div className="flex flex-grow justify-center">
+                              <span>{record.motorCyclePlaque.threeDigitNumber}</span>
+                            </div>
+
+                            <div className="blue-column">
+                              <div className="flag">
+                                <div />
+                                <div />
+                                <div />
+                              </div>
+                              <div className="text">
+                                <div>I.R.</div>
+                                <div>IRAN</div>
+                              </div>
+                            </div>
+                          </div>
+                          <span className="alphabet-column">
+                            {record.motorCyclePlaque.fiveDigitNumber}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      ''
                     ),
                 },
                 {

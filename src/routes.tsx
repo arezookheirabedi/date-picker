@@ -12,6 +12,7 @@ import School from './containers/School/School';
 import SchoolProvince from './containers/School/SchoolProvince';
 import Recruitment from './containers/Recruitment/Recruitment';
 import RecruitmentProvince from './containers/Recruitment/RecruitmentProvince';
+import ReportsRequested from './containers/Reports/Requested';
 import Vaccination from './containers/Vaccination/Vaccination';
 import Citizens from './containers/Citizens/Citizens';
 
@@ -165,6 +166,18 @@ const routes: IRoute[] = [
       },
     ],
     main: Recruitment,
+  },
+  {
+    keyIndex: '9',
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="reports-requested" active={active} disabled={disabled} />
+    ),
+    link: '/dashboard/reports/requested',
+    simLink: '/dashboard/reports/requested',
+    exact: true,
+    inMenu: true,
+    title: 'لیست درخواست گزارش',
+    main: ReportsRequested,
   },
 ];
 

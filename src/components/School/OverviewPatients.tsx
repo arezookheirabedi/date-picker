@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {Menu} from '@headlessui/react';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../RangeDateSliderFliter';
@@ -10,39 +8,21 @@ import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
+import TagsSelect from '../TagsSelect';
 
 const {Line} = Charts;
 
-
 interface IParams {
-  status: string,
-  type: string,
-  from: any,
-  to: any,
-  tags: any[],
+  status: string;
+  type: string;
+  from: any;
+  to: any;
+  tags: any;
 }
-
-
-const filterTypes = [
-  {name: 'دانش آموزان پایه اول', enName: 'a1'},
-  {name: 'دانش آموزان پایه دوم', enName: 'a1'},
-  {name: 'دانش آموزان پایه سوم', enName: 'a1'},
-  {name: 'دانش آموزان پایه چهارم', enName: 'a1'},
-  {name: 'دانش آموزان پایه پنجم', enName: 'a1'},
-  {name: 'دانش آموزان پایه ششم', enName: 'a1'},
-  {name: 'دانش آموزان پایه هفتم', enName: 'a1'},
-  {name: 'دانش آموزان پایه هشتم', enName: 'a1'},
-  {name: 'دانش آموزان پایه نهم', enName: 'a1'},
-  {name: 'دانش آموزان پایه دهم', enName: 'a1'},
-  {name: 'دانش آموزان پایه یازدهم', enName: 'a1'},
-  {name: 'دانش آموزان پایه دوازدهم', enName: 'a1'},
-  {name: 'پرسنل آموزشی', enName: 'a1'},
-  {name: 'پرسنل اداری', enName: 'a1'},
-];
 
 const OverviewPatients = () => {
   const [data, setData] = useState([]);
-  const [serviceType, setServiceType] = useState(null) as any;
+  // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
@@ -82,7 +62,7 @@ const OverviewPatients = () => {
     type: 'ANNUAL',
     from: '',
     to: '',
-    tags: [],
+    tags: '',
   });
 
   const getLinearOverviewPublicTransport = async (params: any) => {
@@ -102,7 +82,7 @@ const OverviewPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverviewPublicTransport({organization: 'school', ...queryParams});
+      getLinearOverviewPublicTransport({organization: 'education', ...queryParams});
     }, 500);
 
     return () => clearTimeout(idSetTimeOut);
@@ -116,8 +96,8 @@ const OverviewPatients = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     }
   }, [selectedDayRange]);
@@ -128,52 +108,14 @@ const OverviewPatients = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between w-3/4 px-8">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {serviceType?.name || 'کل آموزش و پرورش'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
+            <TagsSelect
+              placeholder="کل آموزش و پرورش"
+              tagPattern="^(?!.*(province|city)).*$"
+              organization="education"
+              setQueryParams={setQueryParams}
+              queryParams={queryParams}
+            />
 
-              <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="px-1 py-1 ">
-                  {filterTypes.map((value: any, index: any) => {
-                    // console.log(value);
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                            onClick={() => {
-                              setServiceType(value);
-                              setQueryParams({
-                                ...queryParams,
-                                tags: [value.enName],
-                              });
-                            }}
-                          >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
             <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal

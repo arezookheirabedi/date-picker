@@ -18,10 +18,6 @@ interface TestStatusProvinceProps {
 
 const filterTypes = [
   {
-    name: 'مرتب‌سازی بر اساس پیشفرض',
-    enName: '',
-  },
-  {
     name: 'بیشترین',
     enName: 'HIGHEST',
   },
@@ -34,7 +30,10 @@ const filterTypes = [
 const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
-  const [filterType, setFilterType] = useState({name: null, enName: null});
+  const [filterType, setFilterType] = useState({
+    name: 'بیشترین',
+    enName: 'HIGHEST',
+  });
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orgDataset, setOrgDataset] = useState<any>([]);
@@ -64,7 +63,10 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       });
       setDataset([...normalizedDate]);
       setOrgDataset([...normalizedDate]);
-      setFilterType({name: null, enName: null});
+      setFilterType({
+        name: 'بیشترین',
+        enName: 'HIGHEST',
+      });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -145,7 +147,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
       // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
       if (a.total < b.total) {
         return reverse * 1;
@@ -179,7 +181,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'}
+                  {filterType?.name || 'بیشترین'}
                 </span>
                 <DownIcon className="h-2 w-2.5 mr-2" />
               </Menu.Button>
@@ -328,7 +330,13 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               {
                 name: 'تعداد آزمایش‌های انجام شده',
                 key: 'total',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0)
+                      .commaSeprator()
+                      .toPersianDigits()}
+                  </span>
+                ),
               },
               {
                 name: 'درصد تست‌های مثبت',
@@ -354,18 +362,18 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                   </span>
                 ),
               },
-              {
-                name: 'درصد تست‌های نامشخص',
-                key: 'unknownCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
+              // {
+              //   name: 'درصد تست‌های نامشخص',
+              //   key: 'unknownCount',
+              //   render: (v: any, record: any) => (
+              //     <span>
+              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+              //         .toFixed(4)
+              //         .toPersianDigits()}
+              //       %
+              //     </span>
+              //   ),
+              // },
             ]}
             totalItems={(dataset || []).length || 0}
           />

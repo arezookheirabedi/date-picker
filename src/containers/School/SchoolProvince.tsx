@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
-import { sideCities } from 'src/helpers/utils';
+import {sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/School/OverviewMap';
-import OverviewProvince from '../../components/School/OverviewProvince';
-import OverviewSchoolEmployeProvince from '../../components/School/OverviewSchoolEmployeProvince';
+// import OverviewProvince from '../../components/School/OverviewProvince';
+// import OverviewSchoolEmployeProvince from '../../components/School/OverviewSchoolEmployeProvince';
 import OverviewSchoolStudentProvince from '../../components/School/OverviewSchoolStudentProvince';
 import OverviewPatientsProvince from '../../components/School/OverviewPatientsProvince';
 import TestsStatusProvince from '../../components/School/TestStatusProvince';
@@ -21,12 +21,12 @@ const SchoolProvince = () => {
     // console.log(provinceName)
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
-    })
+    });
 
     if (existsCity) {
       setCityTitle(provinceName);
     }
-  }, [location.search])
+  }, [location.search]);
 
   return (
     <div className="space-y-16 mb-8">
@@ -36,8 +36,8 @@ const SchoolProvince = () => {
         destinationId="school-overview"
       />
 
-      <OverviewProvince cityTitle={cityTitle} />
-      <OverviewSchoolEmployeProvince cityTitle={cityTitle} />
+      {/* <OverviewProvince cityTitle={cityTitle} /> */}
+      {/* <OverviewSchoolEmployeProvince cityTitle={cityTitle} /> */}
       <OverviewSchoolStudentProvince cityTitle={cityTitle} />
 
       <OverviewCategoriesProvince cityTitle={cityTitle} />

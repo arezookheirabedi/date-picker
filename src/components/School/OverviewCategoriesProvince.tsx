@@ -86,14 +86,20 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     });
     if (existsCity) {
       getOverviewByCategory({
-        organization: 'school',
+        organization: 'education',
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
         // count: true,
         from: '',
         to: '',
-        tags: ['school*'].join(','),
+        tags: [
+          `#province# استان ${provinceName}`,
+          '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        ].join(','),
+        tagPattern: [
+          `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
+        ].join(','),
         // province: provinceName,
       });
       //
@@ -117,15 +123,16 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
         // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
         getOverviewByCategory({
-          organization: 'school',
-          // resultStatus: 'POSITIVE',
-          // recoveredCount: true,
-          // total: true,
-          // count: true,
-          tags: ['school*'].join(','),
+          organization: 'education',
+          tags: [
+            `#province# استان ${provinceName}`,
+            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+          ].join(','),
+          tagPattern: [
+            `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
+          ].join(','),
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          // province: provinceName,
         });
       } else {
         history.push('/dashboard/school/province');
@@ -134,7 +141,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آموزش و پرورش در استان &nbsp;
         {cityTitle}

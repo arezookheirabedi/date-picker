@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OverviewSchool from '../../components/School/Overview';
+// import OverviewSchool from '../../components/School/Overview';
 import OverviewSchoolEmploye from '../../components/School/OverviewSchoolEmploye';
 import OverviewSchoolStudent from '../../components/School/OverviewSchoolStudent';
 import OverviewCategories from '../../components/School/OverviewCategories';
@@ -12,7 +12,7 @@ import TestStatus from '../../components/School/TestStatus';
 const School: React.FC<{}> = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewSchool />
+      {/* <OverviewSchool /> */}
       <OverviewSchoolEmploye />
       <OverviewSchoolStudent />
       <OverviewCategories />
