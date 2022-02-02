@@ -40,7 +40,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             employeesCount: item.total || 0,
             infectedCount: item.positiveCount || 0,
             infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoverdCount || 0,
+            saveCount: item.recoveredCount || 0,
             // deadCount: 120,
           });
         }
