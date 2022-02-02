@@ -86,7 +86,7 @@ dockerize-Prod:
     - node-build-Prod
   script:
     - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
-    - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers:latest .
+    - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers-pro:latest .
     - buildah push registry.vaslapp.com/docker/ministers:latest
   only:
     - master

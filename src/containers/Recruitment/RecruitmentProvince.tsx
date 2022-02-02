@@ -32,6 +32,7 @@ const RecruitmentProvince = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="recruitment-overview"
+        // selectDefault
       />
       <OverviewProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
@@ -41,6 +42,5 @@ const RecruitmentProvince = () => {
     </div>
   );
 };
-
 
 export default RecruitmentProvince;

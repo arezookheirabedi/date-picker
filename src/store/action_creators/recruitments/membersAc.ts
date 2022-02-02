@@ -7,6 +7,4 @@ export const addTotalMembersAc = (count: number) => async (dispatch: Dispatch<Ac
         type: ActionType.ADD_TOTAL_MEMBERS_EMPLOYEES,
         payload: count
     })
-
-
 }

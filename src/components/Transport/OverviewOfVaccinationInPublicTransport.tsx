@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
 
 import transportService from 'src/services/transport.service';
 import Statistic from '../../containers/Guild/components/Statistic';
@@ -14,7 +14,7 @@ import NavyVaccineMd from '../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
-import {getServiceTypeName} from "../../helpers/utils";
+import {getServiceTypeName} from '../../helpers/utils';
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -105,7 +105,9 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewVaccinePercent(params, {cancelToken: source.token});
+      const {data} = await transportService.overviewVaccinePercent(params, {
+        cancelToken: source.token,
+      });
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
@@ -190,7 +192,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     getOverviewByVaccinePercent({});
 
     return () => {
-      setReportsDose({})
+      setReportsDose({});
       setCounts({
         numberOfDrivers: 0,
         numberOfFirstDose: 0,
@@ -199,70 +201,84 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       });
       setDataset([]);
       source.cancel('Operation canceled by the user.');
-    }
+    };
   }, []);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
-          text="مجموع رانندگان"
+          text="مجموع رانندگان فعال"
           count={counts.numberOfDrivers}
           loading={countsLoading}
+          hasInfo
+          infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
         />
         <Statistic
           icon={YellowVaccineMd}
           text="تعداد واکسیناسیون دوز اول"
           count={counts.numberOfFirstDose}
           loading={countsLoading}
+          hasInfo
+          infoText="تعداد افرادی که فقط یک دوز واکسن دریافت کردند"
         />
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز دوم"
           count={counts.numberOfSecondDose}
           loading={countsLoading}
+          hasInfo
+          infoText="تعداد افرادی که دو دوز واکسن رو دریافت کردند"
         />
         <Statistic
           icon={NavyVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
           count={reportsDose.threeDose}
           loading={reportsDoseLoading}
+          hasInfo
+          infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
         />
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-        <Statistic
-          icon={GreenVaccine}
-          text="تعداد کل واکسیناسیون"
-          count={reportsDose.allVaccination}
-          loading={reportsDoseLoading}
-        />
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
           count={reportsDose.moreThanThreeDose}
           loading={reportsDoseLoading}
+          hasInfo
+          infoText="تعداد افرادی که بیش از ۳ دوز واکسن دریافت کرده‌اند"
+        />
+        <Statistic
+          icon={GreenVaccine}
+          text="تعداد واکسیناسیون کل دوز"
+          count={reportsDose.allVaccination}
+          loading={reportsDoseLoading}
+          hasInfo
+          infoText="مجموع افرادی که واکسن دریافت کرده‌اند، ( یک دوز ،دو دوز ، سه دور)"
         />
         <Statistic
           icon={GrayVaccine}
           text="تعداد اطلاعات مخدوش"
           count={reportsDose.unknownInformation}
           loading={reportsDoseLoading}
+          hasInfo
+          infoText="تعداد افرادی که اطلاعات آن‌ها در سامانه به درستی ثبت نشده است"
         />
         <Statistic
           icon={GrayVaccine2}
           text="تعداد واکسیناسیون انجام نشده"
           count={counts.numberOfUnvaccinated}
           loading={countsLoading}
+          hasInfo
+          infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده‌اند"
         />
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>

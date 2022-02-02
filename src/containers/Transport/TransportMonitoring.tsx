@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import OverviewDriversMap from 'src/components/Transport/OverviewDriversMap';
 import OverviewDriverStatus from 'src/components/Transport/OverviewDriversStatus';
-import {sideCities} from "../../helpers/utils";
+import {sideCities} from '../../helpers/utils';
 
 // eslint-disable-next-line
 const mockDate = [
@@ -59,7 +59,7 @@ const mockDate = [
 const TransportProvince = () => {
   const location = useLocation();
 
-  const [cityTitle, setCityTitle] = useState('تهران');
+  const [cityTitle, setCityTitle] = useState<string | undefined>();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -70,13 +70,19 @@ const TransportProvince = () => {
 
     if (existsCity) {
       setCityTitle(provinceName);
+    } else {
+      setCityTitle(undefined);
     }
   }, [location.search]);
 
   return (
     <div className="space-y-16 mb-8">
-      <OverviewDriversMap cityTitle={cityTitle} sideCityStatus={sideCities} destinationId="drivers-overview"/>
-      <OverviewDriverStatus/>
+      <OverviewDriversMap
+        cityTitle={cityTitle}
+        sideCityStatus={sideCities}
+        destinationId="drivers-overview"
+      />
+      <OverviewDriverStatus cityTitle={cityTitle} />
     </div>
   );
 };

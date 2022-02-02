@@ -18,10 +18,6 @@ interface TestStatusProvinceProps {
 
 const filterTypes = [
   {
-    name: 'مرتب‌سازی بر اساس پیشفرض',
-    enName: '',
-  },
-  {
     name: 'بیشترین',
     enName: 'HIGHEST',
   },
@@ -36,8 +32,10 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [filterType, setFilterType] = useState({name: null, enName: null});
+  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
+  const [provinceTitle, setProvinceTitle] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -63,6 +61,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         });
       });
       setDataset([...normalizedDate]);
+      setOrgDataset([...normalizedDate]);
+      setFilterType({
+        name: 'بیشترین',
+        enName: 'HIGHEST',
+      });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -78,8 +81,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       return item.name === provinceName;
     });
     if (existsCity) {
+      setProvinceTitle(provinceName);
       getOverviewByCategory({
-        organization: 'school',
+        organization: 'education',
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
@@ -87,13 +91,16 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         from: '',
         to: '',
         // province: provinceName,
-        tags: [],
+        tags: [
+          `#province# استان ${provinceName}`,
+          '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        ].join(','),
       });
       //
     } else {
       history.push('/dashboard/school/province');
     }
-  }, []);
+  }, [location.search]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -133,12 +140,15 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       if (existsCity) {
         getOverviewByCategory({
-          organization: 'recruitment',
+          organization: 'education',
           // resultStatus: 'POSITIVE',
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
           // province: provinceName,
-          tags: [],
+          tags: [
+            `#province# استان ${provinceTitle}`,
+            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+          ].join(','),
         });
       } else {
         history.push('/dashboard/school/province');
@@ -146,13 +156,32 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     }
   }, [selectedDayRange]);
 
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+
+      if (a.total < b.total) {
+        return reverse * 1;
+      }
+
+      if (a.total > b.total) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         آزمایش در آموزش و پرورش در استان‌ &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex align-center justify-start mb-8">
+      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
           <Menu
             as="div"
@@ -304,14 +333,16 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
+                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.
+                    {/* eslint-disable-next-line */}
+                    {v.replace(/استان\s(.*)_/g, '').replace(/_\sاستان\s(.*)/g, '')}
                   </div>
                 ),
               },
               {
                 name: 'تعداد آزمایش‌های انجام شده',
                 key: 'total',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}</span>,
+                render: (v: any) => <span>{Number(v || 0).commaSeprator().toPersianDigits()}</span>,
               },
               {
                 name: 'درصد تست‌های مثبت',
@@ -337,18 +368,18 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                   </span>
                 ),
               },
-              {
-                name: 'درصد تست‌های نامشخص',
-                key: 'unknownCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
+              // {
+              //   name: 'درصد تست‌های نامشخص',
+              //   key: 'unknownCount',
+              //   render: (v: any, record: any) => (
+              //     <span>
+              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+              //         .toFixed(4)
+              //         .toPersianDigits()}
+              //       %
+              //     </span>
+              //   ),
+              // },
             ]}
             totalItems={(dataset || []).length || 0}
           />

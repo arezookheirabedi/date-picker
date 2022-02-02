@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-
+import {useDispatch} from 'react-redux';
+import { addTotalEmployeMembersAc } from 'src/store/action_creators';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
@@ -12,30 +13,36 @@ import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
 
 const OverviewSchoolEmploye = () => {
-  const [numberOf, setNumberOf] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPositive, setNumberOfPositive] = useState(null);
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfPositives, setNumberOfPositives] = useState(null);
+  // eslint-disable-next-line
+  const [numberOfNegatives, setNumberOfNegatives] = useState(null);
+
+  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  const dispatch = useDispatch();
 
   const getNumberOf = async () => {
     setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
-        organization: 'school',
-        tags: ['student'].join(','),
+        organization: 'education',
+        tags: ['#type# پرسنل اداری'].join(','),
         testResultCount: true,
         vaccinationCount: true,
         total: true,
       });
+
+      dispatch(addTotalEmployeMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
-      setNumberOfPlaqueVisited(data.numberOfPositive || 0);
-      setNumberOfPositive(data.numberOfPositive || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfTestResults(data.testResultCount || 0);
+      setNumberOfPositives(data.numberOfPositives || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
+      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+      setNumberOfRecovered(data.numberOfRecovered || 0);
+      setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -43,9 +50,9 @@ const OverviewSchoolEmploye = () => {
       // @ts-ignore
       setNumberOf(0);
       // @ts-ignore
-      setNumberOfPlaqueVisited(0);
+      setNumberOfPositives(0);
       // @ts-ignore
-      setNumberOfPositive(0);
+      setNumberOfNegatives(0);
       // @ts-ignore
       setNumberOfRecovered(0);
       // @ts-ignore
@@ -62,6 +69,8 @@ const OverviewSchoolEmploye = () => {
   useEffect(() => {
     getNumberOf();
   }, []);
+
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -79,7 +88,7 @@ const OverviewSchoolEmploye = () => {
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositive}
+            count={numberOfPositives}
             loading={loading}
           />
           <Statistic
@@ -91,7 +100,7 @@ const OverviewSchoolEmploye = () => {
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic
+        <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
@@ -101,12 +110,12 @@ const OverviewSchoolEmploye = () => {
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
-            count={numberOfPlaqueVisited}
+            count={numberOfNanVaccinated}
             loading={loading}
           />
           <Statistic
             icon={testIcon}
-            text="تعداد آزمایش‌های کارمندان"
+            text="تعداد آزمایش‌های دانش آموزان"
             count={numberOfTestResults}
             loading={loading}
           />

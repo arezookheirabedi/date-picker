@@ -2,6 +2,8 @@ import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // eslint-disable-next-line
 import {Redirect, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
+import 'rc-slider/assets/index.css';
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
 import {useOutsideSidebar} from 'src/hooks/useOutsideSidebar';
 import routes from 'src/routes';
 import {isLogin} from 'src/helpers/utils';
@@ -13,7 +15,7 @@ import Logout from './components/Logout';
 import UserArea from './components/UserArea';
 import MenuItemWrapper from './components/MenuItemWrapper';
 import Today from './components/Today';
-import SideBarFilter from './components/SideBarFilter';
+// import SideBarFilter from './components/SideBarFilter';
 
 const ScrollNavbar = styled.div`
   height: 100vh;
@@ -30,7 +32,7 @@ const ScrollNavbar = styled.div`
 
 const PrivateLayout: React.FC<any> = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const [filterCollapse, setFilterCollapse] = useState(true);
+  // const [filterCollapse, setFilterCollapse] = useState(true);
   const [collapsible, setCollapsible] = useState(false);
 
   const wrapperRef = useRef(null);
@@ -43,9 +45,9 @@ const PrivateLayout: React.FC<any> = () => {
     if (collapsible) setCollapsed(true);
   };
 
-  const toggleFilter: () => void = () => {
-    setFilterCollapse(!filterCollapse);
-  };
+  // const toggleFilter: () => void = () => {
+  //   setFilterCollapse(!filterCollapse);
+  // };
 
   useOutsideSidebar(wrapperRef, closeMenu);
 
@@ -69,7 +71,7 @@ const PrivateLayout: React.FC<any> = () => {
     <>
       <div
         ref={wrapperRef}
-        // className={`border-l xl:border-none overflow-auto h-screen fixed z-50 overflow-hidden w-72 pb-12 bg-white transition-all ease-in-out duration-300
+        // className={`border-l xl:border-none overflow-auto h-screen fixed z-50 w-72 pb-12 bg-white transition-all ease-in-out duration-300
         className={`border-l xl:border-none overflow-auto h-screen fixed z-50 w-72 pb-12 bg-white transition-all ease-in-out duration-300 
           ${collapsed && collapsible ? ' -right-72' : ' right-0'}
           `}
@@ -168,7 +170,7 @@ const PrivateLayout: React.FC<any> = () => {
           </div>
         </div>
 
-        <SideBarFilter filterCollapse={filterCollapse} toggleFilter={toggleFilter} />
+        {/* <SideBarFilter filterCollapse={filterCollapse} toggleFilter={toggleFilter} /> */}
       </div>
     </>
   );

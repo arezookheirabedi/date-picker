@@ -1,21 +1,31 @@
 import React from 'react';
 import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
   organization: string;
+  tagPattern?: string;
   queryParams: any;
+  placeholder?: any;
   setQueryParams: (v: any) => void;
 }
 
-const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) => {
+const TagsSelect = ({
+  organization,
+  tagPattern = '',
+  placeholder = '',
+  setQueryParams,
+  queryParams,
+}: ITagsSelect) => {
   const [serviceType, setServiceType] = React.useState<any>();
   const [tags, setTags] = React.useState<any[]>([]);
 
   const fetcher = async () => {
     try {
-      const res = await hcsService.tags({organization});
+      // @ts-ignore
+      const res = await hcsService.tags({organization, tagPattern});
+      // console.log(res);
       setTags([...res.data]);
     } catch (error: any) {
       // eslint-disable-next-line
@@ -50,7 +60,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
           <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-            <span className="ml-10 whitespace-nowrap truncate">{serviceType || 'کل کارکنان'}</span>
+            <span className="ml-10 whitespace-nowrap truncate">{serviceType || placeholder}</span>
             <DownIcon className="h-2 w-2.5 mr-2" />
           </Menu.Button>
         </div>
@@ -71,7 +81,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
                     setServiceType('');
                   }}
                 >
-                  <span className="truncate">کل کارکنان</span>
+                  <span className="truncate">{placeholder}</span>
                 </button>
               )}
             </Menu.Item>
@@ -87,7 +97,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
                         active ? 'bg-gray-100' : ''
                       } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-xs text-left rtl:text-right truncate`}
                       onClick={() => {
-                        setServiceType(value);
+                        setServiceType(value.key);
                         //   setQueryParams({
                         //     ...queryParams,
                         //     tags: index !== 0 ? [value].join(',') : '',
@@ -96,7 +106,7 @@ const TagsSelect = ({organization, setQueryParams, queryParams}: ITagsSelect) =>
                     >
                       <span className="truncate">
                         {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                        {value}
+                        {value.value}
                       </span>
                     </button>
                   )}

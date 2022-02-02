@@ -32,7 +32,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
     setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
-        organization: 'school',
+        organization: 'education',
         tags: ['student'].join(','),
         testResultCount: true,
         vaccinationCount: true,
