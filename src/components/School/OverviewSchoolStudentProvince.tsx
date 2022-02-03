@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addTotalStudentMembersAc } from 'src/store/action_creators';
+import {useDispatch} from 'react-redux';
+import {addTotalStudentMembersAc} from 'src/store/action_creators';
 import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalStudent from '../../assets/images/icons/graduation.svg';
@@ -13,7 +13,6 @@ import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
 import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
-
 
 interface OverviewSchoolStudentsProps {
   cityTitle: any;
@@ -90,7 +89,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
   }, [location.search]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="school-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به دانش آموزان در استان &nbsp; {cityTitle}
       </legend>
