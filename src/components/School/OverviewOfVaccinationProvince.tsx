@@ -23,8 +23,8 @@ interface OverviewOfVaccinationProvinceProps {
 }
 
 const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
-  cityTitle,
-}) => {
+                                                                                       cityTitle,
+                                                                                     }) => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [countsLoading, setCountsLoading] = useState(false);
@@ -69,16 +69,26 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             tmp = {...tmp, numberOfSecondDose: Number(value)};
           }
 
-          if (Number(key) === 3) {
-            tmp = {...tmp, numberOfThirdDose: Number(value)};
+          if (Number(key) === 3 || Number(key) > 3) {
+            tmp = {...tmp, numberOfThirdDose: tmp.numberOfThirdDose + Number(value)};
           }
 
+          // if (Number(key) === 3) {
+          //   tmp = {...tmp, numberOfThirdDose: Number(value)};
+          // }
+
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            tmp = {...tmp, numberOfMoreThreeDose: Number(value)};
+            tmp = {...tmp, numberOfMoreThreeDose: 0};
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   tmp = {...tmp, numberOfMoreThreeDose: tmp.numberOfMoreThreeDose + Number(value)};
+          // }
+
 
           if (Number(key) !== 0 && key !== 'null') {
-            tmp = {...tmp, numberOfAllDose: Number(value)};
+            tmp = {...tmp, numberOfAllDose: tmp.numberOfAllDose + Number(value)};
           }
 
           if (key === 'null') {
@@ -125,13 +135,23 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             secondDose += Number(value);
           }
 
-          if (Number(key) === 3) {
+          // temporary code
+          if (Number(key) === 3 || Number(key) > 3) {
             thirdDose += Number(value);
           }
 
+          // if (Number(key) === 3) {
+          //   thirdDose += Number(value);
+          // }
+
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += Number(value);
+            moreThanThreeDose += 0;
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   moreThanThreeDose += Number(value);
+          // }
 
           if (Number(key) !== 0 && key !== 'null') {
             allVaccination += Number(value);
@@ -200,7 +220,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         {cityTitle}
       </legend>
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           {/* <Statistic
             icon={totalEmploye1}
             text="مجموع کارمندان آموزشی"
@@ -233,7 +254,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             loading={countsLoading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={NavyVaccine}
             text="تعداد واکسیناسیون دوز سوم"
@@ -253,7 +275,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             loading={countsLoading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GrayVaccine2}
             text="تعداد واکسیناسیون انجام نشده"
@@ -266,13 +289,13 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             count={counts.numberOfAllDose || 0}
             loading={countsLoading}
           />
-          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative"/>
           {/* <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
         </div>
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
