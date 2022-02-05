@@ -42,7 +42,8 @@ const TagsSelect = ({
 
     // eslint-disable-next-line
     if (serviceType) {
-      params = {...queryParams, tags: [`${serviceType}`]};
+      // #grade# دانش آموز بزرگسال
+      params = {...queryParams, tags: [`#grade# ${serviceType}`]};
     } else {
       params = {...queryParams, tags: []};
     }
@@ -97,7 +98,8 @@ const TagsSelect = ({
                         active ? 'bg-gray-100' : ''
                       } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-xs text-left rtl:text-right truncate`}
                       onClick={() => {
-                        setServiceType(value.key);
+                        // #grade# دانش آموز بزرگسال
+                        setServiceType(value.value);
                         //   setQueryParams({
                         //     ...queryParams,
                         //     tags: index !== 0 ? [value].join(',') : '',
