@@ -59,16 +59,27 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
               secondDose += Number(value);
             }
 
-            if (Number(key) === 3) {
+            // temporary code
+            if (Number(key) === 3 || Number(key) > 3) {
               threeDose += Number(value);
             }
+
+            // if (Number(key) === 3) {
+            //   threeDose += Number(value);
+            // }
+
             if (Number(key) !== 0 && key !== 'null') {
               allVaccination += Number(value);
             }
 
+            // temporary code
             if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-              moreThanThreeDose += Number(value);
+              moreThanThreeDose += 0;
             }
+
+            // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            //   moreThanThreeDose += Number(value);
+            // }
 
             if (key === 'null') {
               unknownInformation += Number(value);
@@ -131,13 +142,23 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
               secondDose += Number(value);
             }
 
-            if (Number(key) === 3) {
+            // temporary code
+            if (Number(key) === 3 || Number(key) > 3) {
               thirdDose += Number(value);
             }
 
+            // if (Number(key) === 3) {
+            //   thirdDose += Number(value);
+            // }
+
+            // temporary code
             if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-              moreThanThreeDose += Number(value);
+              moreThanThreeDose += 0;
             }
+
+            // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            //   moreThanThreeDose += Number(value);
+            // }
 
             if (Number(key) !== 0 && key !== 'null') {
               allVaccination += Number(value);
