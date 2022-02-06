@@ -200,7 +200,7 @@ const Column: React.FC<{data: any; categories?: any}> = ({data, categories}) => 
   useEffect(() => {
     if (chartRef && chartRef.current && categories) {
       chartRef.current.chart.xAxis[0].setCategories(categories, true);
-      chartRef.current.chart.xAxis[0].setExtremes(0, 30);
+      chartRef.current.chart.xAxis[0].setExtremes(0, (categories.length || 1) - 1);
       chartRef.current.chart.redraw();
     }
   }, [categories]);
