@@ -49,7 +49,6 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     title: 'داشبورد واکسیناسیون',
-    disabled: true,
     subMenu: [
       {
         keyIndex: '1',
