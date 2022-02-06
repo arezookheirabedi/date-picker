@@ -12,7 +12,7 @@ import eyes from '../../../assets/images/icons/eye_icon.svg';
 import Svg from '../../../components/Svg';
 import DotLoading from '../../../components/DotLoading';
 
-import Checkbox from '../../../shared/Checkbox';
+// import Checkbox from '../../../shared/Checkbox';
 import EPRIVATEROUTE from '../../../constants/PrivateRoute.enum';
 
 export enum EInputLogin {
@@ -32,7 +32,7 @@ type LoginForm = {
 export default function Login() {
   const history = useHistory();
   const [typeInputText, setTypeInputText] = useState(false);
-  const [remember, setRemember] = useState<boolean>(false);
+  // const [remember, setRemember] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -106,10 +106,10 @@ export default function Login() {
     }
   };
 
-  const onRememberChange = (e: any) => {
-    const newRemember = e.target.checked;
-    setRemember(newRemember);
-  };
+  // const onRememberChange = (e: any) => {
+  //   const newRemember = e.target.checked;
+  //   setRemember(newRemember);
+  // };
 
   useEffect(() => {
     handleCaptcha();
@@ -172,7 +172,7 @@ export default function Login() {
           {errors.captcha && <span className="inputError">{errors.captcha.message}</span>}
         </div>
 
-        <Checkbox checked={remember} onChange={onRememberChange}/>
+        {/* <Checkbox checked={remember} onChange={onRememberChange}/> */}
         <div className="landscape_button">
           {/* eslint-disable-next-line react/button-has-type */}
           <button

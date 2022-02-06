@@ -58,16 +58,25 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             tmp = {...tmp, numberOfSecondDose: Number(value)};
           }
 
-          if (Number(key) === 3) {
-            tmp = {...tmp, numberOfThirdDose: Number(value)};
+          if (Number(key) === 3 || Number(key) > 3) {
+            tmp = {...tmp, numberOfThirdDose: tmp.numberOfThirdDose + Number(value)};
           }
 
+          // if (Number(key) === 3) {
+          //   tmp = {...tmp, numberOfThirdDose: Number(value)};
+          // }
+
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            tmp = {...tmp, numberOfMoreThreeDose: Number(value)};
+            tmp = {...tmp, numberOfMoreThreeDose: 0};
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   tmp = {...tmp, numberOfMoreThreeDose: tmp.numberOfMoreThreeDose + Number(value)};
+          // }
 
           if (Number(key) !== 0 && key !== 'null') {
-            tmp = {...tmp, numberOfAllDose: Number(value)};
+            tmp = {...tmp, numberOfAllDose: tmp.numberOfAllDose + Number(value)};
           }
 
           if (key === 'null') {
@@ -114,13 +123,23 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             secondDose += Number(value);
           }
 
-          if (Number(key) === 3) {
+          // temporary code
+          if (Number(key) === 3 || Number(key) > 3) {
             thirdDose += Number(value);
           }
 
+          // if (Number(key) === 3) {
+          //   thirdDose += Number(value);
+          // }
+
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += Number(value);
+            moreThanThreeDose += 0;
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   moreThanThreeDose += Number(value);
+          // }
 
           if (Number(key) !== 0 && key !== 'null') {
             allVaccination += Number(value);
@@ -176,7 +195,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در آموزش و پرورش</legend>
 
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           {/* <Statistic
             icon={totalEmploye1}
             text="مجموع کارمندان آموزشی"
@@ -203,7 +223,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={PurppleVaccine}
             text="تعداد واکسیناسیون دوز دوم"
@@ -223,7 +244,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
@@ -248,7 +270,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>

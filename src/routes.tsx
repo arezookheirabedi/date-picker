@@ -14,6 +14,7 @@ import Recruitment from './containers/Recruitment/Recruitment';
 import RecruitmentProvince from './containers/Recruitment/RecruitmentProvince';
 import ReportsRequested from './containers/Reports/Requested';
 import Vaccination from './containers/Vaccination/Vaccination';
+import VaccinationProvince from './containers/Vaccination/VaccinationProvince';
 import Citizens from './containers/Citizens/Citizens';
 
 const routes: IRoute[] = [
@@ -43,12 +44,28 @@ const routes: IRoute[] = [
     icon: (active, disabled) => (
       <IconWrapperStyle name="vaccine" active={active} disabled={disabled} />
     ),
-    link: '/dashboard/vaccine',
+    link: '/dashboard/vaccination/public',
+    simLink: '/dashboard/vaccination',
     exact: true,
     inMenu: true,
     title: 'داشبورد واکسیناسیون',
     disabled: true,
-    main: Vaccination,
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'عمومی',
+        link: '/dashboard/vaccination/public',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: Vaccination,
+      },
+      {
+        keyIndex: '2',
+        title: 'استانی',
+        link: '/dashboard/vaccination/province',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: VaccinationProvince,
+      },
+    ],
   },
   {
     keyIndex: '4',
