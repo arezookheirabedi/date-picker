@@ -51,7 +51,18 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     setCountsLoading(true);
     try {
       const {data} = await hcsService.doses(params);
-      let tmp = {...counts};
+      let tmp = {
+        numberOfEmployees: 0,
+        numberOfStudents: 0,
+        numberOfTeachers: 0,
+        numberOfFirstDose: 0,
+        numberOfSecondDose: 0,
+        numberOfThirdDose: 0,
+        numberOfMoreThreeDose: 0,
+        numberOfAllDose: 0,
+        numberOfUnknownDose: 0,
+        numberOfUnvaccinated: 0,
+      };
 
       // eslint-disable-next-line no-plusplus
       for (let j: number = 0; j < data.length; j++) {
