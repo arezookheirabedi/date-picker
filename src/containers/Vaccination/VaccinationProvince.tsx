@@ -1,8 +1,10 @@
 import {useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {sideCities} from 'src/helpers/utils';
-import OverviewMap from 'src/components/Vaccination/OverviewMap';
-import OverviewVaccinePerDoses from 'src/components/Vaccination/OverviewVaccinePerDoses';
+import OverviewMap from 'src/components/Vaccination/province/OverviewMap';
+import OverviewVaccinationStatus from 'src/components/Vaccination/province/OverviewVaccinationStatus';
+import OverviewExistVaccine from 'src/components/Vaccination/province/OverviewExistVaccine';
+import OverviewVaccinePerDoses from 'src/components/Vaccination/province/OverviewVaccinePerDoses';
 
 const Vaccination: React.FC<{}> = () => {
   const location = useLocation();
@@ -29,10 +31,8 @@ const Vaccination: React.FC<{}> = () => {
         destinationId="vaccination-overview"
       />
 
-      <div id="vaccination-overview" />
-      {/*  */}
-      {/*  */}
-
+      <OverviewVaccinationStatus cityTitle={cityTitle} />
+      <OverviewExistVaccine cityTitle={cityTitle} />
       <OverviewVaccinePerDoses cityTitle={cityTitle} />
     </div>
   );
