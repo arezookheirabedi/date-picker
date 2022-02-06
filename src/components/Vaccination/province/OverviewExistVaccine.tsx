@@ -2,6 +2,12 @@ import React from 'react';
 
 import Statistic from '../../../containers/Guild/components/Statistic';
 import NavyVaccine from '../../../assets/images/icons/navy-vaccine.svg';
+import barekat from '../../../assets/images/logos/barekat.svg';
+import astrazeneca from '../../../assets/images/logos/astrazeneca.svg';
+import covaxin from '../../../assets/images/logos/covaxin.svg';
+import sinopharm from '../../../assets/images/logos/sinopharm.svg';
+import sputnik from '../../../assets/images/logos/sputnik.svg';
+import spikogen from '../../../assets/images/logos/spikogen.svg';
 
 interface OverviewExistVaccineProps {
   cityTitle: any;
@@ -16,14 +22,14 @@ const OverviewExistVaccine: React.FC<OverviewExistVaccineProps> = ({cityTitle}) 
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={NavyVaccine} text="واکسن آسترازنکا" count={0} loading={false} />
-          <Statistic icon={NavyVaccine} text="واکسن سینوفارم" count={0} loading={false} />
-          <Statistic icon={NavyVaccine} text="واکسن کوواکسین" count={0} loading={false} />
-          <Statistic icon={NavyVaccine} text="واکسن برکت" count="-" loading={false} />
+          <Statistic icon={astrazeneca} text="واکسن آسترازنکا" count={0} loading={false} />
+          <Statistic icon={sinopharm} text="واکسن سینوفارم" count={0} loading={false} />
+          <Statistic icon={covaxin} text="واکسن کوواکسین" count={0} loading={false} />
+          <Statistic icon={barekat} text="واکسن برکت" count="-" loading={false} />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={NavyVaccine} text="واکسن اسپوتینک" count={342} loading={false} />
-          <Statistic icon={NavyVaccine} text="واکسن اسپایکوژن" count={342} loading={false} />
+          <Statistic icon={sputnik} text="واکسن اسپوتینک" count={342} loading={false} />
+          <Statistic icon={spikogen} text="واکسن اسپایکوژن" count={342} loading={false} />
           <Statistic icon={NavyVaccine} text="-" count={342} loading={false} />
           <Statistic icon={NavyVaccine} text="درصد افراد با دوز سوم" count="-" />
         </div>
