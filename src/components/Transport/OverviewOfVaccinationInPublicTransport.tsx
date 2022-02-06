@@ -54,9 +54,11 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   }
 
   async function getReportsDose() {
+
     setReportsDoseLoading(true);
     try {
       const {data} = await transportService.reportsDose({}, {cancelToken: source.token});
+
       const normalizedData: any[] = [];
       let threeDose = 0;
       let allVaccination = 0;
@@ -65,16 +67,28 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       data.dosesCount.forEach((item: any) => {
         // eslint-disable-next-line no-restricted-syntax
         for (const [key, value] of Object.entries(item)) {
-          if (Number(key) === 3) {
+
+          // temporary code
+          if (Number(key) === 3 || Number(key) > 3) {
             threeDose += Number(value);
           }
+
+          // if (Number(key) === 3) {
+          //   threeDose += Number(value);
+          // }
+
           if (Number(key) !== 0 && key !== 'null') {
             allVaccination += Number(value);
           }
 
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += Number(value);
+            moreThanThreeDose += 0;
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   moreThanThreeDose += Number(value);
+          // }
 
           if (key === 'null') {
             unknownInformation += Number(value);
@@ -132,13 +146,23 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             secondDose += Number(value);
           }
 
-          if (Number(key) === 3) {
+          // temporary code
+          if (Number(key) === 3 || Number(key) > 3) {
             thirdDose += Number(value);
           }
 
+          // if (Number(key) === 3) {
+          //   thirdDose += Number(value);
+          // }
+
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += Number(value);
+            moreThanThreeDose += 0;
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   moreThanThreeDose += Number(value);
+          // }
 
           if (Number(key) !== 0 && key !== 'null') {
             allVaccination += Number(value);
@@ -208,7 +232,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div
+        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان فعال"
@@ -242,7 +267,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div
+        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
@@ -278,7 +304,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
