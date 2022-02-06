@@ -233,7 +233,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={Gray1Vaccine}
             text="تعداد اطلاعات مخدوش"
-            count={counts.numberOfUnknownDose || 0}
+            count={counts.unknownInformation || 0}
             loading={countsLoading}
           />
           <Statistic
