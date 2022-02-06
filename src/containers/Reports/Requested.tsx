@@ -88,7 +88,7 @@ const Requested: React.FC<{}> = () => {
         cancelToken: source.token,
       });
 
-      const newWindow = window.open(response.data.downloadLink, '_blank', 'noopener,noreferrer');
+      const newWindow = window.open(process.env.REACT_APP_BASE_API_URL + response.data.downloadLink, '_blank', 'noopener,noreferrer');
       if (newWindow) newWindow.opener = null;
       fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
     } catch (error: any) {
