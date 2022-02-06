@@ -50,11 +50,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -62,7 +62,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -99,6 +99,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   //   // }
   // }, []);
 
+  const location = useLocation();
   useEffect(() => {
     return () => {
       source.cancel('Operation canceled by the user.');
@@ -106,7 +107,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
       setTotalItems(0);
       setLoading(false);
     };
-  }, [history]);
+  }, [location.search]);
 
   useEffect(() => {
     let latestQuery: any = {};
@@ -115,11 +116,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
       latestQuery = JSON.parse(
         // eslint-disable-next-line
         '{"' +
-          decodeURI((search || ' ').substring(1))
-            .replace(/"/g, '\\"')
-            .replace(/&/g, '","')
-            .replace(/=/g, '":"') +
-          '"}'
+        decodeURI((search || ' ').substring(1))
+          .replace(/"/g, '\\"')
+          .replace(/&/g, '","')
+          .replace(/=/g, '":"') +
+        '"}'
       );
     }
 
@@ -187,15 +188,15 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
             params={{
               from: selectedDayRange.from
                 ? moment(
-                    `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
+                  `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
+                  'jYYYY/jM/jD'
+                ).format('YYYY-MM-DD')
                 : null,
               to: selectedDayRange.to
                 ? moment(
-                    `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
+                  `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
+                  'jYYYY/jM/jD'
+                ).format('YYYY-MM-DD')
                 : null,
               healthStatusSet: ['POSITIVE'],
               reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${cityTitle ? `استان ${cityTitle}` : ''}`
@@ -209,16 +210,18 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button
+                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 <div className="flex items-center">
-                  <FolderIcon className="h-5 w-5 ml-2 text-gray-500" />
+                  <FolderIcon className="h-5 w-5 ml-2 text-gray-500"/>
                   <span className="ml-10 whitespace-nowrap truncate">{exportType || 'PDF'}</span>
                 </div>
-                <DownIcon className="h-2 w-2.5 mr-2 text-gray-500" />
+                <DownIcon className="h-2 w-2.5 mr-2 text-gray-500"/>
               </Menu.Button>
             </div>
 
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1 ">
                 {['PDF', 'CSV'].map((value: any, index: any) => {
                   return (
@@ -261,11 +264,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                 <span className="ml-4 whitespace-nowrap truncate text-xs">
                   {toPersianDigit(generateFromDate())}
                 </span>
-                <img src={calendar} alt="x" className="w-5 h-5" />
+                <img src={calendar} alt="x" className="w-5 h-5"/>
               </div>
             </div>
             <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
+              <span className="dash-separator"/>
             </div>
             <div className=" shadow-custom rounded-lg px-4 py-1">
               <div
@@ -275,7 +278,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                 <span className="ml-4 whitespace-nowrap truncate text-xs">
                   {toPersianDigit(generateToDate())}
                 </span>
-                <img src={calendar} alt="x" className="w-5 h-5" />
+                <img src={calendar} alt="x" className="w-5 h-5"/>
               </div>
             </div>
           </div>
@@ -284,7 +287,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
 
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
@@ -322,9 +325,9 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                         >
                           <div className="blue-column">
                             <div className="flag">
-                              <div />
-                              <div />
-                              <div />
+                              <div/>
+                              <div/>
+                              <div/>
                             </div>
                             <div className="text">
                               <div>I.R.</div>
@@ -350,9 +353,9 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
 
                             <div className="blue-column">
                               <div className="flag">
-                                <div />
-                                <div />
-                                <div />
+                                <div/>
+                                <div/>
+                                <div/>
                               </div>
                               <div className="text">
                                 <div>I.R.</div>
@@ -443,14 +446,14 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                       {/* eslint-disable-next-line */}
                       {v || v === 0
                         ? // eslint-disable-next-line no-nested-ternary
-                          v > 2
+                        v > 2
                           ? 'دوز سوم و بیشتر'
                           : // eslint-disable-next-line no-nested-ternary
                           v > 1
-                          ? 'دوز دوم'
-                          : v > 0
-                          ? 'دوز اول'
-                          : 'انجام نشده'
+                            ? 'دوز دوم'
+                            : v > 0
+                            ? 'دوز اول'
+                            : 'انجام نشده'
                         : 'نامشخص'}
                     </span>
                   ),
