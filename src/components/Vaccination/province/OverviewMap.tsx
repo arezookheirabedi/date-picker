@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 
-import Charts from '../Charts';
-import map from '../Charts/ir-all.geo.json';
-import mapData from '../Charts/mapData.json';
-import {sideCities} from '../../helpers/utils';
+import Charts from '../../Charts';
+import map from '../../Charts/ir-all.geo.json';
+import mapData from '../../Charts/mapData.json';
+import {sideCities} from '../../../helpers/utils';
 
 const {Map} = Charts;
 

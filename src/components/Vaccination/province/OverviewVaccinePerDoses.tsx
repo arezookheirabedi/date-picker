@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Charts from '../../Charts';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
 
