@@ -22,8 +22,8 @@ interface OverviewOfVaccinationProvinceProps {
 }
 
 const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
-  cityTitle,
-}) => {
+                                                                                       cityTitle,
+                                                                                     }) => {
   const {total: totalMembers} = useSelector(state => state.recruitmentsMembers);
 
   const [loading, setLoading] = useState(false);
@@ -48,47 +48,52 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     setCountsLoading(true);
     try {
       const {data} = await hcsService.doses(params);
-      let total = 0;
       let tmp = {...counts};
 
       // eslint-disable-next-line no-plusplus
-      data.forEach((item: any) => {
-        const v: any = Object.entries(item);
-        const [key, value] = v[0];
+      for (let j: number = 0; j < data.length; j++) {
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(data[j])) {
+          if (Number(key) === 0) {
+            tmp = {...tmp, numberOfUnvaccinated: Number(value)};
+          }
 
-        switch (key) {
-          case '1':
-            tmp = {...tmp, numberOfFirstDose: value || 0};
-            total += value || 0;
-            break;
-          case '2':
-            tmp = {...tmp, numberOfSecondDose: value || 0};
-            total += value || 0;
-            break;
-          case '3':
-            tmp = {...tmp, numberOfThirdDose: value || 0};
-            total += value || 0;
-            break;
-          case '5':
-            tmp = {...tmp, numberOfMoreThirdDose: value || 0};
-            total += value || 0;
-            break;
-          case 'null':
-            tmp = {...tmp, numberOfUnvaccinated: value || 0};
-            total += value || 0;
-            break;
-          default:
-            tmp = {...tmp, numberOfNull: value || 0};
-            total += value || 0;
-            break;
+          if (Number(key) === 1) {
+            tmp = {...tmp, numberOfFirstDose: Number(value)};
+          }
+
+          if (Number(key) === 2) {
+            tmp = {...tmp, numberOfSecondDose: Number(value)};
+          }
+
+          if (Number(key) === 3 || Number(key) > 3) {
+            tmp = {...tmp, numberOfThirdDose: tmp.numberOfThirdDose + Number(value)};
+          }
+
+          // if (Number(key) === 3) {
+          //   tmp = {...tmp, numberOfThirdDose: Number(value)};
+          // }
+
+          // temporary code
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            tmp = {...tmp, numberOfMoreThreeDose: 0};
+          }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   tmp = {...tmp, numberOfMoreThreeDose: tmp.numberOfMoreThreeDose + Number(value)};
+          // }
+
+          if (Number(key) !== 0 && key !== 'null') {
+            tmp = {...tmp, numberOfAllDose: tmp.numberOfAllDose + Number(value)};
+          }
+
+          if (key === 'null') {
+            tmp = {...tmp, numberOfUnknownDose: Number(value)};
+          }
         }
+      }
 
-        setCounts({
-          ...counts,
-          ...tmp,
-          total,
-        });
-      });
+      setCounts({...tmp});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -126,13 +131,23 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             secondDose += Number(value);
           }
 
-          if (Number(key) === 3) {
+          // temporary code
+          if (Number(key) === 3 || Number(key) > 3) {
             thirdDose += Number(value);
           }
 
+          // if (Number(key) === 3) {
+          //   thirdDose += Number(value);
+          // }
+
+          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += Number(value);
+            moreThanThreeDose += 0;
           }
+
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   moreThanThreeDose += Number(value);
+          // }
 
           if (Number(key) !== 0 && key !== 'null') {
             allVaccination += Number(value);
@@ -202,7 +217,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         {cityTitle}
       </legend>
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalEmploye}
             text="مجموع کارکنان دولت"
@@ -228,7 +244,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             loading={countsLoading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={BlueVaccine}
             text="بیش از ۳ دوز"
@@ -238,36 +255,26 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={
-              (counts.numberOfSecondDose || 0) +
-              (counts.numberOfMoreThirdDose || 0) +
-              (counts.numberOfThirdDose || 0)
-            }
+            count={counts.numberOfAllDose || 0}
             loading={countsLoading}
           />
           <Statistic
             icon={Gray1Vaccine}
             text="تعداد اطلاعات مخدوش"
-            count={counts.numberOfUnvaccinated || 0}
+            count={counts.unknownInformation || 0}
             loading={countsLoading}
           />
           <Statistic
             icon={Gray2Vaccine}
             text="تعداد واکسیناسیون انجام نشده"
-            count={
-              counts.total -
-                ((counts.numberOfFirstDose || 0) +
-                  (counts.numberOfSecondDose || 0) +
-                  (counts.numberOfMoreThirdDose || 0) +
-                  (counts.numberOfThirdDose || 0)) || 0
-            }
+            count={counts.numberOfUnvaccinated || 0}
             loading={countsLoading}
           />
         </div>
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>
