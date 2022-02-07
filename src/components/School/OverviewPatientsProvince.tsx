@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
@@ -10,6 +11,7 @@ import {sideCities, toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
 import TagsSelect from '../TagsSelect';
+
 
 const {Line} = Charts;
 
@@ -33,6 +35,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -41,6 +44,9 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
   const location = useLocation();
   const history = useHistory();
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
@@ -58,11 +64,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -70,18 +76,24 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
   const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
+    setIsCancel(false);
     try {
-      const response = await hcsService.testResultTimeBased(params);
+      const response = await hcsService.testResultTimeBased(params, {cancelToken: source.token});
       setData(response.data);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      if (error.message !== 'cancel') {
+        setErrorMessage(error.message);
+      }
+      if (error && error.message === 'cancel') {
+        setIsCancel(true);
+      }
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -114,10 +126,19 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
     return () => {
       if (existsCity) {
+        source.cancel('Operation canceled by the user.');
         clearTimeout(idSetTimeOut);
       }
     };
+
   }, [queryParams, location.search]);
+
+  useEffect(() => {
+    return () => {
+      setData([]);
+      setIsCancel(false);
+    }
+  }, [history])
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -169,11 +190,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -185,25 +206,25 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
-        {loading && (
+        {(loading || isCancel) && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+        {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data}/>}
+        {data.length === 0 && !loading && !errorMessage && !isCancel && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

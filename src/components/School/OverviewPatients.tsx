@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
 import DatePickerModal from '../DatePickerModal';
@@ -9,6 +10,7 @@ import {toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
 import TagsSelect from '../TagsSelect';
+
 
 const {Line} = Charts;
 
@@ -33,6 +35,9 @@ const OverviewPatients = () => {
     to: null,
   }) as any;
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
@@ -41,11 +46,11 @@ const OverviewPatients = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -53,7 +58,7 @@ const OverviewPatients = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -69,10 +74,9 @@ const OverviewPatients = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.testResultTimeBased(params);
+      const response = await hcsService.testResultTimeBased(params, {cancelToken: source.token});
       setData(response.data);
     } catch (error: any) {
-      setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -80,13 +84,20 @@ const OverviewPatients = () => {
     }
   };
 
+
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
       getLinearOverviewPublicTransport({organization: 'education', ...queryParams});
     }, 500);
 
-    return () => clearTimeout(idSetTimeOut);
+    return () => {
+      setData([]);
+      source.cancel('Operation canceled by the user.');
+      clearTimeout(idSetTimeOut);
+
+    };
   }, [queryParams]);
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -135,11 +146,11 @@ const OverviewPatients = () => {
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -151,24 +162,24 @@ const OverviewPatients = () => {
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
+            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
           </div>
         </div>
 
-        {loading && (
+        {(loading) && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
