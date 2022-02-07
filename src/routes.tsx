@@ -4,6 +4,8 @@ import {IRoute} from './models/route';
 import {IconWrapperStyle} from './components/IconWrapper';
 import Overview from './containers/Overview/Overview';
 import Guild from './containers/Guild/Guild';
+import GuildProvince from './containers/Guild/GuildProvince';
+import GuildMonitoring from './containers/Guild/GuildMonitoring';
 import Transport from './containers/Transport/Transport';
 import TransportProvince from './containers/Transport/TransportProvince';
 import TransportMonitoring from './containers/Transport/TransportMonitoring';
@@ -107,12 +109,35 @@ const routes: IRoute[] = [
     icon: (active, disabled) => (
       <IconWrapperStyle name="guild" active={active} disabled={disabled} />
     ),
-    link: '/dashboard/guild',
+    link: '/dashboard/guild/public',
+    simLink: '/dashboard/guild',
     exact: true,
     inMenu: true,
     title: 'داشبورد اصناف',
-    disabled: true,
-    main: Guild,
+    // disabled: true,
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'عمومی',
+        link: '/dashboard/guild/public',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: Guild,
+      },
+      {
+        keyIndex: '2',
+        title: 'استانی',
+        link: '/dashboard/guild/province',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: GuildProvince,
+      },
+      {
+        keyIndex: '3',
+        title: 'نظارت و بازرسی',
+        link: '/dashboard/guild/monitoring',
+        icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
+        main: GuildMonitoring,
+      },
+    ],
   },
   {
     keyIndex: '6',
