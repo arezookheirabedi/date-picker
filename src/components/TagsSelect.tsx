@@ -1,7 +1,9 @@
 import React from 'react';
+import axios from "axios";
 import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
 import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
+
 
 interface ITagsSelect {
   organization: string;
@@ -14,19 +16,22 @@ interface ITagsSelect {
 }
 
 const TagsSelect = ({
-  organization,
-  tagPattern = '',
-  placeholder = '',
-  setQueryParams,
-  queryParams,
-}: ITagsSelect) => {
+                      organization,
+                      tagPattern = '',
+                      placeholder = '',
+                      setQueryParams,
+                      queryParams,
+                    }: ITagsSelect) => {
   const [serviceType, setServiceType] = React.useState<any>();
   const [tags, setTags] = React.useState<any[]>([]);
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const fetcher = async () => {
     try {
       // @ts-ignore
-      const res = await hcsService.tags({organization, tagPattern});
+      const res = await hcsService.tags({organization, tagPattern}, {cancelToken: source.token});
       // console.log(res);
       setTags([...res.data]);
     } catch (error: any) {
@@ -37,6 +42,11 @@ const TagsSelect = ({
 
   React.useEffect(() => {
     fetcher();
+
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setTags([])
+    }
   }, []);
 
   React.useEffect(() => {
@@ -60,11 +70,12 @@ const TagsSelect = ({
         className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
       >
         <div>
-          <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          <Menu.Button
+            className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
             <span className="ml-10 whitespace-nowrap truncate">{serviceType || placeholder}</span>
-            <DownIcon className="h-2 w-2.5 mr-2" />
+            <DownIcon className="h-2 w-2.5 mr-2"/>
           </Menu.Button>
         </div>
 
