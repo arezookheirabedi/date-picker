@@ -13,12 +13,12 @@ const School: React.FC<{}> = () => {
   return (
     <div className="space-y-16 mb-8">
       {/* <OverviewSchool /> */}
-      <OverviewSchoolEmploye />
-      <OverviewSchoolStudent />
-      <OverviewCategories />
-      <OverviewPatients />
-      <OverviewOfVaccination />
-      <TestStatus />
+      <OverviewSchoolEmploye/>
+      <OverviewSchoolStudent/>
+      <OverviewCategories/>
+      <OverviewPatients/>
+      <OverviewOfVaccination/>
+      <TestStatus/>
     </div>
   );
 };

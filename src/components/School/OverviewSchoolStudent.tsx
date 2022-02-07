@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 import {useDispatch} from 'react-redux';
 import {addTotalStudentMembersAc} from 'src/store/action_creators';
 
@@ -13,6 +15,7 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
 
+
 const OverviewSchoolStudents = () => {
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState(null);
@@ -26,6 +29,9 @@ const OverviewSchoolStudents = () => {
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const dispatch = useDispatch();
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const getNumberOf = async () => {
     setLoading(true);
     try {
@@ -35,7 +41,7 @@ const OverviewSchoolStudents = () => {
         testResultCount: true,
         vaccinationCount: true,
         total: true,
-      });
+      }, {cancelToken: source.token});
 
       dispatch(addTotalStudentMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
@@ -67,6 +73,17 @@ const OverviewSchoolStudents = () => {
 
   useEffect(() => {
     getNumberOf();
+
+    return () => {
+      setNumberOf(null)
+      setNumberOfPositives(null)
+      setNumberOfNegatives(null)
+      setNumberOfVaccination(null)
+      setNumberOfNanVaccinated(null)
+      setNumberOfRecovered(null)
+      setNumberOfTestResults(null)
+      source.cancel('Operation canceled by the user.');
+    }
   }, []);
 
   return (
@@ -74,7 +91,8 @@ const OverviewSchoolStudents = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به دانش آموزان کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalStudent}
             text="مجموع دانش آموزان"
@@ -93,16 +111,17 @@ const OverviewSchoolStudents = () => {
             count={numberOfRecovered}
             loading={loading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
             loading={loading}
           />
-          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-"/>
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
