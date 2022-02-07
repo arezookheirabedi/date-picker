@@ -5,8 +5,10 @@ import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
   organization: string;
+  // eslint-disable-next-line
   tagPattern?: string;
   queryParams: any;
+  // eslint-disable-next-line
   placeholder?: any;
   setQueryParams: (v: any) => void;
 }
