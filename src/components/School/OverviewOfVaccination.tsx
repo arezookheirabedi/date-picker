@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import Statistic from '../../containers/Guild/components/Statistic';
@@ -15,6 +17,7 @@ import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
+
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -33,13 +36,16 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     numberOfUnknownDose: 0,
     numberOfUnvaccinated: 0,
   });
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
 
   const {total: totalMembers, employe: totalEmploye} = useSelector(state => state.studentMembers);
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
-      const {data} = await hcsService.doses(params);
+      const {data} = await hcsService.doses(params, {cancelToken: source.token});
       let tmp = {...counts};
 
       // eslint-disable-next-line no-plusplus
@@ -97,7 +103,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.dosesTagBased(params);
+      const {data} = await hcsService.dosesTagBased(params, {cancelToken: source.token});
       const normalizedData: any[] = [];
 
       data.forEach((item: any, index: number) => {
@@ -188,6 +194,12 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       organization: 'education',
       tags: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
     });
+
+    return () => {
+      setCounts({})
+      setDataset([])
+      source.cancel('Operation canceled by the user.');
+    }
   }, []);
 
   return (

@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 import {useHistory, useLocation} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {addTotalStudentMembersAc} from 'src/store/action_creators';
@@ -14,6 +16,7 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
 
+
 interface OverviewSchoolStudentsProps {
   cityTitle: any;
 }
@@ -28,6 +31,9 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
   const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
 
   const location = useLocation();
   const history = useHistory();
@@ -43,7 +49,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
         testResultCount: true,
         vaccinationCount: true,
         total: true,
-      });
+      }, {cancelToken: source.token});
 
       dispatch(addTotalStudentMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
@@ -56,18 +62,18 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
       // eslint-disable-next-line
       console.log(error);
 
-      // @ts-ignore
-      setNumberOf(0);
-      // @ts-ignore
-      setNumberOfPlaqueVisited(0);
-      // @ts-ignore
-      setNumberOfPositive(0);
-      // @ts-ignore
-      setNumberOfRecovered(0);
-      // @ts-ignore
-      setNumberOfTestResults(0);
-      // @ts-ignore
-      setNumberOfVaccination(0);
+      // // @ts-ignore
+      // setNumberOf(0);
+      // // @ts-ignore
+      // setNumberOfPlaqueVisited(0);
+      // // @ts-ignore
+      // setNumberOfPositive(0);
+      // // @ts-ignore
+      // setNumberOfRecovered(0);
+      // // @ts-ignore
+      // setNumberOfTestResults(0);
+      // // @ts-ignore
+      // setNumberOfVaccination(0);
     } finally {
       setLoading(false);
     }
@@ -86,7 +92,19 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
     } else {
       history.push('/dashboard/school/province');
     }
+
+    return () => {
+      setNumberOf(null)
+      setNumberOfPositives(null)
+      setNumberOfNegatives(null)
+      setNumberOfVaccination(null)
+      setNumberOfNanVaccinated(null)
+      setNumberOfRecovered(null)
+      setNumberOfTestResults(null)
+      source.cancel('Operation canceled by the user.');
+    }
   }, [location.search]);
+
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="school-overview">
@@ -95,7 +113,8 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalStudent}
             text="مجموع دانش آموزان"
@@ -114,16 +133,17 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             count={numberOfRecovered}
             loading={loading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
             loading={loading}
           />
-          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-"/>
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
