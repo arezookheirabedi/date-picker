@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import dayjs from 'dayjs';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useLocation, useHistory} from 'react-router-dom';
@@ -10,7 +9,7 @@ import transportService from 'src/services/transport.service';
 import Table from '../../Table';
 import ExportButton from '../../Export/ExportButton';
 import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
+import {toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
@@ -23,7 +22,7 @@ interface OverviewUnVaccinatedProps {
 const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) => {
   const {search} = useLocation();
   // const location = useLocation();
-  const queryStringParams = new URLSearchParams(search);
+  // const queryStringParams = new URLSearchParams(search);
   const history = useHistory();
 
   const [exportType, setExportType] = useState(null);
@@ -199,9 +198,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
                   ).format('YYYY-MM-DD')
                 : null,
               healthStatusSet: ['POSITIVE'],
-              reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${
-                cityTitle ? `استان ${cityTitle}` : ''
-              }`,
+              reportName: `واحد‌های صنفی بدون واکسیناسیون ${cityTitle ? `استان ${cityTitle}` : ''}`,
             }}
           />
         </div>
@@ -297,166 +294,31 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
               pagination={{pageSize: 20, maxPages: 3}}
               columns={[
                 {
-                  name: 'رسته',
-                  key: 'serviceType',
-                  render: (v: any, record: any, index: number) => (
-                    <span className="flex justify-center w-full">
-                      {`${(
-                        (Number(queryStringParams.get('page') || 1) - 1) * 20 +
-                        index +
-                        1
-                      ).toLocaleString('fa')}. ${getServiceTypeName(v)}`}
-                    </span>
-                  ),
-                },
-                {
-                  name: 'پلاک',
+                  name: 'شماره پروانه',
                   key: '',
-                  render: (v: any, record: any) =>
-                    // eslint-disable-next-line
-                    record.plaque ? (
-                      <div className="flex items-center">
-                        <div
-                          className={`license-plate ${
-                            record.serviceType === 'TAXI_T' || record.serviceType === 'PUBLIC'
-                              ? 'taxi'
-                              : ''
-                          }`}
-                        >
-                          <div className="blue-column">
-                            <div className="flag">
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                            <div className="text">
-                              <div>I.R.</div>
-                              <div>IRAN</div>
-                            </div>
-                          </div>
-                          <span>{record.plaque.firstNumber}</span>
-                          <span className="alphabet-column">{record.plaque.letter}</span>
-                          <span>{record.plaque.secondNumber}</span>
-                          <div className="iran-column">
-                            <span>ایــران</span>
-                            <strong>{record.plaque.iranNumber}</strong>
-                          </div>
-                        </div>
-                      </div>
-                    ) : record.motorCyclePlaque ? (
-                      <div className="flex items-center">
-                        <div className="license-plate-motor">
-                          <div className="flex w-full justify-between">
-                            <div className="flex flex-grow justify-center">
-                              <span>{record.motorCyclePlaque.threeDigitNumber}</span>
-                            </div>
-
-                            <div className="blue-column">
-                              <div className="flag">
-                                <div />
-                                <div />
-                                <div />
-                              </div>
-                              <div className="text">
-                                <div>I.R.</div>
-                                <div>IRAN</div>
-                              </div>
-                            </div>
-                          </div>
-                          <span className="alphabet-column">
-                            {record.motorCyclePlaque.fiveDigitNumber}
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      ''
-                    ),
                 },
                 {
-                  name: 'کدملی راننده',
+                  name: 'کد ISIC',
+                  key: '',
+                },
+                {
+                  name: 'کد ملی مالک',
                   key: 'nationalId',
                   render: (v: any) => (
                     <span className="text-gray-500">{toPersianDigit(v || '')}</span>
                   ),
                 },
                 {
-                  name: 'استان',
-                  key: 'province',
-                  render: (v: any) => <span>{v || '-'}</span>,
+                  name: 'رسته',
+                  key: '',
                 },
                 {
-                  name: 'وضعیت',
-                  key: 'status',
-                  render: (v: string, record: any) => {
-                    let colors = 'from-gray-400 to-gray-300';
-                    if (record.status) {
-                      if (record.status === 'CONDITIONAL_QUALIFIED') {
-                        colors = 'from-orange-600 to-orange-400';
-                      } else if (record.status === 'DISQUALIFIED') {
-                        colors = 'from-red-700 to-red-500';
-                      } else if (record.status === 'QUALIFIED') {
-                        colors = 'from-green-600 to-green-500';
-                      }
-                    }
-
-                    return (
-                      <div className="flex justify-center">
-                        <div
-                          className={`bg-gradient-to-l ${colors} w-4 h-4 rounded-full shadow-2xl`}
-                          style={{boxShadow: '-3px 4px 8px -3px rgba(0,0,0,.5)'}}
-                        />
-                      </div>
-                    );
-                  },
+                  name: 'آدرس',
+                  key: '',
                 },
                 {
-                  name: 'تاریخ ابتلا',
-                  key: 'date',
-                  render: (v: any) => (
-                    <span className="text-gray-500">
-                      {v ? toPersianDigit(dayjs(v).calendar('jalali').format('YYYY/MM/DD')) : '-'}
-                    </span>
-                  ),
-                },
-                {
-                  name: 'آزمایش',
-                  key: 'personHealthStatus',
-                  render: (v: any) => (
-                    <span
-                      // eslint-disable-next-line
-                      className={`${
-                        // eslint-disable-next-line
-                        v === 'POSITIVE'
-                          ? 'text-red-700'
-                          : v === 'NEGATIVE'
-                          ? 'text-green-700'
-                          : 'text-gray-400'
-                      }`}
-                    >
-                      {/* eslint-disable-next-line */}
-                      {v === 'POSITIVE' ? 'مثبت' : v === 'NEGATIVE' ? 'منفی' : 'نامشخص'}
-                    </span>
-                  ),
-                },
-                {
-                  name: 'واکسیناسیون',
-                  key: 'numberOfReceivedDoses',
-                  render: (v: any) => (
-                    <span>
-                      {/* eslint-disable-next-line */}
-                      {v || v === 0
-                        ? // eslint-disable-next-line no-nested-ternary
-                          v > 2
-                          ? 'دوز سوم و بیشتر'
-                          : // eslint-disable-next-line no-nested-ternary
-                          v > 1
-                          ? 'دوز دوم'
-                          : v > 0
-                          ? 'دوز اول'
-                          : 'انجام نشده'
-                        : 'نامشخص'}
-                    </span>
-                  ),
+                  name: 'شماره موبایل',
+                  key: '',
                 },
               ]}
               totalItems={totalItems}

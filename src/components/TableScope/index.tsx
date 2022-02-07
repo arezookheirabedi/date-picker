@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 // import qs from 'qs';
 // import {useLocation} from 'react-router-dom';
 import Empty from '../Empty';
@@ -32,6 +32,7 @@ interface IParams {
 }
 
 interface IPagination {
+  currentPage?: number;
   pageSize?: number;
   maxPages?: number;
 }
@@ -41,14 +42,19 @@ interface IProps {
   totalItems: number;
   columns: IColumn[];
   dataSet: any[];
+  handlePageChange?: (page: number) => void;
 }
 
 const Table: React.FC<IProps> = (props: IProps) => {
-  const {dataSet, pagination, columns, totalItems = 0} = props;
+  const {dataSet, pagination, columns, totalItems = 0, handlePageChange} = props;
 
   // eslint-disable-next-line
   const [page, setPage] = useState<number>(1);
   const pageSize = pagination?.pageSize || PAGE_SIZE;
+
+  useEffect(() => {
+    if (handlePageChange) handlePageChange(page);
+  }, [page]);
 
   return (
     <>
@@ -104,9 +110,10 @@ const Table: React.FC<IProps> = (props: IProps) => {
       {totalItems && totalItems > pageSize ? (
         <Pagination
           totalItems={totalItems}
-          currentPage={page}
+          currentPage={pagination?.currentPage || page}
           setPage={setPage}
           pageSize={pageSize}
+          // maxPages={pagination?.maxPages || 4}
           maxPages={4}
         />
       ) : (
