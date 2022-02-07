@@ -31,6 +31,7 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         item.select();
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     }
 

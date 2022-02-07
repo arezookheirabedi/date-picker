@@ -33,6 +33,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         item.select();
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     }
 

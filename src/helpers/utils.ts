@@ -1,7 +1,7 @@
-import {AxiosRequestConfig} from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
-import {ILogin, IProfile} from 'src/models/authentication.model';
+import { ILogin, IProfile } from 'src/models/authentication.model';
 
 
 const baseUrl = Setup.endpoint;
@@ -21,31 +21,31 @@ export const setRequestConfig: (config: AxiosRequestConfig) => AxiosRequestConfi
       ...config.headers,
     };
   }
-  axiosRequestConfig = {...axiosRequestConfig, ...config};
+  axiosRequestConfig = { ...axiosRequestConfig, ...config };
 
-  return {...axiosRequestConfig, ...config};
+  return { ...axiosRequestConfig, ...config };
 };
 
 export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   switch (config) {
     case EHEADER.HEADER_JSON:
       setRequestConfig({
-        headers: {'Content-Type': 'application/json;utf-8'},
+        headers: { 'Content-Type': 'application/json;utf-8' },
       });
       break;
     case EHEADER.HEADER_MULTIPART:
       setRequestConfig({
-        headers: {'Content-Type': 'multipart/form-data;utf-8'},
+        headers: { 'Content-Type': 'multipart/form-data;utf-8' },
       });
       break;
     case EHEADER.HEADER_URL_ENCODE:
       setRequestConfig({
-        headers: {'Content-Type': 'application/x-www-form-urlencoded;utf-8'},
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;utf-8' },
       });
       break;
     default:
       setRequestConfig({
-        headers: {'Content-Type': 'application/json;utf-8'},
+        headers: { 'Content-Type': 'application/json;utf-8' },
       });
       break;
   }
@@ -121,6 +121,7 @@ export function isLogin() {
   if (tokenStr && firstLogin) {
     if (new Date().getTime() > (Number(firstLogin) + (24 * 60 * 60 * 1000))) {
       removeToken();
+      // eslint-disable-next-line
       console.log('on day finished')
       return false;
     }

@@ -95,6 +95,7 @@ const options = {
     type: 'column',
     events: {
       redraw: () => {
+        // eslint-disable-next-line
         console.log('redraw');
       },
     },
