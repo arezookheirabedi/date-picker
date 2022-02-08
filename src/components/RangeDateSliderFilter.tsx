@@ -51,17 +51,9 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
   const [disabledDays, setDisabledDays] = useState<any[]>([]);
   const [marks, setMarks] = useState([
     {
-      value: 3,
-      label: 'سالیانه',
-      enLabel: 'ANNUAL',
-      style: {
-        color: '#193149',
-      },
-    },
-    {
-      value: 2,
-      label: 'ماهانه',
-      enLabel: 'MONTHLY',
+      value: 0,
+      label: 'روزانه',
+      enLabel: 'DAILY',
       style: {
         color: '#B2B2B2',
       },
@@ -75,11 +67,19 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       },
     },
     {
-      value: 0,
-      label: 'روزانه',
-      enLabel: 'DAILY',
+      value: 2,
+      label: 'ماهانه',
+      enLabel: 'MONTHLY',
       style: {
         color: '#B2B2B2',
+      },
+    },
+    {
+      value: 3,
+      label: 'سالیانه',
+      enLabel: 'ANNUAL',
+      style: {
+        color: '#193149',
       },
     },
   ]) as any;
