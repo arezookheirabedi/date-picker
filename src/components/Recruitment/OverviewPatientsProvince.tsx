@@ -145,7 +145,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between w-3/4 px-8">
+          <div className="flex align-center justify-between flex-grow px-8">
             {cityTitle && (
               <TagsSelect
                 placeholder="کل کارکنان"
@@ -197,9 +197,12 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
             </div>
           </div>
 
-          <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
-          </div>
+          <RangeDateSliderFilter
+            queryParams={queryParams}
+            setQueryParams={setQueryParams}
+            dates={selectedDayRange}
+            wrapperClassName="w-1/4"
+          />
         </div>
 
         {loading && (

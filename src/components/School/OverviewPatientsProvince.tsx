@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
@@ -11,7 +11,6 @@ import {sideCities, toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
 import Spinner from '../Spinner';
 import TagsSelect from '../TagsSelect';
-
 
 const {Line} = Charts;
 
@@ -64,11 +63,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -76,7 +75,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -130,15 +129,14 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
         clearTimeout(idSetTimeOut);
       }
     };
-
   }, [queryParams, location.search]);
 
   useEffect(() => {
     return () => {
       setData([]);
       setIsCancel(false);
-    }
-  }, [history])
+    };
+  }, [history]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -162,7 +160,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between w-3/4 px-8">
+          <div className="flex align-center justify-between flex-grow px-8">
             <TagsSelect
               placeholder="کل آموزش و پرورش"
               tagPattern="^(?!.*(province|city)).*$"
@@ -190,11 +188,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5"/>
+                  <img src={calendar} alt="x" className="w-5 h-5" />
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator"/>
+                <span className="dash-separator" />
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -206,24 +204,27 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5"/>
+                  <img src={calendar} alt="x" className="w-5 h-5" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
-          </div>
+          <RangeDateSliderFilter
+            queryParams={queryParams}
+            setQueryParams={setQueryParams}
+            dates={selectedDayRange}
+            wrapperClassName="w-1/4"
+          />
         </div>
 
         {(loading || isCancel) && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data}/>}
+        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data} />}
         {data.length === 0 && !loading && !errorMessage && !isCancel && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
