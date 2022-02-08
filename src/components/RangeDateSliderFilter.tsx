@@ -51,9 +51,17 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
   const [disabledDays, setDisabledDays] = useState<any[]>([]);
   const [marks, setMarks] = useState([
     {
-      value: 0,
-      label: 'روزانه',
-      enLabel: 'DAILY',
+      value: 3,
+      label: 'سالیانه',
+      enLabel: 'ANNUAL',
+      style: {
+        color: '#193149',
+      },
+    },
+    {
+      value: 2,
+      label: 'ماهانه',
+      enLabel: 'MONTHLY',
       style: {
         color: '#B2B2B2',
       },
@@ -67,19 +75,11 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       },
     },
     {
-      value: 2,
-      label: 'ماهانه',
-      enLabel: 'MONTHLY',
+      value: 0,
+      label: 'روزانه',
+      enLabel: 'DAILY',
       style: {
         color: '#B2B2B2',
-      },
-    },
-    {
-      value: 3,
-      label: 'سالیانه',
-      enLabel: 'ANNUAL',
-      style: {
-        color: '#193149',
       },
     },
   ]) as any;
@@ -101,7 +101,6 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
   };
 
   useEffect(() => {
-    console.log('Here');
     const tmp: any[] = [];
     let lastState = 'ANNUAL';
     if (dates?.from && dates?.to) {
@@ -139,6 +138,8 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       setDisabledDays([]);
       setQueryParams({...queryParams, type: lastState});
     }
+
+    detectSliderChange(marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1);
   }, [dates]);
 
   return (
@@ -146,9 +147,14 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       {marks.filter((x: any) => !disabledDays.includes(x.value)).length > 1 && (
         <div className={`inline-flex ${wrapperClassName || ''}`}>
           <Slider
-            marks={marks.filter((x: any) => !disabledDays.includes(x.value))}
+            marks={marks
+              .filter((x: any) => !disabledDays.includes(x.value))
+              .sort((a: any, b: any) => {
+                return a - b;
+              })}
             step={1}
             min={0}
+            defaultValue={marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1}
             max={marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1}
             onChange={detectSliderChange}
             className="filter-range-slider"
