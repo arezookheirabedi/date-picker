@@ -119,7 +119,7 @@ const OverviewSchoolEmploye = () => {
           />
           <Statistic
             icon={testIcon}
-            text="تعداد آزمایش‌های دانش آموزان"
+            text="تعداد آزمایش‌های کارمندان"
             count={numberOfTestResults}
             loading={loading}
           />
