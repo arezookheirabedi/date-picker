@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFliter';
+import RangeDateSliderFilter from '../RangeDateSliderFilter';
 import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
@@ -95,19 +95,19 @@ const OverviewPatients = () => {
     };
   }, [queryParams]);
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-      });
-    }
-  }, [selectedDayRange]);
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+  //     });
+  //   }
+  // }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
