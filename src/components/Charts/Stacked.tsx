@@ -127,7 +127,7 @@ const options = {
   // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
   plotOptions: {
     series: {
-      stacking: 'normal',
+      stacking: 'percent',
       // borderRadius: 5,
       pointWidth: 15,
     },
