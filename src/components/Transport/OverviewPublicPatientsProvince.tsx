@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
@@ -21,8 +21,8 @@ interface OverviewPublicPatientsProvinceProps {
 }
 
 const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({
-                                                                                         cityTitle,
-                                                                                       }) => {
+  cityTitle,
+}) => {
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -58,11 +58,11 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -70,7 +70,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -79,7 +79,9 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     setErrorMessage(null);
     setIsCancel(false);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params, {cancelToken: source.token});
+      const response = await transportService.linearOverviewPublicTransport(params, {
+        cancelToken: source.token,
+      });
       setData(response.data);
       setIsCancel(false);
     } catch (error: any) {
@@ -125,8 +127,8 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     return () => {
       setData([]);
       setIsCancel(false);
-    }
-  }, [history])
+    };
+  }, [history]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -150,25 +152,23 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between w-3/4 px-8">
+          <div className="flex align-center justify-between flex-grow px-8">
             <Menu
               as="div"
               className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
             >
               <div>
-                <Menu.Button
-                  className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
                     {serviceType?.name || 'کل حمل و نقل'}
                   </span>
-                  <DownIcon className="h-2 w-2.5 mr-2"/>
+                  <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
               </div>
 
-              <Menu.Items
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {transportationTypes.map((value: any, index: any) => {
                     return (
@@ -217,11 +217,11 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5"/>
+                  <img src={calendar} alt="x" className="w-5 h-5" />
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator"/>
+                <span className="dash-separator" />
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -233,24 +233,27 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5"/>
+                  <img src={calendar} alt="x" className="w-5 h-5" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams}/>
-          </div>
+          <RangeDateSliderFilter
+            queryParams={queryParams}
+            setQueryParams={setQueryParams}
+            dates={selectedDayRange}
+            wrapperClassName="w-1/4"
+          />
         </div>
 
         {(loading || isCancel) && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data}/>}
+        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data} />}
         {data.length === 0 && !loading && !errorMessage && !isCancel && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
