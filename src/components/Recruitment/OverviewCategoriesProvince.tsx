@@ -166,11 +166,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.employeesCount < b.employeesCount) {
+      if (Number(a.infectedPercent) < Number(b.infectedPercent)) {
         return reverse * 1;
       }
 
-      if (a.employeesCount > b.employeesCount) {
+      if (Number(a.infectedPercent) > Number(b.infectedPercent)) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -194,11 +194,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.employeesCount < b.employeesCount) {
+        if (Number(a.infectedPercent) < Number(b.infectedPercent)) {
           return reverse * 1;
         }
 
-        if (a.employeesCount > b.employeesCount) {
+        if (Number(a.infectedPercent) > Number(b.infectedPercent)) {
           return reverse * -1;
         }
         // a must be equal to b
