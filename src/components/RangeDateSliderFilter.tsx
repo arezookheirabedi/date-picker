@@ -101,6 +101,7 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
   };
 
   useEffect(() => {
+    console.log('Here');
     const tmp: any[] = [];
     let lastState = 'ANNUAL';
     if (dates?.from && dates?.to) {
@@ -128,12 +129,16 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       }
 
       setDisabledDays([...tmp]);
+      setQueryParams({
+        ...queryParams,
+        type: lastState,
+        from: start.format('YYYY-MM-DDTHH:mm:ss'),
+        to: end.format('YYYY-MM-DDTHH:mm:ss'),
+      });
     } else {
       setDisabledDays([]);
+      setQueryParams({...queryParams, type: lastState});
     }
-
-    // console.log(lastState)
-    setQueryParams({...queryParams, type: lastState});
   }, [dates]);
 
   return (
