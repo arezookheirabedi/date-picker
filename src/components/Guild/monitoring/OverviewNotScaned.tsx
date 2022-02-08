@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import dayjs from 'dayjs';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {useLocation, useHistory} from 'react-router-dom';
-import qs from 'qs';
 import {Menu} from '@headlessui/react';
-import transportService from 'src/services/transport.service';
-import Table from '../../Table';
-import ExportButton from '../../Export/ExportButton';
+// import transportService from 'src/services/transport.service';
+import Table from '../../TableXHR';
+import ExportButton from './ExportButton';
 import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
+import {toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
@@ -21,25 +18,22 @@ interface OverviewNotScanedProps {
 }
 
 const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
-  const {search} = useLocation();
-  // const location = useLocation();
-  const queryStringParams = new URLSearchParams(search);
-  const history = useHistory();
-
   const [exportType, setExportType] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const [totalItems, setTotalItems] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
+  const [currentPage, setCurrenntPage] = useState(1);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
   const {CancelToken} = axios;
+  // eslint-disable-next-line
   const source = CancelToken.source();
 
   const focusFromDate = () => {
@@ -66,16 +60,21 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       : '';
   };
 
-  const getOverviewTransportReport = async (params: any) => {
-    // setErrorMessage(null);
+  const getOverviewReport = async (params: any) => {
+    setErrorMessage(null);
     try {
-      const response: any = await transportService.overviewReport(params, {
-        cancelToken: source.token,
-      });
-      setDataSet([...response.data.content]);
-      setTotalItems(response.data.totalElements);
+      // const response: any = await transportService.overviewReport(params, {
+      //   cancelToken: source.token,
+      // });
+      // setDataSet([...response.data.content]);
+      // setTotalItems(response.data.totalElements);
+
+      // eslint-disable-next-line
+      console.log(params);
+      setDataSet([]);
+      setTotalItems(0);
     } catch (error: any) {
-      // setErrorMessage(error.message);
+      setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -84,100 +83,61 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   };
 
   // useEffect(() => {
-  //   const qst = new URLSearchParams(search);
   //   setLoading(true);
-  //   getOverviewTransportReport({
+  //   getOverviewReport({
   //     healthStatusSet: 'POSITIVE',
-  //     pageNumber: qst.get('page') || 1,
+  //     pageNumber: Number(currentPage) - 1,
   //     pageSize: 20,
   //     sort: 'ASC',
-  //     from: qst.get('from'),
-  //     to: qst.get('to'),
   //   });
-  //   // return () => {
-  //   //   source.cancel('Operation canceled by the user.');
-  //   // }
   // }, []);
 
-  const location = useLocation();
   useEffect(() => {
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataSet([]);
-      setTotalItems(0);
-      setLoading(false);
-    };
-  }, [location.search]);
+    if (!loading) {
+      let query: any = {
+        healthStatusSet: 'POSITIVE',
+        pageNumber: Number(currentPage) - 1,
+        pageSize: 20,
+        sort: 'ASC',
+      };
 
-  useEffect(() => {
-    let latestQuery: any = {};
+      if (selectedDayRange.from && selectedDayRange.to) {
+        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
 
-    if (search && search.length > 1) {
-      latestQuery = JSON.parse(
-        // eslint-disable-next-line
-        '{"' +
-          decodeURI((search || ' ').substring(1))
-            .replace(/"/g, '\\"')
-            .replace(/&/g, '","')
-            .replace(/=/g, '":"') +
-          '"}'
-      );
-    }
-
-    if (!loading && selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      history.push(
-        `/dashboard/transport/monitoring?${qs.stringify({
-          ...latestQuery,
-          page: 1,
+        query = {
+          ...query,
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        })}`
-      );
+        };
+      }
+
+      setLoading(true);
+      getOverviewReport(query);
     }
-  }, [selectedDayRange]);
 
-  useEffect(() => {
-    const qst = new URLSearchParams(search);
-
-    let query: any = {
-      healthStatusSet: 'POSITIVE',
-      pageNumber: Number(qst.get('page') || '1') - 1,
-      pageSize: 20,
-      sort: 'ASC',
-      from: qst.get('from'),
-      to: qst.get('to'),
-    };
-
-    if (qst.has('provinceName')) query = {...query, province: qst.get('provinceName')};
-
-    // if (qst.get('from') && qst.get('to')) {
-    //   let from: any = qst.get('from');
-    //   let to: any = qst.get('from');
-
-    //   from = moment(from, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
-    //   to = moment(to, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
-
-    //   setSelectedDayRange({
-    //     from: {year: from[0], month: from[1], day: from[2]},
-    //     to: {year: to[0], month: to[1], day: to[2]},
-    //   });
-    // }
-
-    setLoading(true);
-    getOverviewTransportReport(query);
-  }, [search]);
+    //   return () => {
+    //     source.cancel('Operation canceled by the user.');
+    //     setDataSet([]);
+    //     setTotalItems(0);
+    //     setLoading(false);
+    //   };
+  }, [selectedDayRange, currentPage]);
 
   useEffect(() => {
     setSelectedDayRange({
       from: null,
       to: null,
     });
+    setCurrenntPage(1);
   }, [cityTitle]);
 
+  function handlePageChange(page: number = 1) {
+    setCurrenntPage(page);
+  }
+
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
       <legend className="text-black mx-auto px-3">
         واحد‌های صنفی که QR کد آن‌ها اسکن نشده {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
@@ -199,7 +159,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
                   ).format('YYYY-MM-DD')
                 : null,
               healthStatusSet: ['POSITIVE'],
-              reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${
+              reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
                 cityTitle ? `استان ${cityTitle}` : ''
               }`,
             }}
@@ -293,170 +253,36 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
         <>
           <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
+              handlePageChange={handlePageChange}
               dataSet={dataSet}
-              pagination={{pageSize: 20, maxPages: 3}}
+              pagination={{pageSize: 20, maxPages: 3, currentPage}}
               columns={[
                 {
-                  name: 'رسته',
-                  key: 'serviceType',
-                  render: (v: any, record: any, index: number) => (
-                    <span className="flex justify-center w-full">
-                      {`${(
-                        (Number(queryStringParams.get('page') || 1) - 1) * 20 +
-                        index +
-                        1
-                      ).toLocaleString('fa')}. ${getServiceTypeName(v)}`}
-                    </span>
-                  ),
-                },
-                {
-                  name: 'پلاک',
+                  name: 'شماره پروانه',
                   key: '',
-                  render: (v: any, record: any) =>
-                    // eslint-disable-next-line
-                    record.plaque ? (
-                      <div className="flex items-center">
-                        <div
-                          className={`license-plate ${
-                            record.serviceType === 'TAXI_T' || record.serviceType === 'PUBLIC'
-                              ? 'taxi'
-                              : ''
-                          }`}
-                        >
-                          <div className="blue-column">
-                            <div className="flag">
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                            <div className="text">
-                              <div>I.R.</div>
-                              <div>IRAN</div>
-                            </div>
-                          </div>
-                          <span>{record.plaque.firstNumber}</span>
-                          <span className="alphabet-column">{record.plaque.letter}</span>
-                          <span>{record.plaque.secondNumber}</span>
-                          <div className="iran-column">
-                            <span>ایــران</span>
-                            <strong>{record.plaque.iranNumber}</strong>
-                          </div>
-                        </div>
-                      </div>
-                    ) : record.motorCyclePlaque ? (
-                      <div className="flex items-center">
-                        <div className="license-plate-motor">
-                          <div className="flex w-full justify-between">
-                            <div className="flex flex-grow justify-center">
-                              <span>{record.motorCyclePlaque.threeDigitNumber}</span>
-                            </div>
-
-                            <div className="blue-column">
-                              <div className="flag">
-                                <div />
-                                <div />
-                                <div />
-                              </div>
-                              <div className="text">
-                                <div>I.R.</div>
-                                <div>IRAN</div>
-                              </div>
-                            </div>
-                          </div>
-                          <span className="alphabet-column">
-                            {record.motorCyclePlaque.fiveDigitNumber}
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      ''
-                    ),
                 },
                 {
-                  name: 'کدملی راننده',
+                  name: 'کد ISIC',
+                  key: '',
+                },
+                {
+                  name: 'کد ملی مالک',
                   key: 'nationalId',
                   render: (v: any) => (
                     <span className="text-gray-500">{toPersianDigit(v || '')}</span>
                   ),
                 },
                 {
-                  name: 'استان',
-                  key: 'province',
-                  render: (v: any) => <span>{v || '-'}</span>,
+                  name: 'رسته',
+                  key: '',
                 },
                 {
-                  name: 'وضعیت',
-                  key: 'status',
-                  render: (v: string, record: any) => {
-                    let colors = 'from-gray-400 to-gray-300';
-                    if (record.status) {
-                      if (record.status === 'CONDITIONAL_QUALIFIED') {
-                        colors = 'from-orange-600 to-orange-400';
-                      } else if (record.status === 'DISQUALIFIED') {
-                        colors = 'from-red-700 to-red-500';
-                      } else if (record.status === 'QUALIFIED') {
-                        colors = 'from-green-600 to-green-500';
-                      }
-                    }
-
-                    return (
-                      <div className="flex justify-center">
-                        <div
-                          className={`bg-gradient-to-l ${colors} w-4 h-4 rounded-full shadow-2xl`}
-                          style={{boxShadow: '-3px 4px 8px -3px rgba(0,0,0,.5)'}}
-                        />
-                      </div>
-                    );
-                  },
+                  name: 'آدرس',
+                  key: '',
                 },
                 {
-                  name: 'تاریخ ابتلا',
-                  key: 'date',
-                  render: (v: any) => (
-                    <span className="text-gray-500">
-                      {v ? toPersianDigit(dayjs(v).calendar('jalali').format('YYYY/MM/DD')) : '-'}
-                    </span>
-                  ),
-                },
-                {
-                  name: 'آزمایش',
-                  key: 'personHealthStatus',
-                  render: (v: any) => (
-                    <span
-                      // eslint-disable-next-line
-                      className={`${
-                        // eslint-disable-next-line
-                        v === 'POSITIVE'
-                          ? 'text-red-700'
-                          : v === 'NEGATIVE'
-                          ? 'text-green-700'
-                          : 'text-gray-400'
-                      }`}
-                    >
-                      {/* eslint-disable-next-line */}
-                      {v === 'POSITIVE' ? 'مثبت' : v === 'NEGATIVE' ? 'منفی' : 'نامشخص'}
-                    </span>
-                  ),
-                },
-                {
-                  name: 'واکسیناسیون',
-                  key: 'numberOfReceivedDoses',
-                  render: (v: any) => (
-                    <span>
-                      {/* eslint-disable-next-line */}
-                      {v || v === 0
-                        ? // eslint-disable-next-line no-nested-ternary
-                          v > 2
-                          ? 'دوز سوم و بیشتر'
-                          : // eslint-disable-next-line no-nested-ternary
-                          v > 1
-                          ? 'دوز دوم'
-                          : v > 0
-                          ? 'دوز اول'
-                          : 'انجام نشده'
-                        : 'نامشخص'}
-                    </span>
-                  ),
+                  name: 'شماره موبایل',
+                  key: '',
                 },
               ]}
               totalItems={totalItems}
