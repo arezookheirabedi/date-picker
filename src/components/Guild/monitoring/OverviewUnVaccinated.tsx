@@ -2,11 +2,9 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {useLocation, useHistory} from 'react-router-dom';
-import qs from 'qs';
 import {Menu} from '@headlessui/react';
-import transportService from 'src/services/transport.service';
-import Table from '../../Table';
+// import transportService from 'src/services/transport.service';
+import Table from '../../TableXHR';
 import ExportButton from '../../Export/ExportButton';
 import DatePickerModal from '../../DatePickerModal';
 import {toPersianDigit} from '../../../helpers/utils';
@@ -20,11 +18,6 @@ interface OverviewUnVaccinatedProps {
 }
 
 const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) => {
-  const {search} = useLocation();
-  // const location = useLocation();
-  // const queryStringParams = new URLSearchParams(search);
-  const history = useHistory();
-
   const [exportType, setExportType] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
@@ -32,13 +25,14 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
+  const [currentPage, setCurrenntPage] = useState(1);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
   const {CancelToken} = axios;
+  // eslint-disable-next-line
   const source = CancelToken.source();
 
   const focusFromDate = () => {
@@ -65,16 +59,21 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
       : '';
   };
 
-  const getOverviewTransportReport = async (params: any) => {
-    // setErrorMessage(null);
+  const getOverviewReport = async (params: any) => {
+    setErrorMessage(null);
     try {
-      const response: any = await transportService.overviewReport(params, {
-        cancelToken: source.token,
-      });
-      setDataSet([...response.data.content]);
-      setTotalItems(response.data.totalElements);
+      // const response: any = await transportService.overviewReport(params, {
+      //   cancelToken: source.token,
+      // });
+      // setDataSet([...response.data.content]);
+      // setTotalItems(response.data.totalElements);
+
+      // eslint-disable-next-line
+      console.log(params);
+      setDataSet([]);
+      setTotalItems(0);
     } catch (error: any) {
-      // setErrorMessage(error.message);
+      setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -83,97 +82,58 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   };
 
   // useEffect(() => {
-  //   const qst = new URLSearchParams(search);
   //   setLoading(true);
-  //   getOverviewTransportReport({
+  //   getOverviewReport({
   //     healthStatusSet: 'POSITIVE',
-  //     pageNumber: qst.get('page') || 1,
+  //     pageNumber: Number(currentPage) - 1,
   //     pageSize: 20,
   //     sort: 'ASC',
-  //     from: qst.get('from'),
-  //     to: qst.get('to'),
   //   });
-  //   // return () => {
-  //   //   source.cancel('Operation canceled by the user.');
-  //   // }
   // }, []);
 
-  const location = useLocation();
   useEffect(() => {
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataSet([]);
-      setTotalItems(0);
-      setLoading(false);
-    };
-  }, [location.search]);
+    if (!loading) {
+      let query: any = {
+        healthStatusSet: 'POSITIVE',
+        pageNumber: Number(currentPage) - 1,
+        pageSize: 20,
+        sort: 'ASC',
+      };
 
-  useEffect(() => {
-    let latestQuery: any = {};
+      if (selectedDayRange.from && selectedDayRange.to) {
+        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
 
-    if (search && search.length > 1) {
-      latestQuery = JSON.parse(
-        // eslint-disable-next-line
-        '{"' +
-          decodeURI((search || ' ').substring(1))
-            .replace(/"/g, '\\"')
-            .replace(/&/g, '","')
-            .replace(/=/g, '":"') +
-          '"}'
-      );
-    }
-
-    if (!loading && selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      history.push(
-        `/dashboard/transport/monitoring?${qs.stringify({
-          ...latestQuery,
-          page: 1,
+        query = {
+          ...query,
           from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
           to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        })}`
-      );
+        };
+      }
+
+      setLoading(true);
+      getOverviewReport(query);
     }
-  }, [selectedDayRange]);
 
-  useEffect(() => {
-    const qst = new URLSearchParams(search);
-
-    let query: any = {
-      healthStatusSet: 'POSITIVE',
-      pageNumber: Number(qst.get('page') || '1') - 1,
-      pageSize: 20,
-      sort: 'ASC',
-      from: qst.get('from'),
-      to: qst.get('to'),
-    };
-
-    if (qst.has('provinceName')) query = {...query, province: qst.get('provinceName')};
-
-    // if (qst.get('from') && qst.get('to')) {
-    //   let from: any = qst.get('from');
-    //   let to: any = qst.get('from');
-
-    //   from = moment(from, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
-    //   to = moment(to, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
-
-    //   setSelectedDayRange({
-    //     from: {year: from[0], month: from[1], day: from[2]},
-    //     to: {year: to[0], month: to[1], day: to[2]},
-    //   });
-    // }
-
-    setLoading(true);
-    getOverviewTransportReport(query);
-  }, [search]);
+    //   return () => {
+    //     source.cancel('Operation canceled by the user.');
+    //     setDataSet([]);
+    //     setTotalItems(0);
+    //     setLoading(false);
+    //   };
+  }, [selectedDayRange, currentPage]);
 
   useEffect(() => {
     setSelectedDayRange({
       from: null,
       to: null,
     });
+    setCurrenntPage(1);
   }, [cityTitle]);
+
+  function handlePageChange(page: number = 1) {
+    setCurrenntPage(page);
+  }
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
@@ -198,7 +158,9 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
                   ).format('YYYY-MM-DD')
                 : null,
               healthStatusSet: ['POSITIVE'],
-              reportName: `واحد‌های صنفی بدون واکسیناسیون ${cityTitle ? `استان ${cityTitle}` : ''}`,
+              reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
+                cityTitle ? `استان ${cityTitle}` : ''
+              }`,
             }}
           />
         </div>
@@ -290,8 +252,9 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
         <>
           <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
+              handlePageChange={handlePageChange}
               dataSet={dataSet}
-              pagination={{pageSize: 20, maxPages: 3}}
+              pagination={{pageSize: 20, maxPages: 3, currentPage}}
               columns={[
                 {
                   name: 'شماره پروانه',
