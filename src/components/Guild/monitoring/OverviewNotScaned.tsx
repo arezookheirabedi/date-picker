@@ -3,8 +3,8 @@ import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
-import transportService from 'src/services/transport.service';
-import Table from '../../TableScope';
+// import transportService from 'src/services/transport.service';
+import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
 import DatePickerModal from '../../DatePickerModal';
 import {toPersianDigit} from '../../../helpers/utils';
@@ -26,15 +26,14 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [currentPage, setCurrenntPage] = useState(1);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
   const {CancelToken} = axios;
+  // eslint-disable-next-line
   const source = CancelToken.source();
 
   const focusFromDate = () => {
@@ -61,16 +60,21 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       : '';
   };
 
-  const getOverviewTransportReport = async (params: any) => {
-    // setErrorMessage(null);
+  const getOverviewReport = async (params: any) => {
+    setErrorMessage(null);
     try {
-      const response: any = await transportService.overviewReport(params, {
-        cancelToken: source.token,
-      });
-      setDataSet([...response.data.content]);
-      setTotalItems(response.data.totalElements);
+      // const response: any = await transportService.overviewReport(params, {
+      //   cancelToken: source.token,
+      // });
+      // setDataSet([...response.data.content]);
+      // setTotalItems(response.data.totalElements);
+
+      // eslint-disable-next-line
+      console.log(params);
+      setDataSet([]);
+      setTotalItems(0);
     } catch (error: any) {
-      // setErrorMessage(error.message);
+      setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -80,7 +84,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
 
   // useEffect(() => {
   //   setLoading(true);
-  //   getOverviewTransportReport({
+  //   getOverviewReport({
   //     healthStatusSet: 'POSITIVE',
   //     pageNumber: Number(currentPage) - 1,
   //     pageSize: 20,
@@ -89,7 +93,6 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   // }, []);
 
   useEffect(() => {
-    console.log(currentPage);
     if (!loading) {
       let query: any = {
         healthStatusSet: 'POSITIVE',
@@ -110,7 +113,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       }
 
       setLoading(true);
-      getOverviewTransportReport(query);
+      getOverviewReport(query);
     }
 
     //   return () => {
