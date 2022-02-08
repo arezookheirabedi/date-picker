@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Charts from '../../Charts';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
 
@@ -14,6 +14,7 @@ interface OverviewVaccinePerDosesProps {
 }
 
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
+  const [categories, setCategories] = useState<any[]>([]);
   const [dataset, setDataset] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
@@ -112,15 +113,18 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       setDataset([
         {
           name: 'واکسیناسیون',
+          type: 'column',
           data: [
-            {x: 'واکسن نزده', y: noDose, color: '#FF0060'},
-            {x: 'دوز اول', y: firstDose, color: '#F3BC06'},
-            {x: 'دوز دوم', y: secondDose, color: '#209F92'},
-            {x: 'دوز سوم', y: thirdDose, color: '#004D65'},
-            {x: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#004D65'},
+            {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
+            {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
+            {name: 'دوز دوم', y: secondDose, color: '#209F92'},
+            {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
+            {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
           ],
         },
       ]);
+
+      setCategories(['واکسن نزده', 'دوز اول', 'دوز دوم', 'دوز سوم', 'بیش از ۳ دوز']);
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -238,7 +242,9 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && dataset.length > 0 && !errorMessage && <Stacked data={dataset} />}
+        {!loading && dataset.length > 0 && !errorMessage && (
+          <Stacked data={dataset} categories={categories} />
+        )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}

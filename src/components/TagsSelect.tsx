@@ -1,12 +1,15 @@
 import React from 'react';
+import axios from 'axios';
 import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
 import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
   organization: string;
+  // eslint-disable-next-line
   tagPattern?: string;
   queryParams: any;
+  // eslint-disable-next-line
   placeholder?: any;
   setQueryParams: (v: any) => void;
 }
@@ -21,10 +24,13 @@ const TagsSelect = ({
   const [serviceType, setServiceType] = React.useState<any>();
   const [tags, setTags] = React.useState<any[]>([]);
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const fetcher = async () => {
     try {
       // @ts-ignore
-      const res = await hcsService.tags({organization, tagPattern});
+      const res = await hcsService.tags({organization, tagPattern}, {cancelToken: source.token});
       // console.log(res);
       setTags([...res.data]);
     } catch (error: any) {
@@ -35,6 +41,11 @@ const TagsSelect = ({
 
   React.useEffect(() => {
     fetcher();
+
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setTags([]);
+    };
   }, []);
 
   React.useEffect(() => {
@@ -43,7 +54,8 @@ const TagsSelect = ({
     // eslint-disable-next-line
     if (serviceType) {
       // #grade# دانش آموز بزرگسال
-      params = {...queryParams, tags: [`#grade# ${serviceType}`]};
+      // params = {...queryParams, tags: [`#grade# ${serviceType}`]};
+      params = {...queryParams, tags: [`${serviceType}`]};
     } else {
       params = {...queryParams, tags: []};
     }
@@ -61,7 +73,9 @@ const TagsSelect = ({
           <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-            <span className="ml-10 whitespace-nowrap truncate">{serviceType || placeholder}</span>
+            <span className="ml-10 whitespace-nowrap truncate">
+              {serviceType ? serviceType.replace(/#grade#/g, '') : placeholder}
+            </span>
             <DownIcon className="h-2 w-2.5 mr-2" />
           </Menu.Button>
         </div>
@@ -99,7 +113,7 @@ const TagsSelect = ({
                       } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-xs text-left rtl:text-right truncate`}
                       onClick={() => {
                         // #grade# دانش آموز بزرگسال
-                        setServiceType(value.value);
+                        setServiceType(value.key);
                         //   setQueryParams({
                         //     ...queryParams,
                         //     tags: index !== 0 ? [value].join(',') : '',

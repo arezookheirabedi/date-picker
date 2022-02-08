@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {useHistory, useLocation} from 'react-router-dom';
-import hcsService from 'src/services/hcs.service';
+// import hcsService from 'src/services/hcs.service';
 import {Menu} from '@headlessui/react';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities, toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
-interface TestStatusProvinceProps {
-  cityTitle: any;
-}
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 const filterTypes = [
   {
@@ -26,73 +22,63 @@ const filterTypes = [
     enName: 'LOWEST',
   },
 ];
-// eslint-disable-next-line
-const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  });
+
+const TestStatus: React.FC<{}> = () => {
+  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [orgDataset, setOrgDataset] = useState<any>([]);
+  // eslint-disable-next-line
+  const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
+  // eslint-disable-next-line
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
+  // eslint-disable-next-line
   async function getOverviewByCategory(params: any) {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.testResultTagBased(params);
-      const normalizedDate: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedDate.push({
-          id: `ovca_${index}`,
-          name: item.tag || 'نامشخص',
-          total: item.total || 0,
-          positiveCount: item.positiveCount || 0,
-          negativeCount: item.negativeCount || 0,
-          unknownCount:
-            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
-          // deadCount: 120,
-        });
-      });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
-      setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
-      });
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    // setLoading(true);
+    // try {
+    //   const {data} = await hcsService.testResultTagBased(params);
+    //   const normalizedDate: any[] = [];
+    //   data.forEach((item: any, index: number) => {
+    //     normalizedDate.push({
+    //       id: `ovca_${index}`,
+    //       name: item.tag || 'نامشخص',
+    //       total: item.total || 0,
+    //       positiveCount: item.positiveCount || 0,
+    //       negativeCount: item.negativeCount || 0,
+    //       unknownCount:
+    //         (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
+    //       // deadCount: 120,
+    //     });
+    //   });
+    //   setDataset([...normalizedDate]);
+    //   setOrgDataset([...normalizedDate]);
+    //   setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+    // } catch (error) {
+    //   // eslint-disable-next-line
+    //   console.log(error);
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
+    getOverviewByCategory({
+      organization: 'employment',
+      tags: ['^((?!استان).)*$'].join(','),
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
+      from: '',
+      to: '',
     });
-    if (existsCity) {
-      getOverviewByCategory({
-        organization: 'employment',
-        from: '',
-        to: '',
-        tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
-      });
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
-  }, [location.search]);
+  }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -119,29 +105,18 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      if (existsCity) {
-        getOverviewByCategory({
-          organization: 'employment',
-          // resultStatus: 'POSITIVE',
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          // province: provinceName,
-          tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
-        });
-      } else {
-        history.push('/dashboard/recruitment/province');
-      }
+      getOverviewByCategory({
+        organization: 'employment',
+        // resultStatus: 'POSITIVE',
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tags: [],
+      });
     }
   }, [selectedDayRange]);
 
@@ -194,38 +169,10 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        وضعیت آزمایش کارکنان دولت استان‌ &nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">آزمایش در اصناف</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center">
-          <div className="relative inline-flex align-center leading-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="جستجو"
-              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
-              onChange={handleSearch}
-              value={searchQuery}
-            />
-          </div>
-        </div>
-        <div className="flex flex-grow align-center justify-end space-x-5 rtl:space-x-reverse">
+        <div className="flex align-center space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             <Menu
               as="div"
@@ -243,11 +190,12 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               </div>
 
               <Menu.Items
-                style={{minWidth: '200px'}}
+                style={{width: '250px'}}
                 className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <div className="px-1 py-1 ">
                   {filterTypes.map((value: any, index: any) => {
+                    // console.log(value);
                     return (
                       // eslint-disable-next-line
                       <Menu.Item key={index}>
@@ -259,8 +207,13 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                             } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
                             onClick={() => {
                               setFilterType(value);
+                              // setQueryParams({
+                              //   ...queryParams,
+                              //   tag: value.enName,
+                              // });
                             }}
                           >
+                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                             {value.name}
                           </button>
                         )}
@@ -311,6 +264,32 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 <img src={calendar} alt="x" className="w-5 h-5" />
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="flex flex-grow align-center justify-end">
+          <div className="relative inline-flex align-center leading-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              type="text"
+              placeholder="جستجو"
+              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              onChange={handleSearch}
+              value={searchQuery}
+            />
           </div>
         </div>
       </div>
@@ -373,13 +352,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'دسته',
+                name: 'نام رسته',
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {((page - 1) * 10 + (index + 1)).toPersianDigits()}.
-                    {/* eslint-disable-next-line */}
-                    {v.replace(/استان\s(.*)_/g, '')}
+                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
                   </div>
                 ),
               },
@@ -431,7 +408,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               //   ),
               // },
             ]}
-            totalItems={(dataset || []).length || 0}
+            totalItems={(dataset || []).length}
           />
         )}
       </div>
@@ -439,4 +416,4 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   );
 };
 
-export default TestStatusProvince;
+export default TestStatus;

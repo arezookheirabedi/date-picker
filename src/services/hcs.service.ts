@@ -1,20 +1,20 @@
 import qs from 'qs';
 import request from '../helpers/request';
 
-function membersGeneral({organization, tag, ...params}: any = {}) {
+function membersGeneral({organization, tag, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params);
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params, {...config});
 }
 
 function membersTagBased({
-  organization,
-  ...params
-}: {
+                           organization,
+                           ...params
+                         }: {
   organization: string;
-  params?: {tagPattern: string; tags: any; from: string; to: string};
-}) {
+  params?: { tagPattern: string; tags: any; from: string; to: string };
+}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -23,17 +23,17 @@ function membersTagBased({
         arrayFormat: 'comma',
       })}`,
       {},
-      {}
+      {...config}
     );
 }
 
 function testResultTimeBased({
-  organization,
-  ...params
-}: {
+                               organization,
+                               ...params
+                             }: {
   organization: string;
-  params?: {status: string; type: string; from: string; to: string; tag: string};
-}) {
+  params?: { status: string; type: string; from: string; to: string; tag: string };
+}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -45,17 +45,17 @@ function testResultTimeBased({
         }
       )}`,
       {},
-      {}
+      {...config}
     );
 }
 
 function testResultTagBased({
-  organization,
-  ...params
-}: {
+                              organization,
+                              ...params
+                            }: {
   organization: string;
-  params?: {tagPattern: string; from: string; to: string};
-}) {
+  params?: { tagPattern: string; from: string; to: string };
+}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -64,11 +64,12 @@ function testResultTagBased({
         params,
         {arrayFormat: 'comma'}
       )}`,
-      {}
+      {},
+      {...config}
     );
 }
 
-function dosesTagBased({organization, ...params}: {organization: string; params: any}) {
+function dosesTagBased({organization, ...params}: { organization: string; params: any }, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -77,22 +78,23 @@ function dosesTagBased({organization, ...params}: {organization: string; params:
         params,
         {arrayFormat: 'comma'}
       )}`,
-      {}
+      {},
+      {...config}
     );
 }
 
-function doses({organization, ...params}: {organization: string; params: any}) {
+function doses({organization, ...params}: { organization: string; params: any }, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params);
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params, {...config});
 }
 
-function tags({organization, ...params}: {organization: string; params?: any}) {
+function tags({organization, ...params}: { organization: string; params?: any }, {...config}) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/tags`, params);
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/tags`, params, {...config});
 }
 
 const hcsService = {
