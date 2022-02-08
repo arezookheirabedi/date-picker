@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -18,8 +19,13 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   const location = useLocation();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -28,8 +34,9 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
   async function getOverviewByCategory(params: any) {
     setLoading(true);
+    setIsCancel(false);
     try {
-      const {data} = await hcsService.membersTagBased(params);
+      const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
 
       const normalizedDate: any[] = [];
       data.forEach((item: any, index: number) => {
@@ -46,9 +53,12 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         }
       });
       setDataset([...normalizedDate]);
+      setIsCancel(false);
     } catch (error) {
       // eslint-disable-next-line
-      console.log(error);
+      if (error && error.message === 'cancel') {
+        setIsCancel(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,11 +72,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -74,7 +84,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -105,6 +115,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       //
     } else {
       history.push('/dashboard/school/province');
+    }
+
+    return () => {
+      setDataset([]);
+      source.cancel('Operation canceled by the user.');
     }
   }, [location.search]);
 
@@ -138,6 +153,10 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         history.push('/dashboard/school/province');
       }
     }
+
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    }
   }, [selectedDayRange]);
 
   return (
@@ -165,11 +184,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 {toPersianDigit(generateFromDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
+          <span className="dash-separator"/>
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -181,14 +200,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 {toPersianDigit(generateToDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5" />
+            <img src={calendar} alt="x" className="w-5 h-5"/>
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
+        {loading || isCancel ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table

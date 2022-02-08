@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import hcsService from 'src/services/hcs.service';
@@ -17,6 +19,7 @@ import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
+
 
 interface OverviewOfVaccinationProvinceProps {
   cityTitle: any;
@@ -42,6 +45,9 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     numberOfUnvaccinated: 0,
   });
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const {total: totalMembers} = useSelector(state => state.studentMembers);
 
   const location = useLocation();
@@ -50,8 +56,19 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
-      const {data} = await hcsService.doses(params);
-      let tmp = {...counts};
+      const {data} = await hcsService.doses(params, {cancelToken: source.token});
+      let tmp = {
+        numberOfEmployees: 0,
+        numberOfStudents: 0,
+        numberOfTeachers: 0,
+        numberOfFirstDose: 0,
+        numberOfSecondDose: 0,
+        numberOfThirdDose: 0,
+        numberOfMoreThreeDose: 0,
+        numberOfAllDose: 0,
+        numberOfUnknownDose: 0,
+        numberOfUnvaccinated: 0,
+      };
 
       // eslint-disable-next-line no-plusplus
       for (let j: number = 0; j < data.length; j++) {
@@ -109,7 +126,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.dosesTagBased(params);
+      const {data} = await hcsService.dosesTagBased(params, {cancelToken: source.token});
       const normalizedData: any[] = [];
 
       data.forEach((item: any, index: number) => {
@@ -211,7 +228,21 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     } else {
       history.push('/dashboard/school/province');
     }
+
+    return () => {
+      if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }
   }, [location.search]);
+
+
+  useEffect(() => {
+    return () => {
+      setCounts({})
+      setDataset([])
+    }
+  }, [history])
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

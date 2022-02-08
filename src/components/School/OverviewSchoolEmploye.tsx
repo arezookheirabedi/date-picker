@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 import {useDispatch} from 'react-redux';
-import { addTotalEmployeMembersAc } from 'src/store/action_creators';
+import {addTotalEmployeMembersAc} from 'src/store/action_creators';
 import Statistic from '../../containers/Guild/components/Statistic';
 import totalRecritment from '../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
@@ -12,8 +14,10 @@ import prescriptionIcon from '../../assets/images/icons/prescription.svg';
 import testIcon from '../../assets/images/icons/test-color.svg';
 import hcsService from '../../services/hcs.service';
 
+
 const OverviewSchoolEmploye = () => {
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line
   const [numberOf, setNumberOf] = useState(null);
   const [numberOfPositives, setNumberOfPositives] = useState(null);
   // eslint-disable-next-line
@@ -25,6 +29,9 @@ const OverviewSchoolEmploye = () => {
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const dispatch = useDispatch();
 
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
   const getNumberOf = async () => {
     setLoading(true);
     try {
@@ -34,7 +41,7 @@ const OverviewSchoolEmploye = () => {
         testResultCount: true,
         vaccinationCount: true,
         total: true,
-      });
+      }, {cancelToken: source.token});
 
       dispatch(addTotalEmployeMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
@@ -46,28 +53,23 @@ const OverviewSchoolEmploye = () => {
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
-      
-      // @ts-ignore
-      setNumberOf(0);
-      // @ts-ignore
-      setNumberOfPositives(0);
-      // @ts-ignore
-      setNumberOfNegatives(0);
-      // @ts-ignore
-      setNumberOfRecovered(0);
-      // @ts-ignore
-      setNumberOfTestResults(0);
-      // @ts-ignore
-      setNumberOfVaccination(0);
+
     } finally {
       setLoading(false);
     }
   };
 
- 
-
   useEffect(() => {
     getNumberOf();
+    return () => {
+      setNumberOf(null);
+      setNumberOfPositives(null);
+      setNumberOfVaccination(null);
+      setNumberOfNanVaccinated(null);
+      setNumberOfRecovered(null);
+      setNumberOfTestResults(null);
+      source.cancel('Operation canceled by the user.');
+    }
   }, []);
 
 
@@ -78,7 +80,8 @@ const OverviewSchoolEmploye = () => {
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalRecritment}
             text="مجموع کارمندان آموزش پرورش"
@@ -97,16 +100,17 @@ const OverviewSchoolEmploye = () => {
             count={numberOfRecovered}
             loading={loading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-        <Statistic
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+          <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOfVaccination}
             loading={loading}
           />
-          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-"/>
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"

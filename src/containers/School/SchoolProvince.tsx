@@ -38,12 +38,11 @@ const SchoolProvince = () => {
 
       {/* <OverviewProvince cityTitle={cityTitle} /> */}
       {/* <OverviewSchoolEmployeProvince cityTitle={cityTitle} /> */}
-      <OverviewSchoolStudentProvince cityTitle={cityTitle} />
-
-      <OverviewCategoriesProvince cityTitle={cityTitle} />
-      <OverviewPatientsProvince cityTitle={cityTitle} />
-      <OverviewOfVaccinationProvince cityTitle={cityTitle} />
-      <TestsStatusProvince cityTitle={cityTitle} />
+      <OverviewSchoolStudentProvince cityTitle={cityTitle}/>
+      <OverviewCategoriesProvince cityTitle={cityTitle}/>
+      <OverviewPatientsProvince cityTitle={cityTitle}/>
+      <OverviewOfVaccinationProvince cityTitle={cityTitle}/>
+      <TestsStatusProvince cityTitle={cityTitle}/>
     </div>
   );
 };

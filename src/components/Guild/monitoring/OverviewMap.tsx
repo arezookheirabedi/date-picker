@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 
-import Charts from '../Charts';
-import map from '../Charts/ir-all.geo.json';
-import mapData from '../Charts/mapData.json';
-import {sideCities} from '../../helpers/utils';
+import Charts from '../../Charts';
+import map from '../../Charts/ir-all.geo.json';
+import mapData from '../../Charts/mapData.json';
+import {sideCities} from '../../../helpers/utils';
 
 const {Map} = Charts;
 
@@ -229,7 +229,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت واکسیناسیون{' '}
+        نگاه کلی به وضعیت اصناف{' '}
         {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
