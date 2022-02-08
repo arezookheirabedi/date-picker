@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
+import {schoolTypes} from 'src/helpers/sortingModels';
+
 // @ts-ignore
 import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
@@ -27,9 +29,18 @@ const OverviewCategories: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
+      const sortData: any = [];
+
+      schoolTypes.forEach(item => {
+        const tm = data.find((i: any) => i.tag === item);
+        sortData.push(tm);
+      });
+
+      // console.log(sortData);
+      // console.log(schoolTypes);
 
       const normalizedDate: any[] = [];
-      data.forEach((item: any, index: number) => {
+      sortData.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
@@ -61,9 +72,9 @@ const OverviewCategories: React.FC<{}> = () => {
     });
 
     return () => {
-      setDataset([])
+      setDataset([]);
       source.cancel('Operation canceled by the user.');
-    }
+    };
   }, []);
 
   const focusFromDate = () => {
@@ -74,11 +85,11 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -86,7 +97,7 @@ const OverviewCategories: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -128,11 +139,11 @@ const OverviewCategories: React.FC<{}> = () => {
                 {toPersianDigit(generateFromDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -144,14 +155,14 @@ const OverviewCategories: React.FC<{}> = () => {
                 {toPersianDigit(generateToDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table

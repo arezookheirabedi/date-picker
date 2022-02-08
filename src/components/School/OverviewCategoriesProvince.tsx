@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
+import {schoolTypes} from 'src/helpers/sortingModels';
+
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -37,9 +39,33 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     setIsCancel(false);
     try {
       const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
+      console.log(data);
+
+      const sortData: any = [];
+
+      schoolTypes.forEach((item: any) => {
+        const tm = data.find((i: any) => {
+          // console.log('item => ', item);
+          // console.log('tag => ', i.tag.replace(/استان\s(.*)_/g, '').replace(/_\sاستان\s(.*)/g, ''));
+          // // eslint-disable-next-line
+          // console.log(
+          //   i.tag
+          //     .replace(/استان\s(.*)_/g, '')
+          //     .replace(/_\sاستان\s(.*)/g, '')
+          //     .trim() === item
+          // );
+          return (
+            i.tag
+              .replace(/استان\s(.*)_/g, '')
+              .replace(/_\sاستان\s(.*)/g, '')
+              .trim() === item
+          );
+        });
+        if (tm) sortData.push(tm);
+      });
 
       const normalizedDate: any[] = [];
-      data.forEach((item: any, index: number) => {
+      sortData.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedDate.push({
             id: `ovca_${index}`,
@@ -72,11 +98,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -84,7 +110,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -120,7 +146,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     return () => {
       setDataset([]);
       source.cancel('Operation canceled by the user.');
-    }
+    };
   }, [location.search]);
 
   useEffect(() => {
@@ -156,7 +182,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
     return () => {
       source.cancel('Operation canceled by the user.');
-    }
+    };
   }, [selectedDayRange]);
 
   return (
@@ -184,11 +210,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 {toPersianDigit(generateFromDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -200,14 +226,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 {toPersianDigit(generateToDate())}
               </span>
             )}
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            <img src={calendar} alt="x" className="w-5 h-5" />
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading || isCancel ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table
