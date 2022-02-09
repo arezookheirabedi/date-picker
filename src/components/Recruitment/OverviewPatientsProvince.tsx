@@ -42,7 +42,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
   const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
-    type: 'ANNUAL',
+    type: 'MONTHLY',
     from: '',
     to: '',
     tags: '',
@@ -198,8 +198,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
           </div>
 
           <RangeDateSliderFilter
-            queryParams={queryParams}
-            setQueryParams={setQueryParams}
+            changeType={v => console.log('D', v)}
+            selectedType={queryParams.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />

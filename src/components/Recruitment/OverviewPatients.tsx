@@ -59,7 +59,7 @@ const OverviewPatients = () => {
 
   const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
-    type: 'ANNUAL',
+    type: 'MONTHLY',
     from: '',
     to: '',
     tags: '',
@@ -161,8 +161,13 @@ const OverviewPatients = () => {
           </div>
 
           <RangeDateSliderFilter
-            queryParams={queryParams}
-            setQueryParams={setQueryParams}
+            changeType={v =>
+              setQueryParams({
+                ...queryParams,
+                type: v,
+              })
+            }
+            selectedType={queryParams.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
