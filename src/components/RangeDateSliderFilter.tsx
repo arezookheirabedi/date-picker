@@ -32,8 +32,8 @@ const dotStyle = {
 };
 
 interface IProps {
-  queryParams: any;
-  setQueryParams: any;
+  selectedType: any;
+  changeType: (v: any) => void;
   wrapperClassName?: string;
   dates?: {
     from: any | null | undefined;
@@ -43,8 +43,8 @@ interface IProps {
 
 // eslint-disable-next-line
 const RangeDateSliderFilter: React.FC<IProps> = ({
-  setQueryParams = null,
-  queryParams,
+  changeType,
+  selectedType,
   dates,
   wrapperClassName,
 }) => {
@@ -55,7 +55,7 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       label: 'سالیانه',
       enLabel: 'ANNUAL',
       style: {
-        color: '#193149',
+        color: '#B2B2B2',
       },
     },
     {
@@ -63,7 +63,7 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       label: 'ماهانه',
       enLabel: 'MONTHLY',
       style: {
-        color: '#B2B2B2',
+        color: '#193149',
       },
     },
     {
@@ -83,16 +83,13 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       },
     },
   ]) as any;
+  const [selected, setSelected] = useState<number>(2);
 
   // eslint-disable-next-line
-
   const detectSliderChange = (value: any) => {
     return setMarks((prevState: any) => {
       return prevState.map((it: any) => {
         if (it.value === value) {
-          setQueryParams((prevS: any) => {
-            return {...prevS, type: it.enLabel};
-          });
           return {...it, style: {color: '#193149'}};
         }
         return {...it, style: {color: '#B2B2B2'}};
@@ -126,21 +123,54 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
         tmp.push(1);
         lastState = 'DAILY';
       }
-
       setDisabledDays([...tmp]);
-      setQueryParams({
-        ...queryParams,
-        type: lastState,
-        from: start.format('YYYY-MM-DDTHH:mm:ss'),
-        to: end.format('YYYY-MM-DDTHH:mm:ss'),
-      });
     } else {
       setDisabledDays([]);
-      setQueryParams({...queryParams, type: lastState});
     }
 
-    detectSliderChange(marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1);
+    changeType(lastState);
   }, [dates]);
+
+  useEffect(() => {
+    setSelected(
+      // eslint-disable-next-line
+      selectedType === 'ANNUAL'
+        ? 3
+        : // eslint-disable-next-line
+        selectedType === 'MONTHLY'
+        ? 2
+        : // eslint-disable-next-line
+        selectedType === 'WEEKLY'
+        ? 1
+        : // eslint-disable-next-line
+        selectedType === 'DAILY'
+        ? 0
+        : 2
+    );
+  }, [selectedType]);
+
+  useEffect(() => {
+    detectSliderChange(selected);
+  }, [selected]);
+
+  function handleChangeSeleted(v: any) {
+    changeType(
+      // eslint-disable-next-line
+      v === 3
+        ? 'ANNUAL'
+        : // eslint-disable-next-line
+        v === 2
+        ? 'MONTHLY'
+        : // eslint-disable-next-line
+        v === 1
+        ? 'WEEKLY'
+        : // eslint-disable-next-line
+        v === 0
+        ? 'DAILY'
+        : 'MONTHLY'
+    );
+  }
+  
 
   return (
     <>
@@ -154,9 +184,9 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
               })}
             step={1}
             min={0}
-            defaultValue={marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1}
+            defaultValue={selected}
             max={marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1}
-            onChange={detectSliderChange}
+            onChange={handleChangeSeleted}
             className="filter-range-slider"
             railStyle={railStyle}
             trackStyle={trackStyle}
