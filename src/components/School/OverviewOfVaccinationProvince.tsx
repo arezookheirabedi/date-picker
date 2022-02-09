@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
+import {schoolTypes} from 'src/helpers/sortingModels';
 
 import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'src/hooks/useTypedSelector';
@@ -20,14 +21,13 @@ import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
 
-
 interface OverviewOfVaccinationProvinceProps {
   cityTitle: any;
 }
 
 const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
-                                                                                       cityTitle,
-                                                                                     }) => {
+  cityTitle,
+}) => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [countsLoading, setCountsLoading] = useState(false);
@@ -103,7 +103,6 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           //   tmp = {...tmp, numberOfMoreThreeDose: tmp.numberOfMoreThreeDose + Number(value)};
           // }
 
-
           if (Number(key) !== 0 && key !== 'null') {
             tmp = {...tmp, numberOfAllDose: tmp.numberOfAllDose + Number(value)};
           }
@@ -127,9 +126,32 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     setLoading(true);
     try {
       const {data} = await hcsService.dosesTagBased(params, {cancelToken: source.token});
+      const sortData: any = [];
+
+      schoolTypes.forEach((item: any) => {
+        const tm = data.find((i: any) => {
+          // console.log('item => ', item);
+          // console.log('tag => ', i.tag.replace(/استان\s(.*)_/g, '').replace(/_\sاستان\s(.*)/g, ''));
+          // // eslint-disable-next-line
+          // console.log(
+          //   i.tag
+          //     .replace(/استان\s(.*)_/g, '')
+          //     .replace(/_\sاستان\s(.*)/g, '')
+          //     .trim() === item
+          // );
+          return (
+            i.tag
+              .replace(/استان\s(.*)_/g, '')
+              .replace(/_\sاستان\s(.*)/g, '')
+              .trim() === item
+          );
+        });
+        if (tm) sortData.push(tm);
+      });
+
       const normalizedData: any[] = [];
 
-      data.forEach((item: any, index: number) => {
+      sortData.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
         let thirdDose = 0;
@@ -233,16 +255,15 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       if (existsCity) {
         source.cancel('Operation canceled by the user.');
       }
-    }
+    };
   }, [location.search]);
-
 
   useEffect(() => {
     return () => {
-      setCounts({})
-      setDataset([])
-    }
-  }, [history])
+      setCounts({});
+      setDataset([]);
+    };
+  }, [history]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -251,8 +272,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         {cityTitle}
       </legend>
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           {/* <Statistic
             icon={totalEmploye1}
             text="مجموع کارمندان آموزشی"
@@ -285,8 +305,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             loading={countsLoading}
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={NavyVaccine}
             text="تعداد واکسیناسیون دوز سوم"
@@ -306,8 +325,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             loading={countsLoading}
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GrayVaccine2}
             text="تعداد واکسیناسیون انجام نشده"
@@ -320,13 +338,13 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             count={counts.numberOfAllDose || 0}
             loading={countsLoading}
           />
-          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative"/>
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
           {/* <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
         </div>
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>
