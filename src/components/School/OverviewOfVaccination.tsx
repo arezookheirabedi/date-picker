@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
+import {schoolTypes} from 'src/helpers/sortingModels';
 
 import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
@@ -17,7 +18,6 @@ import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
-
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   });
   const {CancelToken} = axios;
   const source = CancelToken.source();
-
 
   const {total: totalMembers, employe: totalEmploye} = useSelector(state => state.studentMembers);
 
@@ -104,9 +103,16 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsService.dosesTagBased(params, {cancelToken: source.token});
+      const sortData: any = [];
+
+      schoolTypes.forEach(item => {
+        const tm = data.find((i: any) => i.tag === item);
+        if (tm) sortData.push(tm);
+      });
+
       const normalizedData: any[] = [];
 
-      data.forEach((item: any, index: number) => {
+      sortData.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
         let thirdDose = 0;
@@ -196,10 +202,10 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     });
 
     return () => {
-      setCounts({})
-      setDataset([])
+      setCounts({});
+      setDataset([]);
       source.cancel('Operation canceled by the user.');
-    }
+    };
   }, []);
 
   return (
@@ -207,8 +213,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در آموزش و پرورش</legend>
 
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           {/* <Statistic
             icon={totalEmploye1}
             text="مجموع کارمندان آموزشی"
@@ -235,8 +240,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={PurppleVaccine}
             text="تعداد واکسیناسیون دوز دوم"
@@ -256,8 +260,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={countsLoading}
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
@@ -282,7 +285,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       </div>
       {loading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>
