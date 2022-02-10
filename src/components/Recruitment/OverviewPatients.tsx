@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
+// eslint-disable-next-line
 import moment from 'moment-jalaali';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFliter';
+import RangeDateSliderFilter from '../RangeDateSliderFilter';
 import Charts from '../Charts';
 import {toPersianDigit} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
@@ -58,7 +59,7 @@ const OverviewPatients = () => {
 
   const [queryParams, setQueryParams] = useState<IParams>({
     status: 'POSITIVE',
-    type: 'ANNUAL',
+    type: 'MONTHLY',
     from: '',
     to: '',
     tags: '',
@@ -95,8 +96,33 @@ const OverviewPatients = () => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+
+      const tmp: any[] = [];
+      let lastState = 'ANNUAL';
+
+      const start = moment(finalFromDate, 'jYYYY/jM/jD');
+      const end = moment(finalToDate, 'jYYYY/jM/jD');
+
+      const duration = moment.duration(end.diff(start));
+
+      if (!duration.years()) {
+        tmp.push(3);
+        lastState = 'MONTHLY';
+      }
+
+      if (!duration.months() && !duration.years()) {
+        tmp.push(2);
+        lastState = 'WEEKLY';
+      }
+
+      if (!duration.weeks() && !duration.months() && !duration.years()) {
+        tmp.push(1);
+        lastState = 'DAILY';
+      }
+
       setQueryParams({
         ...queryParams,
+        type: lastState,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
@@ -108,11 +134,11 @@ const OverviewPatients = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان کارکنان دولت</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between w-3/4 px-8">
+          <div className="flex align-center justify-between flex-grow px-8">
             <TagsSelect
               placeholder="کل کارکنان"
               organization="employment"
-              tagPattern='^(?!.*(استان)).*$'
+              tagPattern="^(?!.*(استان)).*$"
               setQueryParams={setQueryParams}
               queryParams={queryParams}
             />
@@ -158,9 +184,17 @@ const OverviewPatients = () => {
             </div>
           </div>
 
-          <div className="w-1/4">
-            <RangeDateSliderFilter setQueryParams={setQueryParams} />
-          </div>
+          <RangeDateSliderFilter
+            changeType={v =>
+              setQueryParams({
+                ...queryParams,
+                type: v,
+              })
+            }
+            selectedType={queryParams.type}
+            dates={selectedDayRange}
+            wrapperClassName="w-1/4"
+          />
         </div>
 
         {loading && (
