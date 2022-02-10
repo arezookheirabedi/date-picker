@@ -190,7 +190,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                 </Menu.Button>
               </div>
 
-              <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="z-40 absolute left-0 xl:right-0 w-52 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {transportationTypes.map((value: any, index: any) => {
                     return (
@@ -201,7 +201,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                             type="button"
                             className={`${
                               active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm whitespace-nowrap`}
                             onClick={() => {
                               setServiceType(value);
                               setQueryParams({
