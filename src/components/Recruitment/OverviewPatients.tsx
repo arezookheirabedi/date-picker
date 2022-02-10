@@ -81,7 +81,6 @@ const OverviewPatients = () => {
   };
 
   useEffect(() => {
-    console.log('object', queryParams);
     const idSetTimeOut = setTimeout(() => {
       getLinearOverview({
         organization: 'employment',
@@ -93,17 +92,42 @@ const OverviewPatients = () => {
     return () => clearTimeout(idSetTimeOut);
   }, [queryParams]);
 
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-  //     setQueryParams({
-  //       ...queryParams,
-  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-  //     });
-  //   }
-  // }, [selectedDayRange]);
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+
+      const tmp: any[] = [];
+      let lastState = 'ANNUAL';
+
+      const start = moment(finalFromDate, 'jYYYY/jM/jD');
+      const end = moment(finalToDate, 'jYYYY/jM/jD');
+
+      const duration = moment.duration(end.diff(start));
+
+      if (!duration.years()) {
+        tmp.push(3);
+        lastState = 'MONTHLY';
+      }
+
+      if (!duration.months() && !duration.years()) {
+        tmp.push(2);
+        lastState = 'WEEKLY';
+      }
+
+      if (!duration.weeks() && !duration.months() && !duration.years()) {
+        tmp.push(1);
+        lastState = 'DAILY';
+      }
+
+      setQueryParams({
+        ...queryParams,
+        type: lastState,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+      });
+    }
+  }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
