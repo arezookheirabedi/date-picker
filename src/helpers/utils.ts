@@ -158,6 +158,24 @@ export const getServiceTypeName = (item: any) => {
       return 'موتور سیکلت';
     case 'SCHOOL_SERVICE':
       return 'سرویس مدارس';
+    case 'AGENCIES_UNDER_THE_SUPERVISION_OF_THE_MUNICIPALITY':
+      return 'سازمان های زیر نظر شهرداری';
+    case 'GUILD_AGENCIES':
+      return 'آژانس';
+    case 'BUS_DRIVING':
+      return 'انوبوسرانی';
+    case 'BIKE_DELIVERY':
+      return 'پیک موتوری';
+    case 'SUBURBAN_TAXI':
+      return 'تاکسی برون شهری';
+    case 'IN_CITY_TAXI':
+      return 'تاکسی درون شهری';
+    case 'CARGO_FLEET':
+      return 'ناوگان باربری';
+    case 'ONLINE_TAXI':
+      return 'تاکسی آنلاین';
+    case 'SAMAS':
+      return 'سماس';
     default:
       return null;
   }
@@ -204,6 +222,42 @@ export const transportationTypes = [
   {
     name: 'سرویس مدارس',
     enName: 'SCHOOL_SERVICE',
+  },
+  {
+    name: 'آژانس',
+    enName: 'GUILD_AGENCIES',
+  },
+  {
+    name: 'انوبوسرانی',
+    enName: 'BUS_DRIVING',
+  },
+  {
+    name: 'پیک موتوری',
+    enName: 'BIKE_DELIVERY',
+  },
+  {
+    name: 'تاکسی برون شهری',
+    enName: 'SUBURBAN_TAXI',
+  },
+  {
+    name: 'تاکسی درون شهری',
+    enName: 'IN_CITY_TAXI',
+  },
+  {
+    name: 'ناوگان باربری',
+    enName: 'CARGO_FLEET',
+  },
+  {
+    name: 'تاکسی آنلاین',
+    enName: 'ONLINE_TAXI',
+  },
+  {
+    name: 'سماس',
+    enName: 'SAMAS',
+  },
+  {
+    name: 'سازمان های زیر نظر شهرداری',
+    enName: 'AGENCIES_UNDER_THE_SUPERVISION_OF_THE_MUNICIPALITY',
   },
 ];
 
