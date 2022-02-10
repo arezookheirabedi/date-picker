@@ -1,6 +1,7 @@
 import Slider from 'rc-slider';
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
+// eslint-disable-next-line
 import moment from 'moment-jalaali';
 
 const railStyle = {
@@ -32,8 +33,8 @@ const dotStyle = {
 };
 
 interface IProps {
-  selectedType: any;
-  changeType: (v: any) => void;
+  selectedType: string;
+  changeType: (v: string) => void;
   wrapperClassName?: string;
   dates?: {
     from: any | null | undefined;
@@ -42,12 +43,43 @@ interface IProps {
 }
 
 // eslint-disable-next-line
+const convertLabelToValue: (label: string) => number = label => {
+  switch (label) {
+    case 'ANNUAL':
+      return 3;
+    case 'MONTHLY':
+      return 2;
+    case 'WEEKLY':
+      return 1;
+    case 'DAILY':
+      return 0;
+    default:
+      return 2;
+  }
+};
+
+const convertValueToLabel: (value: number) => string = value => {
+  switch (value) {
+    case 3:
+      return 'ANNUAL';
+    case 2:
+      return 'MONTHLY';
+    case 1:
+      return 'WEEKLY';
+    case 0:
+      return 'DAILY';
+    default:
+      return 'MONTHLY';
+  }
+};
+
 const RangeDateSliderFilter: React.FC<IProps> = ({
-  changeType,
   selectedType,
-  dates,
+  changeType,
+  dates = {from: null, to: null},
   wrapperClassName,
 }) => {
+  // eslint-disable-next-line
   const [disabledDays, setDisabledDays] = useState<any[]>([]);
   const [marks, setMarks] = useState([
     {
@@ -63,7 +95,7 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       label: 'ماهانه',
       enLabel: 'MONTHLY',
       style: {
-        color: '#193149',
+        color: '#B2B2B2',
       },
     },
     {
@@ -83,10 +115,9 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       },
     },
   ]) as any;
-  const [selected, setSelected] = useState<number>(2);
 
   // eslint-disable-next-line
-  const detectSliderChange = (value: any) => {
+  const detectSliderChange = (value: number) => {
     return setMarks((prevState: any) => {
       return prevState.map((it: any) => {
         if (it.value === value) {
@@ -99,7 +130,6 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
 
   useEffect(() => {
     const tmp: any[] = [];
-    let lastState = 'ANNUAL';
     if (dates?.from && dates?.to) {
       const finalFromDate = `${dates.from.year}/${dates.from.month}/${dates.from.day}`;
       const finalToDate = `${dates.to.year}/${dates.to.month}/${dates.to.day}`;
@@ -111,66 +141,29 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
 
       if (!duration.years()) {
         tmp.push(3);
-        lastState = 'MONTHLY';
       }
 
       if (!duration.months() && !duration.years()) {
         tmp.push(2);
-        lastState = 'WEEKLY';
       }
 
       if (!duration.weeks() && !duration.months() && !duration.years()) {
         tmp.push(1);
-        lastState = 'DAILY';
       }
       setDisabledDays([...tmp]);
     } else {
       setDisabledDays([]);
     }
-
-    changeType(lastState);
   }, [dates]);
 
   useEffect(() => {
-    setSelected(
-      // eslint-disable-next-line
-      selectedType === 'ANNUAL'
-        ? 3
-        : // eslint-disable-next-line
-        selectedType === 'MONTHLY'
-        ? 2
-        : // eslint-disable-next-line
-        selectedType === 'WEEKLY'
-        ? 1
-        : // eslint-disable-next-line
-        selectedType === 'DAILY'
-        ? 0
-        : 2
-    );
+    detectSliderChange(convertLabelToValue(selectedType));
   }, [selectedType]);
 
-  useEffect(() => {
-    detectSliderChange(selected);
-  }, [selected]);
-
+  // eslint-disable-next-line
   function handleChangeSeleted(v: any) {
-    changeType(
-      // eslint-disable-next-line
-      v === 3
-        ? 'ANNUAL'
-        : // eslint-disable-next-line
-        v === 2
-        ? 'MONTHLY'
-        : // eslint-disable-next-line
-        v === 1
-        ? 'WEEKLY'
-        : // eslint-disable-next-line
-        v === 0
-        ? 'DAILY'
-        : 'MONTHLY'
-    );
+    changeType(convertValueToLabel(v));
   }
-  
 
   return (
     <>
@@ -180,12 +173,13 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
             marks={marks
               .filter((x: any) => !disabledDays.includes(x.value))
               .sort((a: any, b: any) => {
-                return a - b;
+                return a.value - b.value;
               })}
             step={1}
             min={0}
-            defaultValue={selected}
+            // max={3}
             max={marks.filter((x: any) => !disabledDays.includes(x.value)).length - 1}
+            value={convertLabelToValue(selectedType)}
             onChange={handleChangeSeleted}
             className="filter-range-slider"
             railStyle={railStyle}
@@ -198,5 +192,4 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
     </>
   );
 };
-
 export default RangeDateSliderFilter;

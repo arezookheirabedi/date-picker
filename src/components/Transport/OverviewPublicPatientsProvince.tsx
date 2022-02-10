@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
-// import moment from 'moment-jalaali';
+import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 import DatePickerModal from '../DatePickerModal';
@@ -129,19 +129,42 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     };
   }, [history]);
 
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-  //     setQueryParams({
-  //       ...queryParams,
-  //       fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //     });
-  //   }
-  // }, [selectedDayRange]);
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+
+      const tmp: any[] = [];
+      let lastState = 'ANNUAL';
+
+      const start = moment(finalFromDate, 'jYYYY/jM/jD');
+      const end = moment(finalToDate, 'jYYYY/jM/jD');
+
+      const duration = moment.duration(end.diff(start));
+
+      if (!duration.years()) {
+        tmp.push(3);
+        lastState = 'MONTHLY';
+      }
+
+      if (!duration.months() && !duration.years()) {
+        tmp.push(2);
+        lastState = 'WEEKLY';
+      }
+
+      if (!duration.weeks() && !duration.months() && !duration.years()) {
+        tmp.push(1);
+        lastState = 'DAILY';
+      }
+
+      setQueryParams({
+        ...queryParams,
+        type: lastState,
+        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
+    }
+  }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -239,7 +262,12 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
           </div>
 
           <RangeDateSliderFilter
-            changeType={v => console.log('D', v)}
+            changeType={v =>
+              setQueryParams({
+                ...queryParams,
+                type: v,
+              })
+            }
             selectedType={queryParams.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
