@@ -12,7 +12,7 @@ const Line: React.FC<any> = ({data}) => {
 
   const [options, setOptions] = useState({
     chart: {
-      type: 'line',
+      type: 'column',
       className: 'transport-line-chart'
     },
     title: {
@@ -35,7 +35,7 @@ const Line: React.FC<any> = ({data}) => {
       "A11",
       "A12"
     ],
-    colors: ["#047E61", "#000000", "#AB0A0A"],
+    colors: ["#ff0000", "#000000", "#AB0A0A"],
     plotOptions: {
       line: {
         marker: {
@@ -111,7 +111,10 @@ const Line: React.FC<any> = ({data}) => {
       {
         name: "مبتلایان ",
         data: [50, 550, 330, 100, 400, 210, 270, 400, 300, 350, 200, 150],
-        lineWidth: 4
+        lineWidth: 4,
+        dataLabels: {
+          enabled: true
+        }
       }
     ]
   }) as any;
