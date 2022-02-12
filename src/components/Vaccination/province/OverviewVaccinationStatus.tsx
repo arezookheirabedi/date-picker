@@ -47,16 +47,11 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
-            count={342}
+            count={0}
             loading={false}
           />
-          <Statistic icon={YellowVaccine} text="درصد افراد با دوز یک" count={342} loading={false} />
-          <Statistic
-            icon={PurppleVaccine}
-            text="درصد افراد با دوز دوم"
-            count={342}
-            loading={false}
-          />
+          <Statistic icon={YellowVaccine} text="درصد افراد با دوز یک" count={0} loading={false} />
+          <Statistic icon={PurppleVaccine} text="درصد افراد با دوز دوم" count={0} loading={false} />
           <Statistic icon={NavyVaccine} text="درصد افراد با دوز سوم" count="-" />
         </div>
 
@@ -64,41 +59,46 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           <Statistic
             icon={personGrayVaccine}
             text="مجموع افراد واکسینه نشده"
-            count={342}
+            count={0}
             loading={false}
           />
           <Statistic
             icon={personGrayVaccine}
             text="درصد افراد واکسینه نشده"
-            count={342}
+            count={0}
             loading={false}
           />
           <Statistic
             icon={blueVaccine}
             text="تعداد واکسیناسیون بیش از ۳ دوز"
-            count={342}
+            count={0}
             loading={false}
           />
-          <Statistic icon={blueVaccine} text="درصد افراد با بیش از ۳ دوز" count="-" />
+          <Statistic
+            icon={blueVaccine}
+            text="درصد افراد با بیش از ۳ دوز"
+            count={0}
+            loading={false}
+          />
         </div>
 
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={greenVaccineBlackVirus}
             text="تعداد فوتی هایی که واکسینه شده"
-            count={342}
+            count="-"
             loading={false}
           />
           <Statistic
             icon={greenVaccineBlackVirus}
             text="درصد فوتی های واکسینه شده"
-            count={342}
+            count="-"
             loading={false}
           />
           <Statistic
             icon={greyVaccine}
             text="مجموع تعداد دوز واکسن تزریقی"
-            count={342}
+            count="-"
             loading={false}
           />
           <Statistic icon={greyVaccine} text="تعداد اطلاعات مخدوش" count="-" />
