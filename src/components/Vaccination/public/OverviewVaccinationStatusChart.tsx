@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import hcsService from "../../../services/hcs.service";
-import DatePickerModal from "../../DatePickerModal";
-import {toPersianDigit} from "../../../helpers/utils";
-import calendar from "../../../assets/images/icons/calendar.svg";
-import Spinner from "../../Spinner";
-import Charts from "../../Charts";
+import vaccineService from 'src/services/vaccine.service';
+import DatePickerModal from '../../DatePickerModal';
+import {toPersianDigit} from '../../../helpers/utils';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Spinner from '../../Spinner';
+import Charts from '../../Charts';
 
 const {Stacked} = Charts;
 
-const OverviewVaccinationStatusChart = () => {
+const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -30,11 +30,11 @@ const OverviewVaccinationStatusChart = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -42,15 +42,14 @@ const OverviewVaccinationStatusChart = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
   const [queryParams, setQueryParams] = useState({
     from: '',
     to: '',
-    tags: ['province'].join(','),
-    organization: 'employment',
+    tags: [],
   });
 
   // eslint-disable-next-line
@@ -58,7 +57,7 @@ const OverviewVaccinationStatusChart = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await hcsService.dosesTagBased(params);
+      const {data} = await vaccineService.dosesTagBased({});
 
       const provinces: any[] = [];
 
@@ -77,7 +76,7 @@ const OverviewVaccinationStatusChart = () => {
         let more = 0;
 
         // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+        for (const [key, value] of Object.entries(item.doses)) {
           if (Number(key) === 0) {
             noDose.push(Number(value));
           }
@@ -105,7 +104,7 @@ const OverviewVaccinationStatusChart = () => {
         if (thirdDose.length < index + 1) thirdDose.push(0);
         if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
 
-        provinces.push(item.tag);
+        provinces.push(item.province);
       });
 
       setDataset([
@@ -163,17 +162,14 @@ const OverviewVaccinationStatusChart = () => {
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        organization: 'employment',
-        tags: ['province'].join(','),
+        tags: [],
       });
     }
   }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت واکسیناسیون کل کشور
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون کل کشور</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
@@ -266,6 +262,6 @@ const OverviewVaccinationStatusChart = () => {
       </div>
     </fieldset>
   );
-}
+};
 
 export default OverviewVaccinationStatusChart;
