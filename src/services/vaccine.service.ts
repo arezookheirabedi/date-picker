@@ -16,9 +16,6 @@ function dosesTagBased({ ...params }: any = {}, config?: any) {
         .get(`/api/v1/hcs-reporter/vaccines/provinces`, params, { ...config });
 }
 
-
-
-
 const vaccineService = {
     membersGeneral,
     dosesTagBased,
