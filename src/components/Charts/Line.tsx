@@ -2,6 +2,15 @@ import React, {useEffect, useState} from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
+
+const converters = {
+  fa(number: any) {
+    return number.toString().replace(/\d/g, (d: any) => {
+      return String.fromCharCode(d.charCodeAt(0) + 1728);
+    });
+  },
+};
+
 Highcharts.setOptions({
   lang: {
     decimalPoint: '.',
@@ -13,6 +22,11 @@ const Line: React.FC<any> = ({data}) => {
   const [options, setOptions] = useState({
     chart: {
       type: 'column',
+      numberFormatter() {
+        // eslint-disable-next-line prefer-rest-params
+        const ret = Highcharts.numberFormat.apply(0, arguments as any);
+        return converters.fa(ret);
+      },
       className: 'transport-line-chart'
     },
     title: {
@@ -99,10 +113,10 @@ const Line: React.FC<any> = ({data}) => {
       borderRadius: 16,
       borderWidth: 0,
       valueDecimals: 0,
-      style : {
-        direction : "rtl",
-        textAlign : 'right',
-        fontFamily : 'inherit'
+      style: {
+        direction: "rtl",
+        textAlign: 'right',
+        fontFamily: 'inherit'
       }
 
       // headerFormat: `<div style="min-width:220px">{point.x}</div>`
