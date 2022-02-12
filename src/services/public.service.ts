@@ -5,7 +5,7 @@ function sendMessage({ ...params }: any = {}, config?: any) {
     return request
         .withHeaders({ 'Content-Type': 'application/json;utf-8' })
         .build()
-        .post(`/public/api/v1/contact-us`, params, { ...config });
+        .post(`/public/v1/contact-us`, params, { ...config });
 }
 
 const publicService = {
