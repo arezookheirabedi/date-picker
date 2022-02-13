@@ -17,7 +17,7 @@ const Pyramid: React.FC<IPyramid> = ({data}) => {
         {data.map((item: IDetail, ind: number) => {
           return (
             // eslint-disable-next-line
-            <li key={ind} style={{width: `${90 - ind * 10}%`, backgroundColor: `${item.color}`}}>
+            <li key={ind} style={{width: `${100 - ind * 8}%`, backgroundColor: `${item.color}`}}>
               <span className="ml-1">{(item.percentage || 0).toLocaleString('fa')}%</span>
               <span>{item.title}</span>
             </li>
