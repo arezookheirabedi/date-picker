@@ -1,8 +1,7 @@
-import { AxiosRequestConfig } from 'axios';
+import {AxiosRequestConfig} from 'axios';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
-import { ILogin, IProfile } from 'src/models/authentication.model';
-
+import {ILogin, IProfile} from 'src/models/authentication.model';
 
 const baseUrl = Setup.endpoint;
 
@@ -21,36 +20,35 @@ export const setRequestConfig: (config: AxiosRequestConfig) => AxiosRequestConfi
       ...config.headers,
     };
   }
-  axiosRequestConfig = { ...axiosRequestConfig, ...config };
+  axiosRequestConfig = {...axiosRequestConfig, ...config};
 
-  return { ...axiosRequestConfig, ...config };
+  return {...axiosRequestConfig, ...config};
 };
 
 export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   switch (config) {
     case EHEADER.HEADER_JSON:
       setRequestConfig({
-        headers: { 'Content-Type': 'application/json;utf-8' },
+        headers: {'Content-Type': 'application/json;utf-8'},
       });
       break;
     case EHEADER.HEADER_MULTIPART:
       setRequestConfig({
-        headers: { 'Content-Type': 'multipart/form-data;utf-8' },
+        headers: {'Content-Type': 'multipart/form-data;utf-8'},
       });
       break;
     case EHEADER.HEADER_URL_ENCODE:
       setRequestConfig({
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;utf-8' },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;utf-8'},
       });
       break;
     default:
       setRequestConfig({
-        headers: { 'Content-Type': 'application/json;utf-8' },
+        headers: {'Content-Type': 'application/json;utf-8'},
       });
       break;
   }
 };
-
 
 export const setLogin: (param: IProfile) => void = param => {
   localStorage.setItem('userinfo', JSON.stringify(param));
@@ -119,10 +117,10 @@ export function isLogin() {
   const tokenStr = localStorage.getItem('token');
   const firstLogin = localStorage.getItem('ministers-first-login');
   if (tokenStr && firstLogin) {
-    if (new Date().getTime() > (Number(firstLogin) + (24 * 60 * 60 * 1000))) {
+    if (new Date().getTime() > Number(firstLogin) + 24 * 60 * 60 * 1000) {
       removeToken();
       // eslint-disable-next-line
-      console.log('on day finished')
+      console.log('on day finished');
       return false;
     }
     const token: ILogin = JSON.parse(tokenStr);
@@ -183,18 +181,28 @@ export const getServiceTypeName = (item: any) => {
 
 export const getColorByServiceTypeName = (item: any) => {
   switch (item) {
-    case 'PUBLIC':
+    case 'AGENCIES_UNDER_THE_SUPERVISION_OF_THE_MUNICIPALITY':
       return '#4EC4F2';
-    case 'TAXI_T':
+    case 'GUILD_AGENCIES':
       return '#9D19FA';
-    case 'ONLINE':
+    case 'BUS_DRIVING':
       return '#049975';
-    case 'MOTOR_PEYK':
+    case 'BIKE_DELIVERY':
       return '#ffc400';
+    case 'SUBURBAN_TAXI':
+      return '#ff2a00';
+    case 'IN_CITY_TAXI':
+      return '#9696ff';
+    case 'CARGO_FLEET':
+      return '#00fff7';
+    case 'ONLINE_TAXI':
+      return '#00bd13';
+    case 'SAMAS':
+      return '#9e967d';
     case 'SCHOOL_SERVICE':
       return '#ff00bf';
     default:
-      return null;
+      return 'brown';
   }
 };
 
