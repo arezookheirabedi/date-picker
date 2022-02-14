@@ -19,7 +19,7 @@ import Today from './components/Today';
 
 const ScrollNavbar = styled.div`
   height: 100vh;
-  max-height: calc(100vh - 18.5rem);
+  max-height: calc(100vh - 19.5rem);
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 
@@ -81,15 +81,20 @@ const PrivateLayout: React.FC<any> = () => {
             <img src={logo} alt="logo" />
           </div>
         </div>
-        <ScrollNavbar className="border-0 z-20 relative overflow-hidden overflow-y-auto pt-8 pb-32">
+        <ScrollNavbar className="border-0 z-20 relative overflow-hidden overflow-y-auto pt-8 pb-16">
           {routes.map(route => (
             <MenuItemWrapper route={route} key={route.keyIndex} />
           ))}
         </ScrollNavbar>
 
         <div className="absolute bottom-0 z-20 w-full bg-white">
-          <div className="flex justify-end text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
-            {process.env.REACT_APP_VERSION}
+          <div className="flex justify-spacebetween text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
+            <span>
+              {(process.env.REACT_APP_VERSION)?.toPersianDigits()}{' '}
+              {process.env.REACT_APP_VERSION_STATUS === 'test' ? 'نسخه آزمایشی' : ''}
+            </span>
+
+            <span>{process.env.REACT_APP_VERSION_BUILD_DATE}</span>
           </div>
           <Logout isMenuItem />
         </div>
