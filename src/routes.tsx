@@ -26,7 +26,7 @@ const routes: IRoute[] = [
     link: '/dashboard/overview',
     exact: true,
     inMenu: true,
-    title: 'داشبورد جامع',
+    title: 'جامع',
     main: Overview,
     showGuildList: true,
     disabled: true,
@@ -37,7 +37,7 @@ const routes: IRoute[] = [
     link: '/dashboard/citizenship',
     exact: true,
     inMenu: true,
-    title: 'داشبورد شهروندان',
+    title: 'شهروندان',
     disabled: true,
     main: Citizens,
   },
@@ -50,7 +50,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/vaccination',
     exact: true,
     inMenu: true,
-    title: 'داشبورد واکسیناسیون',
+    title: 'واکسیناسیون',
     subMenu: [
       {
         keyIndex: '1',
@@ -77,7 +77,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/transport',
     exact: true,
     inMenu: true,
-    title: 'داشبورد حمل و نقل عمومی',
+    title: 'حمل و نقل عمومی',
     subMenu: [
       {
         keyIndex: '1',
@@ -113,7 +113,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/guild',
     exact: true,
     inMenu: true,
-    title: 'داشبورد اصناف',
+    title: 'اصناف',
     // disabled: true,
     subMenu: [
       {
@@ -147,7 +147,7 @@ const routes: IRoute[] = [
     link: '/dashboard/passenger',
     exact: true,
     inMenu: true,
-    title: 'داشبورد مسافران',
+    title: 'مسافران',
     disabled: true,
     main: Passenger,
   },
@@ -161,7 +161,7 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     // disabled: true,
-    title: 'داشبورد آموزش و پرورش',
+    title: 'آموزش و پرورش',
     subMenu: [
       {
         keyIndex: '1',
@@ -189,7 +189,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/recruitment',
     exact: true,
     inMenu: true,
-    title: 'داشبورد امور استخدامی',
+    title: 'امور استخدامی',
     subMenu: [
       {
         keyIndex: '1',
