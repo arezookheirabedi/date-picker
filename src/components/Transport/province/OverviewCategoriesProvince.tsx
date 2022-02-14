@@ -4,12 +4,12 @@ import axios from 'axios';
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
 import transportService from 'src/services/transport.service';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit, sideCities, getServiceTypeName} from '../../helpers/utils';
-import Spinner from '../Spinner';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../Table';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit, sideCities, getServiceTypeName} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
 interface OverviewCategoriesProvinceProps {
   cityTitle?: any;

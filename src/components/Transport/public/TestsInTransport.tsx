@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import Charts from '../Charts';
-import DatePickerModal from '../DatePickerModal';
-import {toPersianDigit, getColorByServiceTypeName, getServiceTypeName} from '../../helpers/utils';
-import calendar from '../../assets/images/icons/calendar.svg';
-import transportService from '../../services/transport.service';
-import Spinner from '../Spinner';
+import Charts from '../../Charts';
+import DatePickerModal from '../../DatePickerModal';
+import {toPersianDigit, getColorByServiceTypeName, getServiceTypeName} from '../../../helpers/utils';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import transportService from '../../../services/transport.service';
+import Spinner from '../../Spinner';
 
 const {Pyramid} = Charts;
 

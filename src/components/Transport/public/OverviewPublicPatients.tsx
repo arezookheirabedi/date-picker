@@ -1,34 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFilter';
-import Charts from '../Charts';
-import {toPersianDigit, sideCities, transportationTypes} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
-import Spinner from '../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import Charts from '../../Charts';
+import {toPersianDigit, transportationTypes} from '../../../helpers/utils';
+import transportService from '../../../services/transport.service';
+import Spinner from '../../Spinner';
 
 const {Line} = Charts;
 
-interface OverviewPublicPatientsProvinceProps {
-  cityTitle: any;
-}
-
-const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({
-  cityTitle,
-}) => {
+const OverviewPublicPatients = () => {
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  const [isCancel, setIsCancel] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -37,17 +29,6 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
-
-  const location = useLocation();
-  const history = useHistory();
-
-  const [queryParams, setQueryParams] = useState({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
-    fromDate: null,
-    toDate: null,
-    serviceType: '',
-  });
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -73,23 +54,24 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
       : '';
   };
 
+  const [queryParams, setQueryParams] = useState({
+    status: 'POSITIVE',
+    type: 'MONTHLY',
+    fromDate: null,
+    toDate: null,
+    serviceType: '',
+  });
+
   const getLinearOverviewPublicTransport = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
-    setIsCancel(false);
     try {
       const response = await transportService.linearOverviewPublicTransport(params, {
         cancelToken: source.token,
       });
       setData(response.data);
-      setIsCancel(false);
     } catch (error: any) {
-      if (error.message !== 'cancel') {
-        setErrorMessage(error.message);
-      }
-      if (error && error.message === 'cancel') {
-        setIsCancel(true);
-      }
+      setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -98,36 +80,16 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const idSetTimeOut = setTimeout(() => {
+      getLinearOverviewPublicTransport(queryParams);
+    }, 500);
 
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getLinearOverviewPublicTransport({...queryParams, province: provinceName});
-      }, 500);
-    } else {
-      history.push('/dashboard/transport/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        clearTimeout(idSetTimeOut);
-      }
-    };
-  }, [queryParams, location.search]);
-
-  useEffect(() => {
     return () => {
       setData([]);
-      setIsCancel(false);
+      source.cancel('Operation canceled by the user.');
+      clearTimeout(idSetTimeOut);
     };
-  }, [history]);
+  }, [queryParams]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -183,10 +145,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی مبتلایان حمل و نقل عمومی در &nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان حمل و نقل عمومی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
@@ -204,7 +163,6 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
               </div>
-
               <Menu.Items className="z-40 absolute left-0 xl:right-0 w-52 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {transportationTypes.map((value: any, index: any) => {
@@ -326,15 +284,14 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
             wrapperClassName="w-1/4"
           />
         </div>
-
-        {(loading || isCancel) && (
+        {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && !isCancel && (
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
@@ -342,4 +299,4 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   );
 };
 
-export default OverviewPublicPatientsProvince;
+export default OverviewPublicPatients;
