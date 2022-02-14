@@ -3,12 +3,12 @@ import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import transportService from 'src/services/transport.service';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit, getServiceTypeName} from '../../helpers/utils';
-import Spinner from '../Spinner';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../Table';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);

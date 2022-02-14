@@ -4,17 +4,17 @@ import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
 
-import Charts from '../Charts';
-import DatePickerModal from '../DatePickerModal';
+import Charts from '../../Charts';
+import DatePickerModal from '../../DatePickerModal';
 import {
   toPersianDigit,
   sideCities,
   getColorByServiceTypeName,
   getServiceTypeName,
-} from '../../helpers/utils';
-import calendar from '../../assets/images/icons/calendar.svg';
-import transportService from '../../services/transport.service';
-import Spinner from '../Spinner';
+} from '../../../helpers/utils';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import transportService from '../../../services/transport.service';
+import Spinner from '../../Spinner';
 
 const {Pyramid} = Charts;
 

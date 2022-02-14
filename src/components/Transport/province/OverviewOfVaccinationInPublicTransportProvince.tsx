@@ -2,21 +2,20 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import Statistic from '../../containers/Guild/components/Statistic';
-import totalDriver from '../../assets/images/icons/transport-color.svg';
-// import YellowVaccine from "../../assets/images/icons/yellow-vaccine.svg";
-import GreenVaccine from '../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../assets/images/icons/gray-vaccine.svg';
-import Table from '../Table';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import transportService from '../../services/transport.service';
-import YellowVaccineMd from '../../assets/images/icons/yellow-vaccine-lg.svg';
-import PurppleVaccineMd from '../../assets/images/icons/purpple-vaccine-lg.svg';
-import NavyVaccineMd from '../../assets/images/icons/navy-vaccine-lg.svg';
-import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
-import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
-import Spinner from '../Spinner';
-import {sideCities, getServiceTypeName} from '../../helpers/utils';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalDriver from '../../../assets/images/icons/transport-color.svg';
+import GreenVaccine from '../../../assets/images/icons/green-vaccine.svg';
+import GrayVaccine from '../../../assets/images/icons/gray-vaccine.svg';
+import Table from '../../Table';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import transportService from '../../../services/transport.service';
+import YellowVaccineMd from '../../../assets/images/icons/yellow-vaccine-lg.svg';
+import PurppleVaccineMd from '../../../assets/images/icons/purpple-vaccine-lg.svg';
+import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
+import BlueVaccine from '../../../assets/images/icons/blue-vaccine.svg';
+import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
+import Spinner from '../../Spinner';
+import {sideCities, getServiceTypeName} from '../../../helpers/utils';
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps {
   cityTitle: any;
