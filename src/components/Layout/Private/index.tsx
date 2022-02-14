@@ -1,6 +1,8 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // eslint-disable-next-line
 import {Redirect, Route, Switch} from 'react-router-dom';
+// @ts-ignore
+import moment from 'moment-jalaali';
 import styled from 'styled-components';
 import 'rc-slider/assets/index.css';
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -19,7 +21,7 @@ import Today from './components/Today';
 
 const ScrollNavbar = styled.div`
   height: 100vh;
-  max-height: calc(100vh - 18.5rem);
+  max-height: calc(100vh - 19.5rem);
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 
@@ -81,15 +83,26 @@ const PrivateLayout: React.FC<any> = () => {
             <img src={logo} alt="logo" />
           </div>
         </div>
-        <ScrollNavbar className="border-0 z-20 relative overflow-hidden overflow-y-auto pt-8 pb-32">
+        <ScrollNavbar className="border-0 z-20 relative overflow-hidden overflow-y-auto pt-8 pb-16">
           {routes.map(route => (
             <MenuItemWrapper route={route} key={route.keyIndex} />
           ))}
         </ScrollNavbar>
 
         <div className="absolute bottom-0 z-20 w-full bg-white">
-          <div className="flex justify-end text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
-            {process.env.REACT_APP_VERSION}
+          <div className="flex justify-between text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
+            <span>
+              {process.env.REACT_APP_VERSION?.toPersianDigits()}{' '}
+              {process.env.REACT_APP_VERSION_STATUS === 'test' ? 'نسخه آزمایشی' : ''}
+            </span>
+
+            <span>
+              {process.env.REACT_APP_VERSION_BUILD_DATE
+                ? moment(Number(process.env.REACT_APP_VERSION_BUILD_DATE))
+                    .format('jYYYY-jMM-jDD')
+                    .toPersianDigits()
+                : ''}
+            </span>
           </div>
           <Logout isMenuItem />
         </div>
@@ -167,6 +180,15 @@ const PrivateLayout: React.FC<any> = () => {
               )}
               <Route component={Overview} />
             </Switch>
+          </div>
+
+          <div className="flex flex-row-reverse justify-center text-xs space-x-1 pt-2 pb-3 poweredby">
+            <span>Powered</span>
+            <span>by</span>
+            <a href="https://vasl.ir" target="_blank" rel="noreferrer">
+              <span>Va</span>
+              <span>sl</span>
+            </a>
           </div>
         </div>
 

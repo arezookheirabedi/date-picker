@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -8,7 +8,7 @@ import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../Table';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit, sideCities , getServiceTypeName} from '../../helpers/utils';
+import {toPersianDigit, sideCities, getServiceTypeName} from '../../helpers/utils';
 import Spinner from '../Spinner';
 
 interface OverviewCategoriesProvinceProps {
@@ -32,7 +32,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   const source = CancelToken.source();
 
   async function getOverviewByCategory(params: any) {
-
     try {
       setLoading(true);
       setIsCancel(false);
@@ -52,7 +51,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         // }
       });
       setDataset([...normalizedDate]);
-      setIsCancel(false)
+      setIsCancel(false);
     } catch (error: any) {
       // eslint-disable-next-line
       if (error && error.message === 'cancel') {
@@ -71,11 +70,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
       : '';
   };
 
@@ -83,7 +82,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -108,7 +107,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     return () => {
       setDataset([]);
       source.cancel('Operation canceled by the user.');
-    }
+    };
   }, [location.search]);
 
   useEffect(() => {
@@ -123,8 +122,25 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
+    } else {
+      getOverviewByCategory({
+        resultStatus: 'POSITIVE',
+        recoveredCount: true,
+        total: true,
+        count: true,
+        resultReceiptDateFrom: null,
+        resultReceiptDateTo: null,
+      });
     }
   }, [selectedDayRange]);
+
+  const clearSelectedDayRange = (e: any) => {
+    e.stopPropagation();
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    });
+  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -149,11 +165,30 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateFromDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            {selectedDayRange.to || selectedDayRange.from ? (
+              <button type="button" onClick={clearSelectedDayRange}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            ) : (
+              <img src={calendar} alt="x" className="w-5 h-5" />
+            )}
           </div>
         </div>
         <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator"/>
+          <span className="dash-separator" />
         </div>
         <div className=" shadow-custom rounded-lg px-4 py-1">
           <div
@@ -163,14 +198,33 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             <span className="ml-4 whitespace-nowrap truncate text-xs">
               {toPersianDigit(generateToDate())}
             </span>
-            <img src={calendar} alt="x" className="w-5 h-5"/>
+            {selectedDayRange.to || selectedDayRange.from ? (
+              <button type="button" onClick={clearSelectedDayRange}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            ) : (
+              <img src={calendar} alt="x" className="w-5 h-5" />
+            )}
           </div>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading || isCancel ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table
