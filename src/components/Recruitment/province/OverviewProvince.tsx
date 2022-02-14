@@ -4,15 +4,15 @@ import {useDispatch} from 'react-redux';
 import {addTotalMembersAc} from 'src/store/action_creators';
 import hcsService from 'src/services/hcs.service';
 import {sideCities} from 'src/helpers/utils';
-import Statistic from '../../containers/Guild/components/Statistic';
-import totalRecritment from '../../assets/images/icons/people-navy.svg';
-import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
-import saveIcon from '../../assets/images/icons/save-color.svg';
-import deadIcon from '../../assets/images/icons/dead-color.svg';
-import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-lg.svg';
-import prescriptionIcon from '../../assets/images/icons/prescription.svg';
-import testIcon from '../../assets/images/icons/test-color.svg';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalRecritment from '../../../assets/images/icons/people-navy.svg';
+import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
+import saveIcon from '../../../assets/images/icons/save-color.svg';
+import deadIcon from '../../../assets/images/icons/dead-color.svg';
+import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
+import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-lg.svg';
+import prescriptionIcon from '../../../assets/images/icons/prescription.svg';
+import testIcon from '../../../assets/images/icons/test-color.svg';
 
 interface OverviewProvinceProps {
   cityTitle: any;
