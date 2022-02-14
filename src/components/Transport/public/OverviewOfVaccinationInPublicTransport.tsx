@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-
+import {Menu} from '@headlessui/react';
 import transportService from 'src/services/transport.service';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
@@ -15,10 +15,23 @@ import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
 import {getServiceTypeName} from '../../../helpers/utils';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+
+const filterTypes = [
+  {
+    name: 'بیشترین',
+    enName: 'HIGHEST',
+  },
+  {
+    name: 'کمترین',
+    enName: 'LOWEST',
+  },
+];
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
+  const [filterType, setFilterType] = useState({name: 'کمترین', enName: 'LOWEST'});
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [countsLoading, setCountsLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [counts, setCounts] = useState<any>({
@@ -54,7 +67,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   }
 
   async function getReportsDose() {
-
     setReportsDoseLoading(true);
     try {
       const {data} = await transportService.reportsDose({}, {cancelToken: source.token});
@@ -67,7 +79,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       data.dosesCount.forEach((item: any) => {
         // eslint-disable-next-line no-restricted-syntax
         for (const [key, value] of Object.entries(item)) {
-
           // temporary code
           if (Number(key) === 3 || Number(key) > 3) {
             threeDose += Number(value);
@@ -197,6 +208,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       });
 
       setDataset([...normalizedDate]);
+      setOrgDataset([...normalizedDate]);
+      setFilterType({name: 'کمترین', enName: 'LOWEST'});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -228,12 +241,32 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse =
+        // eslint-disable-next-line no-nested-ternary
+        filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+
+      if (a.allDoses < b.allDoses) {
+        return reverse * 1;
+      }
+
+      if (a.allDoses > b.allDoses) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان فعال"
@@ -267,8 +300,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
         />
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
@@ -302,9 +334,64 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده‌اند"
         />
       </div>
+
+      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+        <div className="flex items-center">
+          <Menu
+            as="div"
+            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
+          >
+            <div>
+              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
+                {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
+                <span className="ml-10 whitespace-nowrap truncate">
+                  {filterType?.name || 'کمترین'}
+                </span>
+                <DownIcon className="h-2 w-2.5 mr-2" />
+              </Menu.Button>
+            </div>
+
+            <Menu.Items
+              style={{width: '250px'}}
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              <div className="px-1 py-1 ">
+                {filterTypes.map((value: any, index: any) => {
+                  // console.log(value);
+                  return (
+                    // eslint-disable-next-line
+                    <Menu.Item key={index}>
+                      {({active}) => (
+                        <button
+                          type="button"
+                          className={`${
+                            active ? 'bg-gray-100' : ''
+                          } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
+                          onClick={() => {
+                            setFilterType(value);
+                            // setQueryParams({
+                            //   ...queryParams,
+                            //   tag: value.enName,
+                            // });
+                          }}
+                        >
+                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
+                          {value.name}
+                        </button>
+                      )}
+                    </Menu.Item>
+                  );
+                })}
+              </div>
+            </Menu.Items>
+          </Menu>
+        </div>
+      </div>
+      
       {loading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>

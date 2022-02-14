@@ -30,7 +30,6 @@ const OverviewGuildsPerCategory: React.FC<any> = () => {
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [orgDataset, setOrgDataset] = useState<any>([]);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
