@@ -2,12 +2,12 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
 import {sideCities} from 'src/helpers/utils';
-import OverviewMap from '../../components/Recruitment/OverviewMap';
-import OverviewProvince from '../../components/Recruitment/OverviewProvince';
-import OverviewPatientsProvince from '../../components/Recruitment/OverviewPatientsProvince';
-import TestsStatusProvince from '../../components/Recruitment/TestStatusProvince';
-import OverviewCategoriesProvince from '../../components/Recruitment/OverviewCategoriesProvince';
-import OverviewOfVaccinationProvince from '../../components/Recruitment/OverviewOfVaccinationProvince';
+import OverviewMap from '../../components/Recruitment/province/OverviewMap';
+import OverviewProvince from '../../components/Recruitment/province/OverviewProvince';
+import OverviewPatientsProvince from '../../components/Recruitment/province/OverviewPatientsProvince';
+import TestsStatusProvince from '../../components/Recruitment/province/TestStatusProvince';
+import OverviewCategoriesProvince from '../../components/Recruitment/province/OverviewCategoriesProvince';
+import OverviewOfVaccinationProvince from '../../components/Recruitment/province/OverviewOfVaccinationProvince';
 
 const RecruitmentProvince = () => {
   const location = useLocation();

@@ -3,14 +3,14 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
 import {Menu} from '@headlessui/react';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 const filterTypes = [
   {
@@ -47,6 +47,8 @@ const TestStatus: React.FC<{}> = () => {
           name: item.tag || 'نامشخص',
           total: item.total || 0,
           positiveCount: item.positiveCount || 0,
+          positivePercentage:
+            (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0 || 0,
           negativeCount: item.negativeCount || 0,
           unknownCount:
             (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
@@ -119,7 +121,7 @@ const TestStatus: React.FC<{}> = () => {
         organization: 'employment',
         from: null,
         to: null,
-        tags: []
+        tags: [],
       });
     }
   }, [selectedDayRange]);
@@ -129,11 +131,11 @@ const TestStatus: React.FC<{}> = () => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (a.positivePercentage < b.positivePercentage) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.positivePercentage > b.positivePercentage) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -157,11 +159,11 @@ const TestStatus: React.FC<{}> = () => {
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (a.positivePercentage < b.positivePercentage) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (a.positivePercentage > b.positivePercentage) {
           return reverse * -1;
         }
         // a must be equal to b

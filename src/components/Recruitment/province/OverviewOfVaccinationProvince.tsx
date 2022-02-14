@@ -3,20 +3,20 @@ import { Menu } from '@headlessui/react';
 import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
-import Statistic from '../../containers/Guild/components/Statistic';
-import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
-import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
-import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
-import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
-import Gray1Vaccine from '../../assets/images/icons/gray-vaccine-1.svg';
-import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalEmploye from '../../../assets/images/icons/people-dark-green.svg';
+import YellowVaccine from '../../../assets/images/icons/yellow-vaccine-lg.svg';
+import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
+import PurppleVaccine from '../../../assets/images/icons/purpple-vaccine-lg.svg';
+import BlueVaccine from '../../../assets/images/icons/blue-vaccine.svg';
+import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
+import Gray1Vaccine from '../../../assets/images/icons/gray-vaccine-1.svg';
+import Gray2Vaccine from '../../../assets/images/icons/gray-vaccine-2.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {sideCities} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 
 
