@@ -9,13 +9,21 @@
   }
 }
 
-
-
 @keyframes MoveUpDown {
-  0%, 100% {
+  0%,
+  100% {
     bottom: 0;
   }
   50% {
     bottom: 5px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
