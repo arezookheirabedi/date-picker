@@ -172,8 +172,23 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
+    } else {
+      setQueryParams({
+        ...queryParams,
+        type: 'MONTHLY',
+        from: null,
+        to: null,
+      });
     }
   }, [selectedDayRange]);
+
+  const clearSelectedDayRange = (e: any) => {
+    e.stopPropagation();
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    });
+  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -211,7 +226,26 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                       {toPersianDigit(generateFromDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  {selectedDayRange.to || selectedDayRange.from ? (
+                    <button type="button" onClick={clearSelectedDayRange}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  ) : (
+                    <img src={calendar} alt="x" className="w-5 h-5" />
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
@@ -227,7 +261,26 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                       {toPersianDigit(generateToDate())}
                     </span>
                   )}
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  {selectedDayRange.to || selectedDayRange.from ? (
+                    <button type="button" onClick={clearSelectedDayRange}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  ) : (
+                    <img src={calendar} alt="x" className="w-5 h-5" />
+                  )}
                 </div>
               </div>
             </div>
