@@ -3,27 +3,26 @@
   padding: 7rem 0;
   direction: rtl;
   height: 85vh;
-  @include respond(big-desktop){
+  @include respond(big-desktop) {
     height: 850px;
   }
   @include respond(r1920) {
     height: 850px;
   }
 
-  @include respond(r1600){
+  @include respond(r1600) {
     height: 800px;
   }
 
-
-  @include respond(r1440){
+  @include respond(r1440) {
     height: 750px;
   }
 
-  @include respond(r1366){
+  @include respond(r1366) {
     height: 700px;
   }
 
-  @include respond(r1280){
+  @include respond(r1280) {
     height: 650px;
   }
 
@@ -35,7 +34,6 @@
     padding: 7rem 2rem;
     height: 440px;
   }
-
 }
 
 .progress-project {
@@ -44,7 +42,7 @@
   @include respond(r415) {
     padding: 7rem 0;
   }
-  background-image: url("./../../assets/images/repeat-grid-1.png");
+  background-image: url('./../../assets/images/repeat-grid-1.png');
   min-height: 69.2rem;
 }
 
@@ -56,35 +54,35 @@
 
 .faq-section {
   padding: 7rem 0;
-  background-image: url("./../../assets/images/faq.png");
+  background-image: url('./../../assets/images/faq.png');
   background-repeat: no-repeat;
   position: relative;
   height: 104vh;
 
-  @include respond(big-desktop){
+  @include respond(big-desktop) {
     height: 1250px;
   }
   @include respond(r1920) {
     height: 1200px;
   }
 
-  @include respond(r1600){
+  @include respond(r1600) {
     height: 1120px;
   }
 
-  @include respond(r1536){
+  @include respond(r1536) {
     height: 1100px;
   }
 
-  @include respond(r1440){
+  @include respond(r1440) {
     height: 1050px;
-}
+  }
 
-  @include respond(r1366){
+  @include respond(r1366) {
     height: 1000px;
   }
 
-  @include respond(r1280){
+  @include respond(r1280) {
     height: 900px;
   }
 
@@ -92,11 +90,39 @@
     height: 800px;
   }
 
-  @include respond(r415){
+  @include respond(r415) {
     height: 750px;
   }
 
   background-position: center center;
   background-size: cover;
   direction: rtl;
+}
+
+.poweredby {
+  font-size: 1.3rem;
+  font-weight: 400;
+
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-delay: 1s;
+  animation-fill-mode: both;
+
+  > span {
+    color: #9f9f9f;
+  }
+
+  > span:nth-child(2) {
+    margin: 0 0.4rem;
+  }
+
+  > a {
+    span:nth-child(1) {
+      color: #175a76;
+    }
+    span:nth-child(2) {
+      color: #bfdde7;
+    }
+  }
 }

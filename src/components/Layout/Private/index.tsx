@@ -98,7 +98,9 @@ const PrivateLayout: React.FC<any> = () => {
 
             <span>
               {process.env.REACT_APP_VERSION_BUILD_DATE
-                ? moment(Number(process.env.REACT_APP_VERSION_BUILD_DATE)).format('jYYYY-jMM-jDD').toPersianDigits()
+                ? moment(Number(process.env.REACT_APP_VERSION_BUILD_DATE))
+                    .format('jYYYY-jMM-jDD')
+                    .toPersianDigits()
                 : ''}
             </span>
           </div>
@@ -178,6 +180,15 @@ const PrivateLayout: React.FC<any> = () => {
               )}
               <Route component={Overview} />
             </Switch>
+          </div>
+
+          <div className="flex flex-row-reverse justify-center text-xs space-x-1 pt-2 pb-3 poweredby">
+            <span>Powered</span>
+            <span>by</span>
+            <a href="https://vasl.ir" target="_blank" rel="noreferrer">
+              <span>Va</span>
+              <span>sl</span>
+            </a>
           </div>
         </div>
 
