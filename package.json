@@ -1,7 +1,7 @@
 {
   "name": "unit-management-portal",
   "version": "0.2.3",
-  "buildDate": "",
+  "buildDate": 1644838734210,
   "versionStatus": "test",
   "private": true,
   "dependencies": {
