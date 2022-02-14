@@ -161,7 +161,7 @@ export const getServiceTypeName = (item: any) => {
     case 'GUILD_AGENCIES':
       return 'آژانس';
     case 'BUS_DRIVING':
-      return 'انوبوسرانی';
+      return 'اتوبوسرانی';
     case 'BIKE_DELIVERY':
       return 'پیک موتوری';
     case 'SUBURBAN_TAXI':
@@ -236,7 +236,7 @@ export const transportationTypes = [
     enName: 'GUILD_AGENCIES',
   },
   {
-    name: 'انوبوسرانی',
+    name: 'اتوبوسرانی',
     enName: 'BUS_DRIVING',
   },
   {
