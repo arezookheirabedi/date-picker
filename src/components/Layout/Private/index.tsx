@@ -1,6 +1,8 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // eslint-disable-next-line
 import {Redirect, Route, Switch} from 'react-router-dom';
+// @ts-ignore
+import moment from 'moment-jalaali';
 import styled from 'styled-components';
 import 'rc-slider/assets/index.css';
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -88,13 +90,17 @@ const PrivateLayout: React.FC<any> = () => {
         </ScrollNavbar>
 
         <div className="absolute bottom-0 z-20 w-full bg-white">
-          <div className="flex justify-spacebetween text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
+          <div className="flex justify-between text-xs text-gray-400 pl-9 rtl:pl-3 pr-3 rtl:pr-9">
             <span>
-              {(process.env.REACT_APP_VERSION)?.toPersianDigits()}{' '}
+              {process.env.REACT_APP_VERSION?.toPersianDigits()}{' '}
               {process.env.REACT_APP_VERSION_STATUS === 'test' ? 'نسخه آزمایشی' : ''}
             </span>
 
-            <span>{process.env.REACT_APP_VERSION_BUILD_DATE}</span>
+            <span>
+              {process.env.REACT_APP_VERSION_BUILD_DATE
+                ? moment(Number(process.env.REACT_APP_VERSION_BUILD_DATE)).format('jYYYY-jMM-jDD').toPersianDigits()
+                : ''}
+            </span>
           </div>
           <Logout isMenuItem />
         </div>
