@@ -6,13 +6,13 @@ import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
 import { schoolTypes } from 'src/helpers/sortingModels';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities, toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 interface TestStatusProvinceProps {
   cityTitle: any;
