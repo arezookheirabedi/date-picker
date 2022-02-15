@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Menu } from '@headlessui/react';
+import {Menu} from '@headlessui/react';
 import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
@@ -18,8 +18,6 @@ import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
-
-
 const filterTypes: any[] = [
   {
     name: 'بیشترین',
@@ -30,7 +28,6 @@ const filterTypes: any[] = [
     enName: 'LOWEST',
   },
 ];
-
 
 interface OverviewOfVaccinationProvinceProps {
   cityTitle: any;
@@ -47,8 +44,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
+    name: 'کمترین',
+    enName: 'LOWEST',
   });
   const [counts, setCounts] = useState<any>({
     numberOfEmployees: 0,
@@ -200,6 +197,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
           unknownInformation,
           noDose: (noDose * 100) / total,
+          allDosesPercentage:
+            ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
           // eslint-disable-next-line
           // notVaccine: item.dosesCountMap
           //   ? item.dosesCountMap[0]
@@ -211,8 +210,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
       setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
+        name: 'کمترین',
+        enName: 'LOWEST',
       });
     } catch (error) {
       // eslint-disable-next-line
@@ -390,7 +389,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
+                    {filterType?.name || 'کمترین'}
                   </span>
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
@@ -428,7 +427,6 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         </div>
       </div>
 
-
       {loading ? (
         <div className="p-20">
           <Spinner />
@@ -459,9 +457,9 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                           },
                         },
                         {
-                          name: 'allDoses',
+                          name: 'allDosesPercentage',
                           title: 'دوز کل',
-                          y: record.allDoses || 0,
+                          y: record.allDosesPercentage || 0,
                           color: {
                             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                             stops: [
@@ -516,6 +514,11 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'درصد کل دوزها',
+                  key: 'allDosesPercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {

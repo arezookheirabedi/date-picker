@@ -57,10 +57,10 @@ const TestsInTransport = () => {
     try {
       const {data} = await transportService.testsInTransport(params, {cancelToken: source.token});
 
-      let normalizedDate = [] as any;
+      let normalizedData = [] as any;
       data.map((item: any) => {
         if (item.total !== 0) {
-          return normalizedDate.push({
+          return normalizedData.push({
             title: getServiceTypeName(item.serviceType),
             percentage: ((item.count * 100) / item.total).toFixed(4),
             color: getColorByServiceTypeName(item.serviceType),
@@ -69,11 +69,11 @@ const TestsInTransport = () => {
         return null;
       });
 
-      normalizedDate = normalizedDate.sort((a: any, b: any) => {
+      normalizedData = normalizedData.sort((a: any, b: any) => {
         return b.percentage - a.percentage;
       });
 
-      setPyramidData(normalizedDate);
+      setPyramidData(normalizedData);
       // // setPyramidData(data);
       // // console.log(data);
     } catch (error: any) {

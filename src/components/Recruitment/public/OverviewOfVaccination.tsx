@@ -34,8 +34,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
+    name: 'کمترین',
+    enName: 'LOWEST',
   });
   const [counts, setCounts] = useState<any>({
     numberOfFirstDose: 0,
@@ -175,6 +175,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
           unknownInformation,
           noDose: (noDose * 100) / total,
+          allDosesPercentage:
+            ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
           // eslint-disable-next-line
           // notVaccine: item.dosesCountMap
           //   ? item.dosesCountMap[0]
@@ -186,8 +188,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
       setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
+        name: 'کمترین',
+        enName: 'LOWEST',
       });
     } catch (error) {
       // eslint-disable-next-line
@@ -240,11 +242,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.allDoses < b.allDoses) {
+        if (a.allDosesPercentage < b.allDosesPercentage) {
           return reverse * 1;
         }
 
-        if (a.allDoses > b.allDoses) {
+        if (a.allDosesPercentage > b.allDosesPercentage) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -351,7 +353,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
+                    {filterType?.name || 'کمترین'}
                   </span>
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
@@ -407,7 +409,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                     <CategoryDonut
                       data={[
                         {
-                          name: 'allDoses',
+                          name: 'allDosesPercentage',
                           title: 'دوز کل',
                           y: record.allDoses || 0,
                           color: {
@@ -462,6 +464,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'درصد  کل دوزها',
+                  key: 'allDosesPercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {

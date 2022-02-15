@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {Menu} from '@headlessui/react';
 import {schoolTypes} from 'src/helpers/sortingModels';
-
 import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import hcsService from 'src/services/hcs.service';
@@ -20,6 +20,22 @@ import GrayVaccine2 from '../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../TableScope';
 import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
 import Spinner from '../Spinner';
+import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+
+const filterTypes = [
+  {
+    name: 'پیشفرض',
+    enName: '',
+  },
+  {
+    name: 'بیشترین',
+    enName: 'HIGHEST',
+  },
+  {
+    name: 'کمترین',
+    enName: 'LOWEST',
+  },
+];
 
 interface OverviewOfVaccinationProvinceProps {
   cityTitle: any;
@@ -29,8 +45,12 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   cityTitle,
 }) => {
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
+  const [filterType, setFilterType] = useState({
+    name: 'پیشفرض',
+    enName: '',
+  });
   const [countsLoading, setCountsLoading] = useState(false);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   const [counts, setCounts] = useState<any>({
     numberOfEmployees: 0,
@@ -214,6 +234,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
           unknownInformation,
           noDose: (noDose * 100) / total,
+          allDosesPercentage: ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
           // eslint-disable-next-line
           // notVaccine: item.dosesCountMap
           //   ? item.dosesCountMap[0]
@@ -223,6 +244,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         });
       });
       setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({name: 'پیشفرض', enName: ''});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -264,6 +287,25 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       setDataset([]);
     };
   }, [history]);
+
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
+
+      if (a.allDosesPercentage < b.allDosesPercentage) {
+        return reverse * 1;
+      }
+
+      if (a.allDosesPercentage > b.allDosesPercentage) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -342,6 +384,57 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           {/* <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
         </div>
       </div>
+
+      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
+        <div className="flex flex-grow items-center space-x-5 rtl:space-x-reverse">
+          <div className="flex items-center">
+            <Menu
+              as="div"
+              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
+            >
+              <div>
+                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
+                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
+                  <span className="ml-10 whitespace-nowrap truncate">
+                    {filterType?.name || 'پیشفرض'}
+                  </span>
+                  <DownIcon className="h-2 w-2.5 mr-2" />
+                </Menu.Button>
+              </div>
+
+              <Menu.Items
+                style={{minWidth: '200px'}}
+                className="z-40 absolute right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              >
+                <div className="px-1 py-1 ">
+                  {filterTypes.map((value: any, index: any) => {
+                    return (
+                      // eslint-disable-next-line
+                      <Menu.Item key={index}>
+                        {({active}) => (
+                          <button
+                            type="button"
+                            className={`${
+                              active ? 'bg-gray-100' : ''
+                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
+                            onClick={() => {
+                              setFilterType(value);
+                            }}
+                          >
+                            {value.name}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    );
+                  })}
+                </div>
+              </Menu.Items>
+            </Menu>
+          </div>
+        </div>
+      </div>
+
       {loading ? (
         <div className="p-20">
           <Spinner />
@@ -372,9 +465,9 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                           },
                         },
                         {
-                          name: 'allDoses',
+                          name: 'allDosesPercentage',
                           title: 'دوز کل',
-                          y: record.allDoses || 0,
+                          y: record.allDosesPercentage || 0,
                           color: {
                             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                             stops: [
@@ -429,6 +522,11 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'درصد کل دوزها',
+                  key: 'allDosesPercentage',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
