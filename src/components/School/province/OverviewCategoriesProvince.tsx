@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {schoolTypes} from 'src/helpers/sortingModels';
-import { Menu } from '@headlessui/react';
+import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../Table';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 const filterTypes: any[] = [
   {
@@ -27,19 +28,26 @@ const filterTypes: any[] = [
     enName: 'LOWEST',
   },
 ];
+interface OverviewCategoriesProvinceProps {
+  cityTitle?: any;
+}
 
-const OverviewCategories: React.FC<{}> = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
+const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   const [filterType, setFilterType] = useState({
     name: 'پیشفرض',
     enName: '',
   });
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
+
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -48,17 +56,33 @@ const OverviewCategories: React.FC<{}> = () => {
 
   async function getOverviewByCategory(params: any) {
     setLoading(true);
+    setIsCancel(false);
     try {
       const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
+      console.log(data);
+
       const sortData: any = [];
 
-      schoolTypes.forEach(item => {
-        const tm = data.find((i: any) => i.tag === item);
-        sortData.push(tm);
+      schoolTypes.forEach((item: any) => {
+        const tm = data.find((i: any) => {
+          // console.log('item => ', item);
+          // console.log('tag => ', i.tag.replace(/استان\s(.*)_/g, '').replace(/_\sاستان\s(.*)/g, ''));
+          // // eslint-disable-next-line
+          // console.log(
+          //   i.tag
+          //     .replace(/استان\s(.*)_/g, '')
+          //     .replace(/_\sاستان\s(.*)/g, '')
+          //     .trim() === item
+          // );
+          return (
+            i.tag
+              .replace(/استان\s(.*)_/g, '')
+              .replace(/_\sاستان\s(.*)/g, '')
+              .trim() === item
+          );
+        });
+        if (tm) sortData.push(tm);
       });
-
-      // console.log(sortData);
-      // console.log(schoolTypes);
 
       const normalizedData: any[] = [];
       sortData.forEach((item: any, index: number) => {
@@ -76,28 +100,16 @@ const OverviewCategories: React.FC<{}> = () => {
       });
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-    } catch (error) {
+      setIsCancel(false);
+    } catch (error: any) {
       // eslint-disable-next-line
-      console.log(error);
+      if (error && error.message === 'cancel') {
+        setIsCancel(true);
+      }
     } finally {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    getOverviewByCategory({
-      organization: 'education',
-      from: '',
-      to: '',
-      tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-      tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-    });
-
-    return () => {
-      setDataset([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -124,28 +136,39 @@ const OverviewCategories: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
       getOverviewByCategory({
         organization: 'education',
-        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        from: '',
+        to: '',
+        tags: [
+          `#province# استان ${provinceName}`,
+          '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        ].join(','),
+        tagPattern: [
+          `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
+        ].join(','),
+        // province: provinceName,
       });
+      //
     } else {
-      getOverviewByCategory({
-        organization: 'education',
-        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-        from: null,
-        to: null,
-      });
+      history.push('/dashboard/school/province');
     }
-  }, [selectedDayRange]);
+
+    return () => {
+      setDataset([]);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search]);
 
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
@@ -166,6 +189,55 @@ const OverviewCategories: React.FC<{}> = () => {
     setDataset(tmp);
   }, [filterType]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      if (selectedDayRange.from && selectedDayRange.to) {
+        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+
+        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+        getOverviewByCategory({
+          organization: 'education',
+          tags: [
+            `#province# استان ${provinceName}`,
+            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+          ].join(','),
+          tagPattern: [
+            `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
+          ].join(','),
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        });
+      } else {
+        getOverviewByCategory({
+          organization: 'education',
+          tags: [
+            `#province# استان ${provinceName}`,
+            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+          ].join(','),
+          tagPattern: [
+            `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
+          ].join(','),
+          from: null,
+          to: null,
+        });
+      }
+    } else {
+      history.push('/dashboard/school/province');
+    }
+
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [selectedDayRange]);
+
   const clearSelectedDayRange = (e: any) => {
     e.stopPropagation();
     setSelectedDayRange({
@@ -176,7 +248,10 @@ const OverviewCategories: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به آموزش و پرورش کشور</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به آموزش و پرورش در استان &nbsp;
+        {cityTitle}
+      </legend>
 
       <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
@@ -265,45 +340,46 @@ const OverviewCategories: React.FC<{}> = () => {
               )}
             </div>
           </div>
-        </div>
-        <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
-        </div>
-        <div className=" shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            {selectedDayRange.to && (
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateToDate())}
-              </span>
-            )}
-            {selectedDayRange.to || selectedDayRange.from ? (
-              <button type="button" onClick={clearSelectedDayRange}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </button>
-            ) : (
-              <img src={calendar} alt="x" className="w-5 h-5" />
-            )}
+          <div className="flex items-center justify-start mx-4">
+            <span className="dash-separator" />
+          </div>
+          <div className=" shadow-custom rounded-lg px-4 py-1">
+            <div
+              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+              onClick={focusFromDate}
+            >
+              {selectedDayRange.to && (
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateToDate())}
+                </span>
+              )}
+              {selectedDayRange.to || selectedDayRange.from ? (
+                <button type="button" onClick={clearSelectedDayRange}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <img src={calendar} alt="x" className="w-5 h-5" />
+              )}
+            </div>
           </div>
         </div>
       </div>
+
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
+        {loading || isCancel ? (
           <div className="p-20">
             <Spinner />
           </div>
@@ -413,4 +489,4 @@ const OverviewCategories: React.FC<{}> = () => {
   );
 };
 
-export default OverviewCategories;
+export default OverviewCategoriesProvince;
