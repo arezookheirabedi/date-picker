@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
-import Statistic from '../../containers/Guild/components/Statistic';
-import totalRecritment from '../../assets/images/icons/people-navy.svg';
-import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
-import saveIcon from '../../assets/images/icons/save-color.svg';
-import deadIcon from '../../assets/images/icons/dead-color.svg';
-import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
-import prescriptionIcon from '../../assets/images/icons/prescription.svg';
-import testIcon from '../../assets/images/icons/test-color.svg';
-import hcsService from '../../services/hcs.service';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalRecritment from '../../../assets/images/icons/people-navy.svg';
+import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
+import saveIcon from '../../../assets/images/icons/save-color.svg';
+import deadIcon from '../../../assets/images/icons/dead-color.svg';
+import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
+import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-1.svg';
+import prescriptionIcon from '../../../assets/images/icons/prescription.svg';
+import testIcon from '../../../assets/images/icons/test-color.svg';
+import hcsService from '../../../services/hcs.service';
 
 interface OverviewSchoolEmployeProps {
   cityTitle: any;

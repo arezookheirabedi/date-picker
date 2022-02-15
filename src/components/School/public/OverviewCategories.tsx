@@ -1,20 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Menu} from '@headlessui/react';
-
+import {schoolTypes} from 'src/helpers/sortingModels';
+import { Menu } from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
-import { schoolTypes } from 'src/helpers/sortingModels';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../Table';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
-const filterTypes = [
+const filterTypes: any[] = [
   {
     name: 'پیشفرض',
     enName: '',
@@ -29,15 +28,16 @@ const filterTypes = [
   },
 ];
 
-const TestStatus: React.FC<{}> = () => {
-  const [filterType, setFilterType] = useState({
-    name: 'پیشفرض',
-    enName: '',
-  });
+const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
+  const [filterType, setFilterType] = useState({
+    name: 'پیشفرض',
+    enName: '',
+  });
+
   const {CancelToken} = axios;
   const source = CancelToken.source();
   // eslint-disable-next-line
@@ -49,7 +49,7 @@ const TestStatus: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.testResultTagBased(params, {cancelToken: source.token});
+      const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
       const sortData: any = [];
 
       schoolTypes.forEach(item => {
@@ -57,25 +57,25 @@ const TestStatus: React.FC<{}> = () => {
         sortData.push(tm);
       });
 
+      // console.log(sortData);
+      // console.log(schoolTypes);
 
       const normalizedData: any[] = [];
       sortData.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.tag || 'نامشخص',
-          total: item.total || 0,
-          positiveCount: item.positiveCount || 0,
-          positivePercentage:
-            (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0,
-          negativeCount: item.negativeCount || 0,
-          unknownCount:
-            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
-          // deadCount: 120,
-        });
+        if (item.total !== 0) {
+          normalizedData.push({
+            id: `ovca_${index}`,
+            name: item.tag || 'نامشخص',
+            employeesCount: item.total || 0,
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+            saveCount: item.recoveredCount || 0,
+            // deadCount: 120,
+          });
+        }
       });
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setFilterType({name: 'پیشفرض', enName: ''});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -87,18 +87,14 @@ const TestStatus: React.FC<{}> = () => {
   useEffect(() => {
     getOverviewByCategory({
       organization: 'education',
-      // resultStatus: 'POSITIVE',
-      // recoveredCount: true,
-      // total: true,
-      // count: true,
       from: '',
       to: '',
+      tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
       tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
     });
 
     return () => {
       setDataset([]);
-      setOrgDataset([]);
       source.cancel('Operation canceled by the user.');
     };
   }, []);
@@ -135,15 +131,16 @@ const TestStatus: React.FC<{}> = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
         organization: 'education',
-        // resultStatus: 'POSITIVE',
+        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'],
       });
     } else {
       getOverviewByCategory({
         organization: 'education',
-        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'],
+        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
         from: null,
         to: null,
       });
@@ -155,11 +152,11 @@ const TestStatus: React.FC<{}> = () => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
 
-      if (a.positivePercentage < b.positivePercentage) {
+      if (Number(a.infectedPercent) < Number(b.infectedPercent)) {
         return reverse * 1;
       }
 
-      if (a.positivePercentage > b.positivePercentage) {
+      if (Number(a.infectedPercent) > Number(b.infectedPercent)) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -179,8 +176,9 @@ const TestStatus: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">آزمایش در آموزش و پرورش</legend>
-      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+      <legend className="text-black mx-auto px-3">نگاه کلی به آموزش و پرورش کشور</legend>
+
+      <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
           <Menu
             as="div"
@@ -197,10 +195,12 @@ const TestStatus: React.FC<{}> = () => {
               </Menu.Button>
             </div>
 
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items
+              style={{minWidth: '200px'}}
+              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
               <div className="px-1 py-1 ">
                 {filterTypes.map((value: any, index: any) => {
-                  // console.log(value);
                   return (
                     // eslint-disable-next-line
                     <Menu.Item key={index}>
@@ -212,13 +212,8 @@ const TestStatus: React.FC<{}> = () => {
                           } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
                           onClick={() => {
                             setFilterType(value);
-                            // setQueryParams({
-                            //   ...queryParams,
-                            //   tag: value.enName,
-                            // });
                           }}
                         >
-                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                           {value.name}
                         </button>
                       )}
@@ -229,8 +224,7 @@ const TestStatus: React.FC<{}> = () => {
             </Menu.Items>
           </Menu>
         </div>
-
-        <div className="flex items-center">
+        <div className="flex align-center justify-start">
           {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -239,7 +233,6 @@ const TestStatus: React.FC<{}> = () => {
               showDatePicker
             />
           ) : null}
-
           <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
             <div
               className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
@@ -272,40 +265,40 @@ const TestStatus: React.FC<{}> = () => {
               )}
             </div>
           </div>
-          <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
-          </div>
-          <div className=" shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              {selectedDayRange.to && (
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateToDate())}
-                </span>
-              )}
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
+        </div>
+        <div className="flex items-center justify-start mx-4">
+          <span className="dash-separator" />
+        </div>
+        <div className=" shadow-custom rounded-lg px-4 py-1">
+          <div
+            className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+            onClick={focusFromDate}
+          >
+            {selectedDayRange.to && (
+              <span className="ml-4 whitespace-nowrap truncate text-xs">
+                {toPersianDigit(generateToDate())}
+              </span>
+            )}
+            {selectedDayRange.to || selectedDayRange.from ? (
+              <button type="button" onClick={clearSelectedDayRange}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            ) : (
+              <img src={calendar} alt="x" className="w-5 h-5" />
+            )}
           </div>
         </div>
       </div>
@@ -320,15 +313,15 @@ const TestStatus: React.FC<{}> = () => {
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'وضعیت',
+                name: 'وضعیت کلی',
                 key: '',
                 render: (v: any, record) => (
                   <CategoryDonut
                     data={[
                       {
-                        name: 'unknownCount',
-                        title: 'درصد تست‌های نامشخص',
-                        y: record.unknownCount || 0,
+                        name: 'deadCount',
+                        title: 'تعداد فوت‌شدگان',
+                        y: record.deadCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -338,9 +331,9 @@ const TestStatus: React.FC<{}> = () => {
                         },
                       },
                       {
-                        name: 'negativeCount',
-                        title: 'درصد تست‌های منفی',
-                        y: record.negativeCount || 0,
+                        name: 'saveCount',
+                        title: 'تعداد بهبودیافتگان',
+                        y: record.saveCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -350,9 +343,9 @@ const TestStatus: React.FC<{}> = () => {
                         },
                       },
                       {
-                        name: 'positiveCount',
-                        title: 'درصد تست‌های مثبت',
-                        y: record.positiveCount || 0,
+                        name: 'infectedCount',
+                        title: 'تعداد مبتلایان',
+                        y: record.infectedCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -367,63 +360,52 @@ const TestStatus: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'سازمان',
+                name: 'دسته',
                 key: 'name',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex">
-                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
-                  </div>
+                render: (v: any, record, index: number) => (
+                  <span>
+                    {(index + 1).toLocaleString('fa')}.{v}
+                  </span>
                 ),
               },
               {
-                name: 'تعداد آزمایش‌های انجام شده',
-                key: 'total',
+                name: 'تعداد کارکنان',
+                key: 'employeesCount',
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              },
+              {
+                name: 'درصد ابتلا',
+                key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
-                    {Number(v || 0)
-                      .commaSeprator()
-                      .toPersianDigits()}
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های مثبت',
-                key: 'positiveCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
+                    {Number(v).toLocaleString('fa', {
+                      minimumFractionDigits: 4,
+                    })}
                     %
                   </span>
                 ),
               },
               {
-                name: 'درصد تست‌های منفی',
-                key: 'negativeCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
+                name: 'تعداد مبتلایان',
+                key: 'infectedCount',
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              },
+              {
+                name: 'تعداد بهبودیافتگان',
+                key: 'saveCount',
+                render: (v: any) => (
+                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
                 ),
               },
-              // {
-              //   name: 'درصد تست‌های نامشخص',
-              //   key: 'unknownCount',
-              //   render: (v: any, record: any) => (
-              //     <span>
-              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-              //         .toFixed(4)
-              //         .toPersianDigits()}
-              //       %
-              //     </span>
-              //   ),
-              // },
+              {
+                name: 'تعداد فوت‌شدگان',
+                key: 'deadCount',
+                render: (v: any) => (
+                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                ),
+              },
             ]}
-            totalItems={(dataset || []).length || 0}
+            totalItems={(dataset || []).length}
           />
         )}
       </div>
@@ -431,4 +413,4 @@ const TestStatus: React.FC<{}> = () => {
   );
 };
 
-export default TestStatus;
+export default OverviewCategories;

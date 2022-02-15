@@ -1,49 +1,57 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
+import {useHistory, useLocation} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {addTotalEmployeMembersAc} from 'src/store/action_creators';
-import Statistic from '../../containers/Guild/components/Statistic';
-import totalRecritment from '../../assets/images/icons/people-navy.svg';
-import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
-import saveIcon from '../../assets/images/icons/save-color.svg';
-import deadIcon from '../../assets/images/icons/dead-color.svg';
-import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
-import prescriptionIcon from '../../assets/images/icons/prescription.svg';
-import testIcon from '../../assets/images/icons/test-color.svg';
-import hcsService from '../../services/hcs.service';
+import {addTotalStudentMembersAc} from 'src/store/action_creators';
+import {sideCities} from 'src/helpers/utils';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalStudent from '../../../assets/images/icons/graduation.svg';
+import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
+import saveIcon from '../../../assets/images/icons/save-color.svg';
+import deadIcon from '../../../assets/images/icons/dead-color.svg';
+import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
+import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-1.svg';
+import prescriptionIcon from '../../../assets/images/icons/prescription.svg';
+import testIcon from '../../../assets/images/icons/test-color.svg';
+import hcsService from '../../../services/hcs.service';
 
 
-const OverviewSchoolEmploye = () => {
+interface OverviewSchoolStudentsProps {
+  cityTitle: any;
+}
+
+const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [numberOf, setNumberOf] = useState(null);
   const [numberOfPositives, setNumberOfPositives] = useState(null);
   // eslint-disable-next-line
   const [numberOfNegatives, setNumberOfNegatives] = useState(null);
-
   const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const dispatch = useDispatch();
-
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getNumberOf = async () => {
+
+  const location = useLocation();
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+
+  const getNumberOf = async (province: string) => {
     setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
         organization: 'education',
-        tags: ['#type# پرسنل اداری'].join(','),
+        tags: ['#type# دانش آموز', `#province# استان ${province}`].join(','),
         testResultCount: true,
         vaccinationCount: true,
         total: true,
       }, {cancelToken: source.token});
 
-      dispatch(addTotalEmployeMembersAc(data.total || 0));
+      dispatch(addTotalStudentMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
       setNumberOfPositives(data.numberOfPositives || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
@@ -54,37 +62,62 @@ const OverviewSchoolEmploye = () => {
       // eslint-disable-next-line
       console.log(error);
 
+      // // @ts-ignore
+      // setNumberOf(0);
+      // // @ts-ignore
+      // setNumberOfPlaqueVisited(0);
+      // // @ts-ignore
+      // setNumberOfPositive(0);
+      // // @ts-ignore
+      // setNumberOfRecovered(0);
+      // // @ts-ignore
+      // setNumberOfTestResults(0);
+      // // @ts-ignore
+      // setNumberOfVaccination(0);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getNumberOf();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getNumberOf(provinceName);
+    } else {
+      history.push('/dashboard/school/province');
+    }
+
     return () => {
-      setNumberOf(null);
-      setNumberOfPositives(null);
-      setNumberOfVaccination(null);
-      setNumberOfNanVaccinated(null);
-      setNumberOfRecovered(null);
-      setNumberOfTestResults(null);
+      setNumberOf(null)
+      setNumberOfPositives(null)
+      setNumberOfNegatives(null)
+      setNumberOfVaccination(null)
+      setNumberOfNanVaccinated(null)
+      setNumberOfRecovered(null)
+      setNumberOfTestResults(null)
       source.cancel('Operation canceled by the user.');
     }
-  }, []);
+  }, [location.search]);
 
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="school-overview">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به پرسنل اداری آموزش و پرورش کل کشور
+        نگاه کلی به دانش آموزان در استان &nbsp; {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={totalRecritment}
-            text="مجموع کارمندان آموزش پرورش"
+            icon={totalStudent}
+            text="مجموع دانش آموزان"
             count={numberOf}
             loading={loading}
           />
@@ -119,7 +152,7 @@ const OverviewSchoolEmploye = () => {
           />
           <Statistic
             icon={testIcon}
-            text="تعداد آزمایش‌های کارمندان"
+            text="تعداد آزمایش‌های دانش آموزان"
             count={numberOfTestResults}
             loading={loading}
           />
@@ -128,4 +161,4 @@ const OverviewSchoolEmploye = () => {
     </fieldset>
   );
 };
-export default OverviewSchoolEmploye;
+export default OverviewSchoolStudents;
