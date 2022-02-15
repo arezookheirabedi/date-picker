@@ -417,7 +417,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
                         <CategoryDonut
                           data={[
                             {
-                              name: 'fullDoseVaccine',
+                              name: 'allDoses',
                               title: 'دوز کل',
                               y: record.allDoses || 0,
                               color: {
@@ -429,7 +429,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
                               },
                             },
                             {
-                              name: 'notVaccine',
+                              name: 'noDose',
                               title: 'واکسن نزده',
                               y: record.noDose || 0,
                               color: {
@@ -441,7 +441,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
                               },
                             },
                             {
-                              name: 'notVaccine',
+                              name: 'unknownInformation',
                               title: 'اطلاعات مخدوش',
                               y: record.unknownInformation || 0,
                               color: {

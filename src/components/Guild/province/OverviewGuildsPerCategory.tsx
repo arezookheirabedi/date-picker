@@ -43,10 +43,10 @@ const OverviewGuildsPerCategory: React.FC<any> = () => {
     setLoading(true);
     try {
       // const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
-      // const normalizedDate: any[] = [];
+      // const normalizedData: any[] = [];
       // data.forEach((item: any, index: number) => {
       //   // if (item.total !== 0) {
-      //   normalizedDate.push({
+      //   normalizedData.push({
       //     id: `ovca_${index}`,
       //     name: getServiceTypeName(item.serviceType),
       //     employeesCount: item.total || 0,
@@ -57,7 +57,7 @@ const OverviewGuildsPerCategory: React.FC<any> = () => {
       //   });
       //   // }
       // });
-      // setDataset([...normalizedDate]);
+      // setDataset([...normalizedData]);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);

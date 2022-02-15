@@ -43,10 +43,10 @@ const OverviewCategories: React.FC<{}> = () => {
     try {
       const {data} = await hcsService.membersTagBased(params);
 
-      const normalizedDate: any[] = [];
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
-          normalizedDate.push({
+          normalizedData.push({
             id: `ovca_${index}`,
             name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
@@ -57,8 +57,8 @@ const OverviewCategories: React.FC<{}> = () => {
           });
         }
       });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       setFilterType({
         name: 'بیشترین',
         enName: 'HIGHEST',

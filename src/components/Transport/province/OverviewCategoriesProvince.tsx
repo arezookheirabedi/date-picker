@@ -52,10 +52,10 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       setLoading(true);
       setIsCancel(false);
       const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
-      const normalizedDate: any[] = [];
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         // if (item.total !== 0) {
-        normalizedDate.push({
+        normalizedData.push({
           id: `ovca_${index}`,
           name: getServiceTypeName(item.serviceType),
           employeesCount: item.total || 0,
@@ -66,8 +66,8 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         });
         // }
       });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
       setIsCancel(false);
     } catch (error: any) {

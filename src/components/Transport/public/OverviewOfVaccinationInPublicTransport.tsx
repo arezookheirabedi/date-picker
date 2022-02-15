@@ -133,7 +133,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       const {data} = await transportService.overviewVaccinePercent(params, {
         cancelToken: source.token,
       });
-      const normalizedDate: any[] = [];
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
         let secondDose = 0;
@@ -186,7 +186,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           total = allVaccination + noDose + unknownInformation;
         }
 
-        normalizedDate.push({
+        normalizedData.push({
           id: `ovvac_${index}`,
           name: getServiceTypeName(item.serviceType),
           firstDosePercentage: (firstDose * 100) / total,
@@ -207,8 +207,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         });
       });
 
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       setFilterType({name: 'کمترین', enName: 'LOWEST'});
     } catch (error) {
       // eslint-disable-next-line
@@ -388,7 +388,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           </Menu>
         </div>
       </div>
-      
+
       {loading ? (
         <div className="p-20">
           <Spinner />
@@ -408,7 +408,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                       <CategoryDonut
                         data={[
                           {
-                            name: 'fullDoseVaccine',
+                            name: 'allDoses',
                             title: 'دوز کل',
                             y: record.allDoses || 0,
                             color: {
@@ -420,7 +420,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                             },
                           },
                           {
-                            name: 'notVaccine',
+                            name: 'noDose',
                             title: 'واکسن نزده',
                             y: record.noDose || 0,
                             color: {
@@ -432,7 +432,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                             },
                           },
                           {
-                            name: 'notVaccine',
+                            name: 'unknownInformation',
                             title: 'اطلاعات مخدوش',
                             y: record.unknownInformation || 0,
                             color: {

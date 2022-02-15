@@ -5,6 +5,7 @@ import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
+import { schoolTypes } from 'src/helpers/sortingModels';
 import DatePickerModal from '../DatePickerModal';
 import calendar from '../../assets/images/icons/calendar.svg';
 import Table from '../TableScope';
@@ -14,6 +15,10 @@ import Spinner from '../Spinner';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
 const filterTypes = [
+  {
+    name: 'پیشفرض',
+    enName: '',
+  },
   {
     name: 'بیشترین',
     enName: 'HIGHEST',
@@ -26,8 +31,8 @@ const filterTypes = [
 
 const TestStatus: React.FC<{}> = () => {
   const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
+    name: 'پیشفرض',
+    enName: '',
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -45,25 +50,32 @@ const TestStatus: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await hcsService.testResultTagBased(params, {cancelToken: source.token});
-      const normalizedDate: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedDate.push({
+      const sortData: any = [];
+
+      schoolTypes.forEach(item => {
+        const tm = data.find((i: any) => i.tag === item);
+        sortData.push(tm);
+      });
+
+
+      const normalizedData: any[] = [];
+      sortData.forEach((item: any, index: number) => {
+        normalizedData.push({
           id: `ovca_${index}`,
           name: item.tag || 'نامشخص',
           total: item.total || 0,
           positiveCount: item.positiveCount || 0,
+          positivePercentage:
+            (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0,
           negativeCount: item.negativeCount || 0,
           unknownCount:
             (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
           // deadCount: 120,
         });
       });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
-      setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
-      });
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({name: 'پیشفرض', enName: ''});
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -87,10 +99,6 @@ const TestStatus: React.FC<{}> = () => {
     return () => {
       setDataset([]);
       setOrgDataset([]);
-      setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
-      });
       source.cancel('Operation canceled by the user.');
     };
   }, []);
@@ -145,13 +153,13 @@ const TestStatus: React.FC<{}> = () => {
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
       // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
 
-      if (a.total < b.total) {
+      if (a.positivePercentage < b.positivePercentage) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.positivePercentage > b.positivePercentage) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -183,7 +191,7 @@ const TestStatus: React.FC<{}> = () => {
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'بیشترین'}
+                  {filterType?.name || 'پیشفرض'}
                 </span>
                 <DownIcon className="h-2 w-2.5 mr-2" />
               </Menu.Button>

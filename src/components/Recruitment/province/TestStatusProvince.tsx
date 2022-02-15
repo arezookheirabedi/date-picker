@@ -49,9 +49,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     setLoading(true);
     try {
       const {data} = await hcsService.testResultTagBased(params);
-      const normalizedDate: any[] = [];
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
-        normalizedDate.push({
+        normalizedData.push({
           id: `ovca_${index}`,
           name: item.tag || 'نامشخص',
           total: item.total || 0,
@@ -64,8 +64,8 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           // deadCount: 120,
         });
       });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       setFilterType({
         name: 'بیشترین',
         enName: 'HIGHEST',
