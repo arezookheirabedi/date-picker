@@ -1,32 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFilter';
-import Charts from '../Charts';
-import {sideCities, toPersianDigit} from '../../helpers/utils';
-import hcsService from '../../services/hcs.service';
-import Spinner from '../Spinner';
-import TagsSelect from '../TagsSelect';
+import {Menu} from '@headlessui/react';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import Charts from '../../Charts';
+import {toPersianDigit, transportationTypes} from '../../../helpers/utils';
+import transportService from '../../../services/transport.service';
+import Spinner from '../../Spinner';
 
 const {Line} = Charts;
 
-interface IParams {
-  status: string;
-  type: string;
-  from: any;
-  to: any;
-  tags: any;
-}
-
-interface OverviewPatientsProvinceProps {
-  cityTitle: any;
-}
-
-const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({cityTitle}) => {
+const OverviewPublicPatients = () => {
   const [data, setData] = useState([]);
+  const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
@@ -37,16 +27,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     to: null,
   }) as any;
 
-  const location = useLocation();
-  const history = useHistory();
-
-  const [queryParams, setQueryParams] = useState<IParams>({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
-    from: '',
-    to: '',
-    tags: '',
-  });
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -72,11 +54,21 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       : '';
   };
 
-  const getLinearOverview = async (params: any) => {
+  const [queryParams, setQueryParams] = useState({
+    status: 'POSITIVE',
+    type: 'MONTHLY',
+    fromDate: null,
+    toDate: null,
+    serviceType: '',
+  });
+
+  const getLinearOverviewPublicTransport = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.testResultTimeBased(params);
+      const response = await transportService.linearOverviewPublicTransport(params, {
+        cancelToken: source.token,
+      });
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -88,42 +80,16 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getLinearOverview({
-          ...queryParams,
-          tags: [...(queryParams.tags || []), `استان ${provinceName}`].join(','),
-          organization: 'employment',
-        });
-      }, 500);
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
+    const idSetTimeOut = setTimeout(() => {
+      getLinearOverviewPublicTransport(queryParams);
+    }, 500);
 
     return () => {
-      if (existsCity) {
-        clearTimeout(idSetTimeOut);
-      }
+      setData([]);
+      source.cancel('Operation canceled by the user.');
+      clearTimeout(idSetTimeOut);
     };
-  }, [queryParams, location.search]);
-
-  useEffect(() => {
-    setQueryParams({
-      ...queryParams,
-    });
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  }, [location.search]);
+  }, [queryParams]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -156,15 +122,15 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       setQueryParams({
         ...queryParams,
         type: lastState,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       setQueryParams({
         ...queryParams,
         type: 'MONTHLY',
-        from: null,
-        to: null,
+        fromDate: null,
+        toDate: null,
       });
     }
   }, [selectedDayRange]);
@@ -179,23 +145,54 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی مبتلایان کارکنان دولت در &nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان حمل و نقل عمومی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
-            {cityTitle && (
-              <TagsSelect
-                placeholder="کل کارکنان"
-                organization="employment"
-                tagPattern="^(?!.*(استان)).*$"
-                setQueryParams={setQueryParams}
-                queryParams={queryParams}
-              />
-            )}
-
+            <Menu
+              as="div"
+              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
+            >
+              <div>
+                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
+                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
+                  <span className="ml-10 whitespace-nowrap truncate">
+                    {serviceType?.name || 'کل حمل و نقل'}
+                  </span>
+                  <DownIcon className="h-2 w-2.5 mr-2" />
+                </Menu.Button>
+              </div>
+              <Menu.Items className="z-40 absolute left-0 xl:right-0 w-52 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="px-1 py-1 ">
+                  {transportationTypes.map((value: any, index: any) => {
+                    return (
+                      // eslint-disable-next-line
+                      <Menu.Item key={index}>
+                        {({active}) => (
+                          <button
+                            type="button"
+                            className={`${
+                              active ? 'bg-gray-100' : ''
+                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm whitespace-nowrap`}
+                            onClick={() => {
+                              setServiceType(value);
+                              setQueryParams({
+                                ...queryParams,
+                                serviceType: value.enName,
+                              });
+                            }}
+                          >
+                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
+                            {value.name}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    );
+                  })}
+                </div>
+              </Menu.Items>
+            </Menu>
             <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
@@ -287,7 +284,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
             wrapperClassName="w-1/4"
           />
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />
@@ -303,4 +299,4 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   );
 };
 
-export default OverviewPatientsProvince;
+export default OverviewPublicPatients;

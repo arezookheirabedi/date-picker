@@ -1,13 +1,17 @@
-// import axios from 'axios';
 import React, {useState} from 'react';
-import driverInfectedIcon from '../../assets/images/icons/driver-infected.svg';
-import deactiveFuelCardIcon from '../../assets/images/icons/deactive-fuel-card.svg';
-import informationUpdatedIcon from '../../assets/images/icons/information-updated.svg';
-import deactivateInquiryIcon from '../../assets/images/icons/deactivate-inquiry.svg';
-import Statistic from '../../containers/Guild/components/Statistic';
+// import axios from 'axios';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import driverInfectedIcon from '../../../assets/images/icons/driver-infected.svg';
+import deactiveFuelCardIcon from '../../../assets/images/icons/deactive-fuel-card.svg';
+import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
+import deactivateInquiryIcon from '../../../assets/images/icons/deactivate-inquiry.svg';
 // import transportService from '../../services/transport.service';
 
-const OverviewSamas = () => {
+interface OverviewSamasProvinceProps {
+  cityTitle: any;
+}
+
+const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}) => {
   // const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   // eslint-disable-next-line
   const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
@@ -79,7 +83,9 @@ const OverviewSamas = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">سامانه ملی اطلاعات سفر (سماس)</legend>
+      <legend className="text-black mx-auto px-3">
+        سامانه ملی اطلاعات سفر (سماس) استان {cityTitle}
+      </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -106,8 +112,8 @@ const OverviewSamas = () => {
             text="اطلاعات به روز رسانی شده"
             // count={numberOfPlaqueVisited}
             count={0}
-            loading={numberOfPlaqueVisitedLoading}
             hasInfo
+            loading={numberOfPlaqueVisitedLoading}
             infoText="این عدد مشتمل بر مجموع اطلاعات به روز رسانی دریافتی از سماس از تاریخ 1400/10/01 است"
           />
           <Statistic
@@ -123,4 +129,4 @@ const OverviewSamas = () => {
     </fieldset>
   );
 };
-export default OverviewSamas;
+export default OverviewSamasProvince;

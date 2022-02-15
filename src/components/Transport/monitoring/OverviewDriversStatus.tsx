@@ -7,14 +7,14 @@ import {useLocation, useHistory} from 'react-router-dom';
 import qs from 'qs';
 import {Menu} from '@headlessui/react';
 import transportService from 'src/services/transport.service';
-import Table from '../Table';
-import ExportButton from '../Export/ExportButton';
-import DatePickerModal from '../DatePickerModal';
-import {toPersianDigit, getServiceTypeName} from '../../helpers/utils';
-import calendar from '../../assets/images/icons/calendar.svg';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
-import {ReactComponent as FolderIcon} from '../../assets/images/icons/folder.svg';
-import Spinner from '../Spinner';
+import Table from '../../Table';
+import ExportButton from '../../Export/ExportButton';
+import DatePickerModal from '../../DatePickerModal';
+import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
+import Spinner from '../../Spinner';
 
 interface OverviewDriverStatusProps {
   cityTitle?: string;

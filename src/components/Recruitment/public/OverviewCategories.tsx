@@ -1,22 +1,17 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {useHistory, useLocation} from 'react-router-dom';
-import hcsService from 'src/services/hcs.service';
 import {Menu} from '@headlessui/react';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities, toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import hcsService from 'src/services/hcs.service';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
-interface TestStatusProvinceProps {
-  cityTitle: any;
-}
-
-const filterTypes = [
+const filterTypes: any[] = [
   {
     name: 'بیشترین',
     enName: 'HIGHEST',
@@ -26,19 +21,17 @@ const filterTypes = [
     enName: 'LOWEST',
   },
 ];
-// eslint-disable-next-line
-const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  });
+
+const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
+  const [filterType, setFilterType] = useState({
+    name: 'بیشترین',
+    enName: 'HIGHEST',
+  });
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -48,22 +41,24 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.testResultTagBased(params);
-      const normalizedDate: any[] = [];
+      const {data} = await hcsService.membersTagBased(params);
+
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
-        normalizedDate.push({
-          id: `ovca_${index}`,
-          name: item.tag || 'نامشخص',
-          total: item.total || 0,
-          positiveCount: item.positiveCount || 0,
-          negativeCount: item.negativeCount || 0,
-          unknownCount:
-            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
-          // deadCount: 120,
-        });
+        if (item.total !== 0) {
+          normalizedData.push({
+            id: `ovca_${index}`,
+            name: item.tag || 'نامشخص',
+            employeesCount: item.total || 0,
+            infectedCount: item.positiveCount || 0,
+            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+            saveCount: item.recoveredCount || 0,
+            // deadCount: 120,
+          });
+        }
       });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       setFilterType({
         name: 'بیشترین',
         enName: 'HIGHEST',
@@ -77,22 +72,16 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
+    getOverviewByCategory({
+      organization: 'employment',
+      tagPattern: '^(?!.*(استان|_)).*$',
+      tags: ['^((?!استان).)*$'].join(','),
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
     });
-    if (existsCity) {
-      getOverviewByCategory({
-        organization: 'employment',
-        from: '',
-        to: '',
-        tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
-      });
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
-  }, [location.search]);
+  }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -119,36 +108,30 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      if (selectedDayRange.from && selectedDayRange.to) {
-        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-        getOverviewByCategory({
-          organization: 'employment',
-          // resultStatus: 'POSITIVE',
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          // province: provinceName,
-          tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
-        });
-      } else {
-        getOverviewByCategory({
-          organization: 'employment',
-          tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
-          from: null,
-          to: null,
-        });
-      }
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      getOverviewByCategory({
+        organization: 'employment',
+        tagPattern: '^(?!.*(استان|_)).*$',
+        tags: ['^((?!استان).)*$'].join(','),
+        // resultStatus: 'POSITIVE',
+        // recoveredCount: true,
+        // total: true,
+        // count: true,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+      });
     } else {
-      history.push('/dashboard/recruitment/province');
+      getOverviewByCategory({
+        organization: 'employment',
+        tagPattern: '^(?!.*(استان|_)).*$',
+        tags: ['^((?!استان).)*$'].join(','),
+        from: null,
+        to: null,
+      });
     }
   }, [selectedDayRange]);
 
@@ -157,11 +140,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (Number(a.infectedPercent) < Number(b.infectedPercent)) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (Number(a.infectedPercent) > Number(b.infectedPercent)) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -185,11 +168,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (Number(a.infectedPercent) < Number(b.infectedPercent)) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (Number(a.infectedPercent) > Number(b.infectedPercent)) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -209,11 +192,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        وضعیت آزمایش کارکنان دولت استان‌ &nbsp;
-        {cityTitle}
-      </legend>
-
+      <legend className="text-black mx-auto px-3">نگاه کلی به کارکنان دولت کشور</legend>
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center">
           <div className="relative inline-flex align-center leading-3">
@@ -240,7 +219,8 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
             />
           </div>
         </div>
-        <div className="flex flex-grow align-center justify-end space-x-5 rtl:space-x-reverse">
+
+        <div className="flex flex-grow items-center justify-end space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             <Menu
               as="div"
@@ -296,7 +276,6 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 showDatePicker
               />
             ) : null}
-
             <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
               <div
                 className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
@@ -367,7 +346,6 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           </div>
         </div>
       </div>
-
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
@@ -379,15 +357,15 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
-                name: 'وضعیت',
+                name: 'وضعیت کلی',
                 key: '',
                 render: (v: any, record) => (
                   <CategoryDonut
                     data={[
                       {
-                        name: 'unknownCount',
-                        title: 'درصد تست‌های نامشخص',
-                        y: record.unknownCount || 0,
+                        name: 'deadCount',
+                        title: 'تعداد فوت‌شدگان',
+                        y: record.deadCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -397,9 +375,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                         },
                       },
                       {
-                        name: 'negativeCount',
-                        title: 'درصد تست‌های منفی',
-                        y: record.negativeCount || 0,
+                        name: 'saveCount',
+                        title: 'تعداد بهبودیافتگان',
+                        y: record.saveCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -409,9 +387,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                         },
                       },
                       {
-                        name: 'positiveCount',
-                        title: 'درصد تست‌های مثبت',
-                        y: record.positiveCount || 0,
+                        name: 'infectedCount',
+                        title: 'تعداد مبتلایان',
+                        y: record.infectedCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -426,65 +404,52 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'دسته',
+                name: 'سازمان',
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {((page - 1) * 10 + (index + 1)).toPersianDigits()}.
-                    {/* eslint-disable-next-line */}
-                    {v.replace(/استان\s(.*)_/g, '')}
+                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
                   </div>
                 ),
               },
               {
-                name: 'تعداد آزمایش‌های انجام شده',
-                key: 'total',
+                name: 'تعداد کارکنان',
+                key: 'employeesCount',
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              },
+              {
+                name: 'درصد ابتلا',
+                key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
-                    {Number(v || 0)
-                      .commaSeprator()
-                      .toPersianDigits()}
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های مثبت',
-                key: 'positiveCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
+                    {Number(v).toLocaleString('fa', {
+                      minimumFractionDigits: 4,
+                    })}
                     %
                   </span>
                 ),
               },
               {
-                name: 'درصد تست‌های منفی',
-                key: 'negativeCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
+                name: 'تعداد مبتلایان',
+                key: 'infectedCount',
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              },
+              {
+                name: 'تعداد بهبودیافتگان',
+                key: 'saveCount',
+                render: (v: any) => (
+                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
                 ),
               },
-              // {
-              //   name: 'درصد تست‌های نامشخص',
-              //   key: 'unknownCount',
-              //   render: (v: any, record: any) => (
-              //     <span>
-              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-              //         .toFixed(4)
-              //         .toPersianDigits()}
-              //       %
-              //     </span>
-              //   ),
-              // },
+              {
+                name: 'تعداد فوت‌شدگان',
+                key: 'deadCount',
+                render: (v: any) => (
+                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                ),
+              },
             ]}
-            totalItems={(dataset || []).length || 0}
+            totalItems={(dataset || []).length}
           />
         )}
       </div>
@@ -492,4 +457,4 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   );
 };
 
-export default TestStatusProvince;
+export default OverviewCategories;

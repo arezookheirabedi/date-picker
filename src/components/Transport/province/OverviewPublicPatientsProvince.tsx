@@ -4,14 +4,14 @@ import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFilter';
-import Charts from '../Charts';
-import {toPersianDigit, sideCities, transportationTypes} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
-import Spinner from '../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import Charts from '../../Charts';
+import {toPersianDigit, sideCities, transportationTypes} from '../../../helpers/utils';
+import transportService from '../../../services/transport.service';
+import Spinner from '../../Spinner';
 
 const {Line} = Charts;
 

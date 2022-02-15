@@ -1,24 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import { Menu } from '@headlessui/react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
-import Statistic from '../../containers/Guild/components/Statistic';
-import totalEmploye from '../../assets/images/icons/people-dark-green.svg';
-import YellowVaccine from '../../assets/images/icons/yellow-vaccine-lg.svg';
-import GreenVaccine from '../../assets/images/icons/green-vaccine-lg.svg';
-import PurppleVaccine from '../../assets/images/icons/purpple-vaccine-lg.svg';
-import BlueVaccine from '../../assets/images/icons/blue-vaccine.svg';
-import NavyVaccine from '../../assets/images/icons/navy-vaccine-lg.svg';
-import Gray1Vaccine from '../../assets/images/icons/gray-vaccine-1.svg';
-import Gray2Vaccine from '../../assets/images/icons/gray-vaccine-2.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
-
-
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalEmploye from '../../../assets/images/icons/people-dark-green.svg';
+import YellowVaccine from '../../../assets/images/icons/yellow-vaccine-lg.svg';
+import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
+import Gray1Vaccine from '../../../assets/images/icons/gray-vaccine-1.svg';
+import Gray2Vaccine from '../../../assets/images/icons/gray-vaccine-2.svg';
+import PurppleVaccine from '../../../assets/images/icons/purpple-vaccine-lg.svg';
+import BlueVaccine from '../../../assets/images/icons/blue-vaccine.svg';
+import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 const filterTypes: any[] = [
   {
@@ -31,53 +27,33 @@ const filterTypes: any[] = [
   },
 ];
 
-
-interface OverviewOfVaccinationProvinceProps {
-  cityTitle: any;
-}
-
-const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
-  cityTitle,
-}) => {
-  const {total: totalMembers} = useSelector(state => state.recruitmentsMembers);
-
+const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
-  const [countsLoading, setCountsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [countsLoading, setCountsLoading] = useState(false);
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
   const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
+    name: 'کمترین',
+    enName: 'LOWEST',
   });
   const [counts, setCounts] = useState<any>({
-    numberOfEmployees: 0,
     numberOfFirstDose: 0,
     numberOfSecondDose: 0,
     numberOfThirdDose: 0,
-    numberOfMoreThreeDose: 0,
+    numberOfMoreThirdDose: 0,
+    numberOfUnvaccinated: 0,
     numberOfAllDose: 0,
     numberOfUnknownDose: 0,
-    numberOfUnvaccinated: 0,
   });
 
-  const location = useLocation();
-  const history = useHistory();
+  const {total: totalMembers} = useSelector(state => state.recruitmentsMembers);
 
   async function getOverviewByVaccine(params: any) {
     setCountsLoading(true);
     try {
       const {data} = await hcsService.doses(params);
-      let tmp = {
-        numberOfEmployees: 0,
-        numberOfFirstDose: 0,
-        numberOfSecondDose: 0,
-        numberOfThirdDose: 0,
-        numberOfMoreThreeDose: 0,
-        numberOfAllDose: 0,
-        numberOfUnknownDose: 0,
-        numberOfUnvaccinated: 0,
-      };
+      let tmp = {...counts};
 
       // eslint-disable-next-line no-plusplus
       for (let j: number = 0; j < data.length; j++) {
@@ -169,7 +145,6 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           //   thirdDose += Number(value);
           // }
 
-          // temporary code
           if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
             moreThanThreeDose += 0;
           }
@@ -200,6 +175,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
           unknownInformation,
           noDose: (noDose * 100) / total,
+          allDosesPercentage:
+            ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
           // eslint-disable-next-line
           // notVaccine: item.dosesCountMap
           //   ? item.dosesCountMap[0]
@@ -211,8 +188,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
       setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
+        name: 'کمترین',
+        enName: 'LOWEST',
       });
     } catch (error) {
       // eslint-disable-next-line
@@ -223,26 +200,14 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
+    getOverviewByVaccine({
+      organization: 'employment',
     });
-    if (existsCity) {
-      getOverviewByVaccine({
-        organization: 'employment',
-        tags: [`استان ${provinceName}`].join(','),
-      });
-
-      getOverviewByVaccinePercent({
-        organization: 'employment',
-        tags: [`^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`].join(','),
-      });
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
-  }, [location.search]);
+    getOverviewByVaccinePercent({
+      organization: 'employment',
+      tags: [`^(?!.*(استان|_)).*$`].join(','),
+    });
+  }, []);
 
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
@@ -277,11 +242,11 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.allDoses < b.allDoses) {
+        if (a.allDosesPercentage < b.allDosesPercentage) {
           return reverse * 1;
         }
 
-        if (a.allDoses > b.allDoses) {
+        if (a.allDosesPercentage > b.allDosesPercentage) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -293,10 +258,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به واکسیناسیون کارکنان دولت در &nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
+
       <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
@@ -334,7 +297,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={counts.numberOfAllDose || 0}
+            count={counts.numberOfAllDose}
             loading={countsLoading}
           />
           <Statistic
@@ -390,7 +353,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
+                    {filterType?.name || 'کمترین'}
                   </span>
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
@@ -428,7 +391,6 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         </div>
       </div>
 
-
       {loading ? (
         <div className="p-20">
           <Spinner />
@@ -447,19 +409,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                     <CategoryDonut
                       data={[
                         {
-                          name: 'unknownInformation',
-                          title: 'مخدوش',
-                          y: record.unknownInformation || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#6E6E6E'], // start
-                              [1, '#393939'], // end
-                            ],
-                          },
-                        },
-                        {
-                          name: 'allDoses',
+                          name: 'allDosesPercentage',
                           title: 'دوز کل',
                           y: record.allDoses || 0,
                           color: {
@@ -488,13 +438,11 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   className: 'flex justify-center w-full',
                 },
                 {
-                  name: 'دسته',
+                  name: 'سازمان',
                   key: 'name',
                   render: (v: any, record, index: number, page: number) => (
                     <div className="flex">
-                      {((page - 1) * 10 + (index + 1)).toPersianDigits()}.
-                      {/* eslint-disable-next-line */}
-                      {v.replace(/استان\s(.*)_/, '')}
+                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
                     </div>
                   ),
                 },
@@ -519,6 +467,11 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
                 },
                 {
+                  name: 'درصد  کل دوزها',
+                  key: 'allDosesPercentage',
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
                   name: 'واکسن نزده',
                   key: 'noDose',
                   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
@@ -534,7 +487,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
               ]}
-              totalItems={(dataset || []).length || 0}
+              totalItems={dataset.length || 0}
             />
           </div>
         </>
@@ -543,4 +496,4 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   );
 };
 
-export default OverviewOfVaccinationProvince;
+export default OverviewOfVaccination;

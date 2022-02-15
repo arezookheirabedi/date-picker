@@ -2,18 +2,18 @@ import React, {useEffect, useState} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
-import Statistic from '../../containers/Guild/components/Statistic';
-import transportService from '../../services/transport.service';
-import totalDriver from '../../assets/images/icons/transport-color.svg';
-import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
-import saveIcon from '../../assets/images/icons/save-color.svg';
-import deadIcon from '../../assets/images/icons/dead-color.svg';
-import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-lg.svg';
-import inquiryPlaque from '../../assets/images/icons/inquiry-plaque.svg';
-import positiveInquiryPlaque from '../../assets/images/icons/positive-inquiry-plaque.svg';
-import testIcon from '../../assets/images/icons/test-color.svg';
-import {sideCities} from '../../helpers/utils';
+import Statistic from '../../../containers/Guild/components/Statistic';
+import transportService from '../../../services/transport.service';
+import totalDriver from '../../../assets/images/icons/transport-color.svg';
+import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
+import saveIcon from '../../../assets/images/icons/save-color.svg';
+import deadIcon from '../../../assets/images/icons/dead-color.svg';
+import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
+import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-lg.svg';
+import inquiryPlaque from '../../../assets/images/icons/inquiry-plaque.svg';
+import positiveInquiryPlaque from '../../../assets/images/icons/positive-inquiry-plaque.svg';
+import testIcon from '../../../assets/images/icons/test-color.svg';
+import {sideCities} from '../../../helpers/utils';
 
 interface OverviewDriversProvinceProps {
   cityTitle: any;

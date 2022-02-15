@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import OverviewDriversMap from 'src/components/Transport/OverviewDriversMap';
-import OverviewDriverStatus from 'src/components/Transport/OverviewDriversStatus';
+import OverviewDriversMap from 'src/components/Transport/province/OverviewDriversMap';
+import OverviewDriverStatus from 'src/components/Transport/monitoring/OverviewDriversStatus';
 import {sideCities} from '../../helpers/utils';
 
 // eslint-disable-next-line
