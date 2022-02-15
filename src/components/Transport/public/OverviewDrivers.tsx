@@ -193,18 +193,35 @@ const OverviewDrivers = () => {
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع واکسن نزده‌ها"
-            count={0}
+            count={(numberOfDrivers || 0) - (numberOfVaccination || 0)}
+            loading={numberOfDriversLoading || numberOfVaccinationLoading}
             hasInfo
             infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
           />
-          <Statistic icon={vaccineIcon} text="درصد واکسن زده‌ها" count={0} isPercentage />
-          <Statistic icon={grayVaccineIcon} text="درصد واکسن نزده‌ها" count={0} isPercentage />
+          <Statistic
+            icon={vaccineIcon}
+            text="درصد واکسن زده‌ها"
+            count={((numberOfVaccination || 0) * 100) / (numberOfDrivers || 0) || 0}
+            loading={numberOfDriversLoading || numberOfVaccinationLoading}
+            isPercentage
+          />
+          <Statistic
+            icon={grayVaccineIcon}
+            text="درصد واکسن نزده‌ها"
+            count={
+              ((numberOfDrivers || 0) - (numberOfVaccination || 0) * 100) /
+                (numberOfDrivers || 0) || 0
+            }
+            loading={numberOfDriversLoading || numberOfVaccinationLoading}
+            isPercentage
+          />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={driverInfectedIcon}
             text="درصد ابتلا به کل"
-            count={0}
+            count={((numberOfPositiveDrivers || 0) * 100) / (numberOfDrivers || 0) || 0}
+            loading={numberOfDriversLoading || numberOfPositiveDriversLoading}
             isPercentage
             hasInfo
             infoText="این عدد استخراج شده از مجموع افراد فعال در این حوزه با نتایج مثبت آزمایش هایشان است"
