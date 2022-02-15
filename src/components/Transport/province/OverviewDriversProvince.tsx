@@ -227,17 +227,17 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
           <Statistic
             icon={vaccineIcon}
             text="درصد واکسن زده‌ها"
-            count={((numberOfVaccination || 0) * 100) / (numberOfDrivers || 0) || 0}
+            count={(((numberOfVaccination || 0) * 100) / (numberOfDrivers || 0) || 0).toFixed(3)}
             loading={numberOfDriversLoading || numberOfVaccinationLoading}
             isPercentage
           />
           <Statistic
             icon={grayVaccineIcon}
             text="درصد واکسن نزده‌ها"
-            count={
-              ((numberOfDrivers || 0) - (numberOfVaccination || 0) * 100) /
+            count={(
+              (((numberOfDrivers || 0) - (numberOfVaccination || 0)) * 100) /
                 (numberOfDrivers || 0) || 0
-            }
+            ).toFixed(3)}
             loading={numberOfDriversLoading || numberOfVaccinationLoading}
             isPercentage
           />
@@ -246,7 +246,9 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
           <Statistic
             icon={vaccineIcon}
             text="درصد ابتلا به کل"
-            count={((numberOfPositiveDrivers || 0) * 100) / (numberOfDrivers || 0) || 0}
+            count={(((numberOfPositiveDrivers || 0) * 100) / (numberOfDrivers || 0) || 0).toFixed(
+              3
+            )}
             loading={numberOfDriversLoading || numberOfPositiveDriversLoading}
             isPercentage
             hasInfo
