@@ -1,12 +1,12 @@
 import React from 'react';
 
 // import avatar from "../../assets/images/logos/avatar.svg";
-import OverviewSamas from '../../components/Transport/OverviewSamas';
-import OverviewCategories from '../../components/Transport/OverviewCategories';
-import OverviewPublicPatients from '../../components/Transport/OverviewPublicPatients';
-import OverviewOfVaccinationInPublicTransport from '../../components/Transport/OverviewOfVaccinationInPublicTransport';
-import TestsInTransport from '../../components/Transport/TestsInTransport';
-import OverviewDrivers from '../../components/Transport/OverviewDrivers';
+import OverviewSamas from '../../components/Transport/public/OverviewSamas';
+import OverviewCategories from '../../components/Transport/public/OverviewCategories';
+import OverviewPublicPatients from '../../components/Transport/public/OverviewPublicPatients';
+import OverviewOfVaccinationInPublicTransport from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
+import TestsInTransport from '../../components/Transport/public/TestsInTransport';
+import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
 

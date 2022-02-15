@@ -1,27 +1,29 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
-import Charts from '../Charts';
-import map from '../Charts/ir-all.geo.json';
-import mapData from '../Charts/mapData.json';
-import {sideCities} from '../../helpers/utils';
+
+import Charts from '../../Charts';
+import map from '../../Charts/ir-all.geo.json';
+import mapData from '../../Charts/mapData.json';
+import {sideCities} from '../../../helpers/utils';
 
 const {Map} = Charts;
 
-interface OverviewDriversMapProps {
+interface OverviewMapProps {
   sideCityStatus?: any;
   cityTitle: any;
   selectDefault?: boolean;
   destinationId: any;
 }
 
-const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
+const OverviewMap: React.FC<OverviewMapProps> = ({
   sideCityStatus,
-  cityTitle,
   selectDefault,
   destinationId,
 }) => {
   const chartRef = useRef<any>(null);
   const {search, ...location} = useLocation();
+
+  const query = new URLSearchParams(search);
 
   useEffect(() => {
     try {
@@ -31,7 +33,6 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
         item.select();
       });
     } catch (error) {
-      // eslint-disable-next-line
       console.log(error);
     }
 
@@ -224,13 +225,14 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
       },
     ],
   });
-
+  
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت حمل و نقل عمومی {cityTitle ? ` استان‌ ${cityTitle}` : ''}
+        نگاه کلی به کارکنان دولت{' '}
+        {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
       </legend>
-      <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow relative">
+      <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
         <Link to={location.pathname} className="absolute right-20 top-8 z-40">
           <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
         </Link>
@@ -260,4 +262,4 @@ const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
   );
 };
 
-export default OverviewDriversMap;
+export default OverviewMap;

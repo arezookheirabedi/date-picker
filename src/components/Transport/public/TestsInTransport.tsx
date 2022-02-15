@@ -1,31 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
-
-import Charts from '../Charts';
-import DatePickerModal from '../DatePickerModal';
-import {
-  toPersianDigit,
-  sideCities,
-  getColorByServiceTypeName,
-  getServiceTypeName,
-} from '../../helpers/utils';
-import calendar from '../../assets/images/icons/calendar.svg';
-import transportService from '../../services/transport.service';
-import Spinner from '../Spinner';
+import Charts from '../../Charts';
+import DatePickerModal from '../../DatePickerModal';
+import {toPersianDigit, getColorByServiceTypeName, getServiceTypeName} from '../../../helpers/utils';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import transportService from '../../../services/transport.service';
+import Spinner from '../../Spinner';
 
 const {Pyramid} = Charts;
 
-interface TestsInTransportProvinceProps {
-  cityTitle: any;
-}
-
-const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({cityTitle}) => {
+const TestsInTransport = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  // eslint-disable-next-line
   const [pyramidData, setPyramidData] = useState([]);
 
   // {day: 20, month: 9, year: 1400}
@@ -34,19 +24,8 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     to: null,
   }) as any;
 
-  const location = useLocation();
-  const history = useHistory();
-
   const {CancelToken} = axios;
   const source = CancelToken.source();
-
-  const [queryParams, setQueryParams] = useState({
-    count: true,
-    total: true,
-    resultReceiptDateFrom: null,
-    resultReceiptDateTo: null,
-    testResultStatusList: 'POSITIVE,NEGATIVE',
-  });
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -78,10 +57,10 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     try {
       const {data} = await transportService.testsInTransport(params, {cancelToken: source.token});
 
-      let normalizedDate = [] as any;
+      let normalizedData = [] as any;
       data.map((item: any) => {
         if (item.total !== 0) {
-          return normalizedDate.push({
+          return normalizedData.push({
             title: getServiceTypeName(item.serviceType),
             percentage: ((item.count * 100) / item.total).toFixed(4),
             color: getColorByServiceTypeName(item.serviceType),
@@ -90,11 +69,13 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
         return null;
       });
 
-      normalizedDate = normalizedDate.sort((a: any, b: any) => {
+      normalizedData = normalizedData.sort((a: any, b: any) => {
         return b.percentage - a.percentage;
       });
 
-      setPyramidData(normalizedDate);
+      setPyramidData(normalizedData);
+      // // setPyramidData(data);
+      // // console.log(data);
     } catch (error: any) {
       // eslint-disable-next-line
       console.log(error);
@@ -103,29 +84,13 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
       setLoading(false);
     }
   };
-
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getTestInTransport({...queryParams, province: provinceName});
-      }, 500);
-    } else {
-      history.push('/dashboard/transport/province');
-    }
+    getTestInTransport({count: true, total: true, testResultStatusList: 'POSITIVE,NEGATIVE'});
     return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        setPyramidData([]);
-        clearTimeout(idSetTimeOut);
-      }
+      source.cancel('Operation canceled by the user.');
+      setPyramidData([]);
     };
-  }, [queryParams, location.search]);
+  }, []);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -133,14 +98,18 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
+      getTestInTransport({
+        count: true,
+        total: true,
+        testResultStatusList: 'POSITIVE,NEGATIVE',
         resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
     } else {
-      setQueryParams({
-        ...queryParams,
+      getTestInTransport({
+        count: true,
+        total: true,
+        testResultStatusList: 'POSITIVE,NEGATIVE',
         resultReceiptDateFrom: null,
         resultReceiptDateTo: null,
       });
@@ -157,10 +126,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        آزمایش در حمل و نقل عمومی استان &nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">آزمایش در حمل و نقل</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <div className="flex align-center justify-start">
           {showDatePicker ? (
@@ -254,4 +220,4 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   );
 };
 
-export default TestsInTransportProvince;
+export default TestsInTransport;

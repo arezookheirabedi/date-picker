@@ -1,34 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {Menu} from '@headlessui/react';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFilter';
-import Charts from '../Charts';
-import {toPersianDigit, transportationTypes} from '../../helpers/utils';
-import transportService from '../../services/transport.service';
-import Spinner from '../Spinner';
+import hcsService from 'src/services/hcs.service';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Charts from '../../Charts';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
 
-const {Line} = Charts;
+const {Stacked} = Charts;
 
-const OverviewPublicPatients = () => {
-  const [data, setData] = useState([]);
-  const [serviceType, setServiceType] = useState(null) as any;
+const OverviewVaccinePerProvince = () => {
+  const [dataset, setDataset] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -55,21 +47,95 @@ const OverviewPublicPatients = () => {
   };
 
   const [queryParams, setQueryParams] = useState({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
-    fromDate: null,
-    toDate: null,
-    serviceType: '',
+    from: null,
+    to: null,
+    tags: ['province'].join(','),
+    organization: 'employment',
   });
 
-  const getLinearOverviewPublicTransport = async (params: any) => {
+  // eslint-disable-next-line
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params, {
-        cancelToken: source.token,
+      const {data} = await hcsService.dosesTagBased(params);
+
+      const provinces: any[] = [];
+
+      // eslint-disable-next-line
+      let firstDose: any[] = [];
+      // eslint-disable-next-line
+      let secondDose: any[] = [];
+      // eslint-disable-next-line
+      let thirdDose: any[] = [];
+      // eslint-disable-next-line
+      let moreThanThreeDose: any[] = [];
+      // eslint-disable-next-line
+      let noDose: any[] = [];
+
+      data.forEach((item: any, index: number) => {
+        let more = 0;
+
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesCountMap)) {
+          if (Number(key) === 0) {
+            noDose.push(Number(value));
+          }
+
+          if (Number(key) === 1) {
+            firstDose.push(Number(value));
+          }
+
+          if (Number(key) === 2) {
+            secondDose.push(Number(value));
+          }
+
+          if (Number(key) === 3) {
+            thirdDose.push(Number(value));
+          }
+
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            more += Number(value);
+          }
+        }
+
+        if (noDose.length < index + 1) noDose.push(0);
+        if (firstDose.length < index + 1) firstDose.push(0);
+        if (secondDose.length < index + 1) secondDose.push(0);
+        if (thirdDose.length < index + 1) thirdDose.push(0);
+        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
+
+        provinces.push(item.tag);
       });
-      setData(response.data);
+
+      setDataset([
+        {
+          name: 'واکسن نزده',
+          color: '#FF0060',
+          data: [...noDose],
+        },
+        {
+          name: 'دوز اول',
+          color: '#F3BC06',
+          data: [...firstDose],
+        },
+        {
+          name: 'دوز دوم',
+          color: '#209F92',
+          data: [...secondDose],
+        },
+        {
+          name: 'دوز سوم',
+          color: '#004D65',
+          data: [...thirdDose],
+        },
+        {
+          name: 'بیش از ۳ دوز',
+          color: '#BFDDE7',
+          data: [...moreThanThreeDose],
+        },
+      ]);
+      setCategories([...provinces]);
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -81,56 +147,30 @@ const OverviewPublicPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverviewPublicTransport(queryParams);
+      getLinearOverview(queryParams);
     }, 500);
 
-    return () => {
-      setData([]);
-      source.cancel('Operation canceled by the user.');
-      clearTimeout(idSetTimeOut);
-    };
+    return () => clearTimeout(idSetTimeOut);
   }, [queryParams]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
-      const tmp: any[] = [];
-      let lastState = 'ANNUAL';
-
-      const start = moment(finalFromDate, 'jYYYY/jM/jD');
-      const end = moment(finalToDate, 'jYYYY/jM/jD');
-
-      const duration = moment.duration(end.diff(start));
-
-      if (!duration.years()) {
-        tmp.push(3);
-        lastState = 'MONTHLY';
-      }
-
-      if (!duration.months() && !duration.years()) {
-        tmp.push(2);
-        lastState = 'WEEKLY';
-      }
-
-      if (!duration.weeks() && !duration.months() && !duration.years()) {
-        tmp.push(1);
-        lastState = 'DAILY';
-      }
-
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
-        type: lastState,
-        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        organization: 'employment',
+        tags: ['province'].join(','),
       });
     } else {
       setQueryParams({
         ...queryParams,
-        type: 'MONTHLY',
-        fromDate: null,
-        toDate: null,
+        from: null,
+        to: null,
       });
     }
   }, [selectedDayRange]);
@@ -145,54 +185,12 @@ const OverviewPublicPatients = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان حمل و نقل عمومی</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به وضعیت واکسیناسیون کارکنان دولت
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between flex-grow px-8">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {serviceType?.name || 'کل حمل و نقل'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
-              <Menu.Items className="z-40 absolute left-0 xl:right-0 w-52 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="px-1 py-1 ">
-                  {transportationTypes.map((value: any, index: any) => {
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm whitespace-nowrap`}
-                            onClick={() => {
-                              setServiceType(value);
-                              setQueryParams({
-                                ...queryParams,
-                                serviceType: value.enName,
-                              });
-                            }}
-                          >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
+        <div className="flex items-center justify-between mb-10 mt-6 px-8">
+          <div className="flex align-center justify-between w-3/4">
             <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
@@ -272,31 +270,54 @@ const OverviewPublicPatients = () => {
             </div>
           </div>
 
-          <RangeDateSliderFilter
-            changeType={v =>
-              setQueryParams({
-                ...queryParams,
-                type: v,
-              })
-            }
-            selectedType={queryParams.type}
-            dates={selectedDayRange}
-            wrapperClassName="w-1/4"
-          />
+          <div className="w-2/4">
+            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
+                  <span>واکسن نزده</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <span>دوز اول</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <span>دوز دوم</span>
+                </div>
+              </div>
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <span>دوز سوم</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <span>بیش از ۳ دوز</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
         {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+        {!loading && dataset.length > 0 && !errorMessage && (
+          <Stacked data={dataset} categories={categories} />
+        )}
+        {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
+        {/* <div className="flex justify-center items-center w-full">
+          <Stacked data={dataset} categories={categories} />
+        </div> */}
       </div>
     </fieldset>
   );
 };
 
-export default OverviewPublicPatients;
+export default OverviewVaccinePerProvince;

@@ -1,27 +1,31 @@
 import React, {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
-// eslint-disable-next-line
 import moment from 'moment-jalaali';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFilter';
-import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
-import hcsService from '../../services/hcs.service';
-import Spinner from '../Spinner';
-import TagsSelect from '../TagsSelect';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import Charts from '../../Charts';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
+import hcsService from '../../../services/hcs.service';
+import Spinner from '../../Spinner';
+import TagsSelect from '../../TagsSelect';
 
 const {Line} = Charts;
 
 interface IParams {
   status: string;
   type: string;
-  from?: any;
-  to?: any;
-  tags?: any;
+  from: any;
+  to: any;
+  tags: any;
 }
 
-const OverviewPatients: React.FC<{}> = () => {
+interface OverviewPatientsProvinceProps {
+  cityTitle: any;
+}
+
+const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({cityTitle}) => {
   const [data, setData] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -32,6 +36,17 @@ const OverviewPatients: React.FC<{}> = () => {
     from: null,
     to: null,
   }) as any;
+
+  const location = useLocation();
+  const history = useHistory();
+
+  const [queryParams, setQueryParams] = useState<IParams>({
+    status: 'POSITIVE',
+    type: 'MONTHLY',
+    from: '',
+    to: '',
+    tags: '',
+  });
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -57,14 +72,6 @@ const OverviewPatients: React.FC<{}> = () => {
       : '';
   };
 
-  const [queryParams, setQueryParams] = useState<IParams>({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
-    from: '',
-    to: '',
-    tags: '',
-  }) as any;
-
   const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
@@ -80,25 +87,43 @@ const OverviewPatients: React.FC<{}> = () => {
     }
   };
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getLinearOverview({
+          ...queryParams,
+          tags: [...(queryParams.tags || []), `استان ${provinceName}`].join(','),
+          organization: 'employment',
+        });
+      }, 500);
+    } else {
+      history.push('/dashboard/recruitment/province');
+    }
+
+    return () => {
+      if (existsCity) {
+        clearTimeout(idSetTimeOut);
+      }
+    };
+  }, [queryParams, location.search]);
+
+  useEffect(() => {
+    setQueryParams({
+      ...queryParams,
+    });
     setSelectedDayRange({
       from: null,
       to: null,
     });
-  };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({
-        organization: 'employment',
-        ...queryParams,
-        tags: (queryParams.tags || []).join(','),
-      });
-    }, 500);
-
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
+  }, [location.search]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -144,19 +169,32 @@ const OverviewPatients: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
 
+  const clearSelectedDayRange = (e: any) => {
+    e.stopPropagation();
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    });
+  };
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان کارکنان دولت</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی مبتلایان کارکنان دولت در &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
-            <TagsSelect
-              placeholder="کل کارکنان"
-              organization="employment"
-              tagPattern="^(?!.*(استان)).*$"
-              setQueryParams={setQueryParams}
-              queryParams={queryParams}
-            />
+            {cityTitle && (
+              <TagsSelect
+                placeholder="کل کارکنان"
+                organization="employment"
+                tagPattern="^(?!.*(استان)).*$"
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              />
+            )}
 
             <div className="flex align-center justify-between">
               {showDatePicker ? (
@@ -202,7 +240,7 @@ const OverviewPatients: React.FC<{}> = () => {
               <div className="flex items-center justify-start mx-4">
                 <span className="dash-separator" />
               </div>
-              <div className="shadow-custom rounded-lg px-4 py-1">
+              <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
                   className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
                   onClick={focusFromDate}
@@ -265,4 +303,4 @@ const OverviewPatients: React.FC<{}> = () => {
   );
 };
 
-export default OverviewPatients;
+export default OverviewPatientsProvince;

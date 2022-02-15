@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Overview from '../../components/Recruitment/Overview';
-import OverviewCategories from '../../components/Recruitment/OverviewCategories';
-import OverviewVaccinePerProvince from '../../components/Recruitment/OverviewVaccinePerProvince';
-import OverviewPatients from '../../components/Recruitment/OverviewPatients';
-import OverviewOfVaccination from '../../components/Recruitment/OverviewOfVaccination';
-import TestStatus from '../../components/Recruitment/TestStatus';
+import Overview from '../../components/Recruitment/public/Overview';
+import OverviewCategories from '../../components/Recruitment/public/OverviewCategories';
+import OverviewVaccinePerProvince from '../../components/Recruitment/public/OverviewVaccinePerProvince';
+import OverviewPatients from '../../components/Recruitment/public/OverviewPatients';
+import OverviewOfVaccination from '../../components/Recruitment/public/OverviewOfVaccination';
+import TestStatus from '../../components/Recruitment/public/TestStatus';
 
 const Recruitment: React.FC<{}> = () => {
   return (

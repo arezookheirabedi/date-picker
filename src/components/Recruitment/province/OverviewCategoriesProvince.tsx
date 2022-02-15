@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import {useHistory, useLocation} from 'react-router-dom';
 import {Menu} from '@headlessui/react';
 import hcsService from 'src/services/hcs.service';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../TableScope';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+
+interface OverviewCategoriesProvinceProps {
+  cityTitle?: any;
+}
 
 const filterTypes: any[] = [
   {
@@ -22,16 +27,18 @@ const filterTypes: any[] = [
   },
 ];
 
-const OverviewCategories: React.FC<{}> = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [orgDataset, setOrgDataset] = useState<any>([]);
-  const [dataset, setDataset] = useState<any>([]);
+const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [filterType, setFilterType] = useState({
     name: 'بیشترین',
     enName: 'HIGHEST',
   });
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [orgDataset, setOrgDataset] = useState<any>([]);
+  const [dataset, setDataset] = useState<any>([]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -43,10 +50,10 @@ const OverviewCategories: React.FC<{}> = () => {
     try {
       const {data} = await hcsService.membersTagBased(params);
 
-      const normalizedDate: any[] = [];
+      const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
-          normalizedDate.push({
+          normalizedData.push({
             id: `ovca_${index}`,
             name: item.tag || 'نامشخص',
             employeesCount: item.total || 0,
@@ -57,8 +64,8 @@ const OverviewCategories: React.FC<{}> = () => {
           });
         }
       });
-      setDataset([...normalizedDate]);
-      setOrgDataset([...normalizedDate]);
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       setFilterType({
         name: 'بیشترین',
         enName: 'HIGHEST',
@@ -70,18 +77,6 @@ const OverviewCategories: React.FC<{}> = () => {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    getOverviewByCategory({
-      organization: 'employment',
-      tagPattern: '^(?!.*(استان|_)).*$',
-      tags: ['^((?!استان).)*$'].join(','),
-      // resultStatus: 'POSITIVE',
-      // recoveredCount: true,
-      // total: true,
-      // count: true,
-    });
-  }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -108,30 +103,69 @@ const OverviewCategories: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
       getOverviewByCategory({
         organization: 'employment',
-        tagPattern: '^(?!.*(استان|_)).*$',
-        tags: ['^((?!استان).)*$'].join(','),
+        tagPattern: `^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`,
+        tags: [` استان ${provinceName}`, '^((?!استان).)*$'],
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
         // count: true,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        // to: '',
+        // from: '',
+        // province: provinceName,
       });
+      //
     } else {
-      getOverviewByCategory({
-        organization: 'employment',
-        tagPattern: '^(?!.*(استان|_)).*$',
-        tags: ['^((?!استان).)*$'].join(','),
-        from: null,
-        to: null,
-      });
+      history.push('/dashboard/recruitment/province');
+    }
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    });
+  }, [location.search]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      if (selectedDayRange.from && selectedDayRange.to) {
+        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+        getOverviewByCategory({
+          organization: 'employment',
+          tagPattern: `^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`,
+          tags: [`استان ${provinceName}`, '^((?!استان).)*$'],
+          // resultStatus: 'POSITIVE',
+          // recoveredCount: true,
+          // total: true,
+          // count: true,
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        });
+      } else {
+        getOverviewByCategory({
+          organization: 'employment',
+          tagPattern: `^(?=.*استان ${provinceName})(^[^_]*_[^_]*$).*$`,
+          tags: [` استان ${provinceName}`, '^((?!استان).)*$'],
+          from: null,
+          to: null,
+        });
+      }
+    } else {
+      history.push('/dashboard/recruitment/province');
     }
   }, [selectedDayRange]);
 
@@ -191,8 +225,11 @@ const OverviewCategories: React.FC<{}> = () => {
   };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به کارکنان دولت کشور</legend>
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="recruitment-overview">
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به کارکنان دولت کشور در استان &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center">
           <div className="relative inline-flex align-center leading-3">
@@ -281,11 +318,9 @@ const OverviewCategories: React.FC<{}> = () => {
                 className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
                 onClick={focusFromDate}
               >
-                {selectedDayRange.from && (
-                  <span className="ml-4 whitespace-nowrap truncate text-xs">
-                    {toPersianDigit(generateFromDate())}
-                  </span>
-                )}
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateFromDate())}
+                </span>
                 {selectedDayRange.to || selectedDayRange.from ? (
                   <button type="button" onClick={clearSelectedDayRange}>
                     <svg
@@ -316,11 +351,9 @@ const OverviewCategories: React.FC<{}> = () => {
                 className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
                 onClick={focusFromDate}
               >
-                {selectedDayRange.to && (
-                  <span className="ml-4 whitespace-nowrap truncate text-xs">
-                    {toPersianDigit(generateToDate())}
-                  </span>
-                )}
+                <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  {toPersianDigit(generateToDate())}
+                </span>
                 {selectedDayRange.to || selectedDayRange.from ? (
                   <button type="button" onClick={clearSelectedDayRange}>
                     <svg
@@ -408,7 +441,9 @@ const OverviewCategories: React.FC<{}> = () => {
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                    {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.
+                    {/* eslint-disable-next-line */}
+                    {v.replace(/استان\s(.*)_/, '')}
                   </div>
                 ),
               },
@@ -457,4 +492,4 @@ const OverviewCategories: React.FC<{}> = () => {
   );
 };
 
-export default OverviewCategories;
+export default OverviewCategoriesProvince;

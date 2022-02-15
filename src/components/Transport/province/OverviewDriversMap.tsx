@@ -1,29 +1,27 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
-
-import Charts from '../Charts';
-import map from '../Charts/ir-all.geo.json';
-import mapData from '../Charts/mapData.json';
-import {sideCities} from '../../helpers/utils';
+import Charts from '../../Charts';
+import map from '../../Charts/ir-all.geo.json';
+import mapData from '../../Charts/mapData.json';
+import {sideCities} from '../../../helpers/utils';
 
 const {Map} = Charts;
 
-interface OverviewMapProps {
+interface OverviewDriversMapProps {
   sideCityStatus?: any;
   cityTitle: any;
   selectDefault?: boolean;
   destinationId: any;
 }
 
-const OverviewMap: React.FC<OverviewMapProps> = ({
+const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
   sideCityStatus,
+  cityTitle,
   selectDefault,
   destinationId,
 }) => {
   const chartRef = useRef<any>(null);
   const {search, ...location} = useLocation();
-
-  const query = new URLSearchParams(search);
 
   useEffect(() => {
     try {
@@ -33,6 +31,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         item.select();
       });
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     }
 
@@ -225,14 +224,13 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
       },
     ],
   });
-  
+
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به کارکنان دولت{' '}
-        {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
+        نگاه کلی به وضعیت حمل و نقل عمومی {cityTitle ? ` استان‌ ${cityTitle}` : ''}
       </legend>
-      <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
+      <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow relative">
         <Link to={location.pathname} className="absolute right-20 top-8 z-40">
           <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
         </Link>
@@ -262,4 +260,4 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
   );
 };
 
-export default OverviewMap;
+export default OverviewDriversMap;
