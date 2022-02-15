@@ -2,14 +2,14 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
 import {sideCities} from 'src/helpers/utils';
-import OverviewMap from '../../components/School/OverviewMap';
-// import OverviewProvince from '../../components/School/OverviewProvince';
-// import OverviewSchoolEmployeProvince from '../../components/School/OverviewSchoolEmployeProvince';
-import OverviewSchoolStudentProvince from '../../components/School/OverviewSchoolStudentProvince';
-import OverviewPatientsProvince from '../../components/School/OverviewPatientsProvince';
-import TestsStatusProvince from '../../components/School/TestStatusProvince';
-import OverviewCategoriesProvince from '../../components/School/OverviewCategoriesProvince';
-import OverviewOfVaccinationProvince from '../../components/School/OverviewOfVaccinationProvince';
+import OverviewMap from '../../components/School/province/OverviewMap';
+// import OverviewProvince from '../../components/School/province/OverviewProvince';
+// import OverviewSchoolEmployeProvince from '../../components/School/province/OverviewSchoolEmployeProvince';
+import OverviewSchoolStudentProvince from '../../components/School/province/OverviewSchoolStudentProvince';
+import OverviewPatientsProvince from '../../components/School/province/OverviewPatientsProvince';
+import TestsStatusProvince from '../../components/School/province/TestStatusProvince';
+import OverviewCategoriesProvince from '../../components/School/province/OverviewCategoriesProvince';
+import OverviewOfVaccinationProvince from '../../components/School/province/OverviewOfVaccinationProvince';
 
 const SchoolProvince = () => {
   const location = useLocation();

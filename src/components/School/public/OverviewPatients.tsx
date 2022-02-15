@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../RangeDateSliderFilter';
-import Charts from '../Charts';
-import {toPersianDigit} from '../../helpers/utils';
-import hcsService from '../../services/hcs.service';
-import Spinner from '../Spinner';
-import TagsSelect from '../TagsSelect';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import Charts from '../../Charts';
+import {toPersianDigit} from '../../../helpers/utils';
+import hcsService from '../../../services/hcs.service';
+import Spinner from '../../Spinner';
+import TagsSelect from '../../TagsSelect';
 
 const {Line} = Charts;
 

@@ -1,34 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation, useHistory} from 'react-router-dom';
-import {sideCities} from 'src/helpers/utils';
-import Statistic from '../../containers/Guild/components/Statistic';
-import hcsService from '../../services/hcs.service';
-import totalRecritment from '../../assets/images/icons/people-navy.svg';
-import sufferingIcon from '../../assets/images/icons/suffering-color.svg';
-import saveIcon from '../../assets/images/icons/save-color.svg';
-import deadIcon from '../../assets/images/icons/dead-color.svg';
-import vaccineIcon from '../../assets/images/icons/vaccine-color.svg';
-import grayVaccineIcon from '../../assets/images/icons/gray-vaccine-1.svg';
-import prescriptionIcon from '../../assets/images/icons/prescription.svg';
-import testIcon from '../../assets/images/icons/test-color.svg';
 
-interface OverviewProvinceProps {
-  cityTitle: any;
-}
+import Statistic from '../../../containers/Guild/components/Statistic';
+import totalRecritment from '../../../assets/images/icons/people-navy.svg';
+import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
+import saveIcon from '../../../assets/images/icons/save-color.svg';
+import deadIcon from '../../../assets/images/icons/dead-color.svg';
+import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
+import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-1.svg';
+import prescriptionIcon from '../../../assets/images/icons/prescription.svg';
+import testIcon from '../../../assets/images/icons/test-color.svg';
+import hcsService from '../../../services/hcs.service';
 
-const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
-  const [loading, setLoading] = useState(false);
+const Overview = () => {
   const [numberOf, setNumberOf] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
   const [numberOfPositive, setNumberOfPositive] = useState(null);
   const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
 
-  const location = useLocation();
-  const history = useHistory();
-
-  const getNumberOf = async (province: string) => {
+  const getNumberOf = async () => {
     setLoading(true);
     try {
       const {data} = await hcsService.membersGeneral({
@@ -37,7 +29,6 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
         testResultCount: true,
         vaccinationCount: true,
         total: true,
-        province,
       });
       setNumberOf(data.total || 0);
       setNumberOfPlaqueVisited(data.numberOfPositive || 0);
@@ -67,24 +58,13 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getNumberOf(provinceName);
-    } else {
-      history.push('/dashboard/school/province');
-    }
-  }, [location.search]);
+    getNumberOf();
+  }, []);
 
   return (
-    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان &nbsp;
-        {cityTitle}
+        نگاه کلی به پرسنل آموزشی آموزش و پرورش کل کشور
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
@@ -134,5 +114,4 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
     </fieldset>
   );
 };
-
-export default OverviewProvince;
+export default Overview;

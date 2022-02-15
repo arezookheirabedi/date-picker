@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {schoolTypes} from 'src/helpers/sortingModels';
 import {Menu} from '@headlessui/react';
+
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
-import DatePickerModal from '../DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import Table from '../Table';
-import CategoryDonut from '../../containers/Guild/components/CategoryDonut';
-import {sideCities, toPersianDigit} from '../../helpers/utils';
-import Spinner from '../Spinner';
-import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
+import { schoolTypes } from 'src/helpers/sortingModels';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
+import Table from '../../TableScope';
+import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
+import {toPersianDigit} from '../../../helpers/utils';
+import Spinner from '../../Spinner';
+import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
-const filterTypes: any[] = [
+const filterTypes = [
   {
     name: 'پیشفرض',
     enName: '',
@@ -28,26 +28,18 @@ const filterTypes: any[] = [
     enName: 'LOWEST',
   },
 ];
-interface OverviewCategoriesProvinceProps {
-  cityTitle?: any;
-}
 
-const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [loading, setLoading] = useState(false);
-  const [isCancel, setIsCancel] = useState(false);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
-  const [dataset, setDataset] = useState<any>([]);
+const TestStatus: React.FC<{}> = () => {
   const [filterType, setFilterType] = useState({
     name: 'پیشفرض',
     enName: '',
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
+  const [dataset, setDataset] = useState<any>([]);
   const {CancelToken} = axios;
   const source = CancelToken.source();
-
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -56,60 +48,60 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
   async function getOverviewByCategory(params: any) {
     setLoading(true);
-    setIsCancel(false);
     try {
-      const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
-      console.log(data);
-
+      const {data} = await hcsService.testResultTagBased(params, {cancelToken: source.token});
       const sortData: any = [];
 
-      schoolTypes.forEach((item: any) => {
-        const tm = data.find((i: any) => {
-          // console.log('item => ', item);
-          // console.log('tag => ', i.tag.replace(/استان\s(.*)_/g, '').replace(/_\sاستان\s(.*)/g, ''));
-          // // eslint-disable-next-line
-          // console.log(
-          //   i.tag
-          //     .replace(/استان\s(.*)_/g, '')
-          //     .replace(/_\sاستان\s(.*)/g, '')
-          //     .trim() === item
-          // );
-          return (
-            i.tag
-              .replace(/استان\s(.*)_/g, '')
-              .replace(/_\sاستان\s(.*)/g, '')
-              .trim() === item
-          );
-        });
-        if (tm) sortData.push(tm);
+      schoolTypes.forEach(item => {
+        const tm = data.find((i: any) => i.tag === item);
+        sortData.push(tm);
       });
+
 
       const normalizedData: any[] = [];
       sortData.forEach((item: any, index: number) => {
-        if (item.total !== 0) {
-          normalizedData.push({
-            id: `ovca_${index}`,
-            name: item.tag || 'نامشخص',
-            employeesCount: item.total || 0,
-            infectedCount: item.positiveCount || 0,
-            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
-          });
-        }
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name: item.tag || 'نامشخص',
+          total: item.total || 0,
+          positiveCount: item.positiveCount || 0,
+          positivePercentage:
+            (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0,
+          negativeCount: item.negativeCount || 0,
+          unknownCount:
+            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
+          // deadCount: 120,
+        });
       });
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setIsCancel(false);
-    } catch (error: any) {
+      setFilterType({name: 'پیشفرض', enName: ''});
+    } catch (error) {
       // eslint-disable-next-line
-      if (error && error.message === 'cancel') {
-        setIsCancel(true);
-      }
+      console.log(error);
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    getOverviewByCategory({
+      organization: 'education',
+      // resultStatus: 'POSITIVE',
+      // recoveredCount: true,
+      // total: true,
+      // count: true,
+      from: '',
+      to: '',
+      tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
+    });
+
+    return () => {
+      setDataset([]);
+      setOrgDataset([]);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -136,50 +128,38 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
         organization: 'education',
         // resultStatus: 'POSITIVE',
-        // recoveredCount: true,
-        // total: true,
-        // count: true,
-        from: '',
-        to: '',
-        tags: [
-          `#province# استان ${provinceName}`,
-          '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-        ].join(','),
-        tagPattern: [
-          `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
-        ].join(','),
-        // province: provinceName,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'],
       });
-      //
     } else {
-      history.push('/dashboard/school/province');
+      getOverviewByCategory({
+        organization: 'education',
+        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'],
+        from: null,
+        to: null,
+      });
     }
-
-    return () => {
-      setDataset([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
+  }, [selectedDayRange]);
 
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
 
-      if (Number(a.infectedPercent) < Number(b.infectedPercent)) {
+      if (a.positivePercentage < b.positivePercentage) {
         return reverse * 1;
       }
 
-      if (Number(a.infectedPercent) > Number(b.infectedPercent)) {
+      if (a.positivePercentage > b.positivePercentage) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -188,55 +168,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
     setDataset(tmp);
   }, [filterType]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      if (selectedDayRange.from && selectedDayRange.to) {
-        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
-        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-        getOverviewByCategory({
-          organization: 'education',
-          tags: [
-            `#province# استان ${provinceName}`,
-            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-          ].join(','),
-          tagPattern: [
-            `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
-          ].join(','),
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        });
-      } else {
-        getOverviewByCategory({
-          organization: 'education',
-          tags: [
-            `#province# استان ${provinceName}`,
-            '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-          ].join(','),
-          tagPattern: [
-            `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
-          ].join(','),
-          from: null,
-          to: null,
-        });
-      }
-    } else {
-      history.push('/dashboard/school/province');
-    }
-
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [selectedDayRange]);
 
   const clearSelectedDayRange = (e: any) => {
     e.stopPropagation();
@@ -248,12 +179,8 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به آموزش و پرورش در استان &nbsp;
-        {cityTitle}
-      </legend>
-
-      <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+      <legend className="text-black mx-auto px-3">آزمایش در آموزش و پرورش</legend>
+      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
           <Menu
             as="div"
@@ -270,12 +197,10 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
               </Menu.Button>
             </div>
 
-            <Menu.Items
-              style={{minWidth: '200px'}}
-              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
+            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1 ">
                 {filterTypes.map((value: any, index: any) => {
+                  // console.log(value);
                   return (
                     // eslint-disable-next-line
                     <Menu.Item key={index}>
@@ -287,8 +212,13 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                           } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
                           onClick={() => {
                             setFilterType(value);
+                            // setQueryParams({
+                            //   ...queryParams,
+                            //   tag: value.enName,
+                            // });
                           }}
                         >
+                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                           {value.name}
                         </button>
                       )}
@@ -299,7 +229,8 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             </Menu.Items>
           </Menu>
         </div>
-        <div className="flex align-center justify-start">
+
+        <div className="flex items-center">
           {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -308,6 +239,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
               showDatePicker
             />
           ) : null}
+
           <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
             <div
               className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
@@ -377,9 +309,8 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           </div>
         </div>
       </div>
-
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading || isCancel ? (
+        {loading ? (
           <div className="p-20">
             <Spinner />
           </div>
@@ -389,15 +320,15 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'وضعیت کلی',
+                name: 'وضعیت',
                 key: '',
                 render: (v: any, record) => (
                   <CategoryDonut
                     data={[
                       {
-                        name: 'deadCount',
-                        title: 'تعداد فوت‌شدگان',
-                        y: record.deadCount || 0,
+                        name: 'unknownCount',
+                        title: 'درصد تست‌های نامشخص',
+                        y: record.unknownCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -407,9 +338,9 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                         },
                       },
                       {
-                        name: 'saveCount',
-                        title: 'تعداد بهبودیافتگان',
-                        y: record.saveCount || 0,
+                        name: 'negativeCount',
+                        title: 'درصد تست‌های منفی',
+                        y: record.negativeCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -419,9 +350,9 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                         },
                       },
                       {
-                        name: 'infectedCount',
-                        title: 'تعداد مبتلایان',
-                        y: record.infectedCount || 0,
+                        name: 'positiveCount',
+                        title: 'درصد تست‌های مثبت',
+                        y: record.positiveCount || 0,
                         color: {
                           linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                           stops: [
@@ -436,52 +367,63 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'دسته',
+                name: 'سازمان',
                 key: 'name',
-                render: (v: any, record, index: number) => (
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
+                  </div>
+                ),
+              },
+              {
+                name: 'تعداد آزمایش‌های انجام شده',
+                key: 'total',
+                render: (v: any) => (
                   <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
+                    {Number(v || 0)
+                      .commaSeprator()
+                      .toPersianDigits()}
                   </span>
                 ),
               },
               {
-                name: 'تعداد کارکنان',
-                key: 'employeesCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-              },
-              {
-                name: 'درصد ابتلا',
-                key: 'infectedPercent',
-                render: (v: any) => (
+                name: 'درصد تست‌های مثبت',
+                key: 'positiveCount',
+                render: (v: any, record: any) => (
                   <span>
-                    {Number(v).toLocaleString('fa', {
-                      minimumFractionDigits: 4,
-                    })}
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
                     %
                   </span>
                 ),
               },
               {
-                name: 'تعداد مبتلایان',
-                key: 'infectedCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-              },
-              {
-                name: 'تعداد بهبودیافتگان',
-                key: 'saveCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                name: 'درصد تست‌های منفی',
+                key: 'negativeCount',
+                render: (v: any, record: any) => (
+                  <span>
+                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                      .toFixed(4)
+                      .toPersianDigits()}
+                    %
+                  </span>
                 ),
               },
-              {
-                name: 'تعداد فوت‌شدگان',
-                key: 'deadCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-                ),
-              },
+              // {
+              //   name: 'درصد تست‌های نامشخص',
+              //   key: 'unknownCount',
+              //   render: (v: any, record: any) => (
+              //     <span>
+              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+              //         .toFixed(4)
+              //         .toPersianDigits()}
+              //       %
+              //     </span>
+              //   ),
+              // },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length || 0}
           />
         )}
       </div>
@@ -489,4 +431,4 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   );
 };
 
-export default OverviewCategoriesProvince;
+export default TestStatus;
