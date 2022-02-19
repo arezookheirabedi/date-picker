@@ -89,97 +89,103 @@ Highcharts.setOptions({
 
 */
 
-const options = {
-  chart: {
-    renderTo: 'container',
-    type: 'column',
-    events: {
-      redraw: () => {
-        // eslint-disable-next-line
-        console.log('redraw');
+
+
+const Column: React.FC<{data: any; categories?: any; percent?:boolean;}> = ({data, categories,percent}) => {
+  const chartRef = useRef<any>(null);
+  const options = {
+    chart: {
+      renderTo: 'container',
+      type: 'column',
+      events: {
+        redraw: () => {
+          // eslint-disable-next-line
+          console.log('redraw');
+        },
       },
+      // zoomType: 'x'
+      // styledMode: true
     },
-    // zoomType: 'x'
-    // styledMode: true
-  },
-  title: {
-    text: '',
-  },
-  scrollbar: {
-    enabled: true,
-    barBackgroundColor: '#656565',
-    barBorderColor: '#eee',
-    barBorderRadius: 4,
-    barBorderWidth: 0,
-    height: 6,
-    buttonArrowColor: '#eee',
-    rifleColor: '#656565',
-    buttonBackgroundColor: 'transparent',
-    buttonBorderWidth: 0,
-    buttonBorderRadius: 0,
-    trackBackgroundColor: '#eee',
-    trackBorderWidth: 0,
-    trackBorderRadius: 4,
-  },
-  credits: {
-    enabled: false,
-  },
-  // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
-  plotOptions: {
-    series: {
-      stacking: 'percent',
-      // borderRadius: 5,
-      pointWidth: 15,
-    },
-    column: {
-      threshold: null,
-      grouping: false,
-      shadow: false,
-      borderWidth: 0,
-    },
-  },
-  yAxis: {
-    gridLineDashStyle: 'dash',
-    lineDashStyle: 'dash',
-    lineColor: '#000000',
-    lineWidth: 1,
-    opposite: true,
     title: {
+      text: '',
+    },
+    scrollbar: {
+      enabled: true,
+      barBackgroundColor: '#656565',
+      barBorderColor: '#eee',
+      barBorderRadius: 4,
+      barBorderWidth: 0,
+      height: 6,
+      buttonArrowColor: '#eee',
+      rifleColor: '#656565',
+      buttonBackgroundColor: 'transparent',
+      buttonBorderWidth: 0,
+      buttonBorderRadius: 0,
+      trackBackgroundColor: '#eee',
+      trackBorderWidth: 0,
+      trackBorderRadius: 4,
+    },
+    credits: {
       enabled: false,
     },
-  },
-  legend: {
-    enabled: false,
-  },
-  xAxis: {
-    categories: [],
-    type: 'category',
-    labels: {
-      rotation: 45,
+    // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
+    plotOptions: {
+      series: {
+        // stacking: 'percent',
+        stacking: `${percent?'normal':'percent'}`,
+        // borderRadius: 5,
+        pointWidth: 15,
+      },
+      column: {
+        threshold: null,
+        grouping: false,
+        shadow: false,
+        borderWidth: 0,
+      },
     },
-    // lineDashStyle: 'dash',
-    // lineColor: '#000000',
-    // lineWidth: 1
-  },
-  tooltip: {
-    shared: true,
-    useHTML: true,
-    valueSuffix: ' نفر',
-    style: {
-      direction: 'rtl',
-      textAlign: 'right',
-      fontFamily: 'inherit',
-      fontSize: 10,
+    yAxis: {
+      gridLineDashStyle: 'dash',
+      lineDashStyle: 'dash',
+      lineColor: '#000000',
+      lineWidth: 1,
+      opposite: true,
+      title: {
+        enabled: false,
+      },
     },
-    borderWidth: 0,
-    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
-  },
+    legend: {
+      enabled: false,
+    },
+    xAxis: {
+      categories: [],
+      type: 'category',
+      labels: {
+        rotation: 45,
+      },
+      // lineDashStyle: 'dash',
+      // lineColor: '#000000',
+      // lineWidth: 1
+    },
+    tooltip: {
+      shared: true,
+      useHTML: true,
+      valueSuffix: ' نفر',
+      style: {
+        direction: 'rtl',
+        textAlign: 'right',
+        fontFamily: 'inherit',
+        fontSize: 10,
+      },
+      borderWidth: 0,
+      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
+    },
+  
+    series: [],
+  };
 
-  series: [],
-};
 
-const Column: React.FC<{data: any; categories?: any}> = ({data, categories}) => {
-  const chartRef = useRef<any>(null);
+
+
 
   useEffect(() => {
     if (chartRef && chartRef.current) {
