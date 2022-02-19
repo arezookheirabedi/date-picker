@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import vaccineService from 'src/services/vaccine.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
@@ -10,7 +11,7 @@ import Spinner from '../../Spinner';
 const {Stacked} = Charts;
 
 interface OverviewVaccinePerDosesProps {
-  cityTitle: any;
+  cityTitle:string;
 }
 
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
@@ -60,29 +61,30 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     setLoading(true);
     setErrorMessage(null);
     try {
+      const {data} = await vaccineService.membersGeneral({province:cityTitle})
       // const {data} = await hcsService.dosesTagBased(params);
-      const data: any = {
+      const dataChart: any = {
         null: 5,
-        '0': 10,
-        '1': 20,
-        '2': 25,
-        '3': 12,
-        '4': 17,
-        '5': 3,
+        '0': data.doses[0] || 0, // واکسن نزدع
+        '1': data.doses[1] || 0, // دوز اول 
+        '2': data.doses[2] || 0, // دوز دوم
+        '3': data.doses[3] || 0, // دوز سوم
+        '4': data.gtDoses[3] || 0 //  بیش از سه دوز
+       
       };
 
-      // eslint-disable-next-line
-      let firstDose: number = 0;
-      // eslint-disable-next-line
-      let secondDose: number = 0;
-      // eslint-disable-next-line
-      let thirdDose: number = 0;
-      // eslint-disable-next-line
-      let moreThanThreeDose: number = 0;
-      // eslint-disable-next-line
-      let noDose: number = 0;
+  // eslint-disable-next-line
+  let firstDose: number = 0;
+  // eslint-disable-next-line
+  let secondDose: number = 0;
+  // eslint-disable-next-line
+  let thirdDose: number = 0;
+  // eslint-disable-next-line
+  let moreThanThreeDose: number = 0;
+  // eslint-disable-next-line
+  let noDose: number = 0;
 
-      Object.entries(data).forEach(([key, value]: any[]) => {
+      Object.entries(dataChart).forEach(([key, value]: any[]) => {
         switch (key) {
           case 'null':
             // noDose += value;
@@ -102,9 +104,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
           case '4':
             moreThanThreeDose += value;
             break;
-          case '5':
-            moreThanThreeDose += value;
-            break;
+        
           default:
             break;
         }
