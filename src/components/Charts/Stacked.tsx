@@ -91,7 +91,7 @@ Highcharts.setOptions({
 
 
 
-const Column: React.FC<{data: any; categories?: any; percent?:boolean;}> = ({data, categories,percent}) => {
+const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({data, categories,notPercent}) => {
   const chartRef = useRef<any>(null);
   const options = {
     chart: {
@@ -132,7 +132,7 @@ const Column: React.FC<{data: any; categories?: any; percent?:boolean;}> = ({dat
     plotOptions: {
       series: {
         // stacking: 'percent',
-        stacking: `${percent?'normal':'percent'}`,
+        stacking: `${notPercent?'normal':'percent'}`,
         // borderRadius: 5,
         pointWidth: 15,
       },
