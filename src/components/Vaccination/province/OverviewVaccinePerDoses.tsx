@@ -66,7 +66,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.membersGeneral(params)
+      const {data} = await vaccineService.membersGeneral(params,{CancelToken:source.token})
       // const {data} = await hcsService.dosesTagBased(params);
       const dataChart: any = {
         null: 5,
