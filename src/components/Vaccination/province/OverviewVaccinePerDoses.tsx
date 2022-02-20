@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
+import axios from 'axios';
+import { useHistory, useLocation } from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
-import {toPersianDigit} from '../../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
@@ -15,6 +17,10 @@ interface OverviewVaccinePerDosesProps {
 }
 
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+  const location = useLocation();
+  const history = useHistory();
   const [categories, setCategories] = useState<any[]>([]);
   const [dataset, setDataset] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -49,7 +55,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
-
+// eslint-disable-next-line
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
@@ -61,7 +67,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.membersGeneral({province:cityTitle})
+      const {data} = await vaccineService.membersGeneral(params)
       // const {data} = await hcsService.dosesTagBased(params);
       const dataChart: any = {
         null: 5,
@@ -134,35 +140,59 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     }
   };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview(queryParams);
-    }, 500);
-
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        province: cityTitle,
-      });
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getLinearOverview({...queryParams, province: provinceName});
+      }, 500);
     } else {
-      setQueryParams({
-        ...queryParams,
-        province: cityTitle,
-        from: null,
-        to: null,
-      });
+      history.push('/dashboard/vaccination/province');
     }
-  }, [selectedDayRange]);
+
+    return () => {
+      if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        clearTimeout(idSetTimeOut);
+        setDataset([])
+
+
+      }
+    };
+  }, [queryParams, location.search]);
+
+
+
+
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       province: cityTitle,
+  //     });
+  //   } else {
+  //     setQueryParams({
+  //       ...queryParams,
+  //       province: cityTitle,
+  //       from: null,
+  //       to: null,
+  //     });
+  //   }
+  // }, [selectedDayRange]);
 
   const clearSelectedDayRange = (e: any) => {
     e.stopPropagation();

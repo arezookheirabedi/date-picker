@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 
 import vaccineService from 'src/services/vaccine.service';
+import axios from 'axios';
+import {useHistory, useLocation} from 'react-router-dom';
+import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine.svg';
 import YellowVaccine from '../../../assets/images/icons/yellow-vaccine.svg';
@@ -15,26 +18,32 @@ interface OverviewVaccinationStatusProps {
   cityTitle: string;
 }
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+const initialNumber={
+  doses: {...initialDoses},
+  dosesPercentage: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  gtDosesPercentage: {...initialDoses},
+  gtDosesToTotalPopulationPercentage: {...initialDoses},
+  totalPopulation: 0,
+  totalVaccinesCount: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  totalVaccinesPercentage: 0,
+}
 const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
-
-  const [numberOf, setNumberOf] = useState<any>({
-    doses: {...initialDoses},
-    dosesPercentage: {...initialDoses},
-    dosesToTotalPopulationPercentage: {...initialDoses},
-    gtDoses: {...initialDoses},
-    gtDosesPercentage: {...initialDoses},
-    gtDosesToTotalPopulationPercentage: {...initialDoses},
-    totalPopulation: 0,
-    totalVaccinesCount: 0,
-    totalVaccinesCountToTotalPopulationPercentage: 0,
-    totalVaccinesPercentage: 0,
-  });
-
-  const getNumberOf = async () => {
+  const [numberOf, setNumberOf] = useState<any>(initialNumber);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+  const getNumberOf = async (provinceName:string) => {
     setLoading(true);
     try {
-      const {data} = await vaccineService.membersGeneral({province:cityTitle});
+      const {data} = await vaccineService.membersGeneral(
+        {province: provinceName},
+        {cancelToken: source.token}
+      );
 
       setNumberOf({...data});
     } catch (error) {
@@ -45,11 +54,22 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
   };
 
   useEffect(() => {
-    if (cityTitle) {
-      console.log(numberOf)
-      getNumberOf();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getNumberOf(provinceName);
+    } else {
+      history.push('/dashboard/vaccination/province');
     }
-  }, [cityTitle]);
+
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setNumberOf(initialNumber);
+    };
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="vaccination-overview">
@@ -59,7 +79,12 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={GreenVaccine} text="تعداد کل واکسیناسیون" count={numberOf.totalVaccinesCount || 0} loading={loading} />
+          <Statistic
+            icon={GreenVaccine}
+            text="تعداد کل واکسیناسیون"
+            count={numberOf.totalVaccinesCount || 0}
+            loading={loading}
+          />
           <Statistic
             icon={YellowVaccine}
             text="تعداد واکسیناسیون دوز اول"
@@ -86,10 +111,23 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
             count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0).toFixed(3)}
             loading={loading}
           />
-          <Statistic icon={YellowVaccine} text="درصد افراد با دوز یک" count={(numberOf.dosesPercentage[1] || 0).toFixed(3)} loading={loading} />
-          <Statistic icon={PurppleVaccine} text="درصد افراد با دوز دوم" count={(numberOf.dosesPercentage[2] || 0).toFixed(3)} loading={loading} />
-          <Statistic icon={NavyVaccine} text="درصد افراد با دوز سوم"             count={(numberOf.dosesPercentage[3] || 0).toFixed(3)}
-/>
+          <Statistic
+            icon={YellowVaccine}
+            text="درصد افراد با دوز یک"
+            count={(numberOf.dosesPercentage[1] || 0).toFixed(3)}
+            loading={loading}
+          />
+          <Statistic
+            icon={PurppleVaccine}
+            text="درصد افراد با دوز دوم"
+            count={(numberOf.dosesPercentage[2] || 0).toFixed(3)}
+            loading={loading}
+          />
+          <Statistic
+            icon={NavyVaccine}
+            text="درصد افراد با دوز سوم"
+            count={(numberOf.dosesPercentage[3] || 0).toFixed(3)}
+          />
         </div>
 
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -97,7 +135,6 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
             icon={personGrayVaccine}
             text="مجموع افراد واکسینه نشده"
             count={numberOf.doses[0] || 0}
-
             loading={loading}
           />
           <Statistic
@@ -139,7 +176,11 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
             count="-"
             loading={loading}
           />
-          <Statistic icon={greyVaccine} text="تعداد اطلاعات مخدوش" count={numberOf.totalPopulation - (numberOf.gtDoses[0] + numberOf.doses[0]) || 0} />
+          <Statistic
+            icon={greyVaccine}
+            text="تعداد اطلاعات مخدوش"
+            count={numberOf.totalPopulation - (numberOf.gtDoses[0] + numberOf.doses[0]) || 0}
+          />
         </div>
       </div>
     </fieldset>
