@@ -2,8 +2,10 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
+import axios from 'axios';
+import { useHistory, useLocation } from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit} from '../../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
@@ -11,6 +13,10 @@ import Charts from '../../Charts';
 const {Stacked} = Charts;
 
 const OverviewVaccinationStatusChart: React.FC<{}> = () => {
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+  const location = useLocation();
+  const history = useHistory();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -144,13 +150,44 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
     }
   };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview(queryParams);
-    }, 500);
+  // useEffect(() => {
+  //   const idSetTimeOut = setTimeout(() => {
+  //     getLinearOverview(queryParams);
+  //   }, 500);
 
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
+  //   return () => clearTimeout(idSetTimeOut);
+  // }, [queryParams]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getLinearOverview({...queryParams, province: provinceName});
+      }, 500);
+    } else {
+      history.push('/dashboard/vaccination/public');
+    }
+
+    return () => {
+      if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        clearTimeout(idSetTimeOut);
+        setDataset([])
+
+
+      }
+    };
+  }, [queryParams, location.search]);
+
+
+
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
