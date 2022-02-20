@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-// import moment from 'moment-jalaali';
+import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
 import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -24,7 +24,6 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
   const [categories, setCategories] = useState<any[]>([]);
   const [dataset, setDataset] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -172,27 +171,27 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
 
 
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-  //     setQueryParams({
-  //       ...queryParams,
-  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       province: cityTitle,
-  //     });
-  //   } else {
-  //     setQueryParams({
-  //       ...queryParams,
-  //       province: cityTitle,
-  //       from: null,
-  //       to: null,
-  //     });
-  //   }
-  // }, [selectedDayRange]);
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      setQueryParams({
+        ...queryParams,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        province: cityTitle,
+      });
+    } else {
+      setQueryParams({
+        ...queryParams,
+        province: cityTitle,
+        from: null,
+        to: null,
+      });
+    }
+  }, [selectedDayRange]);
 
   const clearSelectedDayRange = (e: any) => {
     e.stopPropagation();
