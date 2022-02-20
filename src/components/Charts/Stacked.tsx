@@ -88,7 +88,13 @@ Highcharts.setOptions({
     },
 
 */
-
+const converters = {
+  fa(number: any) {
+    return number.toString().replace(/\d/g, (d: any) => {
+      return String.fromCharCode(d.charCodeAt(0) + 1728);
+    });
+  },
+};
 
 
 const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({data, categories,notPercent}) => {
@@ -97,6 +103,13 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
     chart: {
       renderTo: 'container',
       type: 'column',
+      numberFormatter() {
+        // eslint-disable-next-line prefer-rest-params
+        const ret = Highcharts.numberFormat.apply(0, arguments as any);
+        return converters.fa(ret);
+      },
+
+
       events: {
         redraw: () => {
           // eslint-disable-next-line
