@@ -3,9 +3,8 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
 import axios from 'axios';
-import { useHistory, useLocation } from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
-import {sideCities, toPersianDigit} from '../../../helpers/utils';
+import {toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
@@ -15,8 +14,6 @@ const {Stacked} = Charts;
 const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
-  const location = useLocation();
-  const history = useHistory();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -63,7 +60,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({});
+      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
 
       const provinces: any[] = [];
 
@@ -150,44 +147,43 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const idSetTimeOut = setTimeout(() => {
-  //     getLinearOverview(queryParams);
-  //   }, 500);
-
-  //   return () => clearTimeout(idSetTimeOut);
-  // }, [queryParams]);
-
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getLinearOverview({...queryParams, province: provinceName});
-      }, 500);
-    } else {
-      history.push('/dashboard/vaccination/public');
-    }
+    const idSetTimeOut = setTimeout(() => {
+      getLinearOverview(queryParams);
+    }, 500);
 
     return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        clearTimeout(idSetTimeOut);
-        setDataset([])
-
-
-      }
+      clearTimeout(idSetTimeOut);
+      source.cancel('Operation canceled by the user.');
+      setDataset([]);
     };
-  }, [queryParams, location.search]);
+  }, [queryParams]);
 
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const provinceName = params.get('provinceName') || ('تهران' as any);
+  //   const existsCity = sideCities.some((item: any) => {
+  //     return item.name === provinceName;
+  //   });
 
+  //   let idSetTimeOut: any;
+  //   if (existsCity) {
+  //     idSetTimeOut = setTimeout(() => {
+  //       getLinearOverview({...queryParams, province: provinceName});
+  //     }, 500);
+  //   } else {
+  //     history.push('/dashboard/vaccination/public');
+  //   }
 
+  //   return () => {
+  //     if (existsCity) {
+  //       source.cancel('Operation canceled by the user.');
+  //       clearTimeout(idSetTimeOut);
+  //       setDataset([])
 
+  //     }
+  //   };
+  // }, [queryParams, location.search]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
