@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import vaccineService from 'src/services/vaccine.service';
 
+import axios from 'axios';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine.svg';
 import YellowVaccine from '../../../assets/images/icons/yellow-vaccine.svg';
@@ -12,26 +13,27 @@ import blueVaccine from '../../../assets/images/icons/blue-vaccine-sm.svg';
 import greyVaccine from '../../../assets/images/icons/gray-vaccine.svg';
 
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-
+const initialNumberOf = {
+  doses: {...initialDoses},
+  dosesPercentage: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  gtDosesPercentage: {...initialDoses},
+  gtDosesToTotalPopulationPercentage: {...initialDoses},
+  totalPopulation: 0,
+  totalVaccinesCount: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  totalVaccinesPercentage: 0,
+};
 const OverviewVaccinationStatus: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<any>({
-    doses: {...initialDoses},
-    dosesPercentage: {...initialDoses},
-    dosesToTotalPopulationPercentage: {...initialDoses},
-    gtDoses: {...initialDoses},
-    gtDosesPercentage: {...initialDoses},
-    gtDosesToTotalPopulationPercentage: {...initialDoses},
-    totalPopulation: 0,
-    totalVaccinesCount: 0,
-    totalVaccinesCountToTotalPopulationPercentage: 0,
-    totalVaccinesPercentage: 0,
-  });
-
+  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
   const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await vaccineService.membersGeneral({});
+      const {data} = await vaccineService.membersGeneral(null, {cancelToken: source.token});
 
       setNumberOf({...data});
     } catch (error) {
@@ -43,6 +45,10 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     getNumberOf();
+    return () => {
+      setNumberOf(initialNumberOf);
+      source.cancel('Operation canceled by the user.');
+    };
   }, []);
 
   return (
