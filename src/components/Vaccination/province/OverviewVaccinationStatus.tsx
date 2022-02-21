@@ -17,8 +17,9 @@ import greyVaccine from '../../../assets/images/icons/gray-vaccine.svg';
 interface OverviewVaccinationStatusProps {
   cityTitle: string;
 }
+
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-const initialNumber={
+const initialNumber = {
   doses: {...initialDoses},
   dosesPercentage: {...initialDoses},
   dosesToTotalPopulationPercentage: {...initialDoses},
@@ -26,6 +27,7 @@ const initialNumber={
   gtDosesPercentage: {...initialDoses},
   gtDosesToTotalPopulationPercentage: {...initialDoses},
   totalPopulation: 0,
+  totalUnknownVaccinesCount: 0,
   totalVaccinesCount: 0,
   totalVaccinesCountToTotalPopulationPercentage: 0,
   totalVaccinesPercentage: 0,
@@ -37,7 +39,7 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
   const [numberOf, setNumberOf] = useState<any>(initialNumber);
   const {CancelToken} = axios;
   const source = CancelToken.source();
-  const getNumberOf = async (provinceName:string) => {
+  const getNumberOf = async (provinceName: string) => {
     setLoading(true);
     try {
       const {data} = await vaccineService.membersGeneral(
@@ -78,7 +80,8 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="تعداد کل واکسیناسیون"
@@ -104,7 +107,8 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
             loading={loading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
@@ -130,7 +134,8 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={personGrayVaccine}
             text="مجموع افراد واکسینه نشده"
@@ -157,7 +162,8 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={greenVaccineBlackVirus}
             text="تعداد فوتی هایی که واکسینه شده"
@@ -179,7 +185,8 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           <Statistic
             icon={greyVaccine}
             text="تعداد اطلاعات مخدوش"
-            count={numberOf.totalPopulation - (numberOf.gtDoses[0] + numberOf.doses[0]) || 0}
+            loading={loading}
+            count={numberOf.totalUnknownVaccinesCount || 0}
           />
         </div>
       </div>
