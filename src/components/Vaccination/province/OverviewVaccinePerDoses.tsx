@@ -1,23 +1,29 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import vaccineService from 'src/services/vaccine.service';
+import axios from 'axios';
+import { useHistory, useLocation } from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
-import {toPersianDigit} from '../../../helpers/utils';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
 
 interface OverviewVaccinePerDosesProps {
-  cityTitle: any;
+  cityTitle:string;
 }
 
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+  const location = useLocation();
+  const history = useHistory();
   const [categories, setCategories] = useState<any[]>([]);
   const [dataset, setDataset] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -48,7 +54,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
-
+// eslint-disable-next-line
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
@@ -60,29 +66,30 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     setLoading(true);
     setErrorMessage(null);
     try {
+      const {data} = await vaccineService.membersGeneral(params,{CancelToken:source.token})
       // const {data} = await hcsService.dosesTagBased(params);
-      const data: any = {
+      const dataChart: any = {
         null: 5,
-        '0': 10,
-        '1': 20,
-        '2': 25,
-        '3': 12,
-        '4': 17,
-        '5': 3,
+        '0': data.doses[0] || 0, // واکسن نزدع
+        '1': data.doses[1] || 0, // دوز اول 
+        '2': data.doses[2] || 0, // دوز دوم
+        '3': data.doses[3] || 0, // دوز سوم
+        '4': data.gtDoses[3] || 0 //  بیش از سه دوز
+       
       };
 
-      // eslint-disable-next-line
-      let firstDose: number = 0;
-      // eslint-disable-next-line
-      let secondDose: number = 0;
-      // eslint-disable-next-line
-      let thirdDose: number = 0;
-      // eslint-disable-next-line
-      let moreThanThreeDose: number = 0;
-      // eslint-disable-next-line
-      let noDose: number = 0;
+  // eslint-disable-next-line
+  let firstDose: number = 0;
+  // eslint-disable-next-line
+  let secondDose: number = 0;
+  // eslint-disable-next-line
+  let thirdDose: number = 0;
+  // eslint-disable-next-line
+  let moreThanThreeDose: number = 0;
+  // eslint-disable-next-line
+  let noDose: number = 0;
 
-      Object.entries(data).forEach(([key, value]: any[]) => {
+      Object.entries(dataChart).forEach(([key, value]: any[]) => {
         switch (key) {
           case 'null':
             // noDose += value;
@@ -102,9 +109,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
           case '4':
             moreThanThreeDose += value;
             break;
-          case '5':
-            moreThanThreeDose += value;
-            break;
+        
           default:
             break;
         }
@@ -134,13 +139,37 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     }
   };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview(queryParams);
-    }, 500);
 
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getLinearOverview({...queryParams, province: provinceName});
+      }, 500);
+    } else {
+      history.push('/dashboard/vaccination/province');
+    }
+
+    return () => {
+      if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        clearTimeout(idSetTimeOut);
+        setDataset([])
+
+
+      }
+    };
+  }, [queryParams, location.search]);
+
+
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -296,7 +325,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} />
+          <Stacked data={dataset} categories={categories}  notPercent/>
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
