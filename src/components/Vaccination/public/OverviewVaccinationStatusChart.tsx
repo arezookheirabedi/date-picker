@@ -33,11 +33,11 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -45,7 +45,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -60,7 +60,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
+      const {data} = await vaccineService.dosesTagBased(params, {cancelToken: source.token});
 
       const provinces: any[] = [];
 
@@ -258,12 +258,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
                       </svg>
                     </button>
                   ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5" />
+                    <img src={calendar} alt="x" className="w-5 h-5"/>
                   )}
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -293,7 +293,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
                       </svg>
                     </button>
                   ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5" />
+                    <img src={calendar} alt="x" className="w-5 h-5"/>
                   )}
                 </div>
               </div>
@@ -301,28 +301,31 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+            <div
+              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div
+                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}}/>
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}}/>
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}}/>
                   <span>دوز دوم</span>
                 </div>
               </div>
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+              <div
+                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}}/>
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}}/>
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>
@@ -332,12 +335,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} />
+          <Stacked data={dataset} categories={categories}/>
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
