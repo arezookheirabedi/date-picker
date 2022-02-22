@@ -145,7 +145,7 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           <Statistic
             icon={personGrayVaccine}
             text="درصد افراد واکسینه نشده"
-            count={(numberOf.dosesPercentage[0] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[0] || 0).toFixed(3)}
             loading={loading}
           />
           <Statistic
