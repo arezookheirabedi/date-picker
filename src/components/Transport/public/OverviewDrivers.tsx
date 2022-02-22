@@ -13,10 +13,26 @@ import positiveInquiryPlaque from '../../../assets/images/icons/positive-inquiry
 import testIcon from '../../../assets/images/icons/test-color.svg';
 import driverInfectedIcon from '../../../assets/images/icons/driver-infected.svg';
 import transportService from '../../../services/transport.service';
+import vaccineService from "../../../services/vaccine.service";
+
+const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+const initialNumberOf = {
+  doses: {...initialDoses},
+  dosesPercentage: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  gtDosesPercentage: {...initialDoses},
+  gtDosesToTotalPopulationPercentage: {...initialDoses},
+  totalPopulation: 0,
+  totalUnknownVaccinesCount: 0,
+  totalVaccinesCount: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  totalVaccinesPercentage: 0,
+};
 
 const OverviewDrivers = () => {
-  const [numberOfDrivers, setNumberOfDrivers] = useState(null);
-  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
+  // const [numberOfDrivers, setNumberOfDrivers] = useState(null);
+  // const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
   const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
   const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
   const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
@@ -28,24 +44,39 @@ const OverviewDrivers = () => {
   const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
   const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
+  // const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  // const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getNumberOfDrivers = async () => {
-    setNumberOfDriversLoading(true);
+  const getNumberOf = async () => {
+    setLoading(true);
     try {
-      const {data} = await transportService.numberOfDrivers(null, {cancelToken: source.token});
-      setNumberOfDrivers(data.numberOfDrivers);
+      const {data} = await vaccineService.membersGeneral({tag : 'transport'}, {cancelToken: source.token});
+      console.log(data);
+      setNumberOf({...data});
     } catch (error) {
-      // eslint-disable-next-line
       console.log(error);
     } finally {
-      setNumberOfDriversLoading(false);
+      setLoading(false);
     }
   };
+
+  // const getNumberOfDrivers = async () => {
+  //   setNumberOfDriversLoading(true);
+  //   try {
+  //     const {data} = await transportService.numberOfDrivers(null, {cancelToken: source.token});
+  //     setNumberOfDrivers(data.numberOfDrivers);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfDriversLoading(false);
+  //   }
+  // };
 
   const getNumberOfPlaqueVisited = async () => {
     setNumberOfPlaqueVisitedLoading(true);
@@ -120,36 +151,36 @@ const OverviewDrivers = () => {
     }
   };
 
-  const getNumberOfVaccination = async () => {
-    setNumberOfVaccinationLoading(true);
-    try {
-      const {data} = await transportService.numberOfVaccination(null, {cancelToken: source.token});
-      setNumberOfVaccination(data.numberOfVaccination);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfVaccinationLoading(false);
-    }
-  };
+  // const getNumberOfVaccination = async () => {
+  //   setNumberOfVaccinationLoading(true);
+  //   try {
+  //     const {data} = await transportService.numberOfVaccination(null, {cancelToken: source.token});
+  //     setNumberOfVaccination(data.numberOfVaccination);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfVaccinationLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
-    getNumberOfDrivers();
+    getNumberOf();
     getNumberOfPlaqueVisited();
     getNumberOfPositiveDrivers();
     getNumberOfPositivePlaqueVisited();
     getNumberOfRecoveredDrivers();
     getNumberOfTestResults();
-    getNumberOfVaccination();
+    // getNumberOfVaccination();
 
     return () => {
-      setNumberOfDrivers(null);
+      // setNumberOfDrivers(null);
       setNumberOfPlaqueVisited(null);
       setNumberOfPositiveDrivers(null);
       setNumberOfPositivePlaqueVisited(null);
       setNumberOfRecoveredDrivers(null);
       setNumberOfTestResults(null);
-      setNumberOfVaccination(null);
+      // setNumberOfVaccination(null);
       source.cancel('Operation canceled by the user.');
     };
   }, []);
@@ -158,12 +189,13 @@ const OverviewDrivers = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی رانندگان کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalDriver}
             text="مجموع رانندگان"
-            count={numberOfDrivers}
-            loading={numberOfDriversLoading}
+            count={numberOf.totalPopulation}
+            loading={loading}
             hasInfo
             infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
           />
@@ -179,51 +211,50 @@ const OverviewDrivers = () => {
             count={numberOfRecoveredDrivers}
             loading={numberOfRecoveredDriversLoading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع واکسن زده‌ها"
-            count={numberOfVaccination}
-            loading={numberOfVaccinationLoading}
+            count={numberOf.totalVaccinesCount || 0}
+            loading={loading}
             hasInfo
             infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
           />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع واکسن نزده‌ها"
-            count={(numberOfDrivers || 0) - (numberOfVaccination || 0)}
-            loading={numberOfDriversLoading || numberOfVaccinationLoading}
+            count={numberOf.doses[0] || 0}
+            loading={loading}
             hasInfo
             infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
           />
           <Statistic
             icon={vaccineIcon}
             text="درصد واکسن زده‌ها"
-            count={(((numberOfVaccination || 0) * 100) / (numberOfDrivers || 0) || 0).toFixed(3)}
-            loading={numberOfDriversLoading || numberOfVaccinationLoading}
+            count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0).toFixed(3)}
+            loading={loading}
             isPercentage
           />
           <Statistic
             icon={grayVaccineIcon}
             text="درصد واکسن نزده‌ها"
-            count={(
-              (((numberOfDrivers || 0) - (numberOfVaccination || 0)) * 100) /
-                (numberOfDrivers || 0) || 0
-            ).toFixed(3)}
-            loading={numberOfDriversLoading || numberOfVaccinationLoading}
+            count={(numberOf.dosesToTotalPopulationPercentage[0] || 0).toFixed(3)}
+            loading={loading}
             isPercentage
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={driverInfectedIcon}
             text="درصد ابتلا به کل"
-            count={(((numberOfPositiveDrivers || 0) * 100) / (numberOfDrivers || 0) || 0).toFixed(
+            count={(((numberOfPositiveDrivers || 0) * 100) / (numberOf.totalPopulation || 0) || 0).toFixed(
               3
             )}
-            loading={numberOfDriversLoading || numberOfPositiveDriversLoading}
+            loading={loading}
             isPercentage
             hasInfo
             infoText="این عدد استخراج شده از مجموع افراد فعال در این حوزه با نتایج مثبت آزمایش هایشان است"
