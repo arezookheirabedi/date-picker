@@ -170,7 +170,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">بیشترین واکسیناسیون اصناف در استان {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3">بیشترین واکسیناسیون در اصناف  {cityTitle}</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center space-x-5 rtl:space-x-reverse">
