@@ -34,8 +34,10 @@ const OverviewGuilds: React.FC<{}> = () => {
       setGuildInfo((prev: any) => {
         return {...prev, ...res.data};
       });
+      // eslint-disable-next-line
       console.log(res);
     } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
