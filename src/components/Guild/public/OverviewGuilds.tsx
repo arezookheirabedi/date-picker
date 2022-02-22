@@ -9,9 +9,9 @@ import scanIcon from 'src/assets/images/icons/scan-color.svg';
 import scanDangerIcon from 'src/assets/images/icons/scan-danger-color.svg';
 import testIcon from 'src/assets/images/icons/test-color.svg';
 import vaccineService from 'src/services/vaccine.service';
-import {msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Statistic from 'src/containers/Guild/components/Statistic';
-import axios from 'axios';
+// import axios from 'axios';
 
 export const initialInfo = {
   totalVaccinesCount: 0,
@@ -24,12 +24,18 @@ export interface IInitialInfo {
 const OverviewGuilds: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [guildInfo, setGuildInfo] = useState<IInitialInfo>(initialInfo);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
   const getGuidInfo = async () => {
     setLoading(true);
     try {
-      const res = await vaccineService.membersGeneral({tag: 'guild'}, {cancelToken: source.token});
+      const res = await vaccineService.membersGeneral({tag: 'guild'},
+       {cancelToken: cancelToken.token}
+       );
 
       setGuildInfo((prev: any) => {
         return {...prev, ...res.data};
@@ -46,7 +52,7 @@ const OverviewGuilds: React.FC<{}> = () => {
   useEffect(() => {
     getGuidInfo();
     return () => {
-      source.cancel(msgRequestCanceled);
+      cancelRequest()
       setGuildInfo(initialInfo);
     };
   }, []);

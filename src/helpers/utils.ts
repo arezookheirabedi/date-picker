@@ -1,4 +1,4 @@
-import {AxiosRequestConfig} from 'axios';
+import Axios, {AxiosRequestConfig, CancelTokenSource} from 'axios';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
 import {ILogin, IProfile} from 'src/models/authentication.model';
@@ -73,6 +73,11 @@ export const setToken: (token: ILogin) => void = token => {
 
 export const removeToken: () => void = () => {
   localStorage.removeItem('token');
+};
+
+export const msgRequestCanceled = 'Operation canceled by the user.';
+export const cancelTokenSource = (): CancelTokenSource => {
+  return Axios.CancelToken.source();
 };
 
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
