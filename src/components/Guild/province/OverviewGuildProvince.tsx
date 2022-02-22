@@ -4,11 +4,11 @@ import moment from 'moment-jalaali';
 // import hcsService from 'src/services/hcs.service';
 import vaccineService from 'src/services/vaccine.service';
 import {useHistory, useLocation} from 'react-router-dom';
-import axios from 'axios';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
 import {
+  cancelTokenSource,
   msgRequestCanceled,
   sideCities,
   toPersianDigit,
@@ -63,14 +63,18 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
     to: null,
     tags: [],
   });
+  const cancelToken = cancelTokenSource();
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
   const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.membersGeneral(params,{ cancelToken:source.token})
+      const {data} = await vaccineService.membersGeneral(params,
+        { cancelToken:cancelToken.token}
+        )
       const dataChart: any = {
         null: 5,
         '0': data.doses[0] || 0, // واکسن نزدع
@@ -160,7 +164,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
 
     return () => {
       if (existsCity) {
-        source.cancel(msgRequestCanceled);
+        cancelRequest()
         clearTimeout(idSetTimeOut);
         setDataset([]);
       }
