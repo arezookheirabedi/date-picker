@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
 import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
-import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
+// import DatePickerModal from '../../DatePickerModal';
+// import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
-import {sideCities, toPersianDigit} from '../../../helpers/utils';
+import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
@@ -23,37 +23,37 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
   const history = useHistory();
   const [categories, setCategories] = useState<any[]>([]);
   const [dataset, setDataset] = useState<any[]>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+  // const focusFromDate = () => {
+  //   setShowDatePicker(true);
+  // };
+  //
+  // const generateFromDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.from
+  //     ? // eslint-disable-next-line
+  //       selectedDayRange.from.year +
+  //         '/' +
+  //         selectedDayRange.from.month +
+  //         '/' +
+  //         selectedDayRange.from.day
+  //     : '';
+  // };
+  //
+  // const generateToDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.to
+  //     ? // eslint-disable-next-line
+  //       selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+  //     : '';
+  // };
 // eslint-disable-next-line
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -170,36 +170,36 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
 
 
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        province: cityTitle,
-      });
-    } else {
-      setQueryParams({
-        ...queryParams,
-        province: cityTitle,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+  //
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       province: cityTitle,
+  //     });
+  //   } else {
+  //     setQueryParams({
+  //       ...queryParams,
+  //       province: cityTitle,
+  //       from: null,
+  //       to: null,
+  //     });
+  //   }
+  // }, [selectedDayRange]);
+  //
+  // const clearSelectedDayRange = (e: any) => {
+  //   e.stopPropagation();
+  //   setSelectedDayRange({
+  //     from: null,
+  //     to: null,
+  //   });
+  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -209,7 +209,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+{/*            <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -285,7 +285,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="w-2/4">
