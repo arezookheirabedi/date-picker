@@ -12,26 +12,26 @@ interface IStatistic {
 }
 
 const Statistic: React.FC<IStatistic> = ({
-  icon,
-  text,
-  count,
-  isPercentage,
-  hasInfo,
-  infoText,
-  loading,
-}) => {
+                                           icon,
+                                           text,
+                                           count,
+                                           isPercentage,
+                                           hasInfo,
+                                           infoText,
+                                           loading,
+                                         }) => {
   return (
     <fieldset className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow relative">
       {hasInfo ? (
         <span className="tooltip absolute -top-4 right-4 cursor-pointer">
-          <img src={Information} className="inline " width="18" height="18" alt="" />
+          <img src={Information} className="inline " width="18" height="18" alt=""/>
           <span className="tooltip__tooltiptext text-left rtl:text-right text-gray-400 p-3 py-2">
             {infoText || 'لورم اپیسوم یک متن ساختگی و تخیلی است .'}
           </span>
         </span>
       ) : null}
       <legend className="text-black mx-auto px-3 transform transition duration-500 hover:scale-150">
-        <img src={icon} alt="" />
+        <img src={icon} alt=""/>
       </legend>
       <div className="flex text-black text-lg mx-auto ">
         {(loading || count === null) && (
@@ -48,8 +48,9 @@ const Statistic: React.FC<IStatistic> = ({
         {!loading && count === 0 && '۰'}
         {!loading && count === '-' && '-'}
         {!loading &&
-          count > 0 &&
-          `${(count || 'بدون داده').commaSeprator().toPersianDigits()}${isPercentage ? '%' : ''}`}
+        count >= 1 &&
+        `${(count || 'بدون داده').commaSeprator().toPersianDigits()}${isPercentage ? '%' : ''}`}
+        {!loading && count < 1 && count > 0 && count?.toPersianDigits()}
       </div>
       <div className="flex text-gray-500 text-sm  mx-auto">{text || ''}</div>
     </fieldset>
