@@ -15,10 +15,10 @@ import greyVaccine from '../../../assets/images/icons/gray-vaccine.svg';
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
 const initialNumberOf = {
   doses: {...initialDoses},
-  dosesPercentage: {...initialDoses},
+  // dosesPercentage: {...initialDoses},
   dosesToTotalPopulationPercentage: {...initialDoses},
   gtDoses: {...initialDoses},
-  gtDosesPercentage: {...initialDoses},
+  // gtDosesPercentage: {...initialDoses},
   gtDosesToTotalPopulationPercentage: {...initialDoses},
   totalPopulation: 0,
   totalUnknownVaccinesCount: 0,
@@ -97,21 +97,21 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={YellowVaccine}
             text="درصد افراد با دوز یک"
-            count={(numberOf.dosesPercentage[1] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[1] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={PurppleVaccine}
             text="درصد افراد با دوز دوم"
-            count={(numberOf.dosesPercentage[2] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[2] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={NavyVaccine}
             text="درصد افراد با دوز سوم"
-            count={(numberOf.dosesPercentage[3] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[3] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
@@ -128,7 +128,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={personGrayVaccine}
             text="درصد افراد واکسینه نشده"
-            count={(numberOf.dosesPercentage[0] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[0] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
@@ -141,7 +141,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={blueVaccine}
             text="درصد افراد با بیش از ۳ دوز"
-            count={(numberOf.gtDosesPercentage[3] || 0).toFixed(3)}
+            count={(numberOf.gtDosesToTotalPopulationPercentage[3] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
