@@ -29,6 +29,7 @@ const Vaccination: React.FC<{}> = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="vaccination-overview"
+        selectDefault
       />
 
       <OverviewVaccinationStatus cityTitle={cityTitle} />

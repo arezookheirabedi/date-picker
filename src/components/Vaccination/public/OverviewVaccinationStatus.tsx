@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import vaccineService from 'src/services/vaccine.service';
 
+import axios from 'axios';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine.svg';
 import YellowVaccine from '../../../assets/images/icons/yellow-vaccine.svg';
@@ -12,28 +13,36 @@ import blueVaccine from '../../../assets/images/icons/blue-vaccine-sm.svg';
 import greyVaccine from '../../../assets/images/icons/gray-vaccine.svg';
 
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-
+const initialNumberOf = {
+  doses: {...initialDoses},
+  // dosesPercentage: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  // gtDosesPercentage: {...initialDoses},
+  // gtDosesToTotalPopulationPercentage: {...initialDoses},
+  gtDosesToTotalDosesPercentage : {...initialDoses},
+  totalPopulation: 0,
+  totalUnknownVaccinesCount: 0,
+  totalVaccinesCount: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  totalVaccinesPercentage: 0,
+};
 const OverviewVaccinationStatus: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<any>({
-    doses: {...initialDoses},
-    dosesPercentage: {...initialDoses},
-    dosesToTotalPopulationPercentage: {...initialDoses},
-    gtDoses: {...initialDoses},
-    gtDosesPercentage: {...initialDoses},
-    gtDosesToTotalPopulationPercentage: {...initialDoses},
-    totalPopulation: 0,
-    totalVaccinesCount: 0,
-    totalVaccinesCountToTotalPopulationPercentage: 0,
-    totalVaccinesPercentage: 0,
-  });
+  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await vaccineService.membersGeneral({});
-
-      setNumberOf({...data});
+      const {data} = await vaccineService.membersGeneral({}, {cancelToken: source.token});
+      setNumberOf((prev: any) => {
+        return {
+          ...prev,
+          ...data
+        }
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -43,6 +52,10 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     getNumberOf();
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setNumberOf(initialNumberOf);
+    };
   }, []);
 
   return (
@@ -50,7 +63,8 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="تعداد کل واکسیناسیون"
@@ -76,48 +90,50 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
             loading={loading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
-            count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0).toFixed(3)}
+            count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0)}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={YellowVaccine}
             text="درصد افراد با دوز یک"
-            count={(numberOf.dosesPercentage[1] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[1] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={PurppleVaccine}
             text="درصد افراد با دوز دوم"
-            count={(numberOf.dosesPercentage[2] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[2] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={NavyVaccine}
             text="درصد افراد با دوز سوم"
-            count={(numberOf.dosesPercentage[3] || 0).toFixed(3)}
+            count={(numberOf.dosesToTotalPopulationPercentage[3] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={personGrayVaccine}
             text="مجموع افراد واکسینه نشده"
-            count={numberOf.doses[0] || 0}
+            count={numberOf.totalNonVaccinesCount || 0}
             loading={loading}
           />
           <Statistic
             icon={personGrayVaccine}
             text="درصد افراد واکسینه نشده"
-            count={(numberOf.dosesPercentage[0] || 0).toFixed(3)}
+            count={(numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0)}
             loading={loading}
             isPercentage
           />
@@ -130,24 +146,26 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={blueVaccine}
             text="درصد افراد با بیش از ۳ دوز"
-            count={(numberOf.gtDosesPercentage[3] || 0).toFixed(3)}
+            count={(numberOf.gtDosesToTotalDosesPercentage[3] || 0)}
             loading={loading}
             isPercentage
           />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={greenVaccineBlackVirus}
             text="تعداد فوتی هایی که واکسینه شده"
             count="-"
           />
-          <Statistic icon={greenVaccineBlackVirus} text="درصد فوتی های واکسینه شده" count="-" />
-          <Statistic icon={greyVaccine} text="مجموع تعداد دوز واکسن تزریقی" count="-" />
+          <Statistic icon={greenVaccineBlackVirus} text="درصد فوتی های واکسینه شده" count="-"/>
+          <Statistic icon={greyVaccine} text="مجموع تعداد دوز واکسن تزریقی" count="-"/>
           <Statistic
             icon={greyVaccine}
             text="تعداد اطلاعات مخدوش"
-            count={numberOf.totalPopulation - (numberOf.gtDoses[0] + numberOf.doses[0]) || 0}
+            loading={loading}
+            count="-"
           />
         </div>
       </div>

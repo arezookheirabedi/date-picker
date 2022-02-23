@@ -1,63 +1,66 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
-import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit} from '../../../helpers/utils';
-import calendar from '../../../assets/images/icons/calendar.svg';
+import axios from 'axios';
+// import DatePickerModal from '../../DatePickerModal';
+// import {toPersianDigit} from '../../../helpers/utils';
+// import calendar from '../../../assets/images/icons/calendar.svg';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 
 const {Stacked} = Charts;
 
 const OverviewVaccinationStatusChart: React.FC<{}> = () => {
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  // const focusFromDate = () => {
+  //   setShowDatePicker(true);
+  // };
+  //
+  // const generateFromDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.from
+  //     ? // eslint-disable-next-line
+  //     selectedDayRange.from.year +
+  //     '/' +
+  //     selectedDayRange.from.month +
+  //     '/' +
+  //     selectedDayRange.from.day
+  //     : '';
+  // };
+  //
+  // const generateToDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.to
+  //     ? // eslint-disable-next-line
+  //     selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+  //     : '';
+  // };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
-
-  const [queryParams, setQueryParams] = useState({
-    from: null,
-    to: null,
-    tags: [],
-  });
+  // const [queryParams, setQueryParams] = useState({
+  //   from: null,
+  //   to: null,
+  //   tags: [],
+  // });
 
   // eslint-disable-next-line
-  const getLinearOverview = async (params: any) => {
+  const getLinearOverview = async () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({});
+      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
 
       const provinces: any[] = [];
 
@@ -146,41 +149,71 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview(queryParams);
+      getLinearOverview();
     }, 500);
 
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
+    return () => {
+      clearTimeout(idSetTimeOut);
+      source.cancel('Operation canceled by the user.');
+      setDataset([]);
+    };
+  }, []);
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
-      });
-    } else {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-        tags: [],
-      });
-    }
-  }, [selectedDayRange]);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const provinceName = params.get('provinceName') || ('تهران' as any);
+  //   const existsCity = sideCities.some((item: any) => {
+  //     return item.name === provinceName;
+  //   });
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+  //   let idSetTimeOut: any;
+  //   if (existsCity) {
+  //     idSetTimeOut = setTimeout(() => {
+  //       getLinearOverview({...queryParams, province: provinceName});
+  //     }, 500);
+  //   } else {
+  //     history.push('/dashboard/vaccination/public');
+  //   }
+
+  //   return () => {
+  //     if (existsCity) {
+  //       source.cancel('Operation canceled by the user.');
+  //       clearTimeout(idSetTimeOut);
+  //       setDataset([])
+
+  //     }
+  //   };
+  // }, [queryParams, location.search]);
+
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       tags: [],
+  //     });
+  //   } else {
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: null,
+  //       to: null,
+  //       tags: [],
+  //     });
+  //   }
+  // }, [selectedDayRange]);
+
+  // const clearSelectedDayRange = (e: any) => {
+  //   e.stopPropagation();
+  //   setSelectedDayRange({
+  //     from: null,
+  //     to: null,
+  //   });
+  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -188,7 +221,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+            {/*            <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -225,12 +258,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
                       </svg>
                     </button>
                   ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5" />
+                    <img src={calendar} alt="x" className="w-5 h-5"/>
                   )}
                 </div>
               </div>
               <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
+                <span className="dash-separator"/>
               </div>
               <div className=" shadow-custom rounded-lg px-4 py-1">
                 <div
@@ -260,36 +293,39 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
                       </svg>
                     </button>
                   ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5" />
+                    <img src={calendar} alt="x" className="w-5 h-5"/>
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+            <div
+              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div
+                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}}/>
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}}/>
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}}/>
                   <span>دوز دوم</span>
                 </div>
               </div>
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+              <div
+                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}}/>
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}}/>
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>
@@ -299,12 +335,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} />
+          <Stacked data={dataset} categories={categories}/>
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
