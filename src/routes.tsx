@@ -14,7 +14,7 @@ import School from './containers/School/School';
 import SchoolProvince from './containers/School/SchoolProvince';
 import Recruitment from './containers/Recruitment/Recruitment';
 import RecruitmentProvince from './containers/Recruitment/RecruitmentProvince';
-import ReportsRequested from './containers/Reports/Requested';
+import ReportsRequested from './containers/Reports';
 import Vaccination from './containers/Vaccination/Vaccination';
 import VaccinationProvince from './containers/Vaccination/VaccinationProvince';
 import Citizens from './containers/Citizens/Citizens';
