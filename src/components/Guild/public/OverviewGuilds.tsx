@@ -11,37 +11,55 @@ import testIcon from 'src/assets/images/icons/test-color.svg';
 import vaccineService from 'src/services/vaccine.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Statistic from 'src/containers/Guild/components/Statistic';
+import guildService from 'src/services/guild.service';
+import {
+  IInitialPcrInfo,
+  IInitialVacinatelInfo,
+  initialPcrInfo,
+  initialVacinatelInfo,
+} from './constant';
 // import axios from 'axios';
 
-export const initialInfo = {
-  totalVaccinesCount: 0,
-  totalPopulation: 0,
-};
-export interface IInitialInfo {
-  totalVaccinesCount: number;
-  totalPopulation: number;
-}
 const OverviewGuilds: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [guildInfo, setGuildInfo] = useState<IInitialInfo>(initialInfo);
+  const [pcrLoading, setPcrLoading] = useState<boolean>(false);
+  const [guildPcrInfo, setGuildPcrInfo] = useState<IInitialPcrInfo>(initialPcrInfo);
+  const [guildVacinateInfo, setGuildVacinateInfo] =
+    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-
-  const getGuidInfo = async () => {
+  const getPcrResult = async (): Promise<any> => {
+    setPcrLoading(true);
+    try {
+      const res = await guildService.guildTestResult(
+        {tag: 'guild'},
+        {cancelToken: cancelToken.token}
+      );
+      if (res.status === 200) {
+        const newData = {...guildPcrInfo, ...res.data};
+        setGuildPcrInfo(newData);
+      }
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setPcrLoading(false);
+    }
+  };
+  const getGuildVacinateInfo = async () => {
     setLoading(true);
     try {
-      const res = await vaccineService.membersGeneral({tag: 'guild'},
-       {cancelToken: cancelToken.token}
-       );
-
-      setGuildInfo((prev: any) => {
-        return {...prev, ...res.data};
-      });
-      // eslint-disable-next-line
-      console.log(res);
+      const res = await vaccineService.membersGeneral(
+        {tag: 'guild'},
+        {cancelToken: cancelToken.token}
+      );
+      if (res.status === 200) {
+        const newData = {...guildVacinateInfo, ...res.data};
+        setGuildVacinateInfo(newData);
+      }
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -49,11 +67,14 @@ const OverviewGuilds: React.FC<{}> = () => {
       setLoading(false);
     }
   };
+ 
   useEffect(() => {
-    getGuidInfo();
+    getGuildVacinateInfo();
+    getPcrResult();
     return () => {
-      cancelRequest()
-      setGuildInfo(initialInfo);
+      cancelRequest();
+      setGuildVacinateInfo(initialVacinatelInfo);
+      setGuildPcrInfo(initialPcrInfo);
     };
   }, []);
   return (
@@ -65,23 +86,38 @@ const OverviewGuilds: React.FC<{}> = () => {
           <Statistic
             icon={guildIcon}
             text="مجموع شاغلین"
-            count={guildInfo.totalPopulation}
+            count={guildVacinateInfo.totalPopulation}
             loading={loading}
           />
-          <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800} />
-          <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450} />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200} />
+          <Statistic
+            icon={sufferingIcon}
+            text="مجموع مبتلایان"
+            count={guildPcrInfo.positiveMembersCount}
+            loading={pcrLoading}
+          />
+          <Statistic
+            icon={saveIcon}
+            text="مجموع بهبود یافتگان"
+            count={guildPcrInfo.recoveredMembersCount}
+            loading={pcrLoading}
+          />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع واکسیناسیون"
-            count={guildInfo.totalVaccinesCount}
+            count={guildVacinateInfo.totalVaccinesCount}
             loading={loading}
           />
-          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={654} />
-          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={428} />
-          <Statistic icon={testIcon} text="تعداد آزمایش های کارمندان" count={864} />
+          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count="-" />
+          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count="-" />
+          <Statistic
+            icon={testIcon}
+            text="تعداد آزمایش های کارمندان"
+            count={guildPcrInfo.testResultsCount}
+            loading={pcrLoading}
+          />
         </div>
       </div>
     </fieldset>
