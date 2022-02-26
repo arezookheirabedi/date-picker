@@ -121,6 +121,17 @@ function guildTestResult({...params}: any = {}, config?: any) {
     .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
 }
 
+
+
+
+function dosesTagBasePerCategori({ ...params }: any = {}, config?: any) {
+  return request
+      .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+      .build()
+      .get(`/api/v1/hcs-reporter/vaccines/tags/${params.tag}/categories/${params.category}` ,{} ,{ ...config });
+}
+
+
 export default {
   registerGuild,
   registerWorkshop,
@@ -134,4 +145,5 @@ export default {
   guildMessages,
   guildMessageSeen,
   guildTestResult,
+  dosesTagBasePerCategori
 };
