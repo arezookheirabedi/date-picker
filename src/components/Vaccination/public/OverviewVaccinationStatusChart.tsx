@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import vaccineService from 'src/services/vaccine.service';
 import axios from 'axios';
-import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit} from '../../../helpers/utils';
-import calendar from '../../../assets/images/icons/calendar.svg';
+// import DatePickerModal from '../../DatePickerModal';
+// import {toPersianDigit} from '../../../helpers/utils';
+// import calendar from '../../../assets/images/icons/calendar.svg';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 
@@ -16,51 +16,51 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   const source = CancelToken.source();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  // const focusFromDate = () => {
+  //   setShowDatePicker(true);
+  // };
+  //
+  // const generateFromDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.from
+  //     ? // eslint-disable-next-line
+  //     selectedDayRange.from.year +
+  //     '/' +
+  //     selectedDayRange.from.month +
+  //     '/' +
+  //     selectedDayRange.from.day
+  //     : '';
+  // };
+  //
+  // const generateToDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.to
+  //     ? // eslint-disable-next-line
+  //     selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+  //     : '';
+  // };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-      selectedDayRange.from.year +
-      '/' +
-      selectedDayRange.from.month +
-      '/' +
-      selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
-
-  const [queryParams, setQueryParams] = useState({
-    from: null,
-    to: null,
-    tags: [],
-  });
+  // const [queryParams, setQueryParams] = useState({
+  //   from: null,
+  //   to: null,
+  //   tags: [],
+  // });
 
   // eslint-disable-next-line
-  const getLinearOverview = async (params: any) => {
+  const getLinearOverview = async () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased(params, {cancelToken: source.token});
+      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
 
       const provinces: any[] = [];
 
@@ -149,7 +149,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview(queryParams);
+      getLinearOverview();
     }, 500);
 
     return () => {
@@ -157,7 +157,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
       source.cancel('Operation canceled by the user.');
       setDataset([]);
     };
-  }, [queryParams]);
+  }, []);
 
   // useEffect(() => {
   //   const params = new URLSearchParams(location.search);
@@ -185,35 +185,35 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   //   };
   // }, [queryParams, location.search]);
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
-      });
-    } else {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-        tags: [],
-      });
-    }
-  }, [selectedDayRange]);
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       tags: [],
+  //     });
+  //   } else {
+  //     setQueryParams({
+  //       ...queryParams,
+  //       from: null,
+  //       to: null,
+  //       tags: [],
+  //     });
+  //   }
+  // }, [selectedDayRange]);
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+  // const clearSelectedDayRange = (e: any) => {
+  //   e.stopPropagation();
+  //   setSelectedDayRange({
+  //     from: null,
+  //     to: null,
+  //   });
+  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -221,7 +221,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+            {/*            <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -297,7 +297,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="w-2/4">

@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {addTotalMembersAc} from 'src/store/action_creators';
+import vaccineServices from 'src/services/vaccine.service';
+import recruitmentServices from 'src/services/recruitment.service';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalRecritment from '../../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
@@ -10,7 +12,6 @@ import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
 import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-lg.svg';
 import prescriptionIcon from '../../../assets/images/icons/prescription.svg';
 import testIcon from '../../../assets/images/icons/test-color.svg';
-import hcsService from '../../../services/hcs.service';
 
 const OverviewRecruitment: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -26,20 +27,23 @@ const OverviewRecruitment: React.FC<{}> = () => {
   const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'employment',
-        testResultCount: true,
-        vaccinationCount: true,
-        total: true,
+      const {data: generalData} = await recruitmentServices.membersGeneral({
+        tag: 'employee',
+        category: 'heName',
       });
 
-      dispatch(addTotalMembersAc(data.total || 0));
-      setNumberOf(data.total || 0);
-      setNumberOfPositive(data.numberOfPositives || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfVaccination(data.numberOfVaccinated || 0);
-      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
-      setNumberOfEmployeeTests(data.numberOfNegatives + data.numberOfPositives || 0);
+      dispatch(addTotalMembersAc(generalData.totalPopulation || 0));
+      setNumberOf(generalData.totalPopulation || 0);
+      setNumberOfPositive(generalData.positiveMembersCount || 0);
+      setNumberOfRecovered(generalData.recoveredMembersCount || 0);
+      setNumberOfEmployeeTests(generalData.testResultsCount || 0);
+
+      const {data: vaccineData} = await vaccineServices.membersGeneral({
+        tag: 'employee',
+        category: 'heName',
+      });
+      setNumberOfVaccination(vaccineData.totalVaccinesCount || 0);
+      setNumberOfNanVaccinated(vaccineData.totalNonVaccinesCount || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
