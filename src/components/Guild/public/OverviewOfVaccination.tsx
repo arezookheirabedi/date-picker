@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Menu} from '@headlessui/react';
-// import hcsService from 'src/services/hcs.service';
+import guildService from 'src/services/guild.service';
+import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
 import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
@@ -8,7 +9,7 @@ import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg'
 
 
 interface OverviewOfVaccinationProps {
-  cityTitle?: any;
+  cityTitle?: string;
 }
 
 const filterTypes: any[] = [
@@ -33,92 +34,105 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
     name: 'بیشترین',
     enName: 'HIGHEST',
   });
+  const cancelToken = cancelTokenSource();
 
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
   // eslint-disable-next-line
   async function getOverviewByVaccinePercent(params: any) {
-    // setLoading(true);
-    // try {
-    //   const {data} = await hcsService.dosesTagBased(params);
-    //   const normalizedData: any[] = [];
-    //   data.forEach((item: any, index: number) => {
-    //     let firstDose = 0;
-    //     let secondDose = 0;
-    //     let thirdDose = 0;
-    //     let moreThanThreeDose = 0;
-    //     let allVaccination = 0;
-    //     let unknownInformation = 0;
-    //     let noDose = 0;
-    //     let total = 0;
-    //     // eslint-disable-next-line
-    //     for (const [key, value] of Object.entries(item.dosesCountMap)) {
-    //       if (Number(key) === 0) {
-    //         noDose += Number(value);
-    //       }
-    //       if (Number(key) === 1) {
-    //         firstDose += Number(value);
-    //       }
-    //       if (Number(key) === 2) {
-    //         secondDose += Number(value);
-    //       }
-    //       // temporary code
-    //       if (Number(key) === 3 || Number(key) > 3) {
-    //         thirdDose += Number(value);
-    //       }
-    //       // if (Number(key) === 3) {
-    //       //   thirdDose += Number(value);
-    //       // }
-    //       if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-    //         moreThanThreeDose += 0;
-    //       }
-    //       // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-    //       //   moreThanThreeDose += Number(value);
-    //       // }
-    //       if (Number(key) !== 0 && key !== 'null') {
-    //         allVaccination += Number(value);
-    //       }
-    //       if (key === 'null') {
-    //         unknownInformation += Number(value);
-    //       }
-    //       total = allVaccination + noDose + unknownInformation;
-    //     }
-    //     // if (total > 0)
-    //     normalizedData.push({
-    //       id: `ovvac_${index}`,
-    //       name: item.tag || 'نامشخص',
-    //       firstDosePercentage: (firstDose * 100) / total,
-    //       secondDosePercentage: (secondDose * 100) / total,
-    //       thirdDosePercentage: (thirdDose * 100) / total,
-    //       otherDose: (moreThanThreeDose * 100) / total,
-    //       allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
-    //       unknownInformation,
-    //       noDose: (noDose * 100) / total,
-    //       // eslint-disable-next-line
-    //       // notVaccine: item.dosesCountMap
-    //       //   ? item.dosesCountMap[0]
-    //       //     ? (item.dosesCountMap[0] * 100) / total
-    //       //     : 0
-    //       //   : 0,
-    //     });
-    //   });
-    //   setDataset([...normalizedData]);
-    //   setOrgDataset([...normalizedData]);
-    //   setFilterType({
-    //     name: 'بیشترین',
-    //     enName: 'HIGHEST',
-    //   });
-    // } catch (error) {
-    //   // eslint-disable-next-line
-    //   console.log(error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    setLoading(true);
+    try {
+      const {data}= await guildService.dosesTagBasePerCategori(params,{cancelToken: cancelToken.token});
+  
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+        let secondDose = 0;
+        let thirdDose = 0;
+        let moreThanThreeDose = 0;
+        // let allVaccination = 0;
+        // let unknownInformation = 0;
+        const noDose = (Number(item.totalNonVaccinesCountToMembersCountPercentage)||0);
+      //  const total = (Numbere(item.membersCount)||0);
+        
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.doses)) {
+          // if (Number(key) === 0) {
+          //   noDose += Number(value);
+          // }
+          if (Number(key) === 1) {
+            firstDose += Number(value);
+          }
+          if (Number(key) === 2) {
+            secondDose += Number(value);
+          }
+          // temporary code
+          if (Number(key) === 3 || Number(key) > 3) {
+            thirdDose += Number(value);
+          }
+          // if (Number(key) === 3) {
+          //   thirdDose += Number(value);
+          // }
+          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+            moreThanThreeDose += Number(value);
+          }
+          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          //   moreThanThreeDose += Number(value);
+          // }
+          // if (Number(key) !== 0 && key !== 'null') {
+          //   allVaccination += Number(value);
+          // }
+          // if (key === 'null') {
+          //   unknownInformation += Number(value);
+          // }
+          // total = allVaccination + noDose + unknownInformation;
+        }
+        // if (total > 0)
+        normalizedData.push({
+          id: `ovvac_${index}`,
+          name: item.categoryValue,
+          // firstDosePercentage: (firstDose * 100) / total,
+          secondDosePercentage: item.dosesToMembersCountPercentage[2],
+          // thirdDosePercentage: (thirdDose * 100) / total,
+          // otherDose: (moreThanThreeDose * 100) / total,
+          allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
+          allDosesPercentage:((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) /item.membersCount,
+          // unknownInformation,
+          noDose,
+          // eslint-disable-next-line
+          // notVaccine: item.dosesCountMap
+          //   ? item.dosesCountMap[0]
+          //     ? (item.dosesCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
+        });
+      });
+      
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({
+        name: 'بیشترین',
+        enName: 'HIGHEST',
+      });
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
     getOverviewByVaccinePercent({
-      organization: 'employment',
-      tags: [`^(?!.*(استان|_)).*$`].join(','),
+      tag:"guild",
+      category :"categoryDesc"
     });
+    return () => {
+      cancelRequest();
+      // setGuildVacinateInfo(initialVacinatelInfo);
+     
+    };
   }, []);
 
   useEffect(() => {
@@ -323,7 +337,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
                 {
                   name: 'کل دوزها',
                   key: 'allDoses',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
                 },
                 {
                   name: 'واکسن نزده',

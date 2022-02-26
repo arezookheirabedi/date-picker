@@ -14,8 +14,6 @@ const {Stacked} = Charts;
 interface OverviewGuildsPerProvinceProps {}
 
 const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () => {
-  // const {CancelToken} = axios;
-  // const source = CancelToken.source();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
