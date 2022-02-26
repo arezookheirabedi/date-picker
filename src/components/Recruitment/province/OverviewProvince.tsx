@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {addTotalMembersAc} from 'src/store/action_creators';
-import hcsService from 'src/services/hcs.service';
+import recruitmentServices from 'src/services/recruitment.service';
+import vaccineServices from 'src/services/vaccine.service';
 import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalRecritment from '../../../assets/images/icons/people-navy.svg';
@@ -35,20 +36,25 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
   const getNumberOf = async (province: any) => {
     setLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'employment',
-        tags: [`استان ${province}`].join(','),
-        testResultCount: true,
-        vaccinationCount: true,
-        total: true,
+      const {data: generalData} = await recruitmentServices.membersGeneral({
+        tag: 'employee',
+        category: 'heName',
+        province,
       });
-      dispatch(addTotalMembersAc(data.total || 0));
-      setNumberOf(data.total || 0);
-      setNumberOfPositive(data.numberOfPositives || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfVaccination(data.numberOfVaccinated || 0);
-      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
-      setNumberOfEmployeeTests(data.numberOfNegatives + data.numberOfPositives || 0);
+
+      dispatch(addTotalMembersAc(generalData.totalPopulation || 0));
+      setNumberOf(generalData.totalPopulation || 0);
+      setNumberOfPositive(generalData.positiveMembersCount || 0);
+      setNumberOfRecovered(generalData.recoveredMembersCount || 0);
+      setNumberOfEmployeeTests(generalData.testResultsCount || 0);
+
+      const {data: vaccineData} = await vaccineServices.membersGeneral({
+        tag: 'employee',
+        category: 'heName',
+        province,
+      });
+      setNumberOfVaccination(vaccineData.totalVaccinesCount || 0);
+      setNumberOfNanVaccinated(vaccineData.totalNonVaccinesCount || 0);
     } catch (error) {
       console.log(error);
     } finally {
