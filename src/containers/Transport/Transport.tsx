@@ -7,7 +7,7 @@ import React from 'react';
 import OverviewOfVaccinationInPublicTransport
   from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
 // import TestsInTransport from '../../components/Transport/public/TestsInTransport';
-import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
+// import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
 
@@ -28,7 +28,7 @@ const Transport = () => {
           style={{backgroundImage: `url(${AlertPattern})`}}
         />
       </div>
-      <OverviewDrivers/>
+      {/* <OverviewDrivers/> */}
       {/* <OverviewSamas /> */}
       {/* <OverviewCategories/> */}
       {/* <OverviewPublicPatients/> */}

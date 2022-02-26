@@ -32,16 +32,19 @@ const filterTypes = [
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
 const initialNumberOf = {
   doses: {...initialDoses},
-  dosesPercentage: {...initialDoses},
   dosesToTotalPopulationPercentage: {...initialDoses},
   gtDoses: {...initialDoses},
-  gtDosesPercentage: {...initialDoses},
-  gtDosesToTotalPopulationPercentage: {...initialDoses},
+  gtDosesToTotalDosesPercentage : {...initialDoses},
+  totalNonVaccinesCount : 0,
+  totalNonVaccinesCountToTotalPopulationPercentage : 0,
   totalPopulation: 0,
-  totalUnknownVaccinesCount: 0,
   totalVaccinesCount: 0,
   totalVaccinesCountToTotalPopulationPercentage: 0,
-  totalVaccinesPercentage: 0,
+  // dosesPercentage: {...initialDoses},
+  // gtDosesPercentage: {...initialDoses},
+  // gtDosesToTotalPopulationPercentage: {...initialDoses},
+  // totalUnknownVaccinesCount: 0,
+  // totalVaccinesPercentage: 0,
 };
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
@@ -384,7 +387,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={GrayVaccine2}
           text="تعداد واکسیناسیون انجام نشده"
-          count={numberOf.doses[0] || 0}
+          count={numberOf.totalNonVaccinesCount || 0}
           loading={loading}
           hasInfo
           infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده‌اند"
