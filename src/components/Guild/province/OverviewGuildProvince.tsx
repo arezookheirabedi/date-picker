@@ -77,7 +77,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
         )
       const dataChart: any = {
         null: 5,
-        '0': data.doses[0] || 0, // واکسن نزدع
+        '0': data.totalNonVaccinesCount || 0, // واکسن نزدع
         '1': data.doses[1] || 0, // دوز اول 
         '2': data.doses[2] || 0, // دوز دوم
         '3': data.doses[3] || 0, // دوز سوم

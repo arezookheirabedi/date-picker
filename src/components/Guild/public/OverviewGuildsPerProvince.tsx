@@ -6,14 +6,12 @@ import vaccineService from 'src/services/vaccine.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
-import { cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
 
-interface OverviewGuildsPerProvinceProps {
- 
-}
+interface OverviewGuildsPerProvinceProps {}
 
 const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () => {
   // const {CancelToken} = axios;
@@ -85,12 +83,12 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
 
       data.forEach((item: any, index: number) => {
         let more = 0;
-
+        noDose.push(Number(item.totalNonVaccinesCount));
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.doses)) {
-          if (Number(key) === 0) {
-            noDose.push(Number(value));
-          }
+          // if (Number(key) === 0) {
+          //   noDose.push(Number(value));
+          // }
 
           if (Number(key) === 1) {
             firstDose.push(Number(value));
@@ -104,7 +102,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
             thirdDose.push(Number(value));
           }
 
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+          if (Number(key) !== 1 && key !== 'null' && Number(key) > 3) {
             more += Number(value);
           }
         }
@@ -162,7 +160,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
 
     return () => {
       clearTimeout(idSetTimeOut);
-      cancelRequest() 
+      cancelRequest();
       setDataset([]);
     };
   }, [queryParams]);
@@ -197,9 +195,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت واکسیناسیون اصناف 
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون اصناف</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
