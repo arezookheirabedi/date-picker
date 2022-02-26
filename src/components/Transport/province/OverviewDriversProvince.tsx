@@ -17,6 +17,7 @@ import {sideCities} from '../../../helpers/utils';
 import vaccineService from '../../../services/vaccine.service';
 import hcsService from '../../../services/hcs.service';
 
+
 interface OverviewDriversProvinceProps {
   cityTitle: any;
 }

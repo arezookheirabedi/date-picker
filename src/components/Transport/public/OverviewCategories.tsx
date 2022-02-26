@@ -12,6 +12,7 @@ import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import Calendar from "../../Calendar";
 
+
 const filterTypes = [
   {
     name: 'بیشترین',
