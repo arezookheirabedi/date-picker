@@ -18,16 +18,19 @@ import vaccineService from "../../../services/vaccine.service";
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
 const initialNumberOf = {
   doses: {...initialDoses},
-  dosesPercentage: {...initialDoses},
   dosesToTotalPopulationPercentage: {...initialDoses},
   gtDoses: {...initialDoses},
-  gtDosesPercentage: {...initialDoses},
-  gtDosesToTotalPopulationPercentage: {...initialDoses},
+  gtDosesToTotalDosesPercentage : {...initialDoses},
+  totalNonVaccinesCount : 0,
+  totalNonVaccinesCountToTotalPopulationPercentage : 0,
   totalPopulation: 0,
-  totalUnknownVaccinesCount: 0,
   totalVaccinesCount: 0,
   totalVaccinesCountToTotalPopulationPercentage: 0,
-  totalVaccinesPercentage: 0,
+  // dosesPercentage: {...initialDoses},
+  // gtDosesPercentage: {...initialDoses},
+  // gtDosesToTotalPopulationPercentage: {...initialDoses},
+  // totalUnknownVaccinesCount: 0,
+  // totalVaccinesPercentage: 0,
 };
 
 const OverviewDrivers = () => {
@@ -226,7 +229,7 @@ const OverviewDrivers = () => {
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع واکسن نزده‌ها"
-            count={numberOf.doses[0] || 0}
+            count={numberOf.totalNonVaccinesCount || 0}
             loading={loading}
             hasInfo
             infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
@@ -234,14 +237,14 @@ const OverviewDrivers = () => {
           <Statistic
             icon={vaccineIcon}
             text="درصد واکسن زده‌ها"
-            count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0).toFixed(3)}
+            count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0)}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={grayVaccineIcon}
             text="درصد واکسن نزده‌ها"
-            count={(numberOf.dosesToTotalPopulationPercentage[0] || 0).toFixed(3)}
+            count={(numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0)}
             loading={loading}
             isPercentage
           />
