@@ -72,10 +72,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           tmp = {...tmp, numberOfMoreThreeDose: tmp.numberOfMoreThreeDose + Number(value)};
         }
 
-        if (Number(key) !== 0 && key !== 'null') {
-          tmp = {...tmp, numberOfAllDose: tmp.numberOfAllDose + Number(value)};
-        }
-
         if (key === 'null') {
           tmp = {...tmp, numberOfUnknownDose: Number(value)};
         }
@@ -84,6 +80,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       tmp = {
         ...tmp,
         numberOfUnvaccinated: Number(data.totalNonVaccinesCount || 0),
+        numberOfAllDose: Number(data.gtDoses["0"] || 0),
         total: Number(data.totalPopulation || 0),
       };
 

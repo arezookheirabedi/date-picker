@@ -98,7 +98,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         }
 
         if (Number(key) !== 0 && key !== 'null') {
-          tmp = {...tmp, numberOfAllDose: tmp.numberOfAllDose + Number(value)};
+          tmp = {...tmp, };
         }
 
         if (key === 'null') {
@@ -109,6 +109,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       tmp = {
         ...tmp,
         numberOfUnvaccinated: Number(data.totalNonVaccinesCount || 0),
+        numberOfAllDose: Number(data.gtDoses["0"] || 0),
         total: Number(data.totalPopulation || 0),
       };
 
