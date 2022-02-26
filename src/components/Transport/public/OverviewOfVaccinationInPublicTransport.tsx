@@ -18,6 +18,7 @@ import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg'
 import vaccineService from '../../../services/vaccine.service';
 import hcsService from '../../../services/hcs.service';
 
+
 const filterTypes = [
   {
     name: 'بیشترین',
