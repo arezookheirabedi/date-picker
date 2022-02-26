@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Menu} from '@headlessui/react';
-import transportService from 'src/services/transport.service';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
@@ -14,8 +13,10 @@ import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
-import {getServiceTypeName} from '../../../helpers/utils';
+// import {getServiceTypeName} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import vaccineService from '../../../services/vaccine.service';
+import hcsService from '../../../services/hcs.service';
 
 const filterTypes = [
   {
@@ -28,174 +29,80 @@ const filterTypes = [
   },
 ];
 
+const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+const initialNumberOf = {
+  doses: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  gtDosesToTotalDosesPercentage: {...initialDoses},
+  totalNonVaccinesCount: 0,
+  totalNonVaccinesCountToTotalPopulationPercentage: 0,
+  totalPopulation: 0,
+  totalVaccinesCount: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  // dosesPercentage: {...initialDoses},
+  // gtDosesPercentage: {...initialDoses},
+  // gtDosesToTotalPopulationPercentage: {...initialDoses},
+  // totalUnknownVaccinesCount: 0,
+  // totalVaccinesPercentage: 0,
+};
+
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [filterType, setFilterType] = useState({name: 'کمترین', enName: 'LOWEST'});
+  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
   const [loading, setLoading] = useState(false);
   const [orgDataset, setOrgDataset] = useState<any>([]);
-  const [countsLoading, setCountsLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
-  const [counts, setCounts] = useState<any>({
-    numberOfDrivers: null,
-    numberOfFirstDose: null,
-    numberOfSecondDose: null,
-    numberOfUnvaccinated: null,
-  });
+  const [datasetLoading, setDatasetLoading] = useState<any>([]);
+  // const [countsLoading, setCountsLoading] = useState(false);
+
+  // eslint-disable-next-line
+
+  // const [counts, setCounts] = useState<any>({
+  //   numberOfDrivers: null,
+  //   numberOfFirstDose: null,
+  //   numberOfSecondDose: null,
+  //   numberOfUnvaccinated: null,
+  // });
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const [reportsDose, setReportsDose] = useState({}) as any;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [reportsDoseLoading, setReportsDoseLoading] = useState(false) as any;
-
-  async function getOverviewByVaccine(params: any) {
-    setCountsLoading(true);
-    try {
-      const {data} = await transportService.overviewVaccine(params, {cancelToken: source.token});
-      setCounts({
-        numberOfDrivers: data.numberOfDrivers || 0,
-        numberOfFirstDose: data.numberOfFirstDose || 0,
-        numberOfSecondDose: data.numberOfSecondDose || 0,
-        numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
-      });
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setCountsLoading(false);
-    }
-  }
-
-  async function getReportsDose() {
-    setReportsDoseLoading(true);
-    try {
-      const {data} = await transportService.reportsDose({}, {cancelToken: source.token});
-
-      const normalizedData: any[] = [];
-      let threeDose = 0;
-      let allVaccination = 0;
-      let moreThanThreeDose = 0;
-      let unknownInformation = 0;
-      data.dosesCount.forEach((item: any) => {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const [key, value] of Object.entries(item)) {
-          // temporary code
-          if (Number(key) === 3 || Number(key) > 3) {
-            threeDose += Number(value);
-          }
-
-          // if (Number(key) === 3) {
-          //   threeDose += Number(value);
-          // }
-
-          if (Number(key) !== 0 && key !== 'null') {
-            allVaccination += Number(value);
-          }
-
-          // temporary code
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += 0;
-          }
-
-          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-          //   moreThanThreeDose += Number(value);
-          // }
-
-          if (key === 'null') {
-            unknownInformation += Number(value);
-          }
-        }
-      });
-      normalizedData.push({
-        threeDose,
-        allVaccination,
-        moreThanThreeDose,
-        unknownInformation,
-      });
-
-      setReportsDose({
-        threeDose,
-        allVaccination,
-        moreThanThreeDose,
-        unknownInformation,
-      });
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setReportsDoseLoading(false);
-    }
-  }
-
-  async function getOverviewByVaccinePercent(params: any) {
+  const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await transportService.overviewVaccinePercent(params, {
-        cancelToken: source.token,
-      });
+      const {data} = await vaccineService.membersGeneral(
+        {tag: 'transport'},
+        {cancelToken: source.token}
+      );
+      setNumberOf({...data});
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getOverviewByVaccine = async () => {
+    setDatasetLoading(true);
+    try {
+      const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {lang: 'fa'});
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
-        let firstDose = 0;
-        let secondDose = 0;
-        let thirdDose = 0;
-        let moreThanThreeDose = 0;
-        let allVaccination = 0;
-        let unknownInformation = 0;
-        let noDose = 0;
-        let total = 0;
         // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.doseCountMap)) {
-          if (Number(key) === 0) {
-            noDose += Number(value);
-          }
-
-          if (Number(key) === 1) {
-            firstDose += Number(value);
-          }
-
-          if (Number(key) === 2) {
-            secondDose += Number(value);
-          }
-
-          // temporary code
-          if (Number(key) === 3 || Number(key) > 3) {
-            thirdDose += Number(value);
-          }
-
-          // if (Number(key) === 3) {
-          //   thirdDose += Number(value);
-          // }
-
-          // temporary code
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            moreThanThreeDose += 0;
-          }
-
-          // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-          //   moreThanThreeDose += Number(value);
-          // }
-
-          if (Number(key) !== 0 && key !== 'null') {
-            allVaccination += Number(value);
-          }
-
-          if (key === 'null') {
-            unknownInformation += Number(value);
-          }
-
-          total = allVaccination + noDose + unknownInformation;
-        }
 
         normalizedData.push({
           id: `ovvac_${index}`,
-          name: getServiceTypeName(item.serviceType),
-          firstDosePercentage: (firstDose * 100) / total,
-          secondDosePercentage: (secondDose * 100) / total,
-          thirdDosePercentage: (thirdDose * 100) / total,
-          otherDose: (moreThanThreeDose * 100) / total,
-          unknownInformation: (unknownInformation * 100) / total,
-          allDoses: ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
-          noDose: (noDose * 100) / total,
+          name: item.categoryValue,
+          firstDosePercentage: item.dosesToMembersCountPercentage[1],
+          secondDosePercentage: item.dosesToMembersCountPercentage[2],
+          thirdDosePercentage: item.dosesToMembersCountPercentage[3],
+          otherDose: item.gtDosesToTotalDosesPercentage[3],
+          unknownInformation: 0,
+          allDoses:
+            item.gtDosesToTotalDosesPercentage[0] -
+            item.totalNonVaccinesCountToMembersCountPercentage,
+          noDose: item.totalNonVaccinesCountToMembersCountPercentage,
           // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
           // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
           // // eslint-disable-next-line
@@ -210,36 +117,218 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
       setFilterType({name: 'کمترین', enName: 'LOWEST'});
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
+    } catch (e: any) {
+      console.log(e);
     } finally {
-      setLoading(false);
+      setDatasetLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getReportsDose();
-    getOverviewByVaccine({
-      numberOfDrivers: true,
-      numberOfFirstDose: true,
-      numberOfSecondDose: true,
-      numberOfUnvaccinated: true,
-    });
-    getOverviewByVaccinePercent({});
-
+    getNumberOf();
+    getOverviewByVaccine();
     return () => {
-      setReportsDose({});
-      setCounts({
-        numberOfDrivers: 0,
-        numberOfFirstDose: 0,
-        numberOfSecondDose: 0,
-        numberOfUnvaccinated: 0,
-      });
-      setDataset([]);
       source.cancel('Operation canceled by the user.');
+      setNumberOf(initialNumberOf);
     };
   }, []);
+
+  // const [reportsDose, setReportsDose] = useState({}) as any;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [reportsDoseLoading, setReportsDoseLoading] = useState(false) as any;
+
+  // async function getOverviewByVaccine(params: any) {
+  //   setCountsLoading(true);
+  //   try {
+  //     const {data} = await transportService.overviewVaccine(params, {cancelToken: source.token});
+  //     setCounts({
+  //       numberOfDrivers: data.numberOfDrivers || 0,
+  //       numberOfFirstDose: data.numberOfFirstDose || 0,
+  //       numberOfSecondDose: data.numberOfSecondDose || 0,
+  //       numberOfUnvaccinated: data.numberOfUnvaccinated || 0,
+  //     });
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setCountsLoading(false);
+  //   }
+  // }
+  //
+  // async function getReportsDose() {
+  //   setReportsDoseLoading(true);
+  //   try {
+  //     const {data} = await transportService.reportsDose({}, {cancelToken: source.token});
+  //
+  //     const normalizedData: any[] = [];
+  //     let threeDose = 0;
+  //     let allVaccination = 0;
+  //     let moreThanThreeDose = 0;
+  //     let unknownInformation = 0;
+  //     data.dosesCount.forEach((item: any) => {
+  //       // eslint-disable-next-line no-restricted-syntax
+  //       for (const [key, value] of Object.entries(item)) {
+  //         // temporary code
+  //         if (Number(key) === 3 || Number(key) > 3) {
+  //           threeDose += Number(value);
+  //         }
+  //
+  //         // if (Number(key) === 3) {
+  //         //   threeDose += Number(value);
+  //         // }
+  //
+  //         if (Number(key) !== 0 && key !== 'null') {
+  //           allVaccination += Number(value);
+  //         }
+  //
+  //         // temporary code
+  //         if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+  //           moreThanThreeDose += 0;
+  //         }
+  //
+  //         // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+  //         //   moreThanThreeDose += Number(value);
+  //         // }
+  //
+  //         if (key === 'null') {
+  //           unknownInformation += Number(value);
+  //         }
+  //       }
+  //     });
+  //     normalizedData.push({
+  //       threeDose,
+  //       allVaccination,
+  //       moreThanThreeDose,
+  //       unknownInformation,
+  //     });
+  //
+  //     setReportsDose({
+  //       threeDose,
+  //       allVaccination,
+  //       moreThanThreeDose,
+  //       unknownInformation,
+  //     });
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setReportsDoseLoading(false);
+  //   }
+  // }
+  //
+  // async function getOverviewByVaccinePercent(params: any) {
+  //   setLoading(true);
+  //   try {
+  //     const {data} = await transportService.overviewVaccinePercent(params, {
+  //       cancelToken: source.token,
+  //     });
+  //     const normalizedData: any[] = [];
+  //     data.forEach((item: any, index: number) => {
+  //       let firstDose = 0;
+  //       let secondDose = 0;
+  //       let thirdDose = 0;
+  //       let moreThanThreeDose = 0;
+  //       let allVaccination = 0;
+  //       let unknownInformation = 0;
+  //       let noDose = 0;
+  //       let total = 0;
+  //       // eslint-disable-next-line
+  //       for (const [key, value] of Object.entries(item.doseCountMap)) {
+  //         if (Number(key) === 0) {
+  //           noDose += Number(value);
+  //         }
+  //
+  //         if (Number(key) === 1) {
+  //           firstDose += Number(value);
+  //         }
+  //
+  //         if (Number(key) === 2) {
+  //           secondDose += Number(value);
+  //         }
+  //
+  //         // temporary code
+  //         if (Number(key) === 3 || Number(key) > 3) {
+  //           thirdDose += Number(value);
+  //         }
+  //
+  //         // if (Number(key) === 3) {
+  //         //   thirdDose += Number(value);
+  //         // }
+  //
+  //         // temporary code
+  //         if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+  //           moreThanThreeDose += 0;
+  //         }
+  //
+  //         // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
+  //         //   moreThanThreeDose += Number(value);
+  //         // }
+  //
+  //         if (Number(key) !== 0 && key !== 'null') {
+  //           allVaccination += Number(value);
+  //         }
+  //
+  //         if (key === 'null') {
+  //           unknownInformation += Number(value);
+  //         }
+  //
+  //         total = allVaccination + noDose + unknownInformation;
+  //       }
+  //
+  //       normalizedData.push({
+  //         id: `ovvac_${index}`,
+  //         name: getServiceTypeName(item.serviceType),
+  //         firstDosePercentage: (firstDose * 100) / total,
+  //         secondDosePercentage: (secondDose * 100) / total,
+  //         thirdDosePercentage: (thirdDose * 100) / total,
+  //         otherDose: (moreThanThreeDose * 100) / total,
+  //         unknownInformation: (unknownInformation * 100) / total,
+  //         allDoses: ((firstDose + secondDose + thirdDose + moreThanThreeDose) * 100) / total,
+  //         noDose: (noDose * 100) / total,
+  //         // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
+  //         // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
+  //         // // eslint-disable-next-line
+  //         // notVaccine: item.doseCountMap
+  //         //   ? item.doseCountMap[0]
+  //         //     ? (item.doseCountMap[0] * 100) / total
+  //         //     : 0
+  //         //   : 0,
+  //       });
+  //     });
+  //
+  //     setDataset([...normalizedData]);
+  //     setOrgDataset([...normalizedData]);
+  //     setFilterType({name: 'کمترین', enName: 'LOWEST'});
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   // getReportsDose();
+  //   // getOverviewByVaccine({
+  //   //   numberOfDrivers: true,
+  //   //   numberOfFirstDose: true,
+  //   //   numberOfSecondDose: true,
+  //   //   numberOfUnvaccinated: true,
+  //   // });
+  //   // getOverviewByVaccinePercent({});
+  //
+  //   return () => {
+  //     // setReportsDose({});
+  //     // setCounts({
+  //     //   numberOfDrivers: 0,
+  //     //   numberOfFirstDose: 0,
+  //     //   numberOfSecondDose: 0,
+  //     //   numberOfUnvaccinated: 0,
+  //     // });
+  //     // setDataset([]);
+  //     source.cancel('Operation canceled by the user.');
+  //   };
+  // }, []);
 
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
@@ -270,32 +359,32 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان فعال"
-          count={counts.numberOfDrivers}
-          loading={countsLoading}
+          count={numberOf.totalPopulation}
+          loading={loading}
           hasInfo
           infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
         />
         <Statistic
           icon={YellowVaccineMd}
           text="تعداد واکسیناسیون دوز اول"
-          count={counts.numberOfFirstDose}
-          loading={countsLoading}
+          count={numberOf.doses[1] || 0}
+          loading={loading}
           hasInfo
           infoText="تعداد افرادی که فقط یک دوز واکسن دریافت کردند"
         />
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز دوم"
-          count={counts.numberOfSecondDose}
-          loading={countsLoading}
+          count={numberOf.doses[2] || 0}
+          loading={loading}
           hasInfo
           infoText="تعداد افرادی که دو دوز واکسن رو دریافت کردند"
         />
         <Statistic
           icon={NavyVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
-          count={reportsDose.threeDose}
-          loading={reportsDoseLoading}
+          count={numberOf.doses[3] || 0}
+          loading={loading}
           hasInfo
           infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
         />
@@ -304,32 +393,32 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
-          count={reportsDose.moreThanThreeDose}
-          loading={reportsDoseLoading}
+          count={numberOf.gtDoses[3] || 0}
+          loading={loading}
           hasInfo
           infoText="تعداد افرادی که بیش از ۳ دوز واکسن دریافت کرده‌اند"
         />
         <Statistic
           icon={GreenVaccine}
           text="تعداد واکسیناسیون کل دوز"
-          count={reportsDose.allVaccination}
-          loading={reportsDoseLoading}
+          count={numberOf.totalVaccinesCount || 0}
+          loading={loading}
           hasInfo
           infoText="مجموع افرادی که واکسن دریافت کرده‌اند، ( یک دوز ،دو دوز ، سه دور)"
         />
         <Statistic
           icon={GrayVaccine}
           text="تعداد اطلاعات مخدوش"
-          count={reportsDose.unknownInformation}
-          loading={reportsDoseLoading}
+          count={numberOf.totalUnknownVaccinesCount || 0}
+          loading={loading}
           hasInfo
           infoText="تعداد افرادی که اطلاعات آن‌ها در سامانه به درستی ثبت نشده است"
         />
         <Statistic
           icon={GrayVaccine2}
           text="تعداد واکسیناسیون انجام نشده"
-          count={counts.numberOfUnvaccinated}
-          loading={countsLoading}
+          count={numberOf.totalNonVaccinesCount || 0}
+          loading={loading}
           hasInfo
           infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده‌اند"
         />
@@ -389,7 +478,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         </div>
       </div>
 
-      {loading ? (
+      {datasetLoading ? (
         <div className="p-20">
           <Spinner />
         </div>
