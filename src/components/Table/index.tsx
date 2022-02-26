@@ -2,6 +2,7 @@ import React, {ReactNode, useEffect} from 'react';
 // import qs from 'qs';
 import {useLocation} from 'react-router-dom';
 import Empty from '../Empty';
+import Loading from '../Loading';
 import Pagination from '../Pagination';
 
 const PAGE_SIZE = parseInt(process.env.REACT_APP_PAGE_SIZE || '15', 10);
@@ -41,10 +42,11 @@ interface IProps {
   totalItems: number;
   columns: IColumn[];
   dataSet: any[];
+  loading?: boolean;
 }
 
 const Table: React.FC<IProps> = (props: IProps) => {
-  const {dataSet, pagination, columns, totalItems = 0} = props;
+  const {dataSet, pagination, columns, totalItems = 0, loading = false} = props;
 
   // eslint-disable-next-line
   // const [totalItems, setTotalItems] = useState<number>(0);
@@ -100,38 +102,55 @@ const Table: React.FC<IProps> = (props: IProps) => {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-900 max-h-screen overflow-hidden overflow-y-scroll">
-            {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
-              dataSet
-                // .slice(
-                //   (parseInt(queryStringParams.get('page') || '1', 10) - 1) * pageSize,
-                //   parseInt(queryStringParams.get('page') || '1', 10) * pageSize
-                // )
-                .map((data, i) => (
-                  // eslint-disable-next-line
-                  <tr className="transition-all border-b border-gray-100" key={i}>
-                    {columns?.map((column, j) => (
-                      <td
-                        className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${
-                          column.className ? column.className : ''
-                        }`}
-                        // eslint-disable-next-line
-                        key={j}
-                      >
-                        {column.render
-                          ? column.render(data[column.key], data, i, parseInt(queryStringParams.get('page') || '1', 10))
-                          : data[column.key]}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-            ) : (
+            {loading ? (
               <tr>
-                <td colSpan={columns.length + 1}>
-                  <div className="px-4 py-10 flex justify-center items-center">
-                    <Empty />
-                  </div>
-                </td>
-              </tr>
+              <td colSpan={columns.length + 1}>
+                <div className="px-4 py-10 flex justify-center items-center">
+                  <Loading />
+                </div>
+              </td>
+            </tr>
+            ) : (
+              <>
+                {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
+                  dataSet
+                    // .slice(
+                    //   (parseInt(queryStringParams.get('page') || '1', 10) - 1) * pageSize,
+                    //   parseInt(queryStringParams.get('page') || '1', 10) * pageSize
+                    // )
+                    .map((data, i) => (
+                      // eslint-disable-next-line
+                      <tr className="transition-all border-b border-gray-100" key={i}>
+                        {columns?.map((column, j) => (
+                          <td
+                            className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${
+                              column.className ? column.className : ''
+                            }`}
+                            // eslint-disable-next-line
+                            key={j}
+                          >
+                            {column.render
+                              ? column.render(
+                                  data[column.key],
+                                  data,
+                                  i,
+                                  parseInt(queryStringParams.get('page') || '1', 10)
+                                )
+                              : data[column.key]}
+                          </td>
+                        ))}
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan={columns.length + 1}>
+                      <div className="px-4 py-10 flex justify-center items-center">
+                        <Empty />
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </>
             )}
           </tbody>
         </table>

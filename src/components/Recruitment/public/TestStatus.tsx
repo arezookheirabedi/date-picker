@@ -8,7 +8,6 @@ import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../../helpers/utils';
-import Spinner from '../../Spinner';
 
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
@@ -346,122 +345,117 @@ const TestStatus: React.FC<{}> = () => {
       </div>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
-          <Table
-            dataSet={[...dataset]}
-            pagination={{pageSize: 10, maxPages: 3}}
-            columns={[
-              {
-                name: 'وضعیت',
-                key: '',
-                render: (v: any, record) => (
-                  <CategoryDonut
-                    data={[
-                      {
-                        name: 'unknownCount',
-                        title: 'درصد تست‌های نامشخص',
-                        y: record.unknownCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#6E6E6E'], // start
-                            [1, '#393939'], // end
-                          ],
-                        },
+        <Table
+          loading={loading}
+          dataSet={[...dataset]}
+          pagination={{pageSize: 10, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت',
+              key: '',
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'unknownCount',
+                      title: 'درصد تست‌های نامشخص',
+                      y: record.unknownCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
                       },
-                      {
-                        name: 'negativeCount',
-                        title: 'درصد تست‌های منفی',
-                        y: record.negativeCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#05D8A4'], // start
-                            [1, '#039572'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'negativeCount',
+                      title: 'درصد تست‌های منفی',
+                      y: record.negativeCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
                       },
-                      {
-                        name: 'positiveCount',
-                        title: 'درصد تست‌های مثبت',
-                        y: record.positiveCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#FE2D2F'], // start
-                            [1, '#CC0002'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'positiveCount',
+                      title: 'درصد تست‌های مثبت',
+                      y: record.positiveCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
+                        ],
                       },
-                    ]}
-                  />
-                ),
-                className: 'flex justify-center w-full',
-              },
-              {
-                name: 'سازمان',
-                key: 'name',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex">
-                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
-                  </div>
-                ),
-              },
-              {
-                name: 'تعداد آزمایش‌های انجام شده',
-                key: 'total',
-                render: (v: any) => (
-                  <span>
-                    {Number(v || 0)
-                      .commaSeprator()
-                      .toPersianDigits()}
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های مثبت',
-                key: 'positiveCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های منفی',
-                key: 'negativeCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
-              // {
-              //   name: 'درصد تست‌های نامشخص',
-              //   key: 'unknownCount',
-              //   render: (v: any, record: any) => (
-              //     <span>
-              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-              //         .toFixed(4)
-              //         .toPersianDigits()}
-              //       %
-              //     </span>
-              //   ),
-              // },
-            ]}
-            totalItems={(dataset || []).length}
-          />
-        )}
+                    },
+                  ]}
+                />
+              ),
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'سازمان',
+              key: 'name',
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                </div>
+              ),
+            },
+            {
+              name: 'تعداد آزمایش‌های انجام شده',
+              key: 'total',
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0)
+                    .commaSeprator()
+                    .toPersianDigits()}
+                </span>
+              ),
+            },
+            {
+              name: 'درصد تست‌های مثبت',
+              key: 'positiveCount',
+              render: (v: any, record: any) => (
+                <span>
+                  {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                    .toFixed(4)
+                    .toPersianDigits()}
+                  %
+                </span>
+              ),
+            },
+            {
+              name: 'درصد تست‌های منفی',
+              key: 'negativeCount',
+              render: (v: any, record: any) => (
+                <span>
+                  {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+                    .toFixed(4)
+                    .toPersianDigits()}
+                  %
+                </span>
+              ),
+            },
+            // {
+            //   name: 'درصد تست‌های نامشخص',
+            //   key: 'unknownCount',
+            //   render: (v: any, record: any) => (
+            //     <span>
+            //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+            //         .toFixed(4)
+            //         .toPersianDigits()}
+            //       %
+            //     </span>
+            //   ),
+            // },
+          ]}
+          totalItems={(dataset || []).length}
+        />
       </div>
     </fieldset>
   );
