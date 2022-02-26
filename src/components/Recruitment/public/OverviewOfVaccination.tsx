@@ -135,7 +135,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           unknownInformation,
           noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
           allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
-          allDoses: Number(item.membersCount || 0) - Number(item.totalNonVaccinesCount || 0),
+          allDoses: Number(item.gtDoses["0"] || 0),
         });
       });
       setDataset([...normalizedData]);
