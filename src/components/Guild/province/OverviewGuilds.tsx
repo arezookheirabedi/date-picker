@@ -9,9 +9,15 @@ import scanIcon from 'src/assets/images/icons/scan-color.svg';
 import scanDangerIcon from 'src/assets/images/icons/scan-danger-color.svg';
 import testIcon from 'src/assets/images/icons/test-color.svg';
 import {useHistory, useLocation} from 'react-router-dom';
-import { cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import vaccineService from 'src/services/vaccine.service';
-import {IInitialInfo, initialInfo} from '../public/OverviewGuilds';
+import guildService from 'src/services/guild.service';
+import {
+  IInitialPcrInfo,
+  IInitialVacinatelInfo,
+  initialPcrInfo,
+  initialVacinatelInfo,
+} from '../public/constant';
 
 interface OverviewGuildsProvinceProps {
   cityTitle?: any;
@@ -21,8 +27,10 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
   const location = useLocation();
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(false);
-  const [guildInfo, setGuildInfo] = useState<IInitialInfo>(initialInfo);
-
+  const [guildVacinateInfo, setGuildVacinateInfo] =
+    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
+  const [pcrLoading, setPcrLoading] = useState<boolean>(false);
+  const [guildPcrInfo, setGuildPcrInfo] = useState<IInitialPcrInfo>(initialPcrInfo);
 
   const cancelToken = cancelTokenSource();
 
@@ -30,18 +38,16 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
     cancelToken.cancel(msgRequestCanceled);
   }
 
-
-  const getGuidInfo = async (params: any) => {
+  const getGuildVacinateInfo = async (params: any) => {
     setLoading(true);
     try {
       const res = await vaccineService.membersGeneral(params, {
-        cancelToken:cancelToken.token,
+        cancelToken: cancelToken.token,
       });
-
-      setGuildInfo((prev: any) => {
-        return {...prev, ...res.data};
-      });
-      // eslint-disable-next-line
+      if (res.status === 200) {
+        const newData = {...guildVacinateInfo, ...res.data};
+        setGuildVacinateInfo(newData);
+      } // eslint-disable-next-line
       console.log(res);
     } catch (error) {
       // eslint-disable-next-line
@@ -50,7 +56,21 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
       setLoading(false);
     }
   };
-
+  const getPcrResult = async (params: any): Promise<any> => {
+    setPcrLoading(true);
+    try {
+      const res = await guildService.guildTestResult(params, {cancelToken: cancelToken.token});
+      if (res.status === 200) {
+        const newData = {...guildPcrInfo, ...res.data};
+        setGuildPcrInfo(newData);
+      }
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setPcrLoading(false);
+    }
+  };
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -58,16 +78,16 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
       return item.name === provinceName;
     });
     if (existsCity) {
-      getGuidInfo({tag: 'guild', province: provinceName});
+      getPcrResult({tag: 'guild', province: provinceName});
+      getGuildVacinateInfo({tag: 'guild', province: provinceName});
     } else {
       history.push('/dashboard/guild/province');
     }
 
     return () => {
-      // source.cancel(msgRequestCanceled);
-      cancelRequest() 
-      
-      setGuildInfo(initialInfo);
+      cancelRequest();
+      setGuildVacinateInfo(initialVacinatelInfo);
+      setGuildPcrInfo(initialPcrInfo);
     };
   }, [location.search]);
 
@@ -80,25 +100,40 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
           <Statistic
             icon={guildIcon}
             text="مجموع شاغلین"
-            count={guildInfo.totalPopulation}
+            count={guildVacinateInfo.totalPopulation}
             loading={loading}
           />
 
-          <Statistic icon={sufferingIcon} text="مجموع مبتلایان" count={2800} />
-          <Statistic icon={saveIcon} text="مجموع بهبود یافتگان" count={1450} />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count={1200} />
+          <Statistic
+            icon={sufferingIcon}
+            text="مجموع مبتلایان"
+            count={guildPcrInfo.positiveMembersCount}
+            loading={pcrLoading}
+          />
+          <Statistic
+            icon={saveIcon}
+            text="مجموع بهبود یافتگان"
+            count={guildPcrInfo.recoveredMembersCount}
+            loading={pcrLoading}
+          />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع واکسیناسیون"
-            count={guildInfo.totalVaccinesCount}
+            count={guildVacinateInfo.totalVaccinesCount}
             loading={loading}
           />
 
-          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={654} />
-          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={428} />
-          <Statistic icon={testIcon} text="تعداد آزمایش های کارمندان" count={864} />
+          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count="-" />
+          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count="-" />
+          <Statistic
+            icon={testIcon}
+            text="تعداد آزمایش های کارمندان"
+            count={guildPcrInfo.testResultsCount}
+            loading={pcrLoading}
+          />
         </div>
       </div>
     </fieldset>
