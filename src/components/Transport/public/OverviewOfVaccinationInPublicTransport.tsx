@@ -15,8 +15,8 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
 // import {getServiceTypeName} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import vaccineService from "../../../services/vaccine.service";
-import hcsService from "../../../services/hcs.service";
+import vaccineService from '../../../services/vaccine.service';
+import hcsService from '../../../services/hcs.service';
 
 const filterTypes = [
   {
@@ -34,9 +34,9 @@ const initialNumberOf = {
   doses: {...initialDoses},
   dosesToTotalPopulationPercentage: {...initialDoses},
   gtDoses: {...initialDoses},
-  gtDosesToTotalDosesPercentage : {...initialDoses},
-  totalNonVaccinesCount : 0,
-  totalNonVaccinesCountToTotalPopulationPercentage : 0,
+  gtDosesToTotalDosesPercentage: {...initialDoses},
+  totalNonVaccinesCount: 0,
+  totalNonVaccinesCountToTotalPopulationPercentage: 0,
   totalPopulation: 0,
   totalVaccinesCount: 0,
   totalVaccinesCountToTotalPopulationPercentage: 0,
@@ -49,13 +49,15 @@ const initialNumberOf = {
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [filterType, setFilterType] = useState({name: 'کمترین', enName: 'LOWEST'});
-  // const [loading, setLoading] = useState(false);
-  // const [orgDataset, setOrgDataset] = useState<any>([]);
-  // eslint-disable-next-line
-  const [countsLoading, setCountsLoading] = useState(false);
-
-// eslint-disable-next-line
+  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
+  const [loading, setLoading] = useState(false);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
+  const [datasetLoading, setDatasetLoading] = useState<any>([]);
+  // const [countsLoading, setCountsLoading] = useState(false);
+
+  // eslint-disable-next-line
+
   // const [counts, setCounts] = useState<any>({
   //   numberOfDrivers: null,
   //   numberOfFirstDose: null,
@@ -63,15 +65,16 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   //   numberOfUnvaccinated: null,
   // });
 
-  const [loading, setLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
   const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await vaccineService.membersGeneral({tag: 'transport'}, {cancelToken: source.token});
+      const {data} = await vaccineService.membersGeneral(
+        {tag: 'transport'},
+        {cancelToken: source.token}
+      );
       setNumberOf({...data});
     } catch (error) {
       console.log(error);
@@ -81,16 +84,45 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   };
 
   const getOverviewByVaccine = async () => {
-    setCountsLoading(true);
+    setDatasetLoading(true);
     try {
-      const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {})
-      console.log(data);
+      const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {lang: 'fa'});
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        // eslint-disable-next-line
+
+        normalizedData.push({
+          id: `ovvac_${index}`,
+          name: item.categoryValue,
+          firstDosePercentage: item.dosesToMembersCountPercentage[1],
+          secondDosePercentage: item.dosesToMembersCountPercentage[2],
+          thirdDosePercentage: item.dosesToMembersCountPercentage[3],
+          otherDose: item.gtDosesToTotalDosesPercentage[3],
+          unknownInformation: 0,
+          allDoses:
+            item.gtDosesToTotalDosesPercentage[0] -
+            item.totalNonVaccinesCountToMembersCountPercentage,
+          noDose: item.totalNonVaccinesCountToMembersCountPercentage,
+          // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
+          // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
+          // // eslint-disable-next-line
+          // notVaccine: item.doseCountMap
+          //   ? item.doseCountMap[0]
+          //     ? (item.doseCountMap[0] * 100) / total
+          //     : 0
+          //   : 0,
+        });
+      });
+
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({name: 'کمترین', enName: 'LOWEST'});
     } catch (e: any) {
       console.log(e);
     } finally {
-      setCountsLoading(false);
+      setDatasetLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getNumberOf();
@@ -298,33 +330,32 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   //   };
   // }, []);
 
-  // useEffect(() => {
-  //   const tmp = [...orgDataset].sort((a: any, b: any) => {
-  //     // eslint-disable-next-line
-  //     const reverse =
-  //       // eslint-disable-next-line no-nested-ternary
-  //       filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
-  //
-  //     if (a.allDoses < b.allDoses) {
-  //       return reverse * 1;
-  //     }
-  //
-  //     if (a.allDoses > b.allDoses) {
-  //       return reverse * -1;
-  //     }
-  //     // a must be equal to b
-  //     return 0;
-  //   });
-  //
-  //   setDataset(tmp);
-  // }, [filterType]);
+  useEffect(() => {
+    const tmp = [...orgDataset].sort((a: any, b: any) => {
+      // eslint-disable-next-line
+      const reverse =
+        // eslint-disable-next-line no-nested-ternary
+        filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+
+      if (a.allDoses < b.allDoses) {
+        return reverse * 1;
+      }
+
+      if (a.allDoses > b.allDoses) {
+        return reverse * -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    setDataset(tmp);
+  }, [filterType]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان فعال"
@@ -358,8 +389,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
         />
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
         <Statistic
           icon={BlueVaccine}
           text="بیش از ۳ دوز"
@@ -401,14 +431,13 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button
-                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
                   {filterType?.name || 'کمترین'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2"/>
+                <DownIcon className="h-2 w-2.5 mr-2" />
               </Menu.Button>
             </div>
 
@@ -449,9 +478,9 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         </div>
       </div>
 
-      {loading ? (
+      {datasetLoading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>
