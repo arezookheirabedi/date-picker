@@ -5,12 +5,12 @@ import {Menu} from '@headlessui/react';
 import moment from 'moment-jalaali';
 import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
+import {getServiceTypeName} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import Calendar from "../../Calendar";
 
 const filterTypes = [
   {
@@ -32,6 +32,15 @@ const OverviewCategories: React.FC<{}> = () => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false
+  }) as any;
+  const [query, setQuery] = useState({
+    resultStatus: 'POSITIVE',
+    recoveredCount: true,
+    total: true,
+    count: true,
+    resultReceiptDateFrom: null,
+    resultReceiptDateTo: null,
   }) as any;
 
   const {CancelToken} = axios;
@@ -67,40 +76,15 @@ const OverviewCategories: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    getOverviewByCategory({
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
-    });
+    getOverviewByCategory(query);
     return () => {
       source.cancel('Operation canceled by the user.');
       setDataset([]);
     };
-  }, []);
+  }, [query]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
   };
 
   useEffect(() => {
@@ -109,17 +93,19 @@ const OverviewCategories: React.FC<{}> = () => {
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
+      setQuery({
+        ...query,
         resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-      });
-    } else {
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
+      })
+
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
         resultReceiptDateFrom: null,
         resultReceiptDateTo: null,
-      });
+      })
     }
   }, [selectedDayRange]);
 
@@ -142,13 +128,6 @@ const OverviewCategories: React.FC<{}> = () => {
     setDataset(tmp);
   }, [filterType]);
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -160,13 +139,14 @@ const OverviewCategories: React.FC<{}> = () => {
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button
+                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
                   {filterType?.name || 'بیشترین'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
+                <DownIcon className="h-2 w-2.5 mr-2"/>
               </Menu.Button>
             </div>
 
@@ -214,79 +194,14 @@ const OverviewCategories: React.FC<{}> = () => {
               showDatePicker
             />
           ) : null}
-          <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              {selectedDayRange.from && (
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateFromDate())}
-                </span>
-              )}
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
-          <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
-          </div>
-          <div className=" shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              {selectedDayRange.to && (
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateToDate())}
-                </span>
-              )}
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
+          <Calendar action={focusFromDate} from={selectedDayRange.from} to={selectedDayRange.to}
+                    setSelectedDayRange={setSelectedDayRange}/>
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <Table
