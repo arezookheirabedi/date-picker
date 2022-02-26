@@ -8,13 +8,16 @@ function membersGeneral({organization, tag, ...params}: any = {}, config?: any) 
     .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params, {...config});
 }
 
-function membersTagBased({
-                           organization,
-                           ...params
-                         }: {
-  organization: string;
-  params?: { tagPattern: string; tags: any; from: string; to: string };
-}, config?: any) {
+function membersTagBased(
+  {
+    organization,
+    ...params
+  }: {
+    organization: string;
+    params?: {tagPattern: string; tags: any; from: string; to: string};
+  },
+  config?: any
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -27,13 +30,16 @@ function membersTagBased({
     );
 }
 
-function testResultTimeBased({
-                               organization,
-                               ...params
-                             }: {
-  organization: string;
-  params?: { status: string; type: string; from: string; to: string; tag: string };
-}, config?: any) {
+function testResultTimeBased(
+  {
+    organization,
+    ...params
+  }: {
+    organization: string;
+    params?: {status: string; type: string; from: string; to: string; tag: string};
+  },
+  config?: any
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -49,13 +55,16 @@ function testResultTimeBased({
     );
 }
 
-function testResultTagBased({
-                              organization,
-                              ...params
-                            }: {
-  organization: string;
-  params?: { tagPattern: string; from: string; to: string };
-}, config?: any) {
+function testResultTagBased(
+  {
+    organization,
+    ...params
+  }: {
+    organization: string;
+    params?: {tagPattern: string; from: string; to: string};
+  },
+  config?: any
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -69,7 +78,10 @@ function testResultTagBased({
     );
 }
 
-function dosesTagBased({organization, ...params}: { organization: string; params: any }, config?: any) {
+function dosesTagBased(
+  {organization, ...params}: {organization: string; params: any},
+  config?: any
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -83,14 +95,14 @@ function dosesTagBased({organization, ...params}: { organization: string; params
     );
 }
 
-function doses({organization, ...params}: { organization: string; params: any }, config?: any) {
+function doses({organization, ...params}: {organization: string; params: any}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params, {...config});
 }
 
-function tags({organization, ...params}: { organization: string; params?: any }, {...config}) {
+function tags({organization, ...params}: {organization: string; params?: any}, {...config}) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -104,6 +116,13 @@ function vaccinationOverview(tag: string, category: string, params: any = {}, co
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
 }
 
+function testResults(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
+}
+
 const hcsService = {
   membersGeneral,
   membersTagBased,
@@ -112,7 +131,8 @@ const hcsService = {
   doses,
   dosesTagBased,
   tags,
-  vaccinationOverview
+  vaccinationOverview,
+  testResults,
 };
 
 export default hcsService;
