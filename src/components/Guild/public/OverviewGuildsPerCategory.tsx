@@ -2,12 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import Spinner from 'src/components/Spinner';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
 import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
-// import Table from '../../Table';
 import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
