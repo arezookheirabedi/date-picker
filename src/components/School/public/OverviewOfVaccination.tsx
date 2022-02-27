@@ -129,7 +129,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setFilterType({name: 'کمترین', enName: 'LOWEST'});
+      setFilterType({name: 'پیشفرض', enName: ''});
     } catch (e: any) {
       console.log(e);
     } finally {

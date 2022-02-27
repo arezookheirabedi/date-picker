@@ -35,7 +35,7 @@ interface OverviewCategoriesProvinceProps {
 const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
-  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
+  const [filterType, setFilterType] = useState({name: 'پیشفرض', enName: ''});
   const [loading, setLoading] = useState(false);
   // const [isCancel, setIsCancel] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
@@ -80,7 +80,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       });
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+      setFilterType({name: 'پیشفرض', enName: ''});
     } catch (e) {
       console.log(e);
     } finally {
