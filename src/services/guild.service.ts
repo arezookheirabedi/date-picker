@@ -130,7 +130,7 @@ function dosesTagBased({ tag, category, ...params }: any = {}, config?: any) {
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, { ...config });
 }
-function guildCategoryStatus({ tag, category, ...params }: any = {}, config?: any) {
+function guildOverviewByCategory({ tag, category, ...params }: any = {}, config?: any) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
@@ -151,5 +151,5 @@ export default {
   guildMessageSeen,
   guildTestResult,
   dosesTagBased,
-  guildCategoryStatus
+  guildOverviewByCategory
 };
