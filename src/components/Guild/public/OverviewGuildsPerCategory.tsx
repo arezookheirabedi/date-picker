@@ -1,13 +1,12 @@
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import Spinner from 'src/components/Spinner';
-import {toPersianDigit} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
+import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
-import Table from '../../Table';
+import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
@@ -29,40 +28,49 @@ const filterTypes = [
 const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({cityTitle}) => {
   const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [orgDataset, setOrgDataset] = useState<any>([]);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  const cancelToken = cancelTokenSource();
 
-  // eslint-disable-next-line
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      // const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
-      // const normalizedData: any[] = [];
-      // data.forEach((item: any, index: number) => {
-      //   // if (item.total !== 0) {
-      //   normalizedData.push({
-      //     id: `ovca_${index}`,
-      //     name: getServiceTypeName(item.serviceType),
-      //     employeesCount: item.total || 0,
-      //     infectedCount: item.count || 0,
-      //     infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
-      //     saveCount: item.recoveredCount || 0,
-      //     // deadCount: 120,
-      //   });
-      //   // }
-      // });
-      // setDataset([...normalizedData]);
+      const {data} = await guildService.guildOverviewByCategory(params, {
+        cancelToken: cancelToken.token,
+      });
+
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name: item.categoryValue || 'نامشخص',
+          employeesCount: item.membersCount || 0,
+          infectedCount: item.positiveMembersCount || 0,
+          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
+          saveCount: item.recoveredMembersCount || 0,
+          deadCount: 0,
+        });
+      });
+
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({
+        name: 'بیشترین',
+        enName: 'HIGHEST',
+      });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -72,15 +80,16 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
   }
 
   useEffect(() => {
-    getOverviewByCategory({
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
-    });
+    // getOverviewByCategory({
+    //   from: '',
+    //   to: '',
+    //   tag: 'guild',
+    //   category: 'categoryDesc',
+    // });
     return () => {
-      source.cancel('Operation canceled by the user.');
+      cancelRequest();
       setDataset([]);
+      setOrgDataset([]);
     };
   }, []);
 
@@ -112,18 +121,18 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tag: 'guild',
+        category: 'categoryDesc',
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        resultReceiptDateFrom: null,
-        resultReceiptDateTo: null,
+        tag: 'guild',
+        category: 'categoryDesc',
+        from: null,
+        to: null,
       });
     }
   }, [selectedDayRange]);
@@ -133,11 +142,11 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (a.infectedPercent < b.infectedPercent) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.infectedPercent > b.infectedPercent) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -161,11 +170,11 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (a.infectedPercent < b.infectedPercent) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (a.infectedPercent > b.infectedPercent) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -185,9 +194,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت رسته‌ها  {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت رسته‌ها {cityTitle}</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
@@ -225,10 +232,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                             } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
                             onClick={() => {
                               setFilterType(value);
-                              // setQueryParams({
-                              //   ...queryParams,
-                              //   tag: value.enName,
-                              // });
                             }}
                           >
                             {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
@@ -351,111 +354,106 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
       </div>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
-          <Table
-            dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
-            columns={[
-              {
-                name: 'وضعیت کلی',
-                key: '',
-                render: (v: any, record) => (
-                  <CategoryDonut
-                    data={[
-                      {
-                        name: 'deadCount',
-                        title: 'تعداد فوت‌شدگان',
-                        y: record.deadCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#6E6E6E'], // start
-                            [1, '#393939'], // end
-                          ],
-                        },
+        <Table
+          loading={loading}
+          dataSet={[...dataset]}
+          pagination={{pageSize: 10, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت کلی',
+              key: '',
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'deadCount',
+                      title: 'تعداد فوت‌شدگان',
+                      y: record.deadCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
                       },
-                      {
-                        name: 'saveCount',
-                        title: 'تعداد بهبودیافتگان',
-                        y: record.saveCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#05D8A4'], // start
-                            [1, '#039572'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'saveCount',
+                      title: 'تعداد بهبودیافتگان',
+                      y: record.saveCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
                       },
-                      {
-                        name: 'infectedCount',
-                        title: 'تعداد مبتلایان',
-                        y: record.infectedCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#FE2D2F'], // start
-                            [1, '#CC0002'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'infectedCount',
+                      title: 'تعداد مبتلایان',
+                      y: record.infectedCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
+                        ],
                       },
-                    ]}
-                  />
-                ),
-                className: 'flex justify-center w-full',
-              },
-              {
-                name: 'نام رسته',
-                key: 'name',
-                render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
-                ),
-              },
-              {
-                name: 'تعداد کارمندان',
-                key: 'employeesCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-              },
-              {
-                name: 'درصد ابتلا',
-                key: 'infectedPercent',
-                render: (v: any) => (
-                  <span>
-                    {Number(v || 0).toLocaleString('fa', {
-                      minimumFractionDigits: 4,
-                    })}
-                    %
-                  </span>
-                ),
-              },
-              {
-                name: 'تعداد مبتلایان',
-                key: 'infectedCount',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-              },
-              {
-                name: 'تعداد بهبودیافتگان',
-                key: 'saveCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-                ),
-              },
-              {
-                name: 'تعداد فوت‌شدگان',
-                key: 'deadCount',
-                render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-                ),
-              },
-            ]}
-            totalItems={(dataset || []).length}
-          />
-        )}
+                    },
+                  ]}
+                />
+              ),
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'نام رسته',
+              key: 'name',
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                </div>
+              ),
+            },
+            {
+              name: 'تعداد کارمندان',
+              key: 'employeesCount',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+            },
+            {
+              name: 'درصد ابتلا',
+              key: 'infectedPercent',
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0).toLocaleString('fa', {
+                    minimumFractionDigits: 4,
+                  })}
+                  %
+                </span>
+              ),
+            },
+            {
+              name: 'تعداد مبتلایان',
+              key: 'infectedCount',
+              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+            },
+            {
+              name: 'تعداد بهبودیافتگان',
+              key: 'saveCount',
+              render: (v: any) => (
+                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+              ),
+            },
+            {
+              name: 'تعداد فوت‌شدگان',
+              key: 'deadCount',
+              render: (v: any) => (
+                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+              ),
+            },
+          ]}
+          totalItems={(dataset || []).length}
+        />
       </div>
     </fieldset>
   );
