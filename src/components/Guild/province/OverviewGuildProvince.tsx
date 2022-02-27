@@ -1,19 +1,29 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
+// import hcsService from 'src/services/hcs.service';
 import vaccineService from 'src/services/vaccine.service';
-// import axios from 'axios';
+import {useHistory, useLocation} from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
-import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
+import {
+  cancelTokenSource,
+  msgRequestCanceled,
+  sideCities,
+  toPersianDigit,
+} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
 
-interface OverviewGuildsPerProvinceProps {}
+interface OverviewGuildsPerProvinceProps {
+  cityTitle?: string;
+}
 
-const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () => {
+const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -29,6 +39,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
   };
 
   const generateFromDate: any = () => {
+    // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
         selectedDayRange.from.year +
@@ -40,6 +51,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
   };
 
   const generateToDate: any = () => {
+    // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
         selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
@@ -51,97 +63,80 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
     to: null,
     tags: [],
   });
-
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-
   const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased(params, {
-        cancelToken: cancelToken.token,
-      });
+      const {data} = await vaccineService.membersGeneral(params,
+        { cancelToken:cancelToken.token}
+        )
+      const dataChart: any = {
+        null: 5,
+        '0': data.totalNonVaccinesCount || 0, // واکسن نزدع
+        '1': data.doses[1] || 0, // دوز اول 
+        '2': data.doses[2] || 0, // دوز دوم
+        '3': data.doses[3] || 0, // دوز سوم
+        '4': data.gtDoses[3] || 0 //  بیش از سه دوز
+       
+      };
 
-      const provinces: any[] = [];
+  // eslint-disable-next-line
+  let firstDose: number = 0;
+  // eslint-disable-next-line
+  let secondDose: number = 0;
+  // eslint-disable-next-line
+  let thirdDose: number = 0;
+  // eslint-disable-next-line
+  let moreThanThreeDose: number = 0;
+  // eslint-disable-next-line
+  let noDose: number = 0;
 
-      // eslint-disable-next-line
-      let firstDose: any[] = [];
-      // eslint-disable-next-line
-      let secondDose: any[] = [];
-      // eslint-disable-next-line
-      let thirdDose: any[] = [];
-      // eslint-disable-next-line
-      let moreThanThreeDose: any[] = [];
-      // eslint-disable-next-line
-      let noDose: any[] = [];
-
-      data.forEach((item: any, index: number) => {
-        let more = 0;
-        noDose.push(Number(item.totalNonVaccinesCount));
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.doses)) {
-          // if (Number(key) === 0) {
-          //   noDose.push(Number(value));
-          // }
-
-          if (Number(key) === 1) {
-            firstDose.push(Number(value));
-          }
-
-          if (Number(key) === 2) {
-            secondDose.push(Number(value));
-          }
-
-          if (Number(key) === 3) {
-            thirdDose.push(Number(value));
-          }
-
-          if (Number(key) !== 1 && key !== 'null' && Number(key) > 3) {
-            more += Number(value);
-          }
+      Object.entries(dataChart).forEach(([key, value]: any[]) => {
+        switch (key) {
+          case 'null':
+            // noDose += value;
+            break;
+          case '0':
+            noDose += value;
+            break;
+          case '1':
+            firstDose += value;
+            break;
+          case '2':
+            secondDose += value;
+            break;
+          case '3':
+            thirdDose += value;
+            break;
+          case '4':
+            moreThanThreeDose += value;
+            break;
+        
+          default:
+            break;
         }
-
-        if (noDose.length < index + 1) noDose.push(0);
-        if (firstDose.length < index + 1) firstDose.push(0);
-        if (secondDose.length < index + 1) secondDose.push(0);
-        if (thirdDose.length < index + 1) thirdDose.push(0);
-        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
-
-        provinces.push(item.province);
       });
 
       setDataset([
         {
-          name: 'واکسن نزده',
-          color: '#FF0060',
-          data: [...noDose],
-        },
-        {
-          name: 'دوز اول',
-          color: '#F3BC06',
-          data: [...firstDose],
-        },
-        {
-          name: 'دوز دوم',
-          color: '#209F92',
-          data: [...secondDose],
-        },
-        {
-          name: 'دوز سوم',
-          color: '#004D65',
-          data: [...thirdDose],
-        },
-        {
-          name: 'بیش از ۳ دوز',
-          color: '#BFDDE7',
-          data: [...moreThanThreeDose],
+          name: 'واکسیناسیون',
+          type: 'column',
+          data: [
+            {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
+            {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
+            {name: 'دوز دوم', y: secondDose, color: '#209F92'},
+            {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
+            {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
+          ],
         },
       ]);
-      setCategories([...provinces]);
+
+      setCategories(['واکسن نزده', 'دوز اول', 'دوز دوم', 'دوز سوم', 'بیش از ۳ دوز']);
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -150,18 +145,32 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
       setLoading(false);
     }
   };
-
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({...queryParams, tag: 'guild'});
-    }, 500);
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getLinearOverview({...queryParams,tag:"guild", province: provinceName});
+      }, 500);
+    } else {
+      history.push('/dashboard/guild/province');
+    }
 
     return () => {
-      clearTimeout(idSetTimeOut);
-      cancelRequest();
-      setDataset([]);
+      if (existsCity) {
+        cancelRequest()
+        clearTimeout(idSetTimeOut);
+        setDataset([]);
+      }
     };
-  }, [queryParams]);
+  }, [queryParams, location.search]);
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -193,7 +202,9 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون اصناف</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به وضعیت واکسیناسیون اصناف {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
@@ -313,7 +324,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} />
+          <Stacked data={dataset} categories={categories}  notPercent />
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
@@ -326,4 +337,4 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
   );
 };
 
-export default OverviewGuildsPerProvince;
+export default OverviewGuildsProvince;
