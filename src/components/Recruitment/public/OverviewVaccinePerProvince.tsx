@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import hcsService from 'src/services/hcs.service';
+import recruitmentServices from 'src/services/recruitment.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
@@ -58,7 +58,7 @@ const OverviewVaccinePerProvince = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await hcsService.dosesTagBased(params);
+      const {data} = await recruitmentServices.dosesProvinceBased(params);
 
       const provinces: any[] = [];
 
@@ -77,11 +77,7 @@ const OverviewVaccinePerProvince = () => {
         let more = 0;
 
         // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.dosesCountMap)) {
-          if (Number(key) === 0) {
-            noDose.push(Number(value));
-          }
-
+        for (const [key, value] of Object.entries(item.doses)) {
           if (Number(key) === 1) {
             firstDose.push(Number(value));
           }
@@ -99,13 +95,15 @@ const OverviewVaccinePerProvince = () => {
           }
         }
 
+        noDose.push(item.totalNonVaccinesCount || 0);
+
         if (noDose.length < index + 1) noDose.push(0);
         if (firstDose.length < index + 1) firstDose.push(0);
         if (secondDose.length < index + 1) secondDose.push(0);
         if (thirdDose.length < index + 1) thirdDose.push(0);
         if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
 
-        provinces.push(item.tag);
+        provinces.push(item.province);
       });
 
       setDataset([
