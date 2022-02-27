@@ -10,13 +10,13 @@ import Table from '../../components/Table';
 import {toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
 
-const Requested: React.FC<{}> = () => {
+const TransportReport: React.FC<{}> = () => {
   const location = useLocation();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
-  const [totalItems, setTotalItems] = useState(0);
+  // const [totalItems, setTotalItems] = useState(0);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -58,7 +58,7 @@ const Requested: React.FC<{}> = () => {
         cancelToken: source.token,
       });
       setDataset([...response.data.content]);
-      setTotalItems(response.data.totalElements);
+      // setTotalItems(response.data.totalElements);
     } catch (error: any) {
       // eslint-disable-next-line
       console.log(error);
@@ -71,7 +71,7 @@ const Requested: React.FC<{}> = () => {
     return () => {
       source.cancel('Operation canceled by the user.');
       setDataset([]);
-      setTotalItems(0);
+      // setTotalItems(0);
       setLoading(false);
     };
   }, [history]);
@@ -127,8 +127,8 @@ const Requested: React.FC<{}> = () => {
 
   return (
     <>
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">لیست درخواست دانلود گزارش</legend>
+      <fieldset className="text-center border rounded-xl p-1 mb-16">
+        <legend className="text-black mx-auto px-3"> لیست گزارش حمل و نقل</legend>
 
         <div className="flex align-center justify-between mb-8">
           <div className="flex align-center justify-start">
@@ -370,4 +370,4 @@ const Requested: React.FC<{}> = () => {
   );
 };
 
-export default Requested;
+export default TransportReport;
