@@ -16,6 +16,13 @@ function dosesTagBased({ tag, category, ...params }: any = {}, config?: any) {
         .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, { ...config });
 }
 
+function dosesProvinceBased({ ...params }: any = {}, config?: any) {
+    return request
+        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+        .build()
+        .get(`/api/v1/hcs-reporter/vaccines/provinces`, params, { ...config });
+}
+
 
 function membersTagBased({ tag, category, ...params }: any = {}, config?: any) {
     return request
@@ -28,6 +35,7 @@ function membersTagBased({ tag, category, ...params }: any = {}, config?: any) {
 const recruitmentService = {
     membersGeneral,
     dosesTagBased,
+    dosesProvinceBased,
     membersTagBased,
 };
 
