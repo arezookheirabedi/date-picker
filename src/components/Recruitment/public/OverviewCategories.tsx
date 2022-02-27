@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
-import hcsService from 'src/services/hcs.service';
+import recruitmentServices from 'src/services/recruitment.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../TableScope';
@@ -40,19 +40,18 @@ const OverviewCategories: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.membersTagBased(params);
+      const {data} = await recruitmentServices.membersTagBased(params);
 
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         if (item.total !== 0) {
           normalizedData.push({
             id: `ovca_${index}`,
-            name: item.tag || 'نامشخص',
-            employeesCount: item.total || 0,
-            infectedCount: item.positiveCount || 0,
-            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
+            name: item.categoryValue || 'نامشخص',
+            employeesCount: item.membersCount || 0,
+            infectedCount: item.positiveMembersCount || 0,
+            infectedPercent: Number(item.positiveMembersCountToMembersCountPercentage || 0).toFixed(4),
+            saveCount: item.recoveredMembersCount || 0,
           });
         }
       });
@@ -70,17 +69,6 @@ const OverviewCategories: React.FC<{}> = () => {
     }
   }
 
-  useEffect(() => {
-    getOverviewByCategory({
-      organization: 'employment',
-      tagPattern: '^(?!.*(استان|_)).*$',
-      tags: ['^((?!استان).)*$'].join(','),
-      // resultStatus: 'POSITIVE',
-      // recoveredCount: true,
-      // total: true,
-      // count: true,
-    });
-  }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -113,9 +101,8 @@ const OverviewCategories: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        organization: 'employment',
-        tagPattern: '^(?!.*(استان|_)).*$',
-        tags: ['^((?!استان).)*$'].join(','),
+        tag: 'employee',
+        category: 'heName',
         // resultStatus: 'POSITIVE',
         // recoveredCount: true,
         // total: true,
@@ -125,9 +112,8 @@ const OverviewCategories: React.FC<{}> = () => {
       });
     } else {
       getOverviewByCategory({
-        organization: 'employment',
-        tagPattern: '^(?!.*(استان|_)).*$',
-        tags: ['^((?!استان).)*$'].join(','),
+        tag: 'employee',
+        category: 'heName',
         from: null,
         to: null,
       });
