@@ -4,10 +4,10 @@ import {useLocation} from 'react-router-dom';
 
 import OverviewDriversMap from '../../components/Transport/province/OverviewDriversMap';
 import OverviewDriversProvince from '../../components/Transport/province/OverviewDriversProvince';
-import OverviewSamasProvince from '../../components/Transport/province/OverviewSamasProvince';
-import OverviewPublicPatientsProvince from '../../components/Transport/province/OverviewPublicPatientsProvince';
-import TestsInTransportProvince from '../../components/Transport/province/TestsInTransportProvince';
-import OverviewCategoriesProvince from '../../components/Transport/province/OverviewCategoriesProvince';
+// import OverviewSamasProvince from '../../components/Transport/province/OverviewSamasProvince';
+// import OverviewPublicPatientsProvince from '../../components/Transport/province/OverviewPublicPatientsProvince';
+// import TestsInTransportProvince from '../../components/Transport/province/TestsInTransportProvince';
+// import OverviewCategoriesProvince from '../../components/Transport/province/OverviewCategoriesProvince';
 import OverviewOfVaccinationInPublicTransportProvince from '../../components/Transport/province/OverviewOfVaccinationInPublicTransportProvince';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
@@ -52,11 +52,11 @@ const TransportProvince = () => {
         selectDefault
       />
       <OverviewDriversProvince cityTitle={cityTitle} />
-      <OverviewSamasProvince cityTitle={cityTitle} />
+      {/* <OverviewSamasProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
-      <OverviewPublicPatientsProvince cityTitle={cityTitle} />
+      <OverviewPublicPatientsProvince cityTitle={cityTitle} /> */}
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle} />
-      <TestsInTransportProvince cityTitle={cityTitle} />
+      {/* <TestsInTransportProvince cityTitle={cityTitle} />  */}
     </div>
   );
 };
