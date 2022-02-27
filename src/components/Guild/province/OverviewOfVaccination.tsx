@@ -53,9 +53,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
-        let secondDose = 0;
-        const  noDose= Number(item.totalNonVaccinesCountToMembersCountPercentage || 0)
-        const allDosesPercentage=100-noDose
+        // let secondDose = 0;
         // let thirdDose = 0;
         // let unknownInformation = 0;
 
@@ -65,9 +63,9 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
             firstDose = Number(value);
           }
 
-            if (Number(key) === 2) {
-              secondDose = Number(value);
-            }
+          //   if (Number(key) === 2) {
+          //     secondDose = Number(value);
+          //   }
 
           //   if (Number(key) === 3) {
           //     thirdDose += Number(value);
@@ -77,14 +75,15 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
           //     unknownInformation += Number(value);
           //   }
         }
+
         normalizedData.push({
           id: `ovvac_${index}`,
           name: item.categoryValue || 'نامشخص',
           firstDosePercentage: firstDose,
-          secondDosePercentage: secondDose,
-          allDosesPercentage,
-          // allDoses:  allDosesPercentage,
-          noDose,
+          secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
+          allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+          allDoses: Number(item.gtDoses['0'] || 0),
+          noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
         });
       });
 
@@ -280,7 +279,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
                     },
                     {
                       name: 'allDosesPercentage',
-                      title: ' کل دوزها',
+                      title: 'دوز دوم',
                       y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -323,8 +322,8 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
             },
             {
               name: 'کل دوزها',
-              key: 'allDosesPercentage',
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+              key: 'allDoses',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
             },
             {
               name: 'واکسن نزده',
