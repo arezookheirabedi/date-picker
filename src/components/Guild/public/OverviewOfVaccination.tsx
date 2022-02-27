@@ -1,15 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Menu} from '@headlessui/react';
-// import hcsService from 'src/services/hcs.service';
+import guildService from 'src/services/guild.service';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-
-
-interface OverviewOfVaccinationProps {
-  cityTitle?: any;
-}
 
 const filterTypes: any[] = [
   {
@@ -22,7 +17,7 @@ const filterTypes: any[] = [
   },
 ];
 
-const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}) => {
+const OverviewOfVaccination: React.FC<{}> = () => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,91 +29,80 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
     enName: 'HIGHEST',
   });
 
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
   // eslint-disable-next-line
   async function getOverviewByVaccinePercent(params: any) {
-    // setLoading(true);
-    // try {
-    //   const {data} = await hcsService.dosesTagBased(params);
-    //   const normalizedData: any[] = [];
-    //   data.forEach((item: any, index: number) => {
-    //     let firstDose = 0;
-    //     let secondDose = 0;
-    //     let thirdDose = 0;
-    //     let moreThanThreeDose = 0;
-    //     let allVaccination = 0;
-    //     let unknownInformation = 0;
-    //     let noDose = 0;
-    //     let total = 0;
-    //     // eslint-disable-next-line
-    //     for (const [key, value] of Object.entries(item.dosesCountMap)) {
-    //       if (Number(key) === 0) {
-    //         noDose += Number(value);
-    //       }
-    //       if (Number(key) === 1) {
-    //         firstDose += Number(value);
-    //       }
-    //       if (Number(key) === 2) {
-    //         secondDose += Number(value);
-    //       }
-    //       // temporary code
-    //       if (Number(key) === 3 || Number(key) > 3) {
-    //         thirdDose += Number(value);
-    //       }
-    //       // if (Number(key) === 3) {
-    //       //   thirdDose += Number(value);
-    //       // }
-    //       if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-    //         moreThanThreeDose += 0;
-    //       }
-    //       // if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-    //       //   moreThanThreeDose += Number(value);
-    //       // }
-    //       if (Number(key) !== 0 && key !== 'null') {
-    //         allVaccination += Number(value);
-    //       }
-    //       if (key === 'null') {
-    //         unknownInformation += Number(value);
-    //       }
-    //       total = allVaccination + noDose + unknownInformation;
-    //     }
-    //     // if (total > 0)
-    //     normalizedData.push({
-    //       id: `ovvac_${index}`,
-    //       name: item.tag || 'نامشخص',
-    //       firstDosePercentage: (firstDose * 100) / total,
-    //       secondDosePercentage: (secondDose * 100) / total,
-    //       thirdDosePercentage: (thirdDose * 100) / total,
-    //       otherDose: (moreThanThreeDose * 100) / total,
-    //       allDoses: firstDose + secondDose + thirdDose + moreThanThreeDose,
-    //       unknownInformation,
-    //       noDose: (noDose * 100) / total,
-    //       // eslint-disable-next-line
-    //       // notVaccine: item.dosesCountMap
-    //       //   ? item.dosesCountMap[0]
-    //       //     ? (item.dosesCountMap[0] * 100) / total
-    //       //     : 0
-    //       //   : 0,
-    //     });
-    //   });
-    //   setDataset([...normalizedData]);
-    //   setOrgDataset([...normalizedData]);
-    //   setFilterType({
-    //     name: 'بیشترین',
-    //     enName: 'HIGHEST',
-    //   });
-    // } catch (error) {
-    //   // eslint-disable-next-line
-    //   console.log(error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    setLoading(true);
+    try {
+      const {data} = await guildService.dosesTagBased(params, {
+        cancelToken: cancelToken.token,
+      });
+
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+        // let secondDose = 0;
+        // let thirdDose = 0;
+        // let unknownInformation = 0;
+
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesToMembersCountPercentage)) {
+          if (Number(key) === 1) {
+            firstDose = Number(value);
+          }
+
+          //   if (Number(key) === 2) {
+          //     secondDose = Number(value);
+          //   }
+
+          //   if (Number(key) === 3) {
+          //     thirdDose += Number(value);
+          //   }
+
+          //   if (key === 'null') {
+          //     unknownInformation += Number(value);
+          //   }
+        }
+
+        normalizedData.push({
+          id: `ovvac_${index}`,
+          name: item.categoryValue || 'نامشخص',
+          firstDosePercentage: firstDose,
+          secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
+          allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+          allDoses: Number(item.gtDoses['0'] || 0),
+          noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+        });
+      });
+
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({
+        name: 'بیشترین',
+        enName: 'HIGHEST',
+      });
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
     getOverviewByVaccinePercent({
-      organization: 'employment',
-      tags: [`^(?!.*(استان|_)).*$`].join(','),
+      tag: 'guild',
+      category: 'categoryDesc',
     });
+    return () => {
+      cancelRequest();
+      // setGuildVacinateInfo(initialVacinatelInfo);
+    };
   }, []);
 
   useEffect(() => {
@@ -126,11 +110,11 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.allDoses < b.allDoses) {
+      if (a.noDose < b.noDose) {
         return reverse * 1;
       }
 
-      if (a.allDoses > b.allDoses) {
+      if (a.noDose > b.noDose) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -154,11 +138,11 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.allDoses < b.allDoses) {
+        if (a.noDose < b.noDose) {
           return reverse * 1;
         }
 
-        if (a.allDoses > b.allDoses) {
+        if (a.noDose > b.noDose) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -170,7 +154,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">بیشترین واکسیناسیون اصناف در استان {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3">بیشترین واکسیناسیون در اصناف</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center space-x-5 rtl:space-x-reverse">
@@ -248,94 +232,87 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
         </div>
       </div>
 
-      {loading ? (
-        <div className="p-20">
-          <Spinner />
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-            <Table
-              dataSet={[...dataset]}
-              pagination={{pageSize: 10, maxPages: 3}}
-              columns={[
-                {
-                  name: 'وضعیت کلی',
-                  key: '',
-                  render: (v: any, record) => (
-                    <CategoryDonut
-                      data={[
-                        {
-                          name: 'allDoses',
-                          title: 'نزده‌ها',
-                          y: record.noDoses || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#6E6E6E'], // start
-                              [1, '#393939'], // end
-                            ],
-                          },
-                        },
-                        {
-                          name: 'allDoses',
-                          title: 'دوز دوم',
-                          y: record.allDoses || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#05D8A4'], // start
-                              [1, '#039572'], // end
-                            ],
-                          },
-                        },
-                        {
-                          name: 'noDose',
-                          title: 'واکسن اول',
-                          y: record.firstDoses || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#F5DF34'], // start
-                              [1, '#d4c12d'], // end
-                            ],
-                          },
-                        },
-                      ]}
-                    />
-                  ),
-                  className: 'flex justify-center w-full',
-                },
-                {
-                  name: 'نام رسته',
-                  key: 'name',
-                  render: (v: any, record, index: number, page: number) => (
-                    <div className="flex">
-                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
-                    </div>
-                  ),
-                },
-                {
-                  name: 'دو دوز',
-                  key: 'secondDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'کل دوزها',
-                  key: 'allDoses',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'واکسن نزده',
-                  key: 'noDose',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-              ]}
-              totalItems={dataset.length || 0}
-            />
-          </div>
-        </>
-      )}
+      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+        <Table
+          loading={loading}
+          dataSet={[...dataset]}
+          pagination={{pageSize: 10, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت کلی',
+              key: '',
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'noDose',
+                      title: 'نزده‌ها',
+                      y: record.noDose || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
+                      },
+                    },
+                    {
+                      name: 'allDosesPercentage',
+                      title: 'دوز دوم',
+                      y: record.allDosesPercentage || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
+                      },
+                    },
+                    {
+                      name: 'firstDosePercentage',
+                      title: 'واکسن اول',
+                      y: record.firstDosePercentage || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#F5DF34'], // start
+                          [1, '#d4c12d'], // end
+                        ],
+                      },
+                    },
+                  ]}
+                />
+              ),
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'نام رسته',
+              key: 'name',
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                </div>
+              ),
+            },
+            {
+              name: 'دو دوز',
+              key: 'secondDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'کل دوزها',
+              key: 'allDoses',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'واکسن نزده',
+              key: 'noDose',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+          ]}
+          totalItems={dataset.length || 0}
+        />
+      </div>
     </fieldset>
   );
 };
