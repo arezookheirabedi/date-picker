@@ -123,6 +123,13 @@ function testResults(params: any = {}, config?: any) {
     .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
 }
 
+function tableOverviewTestResults(tag: string, category: string, params: any = {}, config?: any){
+  return request
+  .withHeaders({'Content-Type': 'application/json;utf-8'})
+  .build()
+  .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {...config});
+}
+
 const hcsService = {
   membersGeneral,
   membersTagBased,
@@ -133,6 +140,7 @@ const hcsService = {
   tags,
   vaccinationOverview,
   testResults,
+  tableOverviewTestResults
 };
 
 export default hcsService;
