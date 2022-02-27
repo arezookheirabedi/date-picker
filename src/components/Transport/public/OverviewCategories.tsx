@@ -3,15 +3,15 @@ import axios from 'axios';
 import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import transportService from 'src/services/transport.service';
+// import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../DatePickerModal';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {getServiceTypeName} from '../../../helpers/utils';
+// import {getServiceTypeName} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import Calendar from "../../Calendar";
-
+import Calendar from '../../Calendar';
+import hcsService from '../../../services/hcs.service';
 
 const filterTypes = [
   {
@@ -33,13 +33,9 @@ const OverviewCategories: React.FC<{}> = () => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
-    clear: false
+    clear: false,
   }) as any;
   const [query, setQuery] = useState({
-    resultStatus: 'POSITIVE',
-    recoveredCount: true,
-    total: true,
-    count: true,
     resultReceiptDateFrom: null,
     resultReceiptDateTo: null,
   }) as any;
@@ -47,20 +43,25 @@ const OverviewCategories: React.FC<{}> = () => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  async function getOverviewByCategory(params: any) {
-    setLoading(true);
+  const overviewTestResults = async (from: any = null, to: any = null) => {
     try {
-      const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
+      setLoading(true);
+      const {data} = await hcsService.tableOverviewTestResults('transport', 'serviceType', {
+        lang: 'fa',
+        from,
+        to,
+      });
+      // console.log(data);
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         // if (item.total !== 0) {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: getServiceTypeName(item.serviceType),
-          employeesCount: item.total || 0,
-          infectedCount: item.count || 0,
-          infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
-          saveCount: item.recoveredCount || 0,
+          name: item.categoryValue,
+          employeesCount: item.membersCount || 0,
+          infectedCount: item.positiveMembersCount || 0,
+          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
+          saveCount: item.recoveredMembersCount || 0,
           // deadCount: 120,
         });
         // }
@@ -68,16 +69,45 @@ const OverviewCategories: React.FC<{}> = () => {
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
       setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
+    } catch (e) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  // async function getOverviewByCategory(params: any) {
+  //   setLoading(true);
+  //   try {
+  //     const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
+  //     const normalizedData: any[] = [];
+  //     data.forEach((item: any, index: number) => {
+  //       // if (item.total !== 0) {
+  //       normalizedData.push({
+  //         id: `ovca_${index}`,
+  //         name: getServiceTypeName(item.serviceType),
+  //         employeesCount: item.total || 0,
+  //         infectedCount: item.count || 0,
+  //         infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
+  //         saveCount: item.recoveredCount || 0,
+  //         // deadCount: 120,
+  //       });
+  //       // }
+  //     });
+  //     setDataset([...normalizedData]);
+  //     setOrgDataset([...normalizedData]);
+  //     setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
-    getOverviewByCategory(query);
+    // getOverviewByCategory(query);
+    overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
     return () => {
       source.cancel('Operation canceled by the user.');
       setDataset([]);
@@ -96,17 +126,16 @@ const OverviewCategories: React.FC<{}> = () => {
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQuery({
         ...query,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-      })
-
+        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
     }
     if (selectedDayRange.clear) {
       setQuery({
         ...query,
         resultReceiptDateFrom: null,
         resultReceiptDateTo: null,
-      })
+      });
     }
   }, [selectedDayRange]);
 
@@ -129,35 +158,33 @@ const OverviewCategories: React.FC<{}> = () => {
     setDataset(tmp);
   }, [filterType]);
 
-
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی رسته‌های حمل و نقل</legend>
-      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+      <legend className="text-black mx-auto px-3">نگاه کلی به حمل و نقل کشور</legend>
+
+      <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
           <Menu
             as="div"
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
           >
             <div>
-              <Menu.Button
-                className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                 {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                 <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'بیشترین'}
+                  {filterType?.name || 'پیشفرض'}
                 </span>
-                <DownIcon className="h-2 w-2.5 mr-2"/>
+                <DownIcon className="h-2 w-2.5 mr-2" />
               </Menu.Button>
             </div>
 
             <Menu.Items
-              style={{width: '250px'}}
+              style={{minWidth: '200px'}}
               className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               <div className="px-1 py-1 ">
                 {filterTypes.map((value: any, index: any) => {
-                  // console.log(value);
                   return (
                     // eslint-disable-next-line
                     <Menu.Item key={index}>
@@ -169,13 +196,8 @@ const OverviewCategories: React.FC<{}> = () => {
                           } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
                           onClick={() => {
                             setFilterType(value);
-                            // setQueryParams({
-                            //   ...queryParams,
-                            //   tag: value.enName,
-                            // });
                           }}
                         >
-                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                           {value.name}
                         </button>
                       )}
@@ -195,14 +217,18 @@ const OverviewCategories: React.FC<{}> = () => {
               showDatePicker
             />
           ) : null}
-          <Calendar action={focusFromDate} from={selectedDayRange.from} to={selectedDayRange.to}
-                    setSelectedDayRange={setSelectedDayRange}/>
+          <Calendar
+            action={focusFromDate}
+            from={selectedDayRange.from}
+            to={selectedDayRange.to}
+            setSelectedDayRange={setSelectedDayRange}
+          />
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
           <div className="p-20">
-            <Spinner/>
+            <Spinner />
           </div>
         ) : (
           <Table
@@ -257,7 +283,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'رسته های حمل و نقل',
+                name: 'دسته',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -266,7 +292,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 ),
               },
               {
-                name: 'تعداد رانندگان',
+                name: 'تعداد کارکنان',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
@@ -275,7 +301,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
-                    {Number(v || 0).toLocaleString('fa', {
+                    {Number(v).toLocaleString('fa', {
                       minimumFractionDigits: 4,
                     })}
                     %

@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {schoolTypes} from 'src/helpers/sortingModels';
-import { Menu } from '@headlessui/react';
+// import {schoolTypes} from 'src/helpers/sortingModels';
+import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import hcsService from 'src/services/hcs.service';
 import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
+// import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../../helpers/utils';
+// import {toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import Calendar from '../../Calendar';
+import hcsService from '../../../services/hcs.service';
 
 const filterTypes: any[] = [
   {
@@ -29,98 +30,121 @@ const filterTypes: any[] = [
 ];
 
 const OverviewCategories: React.FC<{}> = () => {
+  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
-  const [filterType, setFilterType] = useState({
-    name: 'پیشفرض',
-    enName: '',
-  });
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  // eslint-disable-next-line
+  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
+  }) as any;
+  const [query, setQuery] = useState({
+    resultReceiptDateFrom: null,
+    resultReceiptDateTo: null,
   }) as any;
 
-  async function getOverviewByCategory(params: any) {
-    setLoading(true);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+  const overviewTestResults = async (from: any = null, to: any = null) => {
     try {
-      const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
-      const sortData: any = [];
-
-      schoolTypes.forEach(item => {
-        const tm = data.find((i: any) => i.tag === item);
-        sortData.push(tm);
+      setLoading(true);
+      const {data} = await hcsService.tableOverviewTestResults('edu', 'grade', {
+        lang: 'fa',
+        from,
+        to,
       });
-
-      // console.log(sortData);
-      // console.log(schoolTypes);
-
+      // console.log(data);
       const normalizedData: any[] = [];
-      sortData.forEach((item: any, index: number) => {
-        if (item.total !== 0) {
-          normalizedData.push({
-            id: `ovca_${index}`,
-            name: item.tag || 'نامشخص',
-            employeesCount: item.total || 0,
-            infectedCount: item.positiveCount || 0,
-            infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
-            saveCount: item.recoveredCount || 0,
-            // deadCount: 120,
-          });
-        }
+      data.forEach((item: any, index: number) => {
+        // if (item.total !== 0) {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name: item.categoryValue,
+          employeesCount: item.membersCount || 0,
+          infectedCount: item.positiveMembersCount || 0,
+          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
+          saveCount: item.recoveredMembersCount || 0,
+          // deadCount: 120,
+        });
+        // }
       });
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
+      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+    } catch (e) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  // async function getOverviewByCategory(params: any) {
+  //   setLoading(true);
+  //   try {
+  //     const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
+  //     const sortData: any = [];
+
+  //     schoolTypes.forEach(item => {
+  //       const tm = data.find((i: any) => i.tag === item);
+  //       sortData.push(tm);
+  //     });
+
+  //     // console.log(sortData);
+  //     // console.log(schoolTypes);
+
+  //     const normalizedData: any[] = [];
+  //     sortData.forEach((item: any, index: number) => {
+  //       if (item.total !== 0) {
+  //         normalizedData.push({
+  //           id: `ovca_${index}`,
+  //           name: item.tag || 'نامشخص',
+  //           employeesCount: item.total || 0,
+  //           infectedCount: item.positiveCount || 0,
+  //           infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
+  //           saveCount: item.recoveredCount || 0,
+  //           // deadCount: 120,
+  //         });
+  //       }
+  //     });
+  //     setDataset([...normalizedData]);
+  //     setOrgDataset([...normalizedData]);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
-    getOverviewByCategory({
-      organization: 'education',
-      from: '',
-      to: '',
-      tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-      tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-    });
-
+    // getOverviewByCategory(query);
+    overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
     return () => {
-      setDataset([]);
       source.cancel('Operation canceled by the user.');
+      setDataset([]);
     };
-  }, []);
+  }, [query]);
+
+  // useEffect(() => {
+  //   getOverviewByCategory({
+  //     organization: 'education',
+  //     from: '',
+  //     to: '',
+  //     tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
+  //     tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
+  //   });
+
+  //   return () => {
+  //     setDataset([]);
+  //     source.cancel('Operation canceled by the user.');
+  //   };
+  // }, []);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
   };
 
   useEffect(() => {
@@ -129,20 +153,17 @@ const OverviewCategories: React.FC<{}> = () => {
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getOverviewByCategory({
-        organization: 'education',
-        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+      setQuery({
+        ...query,
+        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
-      getOverviewByCategory({
-        organization: 'education',
-        tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-        tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-        from: null,
-        to: null,
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
+        resultReceiptDateFrom: null,
+        resultReceiptDateTo: null,
       });
     }
   }, [selectedDayRange]);
@@ -165,14 +186,6 @@ const OverviewCategories: React.FC<{}> = () => {
 
     setDataset(tmp);
   }, [filterType]);
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -233,73 +246,12 @@ const OverviewCategories: React.FC<{}> = () => {
               showDatePicker
             />
           ) : null}
-          <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              {selectedDayRange.from && (
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateFromDate())}
-                </span>
-              )}
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-start mx-4">
-          <span className="dash-separator" />
-        </div>
-        <div className=" shadow-custom rounded-lg px-4 py-1">
-          <div
-            className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-            onClick={focusFromDate}
-          >
-            {selectedDayRange.to && (
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateToDate())}
-              </span>
-            )}
-            {selectedDayRange.to || selectedDayRange.from ? (
-              <button type="button" onClick={clearSelectedDayRange}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </button>
-            ) : (
-              <img src={calendar} alt="x" className="w-5 h-5" />
-            )}
-          </div>
+          <Calendar
+            action={focusFromDate}
+            from={selectedDayRange.from}
+            to={selectedDayRange.to}
+            setSelectedDayRange={setSelectedDayRange}
+          />
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">

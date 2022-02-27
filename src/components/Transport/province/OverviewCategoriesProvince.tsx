@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Menu } from '@headlessui/react';
+import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
-import transportService from 'src/services/transport.service';
+// import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit, sideCities, getServiceTypeName} from '../../../helpers/utils';
+import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-
+import Calendar from '../../Calendar';
+import hcsService from '../../../services/hcs.service';
 
 const filterTypes = [
   {
@@ -34,7 +34,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   const history = useHistory();
   const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [loading, setLoading] = useState(false);
-  const [isCancel, setIsCancel] = useState(false);
+  // const [isCancel, setIsCancel] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -43,25 +43,35 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     from: null,
     to: null,
   }) as any;
+  const [query, setQuery] = useState({
+    resultReceiptDateFrom: null,
+    resultReceiptDateTo: null,
+    province: null,
+  }) as any;
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  async function getOverviewByCategory(params: any) {
+  const overviewTestResults = async (from: any = null, to: any = null, province: any) => {
     try {
       setLoading(true);
-      setIsCancel(false);
-      const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
+      const {data} = await hcsService.tableOverviewTestResults('transport', 'serviceType', {
+        lang: 'fa',
+        from,
+        to,
+        province,
+      });
+      // console.log(data);
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         // if (item.total !== 0) {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: getServiceTypeName(item.serviceType),
-          employeesCount: item.total || 0,
-          infectedCount: item.count || 0,
-          infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
-          saveCount: item.recoveredCount || 0,
+          name: item.categoryValue,
+          employeesCount: item.membersCount || 0,
+          infectedCount: item.positiveMembersCount || 0,
+          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
+          saveCount: item.recoveredMembersCount || 0,
           // deadCount: 120,
         });
         // }
@@ -69,39 +79,48 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
       setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-      setIsCancel(false);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      if (error && error.message === 'cancel') {
-        setIsCancel(true);
-      }
+    } catch (e) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  // async function getOverviewByCategory(params: any) {
+  //   try {
+  //     setLoading(true);
+  //     setIsCancel(false);
+  //     const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
+  //     const normalizedData: any[] = [];
+  //     data.forEach((item: any, index: number) => {
+  //       // if (item.total !== 0) {
+  //       normalizedData.push({
+  //         id: `ovca_${index}`,
+  //         name: getServiceTypeName(item.serviceType),
+  //         employeesCount: item.total || 0,
+  //         infectedCount: item.count || 0,
+  //         infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
+  //         saveCount: item.recoveredCount || 0,
+  //         // deadCount: 120,
+  //       });
+  //       // }
+  //     });
+  //     setDataset([...normalizedData]);
+  //     setOrgDataset([...normalizedData]);
+  //     setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+  //     setIsCancel(false);
+  //   } catch (error: any) {
+  //     // eslint-disable-next-line
+  //     if (error && error.message === 'cancel') {
+  //       setIsCancel(true);
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   const focusFromDate = () => {
     setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
   };
 
   useEffect(() => {
@@ -111,13 +130,14 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       return item.name === provinceName;
     });
     if (existsCity) {
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        province: provinceName,
-      });
+      overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
+      // getOverviewByCategory({
+      //   resultStatus: 'POSITIVE',
+      //   recoveredCount: true,
+      //   total: true,
+      //   count: true,
+      //   province: provinceName,
+      // });
       //
     } else {
       history.push('/dashboard/transport/province');
@@ -126,26 +146,23 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       setDataset([]);
       source.cancel('Operation canceled by the user.');
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      setQuery({
+        ...query,
+        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
-      getOverviewByCategory({
-        resultStatus: 'POSITIVE',
-        recoveredCount: true,
-        total: true,
-        count: true,
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
         resultReceiptDateFrom: null,
         resultReceiptDateTo: null,
       });
@@ -170,14 +187,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
 
     setDataset(tmp);
   }, [filterType]);
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -246,73 +255,16 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
               showDatePicker
             />
           ) : null}
-          <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateFromDate())}
-              </span>
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
-          <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
-          </div>
-          <div className=" shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              <span className="ml-4 whitespace-nowrap truncate text-xs">
-                {toPersianDigit(generateToDate())}
-              </span>
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
+          <Calendar
+            action={focusFromDate}
+            from={selectedDayRange.from}
+            to={selectedDayRange.to}
+            setSelectedDayRange={setSelectedDayRange}
+          />
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading || isCancel ? (
+        {loading ? (
           <div className="p-20">
             <Spinner />
           </div>
