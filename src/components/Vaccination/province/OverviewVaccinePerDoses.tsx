@@ -70,11 +70,11 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       // const {data} = await hcsService.dosesTagBased(params);
       const dataChart: any = {
         null: 5,
-        '0': data.totalNonVaccinesCount || 0, // واکسن نزدع
-        '1': data.doses[1] || 0, // دوز اول 
-        '2': data.doses[2] || 0, // دوز دوم
-        '3': data.doses[3] || 0, // دوز سوم
-        '4': data.gtDoses[3] || 0 //  بیش از سه دوز
+        '0': Number(data.totalNonVaccinesCount || 0), // واکسن نزدع
+        '1': Number(data.doses[1] || 0), // دوز اول 
+        '2': Number(data.doses[2] || 0), // دوز دوم
+        '3': Number(data.doses[3] || 0), // دوز سوم
+        '4': Number(data.gtDoses[3] || 0) //  بیش از سه دوز
        
       };
 
