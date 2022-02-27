@@ -130,7 +130,12 @@ function dosesTagBased({ tag, category, ...params }: any = {}, config?: any) {
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, { ...config });
 }
-
+function guildCategoryStatus({ tag, category, ...params }: any = {}, config?: any) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, { ...config });
+}
 
 export default {
   registerGuild,
@@ -145,5 +150,6 @@ export default {
   guildMessages,
   guildMessageSeen,
   guildTestResult,
-  dosesTagBased
+  dosesTagBased,
+  guildCategoryStatus
 };
