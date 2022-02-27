@@ -1,10 +1,10 @@
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Spinner from 'src/components/Spinner';
-import {toPersianDigit} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
+import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../Table';
@@ -40,29 +40,33 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
     to: null,
   }) as any;
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  };
 
   // eslint-disable-next-line
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      // const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
-      // const normalizedData: any[] = [];
-      // data.forEach((item: any, index: number) => {
-      //   // if (item.total !== 0) {
-      //   normalizedData.push({
-      //     id: `ovca_${index}`,
-      //     name: getServiceTypeName(item.serviceType),
-      //     employeesCount: item.total || 0,
-      //     infectedCount: item.count || 0,
-      //     infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
-      //     saveCount: item.recoveredCount || 0,
-      //     // deadCount: 120,
-      //   });
-      //   // }
-      // });
-      // setDataset([...normalizedData]);
+      const {data} = await guildService.guildCategoryStatus(params, {cancelToken: cancelToken.token,});
+      debugger
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        // if (item.total !== 0) {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name:item.categoryValue || 'نامشخص',
+          employeesCount: item.total || 0,
+          infectedCount: item.count || 0,
+          infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
+          saveCount: item.recoveredCount || 0,
+          // deadCount: 120,
+        });
+        // }
+      });
+      setDataset([...normalizedData]);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -73,13 +77,11 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
   useEffect(() => {
     getOverviewByCategory({
-      resultStatus: 'POSITIVE',
-      recoveredCount: true,
-      total: true,
-      count: true,
+      tag: 'guild',
+      category: 'categoryDesc',
     });
     return () => {
-      source.cancel('Operation canceled by the user.');
+      cancelRequest()
       setDataset([]);
     };
   }, []);
