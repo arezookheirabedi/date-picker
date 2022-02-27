@@ -101,6 +101,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     });
     return () => {
       cancelRequest();
+      setDataset([]);
+      setOrgDataset([]);
       // setGuildVacinateInfo(initialVacinatelInfo);
     };
   }, []);
@@ -258,7 +260,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                     },
                     {
                       name: 'allDosesPercentage',
-                      title: 'دوز دوم',
+                      title: 'دوز کل',
                       y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
