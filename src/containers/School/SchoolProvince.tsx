@@ -4,7 +4,7 @@ import {useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/School/province/OverviewMap';
 // import OverviewProvince from '../../components/School/province/OverviewProvince';
-// import OverviewSchoolEmployeProvince from '../../components/School/province/OverviewSchoolEmployeProvince';
+import OverviewSchoolEmployeProvince from '../../components/School/province/OverviewSchoolEmployeProvince';
 import OverviewSchoolStudentProvince from '../../components/School/province/OverviewSchoolStudentProvince';
 import OverviewPatientsProvince from '../../components/School/province/OverviewPatientsProvince';
 import TestsStatusProvince from '../../components/School/province/TestStatusProvince';
@@ -37,7 +37,7 @@ const SchoolProvince = () => {
       />
 
       {/* <OverviewProvince cityTitle={cityTitle} /> */}
-      {/* <OverviewSchoolEmployeProvince cityTitle={cityTitle} /> */}
+      <OverviewSchoolEmployeProvince cityTitle={cityTitle} />
 
       <OverviewSchoolStudentProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
