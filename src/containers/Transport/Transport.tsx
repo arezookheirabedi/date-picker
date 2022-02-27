@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import avatar from "../../assets/images/logos/avatar.svg";
-import OverviewSamas from '../../components/Transport/public/OverviewSamas';
+// import OverviewSamas from '../../components/Transport/public/OverviewSamas';
 import OverviewCategories from '../../components/Transport/public/OverviewCategories';
 import OverviewPublicPatients from '../../components/Transport/public/OverviewPublicPatients';
 import OverviewOfVaccinationInPublicTransport from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
@@ -28,7 +28,7 @@ const Transport = () => {
         />
       </div>
       <OverviewDrivers />
-      <OverviewSamas />
+      {/*  <OverviewSamas /> */}
       <OverviewCategories />
       <OverviewPublicPatients />
       <OverviewOfVaccinationInPublicTransport />
