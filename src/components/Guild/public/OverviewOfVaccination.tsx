@@ -304,7 +304,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             {
               name: 'کل دوزها',
               key: 'allDoses',
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
             },
             {
               name: 'واکسن نزده',
