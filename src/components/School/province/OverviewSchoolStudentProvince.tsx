@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
 
 import {useHistory, useLocation} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
@@ -14,8 +14,36 @@ import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
 import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-1.svg';
 import prescriptionIcon from '../../../assets/images/icons/prescription.svg';
 import testIcon from '../../../assets/images/icons/test-color.svg';
+import vaccineService from '../../../services/vaccine.service';
 import hcsService from '../../../services/hcs.service';
 
+const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+const initialNumberOf = {
+  doses: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  gtDosesToTotalDosesPercentage: {...initialDoses},
+  totalNonVaccinesCount: 0,
+  totalNonVaccinesCountToTotalPopulationPercentage: 0,
+  totalPopulation: 0,
+  totalVaccinesCount: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  // dosesPercentage: {...initialDoses},
+  // gtDosesPercentage: {...initialDoses},
+  // gtDosesToTotalPopulationPercentage: {...initialDoses},
+  // totalUnknownVaccinesCount: 0,
+  // totalVaccinesPercentage: 0,
+};
+
+const initialTestResults = {
+  positiveMembersCount: 0,
+  positiveMembersCountToTestResultsCountPercentage: 0,
+  positiveMembersCountToTotalPopulationPercentage: 0,
+  recoveredMembersCount: 0,
+  recoveredMembersCountToTotalPopulationPercentage: 0,
+  testResultsCount: 0,
+  totalPopulation: 0,
+};
 
 interface OverviewSchoolStudentsProps {
   cityTitle: any;
@@ -23,17 +51,11 @@ interface OverviewSchoolStudentsProps {
 
 const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState(null);
-  const [numberOfPositives, setNumberOfPositives] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfNegatives, setNumberOfNegatives] = useState(null);
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
-  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  const [testResultLoading, setTestResultLoading] = useState(false);
+  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
+  const [testResultInfo, setTestResultInfo] = useState<any>(initialTestResults);
   const {CancelToken} = axios;
   const source = CancelToken.source();
-
 
   const location = useLocation();
   const history = useHistory();
@@ -43,21 +65,33 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
   const getNumberOf = async (province: string) => {
     setLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'education',
-        tags: ['#type# دانش آموز', `#province# استان ${province}`].join(','),
-        testResultCount: true,
-        vaccinationCount: true,
-        total: true,
-      }, {cancelToken: source.token});
+      // const {data} = await hcsService.membersGeneral({
+      //   organization: 'education',
+      //   tags: ['#type# دانش آموز', `#province# استان ${province}`].join(','),
+      //   testResultCount: true,
+      //   vaccinationCount: true,
+      //   total: true,
+      // }, {cancelToken: source.token});
 
-      dispatch(addTotalStudentMembersAc(data.total || 0));
-      setNumberOf(data.total || 0);
-      setNumberOfPositives(data.numberOfPositives || 0);
-      setNumberOfVaccination(data.numberOfVaccinated || 0);
-      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
+      const {data} = await vaccineService.membersGeneral(
+        {tag: 'edu', category: 'type', categoryValue: 'STUDENT', province},
+        {cancelToken: source.token}
+      );
+      setNumberOf((prev: any) => {
+        return {
+          ...prev,
+          ...data,
+        };
+      });
+      dispatch(addTotalStudentMembersAc(data.totalPopulation || 0));
+
+      // dispatch(addTotalStudentMembersAc(data.total || 0));
+      // setNumberOf(data.total || 0);
+      // setNumberOfPositives(data.numberOfPositives || 0);
+      // setNumberOfVaccination(data.numberOfVaccinated || 0);
+      // setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+      // setNumberOfRecovered(data.numberOfRecovered || 0);
+      // setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -79,6 +113,27 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
     }
   };
 
+  const getTestResults = async (province: any) => {
+    setTestResultLoading(true);
+    try {
+      const {data} = await hcsService.testResults(
+        {tag: 'edu', category: 'type', categoryValue: 'STUDENT', province},
+        {cancelToken: source.token}
+      );
+      setTestResultInfo((prev: any) => {
+        return {
+          ...prev,
+          ...data,
+        };
+      });
+      // setNumberOf({...data});
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTestResultLoading(false);
+    }
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -89,22 +144,23 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
 
     if (existsCity) {
       getNumberOf(provinceName);
+      getTestResults(provinceName);
     } else {
       history.push('/dashboard/school/province');
     }
 
     return () => {
-      setNumberOf(null)
-      setNumberOfPositives(null)
-      setNumberOfNegatives(null)
-      setNumberOfVaccination(null)
-      setNumberOfNanVaccinated(null)
-      setNumberOfRecovered(null)
-      setNumberOfTestResults(null)
       source.cancel('Operation canceled by the user.');
-    }
+      // setNumberOf(null);
+      // setTestResultInfo(null);
+      // setNumberOfPositives(null);
+      // setNumberOfNegatives(null);
+      // setNumberOfVaccination(null);
+      // setNumberOfNanVaccinated(null);
+      // setNumberOfRecovered(null);
+      // setNumberOfTestResults(null);
+    };
   }, [location.search]);
-
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="school-overview">
@@ -113,48 +169,46 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalStudent}
             text="مجموع دانش آموزان"
-            count={numberOf}
+            count={numberOf.totalPopulation}
             loading={loading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositives}
-            loading={loading}
+            count={testResultInfo.positiveMembersCount}
+            loading={testResultLoading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecovered}
-            loading={loading}
+            count={testResultInfo.recoveredMembersCount}
+            loading={testResultLoading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={numberOfVaccination}
+            count={numberOf.totalVaccinesCount || 0}
             loading={loading}
           />
-          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-"/>
+          <Statistic icon={prescriptionIcon} text="مجموع استعلام‌های آموزش و پرورش" count="-" />
           <Statistic
             icon={grayVaccineIcon}
             text="مجموع افراد واکسینه نشده"
-            count={numberOfNanVaccinated}
+            count={numberOf.totalNonVaccinesCount || 0}
             loading={loading}
           />
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش‌های دانش آموزان"
-            count={numberOfTestResults}
-            loading={loading}
+            count={testResultInfo.testResultsCount}
+            loading={testResultLoading}
           />
         </div>
       </div>
