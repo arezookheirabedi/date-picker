@@ -77,12 +77,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
       data.forEach((item: any, index: number) => {
         let more = 0;
-
+        noDose.push(Number(item.totalNonVaccinesCount));
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.doses)) {
-          if (Number(key) === 0) {
-            noDose.push(Number(value));
-          }
+          // if (Number(key) === 0) {
+          //   noDose.push(Number(value));
+          // }
 
           if (Number(key) === 1) {
             firstDose.push(Number(value));
