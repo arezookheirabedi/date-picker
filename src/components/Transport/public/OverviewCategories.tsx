@@ -160,7 +160,7 @@ const OverviewCategories: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به آموزش و پرورش کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به حمل و نقل کشور</legend>
 
       <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
