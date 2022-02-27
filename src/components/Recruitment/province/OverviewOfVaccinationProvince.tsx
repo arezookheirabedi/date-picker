@@ -15,7 +15,6 @@ import Gray2Vaccine from '../../../assets/images/icons/gray-vaccine-2.svg';
 import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {sideCities} from '../../../helpers/utils';
-import Spinner from '../../Spinner';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 const filterTypes: any[] = [
@@ -98,7 +97,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         }
 
         if (Number(key) !== 0 && key !== 'null') {
-          tmp = {...tmp, };
+          tmp = {...tmp};
         }
 
         if (key === 'null') {
@@ -109,7 +108,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
       tmp = {
         ...tmp,
         numberOfUnvaccinated: Number(data.totalNonVaccinesCount || 0),
-        numberOfAllDose: Number(data.gtDoses["0"] || 0),
+        numberOfAllDose: Number(data.gtDoses['0'] || 0),
         total: Number(data.totalPopulation || 0),
       };
 
@@ -164,7 +163,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
           allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
           // allDoses: Number(item.membersCount || 0) - Number(item.totalNonVaccinesCount || 0),
-          allDoses: Number(item.gtDoses["0"] || 0),
+          allDoses: Number(item.gtDoses['0'] || 0),
         });
       });
       setDataset([...normalizedData]);
@@ -389,116 +388,109 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         </div>
       </div>
 
-      {loading ? (
-        <div className="p-20">
-          <Spinner />
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-            <Table
-              dataSet={[...dataset]}
-              pagination={{pageSize: 10, maxPages: 3}}
-              columns={[
-                {
-                  name: 'وضعیت کلی',
-                  key: '',
-                  render: (v: any, record) => (
-                    <CategoryDonut
-                      data={[
-                        {
-                          name: 'unknownInformation',
-                          title: 'مخدوش',
-                          y: record.unknownInformation || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#6E6E6E'], // start
-                              [1, '#393939'], // end
-                            ],
-                          },
-                        },
-                        {
-                          name: 'allDosesPercentage',
-                          title: 'دوز کل',
-                          y: record.allDoses || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#05D8A4'], // start
-                              [1, '#039572'], // end
-                            ],
-                          },
-                        },
-                        {
-                          name: 'noDose',
-                          title: 'واکسن نزده',
-                          y: record.noDose || 0,
-                          color: {
-                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                            stops: [
-                              [0, '#FE2D2F'], // start
-                              [1, '#CC0002'], // end
-                            ],
-                          },
-                        },
-                      ]}
-                    />
-                  ),
-                  className: 'flex justify-center w-full',
-                },
-                {
-                  name: 'دسته',
-                  key: 'name',
-                  render: (v: any, record, index: number, page: number) => (
-                    <div className="flex">
-                      {((page - 1) * 10 + (index + 1)).toPersianDigits()}.
-                      {/* eslint-disable-next-line */}
-                      {v.replace(/استان\s(.*)_/, '')}
-                    </div>
-                  ),
-                },
-                {
-                  name: 'دوز اول',
-                  key: 'firstDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'دوز دوم',
-                  key: 'secondDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'دوز سوم',
-                  key: 'thirdDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'سایر دوزها',
-                  key: 'otherDose',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'واکسن نزده',
-                  key: 'noDose',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-                },
-                {
-                  name: 'اطلاعات مخدوش',
-                  key: 'unknownInformation',
-                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-                },
-                {
-                  name: 'کل دوزها',
-                  key: 'allDoses',
-                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-                },
-              ]}
-              totalItems={(dataset || []).length || 0}
-            />
-          </div>
-        </>
-      )}
+      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+        <Table
+          loading={loading}
+          dataSet={[...dataset]}
+          pagination={{pageSize: 10, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت کلی',
+              key: '',
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'unknownInformation',
+                      title: 'مخدوش',
+                      y: record.unknownInformation || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
+                      },
+                    },
+                    {
+                      name: 'allDosesPercentage',
+                      title: 'دوز کل',
+                      y: record.allDoses || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
+                      },
+                    },
+                    {
+                      name: 'noDose',
+                      title: 'واکسن نزده',
+                      y: record.noDose || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
+                        ],
+                      },
+                    },
+                  ]}
+                />
+              ),
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'دسته',
+              key: 'name',
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + (index + 1)).toPersianDigits()}.
+                  {/* eslint-disable-next-line */}
+                  {v.replace(/استان\s(.*)_/, '')}
+                </div>
+              ),
+            },
+            {
+              name: 'دوز اول',
+              key: 'firstDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'دوز دوم',
+              key: 'secondDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'دوز سوم',
+              key: 'thirdDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'سایر دوزها',
+              key: 'otherDose',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'واکسن نزده',
+              key: 'noDose',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'اطلاعات مخدوش',
+              key: 'unknownInformation',
+              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+            },
+            {
+              name: 'کل دوزها',
+              key: 'allDoses',
+              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+            },
+          ]}
+          totalItems={(dataset || []).length || 0}
+        />
+      </div>
     </fieldset>
   );
 };

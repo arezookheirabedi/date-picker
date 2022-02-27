@@ -17,7 +17,6 @@ function registerGuild(params: any): Promise<AxiosResponse<IProfile>> {
     .post(`/api/v1/guilds?lang=fa`, params);
 }
 
-
 function registerWorkshop(params: any): Promise<AxiosResponse<IEmployeeOutput[]>> {
   return request
     .forGuildUrl()
@@ -50,7 +49,13 @@ function requestDeleteGuild(guildCode: string): Promise<AxiosResponse<any>> {
     .post(`/api/v1/guilds/${guildCode}/delete-by-otp?lang=fa`);
 }
 
-function deleteGuildByOTP({ guildCode, otp }: { guildCode: string, otp: string }): Promise<AxiosResponse<any>> {
+function deleteGuildByOTP({
+  guildCode,
+  otp,
+}: {
+  guildCode: string;
+  otp: string;
+}): Promise<AxiosResponse<any>> {
   return request
     .forGuildUrl()
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
@@ -65,7 +70,6 @@ function addEmployee(guildCode: string, params: any): Promise<AxiosResponse<any>
     .build()
     .post(`/api/v1/guilds/${guildCode}/employees/register?lang=fa`, params);
 }
-
 
 function deleteEmployee(guildCode: string, nationalId: any): Promise<AxiosResponse<any>> {
   return request
@@ -110,6 +114,24 @@ function guildMessageSeen(
     .post(`/api/v1/guilds/${params.guildCode}/published-messages/seen/${params.messageId}?lang=fa`);
 }
 
+function guildTestResult({ ...params }: any = {}, config?: any) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/general`, params, { ...config });
+}
+
+
+
+
+function dosesTagBased({ tag, category, ...params }: any = {}, config?: any) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+    .build()
+    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, { ...config });
+}
+
+
 export default {
   registerGuild,
   registerWorkshop,
@@ -122,4 +144,6 @@ export default {
   updateEmployeHealthStatus,
   guildMessages,
   guildMessageSeen,
+  guildTestResult,
+  dosesTagBased
 };

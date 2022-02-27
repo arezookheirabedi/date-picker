@@ -2,10 +2,10 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import OverviewMap from 'src/components/Guild/province/OverviewMap';
 import OverviewGuilds from 'src/components/Guild/province/OverviewGuilds';
-import OverviewGuildsPerCategory from 'src/components/Guild/public/OverviewGuildsPerCategory';
-import OverviewGuildsPerProvince from 'src/components/Guild/public/OverviewGuildsPerProvince';
-import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
-import TestStatus from 'src/components/Guild/public/TestStatus';
+import OverviewGuildsProvince from 'src/components/Guild/province/OverviewGuildProvince';
+import OverviewGuildsPerCategory from 'src/components/Guild/province/OverviewGuildsPerCategory';
+import OverviewOfVaccination from 'src/components/Guild/province/OverviewOfVaccination';
+import TestStatus from 'src/components/Guild/province/TestStatus';
 import {sideCities} from 'src/helpers/utils';
 
 const GuildProvince: React.FC<any> = () => {
@@ -30,10 +30,11 @@ const GuildProvince: React.FC<any> = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="guild-overview"
+        selectDefault
       />
       <OverviewGuilds cityTitle={cityTitle} />
       <OverviewGuildsPerCategory cityTitle={cityTitle} />
-      <OverviewGuildsPerProvince cityTitle={cityTitle} />
+      <OverviewGuildsProvince cityTitle={cityTitle} />
       <OverviewOfVaccination cityTitle={cityTitle} />
       <TestStatus cityTitle={cityTitle} />
     </div>
