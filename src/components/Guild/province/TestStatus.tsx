@@ -12,6 +12,10 @@ import Spinner from '../../Spinner';
 
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
+interface TestStatusProps {
+  cityTitle?: any;
+}
+
 const filterTypes = [
   {
     name: 'بیشترین',
@@ -23,7 +27,7 @@ const filterTypes = [
   },
 ];
 
-const TestStatus: React.FC<{}> = () => {
+const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
   const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -184,7 +188,7 @@ const TestStatus: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">آزمایش در اصناف</legend>
+      <legend className="text-black mx-auto px-3">آزمایش در اصناف  {cityTitle}</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">

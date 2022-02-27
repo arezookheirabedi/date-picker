@@ -48,9 +48,8 @@ const Statistic: React.FC<IStatistic> = ({
         {!loading && count === 0 && '۰'}
         {!loading && count === '-' && '-'}
         {!loading &&
-        count >= 1 &&
-        `${(count || 'بدون داده').commaSeprator().toPersianDigits()}${isPercentage ? '%' : ''}`}
-        {!loading && count < 1 && count > 0 && count?.toPersianDigits()}
+        count > 0 &&
+        `${(count || 'بدون داده') % 1 === 0 ? count?.commaSeprator().toPersianDigits() : count?.toPersianDigits()}${isPercentage ? '%' : ''}`}
       </div>
       <div className="flex text-gray-500 text-sm  mx-auto">{text || ''}</div>
     </fieldset>

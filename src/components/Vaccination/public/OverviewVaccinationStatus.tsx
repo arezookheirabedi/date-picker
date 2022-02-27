@@ -37,12 +37,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
     setLoading(true);
     try {
       const {data} = await vaccineService.membersGeneral({}, {cancelToken: source.token});
-      setNumberOf((prev: any) => {
-        return {
-          ...prev,
-          ...data
-        }
-      });
+      setNumberOf({...data});
     } catch (error) {
       console.log(error);
     } finally {
@@ -133,7 +128,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={personGrayVaccine}
             text="درصد افراد واکسینه نشده"
-            count={(numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0)}
+            count={(numberOf.dosesToTotalPopulationPercentage[0] || 0).toFixed(3)}
             loading={loading}
             isPercentage
           />
