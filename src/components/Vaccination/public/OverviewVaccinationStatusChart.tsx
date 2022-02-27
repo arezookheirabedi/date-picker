@@ -77,12 +77,9 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
       data.forEach((item: any, index: number) => {
         let more = 0;
-        noDose.push(Number(item.totalNonVaccinesCount));
+
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.doses)) {
-          // if (Number(key) === 0) {
-          //   noDose.push(Number(value));
-          // }
 
           if (Number(key) === 1) {
             firstDose.push(Number(value));
@@ -100,6 +97,8 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
             more += Number(value);
           }
         }
+
+        noDose.push(Number(item.totalNonVaccinesCount || 0));
 
         if (noDose.length < index + 1) noDose.push(0);
         if (firstDose.length < index + 1) firstDose.push(0);
@@ -301,31 +300,28 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
           </div>
 
           <div className="w-2/4">
-            <div
-              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div
-                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
               </div>
-              <div
-                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>
@@ -335,12 +331,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories}/>
+          <Stacked data={dataset} categories={categories} />
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
