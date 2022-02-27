@@ -115,7 +115,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
         province: provinceName,
       });
     } else {
-      history.push('/dashboard/recruitment/province');
+      history.push('/dashboard/guild/province');
     }
     return () => {
       cancelRequest();
