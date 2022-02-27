@@ -133,7 +133,6 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
       : '';
   };
 
-
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
@@ -158,11 +157,11 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (a.infectedPercent < b.infectedPercent) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.infectedPercent > b.infectedPercent) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -186,11 +185,11 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (a.infectedPercent < b.infectedPercent) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (a.infectedPercent > b.infectedPercent) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -210,7 +209,7 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">     نگاه کلی به رسته‌های استان‌ {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3"> نگاه کلی به رسته‌های استان‌ {cityTitle}</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
@@ -429,10 +428,10 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
             {
               name: 'نام رسته',
               key: 'name',
-              render: (v: any, record, index: number) => (
-                <span>
-                  {(index + 1).toLocaleString('fa')}.{v}
-                </span>
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                </div>
               ),
             },
             {

@@ -142,11 +142,11 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (a.infectedPercent < b.infectedPercent) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.infectedPercent > b.infectedPercent) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -170,11 +170,11 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (a.infectedPercent < b.infectedPercent) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (a.infectedPercent > b.infectedPercent) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -409,10 +409,10 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
             {
               name: 'نام رسته',
               key: 'name',
-              render: (v: any, record, index: number) => (
-                <span>
-                  {(index + 1).toLocaleString('fa')}.{v}
-                </span>
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                </div>
               ),
             },
             {
