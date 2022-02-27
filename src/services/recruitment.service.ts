@@ -17,9 +17,18 @@ function dosesTagBased({ tag, category, ...params }: any = {}, config?: any) {
 }
 
 
+function membersTagBased({ tag, category, ...params }: any = {}, config?: any) {
+    return request
+        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+        .build()
+        .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, { ...config });
+}
+
+
 const recruitmentService = {
     membersGeneral,
     dosesTagBased,
+    membersTagBased,
 };
 
 export default recruitmentService;
