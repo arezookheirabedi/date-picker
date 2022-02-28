@@ -4,14 +4,14 @@ import moment from 'moment-jalaali';
 // import hcsService from 'src/services/hcs.service';
 import vaccineService from 'src/services/vaccine.service';
 import {useHistory, useLocation} from 'react-router-dom';
-import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
+// import DatePickerModal from '../../DatePickerModal';
+// import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
 import {
   cancelTokenSource,
   msgRequestCanceled,
   sideCities,
-  toPersianDigit,
+  // toPersianDigit,
 } from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
@@ -26,37 +26,39 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
   const history = useHistory();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  // eslint-disable-next-line 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line 
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  // const focusFromDate = () => {
+  //   setShowDatePicker(true);
+  // };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
+  // const generateFromDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.from
+  //     ? // eslint-disable-next-line
+  //       selectedDayRange.from.year +
+  //         '/' +
+  //         selectedDayRange.from.month +
+  //         '/' +
+  //         selectedDayRange.from.day
+  //     : '';
+  // };
 
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+  // const generateToDate: any = () => {
+  //   // eslint-disable-next-line
+  //   return selectedDayRange.to
+  //     ? // eslint-disable-next-line
+  //       selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+  //     : '';
+  // };
 
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -192,13 +194,13 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
     }
   }, [selectedDayRange]);
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+  // const clearSelectedDayRange = (e: any) => {
+  //   e.stopPropagation();
+  //   setSelectedDayRange({
+  //     from: null,
+  //     to: null,
+  //   });
+  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -209,15 +211,15 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
             <div className="flex align-center justify-between">
-              {showDatePicker ? (
+              {/* {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
                   selectedDayRange={selectedDayRange}
                   setShowDatePicker={setShowDatePicker}
                   showDatePicker
                 />
-              ) : null}
-              <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
+              ) : null} */}
+              {/* <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
                 <div
                   className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
                   onClick={focusFromDate}
@@ -283,7 +285,9 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
                     <img src={calendar} alt="x" className="w-5 h-5" />
                   )}
                 </div>
-              </div>
+              </div> */}
+           
+           
             </div>
           </div>
 

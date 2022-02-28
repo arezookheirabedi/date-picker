@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
-import hcsService from 'src/services/hcs.service';
+import recruitmentService from 'src/services/recruitment.service';
 import {Menu} from '@headlessui/react';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
@@ -47,20 +47,21 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.testResultTagBased(params);
+      const {data} = await recruitmentService.testResultTagBased(params);
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.tag || 'نامشخص',
-          total: item.total || 0,
-          positiveCount: item.positiveCount || 0,
-          positivePercentage:
-            (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0 || 0,
-          negativeCount: item.negativeCount || 0,
+          name: item.categoryValue || 'نامشخص',
+          total: item.testResultsCount || 0,
+          positiveCount: item.positiveTestResultsCount || 0,
+          positivePercentage: Number(
+            item.positiveTestResultsCountToTestResultsCountPercentage || 0
+          ),
+          negativeCount: item.negativeTestResultsCount || 0,
           unknownCount:
-            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
-          // deadCount: 120,
+            (item.testResultsCount || 0) -
+              ((item.positiveTestResultsCount || 0) + (item.negativeTestResultsCount || 0)) || 0,
         });
       });
       setDataset([...normalizedData]);
@@ -85,10 +86,11 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     });
     if (existsCity) {
       getOverviewByCategory({
-        organization: 'employment',
+        tag: 'employee',
+        category: 'heName',
+        province: provinceName,
         from: '',
         to: '',
-        tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
       });
     } else {
       history.push('/dashboard/recruitment/province');
@@ -133,17 +135,17 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
         // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
         getOverviewByCategory({
-          organization: 'employment',
-          // resultStatus: 'POSITIVE',
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          // province: provinceName,
-          tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
+          tag: 'employee',
+          category: 'heName',
+          province: provinceName,
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         });
       } else {
         getOverviewByCategory({
-          organization: 'employment',
-          tags: [`استان ${provinceName}`, '^((?!استان).)*$'].join(','),
+          tag: 'employee',
+          category: 'heName',
+          province: provinceName,
           from: null,
           to: null,
         });
