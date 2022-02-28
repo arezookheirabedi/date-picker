@@ -141,8 +141,8 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           tag: 'employee',
           category: 'heName',
           province: provinceName,
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         });
       } else {
         getOverviewByCategory({
