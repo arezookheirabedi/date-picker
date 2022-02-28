@@ -123,11 +123,22 @@ function testResults(params: any = {}, config?: any) {
     .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
 }
 
-function tableOverviewTestResults(tag: string, category: string, params: any = {}, config?: any){
+function tableOverviewTestResults(tag: string, category: string, params: any = {}, config?: any) {
   return request
-  .withHeaders({'Content-Type': 'application/json;utf-8'})
-  .build()
-  .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {...config});
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {
+      ...config,
+    });
+}
+
+function testResultsCategory(tag: string, category: string, params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}`, params, {
+      ...config,
+    });
 }
 
 const hcsService = {
@@ -140,7 +151,8 @@ const hcsService = {
   tags,
   vaccinationOverview,
   testResults,
-  tableOverviewTestResults
+  tableOverviewTestResults,
+  testResultsCategory,
 };
 
 export default hcsService;
