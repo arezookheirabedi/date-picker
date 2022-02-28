@@ -3,7 +3,6 @@ import axios from 'axios';
 import {Menu} from '@headlessui/react';
 // import {schoolTypes} from 'src/helpers/sortingModels';
 import {useHistory, useLocation} from 'react-router-dom';
-import {useSelector} from 'src/hooks/useTypedSelector';
 import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../../containers/Guild/components/Statistic';
 // import totalEmploye1 from '../../../assets/images/icons/people-dark-green.svg';
@@ -97,16 +96,14 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const {total: totalMembers} = useSelector(state => state.studentMembers);
-
   const location = useLocation();
   const history = useHistory();
 
-  const getNumberOf = async (provine: any) => {
+  const getNumberOf = async (province: any) => {
     setLoading(true);
     try {
       const {data} = await vaccineService.membersGeneral(
-        {tag: 'edu', provine},
+        {tag: 'edu', province},
         {cancelToken: source.token}
       );
       setNumberOf({...data});
@@ -424,8 +421,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={totalStudent}
             text="مجموع دانش آموزان"
-            // count={counts.numberOfStudents || 0}
-            count={totalMembers || 0}
+            count={numberOf.totalPopulation || 0}
+            // count={totalMembers || 0}
             loading={false}
           />
           <Statistic
