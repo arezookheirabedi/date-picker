@@ -134,7 +134,12 @@ function guildOverviewByCategory({ tag, category, ...params }: any = {}, config?
     .build()
     .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, { ...config });
 }
-
+function guildTestResultByCategory({ tag, category, ...params }: any = {}, config?: any) {
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}`, params, { ...config });
+}
 
 export default {
   registerGuild,
@@ -150,5 +155,6 @@ export default {
   guildMessageSeen,
   guildTestResult,
   dosesTagBased,
-  guildOverviewByCategory
+  guildOverviewByCategory,
+  guildTestResultByCategory
 };

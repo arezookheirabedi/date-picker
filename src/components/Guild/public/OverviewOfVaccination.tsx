@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Menu} from '@headlessui/react';
 import guildService from 'src/services/guild.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
+// @ts-ignore
+import moment from 'moment-jalaali';
 import Table from '../../TableScope';
+import DatePickerModal from '../../DatePickerModal';
+import calendar from '../../../assets/images/icons/calendar.svg';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
@@ -21,6 +25,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDayRange, setSelectedDayRange] = useState({
+    from: null,
+    to: null,
+  }) as any;
   // eslint-disable-next-line
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
@@ -46,27 +55,12 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         let firstDose = 0;
-        // let secondDose = 0;
-        // let thirdDose = 0;
-        // let unknownInformation = 0;
 
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.dosesToMembersCountPercentage)) {
           if (Number(key) === 1) {
             firstDose = Number(value);
           }
-
-          //   if (Number(key) === 2) {
-          //     secondDose = Number(value);
-          //   }
-
-          //   if (Number(key) === 3) {
-          //     thirdDose += Number(value);
-          //   }
-
-          //   if (key === 'null') {
-          //     unknownInformation += Number(value);
-          //   }
         }
 
         normalizedData.push({
@@ -93,17 +87,30 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       setLoading(false);
     }
   }
-
   useEffect(() => {
-    getOverviewByVaccinePercent({
-      tag: 'guild',
-      category: 'categoryDesc',
-    });
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      getOverviewByVaccinePercent({
+        tag: 'guild',
+        category: 'categoryDesc',
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
+    } else {
+      getOverviewByVaccinePercent({
+        tag: 'guild',
+        category: 'categoryDesc',
+        from: null,
+        to: null,
+      });
+    }
+  }, [selectedDayRange]);
+  useEffect(() => {
     return () => {
       cancelRequest();
       setDataset([]);
       setOrgDataset([]);
-      // setGuildVacinateInfo(initialVacinatelInfo);
     };
   }, []);
 
@@ -112,11 +119,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.noDose < b.noDose) {
+      if (a.allDoses < b.allDoses) {
         return reverse * 1;
       }
 
-      if (a.noDose > b.noDose) {
+      if (a.allDoses > b.allDoses) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -153,13 +160,42 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     );
     setSearchQuery(value);
   }
+    const focusFromDate = () => {
+    setShowDatePicker(true);
+  };
 
+  const generateFromDate: any = () => {
+    // eslint-disable-next-line
+    return selectedDayRange.from
+      ? // eslint-disable-next-line
+        selectedDayRange.from.year +
+          '/' +
+          selectedDayRange.from.month +
+          '/' +
+          selectedDayRange.from.day
+      : '';
+  };
+
+  const generateToDate: any = () => {
+    // eslint-disable-next-line
+    return selectedDayRange.to
+      ? // eslint-disable-next-line
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      : '';
+  };
+  const clearSelectedDayRange = (e: any) => {
+    e.stopPropagation();
+    setSelectedDayRange({
+      from: null,
+      to: null,
+    });
+  };
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">بیشترین واکسیناسیون در اصناف</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex items-center space-x-5 rtl:space-x-reverse">
+        <div className="flex align-center space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             <Menu
               as="div"
@@ -177,8 +213,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               </div>
 
               <Menu.Items
-                style={{minWidth: '200px'}}
-                className="z-40 absolute left-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                style={{width: '250px'}}
+                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <div className="px-1 py-1 ">
                   {filterTypes.map((value: any, index: any) => {
@@ -205,6 +241,85 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               </Menu.Items>
             </Menu>
           </div>
+
+          <div className="flex items-center">
+            {showDatePicker ? (
+              <DatePickerModal
+                setSelectedDayRange={setSelectedDayRange}
+                selectedDayRange={selectedDayRange}
+                setShowDatePicker={setShowDatePicker}
+                showDatePicker
+              />
+            ) : null}
+
+            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
+              <div
+                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                onClick={focusFromDate}
+              >
+                {selectedDayRange.from && (
+                  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                    {toPersianDigit(generateFromDate())}
+                  </span>
+                )}
+                {selectedDayRange.to || selectedDayRange.from ? (
+                  <button type="button" onClick={clearSelectedDayRange}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <img src={calendar} alt="x" className="w-5 h-5" />
+                )}
+              </div>
+            </div>
+            <div className="flex items-center justify-start mx-4">
+              <span className="dash-separator" />
+            </div>
+            <div className=" shadow-custom rounded-lg px-4 py-1">
+              <div
+                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                onClick={focusFromDate}
+              >
+                {selectedDayRange.to && (
+                  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                    {toPersianDigit(generateToDate())}
+                  </span>
+                )}
+                {selectedDayRange.to || selectedDayRange.from ? (
+                  <button type="button" onClick={clearSelectedDayRange}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <img src={calendar} alt="x" className="w-5 h-5" />
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-grow align-center justify-end">
@@ -225,7 +340,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             </svg>
             <input
               type="text"
-              placeholder="جستجو"
+              placeholder="جستجوی سازمان"
               className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
               onChange={handleSearch}
               value={searchQuery}
