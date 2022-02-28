@@ -61,7 +61,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           if (Number(key) === 1) {
             firstDose = Number(value);
           }
-
         }
 
         normalizedData.push({
@@ -108,7 +107,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
   useEffect(() => {
-   
     return () => {
       cancelRequest();
       setDataset([]);
@@ -342,7 +340,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             </svg>
             <input
               type="text"
-              placeholder="جستجو"
+              placeholder="جستجوی سازمان"
               className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
               onChange={handleSearch}
               value={searchQuery}
