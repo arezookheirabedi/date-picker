@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import hcsService from 'src/services/hcs.service';
+import recruitmentServices from 'src/services/recruitment.service';
 import {Menu} from '@headlessui/react';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
@@ -38,19 +38,21 @@ const TestStatus: React.FC<{}> = () => {
   async function getOverviewByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await hcsService.testResultTagBased(params);
+      const {data} = await recruitmentServices.testResultTagBased(params);
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.tag || 'نامشخص',
-          total: item.total || 0,
-          positiveCount: item.positiveCount || 0,
-          positivePercentage:
-            (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0 || 0,
-          negativeCount: item.negativeCount || 0,
+          name: item.categoryValue || 'نامشخص',
+          total: item.testResultsCount || 0,
+          positiveCount: item.positiveTestResultsCount || 0,
+          positivePercentage: Number(
+            item.positiveTestResultsCountToTestResultsCountPercentage || 0
+          ),
+          negativeCount: item.negativeTestResultsCount || 0,
           unknownCount:
-            (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
+            (item.testResultsCount || 0) -
+              ((item.positiveTestResultsCount || 0) + (item.negativeTestResultsCount || 0)) || 0,
           // deadCount: 120,
         });
       });
@@ -67,12 +69,8 @@ const TestStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     getOverviewByCategory({
-      organization: 'employment',
-      tags: ['^((?!استان).)*$'].join(','),
-      // resultStatus: 'POSITIVE',
-      // recoveredCount: true,
-      // total: true,
-      // count: true,
+      tag: 'employee',
+      category: 'heName',
       from: '',
       to: '',
     });
@@ -109,18 +107,18 @@ const TestStatus: React.FC<{}> = () => {
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       getOverviewByCategory({
-        organization: 'employment',
-        // resultStatus: 'POSITIVE',
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        tag: 'employee',
+        category: 'heName',
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         tags: [],
       });
     } else {
       getOverviewByCategory({
-        organization: 'employment',
+        tag: 'employee',
+        category: 'heName',
         from: null,
         to: null,
-        tags: [],
       });
     }
   }, [selectedDayRange]);
