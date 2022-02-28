@@ -112,11 +112,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.noDose < b.noDose) {
+      if (a.allDoses < b.allDoses) {
         return reverse * 1;
       }
 
-      if (a.noDose > b.noDose) {
+      if (a.allDoses > b.allDoses) {
         return reverse * -1;
       }
       // a must be equal to b
