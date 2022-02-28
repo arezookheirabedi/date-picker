@@ -369,7 +369,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
             </svg>
             <input
               type="text"
-              placeholder="جستجو"
+              placeholder="جستجوی سازمان"
               className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
               onChange={handleSearch}
               value={searchQuery}
