@@ -121,11 +121,11 @@ const TestStatus: React.FC<{}> = () => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (a.positiveCountPercentage < b.positiveCountPercentage) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.positiveCountPercentage > b.positiveCountPercentage) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -149,11 +149,11 @@ const TestStatus: React.FC<{}> = () => {
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (a.positiveCountPercentage < b.positiveCountPercentage) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (a.positiveCountPercentage > b.positiveCountPercentage) {
           return reverse * -1;
         }
         // a must be equal to b

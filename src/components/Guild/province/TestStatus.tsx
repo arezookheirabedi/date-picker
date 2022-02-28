@@ -51,7 +51,6 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: [],
   });
   const cancelToken = cancelTokenSource();
 
@@ -140,14 +139,12 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: [],
       });
     }
   }, [selectedDayRange]);
@@ -157,11 +154,11 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
       // eslint-disable-next-line
       const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.total < b.total) {
+      if (a.positiveCountPercentage < b.positiveCountPercentage) {
         return reverse * 1;
       }
 
-      if (a.total > b.total) {
+      if (a.positiveCountPercentage > b.positiveCountPercentage) {
         return reverse * -1;
       }
       // a must be equal to b
@@ -185,11 +182,11 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
           // eslint-disable-next-line
           filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.total < b.total) {
+        if (a.positiveCountPercentage < b.positiveCountPercentage) {
           return reverse * 1;
         }
 
-        if (a.total > b.total) {
+        if (a.positiveCountPercentage > b.positiveCountPercentage) {
           return reverse * -1;
         }
         // a must be equal to b
