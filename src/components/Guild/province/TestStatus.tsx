@@ -3,13 +3,18 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 // import hcsService from 'src/services/hcs.service';
 import {Menu} from '@headlessui/react';
+import guildService from 'src/services/guild.service';
+import {useHistory, useLocation} from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {toPersianDigit} from '../../../helpers/utils';
-import Spinner from '../../Spinner';
-
+import {
+  cancelTokenSource,
+  msgRequestCanceled,
+  sideCities,
+  toPersianDigit,
+} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 interface TestStatusProps {
@@ -28,6 +33,8 @@ const filterTypes = [
 ];
 
 const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,48 +48,65 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
     from: null,
     to: null,
   }) as any;
+  const [queryParams, setQueryParams] = useState({
+    from: null,
+    to: null,
+    tags: [],
+  });
+  const cancelToken = cancelTokenSource();
 
-  // eslint-disable-next-line
-  async function getOverviewByCategory(params: any) {
-    // setLoading(true);
-    // try {
-    //   const {data} = await hcsService.testResultTagBased(params);
-    //   const normalizedData: any[] = [];
-    //   data.forEach((item: any, index: number) => {
-    //     normalizedData.push({
-    //       id: `ovca_${index}`,
-    //       name: item.tag || 'نامشخص',
-    //       total: item.total || 0,
-    //       positiveCount: item.positiveCount || 0,
-    //       negativeCount: item.negativeCount || 0,
-    //       unknownCount:
-    //         (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
-    //       // deadCount: 120,
-    //     });
-    //   });
-    //   setDataset([...normalizedData]);
-    //   setOrgDataset([...normalizedData]);
-    //   setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-    // } catch (error) {
-    //   // eslint-disable-next-line
-    //   console.log(error);
-    // } finally {
-    //   setLoading(false);
-    // }
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  async function getTestResultByCategory(params: any) {
+    setLoading(true);
+    try {
+      const {data} = await guildService.guildTestResultByCategory(params, {
+        cancelToken: cancelToken.token,
+      });
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name: item.categoryValue || 'نامشخص',
+          total: item.testResultsCount || 0,
+          positiveCountPercentage: item.positiveTestResultsCountToTestResultsCountPercentage || 0,
+          negativeCountPercentage: item.negativeTestResultsCountToTestResultsCountPercentage || 0,
+        });
+      });
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    getOverviewByCategory({
-      organization: 'employment',
-      tags: ['^((?!استان).)*$'].join(','),
-      // resultStatus: 'POSITIVE',
-      // recoveredCount: true,
-      // total: true,
-      // count: true,
-      from: '',
-      to: '',
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
     });
-  }, []);
+    if (existsCity) {
+      getTestResultByCategory({
+        ...queryParams,
+        tag: 'guild',
+        category: 'categoryDesc',
+        province: provinceName,
+      });
+    } else {
+      history.push('/dashboard/guild/province');
+    }
+    return () => {
+      cancelRequest();
+      setDataset([]);
+      setOrgDataset([]);
+    };
+  }, [queryParams, location.search]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -112,18 +136,15 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      getOverviewByCategory({
-        organization: 'employment',
-        // resultStatus: 'POSITIVE',
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+      setQueryParams({
+        ...queryParams,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         tags: [],
       });
     } else {
-      getOverviewByCategory({
-        organization: 'employment',
+      setQueryParams({
+        ...queryParams,
         from: null,
         to: null,
         tags: [],
@@ -188,7 +209,7 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">آزمایش در اصناف  {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3">آزمایش در اصناف {cityTitle}</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
@@ -352,122 +373,117 @@ const TestStatus: React.FC<TestStatusProps> = ({cityTitle}) => {
       </div>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
-          <Table
-            dataSet={[...dataset]}
-            pagination={{pageSize: 10, maxPages: 3}}
-            columns={[
-              {
-                name: 'وضعیت',
-                key: '',
-                render: (v: any, record) => (
-                  <CategoryDonut
-                    data={[
-                      {
-                        name: 'unknownCount',
-                        title: 'درصد تست‌های نامشخص',
-                        y: record.unknownCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#6E6E6E'], // start
-                            [1, '#393939'], // end
-                          ],
-                        },
+        <Table
+          loading={loading}
+          dataSet={[...dataset]}
+          pagination={{pageSize: 10, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت',
+              key: '',
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'unknownCount',
+                      title: 'درصد تست‌های نامشخص',
+                      y: record.unknownCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
                       },
-                      {
-                        name: 'negativeCount',
-                        title: 'درصد تست‌های منفی',
-                        y: record.negativeCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#05D8A4'], // start
-                            [1, '#039572'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'negativeCountPercentage',
+                      title: 'درصد تست‌های منفی',
+                      y: record.negativeCountPercentage || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
                       },
-                      {
-                        name: 'positiveCount',
-                        title: 'درصد تست‌های مثبت',
-                        y: record.positiveCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#FE2D2F'], // start
-                            [1, '#CC0002'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'positiveCountPercentage',
+                      title: 'درصد تست‌های مثبت',
+                      y: record.positiveCountPercentage || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
+                        ],
                       },
-                    ]}
-                  />
-                ),
-                className: 'flex justify-center w-full',
-              },
-              {
-                name: 'نام رسته',
-                key: 'name',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex">
-                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
-                  </div>
-                ),
-              },
-              {
-                name: 'تعداد آزمایش‌های انجام شده',
-                key: 'total',
-                render: (v: any) => (
-                  <span>
-                    {Number(v || 0)
-                      .commaSeprator()
-                      .toPersianDigits()}
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های مثبت',
-                key: 'positiveCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های منفی',
-                key: 'negativeCount',
-                render: (v: any, record: any) => (
-                  <span>
-                    {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-                      .toFixed(4)
-                      .toPersianDigits()}
-                    %
-                  </span>
-                ),
-              },
-              // {
-              //   name: 'درصد تست‌های نامشخص',
-              //   key: 'unknownCount',
-              //   render: (v: any, record: any) => (
-              //     <span>
-              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-              //         .toFixed(4)
-              //         .toPersianDigits()}
-              //       %
-              //     </span>
-              //   ),
-              // },
-            ]}
-            totalItems={(dataset || []).length}
-          />
-        )}
+                    },
+                  ]}
+                />
+              ),
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'نام رسته',
+              key: 'name',
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                </div>
+              ),
+            },
+            {
+              name: 'تعداد آزمایش‌های انجام شده',
+              key: 'total',
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0)
+                    .commaSeprator()
+                    .toPersianDigits()}
+                </span>
+              ),
+            },
+            {
+              name: 'درصد تست‌های مثبت',
+              key: 'positiveCountPercentage',
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0).toLocaleString('fa', {
+                    minimumFractionDigits: 4,
+                  })}
+                  %
+                </span>
+              ),
+            },
+            {
+              name: 'درصد تست‌های منفی',
+              key: 'negativeCountPercentage',
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0).toLocaleString('fa', {
+                    minimumFractionDigits: 4,
+                  })}
+                  %
+                </span>
+              ),
+            },
+            // {
+            //   name: 'درصد تست‌های نامشخص',
+            //   key: 'unknownCount',
+            //   render: (v: any, record: any) => (
+            //     <span>
+            //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+            //         .toFixed(4)
+            //         .toPersianDigits()}
+            //       %
+            //     </span>
+            //   ),
+            // },
+          ]}
+          totalItems={(dataset || []).length}
+        />
       </div>
     </fieldset>
   );
