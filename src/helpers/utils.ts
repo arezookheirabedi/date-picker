@@ -186,29 +186,51 @@ export const getServiceTypeName = (item: any) => {
 
 export const getColorByServiceTypeName = (item: any) => {
   switch (item) {
-    case 'AGENCIES_UNDER_THE_SUPERVISION_OF_THE_MUNICIPALITY':
+    case 'تاکسی اینترنتی':
       return '#4EC4F2';
-    case 'GUILD_AGENCIES':
+    case 'ناوگان باری':
       return '#9D19FA';
-    case 'BUS_DRIVING':
+    case 'تاکسی درون شهری':
       return '#049975';
-    case 'BIKE_DELIVERY':
+    case 'آژانس های صنفی':
       return '#ffc400';
-    case 'SUBURBAN_TAXI':
+    case 'سرویس مدارس':
       return '#ff2a00';
-    case 'IN_CITY_TAXI':
+    case 'آژانس های تحت نظارت شهرداری':
       return '#9696ff';
-    case 'CARGO_FLEET':
+    case 'پیک موتوری':
       return '#00fff7';
-    case 'ONLINE_TAXI':
+    case 'تاکسی برون شهری':
       return '#00bd13';
-    case 'SAMAS':
+    case 'اتوبوسرانی':
       return '#9e967d';
-    case 'SCHOOL_SERVICE':
-      return '#ff00bf';
     default:
       return 'brown';
   }
+  // switch (item) {
+  //   case 'AGENCIES_UNDER_THE_SUPERVISION_OF_THE_MUNICIPALITY':
+  //     return '#4EC4F2';
+  //   case 'GUILD_AGENCIES':
+  //     return '#9D19FA';
+  //   case 'BUS_DRIVING':
+  //     return '#049975';
+  //   case 'BIKE_DELIVERY':
+  //     return '#ffc400';
+  //   case 'SUBURBAN_TAXI':
+  //     return '#ff2a00';
+  //   case 'IN_CITY_TAXI':
+  //     return '#9696ff';
+  //   case 'CARGO_FLEET':
+  //     return '#00fff7';
+  //   case 'ONLINE_TAXI':
+  //     return '#00bd13';
+  //   case 'SAMAS':
+  //     return '#9e967d';
+  //   case 'SCHOOL_SERVICE':
+  //     return '#ff00bf';
+  //   default:
+  //     return 'brown';
+  // }
 };
 
 export const transportationTypes = [

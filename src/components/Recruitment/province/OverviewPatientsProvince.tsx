@@ -156,8 +156,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       setQueryParams({
         ...queryParams,
         type: lastState,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       setQueryParams({

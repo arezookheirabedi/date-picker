@@ -6,15 +6,11 @@ import moment from 'moment-jalaali';
 
 import Charts from '../../Charts';
 import DatePickerModal from '../../DatePickerModal';
-import {
-  toPersianDigit,
-  sideCities,
-  getColorByServiceTypeName,
-  getServiceTypeName,
-} from '../../../helpers/utils';
-import calendar from '../../../assets/images/icons/calendar.svg';
-import transportService from '../../../services/transport.service';
+import {sideCities, getColorByServiceTypeName} from '../../../helpers/utils';
+// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
+import Calendar from '../../Calendar';
+import hcsService from '../../../services/hcs.service';
 
 const {Pyramid} = Charts;
 
@@ -28,10 +24,15 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   const [errorMessage, setErrorMessage] = useState(null);
   const [pyramidData, setPyramidData] = useState([]);
 
-  // {day: 20, month: 9, year: 1400}
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+  }) as any;
+
+  const [query, setQuery] = useState({
+    resultReceiptDateFrom: null,
+    resultReceiptDateTo: null,
+    province: null,
   }) as any;
 
   const location = useLocation();
@@ -40,51 +41,37 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const [queryParams, setQueryParams] = useState({
-    count: true,
-    total: true,
-    resultReceiptDateFrom: null,
-    resultReceiptDateTo: null,
-    testResultStatusList: 'POSITIVE,NEGATIVE',
-  });
+  // const [queryParams, setQueryParams] = useState({
+  //   count: true,
+  //   total: true,
+  //   resultReceiptDateFrom: null,
+  //   resultReceiptDateTo: null,
+  //   testResultStatusList: 'POSITIVE,NEGATIVE',
+  // });
 
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
-
-  const getTestInTransport = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
+  const overviewTestResults = async (from: any = null, to: any = null, province: any) => {
     try {
-      const {data} = await transportService.testsInTransport(params, {cancelToken: source.token});
+      setLoading(true);
+      setErrorMessage(null);
+      const {data} = await hcsService.testResultsCategory('transport', 'serviceType', {
+        lang: 'fa',
+        from,
+        to,
+        province,
+      });
+      console.log(data);
 
       let normalizedData = [] as any;
       data.map((item: any) => {
         if (item.total !== 0) {
           return normalizedData.push({
-            title: getServiceTypeName(item.serviceType),
-            percentage: ((item.count * 100) / item.total).toFixed(4),
-            color: getColorByServiceTypeName(item.serviceType),
+            title: item.categoryValue,
+            percentage: item.testResultsCountToTotalTestResultsCountPercentage,
+            color: getColorByServiceTypeName(item.categoryValue),
           });
         }
         return null;
@@ -95,14 +82,44 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
       });
 
       setPyramidData(normalizedData);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-      setErrorMessage(error.message);
+    } catch (e) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
   };
+
+  // const getTestInTransport = async (params: any) => {
+  //   setLoading(true);
+  //   setErrorMessage(null);
+  //   try {
+  //     const {data} = await transportService.testsInTransport(params, {cancelToken: source.token});
+
+  //     let normalizedData = [] as any;
+  //     data.map((item: any) => {
+  //       if (item.total !== 0) {
+  //         return normalizedData.push({
+  //           title: getServiceTypeName(item.serviceType),
+  //           percentage: ((item.count * 100) / item.total).toFixed(4),
+  //           color: getColorByServiceTypeName(item.serviceType),
+  //         });
+  //       }
+  //       return null;
+  //     });
+
+  //     normalizedData = normalizedData.sort((a: any, b: any) => {
+  //       return b.percentage - a.percentage;
+  //     });
+
+  //     setPyramidData(normalizedData);
+  //   } catch (error: any) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //     setErrorMessage(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -113,7 +130,8 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     let idSetTimeOut: any;
     if (existsCity) {
       idSetTimeOut = setTimeout(() => {
-        getTestInTransport({...queryParams, province: provinceName});
+        // getTestInTransport({...queryParams, province: provinceName});
+        overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
       }, 500);
     } else {
       history.push('/dashboard/transport/province');
@@ -125,7 +143,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
         clearTimeout(idSetTimeOut);
       }
     };
-  }, [queryParams, location.search]);
+  }, [query, location.search]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -133,27 +151,19 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+      setQuery({
+        ...query,
+        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
-      setQueryParams({
-        ...queryParams,
+      setQuery({
+        ...query,
         resultReceiptDateFrom: null,
         resultReceiptDateTo: null,
       });
     }
   }, [selectedDayRange]);
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -171,73 +181,12 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
               showDatePicker
             />
           ) : null}
-          <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              {selectedDayRange.from && (
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateFromDate())}
-                </span>
-              )}
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
-          <div className="flex items-center justify-start mx-4">
-            <span className="dash-separator" />
-          </div>
-          <div className="shadow-custom rounded-lg px-4 py-1">
-            <div
-              className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-              onClick={focusFromDate}
-            >
-              {selectedDayRange.to && (
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateToDate())}
-                </span>
-              )}
-              {selectedDayRange.to || selectedDayRange.from ? (
-                <button type="button" onClick={clearSelectedDayRange}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <img src={calendar} alt="x" className="w-5 h-5" />
-              )}
-            </div>
-          </div>
+          <Calendar
+            action={focusFromDate}
+            from={selectedDayRange.from}
+            to={selectedDayRange.to}
+            setSelectedDayRange={setSelectedDayRange}
+          />
         </div>
         {loading && (
           <div className="p-40">

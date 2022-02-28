@@ -30,7 +30,7 @@ const filterTypes: any[] = [
 ];
 
 const OverviewCategories: React.FC<{}> = () => {
-  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
+  const [filterType, setFilterType] = useState({name: 'پیشفرض', enName: ''});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
@@ -73,7 +73,7 @@ const OverviewCategories: React.FC<{}> = () => {
       });
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+      setFilterType({name: 'پیشفرض', enName: ''});
     } catch (e) {
       console.log(e);
     } finally {
