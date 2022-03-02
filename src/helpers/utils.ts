@@ -236,7 +236,7 @@ export const getColorByServiceTypeName = (item: any) => {
 export const transportationTypes = [
   {
     name: 'کل حمل و نقل',
-    enName: '',
+    enName: null,
   },
   {
     name: 'تاکسی آنلاین',

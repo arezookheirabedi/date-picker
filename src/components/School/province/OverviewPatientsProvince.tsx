@@ -3,6 +3,7 @@ import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import TagsSelect from 'src/components/TagsSelect';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -208,13 +209,13 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
-            {/* <TagsSelect
+            <TagsSelect
               placeholder="کل آموزش و پرورش"
               category="grade"
               tag="edu"
-              setQueryParams={setQueryParams}
-              queryParams={queryParams}
-            /> */}
+              setQueryParams={setQuery}
+              queryParams={query}
+            />
 
             <div className="flex align-center justify-between">
               {showDatePicker ? (

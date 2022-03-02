@@ -7,7 +7,7 @@ import DatePickerModal from '../../DatePickerModal';
 import Charts from '../../Charts';
 // import {toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-// import TagsSelect from '../../TagsSelect';
+import TagsSelect from '../../TagsSelect';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
@@ -167,13 +167,13 @@ const OverviewPatients = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
-            {/* <TagsSelect
+            <TagsSelect
               placeholder="کل آموزش و پرورش"
               category="grade"
               tag="edu"
-              setQueryParams={setQueryParams}
-              queryParams={queryParams}
-            /> */}
+              setQueryParams={setQuery}
+              queryParams={query}
+            />
 
             <div className="flex align-center justify-between">
               {showDatePicker ? (
