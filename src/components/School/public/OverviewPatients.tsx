@@ -123,9 +123,12 @@ const OverviewPatients = () => {
         lastState = 'DAILY';
       }
 
+      console.log(lastState);
+
       setQueryParams({
         ...queryParams,
-        type: lastState,
+        // type: lastState,
+        type: "DAILY",
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
       });
@@ -155,8 +158,8 @@ const OverviewPatients = () => {
           <div className="flex align-center justify-between flex-grow px-8">
             <TagsSelect
               placeholder="کل آموزش و پرورش"
-              tagPattern="^(?!.*(province|city)).*$"
-              organization="education"
+              category="grade"
+              tag="edu"
               setQueryParams={setQueryParams}
               queryParams={queryParams}
             />
