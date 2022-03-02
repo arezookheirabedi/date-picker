@@ -6,12 +6,14 @@ import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
-import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+// import calendar from '../../../assets/images/icons/calendar.svg';
+// import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-import {toPersianDigit, sideCities, transportationTypes} from '../../../helpers/utils';
-import transportService from '../../../services/transport.service';
+import {sideCities, transportationTypes} from '../../../helpers/utils';
+// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
+import Calendar from '../../Calendar';
+import hcsService from '../../../services/hcs.service';
 
 const {Line} = Charts;
 
@@ -41,55 +43,33 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   const location = useLocation();
   const history = useHistory();
 
-  const [queryParams, setQueryParams] = useState({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
-    fromDate: null,
-    toDate: null,
-    serviceType: '',
+  const [query, setQuery] = useState({
+    // status: 'POSITIVE',
+    // type: 'MONTHLY',
+    from: null,
+    to: null,
+    category: 'serviceType',
+    categoryValue: null,
+    tag: 'transport',
   });
 
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
-
-  const getLinearOverviewPublicTransport = async (params: any) => {
+  const getColumnChartTestResult = async (params: any, province: any) => {
     setLoading(true);
     setErrorMessage(null);
-    setIsCancel(false);
     try {
-      const response = await transportService.linearOverviewPublicTransport(params, {
-        cancelToken: source.token,
-      });
+      const response = await hcsService.columnChartTestResultService(
+        {...params, province},
+        {
+          cancelToken: source.token,
+        }
+      );
       setData(response.data);
-      setIsCancel(false);
     } catch (error: any) {
-      if (error.message !== 'cancel') {
-        setErrorMessage(error.message);
-      }
-      if (error && error.message === 'cancel') {
-        setIsCancel(true);
-      }
+      setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -108,7 +88,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     let idSetTimeOut: any;
     if (existsCity) {
       idSetTimeOut = setTimeout(() => {
-        getLinearOverviewPublicTransport({...queryParams, province: provinceName});
+        getColumnChartTestResult(query, provinceName);
       }, 500);
     } else {
       history.push('/dashboard/transport/province');
@@ -120,7 +100,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
         clearTimeout(idSetTimeOut);
       }
     };
-  }, [queryParams, location.search]);
+  }, [query, location.search]);
 
   useEffect(() => {
     return () => {
@@ -133,56 +113,66 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
-      const tmp: any[] = [];
-      let lastState = 'ANNUAL';
-
-      const start = moment(finalFromDate, 'jYYYY/jM/jD');
-      const end = moment(finalToDate, 'jYYYY/jM/jD');
-
-      const duration = moment.duration(end.diff(start));
-
-      if (!duration.years()) {
-        tmp.push(3);
-        lastState = 'MONTHLY';
-      }
-
-      if (!duration.months() && !duration.years()) {
-        tmp.push(2);
-        lastState = 'WEEKLY';
-      }
-
-      if (!duration.weeks() && !duration.months() && !duration.years()) {
-        tmp.push(1);
-        lastState = 'DAILY';
-      }
-
-      console.log(lastState);
-      
-      setQueryParams({
-        ...queryParams,
-        // type: lastState,
-        type: "DAILY",
-        fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      setQuery({
+        ...query,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
-      setQueryParams({
-        ...queryParams,
-        type: 'MONTHLY',
-        fromDate: null,
-        toDate: null,
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
+        from: null,
+        to: null,
       });
     }
   }, [selectedDayRange]);
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+
+  //     const tmp: any[] = [];
+  //     let lastState = 'ANNUAL';
+
+  //     const start = moment(finalFromDate, 'jYYYY/jM/jD');
+  //     const end = moment(finalToDate, 'jYYYY/jM/jD');
+
+  //     const duration = moment.duration(end.diff(start));
+
+  //     if (!duration.years()) {
+  //       tmp.push(3);
+  //       lastState = 'MONTHLY';
+  //     }
+
+  //     if (!duration.months() && !duration.years()) {
+  //       tmp.push(2);
+  //       lastState = 'WEEKLY';
+  //     }
+
+  //     if (!duration.weeks() && !duration.months() && !duration.years()) {
+  //       tmp.push(1);
+  //       lastState = 'DAILY';
+  //     }
+
+  //     setQueryParams({
+  //       ...queryParams,
+  //       type: lastState,
+  //       fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //     });
+  //   } else {
+  //     setQueryParams({
+  //       ...queryParams,
+  //       type: 'MONTHLY',
+  //       fromDate: null,
+  //       toDate: null,
+  //     });
+  //   }
+  // }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -222,9 +212,9 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                             } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm whitespace-nowrap`}
                             onClick={() => {
                               setServiceType(value);
-                              setQueryParams({
-                                ...queryParams,
-                                serviceType: value.enName,
+                              setQuery({
+                                ...query,
+                                categoryValue: value.enName,
                               });
                             }}
                           >
@@ -247,76 +237,15 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                   showDatePicker
                 />
               ) : null}
-              <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-                <div
-                  className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                  onClick={focusFromDate}
-                >
-                  {selectedDayRange.from && (
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateFromDate())}
-                    </span>
-                  )}
-                  {selectedDayRange.to || selectedDayRange.from ? (
-                    <button type="button" onClick={clearSelectedDayRange}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5" />
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator" />
-              </div>
-              <div className=" shadow-custom rounded-lg px-4 py-1">
-                <div
-                  className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                  onClick={focusFromDate}
-                >
-                  {selectedDayRange.to && (
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateToDate())}
-                    </span>
-                  )}
-                  {selectedDayRange.to || selectedDayRange.from ? (
-                    <button type="button" onClick={clearSelectedDayRange}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5" />
-                  )}
-                </div>
-              </div>
+              <Calendar
+                action={focusFromDate}
+                from={selectedDayRange.from}
+                to={selectedDayRange.to}
+                setSelectedDayRange={setSelectedDayRange}
+              />
             </div>
           </div>
-
+          {/* 
           <RangeDateSliderFilter
             changeType={v =>
               setQueryParams({
@@ -327,7 +256,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
             selectedType={queryParams.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          />
+          /> */}
         </div>
 
         {(loading || isCancel) && (
