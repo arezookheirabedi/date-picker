@@ -169,8 +169,8 @@ const OverviewPatients = () => {
           <div className="flex align-center justify-between flex-grow px-8">
             {/* <TagsSelect
               placeholder="کل آموزش و پرورش"
-              tagPattern="^(?!.*(province|city)).*$"
-              organization="education"
+              category="grade"
+              tag="edu"
               setQueryParams={setQueryParams}
               queryParams={queryParams}
             /> */}
