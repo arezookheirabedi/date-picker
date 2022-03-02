@@ -1,48 +1,57 @@
 import React, {Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
 // import {Calendar} from "react-modern-calendar-datepicker";
-import {Calendar} from "@hassanmojab/react-modern-calendar-datepicker";
+import {Calendar} from '@hassanmojab/react-modern-calendar-datepicker';
 
-const DatePickerModel: React.FC<any> = ({setSelectedDayRange , selectedDayRange , showDatePicker ,setShowDatePicker }) => {
-
-
-  const [error , setError ] = useState<string | null>(null);
+const DatePickerModel: React.FC<any> = ({
+  setSelectedDayRange,
+  selectedDayRange,
+  showDatePicker,
+  setShowDatePicker,
+}) => {
+  const [error, setError] = useState<string | null>(null);
   const [innerDayRange, setInnerDayRange] = useState({
     from: selectedDayRange.from,
-    to: selectedDayRange.to
+    to: selectedDayRange.to,
   }) as any;
 
   const closeModal: () => void = () => {
     setShowDatePicker(false);
   };
 
-
   const setDate = (e: any) => {
-
-    if(e.from && e.to){
+    if (e.from && e.to) {
       setError(null);
     }
     // eslint-disable-next-line
-    setInnerDayRange({...setInnerDayRange, ['from']: e.from, ['to']: e.to})
-  }
+    setInnerDayRange({...setInnerDayRange, ['from']: e.from, ['to']: e.to});
+  };
 
   const confirmDate = () => {
-    if(!innerDayRange.from || !innerDayRange.to){
+    if (!innerDayRange.from || !innerDayRange.to) {
       setError('لطفا بازه زمانی را درست انتخاب کنید.');
-      return null
+      return null;
     }
     setSelectedDayRange({
       from: innerDayRange.from,
-      to: innerDayRange.to
-    })
-    return  closeModal();
-  }
+      to: innerDayRange.to,
+    });
+    return closeModal();
+  };
 
   const renderFooterDatePicker = () => {
-    return (<div className="u-width-80 u-mx-auto u-d-flex u-justify-content-s-b u-mb-1">
-      <button type="button" className="button button--primary w-1/3 mx-auto" onClick={confirmDate}>تایید</button>
-    </div>)
-  }
+    return (
+      <div className="u-width-80 u-mx-auto u-d-flex u-justify-content-s-b u-mb-1">
+        <button
+          type="button"
+          className="button button--primary w-1/3 mx-auto"
+          onClick={confirmDate}
+        >
+          تایید
+        </button>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -58,7 +67,7 @@ const DatePickerModel: React.FC<any> = ({setSelectedDayRange , selectedDayRange 
               leaveFrom="all"
               leaveTo="all"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90"/>
+              <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -74,8 +83,7 @@ const DatePickerModel: React.FC<any> = ({setSelectedDayRange , selectedDayRange 
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div
-                className="relative inline-block w-full max-w-lg p-10 my-8 overflow-hidden align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+              <div className="relative inline-block w-full max-w-lg p-10 my-8 overflow-hidden align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
                 <button
                   type="button"
                   className="absolute top-3 left-4 text-gray-300 cursor-pointer"
