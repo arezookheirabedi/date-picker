@@ -119,9 +119,12 @@ const OverviewPublicPatients = () => {
         lastState = 'DAILY';
       }
 
+      console.log(lastState);
+
       setQueryParams({
         ...queryParams,
-        type: lastState,
+        // type: lastState,
+        type: 'DAILY',
         fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
