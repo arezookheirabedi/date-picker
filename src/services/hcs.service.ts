@@ -141,6 +141,15 @@ function testResultsCategory(tag: string, category: string, params: any = {}, co
     });
 }
 
+function columnChartTestResultService(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/overview/time-based`, params, {
+      ...config,
+    });
+}
+
 const hcsService = {
   membersGeneral,
   membersTagBased,
@@ -153,6 +162,7 @@ const hcsService = {
   testResults,
   tableOverviewTestResults,
   testResultsCategory,
+  columnChartTestResultService,
 };
 
 export default hcsService;

@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react";
-import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts";
-
+import React, {useEffect, useState} from 'react';
+import HighchartsReact from 'highcharts-react-official';
+import Highcharts from 'highcharts';
 
 const converters = {
   fa(number: any) {
@@ -14,11 +13,10 @@ const converters = {
 Highcharts.setOptions({
   lang: {
     decimalPoint: '.',
-    thousandsSep: ','
+    thousandsSep: ',',
   },
-})
+});
 const Line: React.FC<any> = ({data}) => {
-
   const [options, setOptions] = useState({
     chart: {
       type: 'column',
@@ -27,29 +25,16 @@ const Line: React.FC<any> = ({data}) => {
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
       },
-      className: 'transport-line-chart'
+      className: 'transport-line-chart',
     },
     title: {
-      text: null
+      text: null,
     },
     credits: {
-      enabled: false
+      enabled: false,
     },
-    categories: [
-      "A1",
-      "A2",
-      "A3",
-      "A4",
-      "A5",
-      "A6",
-      "A7",
-      "A8",
-      "A9",
-      "A10",
-      "A11",
-      "A12"
-    ],
-    colors: ["#ff0000", "#000000", "#AB0A0A"],
+    categories: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12'],
+    colors: ['#ff0000', '#000000', '#AB0A0A'],
     plotOptions: {
       line: {
         marker: {
@@ -64,29 +49,29 @@ const Line: React.FC<any> = ({data}) => {
                 //   [1, "#FF9400"] // end
                 // ]
               },
-              lineColor: "#fff",
-              lineWidth: 3
-            }
-          }
+              lineColor: '#fff',
+              lineWidth: 3,
+            },
+          },
         },
         lineWidth: 2,
         states: {
           hover: {
-            lineWidth: 1
-          }
+            lineWidth: 1,
+          },
         },
-        threshold: null
-      }
+        threshold: null,
+      },
     },
     yAxis: {
-      gridLineDashStyle: "dash",
-      lineDashStyle: "dash",
-      lineColor: "#000000",
+      gridLineDashStyle: 'dash',
+      lineDashStyle: 'dash',
+      lineColor: '#000000',
       lineWidth: 1,
       opposite: true,
       title: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
     xAxis: {
       categories: [
@@ -103,9 +88,9 @@ const Line: React.FC<any> = ({data}) => {
         'اردیبهشت',
         'فروردین',
       ],
-      lineDashStyle: "dash",
-      lineColor: "#000000",
-      lineWidth: 1
+      lineDashStyle: 'dash',
+      lineColor: '#000000',
+      lineWidth: 1,
     },
     tooltip: {
       shared: true,
@@ -114,23 +99,23 @@ const Line: React.FC<any> = ({data}) => {
       borderWidth: 0,
       valueDecimals: 0,
       style: {
-        direction: "rtl",
+        direction: 'rtl',
         textAlign: 'right',
-        fontFamily: 'inherit'
-      }
+        fontFamily: 'inherit',
+      },
 
       // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
       {
-        name: "مبتلایان ",
+        name: 'مبتلایان ',
         data: [50, 550, 330, 100, 400, 210, 270, 400, 300, 350, 200, 150],
         lineWidth: 4,
         dataLabels: {
-          enabled: true
-        }
-      }
-    ]
+          enabled: true,
+        },
+      },
+    ],
   }) as any;
 
   useEffect(() => {
@@ -138,26 +123,22 @@ const Line: React.FC<any> = ({data}) => {
       const series = [] as any;
       const categories = [] as any;
       data.map((value: any) => {
-        series.push(value.count)
+        series.push(value.positiveMembersCount);
         return categories.push(value.date);
-      })
+      });
       // console.log('series => ', series);
       // console.log('categories => ', categories);
       setOptions({
         xAxis: {
           categories,
-          lineDashStyle: "dash",
-          lineColor: "#000000",
-          lineWidth: 1
+          lineDashStyle: 'dash',
+          lineColor: '#000000',
+          lineWidth: 1,
         },
-        series: [
-          {data: series}
-        ]
+        series: [{data: series}],
       });
     }
-
-  }, [data])
-
+  }, [data]);
 
   // const updateSeries = () => {
   //   // The chart is updated only with new options.
@@ -176,7 +157,6 @@ const Line: React.FC<any> = ({data}) => {
   //
   //   return () => clearInterval(id);
   // })
-
 
   // const updateCategories = () => {
   //   // The chart is updated only with new options.
@@ -197,11 +177,13 @@ const Line: React.FC<any> = ({data}) => {
   //   });
   // }
 
-  return <>
-    {/* <button onClick={updateSeries} type="button">update series</button> */}
-    {/* <button onClick={updateCategories} type="button">update categories</button> */}
-    <HighchartsReact highcharts={Highcharts} options={options}/>
-  </>
-}
+  return (
+    <>
+      {/* <button onClick={updateSeries} type="button">update series</button> */}
+      {/* <button onClick={updateCategories} type="button">update categories</button> */}
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
+};
 
 export default Line;
