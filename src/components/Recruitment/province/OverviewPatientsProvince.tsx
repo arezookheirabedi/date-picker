@@ -2,23 +2,23 @@ import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import recruitmentServices from 'src/services/recruitment.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import {sideCities, toPersianDigit} from '../../../helpers/utils';
-import hcsService from '../../../services/hcs.service';
 import Spinner from '../../Spinner';
 import TagsSelect from '../../TagsSelect';
 
 const {Line} = Charts;
 
 interface IParams {
-  status: string;
-  type: string;
+  tag: string;
+  category: string;
+  type?: string;
   from: any;
   to: any;
-  tags: any;
 }
 
 interface OverviewPatientsProvinceProps {
@@ -41,11 +41,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const history = useHistory();
 
   const [queryParams, setQueryParams] = useState<IParams>({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
+    tag: 'employee',
+    category: 'heName',
+    type: 'DAILY',
     from: '',
     to: '',
-    tags: '',
   });
 
   const focusFromDate = () => {
@@ -76,7 +76,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.testResultTimeBased(params);
+      const response = await recruitmentServices.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -100,8 +100,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       idSetTimeOut = setTimeout(() => {
         getLinearOverview({
           ...queryParams,
-          tags: [...(queryParams.tags || []), `استان ${provinceName}`].join(','),
-          organization: 'employment',
         });
       }, 500);
     } else {
@@ -153,16 +151,19 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
         lastState = 'DAILY';
       }
 
+      console.log(lastState);
+      
       setQueryParams({
         ...queryParams,
-        type: lastState,
+        // type: lastState,
+        type: 'DAILY',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       setQueryParams({
         ...queryParams,
-        type: 'MONTHLY',
+        type: 'DAILY',
         from: null,
         to: null,
       });
@@ -189,8 +190,8 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
             {cityTitle && (
               <TagsSelect
                 placeholder="کل کارکنان"
-                organization="employment"
-                tagPattern="^(?!.*(استان)).*$"
+                tag="employee"
+                category="heName"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
@@ -282,7 +283,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
                 type: v,
               })
             }
-            selectedType={queryParams.type}
+            selectedType={queryParams.type!}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />

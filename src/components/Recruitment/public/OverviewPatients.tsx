@@ -2,23 +2,23 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 // eslint-disable-next-line
 import moment from 'moment-jalaali';
+import recruitmentServices from 'src/services/recruitment.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import {toPersianDigit} from '../../../helpers/utils';
-import hcsService from '../../../services/hcs.service';
 import Spinner from '../../Spinner';
 import TagsSelect from '../../TagsSelect';
 
 const {Line} = Charts;
 
 interface IParams {
-  status: string;
-  type: string;
+  tag: string;
+  category: string;
+  type?: string;
   from?: any;
   to?: any;
-  tags?: any;
 }
 
 const OverviewPatients: React.FC<{}> = () => {
@@ -58,18 +58,18 @@ const OverviewPatients: React.FC<{}> = () => {
   };
 
   const [queryParams, setQueryParams] = useState<IParams>({
-    status: 'POSITIVE',
-    type: 'MONTHLY',
+    tag: 'employee',
+    category: 'heName',
+    // type: 'MONTHLY',
     from: '',
     to: '',
-    tags: '',
   }) as any;
 
   const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.testResultTimeBased(params);
+      const response = await recruitmentServices.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -91,9 +91,7 @@ const OverviewPatients: React.FC<{}> = () => {
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
       getLinearOverview({
-        organization: 'employment',
         ...queryParams,
-        tags: (queryParams.tags || []).join(','),
       });
     }, 500);
 
@@ -128,16 +126,19 @@ const OverviewPatients: React.FC<{}> = () => {
         lastState = 'DAILY';
       }
 
+      console.log(lastState)
+
       setQueryParams({
         ...queryParams,
-        type: lastState,
+        // type: lastState,
+        type: "DAILY",
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       setQueryParams({
         ...queryParams,
-        type: 'MONTHLY',
+        type: 'DAILY',
         from: null,
         to: null,
       });
@@ -152,8 +153,8 @@ const OverviewPatients: React.FC<{}> = () => {
           <div className="flex align-center justify-between flex-grow px-8">
             <TagsSelect
               placeholder="کل کارکنان"
-              organization="employment"
-              tagPattern="^(?!.*(استان)).*$"
+              tag="employee"
+              category="heName"
               setQueryParams={setQueryParams}
               queryParams={queryParams}
             />
@@ -244,7 +245,7 @@ const OverviewPatients: React.FC<{}> = () => {
                 type: v,
               })
             }
-            selectedType={queryParams.type}
+            selectedType={queryParams.type!}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />

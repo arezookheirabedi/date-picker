@@ -1,13 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import {Menu} from '@headlessui/react';
-import hcsService from 'src/services/hcs.service';
+import recruitmentServices from 'src/services/recruitment.service';
 import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
-  organization: string;
-  // eslint-disable-next-line
-  tagPattern?: string;
+  tag: string;
+  category: string;
   queryParams: any;
   // eslint-disable-next-line
   placeholder?: any;
@@ -15,8 +14,8 @@ interface ITagsSelect {
 }
 
 const TagsSelect = ({
-  organization,
-  tagPattern = '',
+  tag = '',
+  category = '',
   placeholder = '',
   setQueryParams,
   queryParams,
@@ -29,9 +28,7 @@ const TagsSelect = ({
 
   const fetcher = async () => {
     try {
-      // @ts-ignore
-      const res = await hcsService.tags({organization, tagPattern}, {cancelToken: source.token});
-      // console.log(res);
+      const res = await recruitmentServices.tags({tag, category}, {cancelToken: source.token});
       setTags([...res.data]);
     } catch (error: any) {
       // eslint-disable-next-line
@@ -51,13 +48,10 @@ const TagsSelect = ({
   React.useEffect(() => {
     let params = {...queryParams};
 
-    // eslint-disable-next-line
     if (serviceType) {
-      // #grade# دانش آموز بزرگسال
-      // params = {...queryParams, tags: [`#grade# ${serviceType}`]};
-      params = {...queryParams, tags: [`${serviceType}`]};
+      params = {...queryParams, categoryValue: serviceType};
     } else {
-      params = {...queryParams, tags: []};
+      params = {...queryParams, categoryValue: null};
     }
 
     setQueryParams(params);
@@ -71,8 +65,6 @@ const TagsSelect = ({
       >
         <div>
           <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-            {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
             <span className="ml-10 whitespace-nowrap truncate">
               {serviceType ? serviceType.replace(/#grade#/g, '') : placeholder}
             </span>
@@ -101,7 +93,6 @@ const TagsSelect = ({
               )}
             </Menu.Item>
             {tags.map((value: any, index: any) => {
-              // console.log(value);
               return (
                 // eslint-disable-next-line
                 <Menu.Item key={index}>
@@ -112,18 +103,10 @@ const TagsSelect = ({
                         active ? 'bg-gray-100' : ''
                       } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-xs text-left rtl:text-right truncate`}
                       onClick={() => {
-                        // #grade# دانش آموز بزرگسال
                         setServiceType(value.key);
-                        //   setQueryParams({
-                        //     ...queryParams,
-                        //     tags: index !== 0 ? [value].join(',') : '',
-                        //   });
                       }}
                     >
-                      <span className="truncate">
-                        {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                        {value.value}
-                      </span>
+                      <span className="truncate">{value.value}</span>
                     </button>
                   )}
                 </Menu.Item>
