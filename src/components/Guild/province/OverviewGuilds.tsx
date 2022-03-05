@@ -13,8 +13,10 @@ import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/uti
 import vaccineService from 'src/services/vaccine.service';
 import guildService from 'src/services/guild.service';
 import {
+  IInitialInquiry,
   IInitialPcrInfo,
   IInitialVacinatelInfo,
+  initialInquiry,
   initialPcrInfo,
   initialVacinatelInfo,
 } from '../public/constant';
@@ -26,6 +28,8 @@ interface OverviewGuildsProvinceProps {
 const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
+  const [inquiryLoading, setInquiryLoading] = useState<boolean>(false);
+  const[guildInquiry,setGuildInquiry]=useState<IInitialInquiry>(initialInquiry)
   const [loading, setLoading] = useState<boolean>(false);
   const [guildVacinateInfo, setGuildVacinateInfo] =
     useState<IInitialVacinatelInfo>(initialVacinatelInfo);
@@ -71,6 +75,19 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
       setPcrLoading(false);
     }
   };
+  const getInquiry=async(params:any)=>{
+    setInquiryLoading(true)
+   try {
+    const res = await guildService.guildInquiry(params,{cancelToken: cancelToken.token})
+   if(res.status===200){
+     const newData={...guildInquiry,...res.data}
+    setGuildInquiry(newData)
+   }
+   } catch (error) {
+     // eslint-disable-next-line
+     console.log(error);
+   }finally{ setInquiryLoading(false)}
+   }
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -78,6 +95,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
       return item.name === provinceName;
     });
     if (existsCity) {
+      getInquiry({province: provinceName ,total:true,disqualified:true})
       getPcrResult({tag: 'guild', province: provinceName});
       getGuildVacinateInfo({tag: 'guild', province: provinceName});
     } else {
@@ -88,6 +106,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
       cancelRequest();
       setGuildVacinateInfo(initialVacinatelInfo);
       setGuildPcrInfo(initialPcrInfo);
+      setGuildInquiry(initialInquiry)
     };
   }, [location.search]);
 
@@ -126,8 +145,8 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             loading={loading}
           />
 
-          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count="-" />
-          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count="-" />
+          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={guildInquiry.total}  loading={inquiryLoading} />
+          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={guildInquiry.disqualified}  loading={inquiryLoading} />
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش های کارمندان"
