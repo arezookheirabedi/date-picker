@@ -3,25 +3,28 @@ stages:
   - dockerize
   - rollout
 
+
+#######################STAGE_MINISTER_START#######################
+
 node-build-Develop:
-  tags: 
-    - master1
-  image: node:14.17.2-alpine3.13
   stage: build
-  artifacts:
-    expire_in: 4h
-    paths:
-      - build/
+  tags:
+    - master1
   cache: 
    key: ${CI_JOB_I}
    paths:
     - node_modules/
     - public/
+  image: node:14.17.2-alpine3.13
   script:
     - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
     - npm version
     - CI=false yarn install
     - CI=false yarn run build:development
+  artifacts:
+    expire_in: 4h
+    paths:
+      - build/
   only:
     - develop
 
@@ -30,9 +33,9 @@ dockerize-Develop:
   stage: dockerize
   tags: 
     - master1
-  image: buildah/buildah
   dependencies:
     - node-build-Develop
+  image: buildah/buildah
   script:
     - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
     - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers-dev:latest .
@@ -54,26 +57,29 @@ rollout-Develop:
   only:
     - develop
 
+#######################STAGE_MINISTER_END#######################
+
+#######################PROD_MINISTER_START#######################
 
 node-build-Prod:
   stage: build
   tags: 
     - master1
-  image: node:14.17.2-alpine3.13
-  artifacts:
-    expire_in: 4h
-    paths:
-      - build/
   cache:
    key: ${CI_JOB_I}
    paths:
     - node_modules/
     - public/
+  image: node:14.17.2-alpine3.13
   script:
     - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
     - npm version
     - CI=false yarn install
     - CI=false yarn run build:production
+  artifacts:
+    expire_in: 4h
+    paths:
+      - build/
   only:
     - master
 
@@ -81,9 +87,9 @@ dockerize-Prod:
   stage: dockerize
   tags: 
     - master1
-  image: buildah/buildah
   dependencies:
     - node-build-Prod
+  image: buildah/buildah
   script:
     - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.vaslapp.com
     - buildah build-using-dockerfile -t registry.vaslapp.com/docker/ministers:latest .
@@ -102,4 +108,8 @@ rollout-Prod:
   script:
     - echo "$KUBERBOH_CONFIG" | base64 -d >.config
     - kubectl rollout restart deployment ministers --kubeconfig .config --namespace connect
+  only:
+    - master
   when: manual
+  
+#######################PROD_MINISTER_END#######################
