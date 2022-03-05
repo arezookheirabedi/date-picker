@@ -13,8 +13,10 @@ import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Statistic from 'src/containers/Guild/components/Statistic';
 import guildService from 'src/services/guild.service';
 import {
+  IInitialInquiry,
   IInitialPcrInfo,
   IInitialVacinatelInfo,
+  initialInquiry,
   initialPcrInfo,
   initialVacinatelInfo,
 } from './constant';
@@ -23,7 +25,10 @@ import {
 const OverviewGuilds: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pcrLoading, setPcrLoading] = useState<boolean>(false);
+  const [inquiryLoading, setInquiryLoading] = useState<boolean>(false);
   const [guildPcrInfo, setGuildPcrInfo] = useState<IInitialPcrInfo>(initialPcrInfo);
+  const[guildInquiry,setGuildInquiry]=useState<IInitialInquiry>(initialInquiry)
+
   const [guildVacinateInfo, setGuildVacinateInfo] =
     useState<IInitialVacinatelInfo>(initialVacinatelInfo);
   const cancelToken = cancelTokenSource();
@@ -67,14 +72,28 @@ const OverviewGuilds: React.FC<{}> = () => {
       setLoading(false);
     }
   };
- 
+ const getInquiry=async()=>{
+  setInquiryLoading(true)
+ try {
+  const res = await guildService.guildInquiry({total:true,disqualified:true},{cancelToken: cancelToken.token})
+ if(res.status===200){
+   const newData={...guildInquiry,...res.data}
+  setGuildInquiry(newData)
+ }
+ } catch (error) {
+   // eslint-disable-next-line
+   console.log(error);
+ }finally{ setInquiryLoading(false)}
+ }
   useEffect(() => {
     getGuildVacinateInfo();
     getPcrResult();
+    getInquiry()
     return () => {
       cancelRequest();
       setGuildVacinateInfo(initialVacinatelInfo);
       setGuildPcrInfo(initialPcrInfo);
+      setGuildInquiry(initialInquiry)
     };
   }, []);
   return (
@@ -110,8 +129,8 @@ const OverviewGuilds: React.FC<{}> = () => {
             count={guildVacinateInfo.totalVaccinesCount}
             loading={loading}
           />
-          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count="-" />
-          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count="-" />
+          <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={guildInquiry.total}  loading={inquiryLoading}/>
+          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={guildInquiry.disqualified}  loading={inquiryLoading}/>
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش های کارمندان"

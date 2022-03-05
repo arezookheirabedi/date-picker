@@ -140,7 +140,12 @@ function guildTestResultByCategory({ tag, category, ...params }: any = {}, confi
     .build()
     .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}`, params, { ...config });
 }
-
+function guildInquiry({ ...params }: any = {}, config?: any){
+  return request
+  .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+  .build()
+  .get(`/api/v1/guilds/visit-histories/general/count`, params, { ...config });
+}
 export default {
   registerGuild,
   registerWorkshop,
@@ -156,5 +161,6 @@ export default {
   guildTestResult,
   dosesTagBased,
   guildOverviewByCategory,
-  guildTestResultByCategory
+  guildTestResultByCategory,
+  guildInquiry
 };
