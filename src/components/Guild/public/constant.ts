@@ -18,3 +18,13 @@ export interface IInitialPcrInfo {
   testResultsCount: number;
   recoveredMembersCountToTotalPopulationPercentage: number;
 }
+export interface IInitialInquiry {
+  total: number;
+  qualified: number;
+  disqualified: number;
+}
+export const initialInquiry = {
+  total: 0,
+  qualified: 0,
+  disqualified: 0,
+};
