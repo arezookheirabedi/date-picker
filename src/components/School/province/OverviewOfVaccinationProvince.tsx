@@ -608,12 +608,12 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
                 {
                   name: 'دوز سوم',
                   key: 'thirdDosePercentage',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v >= 0 ? `${Number(v).toLocaleString('fa')}%` : 'نامشخص'}</span>,
                 },
                 {
                   name: 'سایر دوزها',
                   key: 'otherDose',
-                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                  render: (v: any) => <span>{v >= 0 ? `${Number(v).toLocaleString('fa')}%` : 'نامشخص'}</span>,
                 },
                 {
                   name: 'درصد کل دوزها',
