@@ -44,13 +44,13 @@ dockerize-Develop:
 rollout-Develop:
   stage: rollout
   tags:
-    - k8s-gov
+    - kuber
   image:
     name: bitnami/kubectl
     entrypoint: [ "" ]
   script:
     - echo "$KUBERGOV_CONFIG" | base64 -d >.config
-    - kubectl rollout restart deployment ministers --kubeconfig .config --namespace discovery
+    - kubectl rollout restart deployment ministers --kubeconfig .config --namespace connect
   only:
     - develop
 
