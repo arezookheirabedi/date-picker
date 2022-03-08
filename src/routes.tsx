@@ -18,6 +18,9 @@ import ReportsRequested from './containers/Reports';
 import Vaccination from './containers/Vaccination/Vaccination';
 import VaccinationProvince from './containers/Vaccination/VaccinationProvince';
 import Citizens from './containers/Citizens/Citizens';
+import GuildSocial from './containers/GuildSocialSecurity/GuildSocial';
+import GuildSocialProvince from './containers/GuildSocialSecurity/GuildSocialProvince';
+import GuildSocialMonitoring from './containers/GuildSocialSecurity/GuildSocialMonitoring';
 
 const routes: IRoute[] = [
   {
@@ -104,80 +107,7 @@ const routes: IRoute[] = [
     // disabled: true,
     main: Transport,
   },
-  {
-    keyIndex: '5',
-    icon: (active, disabled) => (
-      <IconWrapperStyle name="guild" active={active} disabled={disabled} />
-    ),
-    link: '/dashboard/guild/managment/public',
-    simLink: '/dashboard/guild',
-    exact: true,
-    inMenu: true,
-    title: 'اصناف',
-    // disabled: true,
-    subMenu: [
-      {
-        keyIndex: '1',
-        title: 'مدیر اصناف',
-        simLink: '/dashboard/guild/managment',
-        link: '/dashboard/guild/managment/public',
-        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-        children: [
-          {
-            keyIndex: '1',
-            title: 'عمومی',
-            link: '/dashboard/guild/managment/public',
-            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-            main: Guild,
-          },
-          {
-            keyIndex: '2',
-            title: 'استانی',
-            link: '/dashboard/guild/managment/province',
-            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-            main: GuildProvince,
-          },
-          {
-            keyIndex: '3',
-            title: 'نظارت و بازرسی',
-            link: '/dashboard/guild/managment/monitoring',
-            icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
-            main: GuildMonitoring,
-          },
-        ],
-      },
-      {
-        keyIndex: '2',
-        title: 'تامین اجتماعی',
-        link: '/dashboard/guild/SocialSecurity/public',
-        simLink: '/dashboard/guild/SocialSecurity',
-        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-        children: [
-          {
-            keyIndex: '1',
-            title: 'عمومی',
-            link: '/dashboard/guild/SocialSecurity/public',
-            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-            main: Guild,
-          },
-          {
-            keyIndex: '2',
-            title: 'استانی',
-            link: '/dashboard/guild/SocialSecurity/province',
-            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-            main: GuildProvince,
-          },
-          {
-            keyIndex: '3',
-            title: 'نظارت و بازرسی',
-            link: '/dashboard/guild/SocialSecurity/monitoring',
-            icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
-            main: GuildMonitoring,
-          },
-        ],
-      },
-    ],
-  },
+ 
   {
     keyIndex: '6',
     icon: (active, disabled) => (
@@ -258,6 +188,80 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'لیست درخواست گزارش',
     main: ReportsRequested,
+  },
+  {
+    keyIndex: '10',
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="guild" active={active} disabled={disabled} />
+    ),
+    link: '/dashboard/guild/managment/public',
+    simLink: '/dashboard/guild',
+    exact: true,
+    inMenu: true,
+    title: 'اصناف',
+    // disabled: true,
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'مدیر اصناف',
+        simLink: '/dashboard/guild/managment',
+        link: '/dashboard/guild/managment/public',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        children: [
+          {
+            keyIndex: '1',
+            title: 'عمومی',
+            link: '/dashboard/guild/managment/public',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main: Guild,
+          },
+          {
+            keyIndex: '2',
+            title: 'استانی',
+            link: '/dashboard/guild/managment/province',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main: GuildProvince,
+          },
+          {
+            keyIndex: '3',
+            title: 'نظارت و بازرسی',
+            link: '/dashboard/guild/managment/monitoring',
+            icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
+            main: GuildMonitoring,
+          },
+        ],
+      },
+      {
+        keyIndex: '2',
+        title: 'تامین اجتماعی',
+        link: '/dashboard/guild/SocialSecurity/public',
+        simLink: '/dashboard/guild/SocialSecurity',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        children: [
+          {
+            keyIndex: '1',
+            title: 'عمومی',
+            link: '/dashboard/guild/SocialSecurity/public',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main:GuildSocial,
+          },
+          {
+            keyIndex: '2',
+            title: 'استانی',
+            link: '/dashboard/guild/SocialSecurity/province',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main:GuildSocialProvince,
+          },
+          {
+            keyIndex: '3',
+            title: 'نظارت و بازرسی',
+            link: '/dashboard/guild/SocialSecurity/monitoring',
+            icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
+            main: GuildSocialMonitoring,
+          },
+        ],
+      },
+    ],
   },
 ];
 
