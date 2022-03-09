@@ -5,18 +5,34 @@ import moment from 'moment-jalaali';
 import DatePickerModal from '../../DatePickerModal';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-// import {toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import TagsSelect from '../../TagsSelect';
 import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
+// import hcsService from '../../../services/hcs.service';
 
 const {Line} = Charts;
 
 const OverviewPatients = () => {
-  const [data, setData] = useState([]);
+  // eslint-disable-next-line
+  const [data, setData] = useState([
+    {date: 'فروردین', positiveMembersCount: 99},
+    {date: 'اردیبهشت', positiveMembersCount: 4},
+    {date: 'خرداد', positiveMembersCount: 8},
+    {date: 'تیر', positiveMembersCount: 8},
+    {date: 'مرداد', positiveMembersCount: 8},
+    {date: 'شهریور', positiveMembersCount: 8},
+    {date: 'مهر', positiveMembersCount: 8},
+    {date: 'آبان', positiveMembersCount: 8},
+    {date: 'آذر', positiveMembersCount: 8},
+    {date: 'دی', positiveMembersCount: 8},
+    {date: 'بهمن', positiveMembersCount: 8},
+    {date: 'اسفند', positiveMembersCount: 8},
+
+
+  ]);
   // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
@@ -51,31 +67,17 @@ const OverviewPatients = () => {
     tag: 'edu',
   });
 
-  const getColumnChartTestResult = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await hcsService.columnChartTestResultService(params, {
-        cancelToken: source.token,
-      });
-      console.log(response.data);
-      setData(response.data);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // const getLinearOverviewPublicTransport = async (params: any) => {
+  // const getColumnChartTestResult = async (params: any) => {
   //   setLoading(true);
   //   setErrorMessage(null);
   //   try {
-  //     const response = await hcsService.testResultTimeBased(params, {cancelToken: source.token});
-  //     setData(response.data);
+  //     const response = await hcsService.columnChartTestResultService(params, {
+  //       cancelToken: source.token,
+  //     });
+  //     // console.log(response.data);
+  //     // setData(response.data);
   //   } catch (error: any) {
+  //     setErrorMessage(error.message);
   //     // eslint-disable-next-line
   //     console.log(error);
   //   } finally {
@@ -85,12 +87,11 @@ const OverviewPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      // getLinearOverviewPublicTransport({organization: 'education', ...queryParams});
-      getColumnChartTestResult(query);
+      // getColumnChartTestResult(query);
     }, 500);
 
     return () => {
-      setData([]);
+      // setData([]);
       source.cancel('Operation canceled by the user.');
       clearTimeout(idSetTimeOut);
     };
@@ -163,7 +164,9 @@ const OverviewPatients = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان آموزش و پرورش</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به مبتلا شدگان بعد از سفر در کل کشور
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
@@ -192,18 +195,6 @@ const OverviewPatients = () => {
               />
             </div>
           </div>
-          {/* 
-          <RangeDateSliderFilter
-            changeType={v =>
-              setQueryParams({
-                ...queryParams,
-                type: v,
-              })
-            }
-            selectedType={queryParams.type}
-            dates={selectedDayRange}
-            wrapperClassName="w-1/4"
-          /> */}
         </div>
 
         {loading && (
@@ -212,7 +203,7 @@ const OverviewPatients = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line borderRadius={5}pointWidth={20}  data={data} />}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
