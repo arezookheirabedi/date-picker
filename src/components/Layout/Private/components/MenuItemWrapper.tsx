@@ -16,7 +16,7 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
   const location = useLocation();
 
   const handleDisabled: (message: string) => void = message => {
-    toast.info(<Info message={message}/>, {
+    toast.info(<Info message={message} />, {
       toastContainerID: 'ct-p-0',
       renderIcon: () => '',
     });
@@ -29,8 +29,10 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
   }, [location]);
 
   const checkMenuIsActive = (routeArg: any, locationArg: any = location) => {
-    return routeArg.simLink ? locationArg.pathname.includes(routeArg.simLink) : locationArg.pathname.includes(routeArg.link)
-  }
+    return routeArg.simLink
+      ? locationArg.pathname.includes(routeArg.simLink)
+      : locationArg.pathname.includes(routeArg.link);
+  };
 
   return (
     route.inMenu && (
@@ -50,31 +52,67 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
               {route.title}
             </button>
           ) : (
-            <ul>
+            <ul className="">
               <li>
-                <NavLink to={route.link} className="flex items-center" isActive={(match: any, loc: any) => {
-                  return checkMenuIsActive(route, loc);
-                }}>
+                <NavLink
+                  to={route.link}
+                  className="flex items-center"
+                  isActive={(match: any, loc: any) => {
+                    return checkMenuIsActive(route, loc);
+                  }}
+                >
                   {route.icon && route.icon(checkMenuIsActive(route))}
                   {route.title}
                 </NavLink>
-                {
-                  route.subMenu && (
-                    <ul className={`pr-10 ${checkMenuIsActive(route) ? 'sub-menu-open' : 'sub-menu-close'}`}>
-                      {route.subMenu.map((r: any) => {
-                        return (<li key={r.keyIndex} className="text-gray-400"><NavLink to={r.link}
-                                                                                        className="flex items-center pt-3 text-xs font-normal">
-                          <div className="w-1 h-1 rounded-full bg-gray-400 ml-2"/>
-                          {r.icon && r.icon(location.pathname.includes(r.link))}
-                          {r.title}
-                        </NavLink></li>)
-                      })}
-                    </ul>
-                  )
-                }
+                {route.subMenu && (
+                  <ul
+                    className={`pr-10 ${
+                      checkMenuIsActive(route) ? 'sub-menu-open' : 'sub-menu-close'
+                    }`}
+                  >
+                    {route.subMenu.map((r: any) => {
+                      return (
+                        <li key={r.keyIndex} className="text-gray-400">
+                          <NavLink
+                            to={r.link}
+                            className="flex items-center pt-3 text-xs font-normal"
+                            isActive={(match: any, loc: any) => {
+                              return checkMenuIsActive(r, loc);
+                            }}
+                          >
+                            <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                            {r.icon && r.icon(location.pathname.includes(r.link))}
+                            {r.title}
+                          </NavLink>
+                          {r.children && (
+                            <ul
+                              className={`pr-10 ${
+                                checkMenuIsActive(r) ? 'sub-menu-open' : 'sub-menu-close'
+                              }`}
+                            >
+                              {r.children.map((c: any) => {
+                                return (
+                                  <li key={c.keyIndex} className="text-gray-400">
+                                    <NavLink
+                                      to={c.link}
+                                      className="flex items-center pt-3 text-xs font-normal"
+                                    >
+                                      <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                                      {c.icon && c.icon(location.pathname.includes(c.link))}
+                                      {c.title}
+                                    </NavLink>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </li>
             </ul>
-
           )}
         </MenuItem>
       </>

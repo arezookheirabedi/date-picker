@@ -167,15 +167,27 @@ const PrivateLayout: React.FC<any> = () => {
                   // eslint-disable-next-line
                   <Route path={route.link} exact={route.exact} key={i} component={route.main} />
                 ) : (
-                  route.subMenu.map((routeArg: any, ind: any) => (
-                    <Route
-                      path={routeArg.link}
-                      exact={routeArg.exact}
-                      // eslint-disable-next-line
-                      key={ind}
-                      component={routeArg.main}
-                    />
-                  ))
+                  route.subMenu.map((routeArg: any, ind: any) =>
+                    !routeArg.children ? (
+                      <Route
+                        path={routeArg.link}
+                        exact={routeArg.exact}
+                        // eslint-disable-next-line
+                        key={ind}
+                        component={routeArg.main}
+                      />
+                    ) : (
+                      routeArg.children.map((routeChildren: any, inc: any) => (
+                        <Route
+                          path={routeChildren.link}
+                          exact={routeChildren.exact}
+                          // eslint-disable-next-line
+                          key={inc}
+                          component={routeChildren.main}
+                        />
+                      ))
+                    )
+                  )
                 )
               )}
               <Route component={Overview} />
