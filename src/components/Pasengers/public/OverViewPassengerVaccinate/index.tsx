@@ -1,8 +1,7 @@
 import React from 'react';
-
 import OverviewPasengersStatusVacsinateTable from './OverviewPasengersStatusVaccinateTable';
-
 import OverviewPassengerVaccinateCard from './OverviewPasengersVaccinateCard';
+
 
 
 

@@ -1,20 +1,18 @@
+import OverviewPasengersStatusCard from 'src/components/Pasengers/public/OverviewPasengersStatusCard';
 
-// import OverviewPasengerStatusCard from "../../components/Pasengers/public/OverviewPasengersStatusCard";
-// import OverViowPassengerStatusVacsinateChart from "../../components/Pasengers/public/OverViewPassengerStatusVaccinateChart";
+import OverviewPasengersVaccinateComponent from 'src/components/Pasengers/public/OverViewPassengerVaccinate';
+import OverviewPassengerPatients from 'src/components/Pasengers/public/OverviewPatients';
 
-import OverviewPasengersVaccinate from "src/components/Pasengers/public/OverviewPasengersVaccinate";
-
+import OverViowPassengerStatusVaccinateChart from '../../components/Pasengers/public/OverViewPassengerStatusVaccinateChart';
 
 const Pasenger = () => {
   return (
     <div className="space-y-16 mb-8">
-      {/* <OverviewPasengerStatusCard/> */}
-      <OverviewPasengersVaccinate/>
-      {/* <OverViowPassengerStatusVacsinateChart/> */}
-
-
-
-      </div>
+      <OverviewPasengersStatusCard />
+      <OverviewPasengersVaccinateComponent />
+      <OverViowPassengerStatusVaccinateChart />
+      <OverviewPassengerPatients />
+    </div>
   );
 };
 

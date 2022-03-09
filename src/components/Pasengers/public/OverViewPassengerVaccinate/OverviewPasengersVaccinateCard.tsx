@@ -1,16 +1,14 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
-import Statistic from '../../../containers/Guild/components/Statistic';
-import GreenVaccine from '../../../assets/images/icons/big-green-vaccine.svg';
-import YellowVaccine from '../../../assets/images/icons/big-yellow-vaccine.svg';
-import GreenTotlaPassenger from '../../../assets/images/icons/green-totla-passenger.svg';
-import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
-import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg';
-import GreyVaccine from '../../../assets/images/icons/big-gray-vaccine.svg';
-import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
-
-
+import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
+import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
+import GreenTotlaPassenger from 'src/assets/images/icons/green-totla-passenger.svg';
+import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
+import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
+import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
+import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
+import Statistic from '../../../../containers/Guild/components/Statistic';
 
 
 

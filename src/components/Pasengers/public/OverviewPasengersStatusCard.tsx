@@ -1,20 +1,10 @@
 import React, {useEffect, useState} from 'react';
-// import vaccineService from 'src/services/vaccine.service';
-
 import axios from 'axios';
 import testIcon from 'src/assets/images/icons/test-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import Statistic from '../../../containers/Guild/components/Statistic';
-
-// import GreenVaccine from '../../../assets/images/icons/green-vaccine.svg';
-// import YellowVaccine from '../../../assets/images/icons/yellow-vaccine.svg';
-// import PurppleVaccine from '../../../assets/images/icons/purpple-vaccine.svg';
-// import NavyVaccine from '../../../assets/images/icons/navy-vaccine.svg';
-// import personGrayVaccine from '../../../assets/images/icons/personGrayVaccine.svg';
-// import greenVaccineBlackVirus from '../../../assets/images/icons/green-vaccine-black-virus.svg';
-// import blueVaccine from '../../../assets/images/icons/blue-vaccine-sm.svg';
 import GreyVaccine from '../../../assets/images/icons/big-gray-vaccine.svg';
 import totalPassengers from '../../../assets/images/icons/total-passengers.svg';
 import suspiciousCovid from '../../../assets/images/icons/suspicious-covid.svg';
