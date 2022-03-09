@@ -5,7 +5,7 @@ import OverviewGuildsPerProvince from 'src/components/Guild/public/OverviewGuild
 import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
 import TestStatus from 'src/components/Guild/public/TestStatus';
 
-const Guild: React.FC<any> = () => {
+const GuildEmployee: React.FC<any> = () => {
   return (
     <div className="space-y-16 mb-8">
       <OverviewGuilds />
@@ -17,4 +17,4 @@ const Guild: React.FC<any> = () => {
   );
 };
 
-export default Guild;
+export default GuildEmployee;
