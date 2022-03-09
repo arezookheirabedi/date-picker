@@ -8,7 +8,7 @@ import OverviewOfVaccination from 'src/components/Guild/province/OverviewOfVacci
 import TestStatus from 'src/components/Guild/province/TestStatus';
 import {sideCities} from 'src/helpers/utils';
 
-const GuildProvince: React.FC<any> = () => {
+const GuildEmployeeProvince: React.FC<any> = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
 
@@ -41,4 +41,4 @@ const GuildProvince: React.FC<any> = () => {
   );
 };
 
-export default GuildProvince;
+export default GuildEmployeeProvince;
