@@ -19,9 +19,12 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
       name: 'نامشخص',
       firstDosePercentage: 0,
       secondDosePercentage: 0,
+      thirdDosePercentage: 0,
       allDosesPercentage: 0,
       allDoses: 0,
       noDose: 0,
+      noData:"-",
+      otherDosePercentage:0
     },
   ]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -75,26 +78,26 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
                 <CategoryDonut
                   data={[
                     {
-                      name: 'noDose',
-                      title: 'نزده‌ها',
-                      y: record.noDose || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
-                      },
-                    },
-                    {
                       name: 'allDosesPercentage',
-                      title: 'دوز کل',
+                      title: 'واکسن نزده',
                       y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
                           [0, '#05D8A4'], // start
                           [1, '#039572'], // end
+                        ],
+                      },
+                    },
+                    {
+                      name: 'noDose',
+                      title: 'واکسن زده',
+                      y: record.noDose || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
                         ],
                       },
                     },
@@ -116,7 +119,7 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
               className: 'flex justify-center w-full',
             },
             {
-              name: 'نام رسته',
+              name: 'دسته بندی',
               key: 'name',
               render: (v: any, record, index: number, page: number) => (
                 <div className="flex">
@@ -125,19 +128,41 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
               ),
             },
             {
-              name: 'دو دوز',
+              name: 'دوز اول',
+              key: 'firstDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'دوز دوم',
               key: 'secondDosePercentage',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'دوز سوم',
+              key: 'thirdDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'سایر دوزها',
+              key: 'otherDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+          
+            {
+              name: 'واکسن نزده',
+              key: 'noDose',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'اطلاعات مخدوش',
+              key: 'noData',
+              render: (v: any) => <span>{v}</span>,
+              // render: (v: any) => <span>-</span>,
             },
             {
               name: 'کل دوزها',
               key: 'allDoses',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
-            },
-            {
-              name: 'واکسن نزده',
-              key: 'noDose',
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
           ]}
           totalItems={dataset.length || 0}

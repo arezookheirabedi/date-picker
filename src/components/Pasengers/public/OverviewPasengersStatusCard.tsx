@@ -142,14 +142,14 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
           hasInfo
             icon={redBaggage}
-            text="تعداد سفر های جلوگیری شده"
+            text="تعداد سفرهای جلوگیری شده"
             count={0}
             loading={loading}
           />
           <Statistic
           infoText="      "
             icon={grayBaggage}
-            text="مجموع سفر های صورت گرفته"
+            text="مجموع سفرهای صورت گرفته"
             count={ 0}
             loading={loading}
             isPercentage
