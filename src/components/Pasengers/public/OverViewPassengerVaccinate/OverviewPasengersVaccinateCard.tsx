@@ -44,7 +44,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
           <Statistic icon={GreenTotlaPassenger} text="مجموع مسافران کل کشور" count={0} loading={loading} />
           <Statistic
             hasInfo
-            infoText="یک دوز-دو دوز-سه در)مجموع افرادی که واکسن دریافت کرده‌اند)"
+            infoText=" مجموع افرادی که واکسن دریافت کرده اند(یک دوز _ دو دوز _ سه دوز)"
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
             count={0}
@@ -146,14 +146,17 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
+infoText="مجموع درصد افرادی که دوز دوم واکسن را در سطح کشور دریافت نموده اند."
+
             icon={OrangeVaccine}
             text="درصد افراد با دوز دوم "
             count={0}
             loading={loading}
           />
           <Statistic
-            hasInfo
+infoText="مجموع درصد افرادی که دوز سوم واکسن را در سطح کشور دریافت نموده اند."
 
+            hasInfo
             icon={PurppleVaccine}
             text="درصد افراد با دوز سوم "
             count={0}
@@ -166,6 +169,8 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
         <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <div className="w-1/4 ">
             <Statistic
+infoText="مجموع درصد افرادی که دوز چهارم واکسن را در سطح کشور دریافت نموده اند."
+
               icon={DarkgreenVaccine}
               text="درصد افراد با دوز چهارم"
               count={0}
@@ -177,6 +182,8 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
           </div>
           <div className="w-1/4 ">
             <Statistic
+infoText="مجموع درصد افرادی که دوز پنجم واکسن را در سطح کشور دریافت نموده اند."
+
               icon={VaccineIcon}
               text="درصد افراد با دوز پنجم"
               count={0}

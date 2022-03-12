@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 
 import testIcon from 'src/assets/images/icons/test-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
@@ -13,7 +13,7 @@ import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-te
 import negetiveTestIcon from 'src/assets/images/icons/negetive-test-icon.svg';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
-import passengerService from 'src/services/passenger.service';
+// import passengerService from 'src/services/passenger.service';
 import Statistic from '../../../../containers/Guild/components/Statistic';
  
 
@@ -26,49 +26,49 @@ interface IDataCard{
 const OverViewPassengerTypeStatusCard: React.FC<{}> = () => {
   // eslint-disable-next-line
   const [passengerType, setPassengerType] = useState<Array<IDataCard>>([
-    {tag: 'airlines', data: {}, title: 'هوایی'},
+    {tag: 'airlines', data: {totalPassengers:0}, title: 'هوایی'},
     {tag: 'errthRoad', data: {}, title: 'زمینی'},
     {tag: 'marine', data:{}, title: 'ریلی'},
     {tag: 'railRoad', data: {}, title: 'دریایی'},
   ]);
-
+  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
 
-const normalizeData=(data:any)=>{
- return(data)
-}
+// const normalizeData=(data:any)=>{
+//  return(data)
+// }
 
 
 
 
-  const fetcher = () => {
-    setLoading(true);
-    const requests = passengerType.map(
-      (i:IDataCard) =>
-        new Promise((resolve, reject) => {
-          passengerService
-            .passengerTestResult({tag:i.tag})
-            .then(response => resolve(response))
-            .catch(error => reject(error));
-        })
-    );
+  // const fetcher = () => {
+  //   setLoading(true);
+  //   const requests = passengerType.map(
+  //     (i:IDataCard) =>
+  //       new Promise((resolve, reject) => {
+  //         passengerService
+  //           .passengerTestResult({tag:i.tag})
+  //           .then(response => resolve(response))
+  //           .catch(error => reject(error));
+  //       })
+  //   );
 
-    Promise.allSettled(requests).then(results => {
-      const succesData: any[] = [];
-      results.forEach(result => {
-        if (result.status === 'fulfilled') {
-          succesData.push((result as any).value.data.data);
-        }
-      });
-      setPassengerType(normalizeData(succesData));
-      setLoading(false);
-    });
-  };
+  //   Promise.allSettled(requests).then(results => {
+  //     const succesData: any[] = [];
+  //     results.forEach(result => {
+  //       if (result.status === 'fulfilled') {
+  //         succesData.push((result as any).value.data.data);
+  //       }
+  //     });
+  //     setPassengerType(normalizeData(succesData));
+  //     setLoading(false);
+  //   });
+  // };
 
-  useEffect(() => {
-    fetcher();
-  }, [passengerType]);
+  // useEffect(() => {
+  //   fetcher();
+  // }, [passengerType]);
 
 
 
@@ -150,14 +150,14 @@ const normalizeData=(data:any)=>{
                   infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
                   hasInfo
                   icon={redBaggage}
-                  text="تعداد سفر های جلوگیری شده"
+                  text="تعداد سفرهای جلوگیری شده"
                   count={0}
                   loading={loading}
                 />
                 <Statistic
                   infoText="      "
                   icon={grayBaggage}
-                  text="مجموع سفر های صورت گرفته"
+                  text="مجموع سفرهای صورت گرفته"
                   count={0}
                   loading={loading}
                   isPercentage
