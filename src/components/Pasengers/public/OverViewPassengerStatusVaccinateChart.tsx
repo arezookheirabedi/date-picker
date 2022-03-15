@@ -1,66 +1,37 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
-import vaccineService from 'src/services/vaccine.service';
-import axios from 'axios';
 // import DatePickerModal from '../../DatePickerModal';
 // import {toPersianDigit} from '../../../helpers/utils';
 // import calendar from '../../../assets/images/icons/calendar.svg';
+import passengerService from 'src/services/passenger.service';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 
 const {Stacked} = Charts;
 
 const OverViewPassengerStatusVacinateChart: React.FC<{}> = () => {
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  // const [selectedDayRange, setSelectedDayRange] = useState({
-  //   from: null,
-  //   to: null,
-  // }) as any;
 
-  // const focusFromDate = () => {
-  //   setShowDatePicker(true);
-  // };
-  //
-  // const generateFromDate: any = () => {
-  //   // eslint-disable-next-line
-  //   return selectedDayRange.from
-  //     ? // eslint-disable-next-line
-  //     selectedDayRange.from.year +
-  //     '/' +
-  //     selectedDayRange.from.month +
-  //     '/' +
-  //     selectedDayRange.from.day
-  //     : '';
-  // };
-  //
-  // const generateToDate: any = () => {
-  //   // eslint-disable-next-line
-  //   return selectedDayRange.to
-  //     ? // eslint-disable-next-line
-  //     selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-  //     : '';
-  // };
+  const cancelToken = cancelTokenSource();
 
-  // const [queryParams, setQueryParams] = useState({
-  //   from: null,
-  //   to: null,
-  //   tags: [],
-  // });
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
 
   // eslint-disable-next-line
   const getLinearOverview = async () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
+      const {data} = await passengerService.dosesTagBased({}, {cancelToken: cancelToken.token});
 
       const provinces: any[] = [];
 
@@ -80,7 +51,6 @@ const OverViewPassengerStatusVacinateChart: React.FC<{}> = () => {
 
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.doses)) {
-
           if (Number(key) === 1) {
             firstDose.push(Number(value));
           }
@@ -153,66 +123,11 @@ const OverViewPassengerStatusVacinateChart: React.FC<{}> = () => {
 
     return () => {
       clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
+      cancelRequest();
       setDataset([]);
     };
   }, []);
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const provinceName = params.get('provinceName') || ('تهران' as any);
-  //   const existsCity = sideCities.some((item: any) => {
-  //     return item.name === provinceName;
-  //   });
-
-  //   let idSetTimeOut: any;
-  //   if (existsCity) {
-  //     idSetTimeOut = setTimeout(() => {
-  //       getLinearOverview({...queryParams, province: provinceName});
-  //     }, 500);
-  //   } else {
-  //     history.push('/dashboard/vaccination/public');
-  //   }
-
-  //   return () => {
-  //     if (existsCity) {
-  //       source.cancel('Operation canceled by the user.');
-  //       clearTimeout(idSetTimeOut);
-  //       setDataset([])
-
-  //     }
-  //   };
-  // }, [queryParams, location.search]);
-
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-  //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-  //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-  //     setQueryParams({
-  //       ...queryParams,
-  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       tags: [],
-  //     });
-  //   } else {
-  //     setQueryParams({
-  //       ...queryParams,
-  //       from: null,
-  //       to: null,
-  //       tags: [],
-  //     });
-  //   }
-  // }, [selectedDayRange]);
-
-  // const clearSelectedDayRange = (e: any) => {
-  //   e.stopPropagation();
-  //   setSelectedDayRange({
-  //     from: null,
-  //     to: null,
-  //   });
-  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -220,83 +135,7 @@ const OverViewPassengerStatusVacinateChart: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
-            {/*            <div className="flex align-center justify-between">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-                <div
-                  className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                  onClick={focusFromDate}
-                >
-                  {selectedDayRange.from && (
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateFromDate())}
-                    </span>
-                  )}
-                  {selectedDayRange.to || selectedDayRange.from ? (
-                    <button type="button" onClick={clearSelectedDayRange}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5"/>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center justify-start mx-4">
-                <span className="dash-separator"/>
-              </div>
-              <div className=" shadow-custom rounded-lg px-4 py-1">
-                <div
-                  className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                  onClick={focusFromDate}
-                >
-                  {selectedDayRange.to && (
-                    <span className="ml-4 whitespace-nowrap truncate text-xs">
-                      {toPersianDigit(generateToDate())}
-                    </span>
-                  )}
-                  {selectedDayRange.to || selectedDayRange.from ? (
-                    <button type="button" onClick={clearSelectedDayRange}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  ) : (
-                    <img src={calendar} alt="x" className="w-5 h-5"/>
-                  )}
-                </div>
-              </div>
-            </div> */}
+{/* <span>kkkk</span> */}
           </div>
 
           <div className="w-2/4">

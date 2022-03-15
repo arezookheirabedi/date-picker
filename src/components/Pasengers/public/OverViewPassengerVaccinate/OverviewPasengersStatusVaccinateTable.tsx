@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 // import vaccineService from 'src/services/vaccine.service';
+// @ts-ignore
+import moment from 'moment-jalaali';
 
-import axios from 'axios';
 import CategoryDonut from 'src/containers/Guild/components/CategoryDonut';
 // import { toPersianDigit } from 'src/helpers/utils';
+import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
+import passengerService from 'src/services/passenger.service';
 import Table from '../../../TableScope';
-// @ts-ignore
-// import moment from 'moment-jalaali';
-
 import DatePickerModal from '../../../DatePickerModal';
 import Calendar from '../../../Calendar';
 
@@ -28,16 +28,91 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
     },
   ]);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  // eslint-disable-next-line
+  const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line
-  const [tableLoading, setTableLoading] = useState(false);
+  
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
-  const {CancelToken} = axios;
+  const cancelToken = cancelTokenSource();
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
+
   // eslint-disable-next-line
-  const source = CancelToken.source();
+  async function getOverviewByVaccineCount(params: any) {
+    setLoading(true);
+    try {
+      const {data} =await passengerService.dosesTagBased(params, {cancelToken: cancelToken.token})
+
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        let firstDose = 0;
+
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries(item.dosesToMembersCountPercentage)) {
+          if (Number(key) === 1) {
+            firstDose = Number(value);
+          }
+        }
+
+        normalizedData.push({
+          id: `ovvac_${index}`,
+          name: item.categoryValue || 'نامشخص',
+          firstDosePercentage: firstDose,
+          secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
+          allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+          allDoses: Number(item.gtDoses['0'] || 0),
+          noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+        });
+      });
+
+      setDataset([...normalizedData]);
+     
+   
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
+
+
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      getOverviewByVaccineCount({
+      
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
+    } else {
+      getOverviewByVaccineCount({
+      
+        from: null,
+        to: null,
+      });
+    }
+  }, [selectedDayRange]);
+  useEffect(() => {
+    return () => {
+      cancelRequest();
+      setDataset([]);
+    };
+  }, []);
+
+
+
+
+
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
@@ -67,7 +142,7 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <Table
-          loading={tableLoading}
+          loading={loading}
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[

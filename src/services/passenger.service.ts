@@ -5,23 +5,22 @@ function passengerTestResult({...params}: any = {}, config?: any): Promise<Axios
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/test-results/general`, params, {...config});
 }
 
 function dosesTagBased(
-  {tag, category, ...params}: any = {},
-  config?: any
-): Promise<AxiosResponse<any>> {
+  params: any = {}, config?: any
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/vaccines/provinces`, params, {...config});
 }
 
 function passengerOverViewByCategory(
   {tag, category, ...params}: any = {},
   config?: any
-): Promise<AxiosResponse<any>> {
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -32,7 +31,7 @@ function passengerOverViewByCategory(
 function passengerTestResultByCategory(
   {tag, category, ...params}: any = {},
   config?: any
-): Promise<AxiosResponse<any>> {
+) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()

@@ -24,10 +24,10 @@ import { IInitialPcrInfo, IInitialTotalVacinatelInfo, initialpcrInfo, initialTot
 
 
 
-const OverviewPassengerStatusCard: React.FC<{}> = () => {
+const OverviewAirlinesPasengersStatusCard: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [pcrLoading, setPcrLoading] = useState<boolean>(false);
   const [ passengerPcrInfo, setPassengerPcrInfo] = useState<IInitialPcrInfo>(initialpcrInfo);
+  const [pcrLoading, setPcrLoading] = useState<boolean>(false);
   const [passengerVaccinateInfo, setPassengerVaccinateInfo] = useState<IInitialTotalVacinatelInfo>(initialTotalVacinatelInfo );
   const cancelToken = cancelTokenSource();
 
@@ -38,7 +38,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
     setPcrLoading(true);
     try {
       const res = await passengerService.passengerTestResult(
-        {},
+        {type:"AIRPLANE"},
         {cancelToken: cancelToken.token}
       );
       if (res.status === 200) {
@@ -56,7 +56,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
     setLoading(true);
     try {
       const res = await passengerService.dosesTagBased(
-        {},
+        {type:"AIRPLANE"},
         {cancelToken: cancelToken.token}
       );
       if (res.status === 200) {
@@ -78,13 +78,14 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
       cancelRequest();
       setPassengerVaccinateInfo(initialTotalVacinatelInfo );
       setPassengerPcrInfo(initialpcrInfo);
+
     };
   }, []);
 
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران در کل کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت مسافران هوایی در کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
 
@@ -93,11 +94,11 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalPassengers}
-            text="مجموع مسافران "
+            text="مجموع مسافران هوایی"
             count={passengerVaccinateInfo.totalPopulation}
             loading={loading}
           />
-            <Statistic
+             <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان بعد از سفر"
             count={passengerPcrInfo.positiveMembersCountAfterTrip||0}
@@ -210,4 +211,4 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
   );
 };
 
-export default OverviewPassengerStatusCard;
+export default OverviewAirlinesPasengersStatusCard;
