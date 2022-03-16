@@ -160,7 +160,7 @@ const OverviewTrainPasengersStatusCard: React.FC<{}> = () => {
           hasInfo
             icon={redBaggage}
             text="تعداد سفرهای جلوگیری شده"
-            count={0}
+            count="-"
             // loading={pcrLoading}
           />
           <Statistic
