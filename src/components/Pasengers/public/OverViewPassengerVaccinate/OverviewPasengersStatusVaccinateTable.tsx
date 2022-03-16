@@ -5,7 +5,7 @@ import moment from 'moment-jalaali';
 
 import CategoryDonut from 'src/containers/Guild/components/CategoryDonut';
 // import { toPersianDigit } from 'src/helpers/utils';
-import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import passengerService from 'src/services/passenger.service';
 import Table from '../../../TableScope';
 import DatePickerModal from '../../../DatePickerModal';
@@ -13,26 +13,13 @@ import Calendar from '../../../Calendar';
 
 const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
   // eslint-disable-next-line
-  const [dataset, setDataset] = useState<any>([
-    {
-      id: `1`,
-      name: 'نامشخص',
-      firstDosePercentage: 0,
-      secondDosePercentage: 0,
-      thirdDosePercentage: 0,
-      allDosesPercentage: 0,
-      allDoses: 0,
-      noDose: 0,
-      noData:"-",
-      otherDosePercentage:0
-    },
-  ]);
+  const [dataset, setDataset] = useState<any>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line
-  
+
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -42,38 +29,32 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-
   // eslint-disable-next-line
   async function getOverviewByVaccineCount(params: any) {
     setLoading(true);
     try {
-      const {data} =await passengerService.dosesTagBased(params, {cancelToken: cancelToken.token})
-
+      const {data} = await passengerService.passengerOverViewByCategory(params, {
+        cancelToken: cancelToken.token,
+      });
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
-        let firstDose = 0;
-
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.dosesToMembersCountPercentage)) {
-          if (Number(key) === 1) {
-            firstDose = Number(value);
-          }
-        }
-
         normalizedData.push({
-          id: `ovvac_${index}`,
+          id: `ovvactrip_${index}`,
           name: item.categoryValue || 'نامشخص',
-          firstDosePercentage: firstDose,
+          firstDosePercentage: Number(item.dosesToMembersCountPercentage[1] || 0),
           secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
-          allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
-          allDoses: Number(item.gtDoses['0'] || 0),
+          thirdDosePercentage: Number(item.dosesToMembersCountPercentage[3] || 0),
+          allDosesPercentage:
+            item.gtDosesToTotalDosesPercentage[0] -
+            item.totalNonVaccinesCountToMembersCountPercentage,
+          allDoses: Number(item.gtDoses[0] || 0),
           noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+          otherDoses: Number(item.gtDosesToTotalDosesPercentage[3] || 0),
+          noData: '-',
         });
       });
 
       setDataset([...normalizedData]);
-     
-   
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -82,21 +63,18 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
     }
   }
 
-
-
-
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       getOverviewByVaccineCount({
-      
+        lang: 'fa',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       getOverviewByVaccineCount({
-      
+        lang: 'fa',
         from: null,
         to: null,
       });
@@ -108,10 +86,6 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
       setDataset([]);
     };
   }, []);
-
-
-
-
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -155,36 +129,24 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
                     {
                       name: 'allDosesPercentage',
                       title: 'واکسن نزده',
-                      y: record.allDosesPercentage || 0,
+                      y: record.noDose || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
                         ],
                       },
                     },
                     {
                       name: 'noDose',
                       title: 'واکسن زده',
-                      y: record.noDose || 0,
+                      y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'firstDosePercentage',
-                      title: 'واکسن اول',
-                      y: record.firstDosePercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#F5DF34'], // start
-                          [1, '#d4c12d'], // end
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
                         ],
                       },
                     },
@@ -219,10 +181,10 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
             },
             {
               name: 'سایر دوزها',
-              key: 'otherDosePercentage',
+              key: 'otherDoses',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
-          
+
             {
               name: 'واکسن نزده',
               key: 'noDose',
