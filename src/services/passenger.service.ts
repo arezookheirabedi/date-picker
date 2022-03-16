@@ -32,13 +32,13 @@ function dosesTagBased(
 }
 
 function passengerOverViewByCategory(
-  {tag, category, ...params}: any = {},
+  params: any = {},
   config?: any
 ) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {
+    .get(`/api/v1/hcs-reporter/trips/vaccines/category-based`, params, {
       ...config,
     });
 }
