@@ -55,7 +55,7 @@ const OverviewBusPasengersStatusCard: React.FC<{}> = () => {
   const getPassengerVaccinateInfo = async () => {
     setLoading(true);
     try {
-      const res = await passengerService.dosesTagBased(
+      const res = await passengerService.getDoses(
         {type:"BUS"},
         {cancelToken: cancelToken.token}
       );
