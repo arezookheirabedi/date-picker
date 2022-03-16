@@ -36,13 +36,8 @@ const OverviewPatients = () => {
   };
 
   const [query, setQuery] = useState({
-    // status: 'POSITIVE',
-    // type: 'MONTHLY',
     from: null,
     to: null,
-    category: 'grade',
-    categoryValue: null,
-    tag: 'edu',
   });
 
   const getColumnChartTestResult = async (params: any) => {
