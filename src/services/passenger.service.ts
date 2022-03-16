@@ -53,6 +53,17 @@ function passengerTestResultByCategory(
       ...config,
     });
 }
+function columnChartTestResultService(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/test-results/unwell/after-trip/time-based`, params, {
+      ...config,
+    });
+}
+
+
+
 
 export default {
   passengerTestResult,
@@ -60,4 +71,5 @@ export default {
   dosesTagBased,
   passengerOverViewByCategory,
   passengerTestResultByCategory,
+  columnChartTestResultService
 };
