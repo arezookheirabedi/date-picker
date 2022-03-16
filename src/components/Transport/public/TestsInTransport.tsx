@@ -42,7 +42,7 @@ const TestsInTransport = () => {
         from,
         to,
       });
-      console.log(data);
+      // console.log(data);
 
       let normalizedData = [] as any;
       data.map((item: any) => {

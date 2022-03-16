@@ -65,7 +65,7 @@ const OverviewDrivers = () => {
   const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
   const [testResultInfo, setTestResultInfo] = useState<any>(initialTestResults);
 
-  console.log(testResultInfo);
+  // console.log(testResultInfo);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
