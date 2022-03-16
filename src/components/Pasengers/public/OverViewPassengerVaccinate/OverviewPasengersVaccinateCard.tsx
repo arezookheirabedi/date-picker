@@ -27,7 +27,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
   const getPassengerVaccinateInfo = async () => {
     setLoading(true);
     try {
-      const res = await passengerService.dosesTagBased({}, {cancelToken: cancelToken.token});
+      const res = await passengerService.getDoses({}, {cancelToken: cancelToken.token});
       if (res.status === 200) {
         const newData = {...initialNumberOfDoses, ...res.data};
         setNumberOf(newData);
