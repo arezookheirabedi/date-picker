@@ -18,12 +18,6 @@ import noneVacsinateStart from '../../../assets/images/icons/none-vaccinate-star
 import { IInitialPcrInfo, IInitialTotalVacinatelInfo, initialpcrInfo, initialTotalVacinatelInfo } from './constant';
 
 
-
-
-
-
-
-
 const OverviewPassengerStatusCard: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pcrLoading, setPcrLoading] = useState<boolean>(false);
@@ -106,7 +100,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           <Statistic
             icon={suspiciousCovid}
             text="مجموع مسافران مشکوک به کوید"
-            count={ 0}
+            count="-"
             // loading={pcrLoading}
           />
           <Statistic
@@ -165,7 +159,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           <Statistic
             icon={grayBaggage}
             text="مجموع سفرهای صورت گرفته"
-            count={ 0}
+            count="-"
             // loading={pcrLoading}
             isPercentage
           />
@@ -180,7 +174,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           hasInfo
             icon={redBaggage}
             text="مجموع سفر های غیر مجاز"
-            count={ 0}
+            count="-"
             // loading={pcrLoading}
             isPercentage
           />
@@ -197,12 +191,12 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           <Statistic  loading={pcrLoading} icon={negetiveTestIcon} text="تعداد تست‌های منفی" count={passengerPcrInfo.negativeTestResultsCount||0}/>
           <Statistic 
           //  loading={pcrLoading}
-           icon={totalVacsinateStart} text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه" count={0}/>
+           icon={totalVacsinateStart} text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه" count="-"/>
           <Statistic
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             // loading={pcrLoading}
-            count={0}
+            count="-"
           />
         </div>
       </div>
