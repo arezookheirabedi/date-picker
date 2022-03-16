@@ -106,7 +106,7 @@ const OverviewBusPasengersStatusCard: React.FC<{}> = () => {
           <Statistic
             icon={suspiciousCovid}
             text="مجموع مسافران مشکوک به کوید"
-            count={ 0}
+            count="-"
             // loading={pcrLoading}
           />
           <Statistic
@@ -165,7 +165,7 @@ const OverviewBusPasengersStatusCard: React.FC<{}> = () => {
           <Statistic
             icon={grayBaggage}
             text="مجموع سفرهای صورت گرفته"
-            count={ 0}
+            count="-"
             // loading={pcrLoading}
             isPercentage
           />
@@ -180,7 +180,7 @@ const OverviewBusPasengersStatusCard: React.FC<{}> = () => {
           hasInfo
             icon={redBaggage}
             text="مجموع سفر های غیر مجاز"
-            count={ 0}
+            count="-"
             // loading={pcrLoading}
             isPercentage
           />
@@ -197,12 +197,12 @@ const OverviewBusPasengersStatusCard: React.FC<{}> = () => {
           <Statistic  loading={pcrLoading} icon={negetiveTestIcon} text="تعداد تست‌های منفی" count={passengerPcrInfo.negativeTestResultsCount||0}/>
           <Statistic 
           //  loading={pcrLoading}
-           icon={totalVacsinateStart} text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه" count={0}/>
+           icon={totalVacsinateStart} text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه" count="-"/>
           <Statistic
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             // loading={pcrLoading}
-            count={0}
+            count="-"
           />
         </div>
       </div>
