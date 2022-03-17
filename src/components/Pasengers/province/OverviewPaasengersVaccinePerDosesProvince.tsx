@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
-import vaccineService from 'src/services/vaccine.service';
+// import moment from 'moment-jalaali';
 import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
-import DatePickerModal from '../../DatePickerModal';
+// import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
 import {sideCities} from '../../../helpers/utils';
-import Calendar from '../../Calendar';
+// import Calendar from '../../Calendar';
 import Spinner from '../../Spinner';
+import hcsService from '../../../services/hcs.service';
 
 const {Stacked} = Charts;
 
@@ -25,20 +25,20 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
     const history = useHistory();
     const [categories, setCategories] = useState<any[]>([]);
     const [dataset, setDataset] = useState<any[]>([]);
-    const [showDatePicker, setShowDatePicker] = useState(false);
+    // const [showDatePicker, setShowDatePicker] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [selectedDayRange, setSelectedDayRange] = useState({
-      from: null,
-      to: null,
-    }) as any;
+    // const [selectedDayRange, setSelectedDayRange] = useState({
+    //   from: null,
+    //   to: null,
+    // }) as any;
 
-    const focusFromDate = () => {
-      setShowDatePicker(true);
-    };
+    // const focusFromDate = () => {
+    //   setShowDatePicker(true);
+    // };
 
     // eslint-disable-next-line
-    const [queryParams, setQueryParams] = useState({
+    const [query, setQuery] = useState({
       from: null,
       to: null,
       province: cityTitle,
@@ -49,15 +49,16 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
       setLoading(true);
       setErrorMessage(null);
       try {
-        const {data} = await vaccineService.membersGeneral(params, {CancelToken: source.token});
+        const {data} = await hcsService.tripVaccinationGeneral(params, {CancelToken: source.token});
+        console.log(data);
         // const {data} = await hcsService.dosesTagBased(params);
         const dataChart: any = {
-          null: 5,
           '0': Number(data.totalNonVaccinesCount || 0), // واکسن نزدع
           '1': Number(data.doses[1] || 0), // دوز اول
           '2': Number(data.doses[2] || 0), // دوز دوم
           '3': Number(data.doses[3] || 0), // دوز سوم
-          '4': Number(data.gtDoses[3] || 0), //  بیش از سه دوز
+          '4': Number(data.doses[4] || 0), // دوز چهارم
+          '5': Number(data.doses[5] || 0), // دوز پنجم
         };
 
         // eslint-disable-next-line
@@ -138,7 +139,7 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
       let idSetTimeOut: any;
       if (existsCity) {
         idSetTimeOut = setTimeout(() => {
-          getLinearOverview({...queryParams, province: provinceName});
+          getLinearOverview({...query, province: provinceName});
         }, 500);
       } else {
         history.push('/dashboard/vaccination/province');
@@ -151,29 +152,28 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
           setDataset([]);
         }
       };
-    }, [queryParams, location.search]);
+    }, [query, location.search]);
 
-    useEffect(() => {
-      if (selectedDayRange.from && selectedDayRange.to) {
-        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-        setQueryParams({
-          ...queryParams,
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-          province: cityTitle,
-        });
-      } else {
-        setQueryParams({
-          ...queryParams,
-          province: cityTitle,
-          from: null,
-          to: null,
-        });
-      }
-    }, [selectedDayRange]);
+    // useEffect(() => {
+    //   if (selectedDayRange.from && selectedDayRange.to) {
+    //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+    //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+    //     // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+    //     // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+    //     setQuery({
+    //       ...query,
+    //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+    //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+    //     });
+    //   }
+    //   if (selectedDayRange.clear) {
+    //     setQuery({
+    //       ...query,
+    //       from: null,
+    //       to: null,
+    //     });
+    //   }
+    // }, [selectedDayRange]);
 
     return (
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -184,7 +184,7 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
           <div className="flex items-center justify-between mb-10 mt-6 px-8">
             <div className="flex align-center justify-between w-3/4">
               <div className="flex align-center justify-between">
-                {showDatePicker ? (
+                {/* {showDatePicker ? (
                   <DatePickerModal
                     setSelectedDayRange={setSelectedDayRange}
                     selectedDayRange={selectedDayRange}
@@ -197,7 +197,7 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
                   from={selectedDayRange.from}
                   to={selectedDayRange.to}
                   setSelectedDayRange={setSelectedDayRange}
-                />
+                /> */}
               </div>
             </div>
 
