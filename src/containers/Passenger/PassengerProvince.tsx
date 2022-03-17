@@ -7,7 +7,7 @@ import OverviewRailPassengerStatusCardProvince from 'src/components/Pasengers/pr
 import OverviewSeaPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewSeaPasengersStatusCardProvince';
 import OverviewPasengersVaccinateComponentProvince from 'src/components/Pasengers/province/OverViewPassengerVaccinateProvince';
 import {sideCities} from 'src/helpers/utils';
-// import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Pasengers/province/OverviewPaasengersVaccinePerDosesProvince';
+import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Pasengers/province/OverviewPaasengersVaccinePerDosesProvince';
 import OverviewPatientsPassengersProvince from 'src/components/Pasengers/province/OverviewPatientsPassengersProvince';
 import OverviewMap from '../../components/Pasengers/province/OverviewMap';
 
@@ -40,7 +40,7 @@ const PasengerProvince = () => {
       <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle} />
       <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle} />
       <OverviewPasengersVaccinateComponentProvince cityTitle={cityTitle} />
-      {/* <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle} /> */}
+      <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle} />
       <OverviewPatientsPassengersProvince cityTitle={cityTitle} />
     </div>
   );
