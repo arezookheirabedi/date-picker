@@ -5,10 +5,10 @@ import OverviewAirPassengerStatusCardProvince from 'src/components/Pasengers/pro
 import OverviewLandPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewLandPasengersStatusCardProvince';
 import OverviewRailPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewRailPasengersStatusCardProvince';
 import OverviewSeaPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewSeaPasengersStatusCardProvince';
-// import OverviewPasengersVaccinateComponentProvince from 'src/components/Pasengers/province/OverViewPassengerVaccinateProvince';
+import OverviewPasengersVaccinateComponentProvince from 'src/components/Pasengers/province/OverViewPassengerVaccinateProvince';
 import {sideCities} from 'src/helpers/utils';
 // import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Pasengers/province/OverviewPaasengersVaccinePerDosesProvince';
-// import OverviewPatientsPassengersProvince from 'src/components/Pasengers/province/OverviewPatientsPassengersProvince';
+import OverviewPatientsPassengersProvince from 'src/components/Pasengers/province/OverviewPatientsPassengersProvince';
 import OverviewMap from '../../components/Pasengers/province/OverviewMap';
 
 const PasengerProvince = () => {
@@ -39,9 +39,9 @@ const PasengerProvince = () => {
       <OverviewLandPassengerStatusCardProvince cityTitle={cityTitle} />
       <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle} />
       <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle} />
-      {/* <OverviewPasengersVaccinateComponentProvince cityTitle={cityTitle} /> */}
-      {/*  <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle} />
-      <OverviewPatientsPassengersProvince cityTitle={cityTitle} /> */}
+      <OverviewPasengersVaccinateComponentProvince cityTitle={cityTitle} />
+      {/* <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle} /> */}
+      <OverviewPatientsPassengersProvince cityTitle={cityTitle} />
     </div>
   );
 };

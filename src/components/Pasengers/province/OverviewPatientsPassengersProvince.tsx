@@ -3,7 +3,7 @@ import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import TagsSelect from 'src/components/TagsSelect';
+// import TagsSelect from 'src/components/TagsSelect';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -42,9 +42,6 @@ const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersPro
     // type: 'MONTHLY',
     from: null,
     to: null,
-    category: 'grade',
-    categoryValue: null,
-    tag: 'edu',
   });
 
   const location = useLocation();
@@ -61,7 +58,7 @@ const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersPro
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.columnChartTestResultService(
+      const response = await hcsService.patientsAfterTrip(
         {...params, province},
         {
           cancelToken: source.token,
@@ -77,27 +74,6 @@ const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersPro
     }
   };
 
-  // const getLinearOverview = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   setIsCancel(false);
-  //   try {
-  //     const response = await hcsService.testResultTimeBased(params, {cancelToken: source.token});
-  //     setData(response.data);
-  //   } catch (error: any) {
-  //     if (error.message !== 'cancel') {
-  //       setErrorMessage(error.message);
-  //     }
-  //     if (error && error.message === 'cancel') {
-  //       setIsCancel(true);
-  //     }
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -110,16 +86,10 @@ const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersPro
     if (existsCity) {
       setProvinceTitle(provinceName);
       idSetTimeOut = setTimeout(() => {
-        // getLinearOverview({
-        //   organization: 'education',
-        //   ...queryParams,
-        //   tags: [...(queryParams.tags || []), `#province# استان ${provinceName}`].join(','),
-        //   // tags: ['#grade# دانش آموز پایه هشتم', `#province# استان ${provinceName}`].join(','),
-        // });
         getColumnChartTestResult(query, provinceName);
       }, 500);
     } else {
-      history.push('/dashboard/school/province');
+      history.push('/dashboard/passenger/province');
     }
 
     return () => {
@@ -211,13 +181,13 @@ const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersPro
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
-            <TagsSelect
+            {/* <TagsSelect
               placeholder="کل آموزش و پرورش"
               category="grade"
               tag="edu"
               setQueryParams={setQuery}
               queryParams={query}
-            />
+            /> */}
 
             <div className="flex align-center justify-between">
               {showDatePicker ? (
