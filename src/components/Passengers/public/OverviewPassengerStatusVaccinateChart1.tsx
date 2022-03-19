@@ -11,7 +11,7 @@ import Charts from '../../Charts';
 
 const {Stacked} = Charts;
 
-const OverViewPassengerStatusVacinateChart: React.FC<{}> = () => {
+const OverviewPassengerStatusVacinateChart: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
@@ -188,4 +188,4 @@ const OverViewPassengerStatusVacinateChart: React.FC<{}> = () => {
   );
 };
 
-export default OverViewPassengerStatusVacinateChart;
+export default OverviewPassengerStatusVacinateChart;

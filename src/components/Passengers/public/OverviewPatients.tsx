@@ -13,7 +13,7 @@ import Calendar from '../../Calendar';
 
 const {Line} = Charts;
 
-const OverviewPatients = () => {
+const OverviewPatients : React.FC<{}> = () => {
   const [data, setData] = useState([]);
   // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);

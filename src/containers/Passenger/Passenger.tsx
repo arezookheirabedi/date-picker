@@ -1,26 +1,26 @@
-import OverviewPasengersStatusCard from 'src/components/Pasengers/public/OverviewPasengersStatusCard';
-import OverviewAirlinesPasengersStatusCard from 'src/components/Pasengers/public/OverviewAirlinesPasengersStatusCard';
-import OverviewBusPasengersStatusCard from 'src/components/Pasengers/public/OverviewBusPasengersStatusCard';
-import OverviewShipPasengersStatusCard from 'src/components/Pasengers/public/OverviewShipPasengersStatusCard';
-import OverviewTrainPasengersStatusCard from 'src/components/Pasengers/public/OverviewTrainPasengersStatusCard';
+import OverviewPassengersStatusCard from 'src/components/Passengers/public/OverviewPassengersStatusCard';
+import OverviewAirlinesPassengersStatusCard from 'src/components/Passengers/public/OverviewAirlinesPassengersStatusCard';
+import OverviewBusPassengersStatusCard from 'src/components/Passengers/public/OverviewBusPassengersStatusCard';
+import OverviewShipPassengersStatusCard from 'src/components/Passengers/public/OverviewShipPassengersStatusCard';
+import OverviewTrainPassengersStatusCard from 'src/components/Passengers/public/OverviewTrainPassengersStatusCard';
 
-import OverviewPasengersVaccinateComponent from 'src/components/Pasengers/public/OverViewPassengerVaccinate';
-import OverviewPassengerPatients from 'src/components/Pasengers/public/OverviewPatients';
-import OverViowPassengerStatusVaccinateChart from '../../components/Pasengers/public/OverViewPassengerStatusVaccinateChart';
+import OverviewPassengersVaccinate from 'src/components/Passengers/public/OverviewPassengerVaccinate1';
+import OverviewPassengerPatients from 'src/components/Passengers/public/OverviewPatients';
+import OverViowPassengerStatusVaccinateChart from '../../components/Passengers/public/OverviewPassengerStatusVaccinateChart1';
 
-const Pasenger = () => {
+const Passenger = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewPasengersStatusCard />
-      <OverviewAirlinesPasengersStatusCard/>
-       <OverviewBusPasengersStatusCard/>
-     <OverviewTrainPasengersStatusCard/>
-      <OverviewShipPasengersStatusCard/> 
-       <OverviewPasengersVaccinateComponent /> 
-       <OverViowPassengerStatusVaccinateChart /> 
-       <OverviewPassengerPatients /> 
+      <OverviewPassengersStatusCard />
+      <OverviewAirlinesPassengersStatusCard />
+      <OverviewBusPassengersStatusCard />
+      <OverviewTrainPassengersStatusCard />
+      <OverviewShipPassengersStatusCard />
+      <OverviewPassengersVaccinate />
+      <OverViowPassengerStatusVaccinateChart />
+      <OverviewPassengerPatients />
     </div>
   );
 };
 
-export default Pasenger;
+export default Passenger;
