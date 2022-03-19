@@ -13,7 +13,6 @@ import Svg from '../../../components/Svg';
 import DotLoading from '../../../components/DotLoading';
 
 // import Checkbox from '../../../shared/Checkbox';
-import EPRIVATEROUTE from '../../../constants/PrivateRoute.enum';
 
 export enum EInputLogin {
   USERNAME = 'username',
@@ -77,7 +76,7 @@ export default function Login() {
       // );
       // eslint-disable-next-line
       console.log('you are logged in');
-      history.push(EPRIVATEROUTE.DASHBOARDTRANSPORTPUBLIC);
+      history.push("/dashboard/vaccination/public");
     } catch (error: any) {
       handleCaptcha();
       const {message} = error;

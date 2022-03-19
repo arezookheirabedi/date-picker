@@ -62,7 +62,7 @@ const TestStatus: React.FC<{}> = () => {
         from,
         to,
       });
-      console.log(data);
+      // console.log(data);
 
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {

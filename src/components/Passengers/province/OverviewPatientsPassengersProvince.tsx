@@ -1,38 +1,51 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
+// import TagsSelect from 'src/components/TagsSelect';
 import DatePickerModal from '../../DatePickerModal';
+// import calendar from '../../../assets/images/icons/calendar.svg';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-// import {toPersianDigit} from '../../../helpers/utils';
+import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import TagsSelect from '../../TagsSelect';
+
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
 const {Line} = Charts;
 
-const OverviewPatients = () => {
+interface OverviewPatientsPassengersProvinceProps {
+  cityTitle: any;
+}
+
+const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersProvinceProps> = ({
+  cityTitle,
+}) => {
   const [data, setData] = useState([]);
-  // const [serviceType, setServiceType] = useState(null) as any;
+  // eslint-disable-next-line
+  const [provinceTitle, setProvinceTitle] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
 
-  // const [queryParams, setQueryParams] = useState<IParams>({
-  //   status: 'POSITIVE',
-  //   type: 'MONTHLY',
-  //   from: '',
-  //   to: '',
-  //   tags: '',
-  // });
+  const [query, setQuery] = useState({
+    // status: 'POSITIVE',
+    // type: 'MONTHLY',
+    from: null,
+    to: null,
+  });
+
+  const location = useLocation();
+  const history = useHistory();
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -41,24 +54,16 @@ const OverviewPatients = () => {
     setShowDatePicker(true);
   };
 
-  const [query, setQuery] = useState({
-    // status: 'POSITIVE',
-    // type: 'MONTHLY',
-    from: null,
-    to: null,
-    category: 'grade',
-    categoryValue: null,
-    tag: 'edu',
-  });
-
-  const getColumnChartTestResult = async (params: any) => {
+  const getColumnChartTestResult = async (params: any, province: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.columnChartTestResultService(params, {
-        cancelToken: source.token,
-      });
-      // console.log(response.data);
+      const response = await hcsService.patientsAfterTrip(
+        {...params, province},
+        {
+          cancelToken: source.token,
+        }
+      );
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -69,32 +74,38 @@ const OverviewPatients = () => {
     }
   };
 
-  // const getLinearOverviewPublicTransport = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const response = await hcsService.testResultTimeBased(params, {cancelToken: source.token});
-  //     setData(response.data);
-  //   } catch (error: any) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      // getLinearOverviewPublicTransport({organization: 'education', ...queryParams});
-      getColumnChartTestResult(query);
-    }, 500);
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      setProvinceTitle(provinceName);
+      idSetTimeOut = setTimeout(() => {
+        getColumnChartTestResult(query, provinceName);
+      }, 500);
+    } else {
+      history.push('/dashboard/passenger/province');
+    }
 
     return () => {
-      setData([]);
-      source.cancel('Operation canceled by the user.');
-      clearTimeout(idSetTimeOut);
+      if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        clearTimeout(idSetTimeOut);
+      }
     };
-  }, [query]);
+  }, [query, location.search]);
+
+  useEffect(() => {
+    return () => {
+      setData([]);
+      setIsCancel(false);
+    };
+  }, [history]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -163,17 +174,20 @@ const OverviewPatients = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان آموزش و پرورش</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به مبتلا شدگان بعد از سفر در استان &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-between flex-grow px-8">
-            <TagsSelect
+            {/* <TagsSelect
               placeholder="کل آموزش و پرورش"
               category="grade"
               tag="edu"
               setQueryParams={setQuery}
               queryParams={query}
-            />
+            /> */}
 
             <div className="flex align-center justify-between">
               {showDatePicker ? (
@@ -192,8 +206,8 @@ const OverviewPatients = () => {
               />
             </div>
           </div>
-          {/* 
-          <RangeDateSliderFilter
+
+          {/* <RangeDateSliderFilter
             changeType={v =>
               setQueryParams({
                 ...queryParams,
@@ -206,14 +220,14 @@ const OverviewPatients = () => {
           /> */}
         </div>
 
-        {loading && (
+        {(loading || isCancel) && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+        {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data} />}
+        {data.length === 0 && !loading && !errorMessage && !isCancel && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
@@ -221,4 +235,4 @@ const OverviewPatients = () => {
   );
 };
 
-export default OverviewPatients;
+export default OverviewPatientsPassengersProvince;

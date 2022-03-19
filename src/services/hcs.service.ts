@@ -8,6 +8,43 @@ function membersGeneral({organization, tag, ...params}: any = {}, config?: any) 
     .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params, {...config});
 }
 
+function tripVaccinationGeneral({...params}: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/vaccines/general`, params, {...config});
+}
+
+function tripTestResultsGeneral({...params}: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/test-results/general`, params, {...config});
+}
+
+function tripVaccinationOverview(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/vaccines/category-based`, params, {...config});
+}
+
+function tripsCount(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/count`, params, {...config});
+}
+
+function patientsAfterTrip(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/test-results/unwell/after-trip/time-based`, params, {
+      ...config,
+    });
+}
+
 function membersTagBased(
   {
     organization,
@@ -152,6 +189,11 @@ function columnChartTestResultService(params: any = {}, config?: any) {
 
 const hcsService = {
   membersGeneral,
+  tripVaccinationGeneral,
+  tripTestResultsGeneral,
+  tripVaccinationOverview,
+  tripsCount,
+  patientsAfterTrip,
   membersTagBased,
   testResultTagBased,
   testResultTimeBased,

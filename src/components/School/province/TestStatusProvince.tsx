@@ -66,7 +66,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         to,
         province,
       });
-      console.log(data);
+      // console.log(data);
 
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {

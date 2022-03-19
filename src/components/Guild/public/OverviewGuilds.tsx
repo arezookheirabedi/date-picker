@@ -61,6 +61,7 @@ const OverviewGuilds: React.FC<{}> = () => {
         {tag: 'guild'},
         {cancelToken: cancelToken.token}
       );
+      
       if (res.status === 200) {
         const newData = {...guildVacinateInfo, ...res.data};
         setGuildVacinateInfo(newData);
@@ -126,7 +127,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           <Statistic
             icon={vaccineIcon}
             text="مجموع واکسیناسیون"
-            count={guildVacinateInfo.totalVaccinesCount}
+            count={guildVacinateInfo.gtDoses[0]||0}
             loading={loading}
           />
           <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={guildInquiry.total}  loading={inquiryLoading}/>
