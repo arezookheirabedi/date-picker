@@ -31,7 +31,7 @@ const filterTypes = [
   },
 ];
 
-const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
+const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
   const [datasetLoading, setDatasetLoading] = useState<any>([]);
   const [filterType, setFilterType] = useState({
     name: 'پیشفرض',
@@ -320,4 +320,4 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
   );
 };
 
-export default OverviewPasengersStatusVacsinateTable;
+export default OverviewPassengersStatusVacsinateTable;

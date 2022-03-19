@@ -1,6 +1,6 @@
 import React from 'react';
-import OverviewPasengersStatusVacsinateTable from './OverviewPasengersStatusVaccinateTable';
-import OverviewPassengerVaccinateCard from './OverviewPasengersVaccinateCard';
+import OverviewPassengersStatusVacsinateTable from './OverviewPassengersStatusVaccinateTable';
+import OverviewPassengerVaccinateCard from './OverviewPassengersVaccinateCard';
 
 interface OverviewPassengerVaccinateProps {
   cityTitle: any;
@@ -14,7 +14,7 @@ const OverviewPassengerVaccinate: React.FC<OverviewPassengerVaccinateProps> = ({
       </legend>
 
       <OverviewPassengerVaccinateCard />
-      <OverviewPasengersStatusVacsinateTable />
+      <OverviewPassengersStatusVacsinateTable />
     </fieldset>
   );
 };

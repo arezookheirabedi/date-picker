@@ -11,7 +11,7 @@ import Table from '../../../TableScope';
 import DatePickerModal from '../../../DatePickerModal';
 import Calendar from '../../../Calendar';
 
-const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
+const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
   // eslint-disable-next-line
   const [dataset, setDataset] = useState<any>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -209,4 +209,4 @@ const OverviewPasengersStatusVacsinateTable: React.FC<{}> = () => {
   );
 };
 
-export default OverviewPasengersStatusVacsinateTable;
+export default OverviewPassengersStatusVacsinateTable;

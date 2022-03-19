@@ -1,17 +1,17 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import OverviewPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewPasengersStatusCardProvince';
-import OverviewAirPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewAirPasengersStatusCardProvince';
-import OverviewLandPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewLandPasengersStatusCardProvince';
-import OverviewRailPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewRailPasengersStatusCardProvince';
-import OverviewSeaPassengerStatusCardProvince from 'src/components/Pasengers/province/OverviewSeaPasengersStatusCardProvince';
-import OverviewPasengersVaccinateComponentProvince from 'src/components/Pasengers/province/OverViewPassengerVaccinateProvince';
+import OverviewPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewPassengersStatusCardProvince';
+import OverviewAirPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewAirPassengersStatusCardProvince';
+import OverviewLandPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewLandPassengersStatusCardProvince';
+import OverviewRailPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewRailPassengersStatusCardProvince';
+import OverviewSeaPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewSeaPassengersStatusCardProvince';
+import OverviewPassengersVaccinateComponentProvince from 'src/components/Passengers/province/OverviewPassengerVaccinateProvince1';
 import {sideCities} from 'src/helpers/utils';
-import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Pasengers/province/OverviewPaasengersVaccinePerDosesProvince';
-import OverviewPatientsPassengersProvince from 'src/components/Pasengers/province/OverviewPatientsPassengersProvince';
-import OverviewMap from '../../components/Pasengers/province/OverviewMap';
+import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Passengers/province/OverviewPassengersVaccinePerDosesProvince';
+import OverviewPatientsPassengersProvince from 'src/components/Passengers/province/OverviewPatientsPassengersProvince';
+import OverviewMap from '../../components/Passengers/province/OverviewMap';
 
-const PasengerProvince = () => {
+const PassengerProvince = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
 
@@ -39,11 +39,11 @@ const PasengerProvince = () => {
       <OverviewLandPassengerStatusCardProvince cityTitle={cityTitle} />
       <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle} />
       <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle} />
-      <OverviewPasengersVaccinateComponentProvince cityTitle={cityTitle} />
+      <OverviewPassengersVaccinateComponentProvince cityTitle={cityTitle} />
       <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle} />
       <OverviewPatientsPassengersProvince cityTitle={cityTitle} />
     </div>
   );
 };
 
-export default PasengerProvince;
+export default PassengerProvince;

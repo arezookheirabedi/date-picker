@@ -1,6 +1,6 @@
 import React from 'react';
-import OverviewPasengersStatusVacsinateTable from './OverviewPasengersStatusVaccinateTable';
-import OverviewPassengerVaccinateCard from './OverviewPasengersVaccinateCard';
+import OverviewPassengersStatusVacsinateTable from './OverviewPassengersStatusVaccinateTable';
+import OverviewPassengerVaccinateCard from './OverviewPassengersVaccinateCard';
 
 const OverviewPassengerVaccinate: React.FC<{}> = () => {
   return (
@@ -8,7 +8,7 @@ const OverviewPassengerVaccinate: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به واکسیناسیون مسافران کل کشور</legend>
 
       <OverviewPassengerVaccinateCard />
-      <OverviewPasengersStatusVacsinateTable />
+      <OverviewPassengersStatusVacsinateTable />
     </fieldset>
   );
 };

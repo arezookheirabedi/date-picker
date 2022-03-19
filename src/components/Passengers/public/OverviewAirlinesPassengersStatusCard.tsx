@@ -24,7 +24,7 @@ import { IInitialPcrInfo, IInitialTotalVacinatelInfo, initialpcrInfo, initialTot
 
 
 
-const OverviewAirlinesPasengersStatusCard: React.FC<{}> = () => {
+const OverviewAirlinesPassengersStatusCard: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [ passengerPcrInfo, setPassengerPcrInfo] = useState<IInitialPcrInfo>(initialpcrInfo);
   const [pcrLoading, setPcrLoading] = useState<boolean>(false);
@@ -211,4 +211,4 @@ const OverviewAirlinesPasengersStatusCard: React.FC<{}> = () => {
   );
 };
 
-export default OverviewAirlinesPasengersStatusCard;
+export default OverviewAirlinesPassengersStatusCard;

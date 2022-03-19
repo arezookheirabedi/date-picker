@@ -42,7 +42,7 @@ const initialTestResults = {
   positiveMembersCountAfterTripToTotalPopulationPercentage: 0,
 };
 
-const OverviewAirPasengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
+const OverviewLandPassengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [testResultloading, setTestResultloading] = useState(false);
@@ -57,7 +57,7 @@ const OverviewAirPasengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
     setLoading(true);
     try {
       const {data} = await hcsService.tripVaccinationGeneral(
-        {province, type: 'AIRPLANE'},
+        {province, type: 'BUS'},
         {cancelToken: source.token}
       );
       setNumberOf({...data});
@@ -72,7 +72,7 @@ const OverviewAirPasengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
     setTestResultloading(true);
     try {
       const {data} = await hcsService.tripTestResultsGeneral(
-        {province, type: 'AIRPLANE'},
+        {province, type: 'BUS'},
         {cancelToken: source.token}
       );
       // console.log(data);
@@ -89,7 +89,7 @@ const OverviewAirPasengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
     setLoading(true);
     try {
       const {data} = await hcsService.tripsCount(
-        {province, type: 'AIRPLANE'},
+        {province, type: 'BUS'},
         {cancelToken: source.token}
       );
       setTripCount(data.count);
@@ -128,7 +128,7 @@ const OverviewAirPasengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="passenger-overview">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت مسافران هوایی در استان &nbsp; {cityTitle}
+        نگاه کلی به وضعیت مسافران زمینی در استان &nbsp; {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
@@ -251,4 +251,4 @@ const OverviewAirPasengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
   );
 };
 
-export default OverviewAirPasengersStatusCardProvince;
+export default OverviewLandPassengersStatusCardProvince;
