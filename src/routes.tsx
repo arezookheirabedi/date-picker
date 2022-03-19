@@ -3,8 +3,8 @@ import React from 'react';
 import {IRoute} from './models/route';
 import {IconWrapperStyle} from './components/IconWrapper';
 import Overview from './containers/Overview/Overview';
-import Guild from './containers/Guild/Guild';
-import GuildProvince from './containers/Guild/GuildProvince';
+import GuildOwner from './containers/Guild/GuildOwner';
+import GuildOwnerProvince from './containers/Guild/GuildOwnerProvince';
 import GuildMonitoring from './containers/Guild/GuildMonitoring';
 import Transport from './containers/Transport/Transport';
 import TransportProvince from './containers/Transport/TransportProvince';
@@ -18,6 +18,9 @@ import ReportsRequested from './containers/Reports';
 import Vaccination from './containers/Vaccination/Vaccination';
 import VaccinationProvince from './containers/Vaccination/VaccinationProvince';
 import Citizens from './containers/Citizens/Citizens';
+import PassengerProvince from './containers/Passenger/PassengerProvince';
+import GuildEmployee from './containers/Guild/GuildEmployee';
+import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 
 const routes: IRoute[] = [
   {
@@ -109,7 +112,7 @@ const routes: IRoute[] = [
     icon: (active, disabled) => (
       <IconWrapperStyle name="guild" active={active} disabled={disabled} />
     ),
-    link: '/dashboard/guild/public',
+    link: '/dashboard/guild/owner/public',
     simLink: '/dashboard/guild',
     exact: true,
     inMenu: true,
@@ -118,17 +121,49 @@ const routes: IRoute[] = [
     subMenu: [
       {
         keyIndex: '1',
-        title: 'عمومی',
-        link: '/dashboard/guild/public',
+        title: 'مالکان واحدهای صنفی',
+        simLink: '/dashboard/guild/owner',
+        link: '/dashboard/guild/owner/public',
         icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-        main: Guild,
+        children: [
+          {
+            keyIndex: '1',
+            title: 'عمومی',
+            link: '/dashboard/guild/owner/public',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main: GuildOwner,
+          },
+          {
+            keyIndex: '2',
+            title: 'استانی',
+            link: '/dashboard/guild/owner/province',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main: GuildOwnerProvince,
+          },
+        ],
       },
       {
         keyIndex: '2',
-        title: 'استانی',
-        link: '/dashboard/guild/province',
+        title: 'کارکنان واحدهای صنفی',
+        link: '/dashboard/guild/employee/public',
+        simLink: '/dashboard/guild/employee',
         icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
-        main: GuildProvince,
+        children: [
+          {
+            keyIndex: '1',
+            title: 'عمومی',
+            link: '/dashboard/guild/employee/public',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main: GuildEmployee,
+          },
+          {
+            keyIndex: '2',
+            title: 'استانی',
+            link: '/dashboard/guild/employee/province',
+            icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+            main: GuildEmployeeProvince,
+          },
+        ],
       },
       {
         keyIndex: '3',
@@ -144,12 +179,28 @@ const routes: IRoute[] = [
     icon: (active, disabled) => (
       <IconWrapperStyle name="passenger" active={active} disabled={disabled} />
     ),
-    link: '/dashboard/passenger',
+    link: '/dashboard/passenger/public',
+    simLink: '/dashboard/passenger',
     exact: true,
     inMenu: true,
     title: 'مسافران',
-    disabled: true,
-    main: Passenger,
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'عمومی',
+        link: '/dashboard/passenger/public',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: Passenger,
+      },
+      {
+        keyIndex: '2',
+        title: 'استانی',
+        link: '/dashboard/passenger/province',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: PassengerProvince,
+      },
+    ],
+    // main: Passenger,
   },
   {
     keyIndex: '7',
