@@ -5,7 +5,7 @@ import OverviewAirPassengerStatusCardProvince from 'src/components/Passengers/pr
 import OverviewLandPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewLandPassengersStatusCardProvince';
 import OverviewRailPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewRailPassengersStatusCardProvince';
 import OverviewSeaPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewSeaPassengersStatusCardProvince';
-import OverviewPassengersVaccinateComponentProvince from 'src/components/Passengers/province/OverviewPassengerVaccinateProvince1';
+import OverviewPassengersVaccinateComponentProvince from 'src/components/Passengers/province/OverviewPassengerVaccinateProvince';
 import {sideCities} from 'src/helpers/utils';
 import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Passengers/province/OverviewPassengersVaccinePerDosesProvince';
 import OverviewPatientsPassengersProvince from 'src/components/Passengers/province/OverviewPatientsPassengersProvince';
