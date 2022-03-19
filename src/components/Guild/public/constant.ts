@@ -1,10 +1,13 @@
+export const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+
 export const initialVacinatelInfo = {
-  totalVaccinesCount: 0,
   totalPopulation: 0,
+  gtDoses: {...initialDoses},
+
 };
 export interface IInitialVacinatelInfo {
-  totalVaccinesCount: number;
   totalPopulation: number;
+  gtDoses:any,
 }
 export const initialPcrInfo = {
   positiveMembersCount:0,

@@ -141,7 +141,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
           <Statistic
             icon={vaccineIcon}
             text="مجموع واکسیناسیون"
-            count={guildVacinateInfo.totalVaccinesCount}
+            count={guildVacinateInfo.gtDoses[0]||0}
             loading={loading}
           />
 
