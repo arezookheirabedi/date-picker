@@ -4,9 +4,9 @@ import OverviewBusPassengersStatusCard from 'src/components/Passengers/public/Ov
 import OverviewShipPassengersStatusCard from 'src/components/Passengers/public/OverviewShipPassengersStatusCard';
 import OverviewTrainPassengersStatusCard from 'src/components/Passengers/public/OverviewTrainPassengersStatusCard';
 
-import OverviewPassengersVaccinate from 'src/components/Passengers/public/OverviewPassengerVaccinate1';
+import OverviewPassengersVaccinate from 'src/components/Passengers/public/OverviewPassengerVaccinate';
 import OverviewPassengerPatients from 'src/components/Passengers/public/OverviewPatients';
-import OverViowPassengerStatusVaccinateChart from '../../components/Passengers/public/OverviewPassengerStatusVaccinateChart1';
+import OverViowPassengerStatusVaccinateChart from '../../components/Passengers/public/OverviewPassengerStatusVaccinateChart';
 
 const Passenger = () => {
   return (

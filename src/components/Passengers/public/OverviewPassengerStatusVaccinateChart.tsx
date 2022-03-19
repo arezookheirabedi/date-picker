@@ -25,7 +25,6 @@ const OverviewPassengerStatusVacinateChart: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-
   // eslint-disable-next-line
   const getLinearOverview = async () => {
     setLoading(true);
@@ -128,15 +127,12 @@ const OverviewPassengerStatusVacinateChart: React.FC<{}> = () => {
     };
   }, []);
 
-
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون مسافران</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="flex align-center justify-between w-3/4">
-{/* <span>kkkk</span> */}
-          </div>
+          <div className="flex align-center justify-between w-3/4">{/* <span>kkkk</span> */}</div>
 
           <div className="w-2/4">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
