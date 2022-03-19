@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-// import {useLocation} from "react-router-dom";
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/School/province/OverviewMap';
 // import OverviewProvince from '../../components/School/province/OverviewProvince';
