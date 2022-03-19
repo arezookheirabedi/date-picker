@@ -119,10 +119,9 @@ const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
   useEffect(() => {
     return () => {
       // setCounts({});
-      // setDataset([]);
       setDataset([]);
       setOrgDataset([]);
-      setFilterType({name: 'کمترین', enName: 'LOWEST'});
+      setFilterType({name: 'پیشفرض', enName: ''});
       source.cancel('Operation canceled by the user.');
     };
   }, [history]);

@@ -198,9 +198,9 @@ const OverviewAirPassengersStatusCardProvince: React.FC<any> = ({cityTitle}) => 
             loading={false}
           />
           <Statistic
-            infoText="      "
+            infoText=""
             icon={grayBaggage}
-            text="مجموع سفر های صورت گرفته"
+            text="مجموع سفرهای صورت گرفته"
             count={tripCount}
             loading={false}
           />
