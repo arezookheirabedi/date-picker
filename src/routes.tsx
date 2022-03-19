@@ -18,6 +18,7 @@ import ReportsRequested from './containers/Reports';
 import Vaccination from './containers/Vaccination/Vaccination';
 import VaccinationProvince from './containers/Vaccination/VaccinationProvince';
 import Citizens from './containers/Citizens/Citizens';
+import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 
@@ -178,12 +179,28 @@ const routes: IRoute[] = [
     icon: (active, disabled) => (
       <IconWrapperStyle name="passenger" active={active} disabled={disabled} />
     ),
-    link: '/dashboard/passenger',
+    link: '/dashboard/passenger/public',
+    simLink: '/dashboard/passenger',
     exact: true,
     inMenu: true,
     title: 'مسافران',
-    disabled: true,
-    main: Passenger,
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'عمومی',
+        link: '/dashboard/passenger/public',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: Passenger,
+      },
+      {
+        keyIndex: '2',
+        title: 'استانی',
+        link: '/dashboard/passenger/province',
+        icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
+        main: PassengerProvince,
+      },
+    ],
+    // main: Passenger,
   },
   {
     keyIndex: '7',

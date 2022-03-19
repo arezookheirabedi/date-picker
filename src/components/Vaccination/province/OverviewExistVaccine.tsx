@@ -22,15 +22,15 @@ const OverviewExistVaccine: React.FC<OverviewExistVaccineProps> = ({cityTitle}) 
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={astrazeneca} text="واکسن آسترازنکا" count={0} loading={false} />
-          <Statistic icon={sinopharm} text="واکسن سینوفارم" count={0} loading={false} />
-          <Statistic icon={covaxin} text="واکسن کوواکسین" count={0} loading={false} />
+          <Statistic icon={astrazeneca} text="واکسن آسترازنکا" count="-" loading={false} />
+          <Statistic icon={sinopharm} text="واکسن سینوفارم" count="-" loading={false} />
+          <Statistic icon={covaxin} text="واکسن کوواکسین" count="-" loading={false} />
           <Statistic icon={barekat} text="واکسن برکت" count="-" loading={false} />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={sputnik} text="واکسن اسپوتینک" count={342} loading={false} />
-          <Statistic icon={spikogen} text="واکسن اسپایکوژن" count={342} loading={false} />
-          <Statistic icon={NavyVaccine} text="-" count={342} loading={false} />
+          <Statistic icon={sputnik} text="واکسن اسپوتینک" count="-" loading={false} />
+          <Statistic icon={spikogen} text="واکسن اسپایکوژن" count="-" loading={false} />
+          <Statistic icon={NavyVaccine} text="-" count="-" loading={false} />
           <Statistic icon={NavyVaccine} text="درصد افراد با دوز سوم" count="-" />
         </div>
       </div>

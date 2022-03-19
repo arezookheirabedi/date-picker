@@ -91,7 +91,7 @@ const OverviewVaccinationStatus: React.FC<OverviewVaccinationStatusProps> = ({ci
           <Statistic
             icon={GreenVaccine}
             text="تعداد کل واکسیناسیون"
-            count={numberOf.totalVaccinesCount || 0}
+            count={numberOf.gtDoses[0] || 0}
             loading={loading}
           />
           <Statistic

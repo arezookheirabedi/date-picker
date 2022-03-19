@@ -16,7 +16,7 @@ Highcharts.setOptions({
     thousandsSep: ',',
   },
 });
-const Line: React.FC<any> = ({data}) => {
+const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
   const [options, setOptions] = useState({
     chart: {
       type: 'column',
@@ -36,7 +36,7 @@ const Line: React.FC<any> = ({data}) => {
     categories: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12'],
     colors: ['#ff0000', '#000000', '#AB0A0A'],
     plotOptions: {
-      line: {
+      column: {
         marker: {
           enabled: false,
           states: {
@@ -55,12 +55,15 @@ const Line: React.FC<any> = ({data}) => {
           },
         },
         lineWidth: 2,
+        threshold: null,
+        borderRadius: borderRadius || 0,
+        pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
           },
         },
-        threshold: null,
+        
       },
     },
     yAxis: {
