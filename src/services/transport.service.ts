@@ -122,7 +122,7 @@ function fetchRequestedReports(params: any, config: any) {
     );
 }
 
-function requestReport(params: { from: string; to: string }) {
+function requestReport(params: any) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000 })
     .build()

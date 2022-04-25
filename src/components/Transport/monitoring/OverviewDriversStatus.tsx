@@ -2,18 +2,18 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 // @ts-ignore
-import moment from 'moment-jalaali';
-import {useLocation, useHistory} from 'react-router-dom';
-import qs from 'qs';
-import {Menu} from '@headlessui/react';
+// import moment from 'moment-jalaali';
+import {useLocation} from 'react-router-dom';
+// import qs from 'qs';
+// import {Menu} from '@headlessui/react';
 import transportService from 'src/services/transport.service';
 import Table from '../../Table';
 import ExportButton from '../../Export/ExportButton';
-import DatePickerModal from '../../DatePickerModal';
+// import DatePickerModal from '../../DatePickerModal';
 import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
-import calendar from '../../../assets/images/icons/calendar.svg';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
+// import calendar from '../../../assets/images/icons/calendar.svg';
+// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+// import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
 import Spinner from '../../Spinner';
 
 interface OverviewDriverStatusProps {
@@ -24,15 +24,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   const {search} = useLocation();
   // const location = useLocation();
   const queryStringParams = new URLSearchParams(search);
-  const history = useHistory();
-
-  const [exportType, setExportType] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -42,29 +38,10 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
 
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+
+
 
   const getOverviewTransportReport = async (params: any) => {
     // setErrorMessage(null);
@@ -109,43 +86,43 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     };
   }, [location.search]);
 
-  useEffect(() => {
-    let latestQuery: any = {};
+  // useEffect(() => {
+  //   let latestQuery: any = {};
 
-    if (search && search.length > 1) {
-      latestQuery = JSON.parse(
-        // eslint-disable-next-line
-        '{"' +
-          decodeURI((search || ' ').substring(1))
-            .replace(/"/g, '\\"')
-            .replace(/&/g, '","')
-            .replace(/=/g, '":"') +
-          '"}'
-      );
-    }
+  //   if (search && search.length > 1) {
+  //     latestQuery = JSON.parse(
+  //       // eslint-disable-next-line
+  //       '{"' +
+  //         decodeURI((search || ' ').substring(1))
+  //           .replace(/"/g, '\\"')
+  //           .replace(/&/g, '","')
+  //           .replace(/=/g, '":"') +
+  //         '"}'
+  //     );
+  //   }
 
-    if (!loading && selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      history.push(
-        `/dashboard/transport/monitoring?${qs.stringify({
-          ...latestQuery,
-          page: 1,
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        })}`
-      );
-    } else {
-      history.push(
-        `/dashboard/transport/monitoring?${qs.stringify({
-          ...latestQuery,
-          page: 1,
-          from: null,
-          to: null,
-        })}`
-      );
-    }
-  }, [selectedDayRange]);
+  //   if (!loading && selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     history.push(
+  //       `/dashboard/transport/monitoring?${qs.stringify({
+  //         ...latestQuery,
+  //         page: 1,
+  //         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       })}`
+  //     );
+  //   } else {
+  //     history.push(
+  //       `/dashboard/transport/monitoring?${qs.stringify({
+  //         ...latestQuery,
+  //         page: 1,
+  //         from: null,
+  //         to: null,
+  //       })}`
+  //     );
+  //   }
+  // }, [selectedDayRange]);
 
   useEffect(() => {
     const qst = new URLSearchParams(search);
@@ -155,8 +132,8 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
       pageNumber: Number(qst.get('page') || '1') - 1,
       pageSize: 20,
       sort: 'ASC',
-      from: qst.get('from'),
-      to: qst.get('to'),
+      // from: qst.get('from'),
+      // to: qst.get('to'),
     };
 
     if (qst.has('provinceName')) query = {...query, province: qst.get('provinceName')};
@@ -178,20 +155,20 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     getOverviewTransportReport(query);
   }, [search]);
 
-  useEffect(() => {
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  }, [cityTitle]);
+  // useEffect(() => {
+  //   setSelectedDayRange({
+  //     from: null,
+  //     to: null,
+  //   });
+  // }, [cityTitle]);
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+  // const clearSelectedDayRange = (e: any) => {
+  //   e.stopPropagation();
+  //   setSelectedDayRange({
+  //     from: null,
+  //     to: null,
+  //   });
+  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
@@ -203,18 +180,18 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
         <div className="inline-flex">
           <ExportButton
             params={{
-              from: selectedDayRange.from
-                ? moment(
-                    `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
-                : null,
-              to: selectedDayRange.to
-                ? moment(
-                    `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
-                : null,
+              // from: selectedDayRange.from
+              //   ? moment(
+              //       `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
+              //       'jYYYY/jM/jD'
+              //     ).format('YYYY-MM-DD')
+              //   : null,
+              // to: selectedDayRange.to
+              //   ? moment(
+              //       `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
+              //       'jYYYY/jM/jD'
+              //     ).format('YYYY-MM-DD')
+              //   : null,
               healthStatusSet: ['POSITIVE'],
               reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${
                 cityTitle ? `استان ${cityTitle}` : ''
@@ -223,7 +200,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
           />
         </div>
 
-        <div className="flex items-center space-x-6 rtl:space-x-reverse">
+        {/* <div className="flex items-center space-x-6 rtl:space-x-reverse">
           <Menu
             as="div"
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
@@ -242,7 +219,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
               <div className="px-1 py-1 ">
                 {['PDF', 'CSV'].map((value: any, index: any) => {
                   return (
-                    // eslint-disable-next-line
+                   
                     <React.Fragment key={index}>
                       <Menu.Item>
                         {({active}) => (
@@ -253,7 +230,6 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                             } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                             onClick={() => setExportType(value)}
                           >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                             {value}
                           </button>
                         )}
@@ -337,7 +313,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {loading ? (
