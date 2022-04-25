@@ -1,16 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
-import moment from 'moment-jalaali';
-import {Menu} from '@headlessui/react';
-// import transportService from 'src/services/transport.service';
+// import moment from 'moment-jalaali';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import DatePickerModal from '../../DatePickerModal';
 import {toPersianDigit} from '../../../helpers/utils';
-import calendar from '../../../assets/images/icons/calendar.svg';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
 import Spinner from '../../Spinner';
 
 interface OverviewPositiveProps {
@@ -18,46 +12,25 @@ interface OverviewPositiveProps {
 }
 
 const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
-  const [exportType, setExportType] = useState(null);
+  // const [exportType, setExportType] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [currentPage, setCurrenntPage] = useState(1);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
   const {CancelToken} = axios;
   // eslint-disable-next-line
   const source = CancelToken.source();
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+ 
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
 
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
 
   const getOverviewReport = async (params: any) => {
     setErrorMessage(null);
@@ -99,41 +72,17 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
         pageSize: 20,
         sort: 'ASC',
       };
-
-      if (selectedDayRange.from && selectedDayRange.to) {
-        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
         query = {
           ...query,
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         };
-      } else {
-        query = {
-          ...query,
-          from: null,
-          to: null,
-        };
-      }
+      
 
       setLoading(true);
       getOverviewReport(query);
     }
-
-    //   return () => {
-    //     source.cancel('Operation canceled by the user.');
-    //     setDataSet([]);
-    //     setTotalItems(0);
-    //     setLoading(false);
-    //   };
-  }, [selectedDayRange, currentPage]);
+  }, [ currentPage]);
 
   useEffect(() => {
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
     setCurrenntPage(1);
   }, [cityTitle]);
 
@@ -141,13 +90,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
     setCurrenntPage(page);
   }
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
+
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
@@ -159,18 +102,18 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
         <div className="inline-flex">
           <ExportButton
             params={{
-              from: selectedDayRange.from
-                ? moment(
-                    `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
-                : null,
-              to: selectedDayRange.to
-                ? moment(
-                    `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
-                : null,
+              // from: selectedDayRange.from
+              //   ? moment(
+              //       `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
+              //       'jYYYY/jM/jD'
+              //     ).format('YYYY-MM-DD')
+              //   : null,
+              // to: selectedDayRange.to
+              //   ? moment(
+              //       `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
+              //       'jYYYY/jM/jD'
+              //     ).format('YYYY-MM-DD')
+              //   : null,
               healthStatusSet: ['POSITIVE'],
               reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
                 cityTitle ? `استان ${cityTitle}` : ''
@@ -179,7 +122,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
           />
         </div>
 
-        <div className="flex items-center space-x-6 rtl:space-x-reverse">
+        {/* <div className="flex items-center space-x-6 rtl:space-x-reverse">
           <Menu
             as="div"
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
@@ -198,7 +141,6 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
               <div className="px-1 py-1 ">
                 {['PDF', 'CSV'].map((value: any, index: any) => {
                   return (
-                    // eslint-disable-next-line
                     <React.Fragment key={index}>
                       <Menu.Item>
                         {({active}) => (
@@ -209,7 +151,6 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
                             } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                             onClick={() => setExportType(value)}
                           >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                             {value}
                           </button>
                         )}
@@ -293,9 +234,8 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
-
       {loading ? (
         <div className="p-20">
           <Spinner />

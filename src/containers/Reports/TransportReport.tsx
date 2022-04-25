@@ -3,8 +3,6 @@ import {useHistory, useLocation} from 'react-router-dom';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import transportService from 'src/services/transport.service';
-import DatePickerModal from '../../components/DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
 import download from '../../assets/images/icons/download.svg';
 import Table from '../../components/Table';
 import {toPersianDigit} from '../../helpers/utils';
@@ -17,7 +15,6 @@ const TransportReport: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   // const [totalItems, setTotalItems] = useState(0);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -27,29 +24,9 @@ const TransportReport: React.FC<{}> = () => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
 
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+
 
   async function fetchReports(params: any) {
     setLoading(true);
@@ -117,21 +94,14 @@ const TransportReport: React.FC<{}> = () => {
     }
   }
 
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <>
       <fieldset className="text-center border rounded-xl p-1 mb-16">
         <legend className="text-black mx-auto px-3"> لیست گزارش حمل و نقل</legend>
 
-        <div className="flex align-center justify-between mb-8">
-          <div className="flex align-center justify-start">
+        <div className="flex align-center justify-end mb-8">
+          {/* <div className="flex align-center justify-start">
             {showDatePicker ? (
               <DatePickerModal
                 setSelectedDayRange={setSelectedDayRange}
@@ -203,7 +173,7 @@ const TransportReport: React.FC<{}> = () => {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="flex align-center">
             <div className="relative inline-flex align-center leading-3">
               <svg

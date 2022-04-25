@@ -9,8 +9,8 @@ import DotLoading from '../DotLoading';
 // eslint-disable-next-line react/prop-types
 const ExportButton: React.FC<{
   params: {
-    from: string;
-    to: string;
+    // from: string;
+    // to: string;
     healthStatusSet: Array<'POSITIVE' | 'NEGATIVE' | 'UNKNOWN' | ''>;
     province?: string;
     reportName?: string;
@@ -43,12 +43,14 @@ const ExportButton: React.FC<{
   };
 
   const openModal: () => void = () => {
-    if (params.from !== null && params.to !== null) {
-      requestExport();
+    // if (params.from !== null && params.to !== null) {
+    //   requestExport();
+    //   setIsOpen(true);
+    // } else {
+    //   toast.warn('مقدار تاریخ انتخاب نشده است');
+    // }
+    requestExport();
       setIsOpen(true);
-    } else {
-      toast.warn('مقدار تاریخ انتخاب نشده است');
-    }
   };
 
   const handleOtpChange = (otpValue: any) => {
