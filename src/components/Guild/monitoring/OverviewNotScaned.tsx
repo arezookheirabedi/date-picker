@@ -102,7 +102,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
           id: `ovca_${index}`,
           categoryCode: item.categoryCode || 'نامشخص',
           guildCode: item.guildCode || 'نامشخص',
-          ownerMobileNumber: item.ownerMobileNumber||"09112356541" ,
+          ownerMobileNumber: item.ownerMobileNumber,
           ownerNationalId: item.ownerNationalId || 'نامشخص',
           categoryName: item.categoryName || 'نامشخص',
           address: item.address || 'نامشخص',
