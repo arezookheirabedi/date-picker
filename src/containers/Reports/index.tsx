@@ -1,4 +1,5 @@
 import React from 'react';
+import GuildReport from './GuildReport';
 
 import TransportReport from './TransportReport';
 
@@ -11,6 +12,7 @@ const Requested: React.FC<{}> = () => {
         <legend className="text-black mx-auto px-3">لیست درخواست دانلود گزارش</legend>
 
      <TransportReport/>
+     <GuildReport/>
       </fieldset>
     </>
   );
