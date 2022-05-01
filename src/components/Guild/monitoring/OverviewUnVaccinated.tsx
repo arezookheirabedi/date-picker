@@ -3,7 +3,7 @@ import axios from 'axios';
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import {cancelTokenSource, msgRequestCanceled,toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import HiddenMobileNumber from './HiddenMobileNumber';
 
@@ -26,8 +26,6 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
 
   const pageSize = 1;
 
- 
-
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
@@ -46,7 +44,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
           id: `ovca_${index}`,
           categoryCode: item.categoryCode || 'نامشخص',
           guildCode: item.guildCode || 'نامشخص',
-          ownerMobileNumber: item.ownerMobileNumber,
+          ownerMobileNumber: item.ownerMobileNumber||"098765",
           ownerNationalId: item.ownerNationalId || 'نامشخص',
           categoryName: item.categoryName || 'نامشخص',
           address: item.address || 'نامشخص',
@@ -84,10 +82,9 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
-     <legend className="text-black mx-auto px-3">
+      <legend className="text-black mx-auto px-3">
         واحد‌های صنفی بدون واکسیناسیون {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
-
 
       <div className="flex justify-between items-center mb-8">
         <div className="inline-flex">
@@ -112,7 +109,6 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
             }}
           />
         </div>
-
       </div>
 
       {loading ? (
@@ -128,34 +124,33 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
               pagination={{pageSize, currentPage}}
               columns={[
                 {
-                  name: "ردیف",
-                  key: "",
+                  name: 'ردیف',
+                  key: '',
                   render: (v: any, record, index: number) => (
                     <div className="flex w-full justify-center">
                       {toPersianDigit(((currentPage - 1) * pageSize + (index + 1)).toString())}.
                     </div>
                   ),
                 },
-    
 
                 {
                   name: 'شماره پروانه',
                   key: 'guildCode',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.guildCode)}</span>
                   ),
                 },
                 {
                   name: 'کد ISIC',
                   key: 'categoryCode',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.categoryCode)}</span>
                   ),
                 },
                 {
                   name: 'کد ملی مالک',
                   key: 'ownerNationalId',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.ownerNationalId)}</span>
                   ),
                 },
@@ -170,12 +165,14 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
                 {
                   name: 'شماره موبایل',
                   key: 'ownerMobileNumber',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                
-                     {record.ownerMobileNumber? <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)}/>:"نامشخص"}
-                      
-                      </span>
+                      {record.ownerMobileNumber ? (
+                        <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)} />
+                      ) : (
+                        'نامشخص'
+                      )}
+                    </span>
                   ),
                 },
               ]}
@@ -184,6 +181,13 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
           </div>
         </>
       )}
+      <div className="border-t-4 my-4 py-4 flec justify-center items-center">
+        <div className=" inline-flex  p-4 border rounded-lg  unVaccinated-count-wrapper" >
+          <span className="text">جمع کل واحد های صنفی بدون واکسیناسیون:</span>
+          <span className="px-1 count">{toPersianDigit(totalItems.toString())}</span>
+          <span className="count">واحد صنفی</span>
+        </div>
+      </div>
     </fieldset>
   );
 };
