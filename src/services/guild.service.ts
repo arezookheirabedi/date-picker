@@ -146,6 +146,14 @@ function guildInquiry({ ...params }: any = {}, config?: any){
   .build()
   .get(`/api/v1/guilds/visit-histories/general/count`, params, { ...config });
 }
+
+function guildOverviewNotScan({ reportType, ...params }: any = {},config?:any):Promise<AxiosResponse<any>> {
+  return request
+  .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+  .build()
+  .get(`/api/v1/guilds/reports/types/${reportType}`, params, { ...config });
+}
+
 export default {
   registerGuild,
   registerWorkshop,
@@ -162,5 +170,6 @@ export default {
   dosesTagBased,
   guildOverviewByCategory,
   guildTestResultByCategory,
-  guildInquiry
+  guildInquiry,
+  guildOverviewNotScan
 };
