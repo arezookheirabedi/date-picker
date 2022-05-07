@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-// import OverviewNotScaned from 'src/components/Guild/monitoring/OverviewNotScaned';
-// import OverviewPositive from 'src/components/Guild/monitoring/OverviewPositive';
+import OverviewNotScaned from 'src/components/Guild/monitoring/OverviewNotScaned';
+import OverviewPositive from 'src/components/Guild/monitoring/OverviewPositive';
 import OverviewUnVaccinated from 'src/components/Guild/monitoring/OverviewUnVaccinated';
 import OverviewMap from 'src/components/Guild/monitoring/OverviewMap';
 import {sideCities} from 'src/helpers/utils';
@@ -30,8 +30,8 @@ const GuildMonitoring = () => {
         sideCityStatus={sideCities}
         destinationId="guild-overview"
       />
-      {/* <OverviewNotScaned cityTitle={cityTitle} />
-      <OverviewPositive cityTitle={cityTitle} /> */}
+      <OverviewNotScaned cityTitle={cityTitle} />
+      <OverviewPositive cityTitle={cityTitle} /> 
       <OverviewUnVaccinated cityTitle={cityTitle} />
     </div>
   );

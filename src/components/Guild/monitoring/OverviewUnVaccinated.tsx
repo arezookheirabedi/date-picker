@@ -44,7 +44,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
           id: `ovca_${index}`,
           categoryCode: item.categoryCode || 'نامشخص',
           guildCode: item.guildCode || 'نامشخص',
-          ownerMobileNumber: item.ownerMobileNumber||"098765",
+          ownerMobileNumber: item.ownerMobileNumber,
           ownerNationalId: item.ownerNationalId || 'نامشخص',
           categoryName: item.categoryName || 'نامشخص',
           address: item.address || 'نامشخص',
@@ -61,13 +61,19 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
     }
   };
 
+useEffect(() => {setCurrenntPage(0)},[cityTitle])
+
+
+
   useEffect(() => {
+
     const params: any = {
       pageNumber: Number(currentPage) - 1,
       pageSize,
       sort: 'ASC',
-      reportType: 'NON_VISITED',
+      reportType: 'NON_VACCINES',
       province: cityTitle,
+      guildType:null
     };
     getOverviewUnVaccinated(params);
     return () => {
