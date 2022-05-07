@@ -3,7 +3,7 @@ import axios from 'axios';
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource,  msgRequestCanceled,  toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import HiddenMobileNumber from './HiddenMobileNumber';
 
@@ -35,7 +35,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await guildService.guildOverviewNotScan(params, {
+      const {data} = await guildService.guildOverview(params, {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];
@@ -128,6 +128,7 @@ useEffect(() => {setCurrenntPage(0)},[cityTitle])
               handlePageChange={handlePageChange}
               dataSet={[...dataSet]}
               pagination={{pageSize, currentPage}}
+              totalItems={totalItems}
               columns={[
                 {
                   name: 'ردیف',
@@ -182,7 +183,7 @@ useEffect(() => {setCurrenntPage(0)},[cityTitle])
                   ),
                 },
               ]}
-              totalItems={totalItems}
+              
             />
           </div>
         </>
