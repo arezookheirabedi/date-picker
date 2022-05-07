@@ -41,7 +41,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await guildService.guildOverviewNotScan(params, {
+      const {data} = await guildService.guildOverview(params, {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];
