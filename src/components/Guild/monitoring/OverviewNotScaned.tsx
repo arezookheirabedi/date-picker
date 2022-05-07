@@ -118,6 +118,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       setLoading(false);
     }
   };
+  useEffect(() => {setCurrenntPage(0)},[cityTitle])
 
   useEffect(() => {
     const params: any = {
@@ -126,6 +127,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       sort: 'ASC',
       reportType: 'NON_VISITED',
       province: cityTitle,
+      guildType:null
     };
     getOverviewReport(params);
     return () => {

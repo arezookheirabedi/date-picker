@@ -66,14 +66,16 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
       setLoading(false);
     }
   };
+  useEffect(() => {setCurrenntPage(0)},[cityTitle])
 
   useEffect(() => {
     const params: any = {
       pageNumber: Number(currentPage) - 1,
       pageSize,
       sort: 'ASC',
-      reportType: 'NON_VISITED',
+      reportType: 'POSITIVE_CHAIN',
       province: cityTitle,
+      guildType:null
     };
     getOverviewPositive(params);
     return () => {
