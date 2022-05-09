@@ -3,7 +3,7 @@ import axios from 'axios';
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import {cancelTokenSource,  msgRequestCanceled,  toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import HiddenMobileNumber from './HiddenMobileNumber';
 
@@ -61,19 +61,18 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
     }
   };
 
-useEffect(() => {setCurrenntPage(0)},[cityTitle])
-
-
+  useEffect(() => {
+    setCurrenntPage(0);
+  }, [cityTitle]);
 
   useEffect(() => {
-
     const params: any = {
       pageNumber: Number(currentPage) - 1,
       pageSize,
       sort: 'ASC',
       reportType: 'NON_VACCINES',
       province: cityTitle,
-      guildType:null
+      guildType: null,
     };
     getOverviewUnVaccinated(params);
     return () => {
@@ -183,13 +182,12 @@ useEffect(() => {setCurrenntPage(0)},[cityTitle])
                   ),
                 },
               ]}
-              
             />
           </div>
         </>
       )}
       <div className="border-t-4 my-4 py-4 flec justify-center items-center">
-        <div className=" inline-flex  p-4 border rounded-lg  unVaccinated-count-wrapper" >
+        <div className=" inline-flex  p-4 border rounded-lg  unVaccinated-count-wrapper">
           <span className="text">جمع کل واحد های صنفی بدون واکسیناسیون:</span>
           <span className="px-1 count">{toPersianDigit(totalItems.toString())}</span>
           <span className="count">واحد صنفی</span>
