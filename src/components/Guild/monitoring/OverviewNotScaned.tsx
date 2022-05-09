@@ -1,86 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-// @ts-ignore
-import moment from 'moment-jalaali';
-import {Menu} from '@headlessui/react';
-// import transportService from 'src/services/transport.service';
+import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit} from '../../../helpers/utils';
-import calendar from '../../../assets/images/icons/calendar.svg';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
+import {cancelTokenSource, msgRequestCanceled,toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
+import HiddenMobileNumber from './HiddenMobileNumber';
 
 interface OverviewNotScanedProps {
   cityTitle?: string;
 }
 
 const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
-  const [exportType, setExportType] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  // eslint-disable-next-line
   const [totalItems, setTotalItems] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [currentPage, setCurrenntPage] = useState(1);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
   const {CancelToken} = axios;
   // eslint-disable-next-line
   const source = CancelToken.source();
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
-
-  const getOverviewReport = async (params: any) => {
-    setErrorMessage(null);
-    try {
-      // const response: any = await transportService.overviewReport(params, {
-      //   cancelToken: source.token,
-      // });
-      // setDataSet([...response.data.content]);
-      // setTotalItems(response.data.totalElements);
-
-      // eslint-disable-next-line
-      console.log(params);
-      setDataSet([]);
-      setTotalItems(0);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const pageSize = 1;
 
   // useEffect(() => {
   //   setLoading(true);
@@ -92,63 +40,105 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   //   });
   // }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      let query: any = {
-        healthStatusSet: 'POSITIVE',
-        pageNumber: Number(currentPage) - 1,
-        pageSize: 20,
-        sort: 'ASC',
-      };
+  // useEffect(() => {
+  //   if (!loading) {
+  //     let query: any = {
+  //       healthStatusSet: 'POSITIVE',
+  //       pageNumber: Number(currentPage) - 1,
+  //       pageSize,
+  //       sort: 'ASC',
+  //       reportType:"NON_VISITED"
+  //     };
+  //     query = {
+  //           ...query,
+  //           // from: null,
+  //           // to: null,
+  //         };
 
-      if (selectedDayRange.from && selectedDayRange.to) {
-        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     // if (selectedDayRange.from && selectedDayRange.to) {
+  //     //   const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     //   const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
 
-        query = {
-          ...query,
-          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        };
-      } else {
-        query = {
-          ...query,
-          from: null,
-          to: null,
-        };
-      }
+  //     //   query = {
+  //     //     ...query,
+  //     //     from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //     //     to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //     //   };
+  //     // } else {
+  //     //   query = {
+  //     //     ...query,
+  //     //     from: null,
+  //     //     to: null,
+  //     //   };
+  //     // }
 
-      setLoading(true);
-      getOverviewReport(query);
+  //     setLoading(true);
+  //     getOverviewReport(query);
+  //   }
+
+  //   //   return () => {
+  //   //     source.cancel('Operation canceled by the user.');
+  //   //     setDataSet([]);
+  //   //     setTotalItems(0);
+  //   //     setLoading(false);
+  //   //   };
+  // }, [ currentPage]);
+
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  const getOverviewReport = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await guildService.guildOverview(params, {
+        cancelToken: cancelToken.token,
+      });
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          categoryCode: item.categoryCode || 'نامشخص',
+          guildCode: item.guildCode || 'نامشخص',
+          ownerMobileNumber: item.ownerMobileNumber,
+          ownerNationalId: item.ownerNationalId || 'نامشخص',
+          categoryName: item.categoryName || 'نامشخص',
+          address: item.address || 'نامشخص',
+        });
+      });
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
-    //   return () => {
-    //     source.cancel('Operation canceled by the user.');
-    //     setDataSet([]);
-    //     setTotalItems(0);
-    //     setLoading(false);
-    //   };
-  }, [selectedDayRange, currentPage]);
+  };
+  useEffect(() => {setCurrenntPage(0)},[cityTitle])
 
   useEffect(() => {
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-    setCurrenntPage(1);
-  }, [cityTitle]);
+    const params: any = {
+      pageNumber: Number(currentPage) - 1,
+      pageSize,
+      sort: 'ASC',
+      reportType: 'NON_VISITED',
+      province: cityTitle,
+      guildType:null
+    };
+    getOverviewReport(params);
+    return () => {
+      cancelRequest();
+      setDataSet([]);
+    };
+  }, [cityTitle, currentPage]);
 
   function handlePageChange(page: number = 1) {
     setCurrenntPage(page);
   }
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
@@ -160,18 +150,18 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
         <div className="inline-flex">
           <ExportButton
             params={{
-              from: selectedDayRange.from
-                ? moment(
-                    `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
-                : null,
-              to: selectedDayRange.to
-                ? moment(
-                    `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-                    'jYYYY/jM/jD'
-                  ).format('YYYY-MM-DD')
-                : null,
+              // from: selectedDayRange.from
+              //   ? moment(
+              //       `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
+              //       'jYYYY/jM/jD'
+              //     ).format('YYYY-MM-DD')
+              //   : null,
+              // to: selectedDayRange.to
+              //   ? moment(
+              //       `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
+              //       'jYYYY/jM/jD'
+              //     ).format('YYYY-MM-DD')
+              //   : null,
               healthStatusSet: ['POSITIVE'],
               reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
                 cityTitle ? `استان ${cityTitle}` : ''
@@ -180,7 +170,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
           />
         </div>
 
-        <div className="flex items-center space-x-6 rtl:space-x-reverse">
+        {/* <div className="flex items-center space-x-6 rtl:space-x-reverse">
           <Menu
             as="div"
             className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
@@ -199,7 +189,6 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
               <div className="px-1 py-1 ">
                 {['PDF', 'CSV'].map((value: any, index: any) => {
                   return (
-                    // eslint-disable-next-line
                     <React.Fragment key={index}>
                       <Menu.Item>
                         {({active}) => (
@@ -210,7 +199,6 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
                             } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                             onClick={() => setExportType(value)}
                           >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                             {value}
                           </button>
                         )}
@@ -294,7 +282,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {loading ? (
@@ -303,38 +291,69 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
         </div>
       ) : (
         <>
+        {/*  id: `ovca_${index}`,
+          categoryCode: item.categoryCode || 'نامشخص',
+          guildCode: item.guildCode || 'نامشخص',
+          ownerMobileNumber: item.ownerMobileNumber || 'نامشخص',
+          ownerNationalId: item.ownerNationalId || 'نامشخص',
+          categoryName: item.categoryName || 'نامشخص',
+          address: item.address || 'نامشخص', */}
           <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
               handlePageChange={handlePageChange}
-              dataSet={dataSet}
-              pagination={{pageSize: 20, maxPages: 3, currentPage}}
+              dataSet={[...dataSet]}
+              pagination={{pageSize, currentPage}}
               columns={[
                 {
+                  name: "ردیف",
+                  key: "",
+                  render: (v: any, record, index: number) => (
+                    <div className="flex w-full justify-center">
+                      {toPersianDigit(((currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    </div>
+                  ),
+                },
+    
+
+                {
                   name: 'شماره پروانه',
-                  key: '',
+                  key: 'guildCode',
+                  render: (v: any,record:any) => (
+                    <span className="text-gray-500">{toPersianDigit(record.guildCode)}</span>
+                  ),
                 },
                 {
                   name: 'کد ISIC',
-                  key: '',
+                  key: 'categoryCode',
+                  render: (v: any,record:any) => (
+                    <span className="text-gray-500">{toPersianDigit(record.categoryCode)}</span>
+                  ),
                 },
                 {
                   name: 'کد ملی مالک',
-                  key: 'nationalId',
-                  render: (v: any) => (
-                    <span className="text-gray-500">{toPersianDigit(v || '')}</span>
+                  key: 'ownerNationalId',
+                  render: (v: any,record:any) => (
+                    <span className="text-gray-500">{toPersianDigit(record.ownerNationalId)}</span>
                   ),
                 },
                 {
                   name: 'رسته',
-                  key: '',
+                  key: 'categoryName',
                 },
                 {
                   name: 'آدرس',
-                  key: '',
+                  key: 'address',
                 },
                 {
                   name: 'شماره موبایل',
-                  key: '',
+                  key: 'ownerMobileNumber',
+                  render: (v: any,record:any) => (
+                    <span className="text-gray-500">
+                
+                     {record.ownerMobileNumber? <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)}/>:"نامشخص"}
+                      
+                      </span>
+                  ),
                 },
               ]}
               totalItems={totalItems}
