@@ -31,7 +31,7 @@ const GuildMonitoring = () => {
         destinationId="guild-overview"
       />
       <OverviewNotScaned cityTitle={cityTitle} />
-      <OverviewPositive cityTitle={cityTitle} />
+      <OverviewPositive cityTitle={cityTitle} /> 
       <OverviewUnVaccinated cityTitle={cityTitle} />
     </div>
   );
