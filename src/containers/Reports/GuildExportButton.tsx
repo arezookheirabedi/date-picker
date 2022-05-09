@@ -61,7 +61,7 @@ const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => 
       case EReportStatus.DOWNLOADED:
         return <span className="text-gray-600">دانلود شده</span>;
       case EReportStatus.READY_FOR_SMS:
-        return <span className="text-gray-600"> آماده جهت ارسال پیامک</span>;
+        return <span className="text-gray-600"> در انتظار تایید</span>;
       case EReportStatus.FAILED:
         return <span className="text-orange-600"> خطا</span>;
       default:

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // import {useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import guildService from 'src/services/guild.service';
+// import guildService from 'src/services/guild.service';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
 import DatePickerModal from '../../components/DatePickerModal';
@@ -21,6 +21,7 @@ import {EReportStatus} from './constant';
 const TransportReport: React.FC<{}> = () => {
   // const location = useLocation();
   // const history = useHistory();
+  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
   // const [currentPage, setCurrenntPage] = useState(1);
@@ -45,39 +46,33 @@ const TransportReport: React.FC<{}> = () => {
   }
   const pageSize = 1;
 
-  async function fetchReports(params: any) {
-    setLoading(true);
-    try {
-      const {data} = await guildService.guildReportoverviewStatus(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any, index: number) => {
-        /* lastModifiedDate: "2022-04-27T18:21:37.081"
-reportName: "گزارش استان تهران"
-reportStatus: "READY_FOR_DOWNLOAD"
-requestDateTime: "2022-04-27T18:20:36.175"
-trackingCode: "89848aa" */
+  // async function fetchReports(params: any) {
+  //   setLoading(true);
+  //   try {
+  //     const {data} = await guildService.guildReportoverviewStatus(params, {
+  //       cancelToken: cancelToken.token,
+  //     });
+  //     const normalizedData: any[] = [];
+  //     data.content.forEach((item: any, index: number) => {
+  //       normalizedData.push({
+  //         id: `ovca_${index}`,
+  //         reportName: item.reportName,
+  //         requestDateTime: item.requestDateTime,
+  //         lastModifiedDate: item.lastModifiedDate,
+  //         trackingCode: item.trackingCode,
+  //         reportStatus: item.reportStatus,
+  //       });
+  //     });
 
-        normalizedData.push({
-          id: `ovca_${index}`,
-          reportName: item.reportName,
-          requestDateTime: item.requestDateTime,
-          lastModifiedDate: item.lastModifiedDate,
-          trackingCode: item.trackingCode,
-          reportStatus: item.reportStatus,
-        });
-      });
-
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  //     setDataSet([...normalizedData]);
+  //     setTotalItems(data.totalElements);
+  //   } catch (error: any) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -100,12 +95,12 @@ trackingCode: "89848aa" */
   }, [selectedDayRange]);
 
   useEffect(() => {
-    fetchReports({
-      fromReportDate: query.fromReportDate,
-      toReportDate: query.toReportDate,
-      pageNumber: query.currentPage - 1,
-      pageSize,
-    });
+    // fetchReports({
+    //   fromReportDate: query.fromReportDate,
+    //   toReportDate: query.toReportDate,
+    //   pageNumber: query.currentPage - 1,
+    //   pageSize,
+    // });
     return () => {
       setDataSet([]);
       cancelRequest();
