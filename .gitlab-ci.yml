@@ -15,7 +15,7 @@ node-build-Develop:
    paths:
     - node_modules/
     - public/
-  image: node:14.17.2-alpine3.13
+  image: registry.vaslapp.com/docker/node:14.17.2-alpine3.13
   script:
     - echo 'nameserver 8.8.8.8' > /etc/resolv.conf
     - npm version
