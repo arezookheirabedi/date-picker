@@ -3,51 +3,40 @@ import axios from 'axios';
 import Charts from '../Charts';
 import Spinner from '../Spinner';
 
-
-// import hcsService from '../../services/hcs.service';
+import dataExchangePortService from "../../services/data-exchange-port.service";
 
 const {Line} = Charts;
 
-const mock: any = [
-  {date: 'استعلام مسافران', positiveMembersCount: 80000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 80000},
-  {date: 'امور استخدامی', positiveMembersCount: 30000},
-  {date: 'استعلام مسافران', positiveMembersCount: 50000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 200000},
-  {date: 'امور استخدامی', positiveMembersCount: 200100},
-  {date: 'استعلام مسافران', positiveMembersCount: 80000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 20000},
-  {date: 'امور استخدامی', positiveMembersCount: 30000},
-  {date: 'استعلام مسافران', positiveMembersCount: 200000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 80000},
-  {date: 'امور استخدامی', positiveMembersCount: 200000},
-  {date: 'استعلام مسافران', positiveMembersCount: 20000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 30000},
-  {date: 'امور استخدامی', positiveMembersCount: 50000},
-  {date: 'استعلام مسافران', positiveMembersCount: 90000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 50000},
-  {date: 'امور استخدامی', positiveMembersCount: 20000},
-  {date: 'استعلام مسافران', positiveMembersCount: 30000},
-  {date: 'استعلام گذرنامه', positiveMembersCount: 240000},
-  {date: 'امور استخدامی', positiveMembersCount: 110000},
-];
+// const mock: any = [
+//   {date: 'استعلام مسافران', positiveMembersCount: 80000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 80000},
+//   {date: 'امور استخدامی', positiveMembersCount: 30000},
+//   {date: 'استعلام مسافران', positiveMembersCount: 50000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 200000},
+//   {date: 'امور استخدامی', positiveMembersCount: 200100},
+//   {date: 'استعلام مسافران', positiveMembersCount: 80000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 20000},
+//   {date: 'امور استخدامی', positiveMembersCount: 30000},
+//   {date: 'استعلام مسافران', positiveMembersCount: 200000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 80000},
+//   {date: 'امور استخدامی', positiveMembersCount: 200000},
+//   {date: 'استعلام مسافران', positiveMembersCount: 20000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 30000},
+//   {date: 'امور استخدامی', positiveMembersCount: 50000},
+//   {date: 'استعلام مسافران', positiveMembersCount: 90000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 50000},
+//   {date: 'امور استخدامی', positiveMembersCount: 20000},
+//   {date: 'استعلام مسافران', positiveMembersCount: 30000},
+//   {date: 'استعلام گذرنامه', positiveMembersCount: 240000},
+//   {date: 'امور استخدامی', positiveMembersCount: 110000},
+// ];
 
 const CallChart: React.FC<any> = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]) as any;
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [isCancel, setIsCancel] = useState(false);
-
-  // const [query] = useState({
-  //   // status: 'POSITIVE',
-  //   // type: 'MONTHLY',
-  //   from: null,
-  //   to: null,
-  //   category: 'grade',
-  //   categoryValue: null,
-  //   tag: 'edu',
-  // });
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -56,14 +45,18 @@ const CallChart: React.FC<any> = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      // const response = await hcsService.columnChartTestResultService(
-      //   query,
-      //   {
-      //     cancelToken: source.token,
-      //   }
-      // );
-      // console.log(response.data)
-      setData(mock);
+      const {data : responseDate} = await dataExchangePortService.getServicesStatistic();
+      const normalizedData: any[] = [];
+      // {date: 'استعلام مسافران', positiveMembersCount: 80000},
+      responseDate.forEach((item: any) => {
+        console.log(item)
+        normalizedData.push({
+          date: item.endPoint || 'نامشخص',
+          positiveMembersCount: item.totalCalls || 0,
+        });
+      });
+
+      setData(normalizedData);
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
