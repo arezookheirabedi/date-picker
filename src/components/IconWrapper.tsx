@@ -34,6 +34,12 @@ const icons = [
     disableIcon: citizenshipIcon,
     activeIcon: citizenshipActiveIcon,
   },
+  {
+    name: 'service-port',
+    icon: citizenshipIcon,
+    disableIcon: citizenshipIcon,
+    activeIcon: citizenshipActiveIcon,
+  },
   {name: 'vaccine', icon: vaccineIcon, disableIcon: vaccineIcon, activeIcon: vaccineActiveIcon},
   {
     name: 'transport',
