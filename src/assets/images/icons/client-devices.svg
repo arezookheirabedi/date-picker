@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5951" data-name="Rectangle 5951" width="60" height="60" transform="translate(-6770 2783)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_44634" data-name="Mask Group 44634" transform="translate(6770 -2783)" clip-path="url(#clip-path)">
+    <path id="_8665033_bank_icon" data-name="8665033_bank_icon" d="M26.169.278a3.438,3.438,0,0,1,2.71,0L52.964,10.6a3.43,3.43,0,0,1,2.011,3.851A3.557,3.557,0,0,1,51.513,17.2v.86a2.515,2.515,0,0,1-2.581,2.581H5.921a2.641,2.641,0,0,1-2.581-2.581V17.2A3.522,3.522,0,0,1,.067,14.452,3.443,3.443,0,0,1,2.081,10.6Zm1.355,13.485a3.441,3.441,0,1,0-3.441-3.441A3.437,3.437,0,0,0,27.523,13.763ZM13.663,44.731h4.3V24.086h6.882V44.731H30.1V24.086h6.882V44.731h4.3V24.086h6.882V45.193c.065.032.129-.022.194.118l5.161,3.441a3.442,3.442,0,0,1-1.914,6.3H3.341a3.44,3.44,0,0,1-1.812-6.3L6.69,45.312c.061-.14.125-.086.091-.118V24.086h6.882Z" transform="translate(-6767.523 2785.473)" fill="#175a76"/>
+  </g>
+</svg>
