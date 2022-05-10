@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Menu} from "@headlessui/react";
-// import {cancelTokenSource, msgRequestCanceled} from "../../helpers/utils";
-// import guildService from "../../services/guild.service";
+import dataExchangePortService from "../../services/data-exchange-port.service";
 import {ReactComponent as DownIcon} from "../../assets/images/icons/down.svg";
 import Table from "../TableScope";
 import CategoryDonut from "../../containers/Guild/components/CategoryDonut";
@@ -17,58 +16,58 @@ const filterTypes = [
   },
 ];
 
-const initialDate = [
-  {
-    serviceName: "ایران من (استعلام مسافران)",
-    receivingDevice: "شرکت علی بابا",
-    serviceGroup: "استعلام مسافران",
-    launchDate: "۱۴۰۰/۱۱/۱۲",
-    provider: "وزارت کشور",
-    numberOfCalls: 1000000,
-    successfulCalling: 600000,
-    failedCall: 400000
-  },
-  {
-    serviceName: "استعلام گذرنامه",
-    receivingDevice: "وزارت کشور",
-    serviceGroup: "استعلام گذرنامه",
-    launchDate: "۱۴۰۰/۱۱/۱۴",
-    provider: "پاوا",
-    numberOfCalls: 2000000,
-    successfulCalling: 900000,
-    failedCall: 1100000
-  },
-  {
-    serviceName: "ایران من (امور استخدامی)",
-    receivingDevice: "شرکت دیجی کالا",
-    serviceGroup: "استعلام پرسنل",
-    launchDate: "۱۴۰۰/۱۱/۲۲",
-    provider: "ایرانسل",
-    numberOfCalls: 3000000,
-    successfulCalling: 2000000,
-    failedCall: 1000000
-  },
-  {
-    serviceName: "ایران من (استعلام مسافران)",
-    receivingDevice: "شرکت علی بابا",
-    serviceGroup: "استعلام مسافران",
-    launchDate: "۱۴۰۰/۱۱/۱۲",
-    provider: "وزارت کشور",
-    numberOfCalls: 500000,
-    successfulCalling: 250000,
-    failedCall: 250000
-  },
-  {
-    serviceName: "ایران من (امور استخدامی)",
-    receivingDevice: "شرکت دیجی کالا",
-    serviceGroup: "استعلام پرسنل",
-    launchDate: "۱۴۰۰/۱۱/۲۲",
-    provider: "ایرانسل",
-    numberOfCalls: 4000000,
-    successfulCalling: 3500000,
-    failedCall: 500000
-  },
-]
+// const initialDate = [
+//   {
+//     serviceName: "ایران من (استعلام مسافران)",
+//     receivingDevice: "شرکت علی بابا",
+//     serviceGroup: "استعلام مسافران",
+//     launchDate: "۱۴۰۰/۱۱/۱۲",
+//     provider: "وزارت کشور",
+//     numberOfCalls: 1000000,
+//     successfulCalling: 600000,
+//     failedCall: 400000
+//   },
+//   {
+//     serviceName: "استعلام گذرنامه",
+//     receivingDevice: "وزارت کشور",
+//     serviceGroup: "استعلام گذرنامه",
+//     launchDate: "۱۴۰۰/۱۱/۱۴",
+//     provider: "پاوا",
+//     numberOfCalls: 2000000,
+//     successfulCalling: 900000,
+//     failedCall: 1100000
+//   },
+//   {
+//     serviceName: "ایران من (امور استخدامی)",
+//     receivingDevice: "شرکت دیجی کالا",
+//     serviceGroup: "استعلام پرسنل",
+//     launchDate: "۱۴۰۰/۱۱/۲۲",
+//     provider: "ایرانسل",
+//     numberOfCalls: 3000000,
+//     successfulCalling: 2000000,
+//     failedCall: 1000000
+//   },
+//   {
+//     serviceName: "ایران من (استعلام مسافران)",
+//     receivingDevice: "شرکت علی بابا",
+//     serviceGroup: "استعلام مسافران",
+//     launchDate: "۱۴۰۰/۱۱/۱۲",
+//     provider: "وزارت کشور",
+//     numberOfCalls: 500000,
+//     successfulCalling: 250000,
+//     failedCall: 250000
+//   },
+//   {
+//     serviceName: "ایران من (امور استخدامی)",
+//     receivingDevice: "شرکت دیجی کالا",
+//     serviceGroup: "استعلام پرسنل",
+//     launchDate: "۱۴۰۰/۱۱/۲۲",
+//     provider: "ایرانسل",
+//     numberOfCalls: 4000000,
+//     successfulCalling: 3500000,
+//     failedCall: 500000
+//   },
+// ]
 
 const ListOfServices = () => {
   const [filterType, setFilterType] = useState({name: 'براساس بیشترین فراخوانی', enName: 'HIGHEST'});
@@ -79,75 +78,43 @@ const ListOfServices = () => {
   // eslint-disable-next-line
   const [orgDataset, setOrgDataset] = useState<any>([]);
 
+  const getListOfServices =async ()=>{
+    setLoading(true);
+    try {
+      const {data} = await dataExchangePortService.getServicesStatistic();
+        const normalizedData: any[] = [];
+        data.forEach((item: any, index: number) => {
+          normalizedData.push({
+            id: `ovca_${index}`,
+            name: item.endPoint || 'نامشخص',
+            receivingDevice: item.consumer || 0,
+            serviceGroup: item.gateway || 0,
+            launchDate: item.startDate || 0,
+            provider: item.provider || 0,
+            numberOfCalls: item.totalCalls || 0,
+            successfulCalling: item.successCalls || 0,
+            failedCall: item.failCalls || 0
+          });
+        });
 
-  // const cancelToken = cancelTokenSource();
-  //
-  // function cancelRequest() {
-  //   cancelToken.cancel(msgRequestCanceled);
-  // }
-
-  // async function getOverviewByCategory(params: any) {
-  //   setLoading(true);
-  //   try {
-  //     const {data} = await guildService.guildOverviewByCategory(params, {
-  //       cancelToken: cancelToken.token,
-  //     });
-  //
-  //     console.log(data);
-  //
-  //     const normalizedData: any[] = [];
-  //     data.forEach((item: any, index: number) => {
-  //       normalizedData.push({
-  //         id: `ovca_${index}`,
-  //         name: item.categoryValue || 'نامشخص',
-  //         employeesCount: item.membersCount || 0,
-  //         infectedCount: item.positiveMembersCount || 0,
-  //         infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
-  //         saveCount: item.recoveredMembersCount || 0,
-  //         deadCount: 0,
-  //       });
-  //     });
-  //
-  //     setDataset([...normalizedData]);
-  //     setOrgDataset([...normalizedData]);
-  //     setFilterType({
-  //       name: 'براساس بیشترین فراخوانی',
-  //       enName: 'HIGHEST',
-  //     });
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  const getOverviewByCategory1 = () => {
-    const normalizedData: any[] = [];
-    initialDate.forEach((item: any, index: number) => {
-      normalizedData.push({
-        id: `ovca_${index}`,
-        name: item.serviceName || 'نامشخص',
-        receivingDevice: item.receivingDevice || 0,
-        serviceGroup: item.serviceGroup || 0,
-        launchDate: item.launchDate || 0,
-        provider: item.provider || 0,
-        numberOfCalls: item.numberOfCalls || 0,
-        successfulCalling: item.successfulCalling || 0,
-        failedCall: item.failedCall || 0
-      });
-    });
-
-    setDataset([...normalizedData]);
-    setOrgDataset([...normalizedData]);
-    setFilterType({
-      name: 'براساس بیشترین فراخوانی',
-      enName: 'HIGHEST',
-    });
+        setDataset([...normalizedData]);
+        setOrgDataset([...normalizedData]);
+        setFilterType({
+          name: 'براساس بیشترین فراخوانی',
+          enName: 'HIGHEST',
+        });
+      // setServicesTotalStatistic({...data})
+      // setProfileNumber(data.count);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
-
   useEffect(() => {
-    getOverviewByCategory1();
+    getListOfServices();
+    // getOverviewByCategory1();
     return () => {
       // cancelRequest();
       setDataset([]);
@@ -354,7 +321,9 @@ const ListOfServices = () => {
             {
               name: 'تاریخ راه اندازی',
               key: 'launchDate',
-              render: (v: any, record: any) => <span>{record.launchDate}</span>,
+              render: (v: any) => (
+                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+              ),
             },
             {
               name: 'ارائه دهنده',
