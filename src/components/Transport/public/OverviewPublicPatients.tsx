@@ -53,7 +53,6 @@ const OverviewPublicPatients = () => {
       const response = await hcsService.columnChartTestResultService(params, {
         cancelToken: source.token,
       });
-      console.log(response.data);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);

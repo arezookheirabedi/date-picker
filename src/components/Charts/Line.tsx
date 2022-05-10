@@ -16,7 +16,7 @@ Highcharts.setOptions({
     thousandsSep: ',',
   },
 });
-const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
+const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلایان'}) => {
   const [options, setOptions] = useState({
     chart: {
       type: 'column',
@@ -111,7 +111,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
     },
     series: [
       {
-        name: 'مبتلایان ',
+        name,
         data: [50, 550, 330, 100, 400, 210, 270, 400, 300, 350, 200, 150],
         lineWidth: 4,
         dataLabels: {
