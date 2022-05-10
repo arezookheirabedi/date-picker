@@ -1,18 +1,18 @@
 import {useEffect, useState} from "react";
 
 import Statistic from 'src/containers/Guild/components/Statistic';
-import totalCitizen from "../../assets/images/icons/total-citizens.svg";
-import totalTests from "../../assets/images/icons/total-tests.svg";
-import totalScanQr from "../../assets/images/icons/total-scan-qr.svg";
-import numberOfTotalRegisterToday from "../../assets/images/icons/number-of-total-register-today.svg";
+import totalCalls from "../../assets/images/icons/total-calls.svg";
+import totalServices from "../../assets/images/icons/total-services.svg";
+import clientDevices from "../../assets/images/icons/client-devices.svg";
+import profilesNumber from "../../assets/images/icons/profile-numbers.svg";
 import dataExchangePortService from "../../services/data-exchange-port.service";
 
 
 const Overview = () => {
 
   const [loadingProfileNumber, setLoadingProfileNumber] = useState<boolean>(false);
-  // const [loading, setLoading] = useState<boolean>(false);
-  // const [servicesTotalStatistic, setServicesTotalStatistic] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [servicesTotalStatistic, setServicesTotalStatistic] = useState<any>(false)
   const [profileNumber, setProfileNumber] = useState(null);
 
   const callGetProfilesNumber = async () => {
@@ -29,16 +29,16 @@ const Overview = () => {
   }
 
   const callGetServicesTotalStatistic = async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
       const {data} = await dataExchangePortService.getServicesTotalStatistic();
-      console.log(data);
+      setServicesTotalStatistic({...data})
       // setProfileNumber(data.count);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   }
 
@@ -55,13 +55,13 @@ const Overview = () => {
         className="flex flex-col lg:flex-row justify-between space-y-5 lg:space-y-0 space-x-0 lg:space-x-5 rtl:space-x-reverse">
         <div
           className="flex-grow flex flex-col md:flex-row space-y-5 md:space-y-0 space-x-0  md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={totalCitizen} text="تعداد کل فراخوانی" count={1000000}/>
-          <Statistic icon={totalTests} text="تعداد کل خدمات" count={100}/>
+          <Statistic icon={totalCalls} loading={loading} text="تعداد کل فراخوانی" count={servicesTotalStatistic.calls || ''}/>
+          <Statistic icon={totalServices} loading={loading} text="تعداد کل خدمات" count={servicesTotalStatistic.endPoints || ''}/>
         </div>
         <div
           className="flex-grow flex flex-col md:flex-row space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={totalScanQr} text="دستگاه های سرویس گیرنده" count={100}/>
-          <Statistic icon={numberOfTotalRegisterToday} text="تعداد پروفایل شهروندان" count={profileNumber}
+          <Statistic icon={clientDevices} loading={loading} text="دستگاه های سرویس گیرنده" count={servicesTotalStatistic.consumers || ''}/>
+          <Statistic icon={profilesNumber} text="تعداد پروفایل شهروندان" count={profileNumber}
                      loading={loadingProfileNumber}/>
         </div>
       </div>
