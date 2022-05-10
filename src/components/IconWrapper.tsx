@@ -4,6 +4,8 @@ import dashboardIcon from '../assets/images/icons/dashboard.svg';
 import dashboardActiveIcon from '../assets/images/icons/dashboard-active.svg';
 import citizenshipIcon from '../assets/images/icons/citizenship.svg';
 import citizenshipActiveIcon from '../assets/images/icons/citizenship-active.svg';
+import servicePortIcon from '../assets/images/icons/service-port.svg';
+import servicePortActiveIcon from '../assets/images/icons/service-port-active.svg';
 import vaccineIcon from '../assets/images/icons/vaccine.svg';
 import vaccineActiveIcon from '../assets/images/icons/vaccine-active.svg';
 import transportIcon from '../assets/images/icons/transport.svg';
@@ -36,9 +38,9 @@ const icons = [
   },
   {
     name: 'service-port',
-    icon: citizenshipIcon,
-    disableIcon: citizenshipIcon,
-    activeIcon: citizenshipActiveIcon,
+    icon: servicePortIcon,
+    disableIcon: servicePortIcon,
+    activeIcon: servicePortActiveIcon,
   },
   {name: 'vaccine', icon: vaccineIcon, disableIcon: vaccineIcon, activeIcon: vaccineActiveIcon},
   {
