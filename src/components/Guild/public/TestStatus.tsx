@@ -6,7 +6,8 @@ import {Menu} from '@headlessui/react';
 import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
-import Table from '../../TableScope';
+import Table from '../../TableScopeSort';
+
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
@@ -21,7 +22,11 @@ const filterTypes = [
     enName: 'LOWEST',
   },
 ];
-
+const order = {
+  total: undefined,
+  positiveCountPercentage: undefined,
+  negativeCountPercentage: undefined,
+};
 const TestStatus: React.FC<{}> = () => {
   const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -338,6 +343,7 @@ const TestStatus: React.FC<{}> = () => {
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <Table
+          orderMain={order}
           loading={loading}
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
@@ -363,6 +369,7 @@ const TestStatus: React.FC<{}> = () => {
                     {
                       name: 'negativeCountPercentage',
                       title: 'درصد تست‌های منفی',
+
                       y: record.negativeCountPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -375,6 +382,7 @@ const TestStatus: React.FC<{}> = () => {
                     {
                       name: 'positiveCountPercentage',
                       title: 'درصد تست‌های مثبت',
+
                       y: record.positiveCountPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -401,6 +409,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'تعداد آزمایش‌های انجام شده',
               key: 'total',
+              sortable: true,
               render: (v: any) => (
                 <span>
                   {Number(v || 0)
@@ -412,6 +421,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'درصد تست‌های مثبت',
               key: 'positiveCountPercentage',
+
               render: (v: any) => (
                 <span>
                   {Number(v || 0).toLocaleString('fa', {
