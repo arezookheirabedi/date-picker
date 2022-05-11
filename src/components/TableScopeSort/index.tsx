@@ -21,6 +21,7 @@ interface IParams {
 interface IPagination {
   pageSize?: number;
   maxPages?: number;
+  currentPage?: number;
 }
 interface IProps {
   // api?: undefined | null | string;
@@ -30,6 +31,7 @@ interface IProps {
   dataSet: any[];
   loading?: boolean;
   orderMain: any;
+  handlePageChange?: (data: number) => void;
 }
 
 const Table: React.FC<IProps> = (props: IProps) => {
@@ -47,34 +49,49 @@ const Table: React.FC<IProps> = (props: IProps) => {
   //   setOrders(newObjectOfSortable);
   // };
 
-  useEffect(() => {
-    setSortData(dataSet);
-  }, [dataSet]);
+  const getData = (dd: any, order: any, Data: any[]) => {
+    let temp = [];
+    if (order) {
+      const tmp = [...Data].sort((a: any, b: any) => {
+        // eslint-disable-next-line
+        const reverse = order === 'ASC' ? 1 : order === 'DESC' ? -1 : 1;
 
-  const getData = (key: string, order: OrderDirection) => {
-    // debugger;
-    // const tmp = [...sortData].sort((a: any, b: any) => {
-    //   // eslint-disable-next-line
-    //   const reverse = order === 'ASC' ? 1 : order === 'DESC' ? -1 : 1;
-    //   if (a.dd < b.dd) {
-    //     return reverse * 1;
-    //   }
-    //   if (a.dd > b.dd) {
-    //     return reverse * -1;
-    //   }
-    //   // a must be equal to b
-    //   return 0;
-    // });
-    // debugger;
-    console.log(key, order);
-    // setSortData(tmp);
+        if (a[`${dd}`] < b[`${dd}`]) {
+          return reverse * 1;
+        }
+        if (a[`${dd}`] > b[`${dd}`]) {
+          return reverse * -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+      temp = tmp;
+    } else {
+      temp = [...Data];
+    }
+    setSortData(temp);
   };
+  useEffect(() => {
+    const Data = dataSet.slice((page - 1) * pageSize, page * pageSize);
+    // /herare we have data but should fix
+    setSortData(Data);
+    const a = Object.keys(orders);
+    const b = Object.values(orders);
+    const c = b.findIndex(element => element !== undefined);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    c !== -1 && getData(a[c], b[c], Data);
+    debugger;
+  }, [orders, dataSet, page]);
   const handleSortOrder = (key: any, order: OrderDirection) => {
-    getData(key, order);
     if (!isEqual(orders, {...orders, [key]: order})) {
       const s = {...orderMain, [key]: order};
       setOrders(s);
     }
+  };
+  const onChangePage = (e: number) => {
+    setPage(e);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    props.handlePageChange && props.handlePageChange(e);
   };
   return (
     <>
@@ -106,7 +123,8 @@ const Table: React.FC<IProps> = (props: IProps) => {
             ) : (
               <>
                 {sortData && columns && sortData.length > 0 && columns.length > 0 ? (
-                  sortData.slice((page - 1) * pageSize, page * pageSize).map((data, i) => (
+                  // sortData.slice((page - 1) * pageSize, page * pageSize).map((data, i) => (
+                  sortData.map((data, i) => (
                     // eslint-disable-next-line
                     <tr className="transition-all border-b border-gray-100" key={i}>
                       {columns?.map((column, j) => (
@@ -142,8 +160,8 @@ const Table: React.FC<IProps> = (props: IProps) => {
       {totalItems && totalItems > pageSize ? (
         <Pagination
           totalItems={totalItems}
-          currentPage={page}
-          setPage={setPage}
+          currentPage={pagination?.currentPage || page}
+          setPage={onChangePage}
           pageSize={pageSize}
           maxPages={4}
         />
