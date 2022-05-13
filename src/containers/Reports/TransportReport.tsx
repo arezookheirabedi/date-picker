@@ -137,12 +137,12 @@ const TransportReport: React.FC<{}> = () => {
   }
   return (
     <>
-      <fieldset className="text-center border rounded-xl p-1 mb-16">
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3"> لیست گزارش حمل و نقل</legend>
 
         <div className="flex align-center justify-between mb-8">
-          <div className="flex items-center justify-between mb-10 mt-6">
-            <div className="flex align-center justify-between flex-grow px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex align-center justify-between flex-grow">
               <div className="flex align-center justify-between">
                 {showDatePicker ? (
                   <DatePickerModal
