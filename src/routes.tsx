@@ -22,6 +22,7 @@ import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from "./containers/ServicePort/ServicePort";
+import ReportsFlour from './containers/Reports/Flour';
 
 const routes: IRoute[] = [
   {
@@ -280,6 +281,18 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'لیست درخواست گزارش',
     main: ReportsRequested,
+  },
+  {
+    keyIndex: '11',
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="reports-flour" active={active} disabled={disabled} />
+    ),
+    link: '/dashboard/reports/flour',
+    simLink: '/dashboard/reports/flour',
+    exact: true,
+    inMenu: true,
+    title: 'گزارش توزیع آرد در استان‌ها',
+    main: ReportsFlour,
   },
 ];
 
