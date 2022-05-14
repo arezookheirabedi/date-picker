@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 // import qs from 'qs';
 // import {useLocation} from 'react-router-dom';
 import Empty from '../Empty';
@@ -51,6 +51,9 @@ const Table: React.FC<IProps> = (props: IProps) => {
   // eslint-disable-next-line
   const [page, setPage] = useState<number>(1);
   const pageSize = pagination?.pageSize || PAGE_SIZE;
+  useEffect(() => {
+    setPage(1);
+  }, [dataSet]);
 
   return (
     <>
