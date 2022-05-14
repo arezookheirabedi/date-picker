@@ -50,6 +50,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
     setOrders(newObjectOfSortable);
   };
 
+  // get sortable columjns object fro setOrder
   useEffect(() => {
     NewOrder(columns);
   }, []);
@@ -79,6 +80,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
   useEffect(() => {
     setPage(1);
   }, [dataSet]);
+
   useEffect(() => {
     const Data = dataSet.slice((page - 1) * pageSize, page * pageSize);
     setSortData(Data);
