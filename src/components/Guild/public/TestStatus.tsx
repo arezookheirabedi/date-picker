@@ -13,15 +13,15 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
-const order = {
-  total: undefined,
-  positiveCountPercentage: undefined,
-  negativeCountPercentage: undefined,
-};
+// const order = {
+//   total: undefined,
+//   positiveCountPercentage: undefined,
+//   negativeCountPercentage: undefined,
+// };
 const TestStatus: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [orgDataset, setOrgDataset] = useState<any>([]);
@@ -92,21 +92,18 @@ const TestStatus: React.FC<{}> = () => {
   }, [selectedDayRange]);
 
   function handleSearch(e: any) {
-    setCurrentPage(1);
     const {value} = e.target;
-
     let tmp = [...orgDataset];
     if (value) {
       tmp = [...tmp].filter(x => x.name.indexOf(value) !== -1);
     }
-    debugger;
     setDataset([...tmp]);
     setSearchQuery(value);
   }
 
-  function handlePageChange(page: number = 1) {
-    setCurrentPage(page);
-  }
+  // function handlePageChange(page: number = 1) {
+  //   setCurrentPage(page);
+  // }
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">آزمایش در اصناف</legend>
@@ -161,11 +158,11 @@ const TestStatus: React.FC<{}> = () => {
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <Table
-          handlePageChange={handlePageChange}
-          orderMain={order}
+          // handlePageChange={handlePageChange}
+          // orderMain={order}
           loading={loading}
           dataSet={[...dataset]}
-          pagination={{pageSize: 10, maxPages: 3, currentPage}}
+          pagination={{pageSize: 10, maxPages: 3}}
           columns={[
             {
               name: 'وضعیت',
