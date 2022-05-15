@@ -4,6 +4,8 @@ import dashboardIcon from '../assets/images/icons/dashboard.svg';
 import dashboardActiveIcon from '../assets/images/icons/dashboard-active.svg';
 import citizenshipIcon from '../assets/images/icons/citizenship.svg';
 import citizenshipActiveIcon from '../assets/images/icons/citizenship-active.svg';
+import servicePortIcon from '../assets/images/icons/service-port.svg';
+import servicePortActiveIcon from '../assets/images/icons/service-port-active.svg';
 import vaccineIcon from '../assets/images/icons/vaccine.svg';
 import vaccineActiveIcon from '../assets/images/icons/vaccine-active.svg';
 import transportIcon from '../assets/images/icons/transport.svg';
@@ -18,6 +20,8 @@ import recruitmentIcon from '../assets/images/icons/recruitment.svg';
 import recruitmentActiveIcon from '../assets/images/icons/recruitment-active.svg';
 import reportsRequestedIcon from '../assets/images/icons/reports-requested.svg';
 import reportsRequestedActiveIcon from '../assets/images/icons/reports-requested-active.svg';
+import reportsFlourIcon from '../assets/images/icons/reports-flour.svg';
+import reportsFlourActiveIcon from '../assets/images/icons/reports-flour-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';
 
@@ -33,6 +37,12 @@ const icons = [
     icon: citizenshipIcon,
     disableIcon: citizenshipIcon,
     activeIcon: citizenshipActiveIcon,
+  },
+  {
+    name: 'service-port',
+    icon: servicePortIcon,
+    disableIcon: servicePortIcon,
+    activeIcon: servicePortActiveIcon,
   },
   {name: 'vaccine', icon: vaccineIcon, disableIcon: vaccineIcon, activeIcon: vaccineActiveIcon},
   {
@@ -70,6 +80,12 @@ const icons = [
     icon: reportsRequestedIcon,
     disableIcon: reportsRequestedIcon,
     activeIcon: reportsRequestedActiveIcon,
+  },
+  {
+    name: 'reports-flour',
+    icon: reportsFlourIcon,
+    disableIcon: reportsFlourIcon,
+    activeIcon: reportsFlourActiveIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
 ];
