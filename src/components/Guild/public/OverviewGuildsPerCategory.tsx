@@ -1,32 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {Menu} from '@headlessui/react';
+// import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
-import calendar from '../../../assets/images/icons/calendar.svg';
 import Table from '../../TableScope';
+import Calendar from '../../Calendar';
+
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 interface OverviewGuildsPerCategoryProps {
   cityTitle?: any;
 }
 
-const filterTypes = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
+// const filterTypes = [
+//   {
+//     name: 'بیشترین',
+//     enName: 'HIGHEST',
+//   },
+//   {
+//     name: 'کمترین',
+//     enName: 'LOWEST',
+//   },
+// ];
 
 const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({cityTitle}) => {
-  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
+  // const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
@@ -67,10 +68,10 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
-      });
+      // setFilterType({
+      //   name: 'بیشترین',
+      //   enName: 'HIGHEST',
+      // });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -80,12 +81,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
   }
 
   useEffect(() => {
-    // getOverviewByCategory({
-    //   from: '',
-    //   to: '',
-    //   tag: 'guild',
-    //   category: 'categoryDesc',
-    // });
     return () => {
       cancelRequest();
       setDataset([]);
@@ -95,26 +90,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
   const focusFromDate = () => {
     setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
   };
 
   useEffect(() => {
@@ -137,24 +112,24 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
     }
   }, [selectedDayRange]);
 
-  useEffect(() => {
-    const tmp = [...orgDataset].sort((a: any, b: any) => {
-      // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+  // useEffect(() => {
+  //   const tmp = [...orgDataset].sort((a: any, b: any) => {
+  //     // eslint-disable-next-line
+  //     const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-      if (a.infectedPercent < b.infectedPercent) {
-        return reverse * 1;
-      }
+  //     if (a.infectedPercent < b.infectedPercent) {
+  //       return reverse * 1;
+  //     }
 
-      if (a.infectedPercent > b.infectedPercent) {
-        return reverse * -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
+  //     if (a.infectedPercent > b.infectedPercent) {
+  //       return reverse * -1;
+  //     }
+  //     // a must be equal to b
+  //     return 0;
+  //   });
 
-    setDataset(tmp);
-  }, [filterType]);
+  //   setDataset(tmp);
+  // }, [filterType]);
 
   function handleSearch(e: any) {
     const {value} = e.target;
@@ -164,33 +139,26 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
       tmp = [...tmp].filter(x => x.name.indexOf(value) !== -1);
     }
 
-    setDataset(
-      [...tmp].sort((a: any, b: any) => {
-        const reverse =
-          // eslint-disable-next-line
-          filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+    // setDataset(
+    //   [...tmp].sort((a: any, b: any) => {
+    //     const reverse =
+    //       // eslint-disable-next-line
+    //       filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
 
-        if (a.infectedPercent < b.infectedPercent) {
-          return reverse * 1;
-        }
+    //     if (a.infectedPercent < b.infectedPercent) {
+    //       return reverse * 1;
+    //     }
 
-        if (a.infectedPercent > b.infectedPercent) {
-          return reverse * -1;
-        }
-        // a must be equal to b
-        return 0;
-      })
-    );
+    //     if (a.infectedPercent > b.infectedPercent) {
+    //       return reverse * -1;
+    //     }
+    //     // a must be equal to b
+    //     return 0;
+    //   })
+    // );
+    setDataset([...tmp]);
     setSearchQuery(value);
   }
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
-    });
-  };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -198,15 +166,13 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <Menu
               as="div"
               className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
             >
               <div>
                 <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
                   <span className="ml-10 whitespace-nowrap truncate">
                     {filterType?.name || 'بیشترین'}
                   </span>
@@ -220,7 +186,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
               >
                 <div className="px-1 py-1 ">
                   {filterTypes.map((value: any, index: any) => {
-                    // console.log(value);
                     return (
                       // eslint-disable-next-line
                       <Menu.Item key={index}>
@@ -234,7 +199,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                               setFilterType(value);
                             }}
                           >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
                             {value.name}
                           </button>
                         )}
@@ -244,7 +208,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                 </div>
               </Menu.Items>
             </Menu>
-          </div>
+          </div> */}
 
           <div className="flex items-center">
             {showDatePicker ? (
@@ -255,74 +219,12 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                 showDatePicker
               />
             ) : null}
-
-            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-              <div
-                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                onClick={focusFromDate}
-              >
-                {selectedDayRange.from && (
-                  <span className="ml-4 whitespace-nowrap truncate text-xs">
-                    {toPersianDigit(generateFromDate())}
-                  </span>
-                )}
-                {selectedDayRange.to || selectedDayRange.from ? (
-                  <button type="button" onClick={clearSelectedDayRange}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
-            </div>
-            <div className=" shadow-custom rounded-lg px-4 py-1">
-              <div
-                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                onClick={focusFromDate}
-              >
-                {selectedDayRange.to && (
-                  <span className="ml-4 whitespace-nowrap truncate text-xs">
-                    {toPersianDigit(generateToDate())}
-                  </span>
-                )}
-                {selectedDayRange.to || selectedDayRange.from ? (
-                  <button type="button" onClick={clearSelectedDayRange}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
-                )}
-              </div>
-            </div>
+            <Calendar
+              action={focusFromDate}
+              from={selectedDayRange.from}
+              to={selectedDayRange.to}
+              setSelectedDayRange={setSelectedDayRange}
+            />
           </div>
         </div>
 
@@ -344,7 +246,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
             </svg>
             <input
               type="text"
-              placeholder="جستجوی سازمان"
+              placeholder="جستجوی واحد صنفی"
               className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
               onChange={handleSearch}
               value={searchQuery}
