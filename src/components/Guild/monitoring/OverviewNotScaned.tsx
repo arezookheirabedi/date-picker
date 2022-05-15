@@ -3,7 +3,7 @@ import axios from 'axios';
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import {cancelTokenSource, msgRequestCanceled,toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import HiddenMobileNumber from './HiddenMobileNumber';
 
@@ -28,7 +28,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   // eslint-disable-next-line
   const source = CancelToken.source();
 
-  const pageSize = 1;
+  const pageSize = 10;
 
   // useEffect(() => {
   //   setLoading(true);
@@ -118,7 +118,9 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       setLoading(false);
     }
   };
-  useEffect(() => {setCurrenntPage(0)},[cityTitle])
+  useEffect(() => {
+    setCurrenntPage(0);
+  }, [cityTitle]);
 
   useEffect(() => {
     const params: any = {
@@ -127,7 +129,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
       sort: 'ASC',
       reportType: 'NON_VISITED',
       province: cityTitle,
-      guildType:null
+      guildType: null,
     };
     getOverviewReport(params);
     return () => {
@@ -162,10 +164,12 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
               //       'jYYYY/jM/jD'
               //     ).format('YYYY-MM-DD')
               //   : null,
-              healthStatusSet: ['POSITIVE'],
-              reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
+
+              reportType: 'NON_VISITED',
+              cityTitle,
+              reportName: `واحد‌های صنفی  ${
                 cityTitle ? `استان ${cityTitle}` : ''
-              }`,
+              } که QR کد آن‌ها اسکن نشده `,
             }}
           />
         </div>
@@ -291,7 +295,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
         </div>
       ) : (
         <>
-        {/*  id: `ovca_${index}`,
+          {/*  id: `ovca_${index}`,
           categoryCode: item.categoryCode || 'نامشخص',
           guildCode: item.guildCode || 'نامشخص',
           ownerMobileNumber: item.ownerMobileNumber || 'نامشخص',
@@ -305,34 +309,33 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
               pagination={{pageSize, currentPage}}
               columns={[
                 {
-                  name: "ردیف",
-                  key: "",
+                  name: 'ردیف',
+                  key: '',
                   render: (v: any, record, index: number) => (
                     <div className="flex w-full justify-center">
                       {toPersianDigit(((currentPage - 1) * pageSize + (index + 1)).toString())}.
                     </div>
                   ),
                 },
-    
 
                 {
                   name: 'شماره پروانه',
                   key: 'guildCode',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.guildCode)}</span>
                   ),
                 },
                 {
                   name: 'کد ISIC',
                   key: 'categoryCode',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.categoryCode)}</span>
                   ),
                 },
                 {
                   name: 'کد ملی مالک',
                   key: 'ownerNationalId',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.ownerNationalId)}</span>
                   ),
                 },
@@ -347,12 +350,14 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
                 {
                   name: 'شماره موبایل',
                   key: 'ownerMobileNumber',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                
-                     {record.ownerMobileNumber? <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)}/>:"نامشخص"}
-                      
-                      </span>
+                      {record.ownerMobileNumber ? (
+                        <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)} />
+                      ) : (
+                        'نامشخص'
+                      )}
+                    </span>
                   ),
                 },
               ]}
