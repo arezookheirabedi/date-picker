@@ -42,29 +42,35 @@ const Table: React.FC<IProps> = (props: IProps) => {
   const [page, setPage] = useState<number>(1);
   const [sortData, setSortData] = useState<any[]>([]);
 
-  const NewOrder = (data: IColumn[]) => {
-    const s = data.filter((i: IColumn) => i.sortable === true);
-    const newData = s.map((b: any) => b.key);
-    const newObjectOfSortable = newData.reduce((a: any, v: any) => ({...a, [v]: undefined}), {});
+  const makeOrderList = (data: IColumn[]) => {
+    const sortableColumn = data.filter((column: IColumn) => column.sortable === true);
+    const newData = sortableColumn.map((column: IColumn) => column.key);
+    const newObjectOfSortable = newData.reduce(
+      (a: any, key: any) => ({...a, [key]: undefined}),
+      {}
+    );
     setFirstOrderList(newObjectOfSortable);
     setOrders(newObjectOfSortable);
   };
 
   // get sortable columjns object fro setOrder
   useEffect(() => {
-    NewOrder(columns);
+    makeOrderList(columns);
   }, []);
-  const getData = (item: any, order: any, Data: any[]) => {
+  const getData = (item: any, order: any, data: any[]) => {
     let temp = [];
     if (order) {
-      const tmp = [...Data].sort((a: any, b: any) => {
+      const tmp = [...data].sort((a: any, b: any) => {
         // eslint-disable-next-line
         const reverse = order === 'ASC' ? 1 : order === 'DESC' ? -1 : 1;
-
-        if (a[`${item}`] < b[`${item}`]) {
+        const numberDataA =
+          Number.isFinite(a[`${item}`]) === true ? a[`${item}`] : Number(a[`${item}`]);
+        const numberDataB =
+          Number.isFinite(b[`${item}`]) === true ? b[`${item}`] : Number(b[`${item}`]);
+        if (numberDataA < numberDataB) {
           return reverse * 1;
         }
-        if (a[`${item}`] > b[`${item}`]) {
+        if (numberDataA > numberDataB) {
           return reverse * -1;
         }
         // a must be equal to b
@@ -72,7 +78,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
       });
       temp = tmp;
     } else {
-      temp = [...Data];
+      temp = [...data];
     }
     setSortData(temp);
   };
@@ -82,18 +88,18 @@ const Table: React.FC<IProps> = (props: IProps) => {
   }, [dataSet]);
 
   useEffect(() => {
-    const Data = dataSet.slice((page - 1) * pageSize, page * pageSize);
-    setSortData(Data);
-    const a = Object.keys(orders);
-    const b = Object.values(orders);
-    const c = b.findIndex(element => element !== undefined);
+    const data = dataSet.slice((page - 1) * pageSize, page * pageSize);
+    setSortData(data);
+    const keyArray = Object.keys(orders);
+    const valueArray = Object.values(orders);
+    const orderIndex = valueArray.findIndex(element => element !== undefined);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    c !== -1 && getData(a[c], b[c], Data);
+    orderIndex !== -1 && getData(keyArray[orderIndex], valueArray[orderIndex], data);
   }, [orders, dataSet, page]);
   const handleSortOrder = (key: any, order: OrderDirection) => {
     if (!isEqual(orders, {...orders, [key]: order})) {
-      const s = {...firstOrderList, [key]: order};
-      setOrders(s);
+      const newOrderList = {...firstOrderList, [key]: order};
+      setOrders(newOrderList);
     }
   };
   const onChangePage = (e: number) => {
