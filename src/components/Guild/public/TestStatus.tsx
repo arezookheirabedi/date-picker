@@ -73,6 +73,7 @@ const TestStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
+      setSearchQuery('');
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       getTestResultByCategory({
