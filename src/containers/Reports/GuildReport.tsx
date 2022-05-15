@@ -34,7 +34,7 @@ const TransportReport: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const pageSize = 2;
+  const pageSize = 10;
 
   async function fetchReports(params: any) {
     setLoading(true);
@@ -43,9 +43,9 @@ const TransportReport: React.FC<{}> = () => {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];
-      data.content.forEach((item: any, index: number) => {
+      data.content.forEach((item: any) => {
         normalizedData.push({
-          id: `ovca_${index}`,
+          id: item.id,
           reportName: item.reportName,
           requestDateTime: item.requestDateTime,
           lastModifiedDate: item.lastModifiedDate,
@@ -86,6 +86,8 @@ const TransportReport: React.FC<{}> = () => {
 
   useEffect(() => {
     fetchReports({
+      sort: 'DESC',
+      sortKey: ['reportStatus'].join(','),
       fromReportDate: query.fromReportDate,
       toReportDate: query.toReportDate,
       pageNumber: query.currentPage - 1,
@@ -230,7 +232,7 @@ const TransportReport: React.FC<{}> = () => {
                   render: (v: any, record: any) => (
                     <div className="flex w-full justify-center">
                       <GuildExportButton
-                        item={record.reportStatus}
+                        item={record}
                         shouldRefresh={shouldRefresh}
                         refresh={refresh}
                       />
