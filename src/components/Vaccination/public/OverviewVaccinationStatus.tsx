@@ -20,7 +20,8 @@ const initialNumberOf = {
   gtDoses: {...initialDoses},
   // gtDosesPercentage: {...initialDoses},
   // gtDosesToTotalPopulationPercentage: {...initialDoses},
-  gtDosesToTotalDosesPercentage : {...initialDoses},
+  gtDosesToTotalDosesPercentage: {...initialDoses},
+  totalNonVaccinesCountToTotalPopulationPercentage: 0,
   totalPopulation: 0,
   totalUnknownVaccinesCount: 0,
   totalVaccinesCount: 0,
@@ -58,8 +59,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="تعداد کل واکسیناسیون"
@@ -85,12 +85,11 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
             loading={loading}
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
-            count={(numberOf.totalVaccinesCountToTotalPopulationPercentage || 0)}
+            count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
             isPercentage
           />
@@ -117,8 +116,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           />
         </div>
 
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={personGrayVaccine}
             text="مجموع افراد واکسینه نشده"
@@ -128,7 +126,7 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={personGrayVaccine}
             text="درصد افراد واکسینه نشده"
-            count={(numberOf.dosesToTotalPopulationPercentage[0] || 0).toFixed(3)}
+            count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
             isPercentage
           />
@@ -141,27 +139,21 @@ const OverviewVaccinationStatus: React.FC<{}> = () => {
           <Statistic
             icon={blueVaccine}
             text="درصد افراد با بیش از ۳ دوز"
-            count={(numberOf.gtDosesToTotalDosesPercentage[3] || 0)}
+            count={numberOf.gtDosesToTotalDosesPercentage[3] || 0}
             loading={loading}
             isPercentage
           />
         </div>
 
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={greenVaccineBlackVirus}
             text="تعداد فوتی هایی که واکسینه شده"
             count="-"
           />
-          <Statistic icon={greenVaccineBlackVirus} text="درصد فوتی های واکسینه شده" count="-"/>
-          <Statistic icon={greyVaccine} text="مجموع تعداد دوز واکسن تزریقی" count="-"/>
-          <Statistic
-            icon={greyVaccine}
-            text="تعداد اطلاعات مخدوش"
-            loading={loading}
-            count="-"
-          />
+          <Statistic icon={greenVaccineBlackVirus} text="درصد فوتی های واکسینه شده" count="-" />
+          <Statistic icon={greyVaccine} text="مجموع تعداد دوز واکسن تزریقی" count="-" />
+          <Statistic icon={greyVaccine} text="تعداد اطلاعات مخدوش" loading={loading} count="-" />
         </div>
       </div>
     </fieldset>
