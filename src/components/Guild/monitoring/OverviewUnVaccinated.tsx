@@ -24,7 +24,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   // eslint-disable-next-line
   const source = CancelToken.source();
 
-  const pageSize = 1;
+  const pageSize = 10;
 
   const cancelToken = cancelTokenSource();
 
@@ -107,10 +107,9 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
               //       'jYYYY/jM/jD'
               //     ).format('YYYY-MM-DD')
               //   : null,
-              healthStatusSet: ['POSITIVE'],
-              reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
-                cityTitle ? `استان ${cityTitle}` : ''
-              }`,
+              reportType: 'NON_VACCINES',
+              cityTitle,
+              reportName: `واحد‌های صنفی بدون واکسیناسیون ${cityTitle ? `استان ${cityTitle}` : ''}`,
             }}
           />
         </div>
