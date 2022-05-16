@@ -36,6 +36,7 @@
     "highcharts-react-official": "^3.0.0",
     "history": "^5.0.0",
     "jalaliday": "^2.3.0",
+    "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
     "moment-jalaali": "^0.9.4",
     "qrcode.react": "^1.0.1",
