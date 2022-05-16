@@ -7,7 +7,6 @@ export const initialVacinatelInfo = {
   totalVaccinesCountToTotalPopulationPercentage: 0,
   gtDoses: {...initialDoses},
   totalNonVaccinesCountBeforeStartOfSystem: 0,
-
   totalVaccinesCountAfterStartOfSystem: 0,
 };
 export interface IInitialVacinatelInfo {
