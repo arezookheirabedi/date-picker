@@ -230,7 +230,7 @@ const OverviewDrivers = () => {
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalDriver}
-            text="مجموع رانندگان"
+            text="مجموع رانندگان فعال"
             count={numberOf.totalPopulation}
             loading={loading}
             hasInfo
@@ -244,11 +244,11 @@ const OverviewDrivers = () => {
           />
           <Statistic
             icon={saveIcon}
-            text="مجموع بهبود یافتگان"
+            text="مجموع بهبودیافتگان"
             count={testResultInfo.recoveredMembersCount}
             loading={testResultLoading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌شدگان" count="-" loading={false} />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
@@ -294,7 +294,7 @@ const OverviewDrivers = () => {
           />
           <Statistic
             icon={inquiryPlaque}
-            text="تعداد استعلام پلاک"
+            text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
             count={numberOfPlaqueVisited}
             loading={numberOfPlaqueVisitedLoading}
             hasInfo
@@ -302,7 +302,7 @@ const OverviewDrivers = () => {
           />
           <Statistic
             icon={positiveInquiryPlaque}
-            text="تعداد استعلام‌های کوید مثبت"
+            text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             count={numberOfPositivePlaqueVisited}
             loading={numberOfPositivePlaqueVisitedLoading}
             hasInfo
