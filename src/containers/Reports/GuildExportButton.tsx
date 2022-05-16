@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import React, {useState} from 'react';
 import guildService from 'src/services/guild.service';
 import DotLoading from 'src/components/DotLoading';
+import fileDownload from 'js-file-download';
 import {EReportStatus} from './constant';
 import download from '../../assets/images/icons/download.svg';
 
@@ -17,19 +18,27 @@ const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => 
     setLoading(true);
     try {
       const response = await guildService.reportDownload(id);
-      const blob = new Blob([response.data], {type: 'text/csv'});
-      const blobuUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobuUrl;
-      link.setAttribute(
-        'download',
+      // const blob = new Blob([response.data], {type: 'text/csv'});
+      fileDownload(
+        response.data,
         `${item.reportName}- ${dayjs(item.requestDateTime)
           .calendar('jalali')
           .format('YYYY-MM-DD')
-          .toPersianDigits()}`
+          .toPersianDigits()}.csv`
       );
-      document.body.appendChild(link);
-      link.click();
+      // const blob = new Blob([response.data], {type: 'application/vnd.ms-excel'});
+      // const blobuUrl = URL.createObjectURL(blob);
+      // const link = document.createElement('a');
+      // link.href = blobuUrl;
+      // link.setAttribute(
+      //   'download',
+      //   `${item.reportName}- ${dayjs(item.requestDateTime)
+      //     .calendar('jalali')
+      //     .format('YYYY-MM-DD')
+      //     .toPersianDigits()}`
+      // );
+      // document.body.appendChild(link);
+      // link.click();
 
       // window.open(url)
     } catch (error) {
