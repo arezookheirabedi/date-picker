@@ -159,7 +159,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             infoText=""
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count="-"
+            count={guildVacinateInfo.totalVaccinesCountAfterStartOfSystem || 0}
             loading={loading}
           />{' '}
           <Statistic
@@ -167,7 +167,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             infoText=""
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count="-"
+            count={guildVacinateInfo.totalNonVaccinesCountBeforeStartOfSystem || 0}
             loading={loading}
           />
         </div>
