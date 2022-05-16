@@ -37,8 +37,8 @@ const Transport = () => {
       <OverviewPublicPatients/>
       <OverviewOfDriverVaccinationProcess/>
       <OverviewOfTheLatestPublicTransportVaccinationStatus />
-      <OverviewOfThePublicTransportVaccinationStatusInCountry />
       <OverviewOfVaccinationInPublicTransport/>
+      <OverviewOfThePublicTransportVaccinationStatusInCountry />
       <TestsInTransport/>
     </div>
   );
