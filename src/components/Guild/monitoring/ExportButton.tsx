@@ -83,21 +83,6 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
   const handleSubmit: (e: React.MouseEvent<HTMLElement>) => void = e => {
     e.stopPropagation();
     handelConfirm(otp);
-    // setSubmitted(true);
-
-    // transportService
-    //   .confirmRequestReport(otp)
-    //   .then(() => {
-    //     toast.success('لینک دانلود به شماره همراه ارسال شد');
-    //     closeModal();
-    //   })
-    //   .catch(error => {
-    //     toast.error(error.message || 'خطایی در عملیات');
-    //     // closeModal();
-    //   })
-    //   .finally(() => {
-    //     setSubmitted(false);
-    //   });
   };
 
   return (
