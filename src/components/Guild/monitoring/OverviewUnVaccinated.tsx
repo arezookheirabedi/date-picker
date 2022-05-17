@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
@@ -19,10 +19,6 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [currentPage, setCurrenntPage] = useState(1);
-
-  const {CancelToken} = axios;
-  // eslint-disable-next-line
-  const source = CancelToken.source();
 
   const pageSize = 10;
 
