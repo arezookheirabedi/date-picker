@@ -3,8 +3,11 @@ import React from 'react';
 import OverviewGuilds from 'src/components/Guild/public/OverviewGuilds';
 import OverviewGuildsPerCategory from 'src/components/Guild/public/OverviewGuildsPerCategory';
 import OverviewGuildsPerProvince from 'src/components/Guild/public/OverviewGuildsPerProvince';
+// import OverviewOfTheLatestPublicGuildVaccinationStatus from 'src/components/Guild/public/OverviewOfTheLatestPublicGuildVaccinationStatus';
 import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
 import TestStatus from 'src/components/Guild/public/TestStatus';
+// import TheLatestOverwiewOfVaccination from 'src/components/Guild/public/TheLatestOverwiewOfVaccination';
+// import OverviewOfGuildVaccinationProcess from 'src/components/Guild/public/OverviewOfGuildVaccinationProcess';
 
 const GuildOwner: React.FC<any> = () => {
   return (
@@ -14,7 +17,10 @@ const GuildOwner: React.FC<any> = () => {
       <OverviewGuildsPerProvince />
       <OverviewOfVaccination />
       <TestStatus />
-      {/* <OverviewGuildRegisteredPercentage />  */}
+      {/* <TheLatestOverwiewOfVaccination /> */}
+      {/* <OverviewOfTheLatestPublicGuildVaccinationStatus /> */}
+      {/* <OverviewOfGuildVaccinationProcess /> */}
+      {/* <OverviewGuildRegisteredPercentage /> */}
     </div>
   );
 };
