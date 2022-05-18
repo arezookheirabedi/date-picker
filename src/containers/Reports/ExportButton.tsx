@@ -11,8 +11,9 @@ interface IProps {
   item: any;
   refresh: boolean;
   shouldRefresh: (data: boolean) => void;
+  reportType: string;
 }
-const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => {
+const ExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh, reportType}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   async function handelDownload(id: any) {
@@ -22,7 +23,8 @@ const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => 
       .format('YYYY-MM-DD')
       .toPersianDigits()}.csv`;
     try {
-      const response = await guildService.reportDownload(id);
+      const response = await guildService.reportDownload(id, reportType);
+
       const blob = new Blob([response.data]);
       const blobuUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -79,4 +81,4 @@ const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => 
   return <>{getButton(item.reportStatus)}</>;
 };
 
-export default GuildExportButton;
+export default ExportButton;
