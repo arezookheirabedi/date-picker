@@ -295,13 +295,6 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
         </div>
       ) : (
         <>
-          {/*  id: `ovca_${index}`,
-          categoryCode: item.categoryCode || 'نامشخص',
-          guildCode: item.guildCode || 'نامشخص',
-          ownerMobileNumber: item.ownerMobileNumber || 'نامشخص',
-          ownerNationalId: item.ownerNationalId || 'نامشخص',
-          categoryName: item.categoryName || 'نامشخص',
-          address: item.address || 'نامشخص', */}
           <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
               handlePageChange={handlePageChange}
