@@ -48,7 +48,6 @@ const OverviewGuildRegisteredPercentage: React.FC<{}> = () => {
       const response = await passengerService.columnChartTestResultService(params, {
         cancelToken: cancelToken.token,
       });
-      debugger;
       console.log(response.data);
       setData(response.data);
     } catch (error: any) {
