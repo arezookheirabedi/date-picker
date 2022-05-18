@@ -2,34 +2,23 @@ import React, {useEffect, useState} from 'react';
 // import {useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import guildService from 'src/services/guild.service';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
+import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../components/DatePickerModal';
 import Calendar from '../../components/Calendar';
-import download from '../../assets/images/icons/download.svg';
-import {
-  cancelTokenSource,
-  // convertGregorianDateToJalaliDate,
-  // convertGregorianDateToJalaliTime,
-  msgRequestCanceled,
-  toPersianDigit,
-} from '../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
-import {EReportStatus} from './constant';
+import ExportButton from './ExportButton';
 
 const TransportReport: React.FC<{}> = () => {
-  // const location = useLocation();
-  // const history = useHistory();
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  // const [currentPage, setCurrenntPage] = useState(1);
-
-  // eslint-disable-next-line
   const [totalItems, setTotalItems] = useState(0);
+
+  const [refresh, shouldRefresh] = useState<boolean>(false);
+
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -44,35 +33,35 @@ const TransportReport: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const pageSize = 1;
+  const pageSize = 10;
 
-  // async function fetchReports(params: any) {
-  //   setLoading(true);
-  //   try {
-  //     const {data} = await guildService.guildReportoverviewStatus(params, {
-  //       cancelToken: cancelToken.token,
-  //     });
-  //     const normalizedData: any[] = [];
-  //     data.content.forEach((item: any, index: number) => {
-  //       normalizedData.push({
-  //         id: `ovca_${index}`,
-  //         reportName: item.reportName,
-  //         requestDateTime: item.requestDateTime,
-  //         lastModifiedDate: item.lastModifiedDate,
-  //         trackingCode: item.trackingCode,
-  //         reportStatus: item.reportStatus,
-  //       });
-  //     });
+  async function fetchReports(params: any) {
+    setLoading(true);
+    try {
+      const {data} = await transportService.transportReportoverviewStatus(params, {
+        cancelToken: cancelToken.token,
+      });
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any) => {
+        normalizedData.push({
+          id: item.id,
+          reportName: item.reportName,
+          requestDateTime: item.requestDateTime,
+          lastModifiedDate: item.lastModifiedDate,
+          trackingCode: item.trackingCode,
+          reportStatus: item.reportStatus,
+        });
+      });
 
-  //     setDataSet([...normalizedData]);
-  //     setTotalItems(data.totalElements);
-  //   } catch (error: any) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+    } catch (error: any) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -95,42 +84,23 @@ const TransportReport: React.FC<{}> = () => {
   }, [selectedDayRange]);
 
   useEffect(() => {
-    // fetchReports({
-    //   fromReportDate: query.fromReportDate,
-    //   toReportDate: query.toReportDate,
-    //   pageNumber: query.currentPage - 1,
-    //   pageSize,
-    // });
+    fetchReports({
+      sort: 'DESC',
+      sortKey: ['reportStatus'].join(','),
+      fromReportDate: query.fromReportDate,
+      toReportDate: query.toReportDate,
+      pageNumber: query.currentPage - 1,
+      pageSize,
+    });
     return () => {
       setDataSet([]);
       cancelRequest();
     };
-  }, [query]);
+  }, [query, refresh]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
-
-  // async function handlePreDownload(id: string) {
-  //   try {
-  //     const params = new URLSearchParams(location.search);
-
-  //     const response = await transportService.preDownloadReport(id, {
-  //       cancelToken: cancelToken.token,
-  //     });
-
-  //     const newWindow = window.open(
-  //       process.env.REACT_APP_BASE_API_URL + response.data.downloadLink,
-  //       '_blank',
-  //       'noopener,noreferrer'
-  //     );
-  //     if (newWindow) newWindow.opener = null;
-  //     fetchReports({pageNumber: Number(params.get('page') || 1) - 1, pageSize});
-  //   } catch (error: any) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   }
-  // }
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -138,7 +108,7 @@ const TransportReport: React.FC<{}> = () => {
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3"> لیست گزارش حمل و نقل</legend>
+        <legend className="text-black mx-auto px-3">لیست گزارش حمل و نقل</legend>
 
         <div className="flex align-center justify-between mb-8">
           <div className="flex items-center justify-between">
@@ -258,34 +228,16 @@ const TransportReport: React.FC<{}> = () => {
                 {
                   name: 'وضعیت',
                   key: 'reportStatus',
-                  render: (v: string, record: any) =>
-                    (() => {
-                      switch (record.reportStatus) {
-                        case EReportStatus.PROCESSING:
-                          return <span className="text-yellow-500">در حال پردازش</span>;
-                        case EReportStatus.READY_FOR_DOWNLOAD:
-                          return (
-                            <div className="inline-flex">
-                              <button
-                                type="button"
-                                className="button button--primary px-8 inline-flex w-auto justify-center items-center space-x-2 rtl:space-x-reverse"
-                                // onClick={() => handlePreDownload(record.id)}
-                              >
-                                <img src={download} alt="download" className="w-5 h-4" />
-                                <span>دانلود</span>
-                              </button>
-                            </div>
-                          );
-                        case EReportStatus.DOWNLOADED:
-                          return <span className="text-gray-400">دانلود شده</span>;
-                        case EReportStatus.READY_FOR_SMS:
-                          return <span className="text-gray-400"> آماده جهت ارسال پیامک</span>;
-                        case EReportStatus.FAILED:
-                          return <span className="text-orange-400"> خطا</span>;
-                        default:
-                          return '';
-                      }
-                    })(),
+                  render: (v: any, record: any) => (
+                    <div className="flex w-full justify-center">
+                      <ExportButton
+                        item={record}
+                        reportType="transport"
+                        shouldRefresh={shouldRefresh}
+                        refresh={refresh}
+                      />
+                    </div>
+                  ),
                 },
               ]}
             />
