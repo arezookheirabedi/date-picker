@@ -10,9 +10,9 @@ import Calendar from '../../components/Calendar';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
 
-import GuildExportButton from './GuildExportButton';
+import ExportButton from './ExportButton';
 
-const TransportReport: React.FC<{}> = () => {
+const GuildReport: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -231,7 +231,8 @@ const TransportReport: React.FC<{}> = () => {
                   key: 'reportStatus',
                   render: (v: any, record: any) => (
                     <div className="flex w-full justify-center">
-                      <GuildExportButton
+                      <ExportButton
+                        reportType="guilds"
                         item={record}
                         shouldRefresh={shouldRefresh}
                         refresh={refresh}
@@ -248,4 +249,4 @@ const TransportReport: React.FC<{}> = () => {
   );
 };
 
-export default TransportReport;
+export default GuildReport;
