@@ -189,7 +189,6 @@ function reportDownload(id: string, reportType: string): Promise<AxiosResponse<a
     .build()
     .get(`/api/v1/${reportType}/reports/${id}/download`);
 }
-/* , {{responseType: 'blob'} */
 
 function configOtpReport({reportType, ...params}: any = {}): Promise<AxiosResponse<any>> {
   return request
