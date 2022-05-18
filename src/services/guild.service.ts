@@ -183,11 +183,11 @@ function requestOtpReport(
     });
 }
 
-function reportDownload(id: any): Promise<AxiosResponse<any>> {
+function reportDownload(id: string, reportType: string): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/guilds/reports/${id}/download`);
+    .get(`/api/v1/${reportType}/reports/${id}/download`);
 }
 /* , {{responseType: 'blob'} */
 
