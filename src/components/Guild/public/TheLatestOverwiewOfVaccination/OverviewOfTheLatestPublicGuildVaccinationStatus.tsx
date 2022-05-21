@@ -9,6 +9,7 @@ import Charts from 'src/components/Charts';
 import calendar from 'src/assets/images/icons/calendar.svg';
 import {toPersianDigit} from 'src/helpers/utils';
 import DatePickerModal from 'src/components/DatePickerModal';
+import {converters} from '../constant';
 
 // import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
@@ -30,14 +31,6 @@ const initialData = {
   ],
 } as any;
 
-const converters = {
-  fa(number: any) {
-    return number.toString().replace(/\d/g, (d: any) => {
-      return String.fromCharCode(d.charCodeAt(0) + 1728);
-    });
-  },
-};
-
 const optionChart = {
   chart: {
     renderTo: 'container',
@@ -56,22 +49,6 @@ const optionChart = {
   },
   title: {
     text: '',
-  },
-  scrollbar: {
-    enabled: true,
-    barBackgroundColor: '#656565',
-    barBorderColor: '#eee',
-    barBorderRadius: 4,
-    barBorderWidth: 0,
-    height: 6,
-    buttonArrowColor: '#eee',
-    rifleColor: '#656565',
-    buttonBackgroundColor: 'transparent',
-    buttonBorderWidth: 0,
-    buttonBorderRadius: 0,
-    trackBackgroundColor: '#eee',
-    trackBorderWidth: 0,
-    trackBorderRadius: 4,
   },
   credits: {
     enabled: false,
