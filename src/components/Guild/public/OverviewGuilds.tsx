@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
-import guildIcon from 'src/assets/images/icons/guild-color.svg';
+import guildIcon from 'src/assets/images/icons/guild-total.svg';
 import guildPositiveIcon from 'src/assets/images/icons/guild-positive.svg';
 import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
