@@ -272,21 +272,17 @@ const OverviewOfGuildVaccinationProcess = () => {
           </div>
         </div>
 
-        {/* {loading && ( */}
-        {/*  <div className="p-40"> */}
-        {/*    <Spinner /> */}
-        {/*  </div> */}
-        {/* )} */}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {/* {!loading && dataset.length > 0 && !errorMessage && ( */}
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-        {/* )} */}
-        {dataset.length === 0 && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        {errorMessage ? (
+          <div className="p-40 text-red-500">{errorMessage}</div>
+        ) : (
+          <>
+            <HeadlessChart data={dataset} optionsProp={optionChart} />
+
+            {dataset.length === 0 && !loading && !errorMessage && (
+              <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+            )}
+          </>
         )}
-        {/* <div className="flex justify-center items-center w-full">
-          <Stacked data={dataset} categories={categories} />
-        </div> */}
       </div>
     </fieldset>
   );
