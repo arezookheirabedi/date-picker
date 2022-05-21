@@ -4,9 +4,12 @@ import moment from 'moment-jalaali';
 // import axios from 'axios';
 // import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
-import HighchartsReact from 'highcharts-react-official';
+
+import Charts from 'src/components/Charts';
+
 import Highcharts from 'highcharts';
-import {data111} from 'src/components/Transport/monitoring/constant';
+// import SearchableSelect from 'src/components/SearchableSelect';
+import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -15,11 +18,15 @@ import {
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
+import {converters, mockRegisterPercentage} from './constant';
+// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
+
+const {HeadlessChart} = Charts;
 
 interface IOverviewGuildRegister {}
 
 const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
-  const [dataset, setDataset] = useState<any[]>([]);
+  const [dataset, setDataset] = useState<any>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [categories, setCategories] = useState<any[]>([]);
   // eslint-disable-next-line
@@ -48,23 +55,19 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
 
   const normalizeData = (data: Array<any>) => {
     const province: any[] = [];
-    const registered: any[] = [];
+
     const unregistered: any[] = [];
     data.forEach((item: any) => {
       province.push(item.province);
       unregistered.push(item.unregister);
-      registered.push(item.register);
     });
-
-    setCategories([...province]);
-    const newData = [
-      {name: 'unregistered', data: [...unregistered]},
-      {name: 'registered', data: [...registered]},
-    ];
-    setDataset([...newData]);
+    // setCategories([...province]);
+    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
+    // setDataset([...newData]);
+    setDataset({categories: [...province], series: [...newData]});
   };
   useEffect(() => {
-    normalizeData(data111);
+    normalizeData(mockRegisterPercentage);
     return () => {
       cancelRequest();
       setDataset([]);
@@ -95,53 +98,108 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
     setShowDatePicker(true);
   };
 
-  const options = {
+  const optionChart = {
     chart: {
       type: 'column',
+      numberFormatter() {
+        // eslint-disable-next-line prefer-rest-params
+        const ret = Highcharts.numberFormat.apply(0, arguments as any);
+        return converters.fa(ret);
+      },
+      className: 'transport-line-chart',
     },
-    // title: {
-    //   text: 'Monthly Average Rainfall',
-    // },
-    // subtitle: {
-    //   text: 'Source: WorldClimate.com',
-    // },
-    xAxis: {
-      categories: [...categories],
-      crosshair: false,
+    title: {
+      text: null,
     },
-    yAxis: {
-      min: 0,
-      // title: {
-      //   text: 'Rainfall (mm)',
-      // },
+    credits: {
+      enabled: false,
     },
-    tooltip: {
-      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-      pointFormat:
-        '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-      footerFormat: '</table>',
-      shared: true,
-      useHTML: true,
-    },
+    colors: ['#ff0000', '#000000', '#AB0A0A'],
     plotOptions: {
       column: {
-        pointPadding: 0.2,
-        borderWidth: 0,
+        marker: {
+          enabled: false,
+          states: {
+            hover: {
+              enabled: true,
+              fillColor: {
+                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
+                // stops: [
+                //   [0, "#FFCC00"], // start
+                //   [1, "#FF9400"] // end
+                // ]
+              },
+              lineColor: '#fff',
+              lineWidth: 3,
+            },
+          },
+        },
+        lineWidth: 2,
+        threshold: null,
+        borderRadius: 2,
+        // pointWidth: pointWidth || 0,
+        states: {
+          hover: {
+            lineWidth: 1,
+          },
+        },
       },
     },
-    series: [...dataset],
+    yAxis: {
+      gridLineDashStyle: 'dash',
+      lineDashStyle: 'dash',
+      lineColor: '#000000',
+      lineWidth: 1,
+      opposite: true,
+      title: {
+        enabled: false,
+      },
+    },
+    xAxis: {
+      lineDashStyle: 'dash',
+      lineColor: '#000000',
+      lineWidth: 1,
+    },
+    tooltip: {
+      shared: true,
+      useHTML: true,
+      valueSuffix: 'K',
+      style: {
+        direction: 'rtl',
+        textAlign: 'right',
+        fontFamily: 'inherit',
+        fontSize: 10,
+      },
+      borderWidth: 0,
+    },
+    series: [
+      {
+        lineWidth: 4,
+        dataLabels: {
+          enabled: true,
+        },
+      },
+    ],
   };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به درصد اصناف ثبت نامی در هر استان
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به درصد ابتلای اصناف در هر استان</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
+          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+            <div className="flex items-center">
+              {/* <SearchableSelect
+                placeholder="کل آموزش و پرورش"
+                category="grade"
+                tag="edu"
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              /> */}
+              <SerchableSingleSelect />
+            </div>
+            <div className="flex items-center">
+              {' '}
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -166,10 +224,9 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && dataset.length > 0 && !errorMessage && (
-          <HighchartsReact highcharts={Highcharts} options={options} />
-          // <Stacked data={dataset} categories={categories} />
-        )}
+
+        <HeadlessChart data={dataset} optionsProp={optionChart} />
+
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
