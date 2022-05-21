@@ -343,9 +343,6 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به آخرین وضعیت واکسیناسیون حمل و نقل عمومی
-      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
