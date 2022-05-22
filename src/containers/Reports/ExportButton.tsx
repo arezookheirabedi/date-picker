@@ -1,42 +1,45 @@
 import dayjs from 'dayjs';
 import React, {useState} from 'react';
 import guildService from 'src/services/guild.service';
+import DotLoading from 'src/components/DotLoading';
+
+// import fileDownload from 'js-file-download';
 import {EReportStatus} from './constant';
 import download from '../../assets/images/icons/download.svg';
 
 interface IProps {
-  item: EReportStatus;
+  item: any;
   refresh: boolean;
   shouldRefresh: (data: boolean) => void;
+  reportType: string;
 }
-const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => {
+const ExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh, reportType}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   async function handelDownload(id: any) {
     setLoading(true);
+    const fileName = `${item.reportName}- ${dayjs(item.requestDateTime)
+      .calendar('jalali')
+      .format('YYYY-MM-DD')
+      .toPersianDigits()}.csv`;
     try {
-      const response = await guildService.otpConfigDownload(id);
+      const response = await guildService.reportDownload(id, reportType);
 
-      const blob = new Blob([response.data], {type: 'text/csv'});
+      const blob = new Blob([response.data]);
       const blobuUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobuUrl;
-      link.setAttribute(
-        'download',
-        `اطلاعات ملاقات کنندگان- ${dayjs(item)
-          .calendar('jalali')
-          .format('YYYY-MM-DD')
-          .toPersianDigits()}`
-      );
+      link.setAttribute('download', `${fileName}`);
       document.body.appendChild(link);
       link.click();
-      shouldRefresh(!refresh);
-      // window.open(url)
+
+      // window.open(url);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
+      shouldRefresh(!refresh);
     }
   }
 
@@ -51,10 +54,16 @@ const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => 
               disabled={loading}
               type="button"
               className="button button--primary px-8 inline-flex w-auto justify-center items-center space-x-2 rtl:space-x-reverse"
-              onClick={() => handelDownload(data)}
+              onClick={() => handelDownload(item.id)}
             >
-              <img src={download} alt="download" className="w-5 h-4" />
-              <span>دانلود</span>
+              {loading ? (
+                <DotLoading />
+              ) : (
+                <>
+                  <img src={download} alt="download" className="w-5 h-4" />
+                  <span>دانلود</span>
+                </>
+              )}
             </button>
           </div>
         );
@@ -69,7 +78,7 @@ const GuildExportButton: React.FC<IProps> = ({item, refresh, shouldRefresh}) => 
     }
   };
 
-  return <>{getButton(item)}</>;
+  return <>{getButton(item.reportStatus)}</>;
 };
 
-export default GuildExportButton;
+export default ExportButton;

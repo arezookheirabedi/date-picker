@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
-import guildIcon from 'src/assets/images/icons/guild-color.svg';
+import guildIcon from 'src/assets/images/icons/guild-total.svg';
 import guildPositiveIcon from 'src/assets/images/icons/guild-positive.svg';
 import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
@@ -107,13 +107,13 @@ const OverviewGuilds: React.FC<{}> = () => {
   }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">وضعیت کلی اصناف کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی اصناف کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
-            infoText=""
+            infoText="مجموع کارفرمایانی که در اصناف فعالیت دارند."
             icon={guildIcon}
             text="مجموع کارفرمایان صنفی"
             count={guildVacinateInfo.totalPopulation}
@@ -121,7 +121,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="مجموع افراد مبتلا شده به بیماری کوید"
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={guildPcrInfo.positiveMembersCount}
@@ -129,18 +129,24 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={guildPcrInfo.recoveredMembersCount}
             loading={pcrLoading}
           />
-          <Statistic hasInfo infoText="" icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" />
+          <Statistic
+            hasInfo
+            infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
+            icon={deadIcon}
+            text="مجموع فوت‌ شدگان"
+            count="-"
+          />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
-            infoText=" افرادی مه دو دوز واکسن دریافت نموده اند واکسینه شده تلقی میگردند."
+            infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={guildVacinateInfo.gtDoses[0] || 0}
@@ -148,7 +154,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
             count={guildVacinateInfo.totalNonVaccinesCount || 0}
@@ -156,18 +162,18 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="تعداد افرادی که بعد از شروع به کار سامانه دوز اول را دریافت کرده اند."
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count="-"
+            count={guildVacinateInfo.totalVaccinesCountAfterStartOfSystem || 0}
             loading={loading}
           />{' '}
           <Statistic
             hasInfo
-            infoText=""
+            infoText="تعداد افرادی که در زمان شروع به کار سامانه در طرح واکسیناسیون شرکت نکرده بودند."
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count="-"
+            count={guildVacinateInfo.totalNonVaccinesCountBeforeStartOfSystem || 0}
             loading={loading}
           />
         </div>
@@ -176,7 +182,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={guildInquiry.disqualified}  loading={inquiryLoading}/> */}
           <Statistic
             hasInfo
-            infoText=""
+            infoText="تعداد کل تست های pcr که کارفرمایان صنفی انجام داده اند."
             icon={testIcon}
             text="تعداد آزمایش های کارفرمایان صنفی"
             count={guildPcrInfo.testResultsCount}
@@ -184,7 +190,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
             count={guildVacinateInfo.totalNonVaccinesCountToTotalPopulationPercentage || 0}
@@ -192,7 +198,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="درصد افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
             count={guildVacinateInfo.totalVaccinesCountToTotalPopulationPercentage || 0}
@@ -200,7 +206,7 @@ const OverviewGuilds: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText=""
+            infoText="نسبت مبتلایان کارفرمایان صنفی به بیماری کرونا به کل جمعیت کارفرمایان صنفی"
             icon={guildPositiveIcon}
             text="درصد ابتلا به کل"
             count={guildPcrInfo.positiveMembersCountToTotalPopulationPercentage || 0}
