@@ -22,9 +22,9 @@ import {converters, mockRegisterPercentage} from './constant';
 
 const {HeadlessChart} = Charts;
 
-interface IOverviewGuildRegister {}
+interface IOverviewGuildPositivePcrPercentage {}
 
-const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
+const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [categories, setCategories] = useState<any[]>([]);
@@ -113,7 +113,7 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
     credits: {
       enabled: false,
     },
-    colors: ['#ff0000', '#000000', '#AB0A0A'],
+    colors: ['#FE2D2F'],
     plotOptions: {
       column: {
         marker: {
@@ -233,4 +233,4 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
   );
 };
 
-export default OverviewGuildRegister;
+export default OverviewGuildPositivePcrPercentage;
