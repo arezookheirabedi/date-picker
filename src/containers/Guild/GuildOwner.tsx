@@ -1,13 +1,15 @@
 import React from 'react';
-// import OverviewGuildRegisteredPercentage from 'src/components/Guild/public/OverviewGuildRegisteredPercentage';
+import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
+// import OverviewGuildPositivePcrPercentage from 'src/components/Guild/public/OverviewGuildPositivePcrPercentage';
+// import OverviewGuildRegisterNumber from 'src/components/Guild/public/OverviewGuildRegisterNumber';
+// import OverviewGuildRegisterPercentage from 'src/components/Guild/public/OverviewGuildRegisterPercentage';
 import OverviewGuilds from 'src/components/Guild/public/OverviewGuilds';
 import OverviewGuildsPerCategory from 'src/components/Guild/public/OverviewGuildsPerCategory';
 import OverviewGuildsPerProvince from 'src/components/Guild/public/OverviewGuildsPerProvince';
-// import OverviewOfTheLatestPublicGuildVaccinationStatus from 'src/components/Guild/public/OverviewOfTheLatestPublicGuildVaccinationStatus';
-import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
+// import OverviewVaccination from 'src/components/Guild/public/OverviewGuildVaccination';
+// import OverviewOfGuildVaccinationProcess from 'src/components/Guild/public/OverviewOfGuildVaccinationProcess';
 import TestStatus from 'src/components/Guild/public/TestStatus';
 // import TheLatestOverwiewOfVaccination from 'src/components/Guild/public/TheLatestOverwiewOfVaccination';
-// import OverviewOfGuildVaccinationProcess from 'src/components/Guild/public/OverviewOfGuildVaccinationProcess';
 
 const GuildOwner: React.FC<any> = () => {
   return (
@@ -17,10 +19,16 @@ const GuildOwner: React.FC<any> = () => {
       <OverviewGuildsPerProvince />
       <OverviewOfVaccination />
       <TestStatus />
-      {/* <TheLatestOverwiewOfVaccination /> */}
-      {/* <OverviewOfTheLatestPublicGuildVaccinationStatus /> */}
-      {/* <OverviewOfGuildVaccinationProcess /> */}
-      {/* <OverviewGuildRegisteredPercentage /> */}
+      {/* <OverviewGuilds />
+      <OverviewGuildsPerCategory />
+      <OverviewOfGuildVaccinationProcess />
+      <TheLatestOverwiewOfVaccination />
+      <OverviewGuildPositivePcrPercentage />
+      <OverviewGuildRegisterPercentage />
+      <OverviewGuildRegisterNumber />
+      <OverviewVaccination />
+      <OverviewGuildsPerProvince />
+      <TestStatus /> */}
     </div>
   );
 };
