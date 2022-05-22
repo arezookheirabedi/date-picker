@@ -90,7 +90,7 @@ const OverviewSamas = () => {
             count={0}
             loading={numberOfDriversLoading}
             hasInfo
-            infoText="این عدد مشتمل بر تمامی رانندگانی است که تا تاریخ روز در حوزه های مختلف مثبت شناسایی شده اند و به سماس اعلام شده اند"
+            infoText="مجموع موارد مبتلایان مثبت و اعلام شده به سماس در رسته‌های مختلف."
           />
           <Statistic
             icon={deactivateInquiryIcon}
@@ -99,7 +99,7 @@ const OverviewSamas = () => {
             count={0}
             loading={numberOfPositiveDriversLoading}
             hasInfo
-            infoText="این عدد مشتمل بر نتایج غیرفعالسازی دریافتی از سماس هستند"
+            infoText="غیرفعال‌سازی انجام شده رانندگان مبتلا توسط سماس."
           />
           <Statistic
             icon={informationUpdatedIcon}
@@ -108,7 +108,7 @@ const OverviewSamas = () => {
             count={0}
             loading={numberOfPlaqueVisitedLoading}
             hasInfo
-            infoText="این عدد مشتمل بر مجموع اطلاعات به روز رسانی دریافتی از سماس از تاریخ 1400/10/01 است"
+            infoText="مجموع اطلاعات به روزرسانی شده توسط سماس."
           />
           <Statistic
             icon={deactiveFuelCardIcon}
@@ -116,7 +116,7 @@ const OverviewSamas = () => {
             count="-"
             loading={false}
             hasInfo
-            infoText="این عدد نشان دهنده ی مجموع تعلیق های کارت سوخت رانندگان شناسایی شده با تست مثبت است"
+            infoText="مجموع کارت سوخت تعیلق شده افراد مختلف توسط سماس."
           />
         </div>
       </div>
