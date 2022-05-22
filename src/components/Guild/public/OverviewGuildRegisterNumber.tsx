@@ -1,30 +1,18 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import axios from 'axios';
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-
 import Charts from 'src/components/Charts';
-
 import Highcharts from 'highcharts';
 import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
-import {
-  cancelTokenSource,
-  msgRequestCanceled,
-  //  toPersianDigit
-} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
 import {converters, mockRegisterPercentage} from './constant';
-// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
 
-interface IOverviewGuildRegisterPercentage {}
-
-const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage> = () => {
+const OverviewGuildRegisterNumber: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [categories, setCategories] = useState<any[]>([]);
@@ -43,7 +31,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: '',
+    tags: null,
   });
 
   const cancelToken = cancelTokenSource();
@@ -54,14 +42,32 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
 
   const normalizeData = (data: Array<any>) => {
     const province: any[] = [];
-
+    const registered: any[] = [];
     const unregistered: any[] = [];
     data.forEach((item: any) => {
       province.push(item.province);
       unregistered.push(item.unregister);
+      registered.push(item.register);
     });
     // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
+    const newData = [
+      {
+        name: 'ثبت نام نشده',
+        dataLabels: {
+          enabled: true,
+        },
+        showInLegend: false,
+        data: [...unregistered],
+      },
+      {
+        name: 'ثبت نام شده',
+        dataLabels: {
+          enabled: true,
+        },
+        showInLegend: false,
+        data: [...registered],
+      },
+    ];
     // setDataset([...newData]);
     setDataset({categories: [...province], series: [...newData]});
   };
@@ -81,14 +87,14 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: '',
+        tags: null,
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: '',
+        tags: null,
       });
     }
   }, [selectedDayRange]);
@@ -113,7 +119,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     credits: {
       enabled: false,
     },
-    colors: ['#175A76'],
+    colors: ['#209F92', '#F3BC06'],
     plotOptions: {
       column: {
         marker: {
@@ -154,7 +160,27 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         enabled: false,
       },
     },
+    // scrollbar: {
+    //   enabled: true,
+    //   barBackgroundColor: '#656565',
+    //   barBorderColor: '#eee',
+    //   barBorderRadius: 4,
+    //   barBorderWidth: 0,
+    //   height: 6,
+    //   buttonArrowColor: '#eee',
+    //   rifleColor: '#656565',
+    //   buttonBackgroundColor: 'transparent',
+    //   buttonBorderWidth: 0,
+    //   buttonBorderRadius: 0,
+    //   trackBackgroundColor: '#eee',
+    //   trackBorderWidth: 0,
+    //   trackBorderRadius: 4,
+    // },
     xAxis: {
+      // scrollbar: {
+      //   enabled: true,
+      //   showFull: false,
+      // },
       lineDashStyle: 'dash',
       lineColor: '#000000',
       lineWidth: 1,
@@ -162,21 +188,20 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: 'K',
+      borderRadius: 16,
+      borderWidth: 0,
+      valueDecimals: 0,
       style: {
         direction: 'rtl',
         textAlign: 'right',
         fontFamily: 'inherit',
-        fontSize: 10,
       },
-      borderWidth: 0,
+
+      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
       {
         lineWidth: 4,
-        dataLabels: {
-          enabled: true,
-        },
       },
     ],
   };
@@ -184,7 +209,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به درصد اصناف ثبت نامی در هر استان
+        نگاه کلی به تعداد اصناف ثبت نامی در هر استان
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
@@ -230,9 +255,12 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
+        {/* <div className="flex justify-center items-center w-full">
+          <Stacked data={dataset} categories={categories} />
+        </div> */}
       </div>
     </fieldset>
   );
 };
 
-export default OverviewGuildRegisterPercentage;
+export default OverviewGuildRegisterNumber;
