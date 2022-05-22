@@ -127,15 +127,22 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
         {/* third card row */}
 
         <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده اند."
-              hasInfo
-              icon={GreyVaccine}
-              text="تعداد واکسیناسیون انجام نشده   "
-              count={numberOf.totalNonVaccinesCount || 0}
-              loading={loading}
-            />
+          <Statistic
+            infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده اند."
+            hasInfo
+            icon={GreyVaccine}
+            text="تعداد واکسیناسیون انجام نشده   "
+            count={numberOf.totalNonVaccinesCount || 0}
+            loading={loading}
+          />
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
           </div>
         </div>
       </div>
@@ -184,27 +191,30 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
         {/* second card row */}
 
         <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="مجموع درصد افرادی که دوز چهارم واکسن را در سطح کشور دریافت نموده اند."
-              icon={DarkgreenVaccine}
-              text="درصد افراد با دوز چهارم"
-              count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
-              hasInfo
-              loading={loading}
-              isPercentage
-            />
+          <Statistic
+            infoText="مجموع درصد افرادی که دوز چهارم واکسن را در سطح کشور دریافت نموده اند."
+            icon={DarkgreenVaccine}
+            text="درصد افراد با دوز چهارم"
+            count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
+            hasInfo
+            loading={loading}
+            isPercentage
+          />
+
+          <Statistic
+            infoText="مجموع درصد افرادی که دوز پنجم واکسن را در سطح کشور دریافت نموده اند."
+            icon={VaccineIcon}
+            text="درصد افراد با دوز پنجم"
+            count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
+            hasInfo
+            loading={loading}
+            isPercentage
+          />
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
           </div>
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="مجموع درصد افرادی که دوز پنجم واکسن را در سطح کشور دریافت نموده اند."
-              icon={VaccineIcon}
-              text="درصد افراد با دوز پنجم"
-              count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-              hasInfo
-              loading={loading}
-              isPercentage
-            />
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
           </div>
         </div>
       </div>
