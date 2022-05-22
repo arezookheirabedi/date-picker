@@ -18,7 +18,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  const [currentPage, setCurrenntPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
@@ -119,7 +119,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
     }
   };
   useEffect(() => {
-    setCurrenntPage(0);
+    setCurrentPage(0);
   }, [cityTitle]);
 
   useEffect(() => {
@@ -139,7 +139,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   }, [cityTitle, currentPage]);
 
   function handlePageChange(page: number = 1) {
-    setCurrenntPage(page);
+    setCurrentPage(page);
   }
 
   return (
