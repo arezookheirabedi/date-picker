@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
+import Highcharts from "highcharts/highstock";
+
 import vaccineService from 'src/services/vaccine.service';
 import axios from 'axios';
 
 // import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 
-const {StackArea} = Charts;
-
+const {HeadlessChart} = Charts;
 
 const initialData = {
   categories: ['۱۴۰۱/۰۱/۰۱', '۱۴۰۱/۰۱/۰۲', '۱۴۰۱/۰۱/۰۳', '۱۴۰۱/۰۱/۰۴', '۱۴۰۱/۰۱/۰۵', '۱۴۰۱/۰۱/۰۶', '۱۴۰۱/۰۱/۰۷', '۱۴۰۱/۰۱/۰۸', '۱۴۰۱/۰۱/۰۹', '۱۴۰۱/۰۱/۱۰'],
@@ -27,6 +28,89 @@ const initialData = {
     data: [16, 21, 44, 196, 139, 1018, 1001, 1200, 1150, 1703]
   }]
 } as any;
+
+const converters = {
+  fa(number: any) {
+    return number.toString().replace(/\d/g, (d: any) => {
+      return String.fromCharCode(d.charCodeAt(0) + 1728);
+    });
+  },
+};
+
+const optionChart = {
+  chart: {
+    renderTo: 'container',
+    type: 'areaspline',
+    numberFormatter() {
+      // eslint-disable-next-line prefer-rest-params
+      const ret = Highcharts.numberFormat.apply(0, arguments as any);
+      return converters.fa(ret);
+    },
+
+
+    events: {
+      redraw: () => {
+        // eslint-disable-next-line
+        // console.log('redraw');
+      },
+    },
+    // zoomType: 'x'
+    // styledMode: true
+  },
+  title: {
+    text: '',
+  },
+  xAxis: {
+    tickmarkPlacement: 'off',
+    title: {
+      enabled: false
+    }
+  },
+  yAxis: {
+    title: {
+      text: ''
+    },
+    opposite: true,
+  },
+  credits: {
+    enabled: false,
+  },
+  colors: ['#F3BC06', '#209F92', '#004D65', '#BFDDE7', '#716DE3'],
+  plotOptions: {
+    series: {
+      fillOpacity: 1,
+      marker: {
+        enabled: false
+      }
+    },
+    area: {
+      stacking: 'normal',
+      // lineColor: '#666666',
+      // lineWidth: 1,
+      // marker: {
+      //   lineWidth: 1,
+      //   lineColor: '#666666'
+      // }
+    }
+  },
+  legend: {
+    enabled: false,
+  },
+  tooltip: {
+    shared: true,
+    useHTML: true,
+    valueSuffix: ' نفر',
+    style: {
+      direction: 'rtl',
+      textAlign: 'right',
+      fontFamily: 'inherit',
+      fontSize: 10,
+    },
+    borderWidth: 0,
+    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
+  },
+
+}
 
 const OverviewOfDriverVaccinationProcess = () => {
 
@@ -185,7 +269,7 @@ const OverviewOfDriverVaccinationProcess = () => {
         {/* )} */}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {/* {!loading && dataset.length > 0 && !errorMessage && ( */}
-        <StackArea data={dataset}/>
+        <HeadlessChart data={dataset} optionsProp={optionChart}/>
         {/* )} */}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
