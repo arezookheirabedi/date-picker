@@ -1,64 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import dayjs from 'dayjs';
-// @ts-ignore
-// import moment from 'moment-jalaali';
-import {useLocation} from 'react-router-dom';
-// import qs from 'qs';
-// import {Menu} from '@headlessui/react';
 import transportService from 'src/services/transport.service';
-import Table from '../../Table';
-import ExportButton from '../../Export/ExportButton';
-// import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit, getServiceTypeName} from '../../../helpers/utils';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-// import {ReactComponent as FolderIcon} from '../../../assets/images/icons/folder.svg';
+import dayjs from 'dayjs';
+import Table from '../../TableXHR';
+import {
+  toPersianDigit,
+  getServiceTypeName,
+  cancelTokenSource,
+  msgRequestCanceled,
+} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
+import ExportButton from './ExportButton';
+import {getHealthStatusTextAndColor, getStatusColor, getVaccinesStatusText} from './constant';
 
 interface OverviewDriverStatusProps {
   cityTitle?: string;
 }
+const pageSize = 10;
 
 const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) => {
-  const {search} = useLocation();
-  // const location = useLocation();
-  const queryStringParams = new URLSearchParams(search);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
+  const [currentPage, setCurrenntPage] = useState(1);
   // eslint-disable-next-line
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-
-
-
-
-
-  const getOverviewTransportReport = async (params: any) => {
-    // setErrorMessage(null);
-    try {
-      const response: any = await transportService.overviewReport(params, {
-        cancelToken: source.token,
-      });
-      setDataSet([...response.data.content]);
-      setTotalItems(response.data.totalElements);
-    } catch (error: any) {
-      // setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
   // useEffect(() => {
   //   const qst = new URLSearchParams(search);
@@ -75,16 +45,6 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   //   //   source.cancel('Operation canceled by the user.');
   //   // }
   // }, []);
-
-  const location = useLocation();
-  useEffect(() => {
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataSet([]);
-      setTotalItems(0);
-      setLoading(false);
-    };
-  }, [location.search]);
 
   // useEffect(() => {
   //   let latestQuery: any = {};
@@ -124,37 +84,6 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   //   }
   // }, [selectedDayRange]);
 
-  useEffect(() => {
-    const qst = new URLSearchParams(search);
-
-    let query: any = {
-      healthStatusSet: 'POSITIVE',
-      pageNumber: Number(qst.get('page') || '1') - 1,
-      pageSize: 20,
-      sort: 'ASC',
-      // from: qst.get('from'),
-      // to: qst.get('to'),
-    };
-
-    if (qst.has('provinceName')) query = {...query, province: qst.get('provinceName')};
-
-    // if (qst.get('from') && qst.get('to')) {
-    //   let from: any = qst.get('from');
-    //   let to: any = qst.get('from');
-
-    //   from = moment(from, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
-    //   to = moment(to, 'YYYY-MM-DD').format('jYYYY-jM-jD').split('-');
-
-    //   setSelectedDayRange({
-    //     from: {year: from[0], month: from[1], day: from[2]},
-    //     to: {year: to[0], month: to[1], day: to[2]},
-    //   });
-    // }
-
-    setLoading(true);
-    getOverviewTransportReport(query);
-  }, [search]);
-
   // useEffect(() => {
   //   setSelectedDayRange({
   //     from: null,
@@ -170,6 +99,68 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   //   });
   // };
 
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  const getOverviewTransportReport = async (params: any) => {
+    setErrorMessage(null);
+    setLoading(true);
+    try {
+      const {data}: any = await transportService.overviewReport(params, {
+        cancelToken: cancelToken.token,
+      });
+
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          serviceType: item.serviceType || 'نامشخص',
+          plaque: item.plaque || 'نامشخص',
+          nationalId: item.nationalId || 'نامشخص',
+          province: item.province || 'نامشخص',
+          date: item.receiptDate,
+          personHealthStatus: item.personHealthStatus,
+          numberOfReceivedDoses: item.numberOfReceivedDoses || 'نامشخص',
+        });
+      });
+      setDataSet([...normalizedData]);
+
+      setTotalItems(data.totalElements);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const province = cityTitle || null;
+    const params: any = {
+      pageNumber: Number(currentPage) - 1,
+      pageSize,
+      sort: 'ASC',
+      reportType: 'GENERAL',
+      province,
+      healthStatusSet: [].join(','),
+      // healthStatusSet: 'POSITIVE',
+      // healthStatusSet: ['POSITIVE', 'NEGATIVE', 'UNKNOWN'].join(','),
+    };
+    getOverviewTransportReport(params);
+    return () => {
+      cancelRequest();
+      setDataSet([]);
+    };
+  }, [cityTitle, currentPage]);
+  useEffect(() => {
+    setCurrenntPage(0);
+  }, [cityTitle]);
+  function handlePageChange(page: number = 1) {
+    setCurrenntPage(page);
+  }
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
       <legend className="text-black mx-auto px-3">
@@ -180,140 +171,15 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
         <div className="inline-flex">
           <ExportButton
             params={{
-              // from: selectedDayRange.from
-              //   ? moment(
-              //       `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-              //       'jYYYY/jM/jD'
-              //     ).format('YYYY-MM-DD')
-              //   : null,
-              // to: selectedDayRange.to
-              //   ? moment(
-              //       `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-              //       'jYYYY/jM/jD'
-              //     ).format('YYYY-MM-DD')
-              //   : null,
-              healthStatusSet: ['POSITIVE'],
+              // healthStatusSet: [],
               reportName: `نگاه کلی به وضعیت رانندگان حمل و نقل عمومی ${
                 cityTitle ? `استان ${cityTitle}` : ''
               }`,
+              province: cityTitle,
+              reportType: 'GENERAL',
             }}
           />
         </div>
-
-        {/* <div className="flex items-center space-x-6 rtl:space-x-reverse">
-          <Menu
-            as="div"
-            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-          >
-            <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                <div className="flex items-center">
-                  <FolderIcon className="h-5 w-5 ml-2 text-gray-500" />
-                  <span className="ml-10 whitespace-nowrap truncate">{exportType || 'PDF'}</span>
-                </div>
-                <DownIcon className="h-2 w-2.5 mr-2 text-gray-500" />
-              </Menu.Button>
-            </div>
-
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="px-1 py-1 ">
-                {['PDF', 'CSV'].map((value: any, index: any) => {
-                  return (
-                   
-                    <React.Fragment key={index}>
-                      <Menu.Item>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                            onClick={() => setExportType(value)}
-                          >
-                            {value}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </React.Fragment>
-                  );
-                })}
-              </div>
-            </Menu.Items>
-          </Menu>
-          <div className="flex items-center justify-start">
-            {showDatePicker ? (
-              <DatePickerModal
-                setSelectedDayRange={setSelectedDayRange}
-                selectedDayRange={selectedDayRange}
-                setShowDatePicker={setShowDatePicker}
-                showDatePicker
-              />
-            ) : null}
-            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-              <div
-                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                onClick={focusFromDate}
-              >
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateFromDate())}
-                </span>
-                {selectedDayRange.to || selectedDayRange.from ? (
-                  <button type="button" onClick={clearSelectedDayRange}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
-            </div>
-            <div className=" shadow-custom rounded-lg px-4 py-1">
-              <div
-                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                onClick={focusFromDate}
-              >
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateToDate())}
-                </span>
-                {selectedDayRange.to || selectedDayRange.from ? (
-                  <button type="button" onClick={clearSelectedDayRange}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
-                )}
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
 
       {loading ? (
@@ -324,90 +190,34 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
         <>
           <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
-              dataSet={dataSet}
-              pagination={{pageSize: 20, maxPages: 3}}
+              handlePageChange={handlePageChange}
+              dataSet={[...dataSet]}
+              pagination={{pageSize, currentPage}}
+              totalItems={totalItems}
               columns={[
                 {
                   name: 'رسته',
                   key: 'serviceType',
                   render: (v: any, record, index: number) => (
-                    <span className="flex justify-center w-full">
-                      {`${(
-                        (Number(queryStringParams.get('page') || 1) - 1) * 20 +
-                        index +
-                        1
-                      ).toLocaleString('fa')}. ${getServiceTypeName(v)}`}
+                    <span className="flex justify-start w-full">
+                      {`${toPersianDigit(
+                        ((currentPage - 1) * pageSize + (index + 1)).toString()
+                      )}. ${getServiceTypeName(v)}`}
                     </span>
                   ),
                 },
                 {
                   name: 'پلاک',
-                  key: '',
-                  render: (v: any, record: any) =>
-                    // eslint-disable-next-line
-                    record.plaque ? (
-                      <div className="flex items-center">
-                        <div
-                          className={`license-plate ${
-                            record.serviceType === 'TAXI_T' || record.serviceType === 'PUBLIC'
-                              ? 'taxi'
-                              : ''
-                          }`}
-                        >
-                          <div className="blue-column">
-                            <div className="flag">
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                            <div className="text">
-                              <div>I.R.</div>
-                              <div>IRAN</div>
-                            </div>
-                          </div>
-                          <span>{record.plaque.firstNumber}</span>
-                          <span className="alphabet-column">{record.plaque.letter}</span>
-                          <span>{record.plaque.secondNumber}</span>
-                          <div className="iran-column">
-                            <span>ایــران</span>
-                            <strong>{record.plaque.iranNumber}</strong>
-                          </div>
-                        </div>
-                      </div>
-                    ) : record.motorCyclePlaque ? (
-                      <div className="flex items-center">
-                        <div className="license-plate-motor">
-                          <div className="flex w-full justify-between">
-                            <div className="flex flex-grow justify-center">
-                              <span>{record.motorCyclePlaque.threeDigitNumber}</span>
-                            </div>
-
-                            <div className="blue-column">
-                              <div className="flag">
-                                <div />
-                                <div />
-                                <div />
-                              </div>
-                              <div className="text">
-                                <div>I.R.</div>
-                                <div>IRAN</div>
-                              </div>
-                            </div>
-                          </div>
-                          <span className="alphabet-column">
-                            {record.motorCyclePlaque.fiveDigitNumber}
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      ''
-                    ),
+                  key: 'plaque',
+                  render: (v: any, record: any) => (
+                    <span className="">{toPersianDigit(record.plaque)}</span>
+                  ),
                 },
                 {
                   name: 'کدملی راننده',
                   key: 'nationalId',
-                  render: (v: any) => (
-                    <span className="text-gray-500">{toPersianDigit(v || '')}</span>
+                  render: (v: any, record: any) => (
+                    <span className="text-gray-500">{toPersianDigit(record.nationalId)}</span>
                   ),
                 },
                 {
@@ -417,18 +227,9 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                 },
                 {
                   name: 'وضعیت',
-                  key: 'status',
+                  key: 'personHealthStatus',
                   render: (v: string, record: any) => {
-                    let colors = 'from-gray-400 to-gray-300';
-                    if (record.status) {
-                      if (record.status === 'CONDITIONAL_QUALIFIED') {
-                        colors = 'from-orange-600 to-orange-400';
-                      } else if (record.status === 'DISQUALIFIED') {
-                        colors = 'from-red-700 to-red-500';
-                      } else if (record.status === 'QUALIFIED') {
-                        colors = 'from-green-600 to-green-500';
-                      }
-                    }
+                    const {colors} = getStatusColor(record.personHealthStatus);
 
                     return (
                       <div className="flex justify-center">
@@ -440,6 +241,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                     );
                   },
                 },
+
                 {
                   name: 'تاریخ ابتلا',
                   key: 'date',
@@ -449,48 +251,26 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                     </span>
                   ),
                 },
+
                 {
                   name: 'آزمایش',
                   key: 'personHealthStatus',
-                  render: (v: any) => (
-                    <span
-                      // eslint-disable-next-line
-                      className={`${
-                        // eslint-disable-next-line
-                        v === 'POSITIVE'
-                          ? 'text-red-700'
-                          : v === 'NEGATIVE'
-                          ? 'text-green-700'
-                          : 'text-gray-400'
-                      }`}
-                    >
-                      {/* eslint-disable-next-line */}
-                      {v === 'POSITIVE' ? 'مثبت' : v === 'NEGATIVE' ? 'منفی' : 'نامشخص'}
-                    </span>
-                  ),
+                  render: (v: any, record: any) => {
+                    const {colors, text} = getHealthStatusTextAndColor(record.personHealthStatus);
+                    return <span className={`${colors}`}>{text} </span>;
+                  },
                 },
                 {
                   name: 'واکسیناسیون',
                   key: 'numberOfReceivedDoses',
-                  render: (v: any) => (
-                    <span>
-                      {/* eslint-disable-next-line */}
-                      {v || v === 0
-                        ? // eslint-disable-next-line no-nested-ternary
-                          v > 2
-                          ? 'دوز سوم و بیشتر'
-                          : // eslint-disable-next-line no-nested-ternary
-                          v > 1
-                          ? 'دوز دوم'
-                          : v > 0
-                          ? 'دوز اول'
-                          : 'انجام نشده'
-                        : 'نامشخص'}
-                    </span>
-                  ),
+
+                  render: (v: any, record: any) => {
+                    const {text} = getVaccinesStatusText(record.numberOfReceivedDoses);
+
+                    return <span>{text} </span>;
+                  },
                 },
               ]}
-              totalItems={totalItems}
             />
           </div>
         </>

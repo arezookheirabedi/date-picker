@@ -1,4 +1,4 @@
-import {AxiosResponse} from 'axios';
+import {AxiosRequestConfig, AxiosResponse} from 'axios';
 import request from 'src/helpers/request';
 import {IProfile} from 'src/models/authentication.model';
 import {IMessageSeenInput, IPagable, IResponseGuildMessage} from 'src/models/message.model';
@@ -170,11 +170,31 @@ function guildReportoverviewStatus(
     .build()
     .get(`/api/v1/guilds/reports`, params, {...config});
 }
-function otpConfigDownload(id: any): Promise<AxiosResponse<any>> {
+
+function requestOtpReport(
+  {reportType, ...params}: any = {},
+  config?: AxiosRequestConfig
+): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .post(`/api/v1/misagh/inquiry/inquiries/daily/download/confirm`, id, {responseType: 'blob'});
+    .post(`/api/v1/guilds/reports/types/${reportType}/downloads/request?lang=fa`, params, {
+      ...config,
+    });
+}
+
+function reportDownload(id: string, reportType: string): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/${reportType}/reports/${id}/download`);
+}
+
+function configOtpReport({reportType, ...params}: any = {}): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .post(`/api/v1/guilds/reports/types/${reportType}/downloads/confirm?lang=fa`, params);
 }
 
 export default {
@@ -196,5 +216,7 @@ export default {
   guildInquiry,
   guildOverview,
   guildReportoverviewStatus,
-  otpConfigDownload,
+  requestOtpReport,
+  reportDownload,
+  configOtpReport,
 };
