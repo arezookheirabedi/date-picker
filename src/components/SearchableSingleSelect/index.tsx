@@ -1,38 +1,66 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, {Fragment, useState} from 'react';
+
+import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import recruitmentServices from 'src/services/recruitment.service';
 
-const people: Array<{id: number | string | null; name: string}> = [
-  {id: 1, name: 'Wade Cooper'},
-  {id: 2, name: 'Arlene Mccoy'},
-  {id: 3, name: 'Devon Webb'},
-  {id: 4, name: 'Tom Cook'},
-  {id: 5, name: 'Tanya Fox'},
-  {id: 6, name: 'Hellen Schmidt'},
-];
+interface IProps {
+  tag: string;
+  category: string;
+  queryParams: any;
 
-export default function SerchableSingleSelect() {
-  const [selected, setSelected] = useState<{id: number | string | null; name: string}>();
+  placeholder?: any;
+  setQueryParams: (v: any) => void;
+}
+const SerchableSingleSelect: React.FC<IProps> = ({placeholder, tag, category}) => {
+  const [selected, setSelected] = useState<{key: number | string | null; value: string}>();
   const [query, setQuery] = useState('');
 
+  const [tags, setTags] = useState<any[]>([{key: null, value: placeholder}]);
+
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
+  const fetcher = async () => {
+    try {
+      const res = await recruitmentServices.tags({tag, category}, {cancelToken: cancelToken.token});
+      const newData = [...tags, ...res.data];
+      setTags([...newData]);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetcher();
+
+    return () => {
+      cancelRequest();
+      setTags([]);
+    };
+  }, []);
   const filteredPeople =
     query === ''
-      ? people
-      : people.filter(person => {
-          return person.name.toLowerCase().includes(query.toLowerCase());
+      ? tags
+      : tags.filter(tag => {
+          return tag.value.toLowerCase().includes(query.toLowerCase());
         });
 
   return (
-    <div className="flex flex-col space-y-3 items-center justify-center">
+    <div className="flex  flex-col space-y-3 items-center justify-center">
       <div className="w-72 relative">
         <Combobox value={selected} onChange={setSelected}>
-          <div className="relative z-10 mt-1">
+          <div className=" single-select">
             <div className="flex items-center rtl:flex-row-reverse py-2 pl-2 pr-10 rtl:pl-10 rtl:pr-2 relative w-full shadow cursor-default overflow-hidden rounded-lg bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
               <Combobox.Input
-                placeholder={selected ? '' : 'انتخاب کنید'}
+                placeholder={selected ? '' : `${placeholder}`}
                 className="inline-block border-none text-sm leading-5 text-gray-900 focus:ring-0 focus:outline-none"
-                displayValue={(person: any) => (person ? person.name : '')}
+                displayValue={(person: any) => (person ? person.value : '')}
                 onChange={event => setQuery(event.target.value)}
               />
               <Combobox.Button className="absolute inset-y-0 right-0 left-auto rtl:left-0 rtl:right-auto flex items-center pr-2 rtl:pl-2 rtl:pr-0">
@@ -46,7 +74,7 @@ export default function SerchableSingleSelect() {
               leaveTo="opacity-0"
               afterLeave={() => setQuery('')}
             >
-              <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Combobox.Options className=" absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {filteredPeople.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     موردی یافت نشد
@@ -54,10 +82,10 @@ export default function SerchableSingleSelect() {
                 ) : (
                   filteredPeople?.map(person => (
                     <Combobox.Option
-                      key={person.id}
+                      key={person.key}
                       className={({active}) =>
                         `relative cursor-default select-none rtl:text-right py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 ${
-                          active ? 'bg-teal-500 text-white' : 'text-gray-900'
+                          active ? 'active-bg-color text-white' : 'text-gray-900'
                         }`
                       }
                       value={person}
@@ -67,12 +95,12 @@ export default function SerchableSingleSelect() {
                           <span
                             className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}
                           >
-                            {person.name}
+                            {person.value}
                           </span>
                           {selected ? (
                             <span
                               className={`absolute inset-y-0 left-0 rtl:right-0 rtl:left-auto flex items-center pl-3 rtl:pr-3 rtl:pl-0 ${
-                                active ? 'text-white' : 'text-teal-600'
+                                active ? 'text-white' : 'chek-color'
                               }`}
                             >
                               <CheckIcon className="h-5 w-5" aria-hidden="true" />
@@ -90,4 +118,5 @@ export default function SerchableSingleSelect() {
       </div>
     </div>
   );
-}
+};
+export default SerchableSingleSelect;
