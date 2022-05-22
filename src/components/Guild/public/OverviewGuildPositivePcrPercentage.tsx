@@ -8,7 +8,6 @@ import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
-// import SearchableSelect from 'src/components/SearchableSelect';
 import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {
   cancelTokenSource,
@@ -44,7 +43,7 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: [],
+    tags: '',
   });
 
   const cancelToken = cancelTokenSource();
@@ -82,14 +81,14 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
+        tags: '',
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: [],
+        tags: '',
       });
     }
   }, [selectedDayRange]);
@@ -189,14 +188,13 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
-              {/* <SearchableSelect
+              <SerchableSingleSelect
                 placeholder="کل آموزش و پرورش"
                 category="grade"
                 tag="edu"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
-              /> */}
-              <SerchableSingleSelect />
+              />
             </div>
             <div className="flex items-center">
               {' '}
@@ -230,9 +228,6 @@ const OverviewGuildRegister: React.FC<IOverviewGuildRegister> = () => {
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
-        {/* <div className="flex justify-center items-center w-full">
-          <Stacked data={dataset} categories={categories} />
-        </div> */}
       </div>
     </fieldset>
   );
