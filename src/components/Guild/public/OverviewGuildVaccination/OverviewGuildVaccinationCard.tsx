@@ -57,89 +57,82 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
     <>
       <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <div className="w-1/4 ">
-            <Statistic
-              hasInfo
-              infoText="مجموع کارفرمایان صنفی که در اصناف فعالیت دارند."
-              icon={guildIcon}
-              text="مجموع کارفرمایان صنفی"
-              count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
-              loading={loading}
-            />
-          </div>
-          <div className="w-1/4 ">
-            <Statistic
-              hasInfo
-              infoText="تعداد کل دوز های تزریقی"
-              icon={GreenVaccine}
-              text="تعداد واکسیناسیون کل دوز"
-              count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
-              loading={loading}
-              isPercentage
-            />
-          </div>
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="تعداد افرادی  که دوز اول واکسن را دریافت کرده‌اند."
-              hasInfo
-              icon={YellowVaccine}
-              text="تعداد واکسیناسیون دوز اول"
-              count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-              loading={loading}
-              isPercentage
-            />
-          </div>
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="تعداد افرادی  که دوز دوم واکسن را دریافت کرده‌اند."
-              icon={OrangeVaccine}
-              text="تعداد واکسیناسیون دوز دوم"
-              count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
-              hasInfo
-              loading={loading}
-              isPercentage
-            />
-          </div>
+          <Statistic
+            hasInfo
+            infoText="مجموع کارفرمایان صنفی که در اصناف فعالیت دارند."
+            icon={guildIcon}
+            text="مجموع کارفرمایان صنفی"
+            count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
+            loading={loading}
+          />
+
+          <Statistic
+            hasInfo
+            infoText="تعداد کل دوز های تزریقی"
+            icon={GreenVaccine}
+            text="تعداد واکسیناسیون کل دوز"
+            count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
+            loading={loading}
+            isPercentage
+          />
+
+          <Statistic
+            infoText="تعداد افرادی  که دوز اول واکسن را دریافت کرده‌اند."
+            hasInfo
+            icon={YellowVaccine}
+            text="تعداد واکسیناسیون دوز اول"
+            count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
+            loading={loading}
+            isPercentage
+          />
+
+          <Statistic
+            infoText="تعداد افرادی  که دوز دوم واکسن را دریافت کرده‌اند."
+            icon={OrangeVaccine}
+            text="تعداد واکسیناسیون دوز دوم"
+            count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
+            hasInfo
+            loading={loading}
+            isPercentage
+          />
         </div>
 
         {/* second card row */}
 
         <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <div className="w-1/4 ">
-            <Statistic
-              text="تعداد واکسیناسیون دوز سوم"
-              hasInfo
-              infoText="تعداد افرادی دوز سوم واکسن را دریافت کرده‌اند."
-              icon={PurppleVaccine}
-              count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-              loading={loading}
-              isPercentage
-            />
-          </div>
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="تعداد افرادی  که دوز چهارم  واکسن را دریافت کرده‌اند."
-              icon={DarkgreenVaccine}
-              text="تعداد واکسیناسیون دوز چهارم"
-              count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-              hasInfo
-              loading={loading}
-              isPercentage
-            />
-          </div>
-          <div className="w-1/4 ">
-            <Statistic
-              infoText="تعداد افرادی  که دوز پنجم واکسن را دریافت کرده‌اند "
-              hasInfo
-              icon={BlueVaccine}
-              text="تعداد واکسیناسیون دوز پنجم"
-              count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-              loading={loading}
-              isPercentage
-            />
-          </div>
+          <Statistic
+            text="تعداد واکسیناسیون دوز سوم"
+            hasInfo
+            infoText="تعداد افرادی دوز سوم واکسن را دریافت کرده‌اند."
+            icon={PurppleVaccine}
+            count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
+            loading={loading}
+            isPercentage
+          />
 
-          <div className="w-1/4 ">{/* cvxdvcv */}</div>
+          <Statistic
+            infoText="تعداد افرادی  که دوز چهارم  واکسن را دریافت کرده‌اند."
+            icon={DarkgreenVaccine}
+            text="تعداد واکسیناسیون دوز چهارم"
+            count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
+            hasInfo
+            loading={loading}
+            isPercentage
+          />
+
+          <Statistic
+            infoText="تعداد افرادی  که دوز پنجم واکسن را دریافت کرده‌اند "
+            hasInfo
+            icon={BlueVaccine}
+            text="تعداد واکسیناسیون دوز پنجم"
+            count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
+            loading={loading}
+            isPercentage
+          />
+
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
           {/* <div className="w-1/4 ">
             <Statistic
               infoText="تعداد افرادی که اطلاعات آنها به درستی در سامانه ثبت نشده است"
@@ -241,7 +234,9 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
             isPercentage
           />
 
-          <div className=" ">{/* cvxdvcv */}</div>
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
         </div>
       </div>
     </>
