@@ -1,43 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import {Menu} from '@headlessui/react';
 import guildService from 'src/services/guild.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Calendar from 'src/components/Calendar';
-import {ReactComponent as DownIcon} from 'src/assets/images/icons/down.svg';
 
 import DatePickerModal from 'src/components/DatePickerModal';
-import Table from 'src/components/TableScope';
+import Table from 'src/components/TableScopeSort';
 import CategoryDonut from '../../../../containers/Guild/components/CategoryDonut';
 
-const filterTypes: any[] = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
-
 const OverviewOfVaccination: React.FC<{}> = () => {
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
-  // eslint-disable-next-line
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
-  const [filterType, setFilterType] = useState({
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  });
 
   const cancelToken = cancelTokenSource();
 
@@ -45,7 +28,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  // eslint-disable-next-line
   async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
@@ -63,12 +45,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             firstDose = Number(value);
           }
         }
-
         normalizedData.push({
           id: `ovvac_${index}`,
           name: item.categoryValue || 'نامشخص',
           firstDosePercentage: firstDose,
           secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
+          thirdDosePercentage: Number(item.dosesToMembersCountPercentage[3] || 0),
+          otherDosesPercentage: Number(item.dosesToMembersCountPercentage[4] || 0),
           allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
           allDoses: Number(item.gtDoses['0'] || 0),
           noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
@@ -77,10 +60,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      setFilterType({
-        name: 'بیشترین',
-        enName: 'HIGHEST',
-      });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -90,6 +69,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   }
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
+      setSearchQuery('');
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       getOverviewByVaccinePercent({
@@ -115,50 +95,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const tmp = [...orgDataset].sort((a: any, b: any) => {
-      // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
-
-      if (a.allDoses < b.allDoses) {
-        return reverse * 1;
-      }
-
-      if (a.allDoses > b.allDoses) {
-        return reverse * -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
-
-    setDataset(tmp);
-  }, [filterType]);
-
   function handleSearch(e: any) {
     const {value} = e.target;
-
     let tmp = [...orgDataset];
     if (value) {
       tmp = [...tmp].filter(x => x.name.indexOf(value) !== -1);
     }
-
-    setDataset(
-      [...tmp].sort((a: any, b: any) => {
-        const reverse =
-          // eslint-disable-next-line
-          filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
-
-        if (a.noDose < b.noDose) {
-          return reverse * 1;
-        }
-
-        if (a.noDose > b.noDose) {
-          return reverse * -1;
-        }
-        // a must be equal to b
-        return 0;
-      })
-    );
+    setDataset([...tmp]);
     setSearchQuery(value);
   }
   const focusFromDate = () => {
@@ -167,56 +110,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">بیشترین واکسیناسیون در اصناف</legend>
-
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
-          <div className="flex items-center">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
-
-              <Menu.Items
-                style={{width: '250px'}}
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              >
-                <div className="px-1 py-1 ">
-                  {filterTypes.map((value: any, index: any) => {
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                            onClick={() => {
-                              setFilterType(value);
-                            }}
-                          >
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
-          </div>
-
           <div className="flex items-center">
             {showDatePicker ? (
               <DatePickerModal
@@ -254,7 +149,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             </svg>
             <input
               type="text"
-              placeholder="جستجوی سازمان"
+              placeholder="جستجوی واحد صنفی"
               className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
               onChange={handleSearch}
               value={searchQuery}
@@ -277,20 +172,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                   data={[
                     {
                       name: 'noDose',
-                      title: 'نزده‌ها',
+                      title: 'واکسن نزده',
                       y: record.noDose || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'allDosesPercentage',
-                      title: 'دوز کل',
-                      y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -300,14 +183,14 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                       },
                     },
                     {
-                      name: 'firstDosePercentage',
-                      title: 'واکسن اول',
-                      y: record.firstDosePercentage || 0,
+                      name: 'allDosesPercentage',
+                      title: 'واکسن زده',
+                      y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
-                          [0, '#F5DF34'], // start
-                          [1, '#d4c12d'], // end
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
                         ],
                       },
                     },
@@ -326,20 +209,36 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               ),
             },
             {
-              name: 'دو دوز',
+              name: 'دوز اول',
+              key: 'firstDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'دوز دوم',
               key: 'secondDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'دوز سوم',
+              key: 'thirdDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'سایر دوزها',
+              key: 'otherDosesPercentage',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
               name: 'کل دوزها',
               key: 'allDoses',
+              sortable: true,
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
             },
-            {
-              name: 'واکسن نزده',
-              key: 'noDose',
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            },
+            // {
+            //   name: 'واکسن نزده',
+            //   key: 'noDose',
+            //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            // },
           ]}
           totalItems={dataset.length || 0}
         />
