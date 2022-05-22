@@ -5,11 +5,13 @@ import OverviewSamas from '../../components/Transport/public/OverviewSamas';
 import OverviewCategories from '../../components/Transport/public/OverviewCategories';
 import OverviewPublicPatients from '../../components/Transport/public/OverviewPublicPatients';
 import OverviewOfDriverVaccinationProcess from "../../components/Transport/public/OverviewOfDriverVaccinationProcess";
+import OverviewOfTheLatestPublicTransportVaccinationStatusCard from "../../components/Transport/public/OverviewOfTheLatestPublicTransportVaccinationStatusCard";
 import OverviewOfTheLatestPublicTransportVaccinationStatus from "../../components/Transport/public/OverviewOfTheLatestPublicTransportVaccinationStatus";
 import OverviewOfThePublicTransportVaccinationStatusInCountry from "../../components/Transport/public/OverviewOfThePublicTransportVaccinationStatusInCountry";
 import OverviewOfVaccinationInPublicTransport
   from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
-import TestsInTransport from '../../components/Transport/public/TestsInTransport';
+import TableOfTestsInTransport from "../../components/Transport/public/TableOfTestsInTransport";
+// import TestsInTransport from '../../components/Transport/public/TestsInTransport';
 import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
@@ -36,10 +38,12 @@ const Transport = () => {
       <OverviewCategories/>
       <OverviewPublicPatients/>
       <OverviewOfDriverVaccinationProcess/>
+      <OverviewOfTheLatestPublicTransportVaccinationStatusCard />
       <OverviewOfTheLatestPublicTransportVaccinationStatus />
       <OverviewOfVaccinationInPublicTransport/>
       <OverviewOfThePublicTransportVaccinationStatusInCountry />
-      <TestsInTransport/>
+      <TableOfTestsInTransport />
+      {/* <TestsInTransport/> */}
     </div>
   );
 };
