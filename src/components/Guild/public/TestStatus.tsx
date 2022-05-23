@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import hcsService from 'src/services/hcs.service';
-// import {Menu} from '@headlessui/react';
 import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
@@ -11,17 +9,10 @@ import Table from '../../TableScopeSort';
 
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
-// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
-// const order = {
-//   total: undefined,
-//   positiveCountPercentage: undefined,
-//   negativeCountPercentage: undefined,
-// };
 const TestStatus: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  // const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [orgDataset, setOrgDataset] = useState<any>([]);
@@ -159,8 +150,6 @@ const TestStatus: React.FC<{}> = () => {
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <Table
-          // handlePageChange={handlePageChange}
-          // orderMain={order}
           loading={loading}
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
@@ -172,20 +161,8 @@ const TestStatus: React.FC<{}> = () => {
                 <CategoryDonut
                   data={[
                     {
-                      name: 'unknownCount',
-                      title: 'درصد تست‌های نامشخص',
-                      y: record.unknownCount || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
-                      },
-                    },
-                    {
                       name: 'negativeCountPercentage',
-                      title: 'درصد تست‌های منفی',
+                      title: 'منفی',
 
                       y: record.negativeCountPercentage || 0,
                       color: {
@@ -198,7 +175,7 @@ const TestStatus: React.FC<{}> = () => {
                     },
                     {
                       name: 'positiveCountPercentage',
-                      title: 'درصد تست‌های مثبت',
+                      title: 'مثبت',
 
                       y: record.positiveCountPercentage || 0,
                       color: {
@@ -262,18 +239,6 @@ const TestStatus: React.FC<{}> = () => {
                 </span>
               ),
             },
-            // {
-            //   name: 'درصد تست‌های نامشخص',
-            //   key: 'unknownCount',
-            //   render: (v: any, record: any) => (
-            //     <span>
-            //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-            //         .toFixed(4)
-            //         .toPersianDigits()}
-            //       %
-            //     </span>
-            //   ),
-            // },
           ]}
           totalItems={(dataset || []).length}
         />
