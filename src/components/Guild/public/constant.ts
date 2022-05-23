@@ -1,13 +1,26 @@
-export const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+export const initialGtDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+export const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+export const initialDosesToTotalPopulationPercentage = {
+  1: 0,
+  2: 0,
+  3: 0,
+  4: 0,
+  5: 0,
+  6: 0,
+  null: 0,
+};
 
 export const initialVacinatelInfo = {
   totalPopulation: 0,
   totalNonVaccinesCount: 0,
   totalNonVaccinesCountToTotalPopulationPercentage: 0,
   totalVaccinesCountToTotalPopulationPercentage: 0,
-  gtDoses: {...initialDoses},
+  gtDoses: {...initialGtDoses},
+  doses: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDosesToTotalPopulationPercentage},
   totalNonVaccinesCountBeforeStartOfSystem: 0,
   totalVaccinesCountAfterStartOfSystem: 0,
+  totalVaccinesCount: 0,
 };
 export interface IInitialVacinatelInfo {
   totalPopulation: number;
@@ -15,8 +28,11 @@ export interface IInitialVacinatelInfo {
   totalNonVaccinesCountToTotalPopulationPercentage: number;
   totalVaccinesCountToTotalPopulationPercentage: number;
   gtDoses: any;
+  doses: any;
+  dosesToTotalPopulationPercentage: any;
   totalNonVaccinesCountBeforeStartOfSystem: number;
   totalVaccinesCountAfterStartOfSystem: number;
+  totalVaccinesCount: number;
 }
 export const initialPcrInfo = {
   positiveMembersCount: 0,
