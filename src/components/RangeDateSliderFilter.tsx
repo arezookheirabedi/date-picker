@@ -46,11 +46,11 @@ interface IProps {
 const convertLabelToValue: (label: string) => number = label => {
   switch (label) {
     case 'ANNUAL':
-      return 3;
-    case 'MONTHLY':
       return 2;
-    case 'WEEKLY':
+    case 'MONTHLY':
       return 1;
+    // case 'WEEKLY':
+    //   return 1;
     case 'DAILY':
       return 0;
     default:
@@ -60,12 +60,12 @@ const convertLabelToValue: (label: string) => number = label => {
 
 const convertValueToLabel: (value: number) => string = value => {
   switch (value) {
-    case 3:
-      return 'ANNUAL';
     case 2:
-      return 'MONTHLY';
+      return 'ANNUAL';
     case 1:
-      return 'WEEKLY';
+      return 'MONTHLY';
+    // case 1:
+    //   return 'WEEKLY';
     case 0:
       return 'DAILY';
     default:
@@ -83,7 +83,7 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
   const [disabledDays, setDisabledDays] = useState<any[]>([]);
   const [marks, setMarks] = useState([
     {
-      value: 3,
+      value: 2,
       label: 'سالیانه',
       enLabel: 'ANNUAL',
       style: {
@@ -91,21 +91,21 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
       },
     },
     {
-      value: 2,
+      value: 1,
       label: 'ماهانه',
       enLabel: 'MONTHLY',
       style: {
         color: '#B2B2B2',
       },
     },
-    {
-      value: 1,
-      label: 'هفتگی',
-      enLabel: 'WEEKLY',
-      style: {
-        color: '#B2B2B2',
-      },
-    },
+    // {
+    //   value: 1,
+    //   label: 'هفتگی',
+    //   enLabel: 'WEEKLY',
+    //   style: {
+    //     color: '#B2B2B2',
+    //   },
+    // },
     {
       value: 0,
       label: 'روزانه',
