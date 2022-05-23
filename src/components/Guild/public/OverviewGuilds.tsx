@@ -149,7 +149,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={guildVacinateInfo.gtDoses[0] || 0}
+            count={guildVacinateInfo.doses[1] || 0}
             loading={loading}
           />
           <Statistic
@@ -195,6 +195,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             text="درصد افراد واکسینه نشده"
             count={guildVacinateInfo.totalNonVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -203,6 +204,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             text="درصد افراد واکسینه شده"
             count={guildVacinateInfo.totalVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -211,6 +213,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             text="درصد ابتلا به کل"
             count={guildPcrInfo.positiveMembersCountToTotalPopulationPercentage || 0}
             loading={pcrLoading}
+            isPercentage
           />
         </div>
       </div>
