@@ -37,21 +37,13 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
-        let firstDose = 0;
-
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.dosesToMembersCountPercentage)) {
-          if (Number(key) === 1) {
-            firstDose = Number(value);
-          }
-        }
         normalizedData.push({
           id: `ovvac_${index}`,
           name: item.categoryValue || 'نامشخص',
-          firstDosePercentage: firstDose,
+          firstDosePercentage: Number(item.dosesToMembersCountPercentage[1] || 0),
           secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
           thirdDosePercentage: Number(item.dosesToMembersCountPercentage[3] || 0),
-          otherDosesPercentage: Number(item.dosesToMembersCountPercentage[4] || 0),
+          otherDosesPercentage: Number(item.gtDosesToTotalDosesPercentage[3] || 0),
           allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
           allDoses: Number(item.gtDoses['0'] || 0),
           noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
