@@ -1,43 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {Menu} from '@headlessui/react';
+
 
 // @ts-ignore
 import moment from 'moment-jalaali';
 // import {schoolTypes} from 'src/helpers/sortingModels';
+import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
+import Table from 'src/components/TableScopeSort';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
-import Table from '../../TableScope';
+
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 // import {toPersianDigit} from '../../../helpers/utils';
-import Spinner from '../../Spinner';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
-const filterTypes = [
-  {
-    name: 'پیشفرض',
-    enName: '',
-  },
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
 
+const PageSize=10
 const TestStatus: React.FC<{}> = () => {
-  const [filterType, setFilterType] = useState({
-    name: 'پیشفرض',
-    enName: '',
-  });
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [dataset, setDataset] = useState<any>([]);
 
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -51,8 +34,11 @@ const TestStatus: React.FC<{}> = () => {
     resultReceiptDateTo: null,
   }) as any;
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
 
   const overviewTestResults = async (from: any = null, to: any = null) => {
     try {
@@ -61,7 +47,7 @@ const TestStatus: React.FC<{}> = () => {
         lang: 'fa',
         from,
         to,
-      });
+      },{cancelRequest:cancelToken.token});
       // console.log(data);
 
       const normalizedData: any[] = [];
@@ -76,8 +62,7 @@ const TestStatus: React.FC<{}> = () => {
         });
       });
       setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'پیشفرض', enName: ''});
+      
     } catch (e) {
       console.log(e);
     } finally {
@@ -85,51 +70,15 @@ const TestStatus: React.FC<{}> = () => {
     }
   };
 
-  // async function getOverviewByCategory(params: any) {
-  //   setLoading(true);
-  //   try {
-  //     const {data} = await hcsService.testResultTagBased(params, {cancelToken: source.token});
-  //     const sortData: any = [];
 
-  //     schoolTypes.forEach(item => {
-  //       const tm = data.find((i: any) => i.tag === item);
-  //       sortData.push(tm);
-  //     });
-
-  //     const normalizedData: any[] = [];
-  //     sortData.forEach((item: any, index: number) => {
-  //       normalizedData.push({
-  //         id: `ovca_${index}`,
-  //         name: item.tag || 'نامشخص',
-  //         total: item.total || 0,
-  //         positiveCount: item.positiveCount || 0,
-  //         positivePercentage:
-  //           (Number(item.positiveCount || 0) * 100) / Number(item.total || 0) || 0,
-  //         negativeCount: item.negativeCount || 0,
-  //         unknownCount:
-  //           (item.total || 0) - ((item.positiveCount || 0) + (item.negativeCount || 0)) || 0,
-  //         // deadCount: 120,
-  //       });
-  //     });
-  //     setDataset([...normalizedData]);
-  //     setOrgDataset([...normalizedData]);
-  //     setFilterType({name: 'پیشفرض', enName: ''});
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   useEffect(() => {
     // getTestInTransport({count: true, total: true, testResultStatusList: 'POSITIVE,NEGATIVE'});
     overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
     return () => {
-      source.cancel('Operation canceled by the user.');
+    cancelRequest();
       setDataset([]);
-      setOrgDataset([]);
-      setFilterType({name: 'پیشفرض', enName: ''});
+
     };
   }, [query]);
 
@@ -158,85 +107,14 @@ const TestStatus: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
 
-  useEffect(() => {
-    const tmp = [...orgDataset].sort((a: any, b: any) => {
-      // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
 
-      if (a.positivePercentage < b.positivePercentage) {
-        return reverse * 1;
-      }
 
-      if (a.positivePercentage > b.positivePercentage) {
-        return reverse * -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
-
-    setDataset(tmp);
-  }, [filterType]);
-
-  // const clearSelectedDayRange = (e: any) => {
-  //   e.stopPropagation();
-  //   setSelectedDayRange({
-  //     from: null,
-  //     to: null,
-  //   });
-  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">آزمایش در آموزش و پرورش</legend>
       <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex items-center">
-          <Menu
-            as="div"
-            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-          >
-            <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'پیشفرض'}
-                </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
-              </Menu.Button>
-            </div>
-
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="px-1 py-1 ">
-                {filterTypes.map((value: any, index: any) => {
-                  // console.log(value);
-                  return (
-                    // eslint-disable-next-line
-                    <Menu.Item key={index}>
-                      {({active}) => (
-                        <button
-                          type="button"
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                          onClick={() => {
-                            setFilterType(value);
-                            // setQueryParams({
-                            //   ...queryParams,
-                            //   tag: value.enName,
-                            // });
-                          }}
-                        >
-                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                          {value.name}
-                        </button>
-                      )}
-                    </Menu.Item>
-                  );
-                })}
-              </div>
-            </Menu.Items>
-          </Menu>
-        </div>
+     
 
         <div className="flex items-center">
           {showDatePicker ? (
@@ -256,14 +134,11 @@ const TestStatus: React.FC<{}> = () => {
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+    
           <Table
+          loading ={loading }
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize: PageSize, maxPages: 3}}
             columns={[
               {
                 name: 'وضعیت',
@@ -317,13 +192,14 @@ const TestStatus: React.FC<{}> = () => {
                 key: 'name',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex">
-                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.{v}
+                    {((page - 1) * PageSize + (index + 1)).toPersianDigits()}.{v}
                   </div>
                 ),
               },
               {
                 name: 'تعداد آزمایش‌های انجام شده',
                 key: 'total',
+                sortable:true,
                 render: (v: any) => (
                   <span>
                     {Number(v || 0)
@@ -332,12 +208,13 @@ const TestStatus: React.FC<{}> = () => {
                   </span>
                 ),
               },
-              {
+              {sortable:true,
+                
                 name: 'درصد تست‌های مثبت',
                 key: 'positivePercentage',
                 render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
               },
-              {
+              {sortable:true,
                 name: 'درصد تست‌های منفی',
                 key: 'negativeCountPercentage',
                 render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
@@ -357,7 +234,7 @@ const TestStatus: React.FC<{}> = () => {
             ]}
             totalItems={(dataset || []).length || 0}
           />
-        )}
+       
       </div>
     </fieldset>
   );
