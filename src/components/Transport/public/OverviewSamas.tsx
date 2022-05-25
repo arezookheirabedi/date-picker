@@ -1,38 +1,36 @@
-// import axios from 'axios';
-import React, {useState} from 'react';
+import axios from 'axios';
+import React, {useState, useEffect} from 'react';
 import driverInfectedIcon from '../../../assets/images/icons/driver-infected.svg';
 import deactiveFuelCardIcon from '../../../assets/images/icons/deactive-fuel-card.svg';
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
 import deactivateInquiryIcon from '../../../assets/images/icons/deactivate-inquiry.svg';
 import Statistic from '../../../containers/Guild/components/Statistic';
-// import transportService from '../../services/transport.service';
+import transportService from '../../../services/transport.service';
 
 const OverviewSamas = () => {
-  // const [numberOfDrivers, setNumberOfDrivers] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
-  // const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
-  // const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
 
-  // const {CancelToken} = axios;
-  // const source = CancelToken.source();
+  // eslint-disable-next-line
+  const [loading, setLoading] = useState(false);
+  const [dataset, setDataset] = useState({
+    healthStatusCalls: null
+  })
 
-  // const getNumberOfDrivers = async () => {
-  //   setNumberOfDriversLoading(true);
-  //   try {
-  //     const {data} = await transportService.numberOfDrivers(null, {cancelToken: source.token});
-  //     setNumberOfDrivers(data.numberOfDrivers);
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setNumberOfDriversLoading(false);
-  //   }
-  // };
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+  const getNumberOfDrivers = async () => {
+    setLoading(true);
+    try {
+      const {data} = await transportService.getSamasInfo(null, {cancelToken: source.token});
+      setDataset(data);
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // const getNumberOfPlaqueVisited = async () => {
   //   setNumberOfPlaqueVisitedLoading(true);
@@ -64,31 +62,29 @@ const OverviewSamas = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   getNumberOfDrivers();
-  //   getNumberOfPlaqueVisited();
-  //   getNumberOfPositiveDrivers();
-
-  //   return () => {
-  //     setNumberOfDrivers(null);
-  //     setNumberOfPlaqueVisited(null);
-  //     setNumberOfPositiveDrivers(null);
-  //     source.cancel('Operation canceled by the user.');
-  //   };
-  // }, []);
+  useEffect(() => {
+    getNumberOfDrivers();
+    return () => {
+      setDataset({
+        healthStatusCalls: null
+      })
+      source.cancel('Operation canceled by the user.');
+    };
+  }, []);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">سامانه ملی اطلاعات سفر (سماس)</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={driverInfectedIcon}
             text="موارد مثبت اعلامی به سماس"
             // count={numberOfDrivers}
-            count={0}
-            loading={numberOfDriversLoading}
+            count={dataset.healthStatusCalls}
+            loading={loading}
             hasInfo
             infoText="مجموع موارد مبتلایان مثبت و اعلام شده به سماس در رسته‌های مختلف."
           />
@@ -96,8 +92,8 @@ const OverviewSamas = () => {
             icon={deactivateInquiryIcon}
             text="غیر فعالسازی‌های انجام شده"
             // count={numberOfPositiveDrivers}
-            count={0}
-            loading={numberOfPositiveDriversLoading}
+            count="-"
+            loading={false}
             hasInfo
             infoText="غیرفعال‌سازی انجام شده رانندگان مبتلا توسط سماس."
           />
@@ -105,8 +101,8 @@ const OverviewSamas = () => {
             icon={informationUpdatedIcon}
             text="اطلاعات به روز رسانی شده"
             // count={numberOfPlaqueVisited}
-            count={0}
-            loading={numberOfPlaqueVisitedLoading}
+            count="-"
+            loading={false}
             hasInfo
             infoText="مجموع اطلاعات به روزرسانی شده توسط سماس."
           />

@@ -160,6 +160,13 @@ function retryReport(id: string, config?: any) {
     .post(`/api/v1/transport/reports/drivers/request/retry/${id}?lang=fa`, {}, { ...config });
 }
 
+function getSamasInfo(params: any, config?: any){
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000 })
+    .build()
+    .get(`/api/v1/transport/reports/types/samas/statistics`, params, { ...config });
+}
+
 export default {
   testsInTransport,
   overviewCategory,
@@ -179,5 +186,6 @@ export default {
   requestReport,
   confirmRequestReport,
   preDownloadReport,
-  retryReport
+  retryReport,
+  getSamasInfo
 };
