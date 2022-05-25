@@ -121,24 +121,37 @@ const OverviewSteudent = () => {
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
+            hasInfo
+            infoText="مجموع دانش‌آموزان مشغول به تحصیل در کل کشور"
             icon={totalStudent}
             text="مجموع دانش آموزان"
             count={numberOf.totalPopulation || 0}
             loading={loading}
           />
           <Statistic
+            hasInfo
+            infoText="مجموع افراد مبتلا شده به بیماری کوید"
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={testResultInfo.positiveMembersCount || 0}
             loading={testResultLoading}
           />
           <Statistic
+            hasInfo
+            infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={testResultInfo.recoveredMembersCount || 0}
             loading={testResultLoading}
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic
+            hasInfo
+            infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
+            icon={deadIcon}
+            text="مجموع فوت‌ شدگان"
+            count="-"
+            loading={false}
+          />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
