@@ -269,29 +269,33 @@ const OverviewVaccinePerProvince = () => {
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+            <div
+              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div
+                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}}/>
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
-                  <span>دوز اول</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}}/>
+                  <span>دوز پنجم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
-                  <span>دوز دوم</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}}/>
+                  <span>دوز چهارم</span>
                 </div>
-              </div>
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}}/>
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
-                  <span>بیش از ۳ دوز</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}}/>
+                  <span>دوز دوم</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}}/>
+                  <span>دوز اول</span>
                 </div>
               </div>
             </div>

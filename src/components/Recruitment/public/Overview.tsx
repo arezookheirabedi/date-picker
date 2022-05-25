@@ -31,13 +31,20 @@ const initialNumberOf = {
   totalVaccinesPercentage: 0,
 };
 
+const initialTestResults = {
+  positiveMembersCount: 0,
+  positiveMembersCountToTestResultsCountPercentage: 0,
+  positiveMembersCountToTotalPopulationPercentage: 0,
+  recoveredMembersCount: 0,
+  recoveredMembersCountToTotalPopulationPercentage: 0,
+  testResultsCount: 0,
+  totalPopulation: 0,
+};
+
 const OverviewRecruitment: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
-  const [totalPopulation, setTotalPopulation] = useState(null);
-  const [numberOfPositive, setNumberOfPositive] = useState(null);
-  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfEmployeeTests, setNumberOfEmployeeTests] = useState(null);
+  const [testResultInfo, setTestResultInfo] = useState<any>(initialTestResults);
 
   const dispatch = useDispatch();
 
@@ -50,10 +57,12 @@ const OverviewRecruitment: React.FC<{}> = () => {
       });
 
       dispatch(addTotalMembersAc(generalData.totalPopulation || 0));
-      setTotalPopulation(generalData.totalPopulation || 0);
-      setNumberOfPositive(generalData.positiveMembersCount || 0);
-      setNumberOfRecovered(generalData.recoveredMembersCount || 0);
-      setNumberOfEmployeeTests(generalData.testResultsCount || 0);
+      setTestResultInfo((prev: any) => {
+        return {
+          ...prev,
+          ...generalData,
+        };
+      });
 
       const {data: vaccineData} = await vaccineServices.membersGeneral({
         tag: 'employee',
@@ -82,19 +91,19 @@ const OverviewRecruitment: React.FC<{}> = () => {
           <Statistic
             icon={totalRecruitment}
             text="مجموع کارکنان دولت"
-            count={totalPopulation}
+            count={testResultInfo.totalPopulation}
             loading={loading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositive}
+            count={testResultInfo.positiveMembersCount}
             loading={loading}
           />
           <Statistic
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecovered}
+            count={testResultInfo.recoveredMembersCount}
             loading={loading}
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false}/>
@@ -116,13 +125,13 @@ const OverviewRecruitment: React.FC<{}> = () => {
           <Statistic
             icon={totalVaccinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count={numberOf.totalVaccinesCountAfterStartOfSystem}
+            count={numberOf.totalVaccinesCountAfterStartOfSystem || '-'}
             loading={loading}
           />
           <Statistic
             icon={noneVaccinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count={numberOf.totalNonVaccinesCountBeforeStartOfSystem}
+            count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || '-'}
             loading={loading}
           />
         </div>
@@ -131,7 +140,7 @@ const OverviewRecruitment: React.FC<{}> = () => {
           <Statistic
             icon={testIcon}
             text="تعداد آزمایش های کارکنان دولت"
-            count={numberOfEmployeeTests}
+            count={testResultInfo.testResultsCount}
             loading={loading}
           />
           <Statistic
@@ -149,7 +158,7 @@ const OverviewRecruitment: React.FC<{}> = () => {
           <Statistic
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
-            count={numberOf.positiveMembersCountToTotalPopulationPercentage}
+            count={testResultInfo.positiveMembersCountToTotalPopulationPercentage}
             loading={loading}
           />
         </div>

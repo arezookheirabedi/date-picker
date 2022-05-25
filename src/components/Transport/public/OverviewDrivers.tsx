@@ -12,7 +12,7 @@ import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-lg.svg';
 // import positiveInquiryPlaque from '../../../assets/images/icons/positive-inquiry-plaque.svg';
 import testIcon from '../../../assets/images/icons/test-color.svg';
 import driverInfectedIcon from '../../../assets/images/icons/driver-infected.svg';
-import transportService from '../../../services/transport.service';
+// import transportService from '../../../services/transport.service';
 import vaccineService from '../../../services/vaccine.service';
 import hcsService from '../../../services/hcs.service';
 import totalVaccinateStart from "../../../assets/images/icons/total-vaccinate-start-work-panel.svg";
@@ -49,13 +49,13 @@ const initialTestResults = {
 const OverviewDrivers = () => {
   // const [numberOfDrivers, setNumberOfDrivers] = useState(null);
   // const [numberOfDriversLoading, setNumberOfDriversLoading] = useState(false);
-  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
+  // const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
+  // const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
   // const [numberOfPositiveDrivers, setNumberOfPositiveDrivers] = useState(null);
   // const [numberOfPositiveDriversLoading, setNumberOfPositiveDriversLoading] = useState(false);
-  const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
-  const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
-    useState(false);
+  // const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
+  // const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
+  //   useState(false);
   // const [numberOfRecoveredDrivers, setNumberOfRecoveredDrivers] = useState(null);
   // const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
   // const [numberOfTestResults, setNumberOfTestResults] = useState(null);
@@ -117,20 +117,20 @@ const OverviewDrivers = () => {
   //   }
   // };
 
-  const getNumberOfPlaqueVisited = async () => {
-    setNumberOfPlaqueVisitedLoading(true);
-    try {
-      const {data} = await transportService.numberOfPlaqueVisited(null, {
-        cancelToken: source.token,
-      });
-      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPlaqueVisitedLoading(false);
-    }
-  };
+  // const getNumberOfPlaqueVisited = async () => {
+  //   setNumberOfPlaqueVisitedLoading(true);
+  //   try {
+  //     const {data} = await transportService.numberOfPlaqueVisited(null, {
+  //       cancelToken: source.token,
+  //     });
+  //     setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfPlaqueVisitedLoading(false);
+  //   }
+  // };
 
   // const getNumberOfPositiveDrivers = async () => {
   //   setNumberOfPositiveDriversLoading(true);
@@ -147,20 +147,20 @@ const OverviewDrivers = () => {
   //   }
   // };
 
-  const getNumberOfPositivePlaqueVisited = async () => {
-    setNumberOfPositivePlaqueVisitedLoading(true);
-    try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited(null, {
-        cancelToken: source.token,
-      });
-      setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPositivePlaqueVisitedLoading(false);
-    }
-  };
+  // const getNumberOfPositivePlaqueVisited = async () => {
+  //   setNumberOfPositivePlaqueVisitedLoading(true);
+  //   try {
+  //     const {data} = await transportService.numberOfPositivePlaqueVisited(null, {
+  //       cancelToken: source.token,
+  //     });
+  //     setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfPositivePlaqueVisitedLoading(false);
+  //   }
+  // };
 
   // const setNumberOfRecoveredDriversLoading = async () => {
   //   setNumberOfRecoveredDriversLoading(true);
@@ -206,18 +206,18 @@ const OverviewDrivers = () => {
   useEffect(() => {
     getNumberOf();
     getTestResults();
-    getNumberOfPlaqueVisited();
+    // getNumberOfPlaqueVisited();
     // getNumberOfPositiveDrivers();
-    getNumberOfPositivePlaqueVisited();
+    // getNumberOfPositivePlaqueVisited();
     // getNumberOfRecoveredDrivers();
     // getNumberOfTestResults();
     // getNumberOfVaccination();
 
     return () => {
       // setNumberOfDrivers(null);
-      setNumberOfPlaqueVisited(null);
+      // setNumberOfPlaqueVisited(null);
       // setNumberOfPositiveDrivers(null);
-      setNumberOfPositivePlaqueVisited(null);
+      // setNumberOfPositivePlaqueVisited(null);
       // setNumberOfRecoveredDrivers(null);
       // setNumberOfTestResults(null);
       // setNumberOfVaccination(null);
@@ -305,16 +305,16 @@ const OverviewDrivers = () => {
           <Statistic
             icon={totalVaccinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count={numberOfPlaqueVisited}
-            loading={numberOfPlaqueVisitedLoading}
+            count={numberOf.totalVaccinesCountAfterStartOfSystem || '-'}
+            loading={loading}
             hasInfo
             infoText="تعداد افرادی که بعد از شروع به کار به سامانه دوز اول واکسن را دریافت کرده اند."
           />
           <Statistic
             icon={noneVaccinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count={numberOfPositivePlaqueVisited}
-            loading={numberOfPositivePlaqueVisitedLoading}
+            count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || '-'}
+            loading={loading}
             hasInfo
             infoText="تعداد افرادی که در زمان شروع سامانه در طرح واکسیناسیون شرکت نکرده‌ بوداند."
           />
