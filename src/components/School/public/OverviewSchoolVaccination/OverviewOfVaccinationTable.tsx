@@ -184,15 +184,20 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               {
                 name: 'دوز اول',
                 key: 'firstDosePercentage',
+                sortable: true,
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
               },
               {
                 name: 'دوز دوم',
+                sortable: true,
+
                 key: 'secondDosePercentage',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
               },
               {
                 name: 'دوز سوم',
+                sortable: true,
+
                 key: 'thirdDosePercentage',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
               },
@@ -201,21 +206,21 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                 key: 'otherDose',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
               },
-              {
-                name: 'درصد کل دوزها',
-                key: 'allDosesPercentage',
-                render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-              },
-              {
-                name: 'واکسن نزده',
-                key: 'noDose',
-                render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-              },
-              {
-                name: 'اطلاعات مخدوش',
-                key: 'unknownInformation',
-                render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-              },
+              // {
+              //   name: 'درصد کل دوزها',
+              //   key: 'allDosesPercentage',
+              //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+              // },
+              // {
+              //   name: 'واکسن نزده',
+              //   key: 'noDose',
+              //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+              // },
+              // {
+              //   name: 'اطلاعات مخدوش',
+              //   key: 'unknownInformation',
+              //   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+              // },
               {
                 name: 'کل دوزها',
                 sortable: true,
