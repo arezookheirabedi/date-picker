@@ -8,8 +8,8 @@ import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
 
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-import passengerService from 'src/services/passenger.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import hcsService from 'src/services/hcs.service';
 import Statistic from '../../../../containers/Guild/components/Statistic';
 import {IInitialNumberOfDoses, initialNumberOfDoses} from '../../../Guild/public/constant';
 
@@ -25,10 +25,10 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getPassengerVaccinateInfo = async () => {
+  const getScoolLatestVaccinateInfo = async (params:any) => {
     setLoading(true);
     try {
-      const res = await passengerService.getDoses({}, {cancelToken: cancelToken.token});
+      const res = await hcsService.PeopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
       if (res.status === 200) {
         const newData = {...initialNumberOfDoses, ...res.data};
         setNumberOf(newData);
@@ -42,7 +42,7 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    getPassengerVaccinateInfo();
+    getScoolLatestVaccinateInfo({tag: 'edu'});
     // getPcrResult();
     return () => {
       cancelRequest();
