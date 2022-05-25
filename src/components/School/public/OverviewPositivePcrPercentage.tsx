@@ -176,7 +176,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
       {
         lineWidth: 4,
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
       },
     ],

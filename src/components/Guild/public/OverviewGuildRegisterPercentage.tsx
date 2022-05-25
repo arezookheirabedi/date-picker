@@ -175,7 +175,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
       {
         lineWidth: 4,
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
       },
     ],

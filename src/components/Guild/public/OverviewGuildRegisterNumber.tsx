@@ -54,7 +54,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       {
         name: 'ثبت نام نشده',
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
         showInLegend: false,
         data: [...unregistered],
@@ -62,10 +62,20 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       {
         name: 'ثبت نام شده',
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
         showInLegend: false,
         data: [...registered],
+        linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+        },
+        stops: [
+          [0, '#5F5B97'],
+          [1, '#DDDCE9']
+        ]
       },
     ];
     // setDataset([...newData]);
