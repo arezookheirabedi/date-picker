@@ -187,6 +187,15 @@ function columnChartTestResultService(params: any = {}, config?: any) {
     });
 }
 
+function getPeopleVaccine(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/people/vaccines/general`, params, {
+      ...config,
+    });
+}
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -205,6 +214,7 @@ const hcsService = {
   tableOverviewTestResults,
   testResultsCategory,
   columnChartTestResultService,
+  getPeopleVaccine,
 };
 
 export default hcsService;
