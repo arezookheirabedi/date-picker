@@ -60,7 +60,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (selected) {
-      params = {...queryParams, categoryValue: selected};
+      params = {...queryParams, categoryValue: selected.key};
     } else {
       params = {...queryParams, categoryValue: null};
     }
