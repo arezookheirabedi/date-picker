@@ -177,11 +177,18 @@ function requestOtpReport(
     });
 }
 
-function configOtpReport({reportType, ...params}: any = {}): Promise<AxiosResponse<any>> {
+function confirmOtpReport({reportType, ...params}: any = {}): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .post(`/api/v1/transport/reports/types/${reportType}/downloads/confirm?lang=fa`, params);
+}
+
+function getSamasInfo(params: any, config?: any){
+  return request
+    .withHeaders({ 'Content-Type': 'application/json;utf-8', timeout: 3 * 60 * 1000 })
+    .build()
+    .get(`/api/v1/transport/reports/types/samas/statistics`, params, { ...config });
 }
 
 export default {
@@ -199,7 +206,9 @@ export default {
   numberOfVaccination,
   linearOverviewPublicTransport,
   requestOtpReport,
-  configOtpReport,
+  confirmOtpReport,
   overviewReport,
+  getSamasInfo,
   transportReportoverviewStatus,
+
 };
