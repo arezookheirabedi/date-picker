@@ -23,7 +23,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  const [currentPage, setCurrenntPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   // eslint-disable-next-line
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -156,10 +156,10 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     };
   }, [cityTitle, currentPage]);
   useEffect(() => {
-    setCurrenntPage(0);
+    setCurrentPage(0);
   }, [cityTitle]);
   function handlePageChange(page: number = 1) {
-    setCurrenntPage(page);
+    setCurrentPage(page);
   }
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">

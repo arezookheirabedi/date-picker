@@ -11,7 +11,7 @@ import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import hcsService from 'src/services/hcs.service';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialNumberOfDoses, initialNumberOfDoses} from '../constant';
+import {IInitialNumberOfDoses, initialNumberOfDoses} from '../../../Guild/public/constant';
 
 const LatestOverviewOfStatusCard: React.FC<{}> = () => {
   // eslint-disable-next-line
@@ -25,11 +25,10 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const  getGuildVaccinateInfo = async (params:any) => {
+  const getScoolLatestVaccinateInfo = async (params:any) => {
     setLoading(true);
     try {
-     
-      const res =  await hcsService.peopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
+      const res = await hcsService.peopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
       if (res.status === 200) {
         const newData = {...initialNumberOfDoses, ...res.data};
         setNumberOf(newData);
@@ -43,7 +42,7 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    getGuildVaccinateInfo( { tag: 'guild'});
+    getScoolLatestVaccinateInfo({tag: 'edu'});
     // getPcrResult();
     return () => {
       cancelRequest();

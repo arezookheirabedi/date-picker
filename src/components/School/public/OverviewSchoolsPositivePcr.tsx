@@ -2,20 +2,20 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import DatePickerModal from '../../DatePickerModal';
-// import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+// import calendar from '../../../assets/images/icons/calendar.svg';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-// import {toPersianDigit} from '../../../helpers/utils';
+// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
-import TagsSelect from '../../TagsSelect';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
 const {Line} = Charts;
 
-const OverviewPatients = () => {
+const OverviewSchoolsPositivePcr = () => {
   const [data, setData] = useState([]);
-  // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
@@ -26,14 +26,6 @@ const OverviewPatients = () => {
     to: null,
   }) as any;
 
-  // const [queryParams, setQueryParams] = useState<IParams>({
-  //   status: 'POSITIVE',
-  //   type: 'MONTHLY',
-  //   from: '',
-  //   to: '',
-  //   tags: '',
-  // });
-
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
@@ -42,8 +34,7 @@ const OverviewPatients = () => {
   };
 
   const [query, setQuery] = useState({
-    // status: 'POSITIVE',
-    // type: 'MONTHLY',
+    type: 'MONTHLY',
     from: null,
     to: null,
     category: 'grade',
@@ -73,9 +64,12 @@ const OverviewPatients = () => {
   //   setLoading(true);
   //   setErrorMessage(null);
   //   try {
-  //     const response = await hcsService.testResultTimeBased(params, {cancelToken: source.token});
+  //     const response = await transportService.linearOverviewPublicTransport(params, {
+  //       cancelToken: source.token,
+  //     });
   //     setData(response.data);
   //   } catch (error: any) {
+  //     setErrorMessage(error.message);
   //     // eslint-disable-next-line
   //     console.log(error);
   //   } finally {
@@ -85,7 +79,6 @@ const OverviewPatients = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      // getLinearOverviewPublicTransport({organization: 'education', ...queryParams});
       getColumnChartTestResult(query);
     }, 500);
 
@@ -148,34 +141,33 @@ const OverviewPatients = () => {
   //     setQueryParams({
   //       ...queryParams,
   //       type: lastState,
-  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
-  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DDTHH:mm:ss'),
+  //       fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
   //     });
   //   } else {
   //     setQueryParams({
   //       ...queryParams,
   //       type: 'MONTHLY',
-  //       from: null,
-  //       to: null,
+  //       fromDate: null,
+  //       toDate: null,
   //     });
   //   }
   // }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان آموزش و پرورش</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان در آموزش و پرورش</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between flex-grow px-8">
-            <TagsSelect
+          <div className="flex align-center justify-start flex-grow px-8">
+            <SearchableSingleSelect
               placeholder="کل آموزش و پرورش"
               category="grade"
               tag="edu"
               setQueryParams={setQuery}
               queryParams={query}
             />
-
-            <div className="flex align-center justify-between">
+            <div className="flex align-center justify-between mr-8">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -192,20 +184,19 @@ const OverviewPatients = () => {
               />
             </div>
           </div>
-          {/* 
+
           <RangeDateSliderFilter
             changeType={v =>
-              setQueryParams({
-                ...queryParams,
+              setQuery({
+                ...query,
                 type: v,
               })
             }
-            selectedType={queryParams.type}
+            selectedType={query.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          /> */}
+          />
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />
@@ -221,4 +212,4 @@ const OverviewPatients = () => {
   );
 };
 
-export default OverviewPatients;
+export default OverviewSchoolsPositivePcr;

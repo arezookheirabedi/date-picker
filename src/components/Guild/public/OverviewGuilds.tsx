@@ -149,7 +149,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={guildVacinateInfo.doses[1] || 0}
+            count={guildVacinateInfo.totalVaccinesCount || 0}
             loading={loading}
           />
           <Statistic
