@@ -37,9 +37,9 @@ const OverviewSchoolsPositivePcr = () => {
     type: 'MONTHLY',
     from: null,
     to: null,
-    category: 'grade',
     categoryValue: null,
-    tag: 'edu',
+    tag: 'guild',
+    category: 'categoryDesc',
   });
 
   const getColumnChartTestResult = async (params: any) => {
@@ -161,9 +161,9 @@ const OverviewSchoolsPositivePcr = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
-              placeholder="کل آموزش و پرورش"
-              category="grade"
-              tag="edu"
+              placeholder="کل اصناف "
+              tag="guild"
+              category="categoryDesc"
               setQueryParams={setQuery}
               queryParams={query}
             />
