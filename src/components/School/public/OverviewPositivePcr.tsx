@@ -34,14 +34,15 @@ const OverviewPositivePcr = () => {
   };
 
   const [query, setQuery] = useState({
-    // status: 'POSITIVE',
-    type: 'DAILY',
+    type: 'MONTHLY',
     from: null,
     to: null,
-    category: 'serviceType',
+    category: 'grade',
     categoryValue: null,
-    tag: 'transport',
+    tag: 'edu',
+   
   });
+
 
   const getColumnChartTestResult = async (params: any) => {
     setLoading(true);
@@ -50,6 +51,7 @@ const OverviewPositivePcr = () => {
       const response = await hcsService.columnChartTestResultService(params, {
         cancelToken: source.token,
       });
+      // console.log(response.data);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
