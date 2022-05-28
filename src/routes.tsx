@@ -9,6 +9,8 @@ import GuildMonitoring from './containers/Guild/GuildMonitoring';
 import Transport from './containers/Transport/Transport';
 import TransportProvince from './containers/Transport/TransportProvince';
 import TransportMonitoring from './containers/Transport/TransportMonitoring';
+import Bakery from './containers/Bakery/Bakery';
+import BakeryProvince from './containers/Bakery/BakeryProvince';
 import Passenger from './containers/Passenger/Passenger';
 import School from './containers/School/School';
 import SchoolProvince from './containers/School/SchoolProvince';
@@ -106,6 +108,35 @@ const routes: IRoute[] = [
     ],
     // disabled: true,
     main: Transport,
+  },
+  {
+    keyIndex: '10',
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="bakery" active={active} disabled={disabled} />
+    ),
+    link: '/dashboard/bakery/public',
+    simLink: '/dashboard/bakery',
+    exact: true,
+    inMenu: true,
+    title: 'داشبورد آرد و نان',
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'عمومی',
+        link: '/dashboard/bakery/public',
+        icon: active => <IconWrapperStyle name="sub-bakery" active={active} />,
+        main: Bakery,
+      },
+      {
+        keyIndex: '2',
+        title: 'استانی',
+        link: '/dashboard/bakery/province',
+        icon: active => <IconWrapperStyle name="sub-bakery" active={active} />,
+        main: BakeryProvince,
+      },
+    ],
+    // disabled: true,
+    main: Bakery,
   },
   {
     keyIndex: '5',
