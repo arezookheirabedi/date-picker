@@ -6,16 +6,16 @@ import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import passengerService from 'src/services/passenger.service';
-import Statistic from '../../../containers/Guild/components/Statistic';
-import GreyVaccine from '../../../assets/images/icons/big-gray-vaccine.svg';
-import totalPassengers from '../../../assets/images/icons/total-passengers.svg';
-import suspiciousCovid from '../../../assets/images/icons/suspicious-covid.svg';
-import grayBaggage from '../../../assets/images/icons/gray-baggage.svg';
-import redBaggage from '../../../assets/images/icons/red-baggage.svg';
-import passengerPositiveTest from '../../../assets/images/icons/passenger-positive-test.svg';
-import negetiveTestIcon from '../../../assets/images/icons/negetive-test-icon.svg';
-import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
-import noneVacsinateStart from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
+import Statistic from 'src/containers/Guild/components/Statistic';
+import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
+import totalPassengers from 'src/assets/images/icons/total-passengers.svg';
+import suspiciousCovid from 'src/assets/images/icons/suspicious-covid.svg';
+import grayBaggage from 'src/assets/images/icons/gray-baggage.svg';
+import redBaggage from 'src/assets/images/icons/red-baggage.svg';
+import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-test.svg';
+import negetiveTestIcon from 'src/assets/images/icons/negetive-test-icon.svg';
+import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
+import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import {
   IInitialPcrInfo,
   IInitialTotalVacinatelInfo,

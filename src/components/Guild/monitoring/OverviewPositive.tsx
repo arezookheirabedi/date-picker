@@ -3,7 +3,7 @@ import axios from 'axios';
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import {cancelTokenSource, msgRequestCanceled,toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import HiddenMobileNumber from './HiddenMobileNumber';
 
@@ -28,9 +28,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
   // eslint-disable-next-line
   const source = CancelToken.source();
 
-  const pageSize = 1;
-
- 
+  const pageSize = 10;
 
   const cancelToken = cancelTokenSource();
 
@@ -66,7 +64,9 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
       setLoading(false);
     }
   };
-  useEffect(() => {setCurrenntPage(0)},[cityTitle])
+  useEffect(() => {
+    setCurrenntPage(0);
+  }, [cityTitle]);
 
   useEffect(() => {
     const params: any = {
@@ -75,7 +75,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
       sort: 'ASC',
       reportType: 'POSITIVE_CHAIN',
       province: cityTitle,
-      guildType:null
+      guildType: null,
     };
     getOverviewPositive(params);
     return () => {
@@ -90,7 +90,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
-        <legend className="text-black mx-auto px-3">
+      <legend className="text-black mx-auto px-3">
         واحد‌های صنفی با زنجیره مثبت کوید {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
 
@@ -110,14 +110,14 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
               //       'jYYYY/jM/jD'
               //     ).format('YYYY-MM-DD')
               //   : null,
-              healthStatusSet: ['POSITIVE'],
-              reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
+              reportType: 'POSITIVE_CHAIN',
+              cityTitle,
+              reportName: ` واحد‌های صنفی ${
                 cityTitle ? `استان ${cityTitle}` : ''
-              }`,
+              } با زنجیره مثبت کوید `,
             }}
           />
         </div>
-
       </div>
 
       {loading ? (
@@ -133,34 +133,33 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
               pagination={{pageSize, currentPage}}
               columns={[
                 {
-                  name: "ردیف",
-                  key: "",
+                  name: 'ردیف',
+                  key: '',
                   render: (v: any, record, index: number) => (
                     <div className="flex w-full justify-center">
                       {toPersianDigit(((currentPage - 1) * pageSize + (index + 1)).toString())}.
                     </div>
                   ),
                 },
-    
 
                 {
                   name: 'شماره پروانه',
                   key: 'guildCode',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.guildCode)}</span>
                   ),
                 },
                 {
                   name: 'کد ISIC',
                   key: 'categoryCode',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.categoryCode)}</span>
                   ),
                 },
                 {
                   name: 'کد ملی مالک',
                   key: 'ownerNationalId',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">{toPersianDigit(record.ownerNationalId)}</span>
                   ),
                 },
@@ -175,12 +174,14 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
                 {
                   name: 'شماره موبایل',
                   key: 'ownerMobileNumber',
-                  render: (v: any,record:any) => (
+                  render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                
-                     {record.ownerMobileNumber? <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)}/>:"نامشخص"}
-                      
-                      </span>
+                      {record.ownerMobileNumber ? (
+                        <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)} />
+                      ) : (
+                        'نامشخص'
+                      )}
+                    </span>
                   ),
                 },
               ]}

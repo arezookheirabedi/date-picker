@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+
 import guildService from 'src/services/guild.service';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
@@ -20,11 +20,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [currentPage, setCurrenntPage] = useState(1);
 
-  const {CancelToken} = axios;
-  // eslint-disable-next-line
-  const source = CancelToken.source();
-
-  const pageSize = 1;
+  const pageSize = 10;
 
   const cancelToken = cancelTokenSource();
 
@@ -107,10 +103,9 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
               //       'jYYYY/jM/jD'
               //     ).format('YYYY-MM-DD')
               //   : null,
-              healthStatusSet: ['POSITIVE'],
-              reportName: `واحد‌های صنفی که QR کد آن‌ها اسکن نشده ${
-                cityTitle ? `استان ${cityTitle}` : ''
-              }`,
+              reportType: 'NON_VACCINES',
+              cityTitle,
+              reportName: `واحد‌های صنفی بدون واکسیناسیون ${cityTitle ? `استان ${cityTitle}` : ''}`,
             }}
           />
         </div>
