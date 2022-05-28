@@ -97,7 +97,7 @@ const converters = {
 };
 
 
-const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({data, categories,notPercent}) => {
+const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltipSuffix?:string}> = ({data, categories,notPercent,tooltipSuffix}) => {
   const chartRef = useRef<any>(null);
   const options = {
     chart: {
@@ -182,7 +182,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: ' نفر',
+      valueSuffix:  `${tooltipSuffix||"نفر"}`,
       style: {
         direction: 'rtl',
         textAlign: 'right',
