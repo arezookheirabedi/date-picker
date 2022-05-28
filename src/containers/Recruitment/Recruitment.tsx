@@ -6,16 +6,24 @@ import OverviewVaccinePerProvince from '../../components/Recruitment/public/Over
 import OverviewPatients from '../../components/Recruitment/public/OverviewPatients';
 import OverviewOfVaccination from '../../components/Recruitment/public/OverviewOfVaccination';
 import TestStatus from '../../components/Recruitment/public/TestStatus';
+import OverviewOfGovernmentEmployeesVaccinationProcess from '../../components/Recruitment/public/OverviewOfGovernmentEmployeesVaccinationProcess';
+import OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard from '../../components/Recruitment/public/OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard';
+import OverviewOfTheLatestGovernmentEmployeesVaccinationStatus from '../../components/Recruitment/public/OverviewOfTheLatestGovernmentEmployeesVaccinationStatus';
+import OverviewOfPercentageOfGovernmentEmployeesInEachProvince from '../../components/Recruitment/public/OverviewOfPercentageOfGovernmentEmployeesInEachProvince';
 
 const Recruitment: React.FC<{}> = () => {
   return (
     <div className="space-y-16 mb-8">
-      <Overview/>
-      <OverviewCategories/>
-      <OverviewVaccinePerProvince/>
-      <OverviewPatients/>
-      <OverviewOfVaccination/>
-      <TestStatus/>
+      <Overview />
+      <OverviewCategories />
+      <OverviewPatients />
+      <OverviewOfGovernmentEmployeesVaccinationProcess />
+      <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard />
+      <OverviewOfTheLatestGovernmentEmployeesVaccinationStatus />
+      <OverviewOfPercentageOfGovernmentEmployeesInEachProvince />
+      <OverviewOfVaccination />
+      <OverviewVaccinePerProvince />
+      <TestStatus />
     </div>
   );
 };

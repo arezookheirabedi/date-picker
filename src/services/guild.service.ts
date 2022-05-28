@@ -190,7 +190,7 @@ function reportDownload(id: string, reportType: string): Promise<AxiosResponse<a
     .get(`/api/v1/${reportType}/reports/${id}/download`);
 }
 
-function configOtpReport({reportType, ...params}: any = {}): Promise<AxiosResponse<any>> {
+function confirmOtpReport({reportType, ...params}: any = {}): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -218,5 +218,5 @@ export default {
   guildReportoverviewStatus,
   requestOtpReport,
   reportDownload,
-  configOtpReport,
+  confirmOtpReport,
 };
