@@ -1,46 +1,55 @@
 import React, {useEffect, useState} from 'react';
+import guildService from 'src/services/guild.service';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import guildService from 'src/services/guild.service';
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
+import Calendar from 'src/components/Calendar';
 
-import Table from '../../TableScopeSort';
+import DatePickerModal from 'src/components/DatePickerModal';
+import Table from 'src/components/TableScopeSort';
+import CategoryDonut from '../../../../containers/Guild/components/CategoryDonut';
 
-import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
-
-const TestStatus: React.FC<{}> = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+const OverviewOfVaccination: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [orgDataset, setOrgDataset] = useState<any>([]);
+  const [dataset, setDataset] = useState<any>([]);
+
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  async function getTestResultByCategory(params: any) {
+
+  async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await guildService.guildTestResultByCategory(params, {
+      const {data} = await guildService.dosesTagBased(params, {
         cancelToken: cancelToken.token,
       });
+
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         normalizedData.push({
-          id: `ovca_${index}`,
+          id: `ovvac_${index}`,
           name: item.categoryValue || 'نامشخص',
-          total: item.testResultsCount || 0,
-          positiveCountPercentage: item.positiveTestResultsCountToTestResultsCountPercentage || 0,
-          negativeCountPercentage: item.negativeTestResultsCountToTestResultsCountPercentage || 0,
+          firstDosePercentage: Number(item.dosesToMembersCountPercentage[1] || 0),
+          secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
+          thirdDosePercentage: Number(item.dosesToMembersCountPercentage[3] || 0),
+          otherDosesPercentage: Number(item.gtDosesToTotalDosesPercentage[3] || 0),
+          allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+          allDoses: Number(item.gtDoses['0'] || 0),
+          noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
         });
       });
+
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
     } catch (error) {
@@ -51,30 +60,18 @@ const TestStatus: React.FC<{}> = () => {
     }
   }
   useEffect(() => {
-    return () => {
-      cancelRequest();
-      setDataset([]);
-      setOrgDataset([]);
-    };
-  }, []);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       setSearchQuery('');
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      getTestResultByCategory({
+      getOverviewByVaccinePercent({
         tag: 'guild',
         category: 'categoryDesc',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
-      getTestResultByCategory({
+      getOverviewByVaccinePercent({
         tag: 'guild',
         category: 'categoryDesc',
         from: null,
@@ -82,6 +79,13 @@ const TestStatus: React.FC<{}> = () => {
       });
     }
   }, [selectedDayRange]);
+  useEffect(() => {
+    return () => {
+      cancelRequest();
+      setDataset([]);
+      setOrgDataset([]);
+    };
+  }, []);
 
   function handleSearch(e: any) {
     const {value} = e.target;
@@ -92,14 +96,12 @@ const TestStatus: React.FC<{}> = () => {
     setDataset([...tmp]);
     setSearchQuery(value);
   }
+  const focusFromDate = () => {
+    setShowDatePicker(true);
+  };
 
-  // function handlePageChange(page: number = 1) {
-  //   setCurrentPage(page);
-  // }
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">آزمایش در اصناف</legend>
-
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
@@ -155,16 +157,15 @@ const TestStatus: React.FC<{}> = () => {
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[
             {
-              name: 'وضعیت',
+              name: 'وضعیت کلی',
               key: '',
               render: (v: any, record) => (
                 <CategoryDonut
                   data={[
                     {
-                      name: 'negativeCountPercentage',
-                      title: 'منفی',
-
-                      y: record.negativeCountPercentage || 0,
+                      name: 'noDose',
+                      title: 'واکسن نزده',
+                      y: record.noDose || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -174,10 +175,9 @@ const TestStatus: React.FC<{}> = () => {
                       },
                     },
                     {
-                      name: 'positiveCountPercentage',
-                      title: 'مثبت',
-
-                      y: record.positiveCountPercentage || 0,
+                      name: 'allDosesPercentage',
+                      title: 'واکسن زده',
+                      y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -194,57 +194,49 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'نام رسته',
               key: 'name',
-
               render: (v: any, record, index: number, page: number) => (
                 <div className="flex">
-                  {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                  {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
                 </div>
               ),
             },
             {
-              name: 'تعداد آزمایش‌های انجام شده',
-              key: 'total',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0)
-                    .commaSeprator()
-                    .toPersianDigits()}
-                </span>
-              ),
+              name: 'دوز اول',
+              key: 'firstDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
-              name: 'درصد تست‌های مثبت',
-              key: 'positiveCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
+              name: 'دوز دوم',
+              key: 'secondDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
-              name: 'درصد تست‌های منفی',
-              key: 'negativeCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
+              name: 'دوز سوم',
+              key: 'thirdDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
+            {
+              name: 'سایر دوزها',
+              key: 'otherDosesPercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            },
+            {
+              name: 'کل دوزها',
+              key: 'allDoses',
+              sortable: true,
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
+            },
+            // {
+            //   name: 'واکسن نزده',
+            //   key: 'noDose',
+            //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            // },
           ]}
-          totalItems={(dataset || []).length}
+          totalItems={dataset.length || 0}
         />
       </div>
     </fieldset>
   );
 };
 
-export default TestStatus;
+export default OverviewOfVaccination;
