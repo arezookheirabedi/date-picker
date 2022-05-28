@@ -8,7 +8,7 @@ import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
-import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -191,7 +191,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
-              <SerchableSingleSelect
+              <SearchableSingleSelect
                 placeholder="کل آموزش و پرورش"
                 category="grade"
                 tag="edu"
