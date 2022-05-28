@@ -28,7 +28,7 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
   const getScoolLatestVaccinateInfo = async (params:any) => {
     setLoading(true);
     try {
-      const res = await hcsService.PeopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
+      const res = await hcsService.peopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
       if (res.status === 200) {
         const newData = {...initialNumberOfDoses, ...res.data};
         setNumberOf(newData);
