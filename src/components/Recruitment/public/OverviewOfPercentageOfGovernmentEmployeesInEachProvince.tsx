@@ -7,7 +7,8 @@ import Calendar from 'src/components/Calendar';
 import DatePickerModal from '../../DatePickerModal';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
-import TagsSelect from '../../TagsSelect';
+// import TagsSelect from '../../TagsSelect';
+import SearchableSingleSelect from "../../SearchableSingleSelect"
 
 const {Line} = Charts;
 
@@ -142,7 +143,7 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
-            <TagsSelect
+            <SearchableSingleSelect
               placeholder="کل کارکنان"
               tag="employee"
               category="heName"
@@ -172,11 +173,11 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
