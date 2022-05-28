@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -160,7 +160,7 @@ const OverviewPositivePcr = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
-            <SerchableSingleSelect
+            <SearchableSingleSelect
               placeholder="کل آموزش و پرورش"
               category="grade"
               tag="edu"
