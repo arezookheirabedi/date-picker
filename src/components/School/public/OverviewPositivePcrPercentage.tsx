@@ -18,13 +18,14 @@ import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
 import {converters, mockRegisterPercentage} from './constant';
+
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
 
-interface IOverviewGuildPositivePcrPercentage {}
+interface IOverviewPositivePcrPercentage {}
 
-const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
+const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [categories, setCategories] = useState<any[]>([]);
@@ -175,7 +176,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       {
         lineWidth: 4,
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
       },
     ],
@@ -183,7 +184,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به درصد ابتلای اصناف در هر استان</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به درصد ابتلای آموزش و پرورش در هر مقطع تحصیلی
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
@@ -233,4 +236,4 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   );
 };
 
-export default OverviewGuildPositivePcrPercentage;
+export default OverviewPositivePcrPercentage;

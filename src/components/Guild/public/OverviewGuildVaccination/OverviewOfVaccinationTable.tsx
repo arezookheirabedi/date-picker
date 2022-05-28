@@ -202,16 +202,20 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             },
             {
               name: 'دوز اول',
+              sortable: true,
+
               key: 'firstDosePercentage',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
               name: 'دوز دوم',
               key: 'secondDosePercentage',
+              sortable: true,
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
               name: 'دوز سوم',
+              sortable: true,
               key: 'thirdDosePercentage',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
