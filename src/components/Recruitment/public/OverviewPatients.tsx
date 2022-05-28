@@ -8,7 +8,8 @@ import DatePickerModal from '../../DatePickerModal';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
-import TagsSelect from '../../TagsSelect';
+// import TagsSelect from '../../TagsSelect';
+import SearchableSingleSelect from '../../SearchableSingleSelect';
 
 const {Line} = Charts;
 
@@ -143,7 +144,7 @@ const OverviewPatients: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
-            <TagsSelect
+            <SearchableSingleSelect
               placeholder="کل کارکنان"
               tag="employee"
               category="heName"
