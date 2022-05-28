@@ -192,7 +192,7 @@ const OverviewSteudent = () => {
             hasInfo
             infoText="تعداد کل تست های pcr که  کارمندان انجام داده اند."
             icon={testIcon}
-            text="تعداد آزمایش های کارمندان"
+            text="تعداد آزمایش های دانش آموزان"
             count={testResultInfo.testResultsCount || 0}
             loading={loading}
           />
@@ -216,7 +216,7 @@ const OverviewSteudent = () => {
           />
           <Statistic
             hasInfo
-            infoText="نسبت مبتلایان کارفرمایان صنفی به بیماری کرونا به کل جمعیت کارفرمایان صنفی"
+            infoText="نسبت مبتلایان  دانش آموزان به بیماری کرونا به کل جمعیت  دانش آموزان"
             icon={studentPositiveTest}
             text="درصد ابتلا به کل"
             count={testResultInfo.positiveMembersCountToTotalPopulationPercentage || 0}
