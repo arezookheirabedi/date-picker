@@ -181,7 +181,7 @@ const OverviewDepartmentEmploye = () => {
           />
           <Statistic
             hasInfo
-            infoText="نسبت مبتلایان کارفرمایان صنفی به بیماری کرونا به کل جمعیت کارفرمایان صنفی"
+            infoText="نسبت مبتلایان کارمندان اداری به بیماری کرونا به کل جمعیت  کارمندان اداری"
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
             count={0}

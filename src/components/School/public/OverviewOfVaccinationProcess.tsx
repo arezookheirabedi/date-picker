@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 
 import vaccineService from 'src/services/vaccine.service';
-import axios from 'axios';
 
 // import Spinner from '../../Spinner';
+import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
@@ -128,8 +128,7 @@ const optionChart = {
 };
 
 const OverviewOfVaccinationProcess = () => {
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  
   const [dataset, setDataset] = useState<any[]>(initialData);
   // const [categories, setCategories] = useState<any[]>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
@@ -137,12 +136,20 @@ const OverviewOfVaccinationProcess = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+
+
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  
   // eslint-disable-next-line
   const getLinearOverview = async () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
+      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: cancelToken.token});
 
       const provinces: any[] = [];
 
@@ -234,7 +241,7 @@ const OverviewOfVaccinationProcess = () => {
 
     return () => {
       clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
+      cancelRequest()
       setDataset([]);
     };
   }, []);

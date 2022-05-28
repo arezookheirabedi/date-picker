@@ -179,7 +179,7 @@ const OverviewEducationalEmploye = () => {
           />
           <Statistic
             hasInfo
-            infoText="نسبت مبتلایان کارفرمایان صنفی به بیماری کرونا به کل جمعیت کارفرمایان صنفی"
+            infoText="نسبت مبتلایان کارمندان آموزشی به بیماری کرونا به کل جمعیت  کارمندان آموزشی"
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
             count={0}

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 // import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
-import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
+// import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import totalDepartmentRecritment from 'src/assets/images/icons/people-navy.svg';
 import totalEducationalRecritment from 'src/assets/images/icons/people-green.svg';
 import totalStudent from 'src/assets/images/icons/graduation.svg';
@@ -53,7 +53,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
-            infoText="مجموع کارفرمایان صنفی که در اصناف فعالیت دارند."
+            infoText="مجموع کارمندان آموزشی که در  آموزش و پرورش فعالیت دارند."
             icon={totalEducationalRecritment}
             text="مجموع کارمندان آموزشی"
             count={totalEmploye||0}
@@ -61,7 +61,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText="مجموع کارفرمایان صنفی که در اصناف فعالیت دارند."
+            infoText="مجموع  کارمندان اداری که در آموزش و پرورش فعالیت دارند."
             icon={totalDepartmentRecritment}
             text="مجموع کارمندان اداری"
             count={totalEmploye||0}
@@ -69,7 +69,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText="مجموع کارفرمایان صنفی که در اصناف فعالیت دارند."
+            infoText="مجموع کل دانش آموزان مشغول به تحصیل در کل کشور"
             icon={totalStudent}
             text="مجموع  دانش آموزان"
             count={totalMembers||0}
@@ -108,7 +108,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           <Statistic
             text="تعداد واکسیناسیون دوز سوم"
             hasInfo
-            infoText="تعداد افرادی دوز سوم واکسن را دریافت کرده‌اند."
+            infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
             icon={PurppleVaccine}
             count={numberOf.doses[3]}
             loading={loading}
@@ -237,7 +237,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             isPercentage
           />
 
-          <Statistic
+          {/* <Statistic
             infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
             hasInfo
             icon={GrayVaccine}
@@ -245,8 +245,11 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage}
             loading={loading}
             isPercentage
-          />
+          /> */}
 
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
           <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
             {/* cvxdvcv */}
           </div>
