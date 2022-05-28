@@ -5,7 +5,6 @@ import moment from 'moment-jalaali';
 import recruitmentServices from 'src/services/recruitment.service';
 import Calendar from 'src/components/Calendar';
 import DatePickerModal from '../../DatePickerModal';
-import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 import TagsSelect from '../../TagsSelect';
@@ -20,7 +19,7 @@ interface IParams {
   to?: any;
 }
 
-const OverviewPatients: React.FC<{}> = () => {
+const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
   const [data, setData] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -139,7 +138,7 @@ const OverviewPatients: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان کارکنان دولت</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به درصد ابتلای کارکنان دولت در هر استان</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
@@ -169,17 +168,6 @@ const OverviewPatients: React.FC<{}> = () => {
             </div>
           </div>
 
-          <RangeDateSliderFilter
-            changeType={v =>
-              setQueryParams({
-                ...queryParams,
-                type: v,
-              })
-            }
-            selectedType={queryParams.type!}
-            dates={selectedDayRange}
-            wrapperClassName="w-1/4"
-          />
         </div>
 
         {loading && (
@@ -195,6 +183,6 @@ const OverviewPatients: React.FC<{}> = () => {
       </div>
     </fieldset>
   );
-};
+}
 
-export default OverviewPatients;
+export default OverviewOfPercentageOfGovernmentEmployeesInEachProvince;

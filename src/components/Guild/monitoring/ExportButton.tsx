@@ -61,7 +61,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
     setSubmitted(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const response = await guildService.configOtpReport({
+      const response = await guildService.confirmOtpReport({
         reportType: params.reportType,
         verificationCode: data,
       });

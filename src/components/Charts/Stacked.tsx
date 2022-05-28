@@ -113,7 +113,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
       events: {
         redraw: () => {
           // eslint-disable-next-line
-          console.log('redraw');
+          // console.log('redraw');
         },
       },
       // zoomType: 'x'
@@ -231,7 +231,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
         highcharts={Highcharts}
         options={options}
         ref={chartRef}
-        containerProps={{className: 'flex w-full', style: {maxWidth: 'calc(100vw - 550px)'}}}
+        containerProps={{className: 'flex w-full'}}
       />
     </>
   );
