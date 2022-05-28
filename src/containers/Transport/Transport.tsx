@@ -2,11 +2,17 @@ import React from 'react';
 
 // import avatar from "../../assets/images/logos/avatar.svg";
 // import OverviewSamas from '../../components/Transport/public/OverviewSamas';
-import OverviewCategories from '../../components/Transport/public/OverviewCategories';
-import OverviewPublicPatients from '../../components/Transport/public/OverviewPublicPatients';
-import OverviewOfVaccinationInPublicTransport from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
-import TestsInTransport from '../../components/Transport/public/TestsInTransport';
-import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
+// import OverviewCategories from '../../components/Transport/public/OverviewCategories';
+// import OverviewPublicPatients from '../../components/Transport/public/OverviewPublicPatients';
+// import OverviewOfDriverVaccinationProcess from "../../components/Transport/public/OverviewOfDriverVaccinationProcess";
+import OverviewOfTheLatestPublicTransportVaccinationStatusCard from '../../components/Transport/public/OverviewOfTheLatestPublicTransportVaccinationStatusCard';
+// import OverviewOfTheLatestPublicTransportVaccinationStatus from "../../components/Transport/public/OverviewOfTheLatestPublicTransportVaccinationStatus";
+// import OverviewOfThePublicTransportVaccinationStatusInCountry from "../../components/Transport/public/OverviewOfThePublicTransportVaccinationStatusInCountry";
+// import OverviewOfVaccinationInPublicTransport
+//   from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
+// import TableOfTestsInTransport from "../../components/Transport/public/TableOfTestsInTransport";
+// import TestsInTransport from '../../components/Transport/public/TestsInTransport';
+// import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
 
@@ -27,12 +33,17 @@ const Transport = () => {
           style={{backgroundImage: `url(${AlertPattern})`}}
         />
       </div>
-      <OverviewDrivers />
-      {/*  <OverviewSamas /> */}
-      <OverviewCategories />
-      <OverviewPublicPatients />
-      <OverviewOfVaccinationInPublicTransport />
-      <TestsInTransport />
+      {/* <OverviewDrivers/> */}
+      {/* <OverviewSamas/> */}
+      {/* <OverviewCategories/> */}
+      {/* <OverviewPublicPatients/> */}
+      {/* <OverviewOfDriverVaccinationProcess/> */}
+      <OverviewOfTheLatestPublicTransportVaccinationStatusCard />
+      {/* <OverviewOfTheLatestPublicTransportVaccinationStatus /> */}
+      {/* <OverviewOfVaccinationInPublicTransport/> */}
+      {/* <OverviewOfThePublicTransportVaccinationStatusInCountry /> */}
+      {/* <TableOfTestsInTransport /> */}
+      {/* <TestsInTransport/> */}
     </div>
   );
 };
