@@ -78,8 +78,6 @@ const OverviewSchoolsPositivePcr = () => {
   // };
 
   useEffect(() => {
-    debugger;
-    console.log(query);
     const idSetTimeOut = setTimeout(() => {
       getColumnChartTestResult(query);
     }, 500);
