@@ -18,7 +18,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  const [currentPage, setCurrenntPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const pageSize = 10;
 
@@ -58,7 +58,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   };
 
   useEffect(() => {
-    setCurrenntPage(0);
+    setCurrentPage(0);
   }, [cityTitle]);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   }, [cityTitle, currentPage]);
 
   function handlePageChange(page: number = 1) {
-    setCurrenntPage(page);
+    setCurrentPage(page);
   }
 
   return (
