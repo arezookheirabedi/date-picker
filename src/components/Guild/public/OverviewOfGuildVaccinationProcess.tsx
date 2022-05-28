@@ -138,11 +138,12 @@ const OverviewOfGuildVaccinationProcess = () => {
   const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line
-  const getLinearOverview = async () => {
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
+      // const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {cancelToken: source.token})
+      const {data} = await vaccineService.dosesTagBased(params, {cancelToken: source.token});
 
       const provinces: any[] = [];
 
@@ -229,7 +230,7 @@ const OverviewOfGuildVaccinationProcess = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview();
+      getLinearOverview({tag: 'guild'});
     }, 500);
 
     return () => {
