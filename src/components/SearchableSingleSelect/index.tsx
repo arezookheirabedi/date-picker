@@ -14,7 +14,13 @@ interface IProps {
   placeholder?: any;
   setQueryParams: (v: any) => void;
 }
-const SerchableSingleSelect: React.FC<IProps> = ({placeholder, tag, category}) => {
+const SearchableSingleSelect: React.FC<IProps> = ({
+  placeholder,
+  tag,
+  category,
+  setQueryParams,
+  queryParams,
+}) => {
   const [selected, setSelected] = useState<{key: number | string | null; value: string}>();
   const [query, setQuery] = useState('');
 
@@ -51,6 +57,15 @@ const SerchableSingleSelect: React.FC<IProps> = ({placeholder, tag, category}) =
           return tag.value.toLowerCase().includes(query.toLowerCase());
         });
 
+  useEffect(() => {
+    let params = {...queryParams};
+    if (selected) {
+      params = {...queryParams, categoryValue: selected.key};
+    } else {
+      params = {...queryParams, categoryValue: null};
+    }
+    setQueryParams(params);
+  }, [selected]);
   return (
     <div className="flex  flex-col space-y-3 items-center justify-center">
       <div className="w-72 relative">
@@ -119,4 +134,4 @@ const SerchableSingleSelect: React.FC<IProps> = ({placeholder, tag, category}) =
     </div>
   );
 };
-export default SerchableSingleSelect;
+export default SearchableSingleSelect;
