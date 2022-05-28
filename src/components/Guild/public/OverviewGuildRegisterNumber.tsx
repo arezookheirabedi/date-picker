@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
-import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
@@ -54,7 +54,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       {
         name: 'ثبت نام نشده',
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
         showInLegend: false,
         data: [...unregistered],
@@ -62,10 +62,20 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       {
         name: 'ثبت نام شده',
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
         showInLegend: false,
         data: [...registered],
+        linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1,
+        },
+        stops: [
+          [0, '#5F5B97'],
+          [1, '#DDDCE9'],
+        ],
       },
     ];
     // setDataset([...newData]);
@@ -215,7 +225,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
-              <SerchableSingleSelect
+              <SearchableSingleSelect
                 placeholder="کل آموزش و پرورش"
                 category="grade"
                 tag="edu"
