@@ -5,7 +5,7 @@ import moment from 'moment-jalaali';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import guildService from 'src/services/guild.service';
 import DatePickerModal from '../../DatePickerModal';
-import Table from '../../TableScope';
+import Table from '../../TableScopeSort';
 import Calendar from '../../Calendar';
 
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
@@ -14,17 +14,6 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 interface OverviewGuildsPerCategoryProps {
   cityTitle?: any;
 }
-
-// const filterTypes = [
-//   {
-//     name: 'بیشترین',
-//     enName: 'HIGHEST',
-//   },
-//   {
-//     name: 'کمترین',
-//     enName: 'LOWEST',
-//   },
-// ];
 
 const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({cityTitle}) => {
   // const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
@@ -68,10 +57,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
       setDataset([...normalizedData]);
       setOrgDataset([...normalizedData]);
-      // setFilterType({
-      //   name: 'بیشترین',
-      //   enName: 'HIGHEST',
-      // });
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
@@ -94,6 +79,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
+      setSearchQuery('');
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       getOverviewByCategory({
@@ -112,25 +98,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
     }
   }, [selectedDayRange]);
 
-  // useEffect(() => {
-  //   const tmp = [...orgDataset].sort((a: any, b: any) => {
-  //     // eslint-disable-next-line
-  //     const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
-
-  //     if (a.infectedPercent < b.infectedPercent) {
-  //       return reverse * 1;
-  //     }
-
-  //     if (a.infectedPercent > b.infectedPercent) {
-  //       return reverse * -1;
-  //     }
-  //     // a must be equal to b
-  //     return 0;
-  //   });
-
-  //   setDataset(tmp);
-  // }, [filterType]);
-
   function handleSearch(e: any) {
     const {value} = e.target;
 
@@ -139,23 +106,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
       tmp = [...tmp].filter(x => x.name.indexOf(value) !== -1);
     }
 
-    // setDataset(
-    //   [...tmp].sort((a: any, b: any) => {
-    //     const reverse =
-    //       // eslint-disable-next-line
-    //       filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
-
-    //     if (a.infectedPercent < b.infectedPercent) {
-    //       return reverse * 1;
-    //     }
-
-    //     if (a.infectedPercent > b.infectedPercent) {
-    //       return reverse * -1;
-    //     }
-    //     // a must be equal to b
-    //     return 0;
-    //   })
-    // );
     setDataset([...tmp]);
     setSearchQuery(value);
   }
@@ -166,50 +116,6 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
-          {/* <div className="flex items-center">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
-
-              <Menu.Items
-                style={{width: '250px'}}
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              >
-                <div className="px-1 py-1 ">
-                  {filterTypes.map((value: any, index: any) => {
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                            onClick={() => {
-                              setFilterType(value);
-                            }}
-                          >
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
-          </div> */}
-
           <div className="flex items-center">
             {showDatePicker ? (
               <DatePickerModal
@@ -270,6 +176,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                     {
                       name: 'deadCount',
                       title: 'تعداد فوت‌شدگان',
+
                       y: record.deadCount || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
@@ -325,6 +232,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
             {
               name: 'درصد ابتلا',
               key: 'infectedPercent',
+              sortable: true,
               render: (v: any) => (
                 <span>
                   {Number(v || 0).toLocaleString('fa', {
@@ -336,11 +244,13 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
             },
             {
               name: 'تعداد مبتلایان',
+              sortable: true,
               key: 'infectedCount',
               render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
             },
             {
               name: 'تعداد بهبودیافتگان',
+              sortable: true,
               key: 'saveCount',
               render: (v: any) => (
                 <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
