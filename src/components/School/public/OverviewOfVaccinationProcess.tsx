@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-
-import vaccineService from 'src/services/vaccine.service';
-
 // import Spinner from '../../Spinner';
-import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import hcsService from 'src/services/hcs.service';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
@@ -128,7 +126,6 @@ const optionChart = {
 };
 
 const OverviewOfVaccinationProcess = () => {
-  
   const [dataset, setDataset] = useState<any[]>(initialData);
   // const [categories, setCategories] = useState<any[]>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
@@ -136,20 +133,22 @@ const OverviewOfVaccinationProcess = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
-
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  
+
   // eslint-disable-next-line
-  const getLinearOverview = async () => {
+  const getLinearOverview = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: cancelToken.token});
+      /* should ass accumulative */
+      // const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
+      const {data} = await hcsService.dosesTagBased(params, {
+        cancelToken: cancelToken.token,
+      });
 
       const provinces: any[] = [];
 
@@ -236,12 +235,12 @@ const OverviewOfVaccinationProcess = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview();
+      getLinearOverview({tag: 'edu'});
     }, 500);
 
     return () => {
       clearTimeout(idSetTimeOut);
-      cancelRequest()
+      cancelRequest();
       setDataset([]);
     };
   }, []);
