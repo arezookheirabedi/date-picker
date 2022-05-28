@@ -63,7 +63,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
     setSubmitted(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const response = await transportService.configOtpReport({
+      const response = await transportService.confirmOtpReport({
         reportType: params.reportType,
         verificationCode: data,
       });

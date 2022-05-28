@@ -38,7 +38,7 @@ const TableHeaderColumn: React.FC<IProps> = ({column, handleSortOrder, order}) =
       <div className="flex items-center justify-center space-x-2 whitespace-nowrap rtl:space-x-reverse">
         <span className="inline-flex">{column.name}</span>
         {column.sortable && (
-          <div className="flex cursor-pointer items-center justify-center">
+          <div className="flex cursor-pointer items-center justify-center flex-shrink-0">
             {order === 'ASC' ? (
               <img src={up} className="h-3 w-2" alt="" />
             ) : order === 'DESC' ? (
