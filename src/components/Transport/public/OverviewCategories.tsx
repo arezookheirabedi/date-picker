@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 // import transportService from 'src/services/transport.service';
@@ -9,27 +8,16 @@ import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 // import {getServiceTypeName} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
-const filterTypes = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
+
 
 const OverviewCategories: React.FC<{}> = () => {
-  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -67,8 +55,8 @@ const OverviewCategories: React.FC<{}> = () => {
         // }
       });
       setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+      // setOrgDataset([...normalizedData]);
+      // setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
     } catch (e) {
       console.log(e);
     } finally {
@@ -138,76 +126,11 @@ const OverviewCategories: React.FC<{}> = () => {
       });
     }
   }, [selectedDayRange]);
-
-  useEffect(() => {
-    const tmp = [...orgDataset].sort((a: any, b: any) => {
-      // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
-
-      if (a.infectedPercent < b.infectedPercent) {
-        return reverse * 1;
-      }
-
-      if (a.infectedPercent > b.infectedPercent) {
-        return reverse * -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
-
-    setDataset(tmp);
-  }, [filterType]);
-
+  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به حمل و نقل کشور</legend>
-
+      <legend className="text-black mx-auto px-3">نگاه کلی رسته های حمل و نقل</legend>
       <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex items-center">
-          <Menu
-            as="div"
-            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-          >
-            <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'پیشفرض'}
-                </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
-              </Menu.Button>
-            </div>
-
-            <Menu.Items
-              style={{minWidth: '200px'}}
-              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-              <div className="px-1 py-1 ">
-                {filterTypes.map((value: any, index: any) => {
-                  return (
-                    // eslint-disable-next-line
-                    <Menu.Item key={index}>
-                      {({active}) => (
-                        <button
-                          type="button"
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                          onClick={() => {
-                            setFilterType(value);
-                          }}
-                        >
-                          {value.name}
-                        </button>
-                      )}
-                    </Menu.Item>
-                  );
-                })}
-              </div>
-            </Menu.Items>
-          </Menu>
-        </div>
         <div className="flex align-center justify-start">
           {showDatePicker ? (
             <DatePickerModal
@@ -283,7 +206,7 @@ const OverviewCategories: React.FC<{}> = () => {
                 className: 'flex justify-center w-full',
               },
               {
-                name: 'دسته',
+                name: 'رسته های حمل و نقل',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -292,12 +215,12 @@ const OverviewCategories: React.FC<{}> = () => {
                 ),
               },
               {
-                name: 'تعداد کارکنان',
+                name: 'تعداد رانندگان',
                 key: 'employeesCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
-                name: 'درصد ابتلا',
+                name: 'درصد ابتلا کل رانندگان',
                 key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
