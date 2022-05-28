@@ -6,9 +6,11 @@ import vaccineService from 'src/services/vaccine.service';
 // import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
-import {cancelTokenSource, msgRequestCanceled,
+import {
+  cancelTokenSource,
+  msgRequestCanceled,
   //  toPersianDigit
-  } from '../../../helpers/utils';
+} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {Stacked} = Charts;
@@ -18,11 +20,11 @@ interface OverviewPerProvinceProps {}
 const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line 
+  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line 
+  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -157,7 +159,7 @@ const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({...queryParams, tag: 'guild'});
+      getLinearOverview({...queryParams, tag: 'edu'});
     }, 500);
 
     return () => {
@@ -197,7 +199,9 @@ const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون آموزش و پرورش کشور</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به وضعیت واکسیناسیون آموزش و پرورش کشور
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
