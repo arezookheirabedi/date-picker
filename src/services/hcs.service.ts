@@ -146,26 +146,22 @@ function tags({organization, ...params}: {organization: string; params?: any}, {
     .get(`/api/v1/hcs-reporter/organizations/${organization}/tags`, params, {...config});
 }
 
-
-
-
 function vaccinationOverview(tag: string, category: string, params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
 }
-
-function peopleVaccinationOverview(  {tag, category, ...params}: any = {},
-  config?: any) {
+function peopleVaccinationOverview({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/people/vaccines/tags/${tag}/categories/${category}`, params, {...config});
+    .get(`/api/v1/hcs-reporter/people/vaccines/tags/${tag}/categories/${category}`, params, {
+      ...config,
+    });
 }
 
-function peopleLatestVaccinationOverview( params:any,
-  config?: any) {
+function peopleLatestVaccinationOverview(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -206,6 +202,15 @@ function columnChartTestResultService(params: any = {}, config?: any) {
     });
 }
 
+function getPeopleVaccine(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/people/vaccines/general`, params, {
+      ...config,
+    });
+}
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -225,7 +230,8 @@ const hcsService = {
   testResultsCategory,
   columnChartTestResultService,
   peopleVaccinationOverview,
-  peopleLatestVaccinationOverview
+  peopleLatestVaccinationOverview,
+  getPeopleVaccine,
 };
 
 export default hcsService;
