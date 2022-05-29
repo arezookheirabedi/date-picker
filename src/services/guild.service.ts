@@ -196,6 +196,25 @@ function confirmOtpReport({reportType, ...params}: any = {}): Promise<AxiosRespo
     .build()
     .post(`/api/v1/guilds/reports/types/${reportType}/downloads/confirm?lang=fa`, params);
 }
+function percentageOfRegisteredGuilds(
+  {...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/reports/registered/percentage?lang=fa`, params, {...config});
+}
+
+function numberOfRegisteredGuilds(
+  {...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/reports/registered/count?lang=fa`, params, {...config});
+}
 
 export default {
   registerGuild,
@@ -219,4 +238,6 @@ export default {
   requestOtpReport,
   reportDownload,
   confirmOtpReport,
+  percentageOfRegisteredGuilds,
+  numberOfRegisteredGuilds,
 };
