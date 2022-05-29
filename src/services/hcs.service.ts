@@ -1,3 +1,4 @@
+import {AxiosResponse} from 'axios';
 import qs from 'qs';
 import request from '../helpers/request';
 
@@ -152,7 +153,10 @@ function vaccinationOverview(tag: string, category: string, params: any = {}, co
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
 }
-function peopleVaccinationOverview({tag, category, ...params}: any = {}, config?: any) {
+function peopleVaccinationOverview(
+  {tag, category, ...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -161,7 +165,7 @@ function peopleVaccinationOverview({tag, category, ...params}: any = {}, config?
     });
 }
 
-function peopleLatestVaccinationOverview(params: any, config?: any) {
+function peopleLatestVaccinationOverview(params: any, config?: any): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -211,6 +215,18 @@ function getPeopleVaccine(params: any = {}, config?: any) {
     });
 }
 
+function accumulativeVaccinesTimeBasedReport(
+  params: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/vaccines/time-based/accumulative`, params, {
+      ...config,
+    });
+}
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -232,6 +248,7 @@ const hcsService = {
   peopleVaccinationOverview,
   peopleLatestVaccinationOverview,
   getPeopleVaccine,
+  accumulativeVaccinesTimeBasedReport,
 };
 
 export default hcsService;
