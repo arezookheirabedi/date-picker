@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
-// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import guildService from 'src/services/guild.service';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -285,7 +285,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
-            {/* <div className="flex items-center">
+            <div className="flex items-center">
               <SearchableSingleSelect
                 placeholder="کل اصناف"
                 tag="guild"
@@ -293,7 +293,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
-            </div> */}
+            </div>
             <div className="flex items-center">
               {' '}
               {showDatePicker ? (
