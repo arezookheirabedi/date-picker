@@ -27,12 +27,10 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
       const res = await hcsService.peopleLatestVaccinationOverview(params, {
         cancelToken: cancelToken.token,
       });
-      if (res.status === 200) {
-        const newData = {...initialNumberOfDoses, ...res.data};
-        setNumberOf(newData);
-      }
+      const newData = {...initialNumberOfDoses, ...res.data};
+      setNumberOf(newData);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || 'خطایی در عملیات');
 
       // eslint-disable-next-line
       console.log(error);
@@ -57,6 +55,7 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
       </legend>
 
       <LatestOverviewOfStatusCard loading={loading} numberOf={numberOf} />
+
       <OverviewOfTheLatestPublicGuildVaccinationStatus
         loading={loading}
         numberOf={numberOf}
