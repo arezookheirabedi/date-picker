@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 // import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
 import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
@@ -6,53 +6,14 @@ import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
 import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
-
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import hcsService from 'src/services/hcs.service';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialNumberOfDoses, initialNumberOfDoses} from '../constant';
+import {IInitialNumberOfDoses} from '../constant';
 
-const LatestOverviewOfStatusCard: React.FC<{}> = () => {
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getGuildVaccinateInfo = async (params: any) => {
-    setLoading(true);
-    try {
-      const res = await hcsService.peopleLatestVaccinationOverview(params, {
-        cancelToken: cancelToken.token,
-      });
-      if (res.status === 200) {
-        const newData = {...initialNumberOfDoses, ...res.data};
-        setNumberOf(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getGuildVaccinateInfo({tag: 'guild'});
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setNumberOf(initialNumberOfDoses);
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, []);
-
+const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitialNumberOfDoses}> = ({
+  loading,
+  numberOf,
+}) => {
   return (
     <>
       <div className="flex  mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
