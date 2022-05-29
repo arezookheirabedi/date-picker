@@ -243,15 +243,11 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        {!loading &&
-          !errorMessage &&
-          (initialData?.series.data.length === 0 && initialData?.categories.length === 0 ? (
-            <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-          ) : (
-            <HeadlessChart data={initialData} optionsProp={optionChart} />
-          ))}
+        {!loading && errorMessage ? (
+          <div className="p-40 text-red-500">{errorMessage}</div>
+        ) : (
+          <HeadlessChart data={initialData} optionsProp={optionChart} />
+        )}
       </div>
     </fieldset>
   );
