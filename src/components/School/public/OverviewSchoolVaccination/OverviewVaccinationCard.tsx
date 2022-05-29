@@ -20,7 +20,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const {total: totalMembers, employe: totalEmploye} = useSelector(state => state.studentMembers);
   const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-   
+
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
@@ -30,7 +30,10 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
   const getNumberOf = async () => {
     setLoading(true);
     try {
-      const {data} = await vaccineService.membersGeneral({tag: 'edu'}, {cancelToken:cancelToken.token});
+      const {data} = await vaccineService.membersGeneral(
+        {tag: 'edu'},
+        {cancelToken: cancelToken.token}
+      );
       setNumberOf({...data});
     } catch (error) {
       console.log(error);
@@ -49,14 +52,14 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
 
   return (
     <>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="flex mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
             infoText="مجموع کارمندان آموزشی که در  آموزش و پرورش فعالیت دارند."
             icon={totalEducationalRecritment}
             text="مجموع کارمندان آموزشی"
-            count={totalEmploye||0}
+            count={totalEmploye || 0}
             loading={loading}
           />
           <Statistic
@@ -64,7 +67,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             infoText="مجموع  کارمندان اداری که در آموزش و پرورش فعالیت دارند."
             icon={totalDepartmentRecritment}
             text="مجموع کارمندان اداری"
-            count={totalEmploye||0}
+            count={totalEmploye || 0}
             loading={loading}
           />
           <Statistic
@@ -72,7 +75,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             infoText="مجموع کل دانش آموزان مشغول به تحصیل در کل کشور"
             icon={totalStudent}
             text="مجموع  دانش آموزان"
-            count={totalMembers||0}
+            count={totalMembers || 0}
             loading={loading}
           />
           <Statistic
