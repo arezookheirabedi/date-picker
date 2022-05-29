@@ -1,5 +1,4 @@
 import React from 'react';
-// import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
 import OverviewGuildPositivePcrPercentage from 'src/components/Guild/public/OverviewGuildPositivePcrPercentage';
 import OverviewGuildRegisterNumber from 'src/components/Guild/public/OverviewGuildRegisterNumber';
 import OverviewGuildRegisterPercentage from 'src/components/Guild/public/OverviewGuildRegisterPercentage';
@@ -15,12 +14,6 @@ import OverviewSchoolsPositivePcr from 'src/components/School/public/OverviewSch
 const GuildOwner: React.FC<any> = () => {
   return (
     <div className="space-y-16 mb-8">
-      {/* <OverviewGuilds />
-      <OverviewGuildsPerCategory />
-      <OverviewGuildsPerProvince />
-      <OverviewOfVaccination />
-      <TestStatus /> */}
-
       <OverviewGuilds />
       <OverviewGuildsPerCategory />
       <OverviewSchoolsPositivePcr />
