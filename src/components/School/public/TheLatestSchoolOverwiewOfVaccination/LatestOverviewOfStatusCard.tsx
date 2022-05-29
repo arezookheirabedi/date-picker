@@ -6,7 +6,6 @@ import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
 import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
-
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import hcsService from 'src/services/hcs.service';
@@ -25,10 +24,12 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getScoolLatestVaccinateInfo = async (params:any) => {
+  const getScoolLatestVaccinateInfo = async (params: any) => {
     setLoading(true);
     try {
-      const res = await hcsService.peopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
+      const res = await hcsService.peopleLatestVaccinationOverview(params, {
+        cancelToken: cancelToken.token,
+      });
       if (res.status === 200) {
         const newData = {...initialNumberOfDoses, ...res.data};
         setNumberOf(newData);
@@ -53,7 +54,7 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
 
   return (
     <>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="flex  mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             text="تعداد افراد با  دوز اول"
