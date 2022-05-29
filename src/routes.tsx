@@ -9,6 +9,8 @@ import GuildMonitoring from './containers/Guild/GuildMonitoring';
 import Transport from './containers/Transport/Transport';
 import TransportProvince from './containers/Transport/TransportProvince';
 import TransportMonitoring from './containers/Transport/TransportMonitoring';
+import Bakery from './containers/Bakery/Bakery';
+import BakeryProvince from './containers/Bakery/BakeryProvince';
 import Passenger from './containers/Passenger/Passenger';
 import School from './containers/School/School';
 import SchoolProvince from './containers/School/SchoolProvince';
@@ -22,7 +24,6 @@ import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from "./containers/ServicePort/ServicePort";
-import ReportsFlour from './containers/Reports/Flour';
 
 const routes: IRoute[] = [
   {
@@ -117,6 +118,36 @@ const routes: IRoute[] = [
     ],
     // disabled: true,
     main: Transport,
+  },
+  {
+    
+    keyIndex: '10',
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="bakery" active={active} disabled={disabled} />
+    ),
+    link: '/dashboard/bakery/public',
+    simLink: '/dashboard/bakery',
+    exact: true,
+    inMenu: true,
+    title: 'داشبورد آرد و نان',
+    subMenu: [
+      {
+        keyIndex: '1',
+        title: 'عمومی',
+        link: '/dashboard/bakery/public',
+        icon: active => <IconWrapperStyle name="sub-bakery" active={active} />,
+        main: Bakery,
+      },
+      {
+        keyIndex: '2',
+        title: 'استانی',
+        link: '/dashboard/bakery/province',
+        icon: active => <IconWrapperStyle name="sub-bakery" active={active} />,
+        main: BakeryProvince,
+      },
+    ],
+    // disabled: true,
+    main: Bakery,
   },
   {
     keyIndex: '6',
@@ -271,7 +302,7 @@ const routes: IRoute[] = [
     main: Recruitment,
   },
   {
-    keyIndex: '10',
+    keyIndex: '11',
     icon: (active, disabled) => (
       <IconWrapperStyle name="reports-requested" active={active} disabled={disabled} />
     ),
@@ -281,18 +312,6 @@ const routes: IRoute[] = [
     inMenu: true,
     title: 'لیست درخواست گزارش',
     main: ReportsRequested,
-  },
-  {
-    keyIndex: '11',
-    icon: (active, disabled) => (
-      <IconWrapperStyle name="reports-flour" active={active} disabled={disabled} />
-    ),
-    link: '/dashboard/reports/flour',
-    simLink: '/dashboard/reports/flour',
-    exact: true,
-    inMenu: true,
-    title: 'گزارش توزیع آرد در استان‌ها',
-    main: ReportsFlour,
   },
 ];
 
