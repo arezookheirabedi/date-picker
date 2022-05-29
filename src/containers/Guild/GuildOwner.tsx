@@ -1,4 +1,5 @@
 import React from 'react';
+import OverviewGuildPositivePcr from 'src/components/Guild/public/OverviewGuildPositivePcr';
 import OverviewGuildPositivePcrPercentage from 'src/components/Guild/public/OverviewGuildPositivePcrPercentage';
 import OverviewGuildRegisterNumber from 'src/components/Guild/public/OverviewGuildRegisterNumber';
 import OverviewGuildRegisterPercentage from 'src/components/Guild/public/OverviewGuildRegisterPercentage';
@@ -9,14 +10,13 @@ import OverviewVaccination from 'src/components/Guild/public/OverviewGuildVaccin
 import OverviewOfGuildVaccinationProcess from 'src/components/Guild/public/OverviewOfGuildVaccinationProcess';
 import TestStatus from 'src/components/Guild/public/TestStatus';
 import TheLatestOverwiewOfVaccination from 'src/components/Guild/public/TheLatestOverwiewOfVaccination';
-import OverviewSchoolsPositivePcr from 'src/components/School/public/OverviewSchoolsPositivePcr';
 
 const GuildOwner: React.FC<any> = () => {
   return (
     <div className="space-y-16 mb-8">
       <OverviewGuilds />
       <OverviewGuildsPerCategory />
-      <OverviewSchoolsPositivePcr />
+      <OverviewGuildPositivePcr />
       <OverviewOfGuildVaccinationProcess />
       <TheLatestOverwiewOfVaccination />
       <OverviewGuildPositivePcrPercentage />
