@@ -25,11 +25,12 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const  getGuildVaccinateInfo = async (params:any) => {
+  const getGuildVaccinateInfo = async (params: any) => {
     setLoading(true);
     try {
-     
-      const res =  await hcsService.peopleLatestVaccinationOverview(params, {cancelToken: cancelToken.token});
+      const res = await hcsService.peopleLatestVaccinationOverview(params, {
+        cancelToken: cancelToken.token,
+      });
       if (res.status === 200) {
         const newData = {...initialNumberOfDoses, ...res.data};
         setNumberOf(newData);
@@ -43,7 +44,7 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    getGuildVaccinateInfo( { tag: 'guild'});
+    getGuildVaccinateInfo({tag: 'guild'});
     // getPcrResult();
     return () => {
       cancelRequest();
@@ -54,7 +55,7 @@ const LatestOverviewOfStatusCard: React.FC<{}> = () => {
 
   return (
     <>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="flex  mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             text="تعداد افراد با  دوز اول"
