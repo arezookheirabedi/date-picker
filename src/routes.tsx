@@ -135,7 +135,7 @@ const routes: IRoute[] = [
         main: BakeryProvince,
       },
     ],
-    disabled: true,
+    // disabled: true,
     main: Bakery,
   },
   {
