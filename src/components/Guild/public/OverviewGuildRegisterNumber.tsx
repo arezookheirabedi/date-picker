@@ -4,11 +4,12 @@ import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import guildService from 'src/services/guild.service';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
+import {converters} from './constant';
 
 const {HeadlessChart} = Charts;
 
@@ -40,50 +41,111 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
-    const registered: any[] = [];
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-      registered.push(item.register);
-    });
-    // setCategories([...province]);
-    const newData = [
-      {
-        name: 'ثبت نام نشده',
-        dataLabels: {
-          // enabled: true,
+  // const normalizeData = (data: Array<any>) => {
+  //   const province: any[] = [];
+  //   const registered: any[] = [];
+  //   const unregistered: any[] = [];
+  //   data.forEach((item: any) => {
+  //     province.push(item.province);
+  //     unregistered.push(item.unregister);
+  //     registered.push(item.register);
+  //   });
+  //   // setCategories([...province]);
+  //   const newData = [
+  //     {
+  //       name: 'ثبت نام نشده',
+  //       dataLabels: {
+  //         // enabled: true,
+  //       },
+  //       showInLegend: false,
+  //       data: [...unregistered],
+  //     },
+  //     {
+  //       name: 'ثبت نام شده',
+  //       dataLabels: {
+  //         // enabled: true,
+  //       },
+  //       showInLegend: false,
+  //       data: [...registered],
+  //       linearGradient: {
+  //         x1: 0,
+  //         x2: 0,
+  //         y1: 0,
+  //         y2: 1,
+  //       },
+  //       stops: [
+  //         [0, '#5F5B97'],
+  //         [1, '#DDDCE9'],
+  //       ],
+  //     },
+  //   ];
+  //   // setDataset([...newData]);
+  //   setDataset({categories: [...province], series: [...newData]});
+  // };
+
+  const getColumnChartRegisterNumber = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await guildService.numberOfRegisteredGuilds(params, {
+        cancelToken: cancelToken.token,
+      });
+      const province: any[] = [];
+      const registered: any[] = [];
+      const allCount: any[] = [];
+      data.forEach((item: any) => {
+        province.push(item.province);
+        allCount.push(item.allCount);
+        registered.push(item.registeredCount);
+      });
+      // setCategories([...province]);
+      const newData = [
+        {
+          name: 'کل',
+          dataLabels: {
+            // enabled: true,
+          },
+          showInLegend: false,
+          data: [...allCount],
         },
-        showInLegend: false,
-        data: [...unregistered],
-      },
-      {
-        name: 'ثبت نام شده',
-        dataLabels: {
-          // enabled: true,
+        {
+          name: 'ثبت نام شده',
+          dataLabels: {
+            // enabled: true,
+          },
+          showInLegend: false,
+          data: [...registered],
+          linearGradient: {
+            x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 1,
+          },
+          stops: [
+            [0, '#5F5B97'],
+            [1, '#DDDCE9'],
+          ],
         },
-        showInLegend: false,
-        data: [...registered],
-        linearGradient: {
-          x1: 0,
-          x2: 0,
-          y1: 0,
-          y2: 1,
-        },
-        stops: [
-          [0, '#5F5B97'],
-          [1, '#DDDCE9'],
-        ],
-      },
-    ];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
+      ];
+      // setDataset([...newData]);
+      setDataset({categories: [...province], series: [...newData]});
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    normalizeData(mockRegisterPercentage);
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartRegisterNumber(queryParams);
+    }, 500);
+    // normalizeData(mockRegisterPercentage);
     return () => {
+      clearTimeout(idSetTimeOut);
+
       cancelRequest();
       setDataset([]);
     };
@@ -97,14 +159,12 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: null,
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: null,
       });
     }
   }, [selectedDayRange]);
@@ -201,6 +261,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       borderRadius: 16,
       borderWidth: 0,
       valueDecimals: 0,
+      valueSuffix: 'نفر',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -226,9 +287,9 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                placeholder="کل آموزش و پرورش"
-                category="grade"
-                tag="edu"
+                placeholder="کل اصناف"
+                tag="guild"
+                category="categoryDesc"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
@@ -260,11 +321,13 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {!loading &&
+          !errorMessage &&
+          (dataset.length === 0 ? (
+            <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+          ) : (
+            <HeadlessChart data={dataset} optionsProp={optionChart} />
+          ))}
         {/* <div className="flex justify-center items-center w-full">
           <Stacked data={dataset} categories={categories} />
         </div> */}

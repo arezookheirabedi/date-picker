@@ -9,6 +9,7 @@ import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import guildService from 'src/services/guild.service';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -17,7 +18,7 @@ import {
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
+import {converters} from './constant';
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
@@ -43,7 +44,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: '',
+    tags: null,
   });
 
   const cancelToken = cancelTokenSource();
@@ -52,22 +53,54 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
+  // const normalizeData = (data: Array<any>) => {
+  //   const province: any[] = [];
 
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-    });
-    // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
+  //   const unregistered: any[] = [];
+  //   data.forEach((item: any) => {
+  //     province.push(item.province);
+  //     unregistered.push(item.unregister);
+  //   });
+  //   // setCategories([...province]);
+  //   const newData = [{showInLegend: false, name: 'ثبت نام شده', data: [...unregistered]}];
+  //   // setDataset([...newData]);
+  //   setDataset({categories: [...province], series: [...newData]});
+  // };
+  const getColumnChartRegisterPercentage = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await guildService.percentageOfRegisteredGuilds(params, {
+        cancelToken: cancelToken.token,
+      });
+      const province: any[] = [];
+      const unregistered: any[] = [];
+      data.forEach((item: any) => {
+        province.push(item.province);
+        unregistered.push(item.percentage);
+      });
+      // setCategories([...province]);
+      const newData = [{showInLegend: false, name: 'ثبت نام شده', data: [...unregistered]}];
+      // setDataset([...newData]);
+      setDataset({categories: [...province], series: [...newData]});
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    normalizeData(mockRegisterPercentage);
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartRegisterPercentage(queryParams);
+    }, 500);
+    // normalizeData(mockRegisterPercentage);
+
     return () => {
+      clearTimeout(idSetTimeOut);
+
       cancelRequest();
       setDataset([]);
     };
@@ -81,14 +114,12 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: '',
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: '',
       });
     }
   }, [selectedDayRange]);
@@ -162,7 +193,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: 'K',
+      valueSuffix: '٪',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -192,8 +223,8 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
             <div className="flex items-center">
               <SearchableSingleSelect
                 placeholder="کل اصناف"
-                category="categoryDesc"
                 tag="guild"
+                category="categoryDesc"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
@@ -225,11 +256,13 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {!loading &&
+          !errorMessage &&
+          (dataset.length === 0 ? (
+            <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+          ) : (
+            <HeadlessChart data={dataset} optionsProp={optionChart} />
+          ))}
       </div>
     </fieldset>
   );

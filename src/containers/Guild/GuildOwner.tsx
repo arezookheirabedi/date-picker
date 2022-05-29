@@ -1,5 +1,5 @@
 import React from 'react';
-// import OverviewOfVaccination from 'src/components/Guild/public/OverviewOfVaccination';
+import OverviewGuildPositivePcr from 'src/components/Guild/public/OverviewGuildPositivePcr';
 import OverviewGuildPositivePcrPercentage from 'src/components/Guild/public/OverviewGuildPositivePcrPercentage';
 import OverviewGuildRegisterNumber from 'src/components/Guild/public/OverviewGuildRegisterNumber';
 import OverviewGuildRegisterPercentage from 'src/components/Guild/public/OverviewGuildRegisterPercentage';
@@ -21,6 +21,7 @@ const GuildOwner: React.FC<any> = () => {
       <TestStatus /> */}
       <OverviewGuilds />
       <OverviewGuildsPerCategory />
+      <OverviewGuildPositivePcr />
       <OverviewOfGuildVaccinationProcess />
       <TheLatestOverwiewOfVaccination />
       <OverviewGuildPositivePcrPercentage />
