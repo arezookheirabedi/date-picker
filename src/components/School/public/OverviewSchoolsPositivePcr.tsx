@@ -37,9 +37,7 @@ const OverviewSchoolsPositivePcr = () => {
     type: 'MONTHLY',
     from: null,
     to: null,
-
     category: 'grade',
-
     categoryValue: null,
     tag: 'edu',
   });
