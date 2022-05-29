@@ -158,7 +158,7 @@ const OverviewSchoolsPositivePcr = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان در اصناف</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان در آموزش و پرورش</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
