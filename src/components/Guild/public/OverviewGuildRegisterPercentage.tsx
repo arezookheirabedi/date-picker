@@ -191,9 +191,9 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                placeholder="کل آموزش و پرورش"
-                category="grade"
-                tag="edu"
+                placeholder="کل اصناف"
+                tag="guild"
+                category="categoryDesc"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
