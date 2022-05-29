@@ -226,7 +226,15 @@ function accumulativeVaccinesTimeBasedReport(
       ...config,
     });
 }
-
+function positivePcrPercentageProvinceBased(
+  {...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/overview/province-based`, params, {...config});
+}
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -249,6 +257,7 @@ const hcsService = {
   peopleLatestVaccinationOverview,
   getPeopleVaccine,
   accumulativeVaccinesTimeBasedReport,
+  positivePcrPercentageProvinceBased,
 };
 
 export default hcsService;
