@@ -1,25 +1,15 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import axios from 'axios';
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-
 import Charts from 'src/components/Charts';
-
 import Highcharts from 'highcharts';
-import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import guildService from 'src/services/guild.service';
-import {
-  cancelTokenSource,
-  msgRequestCanceled,
-  //  toPersianDigit
-} from '../../../helpers/utils';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
 import {converters} from './constant';
-// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
 
@@ -44,7 +34,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: null,
   });
 
   const cancelToken = cancelTokenSource();
@@ -222,9 +211,9 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
+                endPoint={guildService.getRegisterList({})}
                 placeholder="کل اصناف"
-                tag="guild"
-                category="categoryDesc"
+                objectKey="categoryId"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />

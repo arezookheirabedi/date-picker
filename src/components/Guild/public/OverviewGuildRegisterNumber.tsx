@@ -3,13 +3,14 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
-import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import guildService from 'src/services/guild.service';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
 import {converters} from './constant';
+// import SearchableDropBoxForRegister from './SearchableDropBoxForRegister';
 
 const {HeadlessChart} = Charts;
 
@@ -32,7 +33,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: null,
+    categoryId: null,
   });
 
   const cancelToken = cancelTokenSource();
@@ -140,6 +141,8 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
+      // const {categoryValue, ...newQuery}: any = queryParams;
+      // {...newQuery, categoryId: categoryValue}
       getColumnChartRegisterNumber(queryParams);
     }, 500);
     // normalizeData(mockRegisterPercentage);
@@ -287,9 +290,9 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
+                endPoint={guildService.getRegisterList({})}
                 placeholder="کل اصناف"
-                tag="guild"
-                category="categoryDesc"
+                objectKey="categoryId"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
