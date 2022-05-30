@@ -14,16 +14,16 @@ import OverviewOfPercentageOfGovernmentEmployeesInEachProvince from '../../compo
 const Recruitment: React.FC<{}> = () => {
   return (
     <div className="space-y-16 mb-8">
-      <Overview />
-      <OverviewCategories />
-      <OverviewPatients />
-      <OverviewOfGovernmentEmployeesVaccinationProcess />
-      <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard />
-      <OverviewOfTheLatestGovernmentEmployeesVaccinationStatus />
-      <OverviewOfPercentageOfGovernmentEmployeesInEachProvince />
-      <OverviewOfVaccination />
-      <OverviewVaccinePerProvince />
-      <TestStatus />
+       <Overview />
+       <OverviewCategories />
+       <OverviewPatients />
+       <OverviewOfGovernmentEmployeesVaccinationProcess />
+       <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard />
+       <OverviewOfTheLatestGovernmentEmployeesVaccinationStatus />
+       <OverviewOfPercentageOfGovernmentEmployeesInEachProvince />
+       <OverviewOfVaccination />
+       <OverviewVaccinePerProvince />
+       <TestStatus />
     </div>
   );
 };
