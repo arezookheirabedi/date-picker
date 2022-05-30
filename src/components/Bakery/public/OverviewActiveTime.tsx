@@ -11,6 +11,41 @@ import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
 
+// eslint-disable-next-line
+function convertNumToTime(n: number) {
+  // Check sign of given number
+  let sign: any = n >= 0 ? 1 : -1;
+
+  // Set positive value of number of sign negative
+  const number: number = n * sign;
+
+  // Separate the int from the decimal part
+  const hour = Math.floor(number);
+  let decpart = number - hour;
+
+  const min = 1 / 60;
+  // Round to nearest minute
+  decpart = min * Math.round(decpart / min);
+
+  let minute = `${Math.floor(decpart * 60)}`;
+
+  // Add padding if need
+  if (minute.length < 2) {
+    minute = `0${minute}`;
+  }
+
+  // Add Sign in final result
+  sign = sign === 1 ? '' : '-';
+
+  // Concate hours and minutes
+  // const time = `${sign + hour}:${minute}`;
+
+  return {
+    hour: `${sign + hour}`,
+    minutes: `${minute}`,
+  };
+}
+
 const optionChart = {
   chart: {
     type: 'column',
@@ -74,9 +109,15 @@ const optionChart = {
     lineWidth: 1,
   },
   tooltip: {
-    shared: true,
     useHTML: true,
-    valueSuffix: ' ساعت ',
+    // valueSuffix: ' ساعت ',
+    // eslint-disable-next-line
+    pointFormatter: function () {
+      // eslint-disable-next-line
+      const {x, y, point, series}: any = this;
+      const {hour, minutes} = convertNumToTime(y);
+      return `${series.name} : <b>${hour} ساعت و ${minutes} دقیقه</b>`;
+    },
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -121,6 +162,7 @@ const OverviewActiveTime: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
+
   const focusFromDate = () => {
     setShowDatePicker(true);
   };
