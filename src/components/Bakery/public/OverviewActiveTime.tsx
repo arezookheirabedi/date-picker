@@ -76,7 +76,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: 'K',
+    valueSuffix: ' ساعت ',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -104,8 +104,16 @@ const OverviewActiveTime: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
+    from: {
+      day: 6,
+      month: 3,
+      year: 1401,
+    },
+    to: {
+      day: 6,
+      month: 3,
+      year: 1401,
+    },
   }) as any;
 
   const cancelToken = cancelTokenSource();
@@ -129,21 +137,17 @@ const OverviewActiveTime: React.FC<{}> = () => {
       const response = await bakeryService.bakeryActiveTime(params, {
         cancelToken: cancelToken.token,
       });
-      // eslint-disable-next-line
-      console.log(response.data);
 
       const province: any[] = [];
-      const registered: any[] = [];
-      const unregistered: any[] = [];
+      const hour: any[] = [];
       response.data.forEach((item: any) => {
         province.push(item.province);
-        unregistered.push(item.membersCount / 100);
-        registered.push(item.totalNonVaccinesCount);
+        hour.push(item.hour);
       });
       // setCategories([...province]);
       const newData = [
         {
-          name: 'ثبت نام شده',
+          name: 'متوسط فعالیت',
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
@@ -155,7 +159,7 @@ const OverviewActiveTime: React.FC<{}> = () => {
             // enabled: true,
           },
           showInLegend: false,
-          data: [...registered],
+          data: [...hour],
           linearGradient: {
             x1: 0,
             x2: 0,
