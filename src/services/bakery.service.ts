@@ -43,6 +43,13 @@ function bakerySoldCount({ tag, ...params }: any = {}, config?: any) {
         .get(`/api/v1/bakery/sold-count`, params, { ...config });
 }
 
+function bakerySupplyFlour({ tag, ...params }: any = {}, config?: any) {
+    return request
+        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+        .build({ mock: true })
+        .get(`/api/v1/bakery/supply-flour`, params, { ...config });
+}
+
 
 const bakeryService = {
     bakeryGeneral,
@@ -50,7 +57,8 @@ const bakeryService = {
     bakeryLicense,
     bakeryActiveTime,
     bakerySellRate,
-    bakerySoldCount
+    bakerySoldCount,
+    bakerySupplyFlour
 }
 
 export default bakeryService;
