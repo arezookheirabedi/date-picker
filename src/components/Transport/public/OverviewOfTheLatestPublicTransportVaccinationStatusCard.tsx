@@ -66,7 +66,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             hasInfo
             icon={YellowVaccine}
             text="تعداد افراد با دوز اول"
-            count={numberOf.totalNonVaccinesCount || 0}
+            count={numberOf.doses[1] || 0}
             loading={loading}
           />
           <Statistic
@@ -74,15 +74,15 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون آنها دو دوز واکسن است."
             icon={OrangeVaccine}
             text="تعداد افراد با دوز دوم"
-            count="-"
-            // loading={loading}
+            count={numberOf.doses[2] || 0}
+            loading={loading}
           />
           <Statistic
             hasInfo
             infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون آنها سه دوز واکسن است."
             icon={PurpleVaccine}
             text="تعداد افراد با دوز سوم"
-            count={numberOf.doses[1] || 0}
+            count={numberOf.doses[3] || 0}
             loading={loading}
           />
           <Statistic
@@ -90,7 +90,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون آنها چهار دوز واکسن است."
             icon={DarkgreenVaccine}
             text="تعداد افراد با دوز چهارم"
-            count={numberOf.doses[2] || 0}
+            count={numberOf.doses[4] || 0}
             loading={loading}
           />
         </div>
@@ -104,7 +104,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون آنها پنج دوز واکسن است."
               icon={VaccineIcon}
               text="تعداد افراد با دوز پنجم"
-              count={numberOf.doses[3] || 0}
+              count={numberOf.doses[5] || 0}
               loading={loading}
             />
           </div>
@@ -114,7 +114,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               infoText="تعداد افرادی که حداقل یک دوز واکسن دریافت کرده‌اند."
               icon={VaccineIcon}
               text="مجموع افراد واکسینه شده"
-              count={numberOf.doses[4] || 0}
+              count={numberOf.totalVaccinesCount || 0}
               loading={loading}
             />
           </div>
@@ -124,7 +124,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
               icon={GreyVaccine}
               text="مجموع افراد واکسینه نشده"
-              count={numberOf.doses[5] || 0}
+              count={numberOf.totalNonVaccinesCount || 0}
               loading={loading}
             />
           </div>
@@ -139,7 +139,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             hasInfo
             icon={YellowVaccine}
             text="درصد افراد با دوز اول"
-            count={numberOf.totalNonVaccinesCount || 0}
+            count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
             loading={loading}
           />
           <Statistic
@@ -147,15 +147,15 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها دو دوز واکسن است."
             icon={OrangeVaccine}
             text="درصد افراد با دوز دوم"
-            count="-"
-            // loading={loading}
+            count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
+            loading={loading}
           />
           <Statistic
             hasInfo
             infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها سه دوز واکسن است."
             icon={PurpleVaccine}
             text="درصد افراد با دوز سوم"
-            count={numberOf.doses[1] || 0}
+            count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
             loading={loading}
           />
           <Statistic
@@ -163,7 +163,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها چهار دوز واکسن است."
             icon={DarkgreenVaccine}
             text="درصد افراد با دوز چهارم"
-            count={numberOf.doses[2] || 0}
+            count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             loading={loading}
           />
         </div>
@@ -177,7 +177,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها پنج دوز واکسن است."
               icon={VaccineIcon}
               text="درصد افراد با دوز پنجم"
-              count={numberOf.doses[3] || 0}
+              count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
               loading={loading}
             />
           </div>
@@ -187,7 +187,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               infoText="درصد  افرادی که حداقل یک دوز واکسن دریافت کرده‌اند."
               icon={VaccineIcon}
               text="درصد افراد واکسینه شده"
-              count={numberOf.doses[4] || 0}
+              count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
               loading={loading}
             />
           </div>
@@ -197,7 +197,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
               icon={GreyVaccine}
               text="درصد افراد واکسینه نشده"
-              count={numberOf.doses[5] || 0}
+              count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
               loading={loading}
             />
           </div>
