@@ -150,34 +150,32 @@ const OverviewLicence: React.FC<{}> = () => {
       const response = await bakeryService.bakeryLicense(params, {
         cancelToken: cancelToken.token,
       });
-      // eslint-disable-next-line
-      console.log(response.data);
 
       const province: any[] = [];
-      const registered: any[] = [];
-      const unregistered: any[] = [];
+      const samt: any[] = [];
+      const sima: any[] = [];
       response.data.forEach((item: any) => {
         province.push(item.province);
-        unregistered.push(item.membersCount / 100);
-        registered.push(item.totalNonVaccinesCount);
+        samt.push(item.samt);
+        sima.push(item.sima);
       });
       // setCategories([...province]);
       const newData = [
         {
-          name: 'ثبت نام نشده',
+          name: 'صمت',
           dataLabels: {
             // enabled: true,
           },
           showInLegend: false,
-          data: [...unregistered],
+          data: [...samt],
         },
         {
-          name: 'ثبت نام شده',
+          name: 'سیما',
           dataLabels: {
             // enabled: true,
           },
           showInLegend: false,
-          data: [...registered],
+          data: [...sima],
           linearGradient: {
             x1: 0,
             x2: 0,

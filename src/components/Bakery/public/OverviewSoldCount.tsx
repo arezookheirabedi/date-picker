@@ -129,8 +129,6 @@ const OverviewActiveTime: React.FC<{}> = () => {
       const response = await bakeryService.bakerySoldCount(params, {
         cancelToken: cancelToken.token,
       });
-      // eslint-disable-next-line
-      console.log(response.data);
 
       const province: any[] = [];
       const registered: any[] = [];
