@@ -1,137 +1,445 @@
 import { instanceMockAdapter } from '../helpers/requestUtil';
 
 // eslint-disable-next-line
-const mockRes: any[] =
-  [{ "province": "تهران", "membersCount": 11056234, "totalNonVaccinesCount": 309034, "doses": { "1": 10747200, "2": 10046153, "3": 5204492, "4": 7276, "5": 40858, "6": 1 }, "gtDoses": { "0": 26045980, "1": 15298780, "2": 5252627, "3": 48135, "4": 40859, "5": 1, "6": 0 }, "dosesToMembersCountPercentage": { "1": 97.2048, "2": 90.8641, "3": 47.0729, "4": 0.0658, "5": 0.3695, "6": 0.0 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 58.7375, "2": 20.1667, "3": 0.1848, "4": 0.1568, "5": 0.0, "6": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.7951 }, { "province": "خراسان رضوی", "membersCount": 4929211, "totalNonVaccinesCount": 84346, "doses": { "1": 4844865, "2": 4434592, "3": 1835643, "4": 3021, "5": 17213 }, "gtDoses": { "0": 11135334, "1": 6290469, "2": 1855877, "3": 20234, "4": 17213, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.2888, "2": 89.9655, "3": 37.24, "4": 0.0612, "5": 0.3492 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.491, "2": 16.6665, "3": 0.1817, "4": 0.1545, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.7111 }, { "province": "اصفهان", "membersCount": 4006167, "totalNonVaccinesCount": 53706, "doses": { "1": 3952461, "2": 3633183, "3": 1590121, "4": 36, "5": 4140 }, "gtDoses": { "0": 9179941, "1": 5227480, "2": 1594297, "3": 4176, "4": 4140, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.6594, "2": 90.6897, "3": 39.6918, "4": 8.0E-4, "5": 0.1033 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.9445, "2": 17.3671, "3": 0.0454, "4": 0.045, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.3405 }, { "province": "فارس", "membersCount": 3796573, "totalNonVaccinesCount": 55160, "doses": { "1": 3741413, "2": 3507152, "3": 1714875, "4": 12, "5": 5342 }, "gtDoses": { "0": 8968794, "1": 5227381, "2": 1720229, "3": 5354, "4": 5342, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.5471, "2": 92.3767, "3": 45.169, "4": 3.0E-4, "5": 0.1407 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 58.2841, "2": 19.1801, "3": 0.0596, "4": 0.0595, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.4528 }, { "province": "خوزستان", "membersCount": 3227420, "totalNonVaccinesCount": 68471, "doses": { "1": 3158949, "2": 2759894, "3": 1082981, "4": 184, "5": 3782 }, "gtDoses": { "0": 7005790, "1": 3846841, "2": 1086947, "3": 3966, "4": 3782, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.8784, "2": 85.5139, "3": 33.5556, "4": 0.0057, "5": 0.1171 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 54.9094, "2": 15.5149, "3": 0.0566, "4": 0.0539, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.1215 }, { "province": "آذربایجان شرقی", "membersCount": 3053214, "totalNonVaccinesCount": 39701, "doses": { "1": 3013513, "2": 2844062, "3": 1555519, "4": 12, "5": 3852 }, "gtDoses": { "0": 7416958, "1": 4403445, "2": 1559383, "3": 3864, "4": 3852, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.6996, "2": 93.1497, "3": 50.9469, "4": 3.0E-4, "5": 0.1261 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 59.3699, "2": 21.0245, "3": 0.052, "4": 0.0519, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.3003 }, { "province": "مازندران", "membersCount": 2666084, "totalNonVaccinesCount": 6630, "doses": { "1": 2659454, "2": 2520542, "3": 1415619, "4": 4061, "5": 55980 }, "gtDoses": { "0": 6655656, "1": 3996202, "2": 1475660, "3": 60041, "4": 55980, "5": 0 }, "dosesToMembersCountPercentage": { "1": 99.7513, "2": 94.5409, "3": 53.0973, "4": 0.1523, "5": 2.0997 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 60.0421, "2": 22.1715, "3": 0.9021, "4": 0.841, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 0.2486 }, { "province": "آذربایجان غربی", "membersCount": 2458298, "totalNonVaccinesCount": 22456, "doses": { "1": 2435842, "2": 2252190, "3": 1016576, "4": 7, "5": 1951 }, "gtDoses": { "0": 5706566, "1": 3270724, "2": 1018534, "3": 1958, "4": 1951, "5": 0 }, "dosesToMembersCountPercentage": { "1": 99.0865, "2": 91.6158, "3": 41.3528, "4": 2.0E-4, "5": 0.0793 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.315, "2": 17.8484, "3": 0.0343, "4": 0.0341, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 0.9134 }, { "province": "کرمان", "membersCount": 2178425, "totalNonVaccinesCount": 24902, "doses": { "1": 2153523, "2": 1970020, "3": 834047, "4": 7, "5": 1857 }, "gtDoses": { "0": 4959454, "1": 2805931, "2": 835911, "3": 1864, "4": 1857, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.8568, "2": 90.4332, "3": 38.2866, "4": 3.0E-4, "5": 0.0852 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.5774, "2": 16.8549, "3": 0.0375, "4": 0.0374, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.1431 }, { "province": "گیلان", "membersCount": 2155787, "totalNonVaccinesCount": 35131, "doses": { "1": 2120656, "2": 2023027, "3": 1066848, "4": 31, "5": 4535 }, "gtDoses": { "0": 5215097, "1": 3094441, "2": 1071414, "3": 4566, "4": 4535, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.3703, "2": 93.8416, "3": 49.4876, "4": 0.0014, "5": 0.2103 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 59.3362, "2": 20.5444, "3": 0.0875, "4": 0.0869, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.6296 }, { "province": "البرز", "membersCount": 2136373, "totalNonVaccinesCount": 53649, "doses": { "1": 2082724, "2": 1940475, "3": 926851, "4": 113, "5": 4390 }, "gtDoses": { "0": 4954553, "1": 2871829, "2": 931354, "3": 4503, "4": 4390, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.4887, "2": 90.8303, "3": 43.3843, "4": 0.0052, "5": 0.2054 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.9634, "2": 18.7979, "3": 0.0908, "4": 0.0886, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.5112 }, { "province": "سیستان و بلوچستان", "membersCount": 1817272, "totalNonVaccinesCount": 38815, "doses": { "1": 1778457, "2": 1537490, "3": 667553, "4": 17, "5": 2282 }, "gtDoses": { "0": 3985799, "1": 2207342, "2": 669852, "3": 2299, "4": 2282, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.8641, "2": 84.6042, "3": 36.7337, "4": 9.0E-4, "5": 0.1255 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 55.3801, "2": 16.8059, "3": 0.0576, "4": 0.0572, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.1358 }, { "province": "کرمانشاه", "membersCount": 1427633, "totalNonVaccinesCount": 12263, "doses": { "1": 1415370, "2": 1304111, "3": 638775, "4": 5, "5": 1985 }, "gtDoses": { "0": 3360246, "1": 1944876, "2": 640765, "3": 1990, "4": 1985, "5": 0 }, "dosesToMembersCountPercentage": { "1": 99.141, "2": 91.3477, "3": 44.7436, "4": 3.0E-4, "5": 0.139 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.8789, "2": 19.0689, "3": 0.0592, "4": 0.059, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 0.8589 }, { "province": "هرمزگان", "membersCount": 1401531, "totalNonVaccinesCount": 33723, "doses": { "1": 1367808, "2": 1260477, "3": 631184, "4": 15, "5": 2382 }, "gtDoses": { "0": 3261866, "1": 1894058, "2": 633581, "3": 2397, "4": 2382, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.5938, "2": 89.9357, "3": 45.0353, "4": 0.001, "5": 0.1699 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 58.0667, "2": 19.4238, "3": 0.0734, "4": 0.073, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.4061 }, { "province": "گلستان", "membersCount": 1316489, "totalNonVaccinesCount": 1540, "doses": { "1": 1314949, "2": 1195480, "3": 495820, "4": 311, "5": 6420, "6": 8 }, "gtDoses": { "0": 3012988, "1": 1698039, "2": 502559, "3": 6739, "4": 6428, "5": 8, "6": 0 }, "dosesToMembersCountPercentage": { "1": 99.883, "2": 90.8081, "3": 37.6622, "4": 0.0236, "5": 0.4876, "6": 6.0E-4 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.3573, "2": 16.6797, "3": 0.2236, "4": 0.2133, "5": 2.0E-4, "6": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 0.1169 }, { "province": "همدان", "membersCount": 1295384, "totalNonVaccinesCount": 19387, "doses": { "1": 1275997, "2": 1180135, "3": 553708, "4": 4, "5": 1186 }, "gtDoses": { "0": 3011030, "1": 1735033, "2": 554898, "3": 1190, "4": 1186, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.5033, "2": 91.1031, "3": 42.7446, "4": 3.0E-4, "5": 0.0915 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.6225, "2": 18.4288, "3": 0.0395, "4": 0.0393, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.4966 }, { "province": "لرستان", "membersCount": 1255740, "totalNonVaccinesCount": 32047, "doses": { "1": 1223693, "2": 1110077, "3": 496081, "4": 12, "5": 1048 }, "gtDoses": { "0": 2830911, "1": 1607218, "2": 497141, "3": 1060, "4": 1048, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.4479, "2": 88.4002, "3": 39.505, "4": 9.0E-4, "5": 0.0834 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.7738, "2": 17.5611, "3": 0.0374, "4": 0.037, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.552 }, { "province": "مرکزی", "membersCount": 1128558, "totalNonVaccinesCount": 15495, "doses": { "1": 1113063, "2": 1043861, "3": 519687, "4": 27, "5": 1390 }, "gtDoses": { "0": 2678028, "1": 1564965, "2": 521104, "3": 1417, "4": 1390, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.627, "2": 92.4951, "3": 46.0487, "4": 0.0023, "5": 0.1231 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 58.4372, "2": 19.4584, "3": 0.0529, "4": 0.0519, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.3729 }, { "province": "کردستان", "membersCount": 1087892, "totalNonVaccinesCount": 17854, "doses": { "1": 1070038, "2": 963172, "3": 380171, "4": 5, "5": 645 }, "gtDoses": { "0": 2414031, "1": 1343993, "2": 380821, "3": 650, "4": 645, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.3588, "2": 88.5356, "3": 34.9456, "4": 4.0E-4, "5": 0.0592 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 55.6742, "2": 15.7753, "3": 0.0269, "4": 0.0267, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.6411 }, { "province": "قزوین", "membersCount": 999128, "totalNonVaccinesCount": 10585, "doses": { "1": 988543, "2": 912142, "3": 421499, "4": 13, "5": 534 }, "gtDoses": { "0": 2322731, "1": 1334188, "2": 422046, "3": 547, "4": 534, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.9405, "2": 91.2938, "3": 42.1866, "4": 0.0013, "5": 0.0534 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.4404, "2": 18.1702, "3": 0.0235, "4": 0.0229, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.0594 }, { "province": "اردبيل", "membersCount": 948244, "totalNonVaccinesCount": 15979, "doses": { "1": 932265, "2": 867419, "3": 418157, "4": 4, "5": 847 }, "gtDoses": { "0": 2218692, "1": 1286427, "2": 419008, "3": 851, "4": 847, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.3148, "2": 91.4763, "3": 44.098, "4": 4.0E-4, "5": 0.0893 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.9813, "2": 18.8853, "3": 0.0383, "4": 0.0381, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.6851 }, { "province": "یزد", "membersCount": 905323, "totalNonVaccinesCount": 16998, "doses": { "1": 888325, "2": 809858, "3": 338524, "4": 4, "5": 1212 }, "gtDoses": { "0": 2037923, "1": 1149598, "2": 339740, "3": 1216, "4": 1212, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.1224, "2": 89.4551, "3": 37.3926, "4": 4.0E-4, "5": 0.1338 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.4102, "2": 16.6708, "3": 0.0596, "4": 0.0594, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.8775 }, { "province": "قم", "membersCount": 827847, "totalNonVaccinesCount": 18415, "doses": { "1": 809432, "2": 716279, "3": 257320, "4": 14, "5": 810 }, "gtDoses": { "0": 1783855, "1": 974423, "2": 258144, "3": 824, "4": 810, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.7755, "2": 86.5231, "3": 31.083, "4": 0.0016, "5": 0.0978 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 54.6245, "2": 14.4711, "3": 0.0461, "4": 0.0454, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.2244 }, { "province": "زنجان", "membersCount": 817287, "totalNonVaccinesCount": 10738, "doses": { "1": 806549, "2": 759253, "3": 407371, "4": 6, "5": 1150 }, "gtDoses": { "0": 1974329, "1": 1167780, "2": 408527, "3": 1156, "4": 1150, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.6861, "2": 92.8991, "3": 49.8442, "4": 7.0E-4, "5": 0.1407 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 59.1481, "2": 20.6919, "3": 0.0585, "4": 0.0582, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.3138 }, { "province": "بوشهر", "membersCount": 807053, "totalNonVaccinesCount": 9776, "doses": { "1": 797277, "2": 730852, "3": 297019, "4": 7, "5": 365 }, "gtDoses": { "0": 1825520, "1": 1028243, "2": 297391, "3": 372, "4": 365, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.7886, "2": 90.5581, "3": 36.8029, "4": 8.0E-4, "5": 0.0452 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.326, "2": 16.2907, "3": 0.0203, "4": 0.0199, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.2113 }, { "province": "چهارمحال و بختیاری", "membersCount": 671624, "totalNonVaccinesCount": 4826, "doses": { "1": 666798, "2": 626619, "3": 307450, "4": 3, "5": 1166 }, "gtDoses": { "0": 1602036, "1": 935238, "2": 308619, "3": 1169, "4": 1166, "5": 0 }, "dosesToMembersCountPercentage": { "1": 99.2814, "2": 93.299, "3": 45.777, "4": 4.0E-4, "5": 0.1736 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 58.378, "2": 19.2641, "3": 0.0729, "4": 0.0727, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 0.7185 }, { "province": "خراسان شمالی", "membersCount": 648525, "totalNonVaccinesCount": 5978, "doses": { "1": 642547, "2": 597049, "3": 277082, "4": 6, "5": 554 }, "gtDoses": { "0": 1517238, "1": 874691, "2": 277642, "3": 560, "4": 554, "5": 0 }, "dosesToMembersCountPercentage": { "1": 99.0782, "2": 92.0626, "3": 42.7249, "4": 9.0E-4, "5": 0.0854 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.6502, "2": 18.2991, "3": 0.0369, "4": 0.0365, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 0.9217 }, { "province": "خراسان جنوبی", "membersCount": 556917, "totalNonVaccinesCount": 6310, "doses": { "1": 550607, "2": 508140, "3": 203678, "4": 11, "5": 331 }, "gtDoses": { "0": 1262767, "1": 712160, "2": 204020, "3": 342, "4": 331, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.8669, "2": 91.2416, "3": 36.5724, "4": 0.0019, "5": 0.0594 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.3967, "2": 16.1565, "3": 0.027, "4": 0.0262, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.133 }, { "province": "سمنان", "membersCount": 548882, "totalNonVaccinesCount": 6692, "doses": { "1": 542190, "2": 511062, "3": 271388, "4": 9, "5": 1057 }, "gtDoses": { "0": 1325706, "1": 783516, "2": 272454, "3": 1066, "4": 1057, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.7807, "2": 93.1096, "3": 49.4437, "4": 0.0016, "5": 0.1925 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 59.1017, "2": 20.5516, "3": 0.0804, "4": 0.0797, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.2192 }, { "province": "کهگیلویه و بویراحمد", "membersCount": 524238, "totalNonVaccinesCount": 7474, "doses": { "1": 516764, "2": 478139, "3": 220209, "5": 555 }, "gtDoses": { "0": 1215667, "1": 698903, "2": 220764, "3": 555, "5": 0 }, "dosesToMembersCountPercentage": { "1": 98.5743, "2": 91.2064, "3": 42.0055, "5": 0.1058 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 57.4913, "2": 18.1599, "3": 0.0456, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 1.4256 }, { "province": "ایلام", "membersCount": 416477, "totalNonVaccinesCount": 9053, "doses": { "1": 407424, "2": 376021, "3": 156267, "5": 150 }, "gtDoses": { "0": 939862, "1": 532438, "2": 156417, "3": 150, "5": 0 }, "dosesToMembersCountPercentage": { "1": 97.8262, "2": 90.2861, "3": 37.5211, "5": 0.036 }, "gtDosesToTotalDosesPercentage": { "0": 100.0, "1": 56.6506, "2": 16.6425, "3": 0.0159, "5": 0.0 }, "totalNonVaccinesCountToMembersCountPercentage": 2.1737 }]
-
-
-const mockActiveTimeRes: any[] = [
+const mockRes: any[] = [
   {
-    "hour": 5.53,
-    "province": "مرکزی"
+    "province": "اردبیل",
+    "numberOfTotalBakery": 8303,
+    "numberOfEnableBakery": 42,
+    "numberOfDisableBakery": 6084,
+    "numberOfBakeryBanned": 2177,
+    "numberOfSamt": 2840,
+    "numberOfSima": 8303,
+    "numberOfActivePos": 1119
   },
   {
-    "hour": 4.41,
-    "province": "البرز"
+    "province": "اصفهان",
+    "numberOfTotalBakery": 6431,
+    "numberOfEnableBakery": 60,
+    "numberOfDisableBakery": 4740,
+    "numberOfBakeryBanned": 1631,
+    "numberOfSamt": 573,
+    "numberOfSima": 6431,
+    "numberOfActivePos": 1878
   },
   {
-    "hour": 4.51,
-    "province": "اردبیل "
+    "province": "البرز",
+    "numberOfTotalBakery": 3204,
+    "numberOfEnableBakery": 39,
+    "numberOfDisableBakery": 2636,
+    "numberOfBakeryBanned": 529,
+    "numberOfSamt": 2336,
+    "numberOfSima": 3204,
+    "numberOfActivePos": 1219
   },
   {
-    "hour": 4.25,
-    "province": "آذربایجان غربی"
+    "province": "ایلام",
+    "numberOfTotalBakery": 5995,
+    "numberOfEnableBakery": 48,
+    "numberOfDisableBakery": 4587,
+    "numberOfBakeryBanned": 1360,
+    "numberOfSamt": 830,
+    "numberOfSima": 5995,
+    "numberOfActivePos": 309
   },
   {
-    "hour": 3.22,
-    "province": "آذربایجان شرقی"
+    "province": "آذربایجان شرقی",
+    "numberOfTotalBakery": 2861,
+    "numberOfEnableBakery": 8,
+    "numberOfDisableBakery": 2362,
+    "numberOfBakeryBanned": 491,
+    "numberOfSamt": 6863,
+    "numberOfSima": 2861,
+    "numberOfActivePos": 3018
   },
   {
-    "hour": 6.5,
-    "province": "بوشهر"
+    "province": "آذربایجان غربی",
+    "numberOfTotalBakery": 960,
+    "numberOfEnableBakery": 10,
+    "numberOfDisableBakery": 685,
+    "numberOfBakeryBanned": 265,
+    "numberOfSamt": 5317,
+    "numberOfSima": 960,
+    "numberOfActivePos": 1980
   },
   {
-    "hour": 4.59,
-    "province": "چهارمحال و بختیاری"
+    "province": "بوشهر",
+    "numberOfTotalBakery": 1107,
+    "numberOfEnableBakery": 14,
+    "numberOfDisableBakery": 854,
+    "numberOfBakeryBanned": 239,
+    "numberOfSamt": 730,
+    "numberOfSima": 1107,
+    "numberOfActivePos": 373
   },
   {
-    "hour": 5.30,
-    "province": "ایلام "
+    "province": "تهران",
+    "numberOfTotalBakery": 10934,
+    "numberOfEnableBakery": 78,
+    "numberOfDisableBakery": 9409,
+    "numberOfBakeryBanned": 1447,
+    "numberOfSamt": 9199,
+    "numberOfSima": 10934,
+    "numberOfActivePos": 3440
   },
   {
-    "hour": 5.26,
-    "province": "اصفهان "
+    "province": "چهارمحال و بختیاری",
+    "numberOfTotalBakery": 1555,
+    "numberOfEnableBakery": 7,
+    "numberOfDisableBakery": 879,
+    "numberOfBakeryBanned": 669,
+    "numberOfSamt": 954,
+    "numberOfSima": 1555,
+    "numberOfActivePos": 334
   },
   {
-    "hour": 6.39,
-    "province": "فارس"
+    "province": "خراسان جنوبی",
+    "numberOfTotalBakery": 1269,
+    "numberOfEnableBakery": 10,
+    "numberOfDisableBakery": 796,
+    "numberOfBakeryBanned": 463,
+    "numberOfSamt": 731,
+    "numberOfSima": 1269,
+    "numberOfActivePos": 422
   },
   {
-    "hour": 5.31,
-    "province": "گیلان "
+    "province": "خراسان رضوی",
+    "numberOfTotalBakery": 7638,
+    "numberOfEnableBakery": 41,
+    "numberOfDisableBakery": 5660,
+    "numberOfBakeryBanned": 1937,
+    "numberOfSamt": 5337,
+    "numberOfSima": 7638,
+    "numberOfActivePos": 2754
   },
   {
-    "hour": 4.37,
-    "province": "گلستان "
+    "province": "خراسان شمالی",
+    "numberOfTotalBakery": 1626,
+    "numberOfEnableBakery": 10,
+    "numberOfDisableBakery": 1321,
+    "numberOfBakeryBanned": 295,
+    "numberOfSamt": 1360,
+    "numberOfSima": 1626,
+    "numberOfActivePos": 614
   },
   {
-    "hour": 6.17,
-    "province": "همدان "
+    "province": "خوزستان",
+    "numberOfTotalBakery": 3823,
+    "numberOfEnableBakery": 30,
+    "numberOfDisableBakery": 3415,
+    "numberOfBakeryBanned": 378,
+    "numberOfSamt": 2256,
+    "numberOfSima": 3823,
+    "numberOfActivePos": 917
   },
   {
-    "hour": 6.29,
-    "province": "هرمزگان "
+    "province": "زنجان",
+    "numberOfTotalBakery": 2282,
+    "numberOfEnableBakery": 36,
+    "numberOfDisableBakery": 1573,
+    "numberOfBakeryBanned": 673,
+    "numberOfSamt": 1636,
+    "numberOfSima": 2282,
+    "numberOfActivePos": 984
   },
   {
-    "hour": 4.55,
-    "province": "خراسان جنوبی"
+    "province": "سمنان",
+    "numberOfTotalBakery": 1267,
+    "numberOfEnableBakery": 3,
+    "numberOfDisableBakery": 886,
+    "numberOfBakeryBanned": 378,
+    "numberOfSamt": 718,
+    "numberOfSima": 1267,
+    "numberOfActivePos": 439
   },
   {
-    "hour": 5.29,
-    "province": "خوزستان "
+    "province": "سیستان و بلوچستان",
+    "numberOfTotalBakery": 2690,
+    "numberOfEnableBakery": 10,
+    "numberOfDisableBakery": 1673,
+    "numberOfBakeryBanned": 1007,
+    "numberOfSamt": 760,
+    "numberOfSima": 2690,
+    "numberOfActivePos": 456
   },
   {
-    "hour": 6.37,
-    "province": "خراسان رضوی "
+    "province": "فارس",
+    "numberOfTotalBakery": 5270,
+    "numberOfEnableBakery": 33,
+    "numberOfDisableBakery": 3423,
+    "numberOfBakeryBanned": 1814,
+    "numberOfSamt": 3382,
+    "numberOfSima": 5270,
+    "numberOfActivePos": 2056
   },
   {
-    "hour": 4.50,
-    "province": "خراسان شمالی "
+    "province": "قزوین",
+    "numberOfTotalBakery": 1986,
+    "numberOfEnableBakery": 17,
+    "numberOfDisableBakery": 1689,
+    "numberOfBakeryBanned": 280,
+    "numberOfSamt": 1734,
+    "numberOfSima": 1986,
+    "numberOfActivePos": 651
   },
   {
-    "hour": 6.20,
-    "province": "کهگلویه و بویراحمر"
+    "province": "قم",
+    "numberOfTotalBakery": 1187,
+    "numberOfEnableBakery": 40,
+    "numberOfDisableBakery": 911,
+    "numberOfBakeryBanned": 236,
+    "numberOfSamt": 819,
+    "numberOfSima": 1187,
+    "numberOfActivePos": 341
   },
   {
-    "hour": 4.7,
-    "province": "کردستان "
+    "province": "كردستان",
+    "numberOfTotalBakery": 2974,
+    "numberOfEnableBakery": 21,
+    "numberOfDisableBakery": 2608,
+    "numberOfBakeryBanned": 345,
+    "numberOfSamt": 2952,
+    "numberOfSima": 2974,
+    "numberOfActivePos": 1080
   },
   {
-    "hour": 4.57,
-    "province": "کرمان "
+    "province": "كرمان",
+    "numberOfTotalBakery": 2851,
+    "numberOfEnableBakery": 25,
+    "numberOfDisableBakery": 2329,
+    "numberOfBakeryBanned": 497,
+    "numberOfSamt": 1850,
+    "numberOfSima": 2851,
+    "numberOfActivePos": 902
   },
   {
-    "hour": 5.52,
-    "province": "کرمانشاه "
+    "province": "کهگیلویه و بویراحمد",
+    "numberOfTotalBakery": 1072,
+    "numberOfEnableBakery": 35,
+    "numberOfDisableBakery": 630,
+    "numberOfBakeryBanned": 407,
+    "numberOfSamt": 601,
+    "numberOfSima": 1072,
+    "numberOfActivePos": 219
   },
   {
-    "hour": 6.9,
-    "province": "لرستان"
+    "province": "کرمانشاه",
+    "numberOfTotalBakery": 2925,
+    "numberOfEnableBakery": 43,
+    "numberOfDisableBakery": 2171,
+    "numberOfBakeryBanned": 711,
+    "numberOfSamt": 2688,
+    "numberOfSima": 2925,
+    "numberOfActivePos": 827
   },
   {
-    "hour": 5.48,
-    "province": "مازندران "
+    "province": "گلستان",
+    "numberOfTotalBakery": 3150,
+    "numberOfEnableBakery": 8,
+    "numberOfDisableBakery": 2337,
+    "numberOfBakeryBanned": 805,
+    "numberOfSamt": 2435,
+    "numberOfSima": 3150,
+    "numberOfActivePos": 989
   },
   {
-    "hour": 4.26,
-    "province": "قزوین "
+    "province": "گیلان",
+    "numberOfTotalBakery": 6331,
+    "numberOfEnableBakery": 87,
+    "numberOfDisableBakery": 3875,
+    "numberOfBakeryBanned": 2369,
+    "numberOfSamt": 4054,
+    "numberOfSima": 6331,
+    "numberOfActivePos": 1823
   },
   {
-    "hour": 8.0,
-    "province": "قم "
+    "province": "لرستان",
+    "numberOfTotalBakery": 2662,
+    "numberOfEnableBakery": 17,
+    "numberOfDisableBakery": 2024,
+    "numberOfBakeryBanned": 621,
+    "numberOfSamt": 2117,
+    "numberOfSima": 2662,
+    "numberOfActivePos": 923
   },
   {
-    "hour": 4.58,
-    "province": "سیستان و بلوچستان "
+    "province": "مازندران",
+    "numberOfTotalBakery": 7011,
+    "numberOfEnableBakery": 50,
+    "numberOfDisableBakery": 4742,
+    "numberOfBakeryBanned": 2219,
+    "numberOfSamt": 4934,
+    "numberOfSima": 7011,
+    "numberOfActivePos": 2322
   },
   {
-    "hour": 6.37,
-    "province": "سمنان "
+    "province": "مرکزی",
+    "numberOfTotalBakery": 2815,
+    "numberOfEnableBakery": 17,
+    "numberOfDisableBakery": 1628,
+    "numberOfBakeryBanned": 1170,
+    "numberOfSamt": 1764,
+    "numberOfSima": 2815,
+    "numberOfActivePos": 938
   },
   {
-    "hour": 6.38,
-    "province": "تهران "
+    "province": "هرمزگان",
+    "numberOfTotalBakery": 1915,
+    "numberOfEnableBakery": 16,
+    "numberOfDisableBakery": 1270,
+    "numberOfBakeryBanned": 629,
+    "numberOfSamt": 876,
+    "numberOfSima": 1915,
+    "numberOfActivePos": 509
   },
   {
-    "hour": 4.40,
-    "province": "یزد "
+    "province": "همدان",
+    "numberOfTotalBakery": 2403,
+    "numberOfEnableBakery": 7,
+    "numberOfDisableBakery": 1880,
+    "numberOfBakeryBanned": 516,
+    "numberOfSamt": 2022,
+    "numberOfSima": 2403,
+    "numberOfActivePos": 907
   },
   {
-    "hour": 2.58,
-    "province": "زنجان "
+    "province": "یزد",
+    "numberOfTotalBakery": 2305,
+    "numberOfEnableBakery": 95,
+    "numberOfDisableBakery": 1343,
+    "numberOfBakeryBanned": 867,
+    "numberOfSamt": 1083,
+    "numberOfSima": 2305,
+    "numberOfActivePos": 542
   }
 ]
 
+const mockActiveTimeRes: any[] = [
+  {
+    "province": "مرکزی",
+    "hour": 5.89
+  },
+  {
+    "province": "البرز",
+    "hour": 4.69
+  },
+  {
+    "province": "اردبیل ",
+    "hour": 4.86
+  },
+  {
+    "province": "آذربایجان غربی",
+    "hour": 4.42
+  },
+  {
+    "province": "آذربایجان شرقی",
+    "hour": 3.38
+  },
+  {
+    "province": "بوشهر",
+    "hour": 6.1
+  },
+  {
+    "province": "چهارمحال و بختیاری",
+    "hour": 4.99
+  },
+  {
+    "province": "ایلام ",
+    "hour": 5.51
+  },
+  {
+    "province": "اصفهان ",
+    "hour": 5.43
+  },
+  {
+    "province": "فارس",
+    "hour": 6.66
+  },
+  {
+    "province": "گیلان ",
+    "hour": 5.52
+  },
+  {
+    "province": "گلستان ",
+    "hour": 4.63
+  },
+  {
+    "province": "همدان ",
+    "hour": 6.29
+  },
+  {
+    "province": "هرمزگان ",
+    "hour": 6.49
+  },
+  {
+    "province": "خراسان شمالی ",
+    "hour": 4.93
+  },
+  {
+    "province": "خوزستان ",
+    "hour": 5.49
+  },
+  {
+    "province": "خراسان رضوی ",
+    "hour": 6.63
+  },
+  {
+    "province": "خراسان شمالی ",
+    "hour": 4.85
+  },
+  {
+    "province": "کهگلویه و بویراحمر",
+    "hour": 6.35
+  },
+  {
+    "province": "کردستان ",
+    "hour": 4.12
+  },
+  {
+    "province": "کرمان ",
+    "hour": 4.95
+  },
+  {
+    "province": "کرمانشاه ",
+    "hour": 5.87
+  },
+  {
+    "province": "لرستان",
+    "hour": 6.16
+  },
+  {
+    "province": "مازندران ",
+    "hour": 5.81
+  },
+  {
+    "province": "قزوین ",
+    "hour": 4.44
+  },
+  {
+    "province": "قم ",
+    "hour": 8
+  },
+  {
+    "province": "سیستان و بلوچستان ",
+    "hour": 4.98
+  },
+  {
+    "province": "سمنان ",
+    "hour": 6.62
+  },
+  {
+    "province": "تهران ",
+    "hour": 6.63
+  },
+  {
+    "province": "یزد ",
+    "hour": 4.68
+  },
+  {
+    "province": "زنجان ",
+    "hour": 2.97
+  }
+]
 
 const mockSellRateRes: any[] = [
   {
@@ -262,159 +570,159 @@ const mockSellRateRes: any[] = [
 
 const mockLicenceRes: any[] = [
   {
-    "province": "تهران",
-    "samt": 7384,
-    "sima": 7438
-  },
-  {
-    "province": "آذربایجان شرقی",
-    "samt": 4190,
-    "sima": 3260
-  },
-  {
-    "province": "آذربایجان غربی",
-    "samt": 3398,
-    "sima": 2700
-  },
-  {
-    "province": "گیلان",
-    "samt": 3177,
-    "sima": 2928
-  },
-  {
-    "province": "خراسان رضوی",
-    "samt": 2228,
-    "sima": 2463
-  },
-  {
-    "province": "کردستان",
-    "samt": 1751,
-    "sima": 1379
-  },
-  {
-    "province": "فارس",
-    "samt": 1729,
-    "sima": 1700
-  },
-  {
-    "province": "کرمانشاه",
-    "samt": 1716,
-    "sima": 1195
-  },
-  {
-    "province": "لرستان",
-    "samt": 1414,
-    "sima": 1308
-  },
-  {
-    "province": "خوزستان",
-    "samt": 1409,
-    "sima": 2550
-  },
-  {
-    "province": "مازندران",
-    "samt": 1326,
-    "sima": 1113
-  },
-  {
-    "province": "گلستان",
-    "samt": 1256,
-    "sima": 1118
-  },
-  {
-    "province": "همدان",
-    "samt": 1131,
-    "sima": 978
-  },
-  {
-    "province": "زنجان",
-    "samt": 1067,
-    "sima": 941
-  },
-  {
-    "province": "کرمان",
-    "samt": 1371,
-    "sima": 1834
-  },
-  {
-    "province": "خراسان شمالي",
-    "samt": 962,
-    "sima": 921
-  },
-  {
-    "province": "یزد",
-    "samt": 781,
-    "sima": 981
-  },
-  {
     "province": "اردبیل",
-    "samt": 770,
-    "sima": 542
-  },
-  {
-    "province": "چهارمحال وبختیاری",
-    "samt": 626,
-    "sima": 552
-  },
-  {
-    "province": "ایلام",
-    "samt": 581,
-    "sima": 426
-  },
-  {
-    "province": "قزوین",
-    "samt": 530,
-    "sima": 482
-  },
-  {
-    "province": "البرز",
-    "samt": 487,
-    "sima": 507
-  },
-  {
-    "province": "مرکزی",
-    "samt": 458,
-    "sima": 302
-  },
-  {
-    "province": "بوشهر",
-    "samt": 401,
-    "sima": 525
-  },
-  {
-    "province": "خراسان جنوبی",
-    "samt": 399,
-    "sima": 459
-  },
-  {
-    "province": "کهگیلویه وبویراحمد",
-    "samt": 367,
-    "sima": 373
-  },
-  {
-    "province": "سیستان وبلوچستان",
-    "samt": 355,
-    "sima": 1268
-  },
-  {
-    "province": "هرمزگان",
-    "samt": 240,
-    "sima": 604
+    "sima": 2616,
+    "samt": 2840
   },
   {
     "province": "اصفهان",
-    "samt": 233,
-    "sima": 4177
+    "sima": 4517,
+    "samt": 573
+  },
+  {
+    "province": "البرز",
+    "sima": 2362,
+    "samt": 2336
+  },
+  {
+    "province": "ايلام",
+    "sima": 675,
+    "samt": 830
+  },
+  {
+    "province": "آذربايجان شرقي",
+    "sima": 5935,
+    "samt": 6863
+  },
+  {
+    "province": "آذربايجان غربي",
+    "sima": 4623,
+    "samt": 5317
+  },
+  {
+    "province": "بوشهر",
+    "sima": 854,
+    "samt": 730
+  },
+  {
+    "province": "تهران",
+    "sima": 9252,
+    "samt": 9199
+  },
+  {
+    "province": "چهارمحال وبختيارئ",
+    "sima": 879,
+    "samt": 954
+  },
+  {
+    "province": "خراسان جنوبي",
+    "sima": 791,
+    "samt": 731
+  },
+  {
+    "province": "خراسان رضوئ",
+    "sima": 5572,
+    "samt": 5337
+  },
+  {
+    "province": "خراسان شمالي",
+    "sima": 1319,
+    "samt": 1360
+  },
+  {
+    "province": "خوزستان",
+    "sima": 3399,
+    "samt": 2256
+  },
+  {
+    "province": "زنجان",
+    "sima": 1510,
+    "samt": 1636
   },
   {
     "province": "سمنان",
-    "samt": 219,
-    "sima": 375
+    "sima": 875,
+    "samt": 718
+  },
+  {
+    "province": "سيستان وبلوچستان",
+    "sima": 1673,
+    "samt": 760
+  },
+  {
+    "province": "فارس",
+    "sima": 3363,
+    "samt": 3382
+  },
+  {
+    "province": "قزوين",
+    "sima": 1686,
+    "samt": 1734
   },
   {
     "province": "قم",
-    "samt": 183,
-    "sima": 270
+    "sima": 911,
+    "samt": 819
+  },
+  {
+    "province": "كردستان",
+    "sima": 2586,
+    "samt": 2952
+  },
+  {
+    "province": "كرمان",
+    "sima": 2315,
+    "samt": 1850
+  },
+  {
+    "province": "كهگيلويه وبويراحمد",
+    "sima": 608,
+    "samt": 601
+  },
+  {
+    "province": "کرمانشاه",
+    "sima": 2165,
+    "samt": 2688
+  },
+  {
+    "province": "گلستان",
+    "sima": 2297,
+    "samt": 2435
+  },
+  {
+    "province": "گيلان",
+    "sima": 3807,
+    "samt": 4054
+  },
+  {
+    "province": "لرستان",
+    "sima": 2014,
+    "samt": 2117
+  },
+  {
+    "province": "مازندران",
+    "sima": 4729,
+    "samt": 4934
+  },
+  {
+    "province": "مرکزي",
+    "sima": 1610,
+    "samt": 1764
+  },
+  {
+    "province": "هرمزگان",
+    "sima": 1243,
+    "samt": 876
+  },
+  {
+    "province": "همدان",
+    "sima": 1868,
+    "samt": 2022
+  },
+  {
+    "province": "يزد",
+    "sima": 1286,
+    "samt": 1083
   }
 ]
 
@@ -424,27 +732,23 @@ instanceMockAdapter
   // eslint-disable-next-line
   .onGet(/\/api\/v1\/bakery\/general/g, { province: /.*/ })
   .reply((req: any) => {
-    const res: any = req.params.province ? {
-      numberOfTotalBakery: 12012,
-      numberOfEnableBakery: 9635,
-      numberOfDisableBakery: 82,
-      numberOfAudit: 0,
-      numberOfSamt: 9199,
-      numberOfSima: 12012,
-      numberOfActivePos: 3440,
-      numberOfAvgSupplyFlour: 0,
-      numberOfBakeryBanned: 2295,
-    } : {
-      numberOfTotalBakery: 123513,
-      numberOfEnableBakery: 87135,
-      numberOfDisableBakery: 1068,
-      numberOfAudit: 0,
-      numberOfSamt: 75751,
-      numberOfSima: 123513,
-      numberOfActivePos: 35286,
-      numberOfAvgSupplyFlour: 0,
-      numberOfBakeryBanned: 35310,
-    };
+    let res: any = [];
+
+    if (req.params.province) {
+      res = mockRes.find(d => d.province === req.params.province)
+    } else {
+      res = {
+        numberOfTotalBakery: 108802,
+        numberOfEnableBakery: 80420,
+        numberOfDisableBakery: 957,
+        numberOfAudit: 0,
+        numberOfSamt: 75751,
+        numberOfSima: 108802,
+        numberOfActivePos: 35285,
+        numberOfAvgSupplyFlour: 0,
+        numberOfBakeryBanned: 27425,
+      };
+    }
     return [200, { ...res }];
   });
 
