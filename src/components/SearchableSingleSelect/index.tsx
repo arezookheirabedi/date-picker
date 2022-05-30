@@ -2,54 +2,78 @@
 
 import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
-import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import recruitmentServices from 'src/services/recruitment.service';
+import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
+// import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
 interface IProps {
-  tag: string;
-  category: string;
+  tag?: string;
+  category?: string;
+  endPoint?: any;
   queryParams: any;
   placeholder?: any;
   setQueryParams: (v: any) => void;
+  objectKey?: any;
 }
-
 
 const SearchableSingleSelect: React.FC<IProps> = ({
   placeholder,
   tag,
   category,
+  endPoint,
   setQueryParams,
   queryParams,
+  objectKey,
 }) => {
   const [selected, setSelected] = useState<{key: number | string | null; value: string}>();
   const [query, setQuery] = useState('');
 
   const [tags, setTags] = useState<any[]>([{key: null, value: placeholder}]);
 
-  const cancelToken = cancelTokenSource();
+  // const cancelToken = cancelTokenSource();
 
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const fetcher = async () => {
+  // function cancelRequest() {
+  //   cancelToken.cancel(msgRequestCanceled);
+  // }
+  const enpointFetcher = async () => {
     try {
-      const res = await recruitmentServices.tags({tag, category}, {cancelToken: cancelToken.token});
+      const res = await endPoint;
       const newData = [...tags, ...res.data];
       setTags([...newData]);
     } catch (error: any) {
       console.log(error);
     }
   };
+  const otherFetcher = async () => {
+    try {
+      const res = await recruitmentServices.tags({tag, category});
+      const newData = [...tags, ...res.data];
+      setTags([...newData]);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+  const fetcher = () => {
+    // eslint-disable-next-line no-new
+    new Promise((resolve, reject) => {
+      if (endPoint)
+        enpointFetcher()
+          .then(response => resolve(response))
+          .catch(error => reject(error));
+      else
+        otherFetcher()
+          .then(response => resolve(response))
+          .catch(error => reject(error));
+    });
+  };
 
   useEffect(() => {
     fetcher();
 
-    return () => {
-      cancelRequest();
-      setTags([]);
-    };
+    // return () => {
+    //   cancelRequest();
+    //   setTags([]);
+    // };
   }, []);
   const filteredTags =
     query === ''
@@ -61,7 +85,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (selected) {
-      params = {...queryParams, categoryValue: selected.key};
+      params = {...queryParams, [`${objectKey}||categoryValue`]: selected.key};
     } else {
       params = {...queryParams, categoryValue: null};
     }
