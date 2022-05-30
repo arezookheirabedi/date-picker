@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-
-import vaccineService from 'src/services/vaccine.service';
-import axios from 'axios';
-
 // import Spinner from '../../Spinner';
+import hcsService from 'src/services/hcs.service';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
@@ -128,8 +126,11 @@ const optionChart = {
 };
 
 const OverviewOfGuildVaccinationProcess = () => {
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
   const [dataset, setDataset] = useState<any[]>(initialData);
   // const [categories, setCategories] = useState<any[]>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
@@ -138,12 +139,14 @@ const OverviewOfGuildVaccinationProcess = () => {
   const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line
-  const getLinearOverview = async (params: any) => {
+  const getAreaChartVaccination = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      // const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {cancelToken: source.token})
-      const {data} = await vaccineService.dosesTagBased(params, {cancelToken: source.token});
+      const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
+        cancelToken: cancelToken.token,
+      });
+      // const {data} = await vaccineService.dosesTagBased(params, {cancelToken: source.token});
 
       const provinces: any[] = [];
 
@@ -230,12 +233,12 @@ const OverviewOfGuildVaccinationProcess = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({tag: 'guild'});
+      getAreaChartVaccination({tag: 'guild'});
     }, 500);
 
     return () => {
       clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
+      cancelRequest();
       setDataset([]);
     };
   }, []);
