@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from 'highcharts/highstock';
-import Charts from 'src/components/Charts';
-import DatePickerModal from 'src/components/DatePickerModal';
-import Calendar from 'src/components/Calendar';
-import Spinner from 'src/components/Spinner';
+import DatePickerModal from '../../../DatePickerModal';
+import Calendar from '../../../Calendar';
+import Spinner from '../../../Spinner';
+import Charts from '../../../Charts';
 import {converters, IInitialNumberOfDoses} from '../../public/constant';
 
 const {HeadlessChart} = Charts;
