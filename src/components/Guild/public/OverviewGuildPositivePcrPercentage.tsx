@@ -9,7 +9,7 @@ import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-import guildService from 'src/services/guild.service';
+import hcsService from 'src/services/hcs.service';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -18,7 +18,7 @@ import {
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
+import {converters} from './constant';
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
@@ -53,28 +53,30 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
+  // const normalizeData = (data: Array<any>) => {
+  //   const province: any[] = [];
 
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-    });
-    // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...unregistered]}];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
-  };
+  //   const unregistered: any[] = [];
+  //   data.forEach((item: any) => {
+  //     province.push(item.province);
+  //     unregistered.push(item.unregister);
+  //   });
+  //   // setCategories([...province]);
+  //   const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...unregistered]}];
+  //   // setDataset([...newData]);
+  //   setDataset({categories: [...province], series: [...newData]});
+  // };
 
   const getColumnChartPositivePcrPercentage = async (params: any) => {
+    debugger;
     setLoading(true);
     setErrorMessage(null);
     try {
-      // const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
-      const {data} = await guildService.percentageOfRegisteredGuilds(params, {
+      const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
+        // const {data} = await guildService.percentageOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
+
       const province: any[] = [];
 
       const unregistered: any[] = [];
@@ -99,7 +101,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     const idSetTimeOut = setTimeout(() => {
       getColumnChartPositivePcrPercentage(queryParams);
     }, 500);
-    normalizeData(mockRegisterPercentage);
+    // normalizeData(mockRegisterPercentage);
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
@@ -208,8 +210,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     series: [
       {
         lineWidth: 4,
+        showInLegend: false,
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
       },
     ],
@@ -257,10 +260,10 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
+        {!loading && !errorMessage && dataset.length === 0 ? (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        ) : (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
       </div>
     </fieldset>
