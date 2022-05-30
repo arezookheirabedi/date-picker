@@ -12,6 +12,9 @@ import frenchBreadIcon from '../../../assets/images/icons/french-bread.svg';
 import tpsIcon from '../../../assets/images/icons/tps.svg';
 import transactionsIcon from '../../../assets/images/icons/transactions.svg';
 import activeTimeIcon from '../../../assets/images/icons/active-time.svg';
+import posDeactiveIcon from '../../../assets/images/icons/pos-deactive.svg';
+import ovenDeactiveIcon from '../../../assets/images/icons/oven-deactive.svg';
+import bakeryBannedIcon from '../../../assets/images/icons/bakery-banned.svg';
 import bakeryService from '../../../services/bakery.service';
 
 const initialNumberOf = {
@@ -81,7 +84,7 @@ const OverviewBakery = () => {
               loading={loading}
             />
             <Statistic
-              icon={flourIcon}
+              icon={ovenDeactiveIcon}
               text="مجموع نانوایی‌های غیر فعال"
               count={numberOf.numberOfDisableBakery || 0}
               loading={loading}
@@ -125,7 +128,7 @@ const OverviewBakery = () => {
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
-              icon={posIcon}
+              icon={posDeactiveIcon}
               text="مجموع نانوایی‌های بدون کارتخوان"
               count={numberOf.numberOfBakeryWithoutPos || 0}
               loading={loading}
@@ -133,7 +136,7 @@ const OverviewBakery = () => {
               // infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
             />
             <Statistic
-              icon={wheatIcon}
+              icon={bakeryBannedIcon}
               text="مجموع نانوایی‌های مسدود شده"
               count={numberOf.numberOfBakeryBanned || 0}
               loading={loading}
