@@ -68,7 +68,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   // };
 
   const getColumnChartPositivePcrPercentage = async (params: any) => {
-    debugger;
     setLoading(true);
     setErrorMessage(null);
     try {
