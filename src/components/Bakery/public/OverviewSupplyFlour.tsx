@@ -27,7 +27,7 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  colors: ['#E20002'],
+  colors: ['#14B8A6'],
   plotOptions: {
     column: {
       marker: {
@@ -95,7 +95,7 @@ const optionChart = {
   ],
 };
 
-const OverviewActiveTime: React.FC<{}> = () => {
+const OverviewSupplyFlour: React.FC<{}> = () => {
   const [data, setData] = useState({});
   // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -104,16 +104,8 @@ const OverviewActiveTime: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
-    from: {
-      day: 6,
-      month: 3,
-      year: 1401,
-    },
-    to: {
-      day: 6,
-      month: 3,
-      year: 1401,
-    },
+    from: null,
+    to: null,
   }) as any;
 
   const cancelToken = cancelTokenSource();
@@ -134,7 +126,7 @@ const OverviewActiveTime: React.FC<{}> = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await bakeryService.bakerySellRate(params, {
+      const response = await bakeryService.bakerySupplyFlour(params, {
         cancelToken: cancelToken.token,
       });
 
@@ -153,6 +145,7 @@ const OverviewActiveTime: React.FC<{}> = () => {
           },
           showInLegend: false,
           data: [...sellCount],
+          
         },
       ];
       // setDataset([...newData]);
@@ -259,4 +252,4 @@ const OverviewActiveTime: React.FC<{}> = () => {
   );
 };
 
-export default OverviewActiveTime;
+export default OverviewSupplyFlour;
