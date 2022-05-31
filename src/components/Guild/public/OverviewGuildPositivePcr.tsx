@@ -3,6 +3,7 @@ import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {isEmpty} from 'lodash';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -204,8 +205,9 @@ const OverviewPositivePcr = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+
+        {!loading && !isEmpty(data) && !errorMessage && <Line data={data} />}
+        {isEmpty(data) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
