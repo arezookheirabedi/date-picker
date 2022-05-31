@@ -15,8 +15,8 @@ const Bakery = () => {
       <OverviewLicence />
       <OverviewActiveTime />
       <OverviewSellRate />
-      <OverviewSupplyFlour />
       <OverviewSoldCount />
+      <OverviewSupplyFlour />
     </div>
   );
 };
