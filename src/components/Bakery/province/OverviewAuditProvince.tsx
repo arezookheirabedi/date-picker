@@ -144,7 +144,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
         نگاه کلی به لیست واحد‌هایی که نیاز به بازرسی دارند در استان &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex items-center space-x-4 rtl:space-x-reverse mb-16 text-sm">
+      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm">
         <label
           htmlFor="overTime"
           className="flex-grow flex items-center justify-between cursor-pointer"
