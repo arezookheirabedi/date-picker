@@ -2,11 +2,10 @@ import {useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from 'src/components/Vaccination/province/OverviewMap';
-// import OverviewVaccinationStatus from 'src/components/Vaccination/province/OverviewVaccinationStatus';
-import OverviewExistVaccine from 'src/components/Vaccination/province/OverviewExistVaccine';
+import OverviewExistVaccineCount from 'src/components/Vaccination/province/OverviewExistVaccineCount';
 import OverviewVaccinePerDoses from 'src/components/Vaccination/province/OverviewVaccinePerDoses';
 import OverviewVaccine from 'src/components/Vaccination/province/OverviewVaccine';
-// import OverviewVaccinationStatus from 'src/components/Vaccination/province/OverviewVaccinationStatus';
+import OverviewExistVaccinePercentage from 'src/components/Vaccination/province/OverviewExistVaccinePercentage';
 
 const Vaccination: React.FC<{}> = () => {
   const location = useLocation();
@@ -36,7 +35,8 @@ const Vaccination: React.FC<{}> = () => {
 
       <OverviewVaccine cityTitle={cityTitle} />
       {/* <OverviewVaccinationStatus cityTitle={cityTitle} /> */}
-      <OverviewExistVaccine cityTitle={cityTitle} />
+      <OverviewExistVaccineCount cityTitle={cityTitle} />
+      <OverviewExistVaccinePercentage cityTitle={cityTitle} />
       <OverviewVaccinePerDoses cityTitle={cityTitle} />
     </div>
   );
