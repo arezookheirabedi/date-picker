@@ -9,6 +9,13 @@ import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import bakeryService from '../../../services/bakery.service';
+import chartBoxIcon from '../../../assets/images/icons/chart-box.svg';
+import chartBoxActiveIcon from '../../../assets/images/icons/chart-box-active.svg';
+import extortionIcon from '../../../assets/images/icons/extortion.svg';
+import extortionActiveIcon from '../../../assets/images/icons/extortion-active.svg';
+import clockIcon from '../../../assets/images/icons/clock.svg';
+import clockActiveIcon from '../../../assets/images/icons/clock-active.svg';
+import checkActiveIcon from '../../../assets/images/icons/check-active.svg';
 
 interface OverviewAuditProvinceProps {
   cityTitle?: any;
@@ -17,11 +24,13 @@ interface OverviewAuditProvinceProps {
 const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
-  const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
-  const [loading, setLoading] = useState(false);
-  // const [isCancel, setIsCancel] = useState(false);
+  const [loading, setLoading] = useState<any>(false);
+  const [notUseFlour, setNotUseFlour] = useState<any>(false);
+  const [isExtortion, setIsExtortion] = useState<any>(false);
+  const [overTime, setOverTime] = useState<any>(false);
+
   const [dataset, setDataset] = useState<any>([]);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
+  const [filteredDataset, setFilteredDataset] = useState<any>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -61,8 +70,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
         // }
       });
       setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
+      setFilteredDataset([...normalizedData]);
     } catch (e) {
       // eslint-disable-next-line
       console.log(e);
@@ -70,39 +78,6 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
       setLoading(false);
     }
   };
-
-  // async function getOverviewByCategory(params: any) {
-  //   try {
-  //     setLoading(true);
-  //     setIsCancel(false);
-  //     const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
-  //     const normalizedData: any[] = [];
-  //     data.forEach((item: any, index: number) => {
-  //       // if (item.total !== 0) {
-  //       normalizedData.push({
-  //         id: `ovca_${index}`,
-  //         name: getServiceTypeName(item.serviceType),
-  //         employeesCount: item.total || 0,
-  //         infectedCount: item.count || 0,
-  //         infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
-  //         saveCount: item.recoveredCount || 0,
-  //         // deadCount: 120,
-  //       });
-  //       // }
-  //     });
-  //     setDataset([...normalizedData]);
-  //     setOrgDataset([...normalizedData]);
-  //     setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-  //     setIsCancel(false);
-  //   } catch (error: any) {
-  //     // eslint-disable-next-line
-  //     if (error && error.message === 'cancel') {
-  //       setIsCancel(true);
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -155,31 +130,94 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
   }, [selectedDayRange]);
 
   useEffect(() => {
-    const tmp = [...orgDataset].sort((a: any, b: any) => {
-      // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 1;
+    let d = [...dataset];
+    if (isExtortion) d = d.filter(item => item.isExtortion === true);
+    if (overTime) d = d.filter(item => item.overTime === true);
+    if (notUseFlour) d = d.filter(item => item.notUseFlour === true);
 
-      if (a.infectedPercent < b.infectedPercent) {
-        return reverse * 1;
-      }
-
-      if (a.infectedPercent > b.infectedPercent) {
-        return reverse * -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
-
-    setDataset(tmp);
-  }, [filterType]);
+    setFilteredDataset(d);
+  }, [isExtortion, overTime, notUseFlour]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-      نگاه کلی به لیست واحد‌هایی که نیاز به بازرسی دارند در استان &nbsp;
+        نگاه کلی به لیست واحد‌هایی که نیاز به بازرسی دارند در استان &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+      <div className="flex items-center space-x-4 rtl:space-x-reverse mb-16 text-sm">
+        <label
+          htmlFor="overTime"
+          className="flex-grow flex items-center justify-between cursor-pointer"
+        >
+          <div
+            className={`w-full flex items-center ${
+              overTime ? 'bg-green-600 text-white' : 'bg-white'
+            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
+          >
+            <div className="">
+              <input
+                type="checkbox"
+                id="overTime"
+                className="hidden"
+                onChange={() => setOverTime(!overTime)}
+              />
+              <img className="w-4 h-4" src={overTime ? clockActiveIcon : clockIcon} alt="" />
+            </div>
+            <span>مشکوک به تخلف از ساعت فعالیت</span>
+          </div>
+          {overTime && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
+        </label>
+
+        <label htmlFor="notUseFlour" className="flex-grow flex items-center justify-between">
+          <div
+            className={`w-full flex items-center ${
+              notUseFlour ? 'bg-green-600 text-white' : 'bg-white'
+            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
+          >
+            <div className="">
+              <input
+                type="checkbox"
+                id="notUseFlour"
+                className="hidden"
+                onChange={() => setNotUseFlour(!notUseFlour)}
+              />
+              <img
+                className="w-4 h-4"
+                src={notUseFlour ? chartBoxActiveIcon : chartBoxIcon}
+                alt=""
+              />
+            </div>
+            <span>مشکوک به عدم استفاده‌ مجاز از سهمیه آرد</span>
+          </div>
+          {notUseFlour && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
+        </label>
+
+        <label htmlFor="isExtortion" className="flex-grow flex items-center justify-between">
+          <div
+            className={`w-full flex items-center ${
+              isExtortion ? 'bg-green-600 text-white' : 'bg-white'
+            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
+          >
+            <div className="">
+              <input
+                type="checkbox"
+                id="isExtortion"
+                className="hidden"
+                onChange={() => setIsExtortion(!isExtortion)}
+              />
+              <img
+                className="w-4 h-4"
+                src={isExtortion ? extortionActiveIcon : extortionIcon}
+                alt=""
+              />
+            </div>
+            <span>مشکوک به گران فروشی</span>
+          </div>
+          {isExtortion && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
+        </label>
+      </div>
+
+      <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center justify-start">
           {showDatePicker ? (
             <DatePickerModal
@@ -204,56 +242,90 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
           </div>
         ) : (
           <Table
-            dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            dataSet={[...filteredDataset]}
+            pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
                 name: 'وضعیت',
                 key: 'status',
                 className: 'flex justify-start',
-                render: (v: any, record, index: number) => (
-                  <div className="flex justify-start items-center">
-                    {(index + 1).toLocaleString('fa')}.{v}
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex justify-start items-center space-x-2 rtl:space-x-reverse">
+                    <span className="w-8">
+                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.
+                    </span>
+                    <div
+                      className={`w-5 h-5 rounded-full shadow bg-gradient-to-bl ${
+                        v === 'active' ? 'from-green-800 to-green-500' : 'from-red-800 to-red-500'
+                      }`}
+                    />
                   </div>
                 ),
               },
               {
                 name: 'استان',
                 key: 'province',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                render: (v: any) => <span>{v}</span>,
               },
               {
                 name: 'شهر',
                 key: 'city',
-                render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
+                render: (v: any) => <span>{v}</span>,
               },
               {
                 name: 'شناسه پروانه سیما',
                 key: 'simaId',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                render: (v: any) => <span>{v}</span>,
               },
               {
                 name: 'شناسه POS بانکی',
                 key: 'posId',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                render: (v: any) => <span>{v || '-'}</span>,
               },
               {
                 name: 'شماره ملی',
                 key: 'nationalId',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                render: (v: any) => <span>{v}</span>,
               },
               {
                 name: 'نوع تخلف قابل بررسی',
                 key: 'types',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                render: (v: any, record: any) => (
+                  <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
+                    {record.notUseFlour && (
+                      <div className="">
+                        <img
+                          className="w-4 h-4"
+                          src={chartBoxIcon}
+                          alt="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
+                        />
+                      </div>
+                    )}
+                    {record.isExtortion && (
+                      <div className="">
+                        <img className="w-4 h-4" src={extortionIcon} alt="مشکوک به گران فروشی" />
+                      </div>
+                    )}
+                    {record.overTime && (
+                      <div className="">
+                        <img
+                          className="w-4 h-4"
+                          src={clockIcon}
+                          alt="مشکوک به تخلف از ساعت فعالیت"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ),
               },
               {
                 name: 'آدرس',
                 key: 'address',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                className: 'flex justify-start',
+                render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(filteredDataset || []).length}
           />
         )}
       </div>
