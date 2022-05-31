@@ -6,6 +6,7 @@ import OverviewActiveTime from 'src/components/Bakery/public/OverviewActiveTime'
 import OverviewSellRate from 'src/components/Bakery/public/OverviewSellRate';
 import OverviewSoldCount from 'src/components/Bakery/public/OverviewSoldCount';
 import OverviewSupplyFlour from 'src/components/Bakery/public/OverviewSupplyFlour';
+import OverviewAudit from 'src/components/Bakery/public/OverviewAudit';
 
 const Bakery = () => {
   return (
@@ -17,6 +18,7 @@ const Bakery = () => {
       <OverviewSellRate />
       <OverviewSoldCount />
       <OverviewSupplyFlour />
+      <OverviewAudit />
     </div>
   );
 };
