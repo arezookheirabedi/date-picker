@@ -88,7 +88,6 @@ function updateEmployeHealthStatus(
     .build()
     .put(`/api/v1/guilds/health/employee?lang=fa`, params);
 }
-
 interface IParams extends IPagable {
   guildCode: string;
 }
@@ -136,6 +135,7 @@ function guildOverviewByCategory({tag, category, ...params}: any = {}, config?: 
       ...config,
     });
 }
+
 function guildTestResultByCategory({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -144,6 +144,7 @@ function guildTestResultByCategory({tag, category, ...params}: any = {}, config?
       ...config,
     });
 }
+
 function guildInquiry({...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -197,6 +198,32 @@ function confirmOtpReport({reportType, ...params}: any = {}): Promise<AxiosRespo
     .post(`/api/v1/guilds/reports/types/${reportType}/downloads/confirm?lang=fa`, params);
 }
 
+function percentageOfRegisteredGuilds(
+  {...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/reports/registered/percentage?lang=fa`, params, {...config});
+}
+
+function numberOfRegisteredGuilds(
+  {...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/reports/registered/count?lang=fa`, params, {...config});
+}
+function getRegisterList(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/categories/list?lang=fa`, params, {...config});
+}
+
 export default {
   registerGuild,
   registerWorkshop,
@@ -219,4 +246,7 @@ export default {
   requestOtpReport,
   reportDownload,
   confirmOtpReport,
+  percentageOfRegisteredGuilds,
+  numberOfRegisteredGuilds,
+  getRegisterList,
 };

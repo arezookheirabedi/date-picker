@@ -23,7 +23,7 @@ import Citizens from './containers/Citizens/Citizens';
 import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
-import ServicePort from "./containers/ServicePort/ServicePort";
+import ServicePort from './containers/ServicePort/ServicePort';
 
 const routes: IRoute[] = [
   {
@@ -49,7 +49,9 @@ const routes: IRoute[] = [
   },
   {
     keyIndex: '3',
-    icon: (active,disabled) => <IconWrapperStyle name="service-port" active={active} disabled={disabled} />,
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="service-port" active={active} disabled={disabled} />
+    ),
     link: '/dashboard/service-port',
     exact: true,
     inMenu: true,
@@ -120,7 +122,6 @@ const routes: IRoute[] = [
     main: Transport,
   },
   {
-    
     keyIndex: '10',
     icon: (active, disabled) => (
       <IconWrapperStyle name="bakery" active={active} disabled={disabled} />

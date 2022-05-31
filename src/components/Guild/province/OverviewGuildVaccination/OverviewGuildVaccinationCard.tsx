@@ -8,17 +8,17 @@ import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
 import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
-
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import vaccineService from 'src/services/vaccine.service';
+import {useHistory, useLocation} from 'react-router-dom';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialVacinatelInfo, initialVacinatelInfo} from '../constant';
+import {IInitialVacinatelInfo, initialVacinatelInfo} from '../../public/constant';
 
 const OverviewOfStatusCard: React.FC<{}> = () => {
+  const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState<boolean>(false);
-
   const [guildVacinateInfo, setGuildVacinateInfo] =
     useState<IInitialVacinatelInfo>(initialVacinatelInfo);
   const cancelToken = cancelTokenSource();
@@ -27,13 +27,10 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getGuildVacinateInfo = async () => {
+  const getGuildVacinateInfo = async (params: any) => {
     setLoading(true);
     try {
-      const res = await vaccineService.membersGeneral(
-        {tag: 'guild'},
-        {cancelToken: cancelToken.token}
-      );
+      const res = await vaccineService.membersGeneral(params, {cancelToken: cancelToken.token});
       if (res.status === 200) {
         const newData = {...guildVacinateInfo, ...res.data};
         setGuildVacinateInfo(newData);
@@ -47,13 +44,22 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    getGuildVacinateInfo();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getGuildVacinateInfo({province: provinceName, tag: 'guild'});
+    } else {
+      history.push('/dashboard/guild/province');
+    }
 
     return () => {
       cancelRequest();
       setGuildVacinateInfo(initialVacinatelInfo);
     };
-  }, []);
+  }, [location.search]);
 
   return (
     <>

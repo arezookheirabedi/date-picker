@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import hcsService from 'src/services/hcs.service';
+import {useHistory, useLocation} from 'react-router-dom';
 import LatestOverviewOfStatusCard from './LatestOverviewOfStatusCard';
 import OverviewOfTheLatestPublicGuildVaccinationStatus from './OverviewOfTheLatestPublicGuildVaccinationStatus';
-import {IInitialNumberOfDoses, initialNumberOfDoses} from '../constant';
+import {IInitialNumberOfDoses, initialNumberOfDoses} from '../../public/constant';
 
-const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
+interface ITheLatestOverwiewOfVaccination {
+  cityTitle?: any;
+}
+const TheLatestOverwiewOfVaccination: React.FC<ITheLatestOverwiewOfVaccination> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [queryParams, setQueryParams] = useState({
@@ -40,18 +46,27 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    getGuildVaccinateInfo({...queryParams, tag: 'guild'});
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getGuildVaccinateInfo({...queryParams, tag: 'guild', province: provinceName});
+    } else {
+      history.push('/dashboard/guild/province');
+    }
     return () => {
       cancelRequest();
       setNumberOf(initialNumberOfDoses);
     };
-  }, [queryParams]);
+  }, [queryParams, location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         {' '}
-        نگاه کلی به آخرین وضعیت واکسیناسیون اصناف
+        نگاه کلی به آخرین وضعیت واکسیناسیون اصناف استان {cityTitle}
       </legend>
 
       <LatestOverviewOfStatusCard loading={loading} numberOf={numberOf} />

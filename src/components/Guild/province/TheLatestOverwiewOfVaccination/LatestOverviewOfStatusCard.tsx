@@ -8,7 +8,7 @@ import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialNumberOfDoses} from '../constant';
+import {IInitialNumberOfDoses} from '../../public/constant';
 
 const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitialNumberOfDoses}> = ({
   loading,

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-// import Spinner from '../../Spinner';
 import hcsService from 'src/services/hcs.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
+import {useHistory, useLocation} from 'react-router-dom';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
@@ -124,20 +124,22 @@ const optionChart = {
     // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
 };
-
-const OverviewOfGuildVaccinationProcess = () => {
+interface IOverviewOfGuildVaccinationProcess {
+  cityTitle?: any;
+}
+const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationProcess> = ({
+  cityTitle,
+}) => {
+  const location = useLocation();
+  const history = useHistory();
+  const [dataset, setDataset] = useState<any[]>(initialData);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const [dataset, setDataset] = useState<any[]>(initialData);
-  // const [categories, setCategories] = useState<any[]>([]);
-  // const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   // eslint-disable-next-line
   const getAreaChartVaccination = async (params: any) => {
     setLoading(true);
@@ -146,8 +148,6 @@ const OverviewOfGuildVaccinationProcess = () => {
       const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
         cancelToken: cancelToken.token,
       });
-      // const {data} = await vaccineService.dosesTagBased(params, {cancelToken: source.token});
-
       const provinces: any[] = [];
 
       // eslint-disable-next-line
@@ -232,20 +232,34 @@ const OverviewOfGuildVaccinationProcess = () => {
   };
 
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getAreaChartVaccination({tag: 'guild'});
-    }, 500);
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getAreaChartVaccination({tag: 'guild', province: provinceName});
+      }, 500);
+    } else {
+      history.push('/dashboard/guild/province');
+    }
 
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset([]);
     };
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به روند واکسیناسیون اصناف </legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به روند واکسیناسیون اصناف استان {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
