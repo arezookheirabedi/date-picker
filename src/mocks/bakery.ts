@@ -1,813 +1,1067 @@
-import { instanceMockAdapter } from '../helpers/requestUtil';
+import {instanceMockAdapter} from '../helpers/requestUtil';
+import {res as data} from './bakery.data';
 
 // eslint-disable-next-line
 const mockRes: any[] = [
   {
-    "province": "اردبیل",
-    "numberOfTotalBakery": 8303,
-    "numberOfEnableBakery": 42,
-    "numberOfDisableBakery": 6084,
-    "numberOfBakeryBanned": 2177,
-    "numberOfSamt": 2840,
-    "numberOfSima": 8303,
-    "numberOfActivePos": 1119
+    province: 'آذربایجان شرقی',
+    numberOfTotalBakery: 8345,
+    numberOfEnableBakery: 6121,
+    numberOfDisableBakery: 56,
+    numberOfBakeryBanned: 2168,
+    numberOfSamt: 2840,
+    numberOfSima: 8345,
+    numberOfActivePos: 5541,
+    numberOfAvgSupplyFlour: 36747775,
+    numberOfBakeryWithoutPos: 1765,
+    numberOfTransaction: 1000,
+    numberOfTransactionPerDay: 565,
+    numberOfPosActiveTime: 462,
   },
   {
-    "province": "اصفهان",
-    "numberOfTotalBakery": 6431,
-    "numberOfEnableBakery": 60,
-    "numberOfDisableBakery": 4740,
-    "numberOfBakeryBanned": 1631,
-    "numberOfSamt": 573,
-    "numberOfSima": 6431,
-    "numberOfActivePos": 1878
+    province: 'آذربایجان غربی',
+    numberOfTotalBakery: 6445,
+    numberOfEnableBakery: 4757,
+    numberOfDisableBakery: 65,
+    numberOfBakeryBanned: 1623,
+    numberOfSamt: 573,
+    numberOfSima: 6445,
+    numberOfActivePos: 3781,
+    numberOfAvgSupplyFlour: 31996760,
+    numberOfBakeryWithoutPos: 1641,
+    numberOfTransaction: 710,
+    numberOfTransactionPerDay: 355,
+    numberOfPosActiveTime: 268,
   },
   {
-    "province": "البرز",
-    "numberOfTotalBakery": 3204,
-    "numberOfEnableBakery": 39,
-    "numberOfDisableBakery": 2636,
-    "numberOfBakeryBanned": 529,
-    "numberOfSamt": 2336,
-    "numberOfSima": 3204,
-    "numberOfActivePos": 1219
+    province: 'اردبیل',
+    numberOfTotalBakery: 3211,
+    numberOfEnableBakery: 2651,
+    numberOfDisableBakery: 21,
+    numberOfBakeryBanned: 539,
+    numberOfSamt: 2336,
+    numberOfSima: 3211,
+    numberOfActivePos: 2241,
+    numberOfAvgSupplyFlour: 16919180,
+    numberOfBakeryWithoutPos: 855,
+    numberOfTransaction: 470,
+    numberOfTransactionPerDay: 230,
+    numberOfPosActiveTime: 181,
   },
   {
-    "province": "ایلام",
-    "numberOfTotalBakery": 5995,
-    "numberOfEnableBakery": 48,
-    "numberOfDisableBakery": 4587,
-    "numberOfBakeryBanned": 1360,
-    "numberOfSamt": 830,
-    "numberOfSima": 5995,
-    "numberOfActivePos": 309
+    province: 'اصفهان',
+    numberOfTotalBakery: 5996,
+    numberOfEnableBakery: 4581,
+    numberOfDisableBakery: 52,
+    numberOfBakeryBanned: 1363,
+    numberOfSamt: 830,
+    numberOfSima: 5996,
+    numberOfActivePos: 5553,
+    numberOfAvgSupplyFlour: 37224639,
+    numberOfBakeryWithoutPos: 894,
+    numberOfTransaction: 904,
+    numberOfTransactionPerDay: 574,
+    numberOfPosActiveTime: 442,
   },
   {
-    "province": "آذربایجان شرقی",
-    "numberOfTotalBakery": 2861,
-    "numberOfEnableBakery": 8,
-    "numberOfDisableBakery": 2362,
-    "numberOfBakeryBanned": 491,
-    "numberOfSamt": 6863,
-    "numberOfSima": 2861,
-    "numberOfActivePos": 3018
+    province: 'البرز',
+    numberOfTotalBakery: 2861,
+    numberOfEnableBakery: 2361,
+    numberOfDisableBakery: 10,
+    numberOfBakeryBanned: 490,
+    numberOfSamt: 6863,
+    numberOfSima: 2861,
+    numberOfActivePos: 2442,
+    numberOfAvgSupplyFlour: 21362000,
+    numberOfBakeryWithoutPos: 669,
+    numberOfTransaction: 283,
+    numberOfTransactionPerDay: 190,
+    numberOfPosActiveTime: 135,
   },
   {
-    "province": "آذربایجان غربی",
-    "numberOfTotalBakery": 960,
-    "numberOfEnableBakery": 10,
-    "numberOfDisableBakery": 685,
-    "numberOfBakeryBanned": 265,
-    "numberOfSamt": 5317,
-    "numberOfSima": 960,
-    "numberOfActivePos": 1980
+    province: 'ایلام',
+    numberOfTotalBakery: 960,
+    numberOfEnableBakery: 688,
+    numberOfDisableBakery: 9,
+    numberOfBakeryBanned: 263,
+    numberOfSamt: 5317,
+    numberOfSima: 960,
+    numberOfActivePos: 731,
+    numberOfAvgSupplyFlour: 6607693,
+    numberOfBakeryWithoutPos: 173,
+    numberOfTransaction: 137,
+    numberOfTransactionPerDay: 89,
+    numberOfPosActiveTime: 66,
   },
   {
-    "province": "بوشهر",
-    "numberOfTotalBakery": 1107,
-    "numberOfEnableBakery": 14,
-    "numberOfDisableBakery": 854,
-    "numberOfBakeryBanned": 239,
-    "numberOfSamt": 730,
-    "numberOfSima": 1107,
-    "numberOfActivePos": 373
+    province: 'بوشهر',
+    numberOfTotalBakery: 1112,
+    numberOfEnableBakery: 857,
+    numberOfDisableBakery: 15,
+    numberOfBakeryBanned: 240,
+    numberOfSamt: 730,
+    numberOfSima: 1112,
+    numberOfActivePos: 1031,
+    numberOfAvgSupplyFlour: 9469880,
+    numberOfBakeryWithoutPos: 205,
+    numberOfTransaction: 183,
+    numberOfTransactionPerDay: 92,
+    numberOfPosActiveTime: 68,
   },
   {
-    "province": "تهران",
-    "numberOfTotalBakery": 10934,
-    "numberOfEnableBakery": 78,
-    "numberOfDisableBakery": 9409,
-    "numberOfBakeryBanned": 1447,
-    "numberOfSamt": 9199,
-    "numberOfSima": 10934,
-    "numberOfActivePos": 3440
+    province: 'تهران',
+    numberOfTotalBakery: 10949,
+    numberOfEnableBakery: 9418,
+    numberOfDisableBakery: 86,
+    numberOfBakeryBanned: 1445,
+    numberOfSamt: 9199,
+    numberOfSima: 10949,
+    numberOfActivePos: 9918,
+    numberOfAvgSupplyFlour: 108581944,
+    numberOfBakeryWithoutPos: 2469,
+    numberOfTransaction: 1188,
+    numberOfTransactionPerDay: 654,
+    numberOfPosActiveTime: 394,
   },
   {
-    "province": "چهارمحال و بختیاری",
-    "numberOfTotalBakery": 1555,
-    "numberOfEnableBakery": 7,
-    "numberOfDisableBakery": 879,
-    "numberOfBakeryBanned": 669,
-    "numberOfSamt": 954,
-    "numberOfSima": 1555,
-    "numberOfActivePos": 334
+    province: 'چهارمحال و بختیاری',
+    numberOfTotalBakery: 1539,
+    numberOfEnableBakery: 867,
+    numberOfDisableBakery: 7,
+    numberOfBakeryBanned: 665,
+    numberOfSamt: 954,
+    numberOfSima: 1539,
+    numberOfActivePos: 918,
+    numberOfAvgSupplyFlour: 9537760,
+    numberOfBakeryWithoutPos: 231,
+    numberOfTransaction: 137,
+    numberOfTransactionPerDay: 88,
+    numberOfPosActiveTime: 68,
   },
   {
-    "province": "خراسان جنوبی",
-    "numberOfTotalBakery": 1269,
-    "numberOfEnableBakery": 10,
-    "numberOfDisableBakery": 796,
-    "numberOfBakeryBanned": 463,
-    "numberOfSamt": 731,
-    "numberOfSima": 1269,
-    "numberOfActivePos": 422
+    province: 'خراسان جنوبی',
+    numberOfTotalBakery: 1237,
+    numberOfEnableBakery: 758,
+    numberOfDisableBakery: 11,
+    numberOfBakeryBanned: 468,
+    numberOfSamt: 731,
+    numberOfSima: 1237,
+    numberOfActivePos: 864,
+    numberOfAvgSupplyFlour: 8288328,
+    numberOfBakeryWithoutPos: 208,
+    numberOfTransaction: 148,
+    numberOfTransactionPerDay: 90,
+    numberOfPosActiveTime: 64,
   },
   {
-    "province": "خراسان رضوی",
-    "numberOfTotalBakery": 7638,
-    "numberOfEnableBakery": 41,
-    "numberOfDisableBakery": 5660,
-    "numberOfBakeryBanned": 1937,
-    "numberOfSamt": 5337,
-    "numberOfSima": 7638,
-    "numberOfActivePos": 2754
+    province: 'خراسان رضوی',
+    numberOfTotalBakery: 7602,
+    numberOfEnableBakery: 5623,
+    numberOfDisableBakery: 42,
+    numberOfBakeryBanned: 1937,
+    numberOfSamt: 5337,
+    numberOfSima: 7602,
+    numberOfActivePos: 5765,
+    numberOfAvgSupplyFlour: 53493229,
+    numberOfBakeryWithoutPos: 1583,
+    numberOfTransaction: 716,
+    numberOfTransactionPerDay: 441,
+    numberOfPosActiveTime: 352,
   },
   {
-    "province": "خراسان شمالی",
-    "numberOfTotalBakery": 1626,
-    "numberOfEnableBakery": 10,
-    "numberOfDisableBakery": 1321,
-    "numberOfBakeryBanned": 295,
-    "numberOfSamt": 1360,
-    "numberOfSima": 1626,
-    "numberOfActivePos": 614
+    province: 'خراسان شمالی',
+    numberOfTotalBakery: 1626,
+    numberOfEnableBakery: 1323,
+    numberOfDisableBakery: 9,
+    numberOfBakeryBanned: 294,
+    numberOfSamt: 1360,
+    numberOfSima: 1626,
+    numberOfActivePos: 1088,
+    numberOfAvgSupplyFlour: 8670000,
+    numberOfBakeryWithoutPos: 529,
+    numberOfTransaction: 188,
+    numberOfTransactionPerDay: 104,
+    numberOfPosActiveTime: 86,
   },
   {
-    "province": "خوزستان",
-    "numberOfTotalBakery": 3823,
-    "numberOfEnableBakery": 30,
-    "numberOfDisableBakery": 3415,
-    "numberOfBakeryBanned": 378,
-    "numberOfSamt": 2256,
-    "numberOfSima": 3823,
-    "numberOfActivePos": 917
+    province: 'خوزستان',
+    numberOfTotalBakery: 3823,
+    numberOfEnableBakery: 3394,
+    numberOfDisableBakery: 35,
+    numberOfBakeryBanned: 394,
+    numberOfSamt: 2256,
+    numberOfSima: 3823,
+    numberOfActivePos: 3297,
+    numberOfAvgSupplyFlour: 44268272,
+    numberOfBakeryWithoutPos: 872,
+    numberOfTransaction: 611,
+    numberOfTransactionPerDay: 390,
+    numberOfPosActiveTime: 264,
   },
   {
-    "province": "زنجان",
-    "numberOfTotalBakery": 2282,
-    "numberOfEnableBakery": 36,
-    "numberOfDisableBakery": 1573,
-    "numberOfBakeryBanned": 673,
-    "numberOfSamt": 1636,
-    "numberOfSima": 2282,
-    "numberOfActivePos": 984
+    province: 'زنجان',
+    numberOfTotalBakery: 2294,
+    numberOfEnableBakery: 1581,
+    numberOfDisableBakery: 36,
+    numberOfBakeryBanned: 677,
+    numberOfSamt: 1636,
+    numberOfSima: 2294,
+    numberOfActivePos: 1437,
+    numberOfAvgSupplyFlour: 12422393,
+    numberOfBakeryWithoutPos: 450,
+    numberOfTransaction: 519,
+    numberOfTransactionPerDay: 524,
+    numberOfPosActiveTime: 461,
   },
   {
-    "province": "سمنان",
-    "numberOfTotalBakery": 1267,
-    "numberOfEnableBakery": 3,
-    "numberOfDisableBakery": 886,
-    "numberOfBakeryBanned": 378,
-    "numberOfSamt": 718,
-    "numberOfSima": 1267,
-    "numberOfActivePos": 439
+    province: 'سمنان',
+    numberOfTotalBakery: 1233,
+    numberOfEnableBakery: 774,
+    numberOfDisableBakery: 98,
+    numberOfBakeryBanned: 361,
+    numberOfSamt: 718,
+    numberOfSima: 1233,
+    numberOfActivePos: 962,
+    numberOfAvgSupplyFlour: 6432767,
+    numberOfBakeryWithoutPos: 173,
+    numberOfTransaction: 144,
+    numberOfTransactionPerDay: 94,
+    numberOfPosActiveTime: 67,
   },
   {
-    "province": "سیستان و بلوچستان",
-    "numberOfTotalBakery": 2690,
-    "numberOfEnableBakery": 10,
-    "numberOfDisableBakery": 1673,
-    "numberOfBakeryBanned": 1007,
-    "numberOfSamt": 760,
-    "numberOfSima": 2690,
-    "numberOfActivePos": 456
+    province: 'سیستان و بلوچستان',
+    numberOfTotalBakery: 2696,
+    numberOfEnableBakery: 1678,
+    numberOfDisableBakery: 11,
+    numberOfBakeryBanned: 1007,
+    numberOfSamt: 760,
+    numberOfSima: 2696,
+    numberOfActivePos: 2041,
+    numberOfAvgSupplyFlour: 35948835,
+    numberOfBakeryWithoutPos: 285,
+    numberOfTransaction: 424,
+    numberOfTransactionPerDay: 250,
+    numberOfPosActiveTime: 171,
   },
   {
-    "province": "فارس",
-    "numberOfTotalBakery": 5270,
-    "numberOfEnableBakery": 33,
-    "numberOfDisableBakery": 3423,
-    "numberOfBakeryBanned": 1814,
-    "numberOfSamt": 3382,
-    "numberOfSima": 5270,
-    "numberOfActivePos": 2056
+    province: 'فارس',
+    numberOfTotalBakery: 5273,
+    numberOfEnableBakery: 3424,
+    numberOfDisableBakery: 36,
+    numberOfBakeryBanned: 1813,
+    numberOfSamt: 3382,
+    numberOfSima: 5273,
+    numberOfActivePos: 5005,
+    numberOfAvgSupplyFlour: 39030848,
+    numberOfBakeryWithoutPos: 469,
+    numberOfTransaction: 583,
+    numberOfTransactionPerDay: 393,
+    numberOfPosActiveTime: 259,
   },
   {
-    "province": "قزوین",
-    "numberOfTotalBakery": 1986,
-    "numberOfEnableBakery": 17,
-    "numberOfDisableBakery": 1689,
-    "numberOfBakeryBanned": 280,
-    "numberOfSamt": 1734,
-    "numberOfSima": 1986,
-    "numberOfActivePos": 651
+    province: 'قزوین',
+    numberOfTotalBakery: 1986,
+    numberOfEnableBakery: 1686,
+    numberOfDisableBakery: 23,
+    numberOfBakeryBanned: 277,
+    numberOfSamt: 1734,
+    numberOfSima: 1986,
+    numberOfActivePos: 1483,
+    numberOfAvgSupplyFlour: 11762120,
+    numberOfBakeryWithoutPos: 587,
+    numberOfTransaction: 363,
+    numberOfTransactionPerDay: 313,
+    numberOfPosActiveTime: 239,
   },
   {
-    "province": "قم",
-    "numberOfTotalBakery": 1187,
-    "numberOfEnableBakery": 40,
-    "numberOfDisableBakery": 911,
-    "numberOfBakeryBanned": 236,
-    "numberOfSamt": 819,
-    "numberOfSima": 1187,
-    "numberOfActivePos": 341
+    province: 'قم',
+    numberOfTotalBakery: 1197,
+    numberOfEnableBakery: 912,
+    numberOfDisableBakery: 49,
+    numberOfBakeryBanned: 236,
+    numberOfSamt: 819,
+    numberOfSima: 1197,
+    numberOfActivePos: 1094,
+    numberOfAvgSupplyFlour: 10306920,
+    numberOfBakeryWithoutPos: 226,
+    numberOfTransaction: 159,
+    numberOfTransactionPerDay: 87,
+    numberOfPosActiveTime: 65,
   },
   {
-    "province": "كردستان",
-    "numberOfTotalBakery": 2974,
-    "numberOfEnableBakery": 21,
-    "numberOfDisableBakery": 2608,
-    "numberOfBakeryBanned": 345,
-    "numberOfSamt": 2952,
-    "numberOfSima": 2974,
-    "numberOfActivePos": 1080
+    province: 'گلستان',
+    numberOfTotalBakery: 3154,
+    numberOfEnableBakery: 2340,
+    numberOfDisableBakery: 9,
+    numberOfBakeryBanned: 805,
+    numberOfSamt: 2952,
+    numberOfSima: 3154,
+    numberOfActivePos: 1960,
+    numberOfAvgSupplyFlour: 17669120,
+    numberOfBakeryWithoutPos: 735,
+    numberOfTransaction: 316,
+    numberOfTransactionPerDay: 155,
+    numberOfPosActiveTime: 112,
   },
   {
-    "province": "كرمان",
-    "numberOfTotalBakery": 2851,
-    "numberOfEnableBakery": 25,
-    "numberOfDisableBakery": 2329,
-    "numberOfBakeryBanned": 497,
-    "numberOfSamt": 1850,
-    "numberOfSima": 2851,
-    "numberOfActivePos": 902
+    province: 'گیلان',
+    numberOfTotalBakery: 6308,
+    numberOfEnableBakery: 4069,
+    numberOfDisableBakery: 37,
+    numberOfBakeryBanned: 2202,
+    numberOfSamt: 1850,
+    numberOfSima: 6308,
+    numberOfActivePos: 2975,
+    numberOfAvgSupplyFlour: 25801800,
+    numberOfBakeryWithoutPos: 1739,
+    numberOfTransaction: 567,
+    numberOfTransactionPerDay: 311,
+    numberOfPosActiveTime: 197,
   },
   {
-    "province": "کهگیلویه و بویراحمد",
-    "numberOfTotalBakery": 1072,
-    "numberOfEnableBakery": 35,
-    "numberOfDisableBakery": 630,
-    "numberOfBakeryBanned": 407,
-    "numberOfSamt": 601,
-    "numberOfSima": 1072,
-    "numberOfActivePos": 219
+    province: 'لرستان',
+    numberOfTotalBakery: 2647,
+    numberOfEnableBakery: 2006,
+    numberOfDisableBakery: 19,
+    numberOfBakeryBanned: 622,
+    numberOfSamt: 601,
+    numberOfSima: 2647,
+    numberOfActivePos: 2010,
+    numberOfAvgSupplyFlour: 20630207,
+    numberOfBakeryWithoutPos: 374,
+    numberOfTransaction: 435,
+    numberOfTransactionPerDay: 220,
+    numberOfPosActiveTime: 172,
   },
   {
-    "province": "کرمانشاه",
-    "numberOfTotalBakery": 2925,
-    "numberOfEnableBakery": 43,
-    "numberOfDisableBakery": 2171,
-    "numberOfBakeryBanned": 711,
-    "numberOfSamt": 2688,
-    "numberOfSima": 2925,
-    "numberOfActivePos": 827
+    province: 'مازندران',
+    numberOfTotalBakery: 7049,
+    numberOfEnableBakery: 4757,
+    numberOfDisableBakery: 46,
+    numberOfBakeryBanned: 2246,
+    numberOfSamt: 2688,
+    numberOfSima: 7049,
+    numberOfActivePos: 4818,
+    numberOfAvgSupplyFlour: 33245000,
+    numberOfBakeryWithoutPos: 1236,
+    numberOfTransaction: 994,
+    numberOfTransactionPerDay: 603,
+    numberOfPosActiveTime: 398,
   },
   {
-    "province": "گلستان",
-    "numberOfTotalBakery": 3150,
-    "numberOfEnableBakery": 8,
-    "numberOfDisableBakery": 2337,
-    "numberOfBakeryBanned": 805,
-    "numberOfSamt": 2435,
-    "numberOfSima": 3150,
-    "numberOfActivePos": 989
+    province: 'مرکزی',
+    numberOfTotalBakery: 2818,
+    numberOfEnableBakery: 1882,
+    numberOfDisableBakery: 18,
+    numberOfBakeryBanned: 918,
+    numberOfSamt: 2435,
+    numberOfSima: 2818,
+    numberOfActivePos: 2069,
+    numberOfAvgSupplyFlour: 12447160,
+    numberOfBakeryWithoutPos: 464,
+    numberOfTransaction: 328,
+    numberOfTransactionPerDay: 191,
+    numberOfPosActiveTime: 137,
   },
   {
-    "province": "گیلان",
-    "numberOfTotalBakery": 6331,
-    "numberOfEnableBakery": 87,
-    "numberOfDisableBakery": 3875,
-    "numberOfBakeryBanned": 2369,
-    "numberOfSamt": 4054,
-    "numberOfSima": 6331,
-    "numberOfActivePos": 1823
+    province: 'هرمزگان',
+    numberOfTotalBakery: 1898,
+    numberOfEnableBakery: 1249,
+    numberOfDisableBakery: 22,
+    numberOfBakeryBanned: 627,
+    numberOfSamt: 4054,
+    numberOfSima: 1898,
+    numberOfActivePos: 1423,
+    numberOfAvgSupplyFlour: 16041908,
+    numberOfBakeryWithoutPos: 310,
+    numberOfTransaction: 307,
+    numberOfTransactionPerDay: 217,
+    numberOfPosActiveTime: 118,
   },
   {
-    "province": "لرستان",
-    "numberOfTotalBakery": 2662,
-    "numberOfEnableBakery": 17,
-    "numberOfDisableBakery": 2024,
-    "numberOfBakeryBanned": 621,
-    "numberOfSamt": 2117,
-    "numberOfSima": 2662,
-    "numberOfActivePos": 923
+    province: 'همدان',
+    numberOfTotalBakery: 2397,
+    numberOfEnableBakery: 1879,
+    numberOfDisableBakery: 14,
+    numberOfBakeryBanned: 504,
+    numberOfSamt: 2117,
+    numberOfSima: 2397,
+    numberOfActivePos: 2295,
+    numberOfAvgSupplyFlour: 14807040,
+    numberOfBakeryWithoutPos: 310,
+    numberOfTransaction: 398,
+    numberOfTransactionPerDay: 224,
+    numberOfPosActiveTime: 167,
   },
   {
-    "province": "مازندران",
-    "numberOfTotalBakery": 7011,
-    "numberOfEnableBakery": 50,
-    "numberOfDisableBakery": 4742,
-    "numberOfBakeryBanned": 2219,
-    "numberOfSamt": 4934,
-    "numberOfSima": 7011,
-    "numberOfActivePos": 2322
+    province: 'کردستان',
+    numberOfTotalBakery: 2958,
+    numberOfEnableBakery: 2577,
+    numberOfDisableBakery: 39,
+    numberOfBakeryBanned: 342,
+    numberOfSamt: 4934,
+    numberOfSima: 2958,
+    numberOfActivePos: 1946,
+    numberOfAvgSupplyFlour: 16738120,
+    numberOfBakeryWithoutPos: 908,
+    numberOfTransaction: 400,
+    numberOfTransactionPerDay: 227,
+    numberOfPosActiveTime: 174,
   },
   {
-    "province": "مرکزی",
-    "numberOfTotalBakery": 2815,
-    "numberOfEnableBakery": 17,
-    "numberOfDisableBakery": 1628,
-    "numberOfBakeryBanned": 1170,
-    "numberOfSamt": 1764,
-    "numberOfSima": 2815,
-    "numberOfActivePos": 938
+    province: 'کرمان',
+    numberOfTotalBakery: 2863,
+    numberOfEnableBakery: 2318,
+    numberOfDisableBakery: 39,
+    numberOfBakeryBanned: 506,
+    numberOfSamt: 1764,
+    numberOfSima: 2863,
+    numberOfActivePos: 3144,
+    numberOfAvgSupplyFlour: 26454505,
+    numberOfBakeryWithoutPos: 255,
+    numberOfTransaction: 541,
+    numberOfTransactionPerDay: 364,
+    numberOfPosActiveTime: 276,
   },
   {
-    "province": "هرمزگان",
-    "numberOfTotalBakery": 1915,
-    "numberOfEnableBakery": 16,
-    "numberOfDisableBakery": 1270,
-    "numberOfBakeryBanned": 629,
-    "numberOfSamt": 876,
-    "numberOfSima": 1915,
-    "numberOfActivePos": 509
+    province: 'کرمانشاه',
+    numberOfTotalBakery: 2915,
+    numberOfEnableBakery: 2158,
+    numberOfDisableBakery: 51,
+    numberOfBakeryBanned: 706,
+    numberOfSamt: 876,
+    numberOfSima: 2915,
+    numberOfActivePos: 1894,
+    numberOfAvgSupplyFlour: 20462956,
+    numberOfBakeryWithoutPos: 600,
+    numberOfTransaction: 382,
+    numberOfTransactionPerDay: 227,
+    numberOfPosActiveTime: 156,
   },
   {
-    "province": "همدان",
-    "numberOfTotalBakery": 2403,
-    "numberOfEnableBakery": 7,
-    "numberOfDisableBakery": 1880,
-    "numberOfBakeryBanned": 516,
-    "numberOfSamt": 2022,
-    "numberOfSima": 2403,
-    "numberOfActivePos": 907
+    province: 'کهگیلویه و بویراحمد',
+    numberOfTotalBakery: 1067,
+    numberOfEnableBakery: 636,
+    numberOfDisableBakery: 17,
+    numberOfBakeryBanned: 414,
+    numberOfSamt: 2022,
+    numberOfSima: 1067,
+    numberOfActivePos: 809,
+    numberOfAvgSupplyFlour: 7327280,
+    numberOfBakeryWithoutPos: 113,
+    numberOfTransaction: 188,
+    numberOfTransactionPerDay: 131,
+    numberOfPosActiveTime: 68,
   },
   {
-    "province": "یزد",
-    "numberOfTotalBakery": 2305,
-    "numberOfEnableBakery": 95,
-    "numberOfDisableBakery": 1343,
-    "numberOfBakeryBanned": 867,
-    "numberOfSamt": 1083,
-    "numberOfSima": 2305,
-    "numberOfActivePos": 542
-  }
-]
+    province: 'یزد',
+    numberOfTotalBakery: 2300,
+    numberOfEnableBakery: 1340,
+    numberOfDisableBakery: 94,
+    numberOfBakeryBanned: 866,
+    numberOfSamt: 1083,
+    numberOfSima: 2300,
+    numberOfActivePos: 1532,
+    numberOfAvgSupplyFlour: 10744910,
+    numberOfBakeryWithoutPos: 475,
+    numberOfTransaction: 371,
+    numberOfTransactionPerDay: 255,
+    numberOfPosActiveTime: 176,
+  },
+];
 
 const mockActiveTimeRes: any[] = [
   {
-    "province": "مرکزی",
-    "hour": 5.89
+    province: 'مرکزی',
+    hour: 7.93,
   },
   {
-    "province": "البرز",
-    "hour": 4.69
+    province: 'البرز',
+    hour: 8.75,
   },
   {
-    "province": "اردبیل ",
-    "hour": 4.86
+    province: 'اردبیل',
+    hour: 5.67,
   },
   {
-    "province": "آذربایجان غربی",
-    "hour": 4.42
+    province: 'آذربایجان شرقی',
+    hour: 5.53,
   },
   {
-    "province": "آذربایجان شرقی",
-    "hour": 3.38
+    province: 'آذربایجان غربی',
+    hour: 5.48,
   },
   {
-    "province": "بوشهر",
-    "hour": 6.1
+    province: 'بوشهر',
+    hour: 7.65,
   },
   {
-    "province": "چهارمحال و بختیاری",
-    "hour": 4.99
+    province: 'چهارمحال و بختیاری',
+    hour: 7.36,
   },
   {
-    "province": "ایلام ",
-    "hour": 5.51
+    province: 'ایلام',
+    hour: 6.44,
   },
   {
-    "province": "اصفهان ",
-    "hour": 5.43
+    province: 'اصفهان',
+    hour: 7.94,
   },
   {
-    "province": "فارس",
-    "hour": 6.66
+    province: 'فارس',
+    hour: 8.12,
   },
   {
-    "province": "گیلان ",
-    "hour": 5.52
+    province: 'گیلان',
+    hour: 6.79,
   },
   {
-    "province": "گلستان ",
-    "hour": 4.63
+    province: 'گلستان',
+    hour: 5.67,
   },
   {
-    "province": "همدان ",
-    "hour": 6.29
+    province: 'همدان',
+    hour: 7.67,
   },
   {
-    "province": "هرمزگان ",
-    "hour": 6.49
+    province: 'هرمزگان',
+    hour: 7.9,
   },
   {
-    "province": "خراسان شمالی ",
-    "hour": 4.93
+    province: 'خراسان شمالی',
+    hour: 5.68,
   },
   {
-    "province": "خوزستان ",
-    "hour": 5.49
+    province: 'خوزستان',
+    hour: 7.12,
   },
   {
-    "province": "خراسان رضوی ",
-    "hour": 6.63
+    province: 'خراسان رضوی',
+    hour: 8.86,
   },
   {
-    "province": "خراسان شمالی ",
-    "hour": 4.85
+    province: 'خراسان جنوبی',
+    hour: 6.6,
   },
   {
-    "province": "کهگلویه و بویراحمر",
-    "hour": 6.35
+    province: 'کهگلویه و بویراحمر',
+    hour: 8.2,
   },
   {
-    "province": "کردستان ",
-    "hour": 4.12
+    province: 'کردستان',
+    hour: 5.78,
   },
   {
-    "province": "کرمان ",
-    "hour": 4.95
+    province: 'کرمان',
+    hour: 7.06,
   },
   {
-    "province": "کرمانشاه ",
-    "hour": 5.87
+    province: 'کرمانشاه',
+    hour: 7.35,
   },
   {
-    "province": "لرستان",
-    "hour": 6.16
+    province: 'لرستان',
+    hour: 7.8,
   },
   {
-    "province": "مازندران ",
-    "hour": 5.81
+    province: 'مازندران',
+    hour: 7.07,
   },
   {
-    "province": "قزوین ",
-    "hour": 4.44
+    province: 'قزوین',
+    hour: 5.63,
   },
   {
-    "province": "قم ",
-    "hour": 8
+    province: 'قم',
+    hour: 9.08,
   },
   {
-    "province": "سیستان و بلوچستان ",
-    "hour": 4.98
+    province: 'سیستان و بلوچستان',
+    hour: 5.89,
   },
   {
-    "province": "سمنان ",
-    "hour": 6.62
+    province: 'سمنان',
+    hour: 7.45,
   },
   {
-    "province": "تهران ",
-    "hour": 6.63
+    province: 'تهران',
+    hour: 10.88,
   },
   {
-    "province": "یزد ",
-    "hour": 4.68
+    province: 'یزد',
+    hour: 6.28,
   },
   {
-    "province": "زنجان ",
-    "hour": 2.97
-  }
-]
+    province: 'زنجان',
+    hour: 3.74,
+  },
+];
 
 const mockSellRateRes: any[] = [
   {
-    "sellCount": 8689298.36,
-    "province": "مرکزی"
+    province: 'مرکزی',
+    sellCount: 11432777.86,
   },
   {
-    "sellCount": 13295339.09,
-    "province": "البرز"
+    province: 'البرز',
+    sellCount: 21177495.01,
   },
   {
-    "sellCount": 6722120.111,
-    "province": "اردبیل "
+    province: 'اردبیل',
+    sellCount: 11516387.81,
   },
   {
-    "sellCount": 9989286.589,
-    "province": "آذربایجان غربی"
+    province: 'آذربایجان شرقی',
+    sellCount: 12730177.97,
   },
   {
-    "sellCount": 8439852.733,
-    "province": "آذربایجان شرقی"
+    province: 'آذربایجان غربی',
+    sellCount: 12570225,
   },
   {
-    "sellCount": 11199076.74,
-    "province": "بوشهر"
+    province: 'بوشهر',
+    sellCount: 15437375.17,
   },
   {
-    "sellCount": 4779424.409,
-    "province": "چهارمحال و بختیاری"
+    province: 'چهارمحال و بختیاری',
+    sellCount: 9235530.605,
   },
   {
-    "sellCount": 12818678.13,
-    "province": "ایلام "
+    province: 'ایلام',
+    sellCount: 11468622.06,
   },
   {
-    "sellCount": 9590537.546,
-    "province": "اصفهان "
+    province: 'اصفهان',
+    sellCount: 15013302.78,
   },
   {
-    "sellCount": 14664574.57,
-    "province": "فارس"
+    province: 'فارس',
+    sellCount: 19395280.4,
   },
   {
-    "sellCount": 8429054.404,
-    "province": "گیلان "
+    province: 'گیلان',
+    sellCount: 14699883.85,
   },
   {
-    "sellCount": 6954132.374,
-    "province": "گلستان "
+    province: 'گلستان',
+    sellCount: 10513920.81,
   },
   {
-    "sellCount": 9163736.1,
-    "province": "همدان "
+    province: 'همدان',
+    sellCount: 11142113.75,
   },
   {
-    "sellCount": 16410580.82,
-    "province": "هرمزگان "
+    province: 'هرمزگان',
+    sellCount: 19116720.55,
   },
   {
-    "sellCount": 5556069.91,
-    "province": "خراسان شمالی "
+    province: 'خراسان شمالی',
+    sellCount: 8387361.662,
   },
   {
-    "sellCount": 15760279.26,
-    "province": "خوزستان "
+    province: 'خوزستان',
+    sellCount: 20618782.13,
   },
   {
-    "sellCount": 12140145.03,
-    "province": "خراسان رضوی "
+    province: 'خراسان رضوی',
+    sellCount: 17332673.86,
   },
   {
-    "sellCount": 5803087.736,
-    "province": "خراسان شمالی "
+    province: 'خراسان جنوبی',
+    sellCount: 8124037.062,
   },
   {
-    "sellCount": 12735494.98,
-    "province": "کهگلویه و بویراحمر"
+    province: 'کهگلویه و بویراحمر',
+    sellCount: 17193487.13,
   },
   {
-    "sellCount": 6857303.887,
-    "province": "کردستان "
+    province: 'کردستان',
+    sellCount: 11293499.94,
   },
   {
-    "sellCount": 11625721.74,
-    "province": "کرمان "
+    province: 'کرمان',
+    sellCount: 13982120.08,
   },
   {
-    "sellCount": 7074081.339,
-    "province": "کرمانشاه "
+    province: 'کرمانشاه',
+    sellCount: 13072055,
   },
   {
-    "sellCount": 8977356.337,
-    "province": "لرستان"
+    province: 'لرستان',
+    sellCount: 11069901.48,
   },
   {
-    "sellCount": 9407692.233,
-    "province": "مازندران "
+    province: 'مازندران',
+    sellCount: 13135416.82,
   },
   {
-    "sellCount": 12363930.14,
-    "province": "قزوین "
+    province: 'قزوین',
+    sellCount: 13565767.49,
   },
   {
-    "sellCount": 11799462.52,
-    "province": "قم "
+    province: 'قم',
+    sellCount: 16096586.06,
   },
   {
-    "sellCount": 12543680.3,
-    "province": "سیستان و بلوچستان "
+    province: 'سیستان و بلوچستان',
+    sellCount: 19498423.69,
   },
   {
-    "sellCount": 8874341.432,
-    "province": "سمنان "
+    province: 'سمنان',
+    sellCount: 9406484.839,
   },
   {
-    "sellCount": 22067836.55,
-    "province": "تهران "
+    province: 'تهران',
+    sellCount: 30648821.63,
   },
   {
-    "sellCount": 12109150.31,
-    "province": "یزد "
+    province: 'یزد',
+    sellCount: 14227064.54,
   },
   {
-    "sellCount": 4565946.438,
-    "province": "زنجان "
-  }
-]
+    province: 'زنجان',
+    sellCount: 7359083.678,
+  },
+];
 
 const mockLicenceRes: any[] = [
   {
-    "province": "اردبیل",
-    "sima": 2616,
-    "samt": 2840
+    province: 'اردبیل',
+    sima: 1829,
+    samt: 2840,
   },
   {
-    "province": "اصفهان",
-    "sima": 4517,
-    "samt": 573
+    province: 'اصفهان',
+    sima: 305,
+    samt: 573,
   },
   {
-    "province": "البرز",
-    "sima": 2362,
-    "samt": 2336
+    province: 'البرز',
+    sima: 1690,
+    samt: 2336,
   },
   {
-    "province": "ايلام",
-    "sima": 675,
-    "samt": 830
+    province: 'ايلام',
+    sima: 247,
+    samt: 830,
   },
   {
-    "province": "آذربايجان شرقي",
-    "sima": 5935,
-    "samt": 6863
+    province: 'آذربايجان شرقي',
+    sima: 2155,
+    samt: 6863,
   },
   {
-    "province": "آذربايجان غربي",
-    "sima": 4623,
-    "samt": 5317
+    province: 'آذربايجان غربي',
+    sima: 1300,
+    samt: 5317,
   },
   {
-    "province": "بوشهر",
-    "sima": 854,
-    "samt": 730
+    province: 'بوشهر',
+    sima: 286,
+    samt: 730,
   },
   {
-    "province": "تهران",
-    "sima": 9252,
-    "samt": 9199
+    province: 'تهران',
+    sima: 1776,
+    samt: 9199,
   },
   {
-    "province": "چهارمحال وبختيارئ",
-    "sima": 879,
-    "samt": 954
+    province: 'چهارمحال وبختيارئ',
+    sima: 332,
+    samt: 954,
   },
   {
-    "province": "خراسان جنوبي",
-    "sima": 791,
-    "samt": 731
+    province: 'خراسان جنوبي',
+    sima: 248,
+    samt: 731,
   },
   {
-    "province": "خراسان رضوئ",
-    "sima": 5572,
-    "samt": 5337
+    province: 'خراسان رضوئ',
+    sima: 2855,
+    samt: 5337,
   },
   {
-    "province": "خراسان شمالي",
-    "sima": 1319,
-    "samt": 1360
+    province: 'خراسان شمالي',
+    sima: 310,
+    samt: 1360,
   },
   {
-    "province": "خوزستان",
-    "sima": 3399,
-    "samt": 2256
+    province: 'خوزستان',
+    sima: 822,
+    samt: 2256,
   },
   {
-    "province": "زنجان",
-    "sima": 1510,
-    "samt": 1636
+    province: 'زنجان',
+    sima: 489,
+    samt: 1636,
   },
   {
-    "province": "سمنان",
-    "sima": 875,
-    "samt": 718
+    province: 'سمنان',
+    sima: 386,
+    samt: 718,
   },
   {
-    "province": "سيستان وبلوچستان",
-    "sima": 1673,
-    "samt": 760
+    province: 'سيستان وبلوچستان',
+    sima: 357,
+    samt: 760,
   },
   {
-    "province": "فارس",
-    "sima": 3363,
-    "samt": 3382
+    province: 'فارس',
+    sima: 1418,
+    samt: 3382,
   },
   {
-    "province": "قزوين",
-    "sima": 1686,
-    "samt": 1734
+    province: 'قزوين',
+    sima: 1190,
+    samt: 1734,
   },
   {
-    "province": "قم",
-    "sima": 911,
-    "samt": 819
+    province: 'قم',
+    sima: 618,
+    samt: 819,
   },
   {
-    "province": "كردستان",
-    "sima": 2586,
-    "samt": 2952
+    province: 'كردستان',
+    sima: 867,
+    samt: 2952,
   },
   {
-    "province": "كرمان",
-    "sima": 2315,
-    "samt": 1850
+    province: 'كرمان',
+    sima: 432,
+    samt: 1850,
   },
   {
-    "province": "كهگيلويه وبويراحمد",
-    "sima": 608,
-    "samt": 601
+    province: 'كهگيلويه وبويراحمد',
+    sima: 250,
+    samt: 601,
   },
   {
-    "province": "کرمانشاه",
-    "sima": 2165,
-    "samt": 2688
+    province: 'کرمانشاه',
+    sima: 887,
+    samt: 2688,
   },
   {
-    "province": "گلستان",
-    "sima": 2297,
-    "samt": 2435
+    province: 'گلستان',
+    sima: 963,
+    samt: 2435,
   },
   {
-    "province": "گيلان",
-    "sima": 3807,
-    "samt": 4054
+    province: 'گيلان',
+    sima: 958,
+    samt: 4054,
   },
   {
-    "province": "لرستان",
-    "sima": 2014,
-    "samt": 2117
+    province: 'لرستان',
+    sima: 550,
+    samt: 2117,
   },
   {
-    "province": "مازندران",
-    "sima": 4729,
-    "samt": 4934
+    province: 'مازندران',
+    sima: 2814,
+    samt: 4934,
   },
   {
-    "province": "مرکزي",
-    "sima": 1610,
-    "samt": 1764
+    province: 'مرکزي',
+    sima: 1271,
+    samt: 1764,
   },
   {
-    "province": "هرمزگان",
-    "sima": 1243,
-    "samt": 876
+    province: 'هرمزگان',
+    sima: 312,
+    samt: 876,
   },
   {
-    "province": "همدان",
-    "sima": 1868,
-    "samt": 2022
+    province: 'همدان',
+    sima: 687,
+    samt: 2022,
   },
   {
-    "province": "يزد",
-    "sima": 1286,
-    "samt": 1083
-  }
-]
+    province: 'يزد',
+    sima: 279,
+    samt: 1083,
+  },
+];
 
-
+const mockAuditRes: any[] = [...data];
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/bakery\/general/g, { province: /.*/ })
+  .onGet(/\/api\/v1\/bakery\/general/g, {province: /.*/})
   .reply((req: any) => {
     let res: any = [];
 
     if (req.params.province) {
-      res = mockRes.find(d => d.province === req.params.province)
+      res = mockRes.find(d => d.province === req.params.province);
     } else {
       res = {
-        numberOfTotalBakery: 108802,
-        numberOfEnableBakery: 80420,
-        numberOfDisableBakery: 957,
-        numberOfAudit: 0,
+        numberOfTotalBakery: 108759,
+        numberOfEnableBakery: 80665,
+        numberOfDisableBakery: 1076,
+        numberOfBakeryBanned: 8648,
         numberOfSamt: 75751,
-        numberOfSima: 108802,
-        numberOfActivePos: 35285,
-        numberOfAvgSupplyFlour: 0,
-        numberOfBakeryBanned: 27425,
+        numberOfSima: 108759,
+        numberOfActivePos: 82067,
+        numberOfAvgSupplyFlour: 23594882.2258065,
+        numberOfBakeryWithoutPos: 21803,
+        numberOfAudit: 14800,
+
+        numberOfTransactionPerDay: 8648,
+        numberOfTransaction: 14094,
+        numberOfPosActiveTime: 6263,
       };
     }
-    return [200, { ...res }];
+    return [200, {...res}];
   });
 
 instanceMockAdapter
   // eslint-disable-next-line
-  .onGet(/\/api\/v1\/bakery\/per\-category/g, {})
-  .reply(() => {
-    // eslint-disable-next-line
-    const res: any[] = [
-      {
-        "_id": "62921ccfd74c22432993672b",
-        "index": 0,
-        "total": 700,
-        "samt": 41,
-        "sima": 93,
-        "categoryValue": "لواش"
-      },
-      {
-        "_id": "62921ccff52cfb30e54a70ee",
-        "index": 1,
-        "total": 3353,
-        "samt": 75,
-        "sima": 21,
-        "categoryValue": "سنگک"
-      },
-      {
-        "_id": "62921ccfe339570bde428a76",
-        "index": 2,
-        "total": 547,
-        "samt": 79,
-        "sima": 27,
-        "categoryValue": "نان روغنی"
-      },
-      {
-        "_id": "62921ccf1f1946134ecdf99d",
-        "index": 3,
-        "total": 1279,
-        "samt": 28,
-        "sima": 24,
-        "categoryValue": "شیرینی پزی و قنادی"
-      },
-      {
-        "_id": "62921ccf92a7d6304b6a075b",
-        "index": 4,
-        "total": 1018,
-        "samt": 83,
-        "sima": 86,
-        "categoryValue": "تافتون"
-      }
-    ];
+  .onGet(/\/api\/v1\/bakery\/per\-category/g, {province: /.*/})
+  .reply(req => {
+    let response: any[] = [];
 
-    return [200, []];
+    if (!req.params.province)
+      response = [
+        {
+          category: 'لواش',
+          total: 26380,
+        },
+        {
+          category: 'بربري',
+          total: 21739,
+        },
+        {
+          category: 'سنگک',
+          total: 9811,
+        },
+        {
+          category: 'تافتون',
+          total: 9409,
+        },
+        {
+          category: 'تافتون ماشيني',
+          total: 3857,
+        },
+        {
+          category: 'فانتزي',
+          total: 2931,
+        },
+        {
+          category: 'ساير نان هاي سنتي',
+          total: 1646,
+        },
+        {
+          category: 'نان تافتون سنتي',
+          total: 1122,
+        },
+        {
+          category: 'تافتون تنوري',
+          total: 1022,
+        },
+        {
+          category: 'تنوري سنتي',
+          total: 851,
+        },
+        {
+          category: 'حجیم و نیمه حجیم',
+          total: 829,
+        },
+        {
+          category: 'ماشيني',
+          total: 714,
+        },
+        {
+          category: 'دوار',
+          total: 688,
+        },
+        {
+          category: 'خشکه پزی',
+          total: 546,
+        },
+        {
+          category: 'حرارت غيرمستقيم',
+          total: 505,
+        },
+        {
+          category: 'سنتي',
+          total: 228,
+        },
+        {
+          category: 'تنوري',
+          total: 204,
+        },
+        {
+          category: 'خام پز',
+          total: 189,
+        },
+        {
+          category: 'نان محلی',
+          total: 101,
+        },
+        {
+          category: 'نانوايي ماشيني',
+          total: 90,
+        },
+        {
+          category: 'صنعتی',
+          total: 50,
+        },
+        {
+          category: 'ساير',
+          total: 46,
+        },
+        {
+          category: 'نان روغني',
+          total: 44,
+        },
+        {
+          category: 'خانه پز',
+          total: 41,
+        },
+        {
+          category: 'صمون پزي',
+          total: 37,
+        },
+        {
+          category: 'مجتمع',
+          total: 36,
+        },
+        {
+          category: 'خشکه پز',
+          total: 28,
+        },
+        {
+          category: 'تافتون خراساني',
+          total: 22,
+        },
+        {
+          category: 'نان حجمي و نيمه حجمي',
+          total: 11,
+        },
+        {
+          category: 'ماشيني سبوس دار',
+          total: 1,
+        },
+        {
+          category: 'نيمه حجيم',
+          total: 1,
+        },
+        {
+          category: 'بولکي',
+          total: 1,
+        },
+        {
+          category: 'اسکو',
+          total: 1,
+        },
+      ];
+
+    return [200, [...response]];
   });
 
 instanceMockAdapter
   // eslint-disable-next-line
   .onGet(/\/api\/v1\/bakery\/license/g, {})
   .reply(() => {
-
     return [200, [...mockLicenceRes]];
   });
 
@@ -815,7 +1069,6 @@ instanceMockAdapter
   // eslint-disable-next-line
   .onGet(/\/api\/v1\/bakery\/active\-time/g, {})
   .reply(() => {
-
     return [200, [...mockActiveTimeRes]];
   });
 
@@ -823,7 +1076,6 @@ instanceMockAdapter
   // eslint-disable-next-line
   .onGet(/\/api\/v1\/bakery\/sell\-rate/g, {})
   .reply(() => {
-
     return [200, [...mockSellRateRes]];
   });
 
@@ -839,4 +1091,16 @@ instanceMockAdapter
   .onGet(/\/api\/v1\/bakery\/supply\-flour/g, {})
   .reply(() => {
     return [200, []];
+  });
+
+instanceMockAdapter
+  // eslint-disable-next-line
+  .onGet(/\/api\/v1\/bakery\/audit/g, {province: /.*/})
+  .reply(req => {
+    let response: any[] = [];
+    if (!req.params.province) {
+      response = mockAuditRes;
+    }
+
+    return [200, [...response]];
   });
