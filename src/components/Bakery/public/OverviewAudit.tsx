@@ -8,13 +8,22 @@ import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import bakeryService from '../../../services/bakery.service';
 import chartBoxIcon from '../../../assets/images/icons/chart-box.svg';
+import chartBoxActiveIcon from '../../../assets/images/icons/chart-box-active.svg';
 import extortionIcon from '../../../assets/images/icons/extortion.svg';
+import extortionActiveIcon from '../../../assets/images/icons/extortion-active.svg';
 import clockIcon from '../../../assets/images/icons/clock.svg';
+import clockActiveIcon from '../../../assets/images/icons/clock-active.svg';
+import checkActiveIcon from '../../../assets/images/icons/check-active.svg';
 
 const OverviewAudit: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [notUseFlour, setNotUseFlour] = useState<any>(false);
+  const [isExtortion, setIsExtortion] = useState<any>(false);
+  const [overTime, setOverTime] = useState<any>(false);
+
   const [dataset, setDataset] = useState<any>([]);
+  const [filteredDataset, setFilteredDataset] = useState<any>([]);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -46,6 +55,7 @@ const OverviewAudit: React.FC<{}> = () => {
         });
       });
       setDataset([...normalizedData]);
+      setFilteredDataset([...normalizedData]);
     } catch (e) {
       // eslint-disable-next-line
       console.log(e);
@@ -87,6 +97,15 @@ const OverviewAudit: React.FC<{}> = () => {
     }
   }, [selectedDayRange]);
 
+  useEffect(() => {
+    let d = [...dataset];
+    if (isExtortion) d = d.filter(item => item.isExtortion === true);
+    if (overTime) d = d.filter(item => item.overTime === true);
+    if (notUseFlour) d = d.filter(item => item.notUseFlour === true);
+
+    setFilteredDataset(d);
+  }, [isExtortion, overTime, notUseFlour]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -94,33 +113,76 @@ const OverviewAudit: React.FC<{}> = () => {
       </legend>
 
       <div className="flex items-center space-x-4 rtl:space-x-reverse mb-16 text-sm">
-        <button type="button" className="flex-grow flex items-center justify-between">
-          <div className="w-full flex items-center bg-white shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse">
+        <label
+          htmlFor="overTime"
+          className="flex-grow flex items-center justify-between cursor-pointer"
+        >
+          <div
+            className={`w-full flex items-center ${
+              overTime ? 'bg-green-600 text-white' : 'bg-white'
+            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
+          >
             <div className="">
-              <img className="w-4 h-4" src={clockIcon} alt="" />
+              <input
+                type="checkbox"
+                id="overTime"
+                className="hidden"
+                onChange={() => setOverTime(!overTime)}
+              />
+              <img className="w-4 h-4" src={overTime ? clockActiveIcon : clockIcon} alt="" />
             </div>
             <span>مشکوک به تخلف از ساعت فعالیت</span>
           </div>
-          <div className="" />
-        </button>
-        <button type="button" className="flex-grow flex items-center justify-between">
-          <div className="w-full flex items-center bg-white shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse">
+          {overTime && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
+        </label>
+
+        <label htmlFor="notUseFlour" className="flex-grow flex items-center justify-between">
+          <div
+            className={`w-full flex items-center ${
+              notUseFlour ? 'bg-green-600 text-white' : 'bg-white'
+            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
+          >
             <div className="">
-              <img className="w-4 h-4" src={chartBoxIcon} alt="" />
+              <input
+                type="checkbox"
+                id="notUseFlour"
+                className="hidden"
+                onChange={() => setNotUseFlour(!notUseFlour)}
+              />
+              <img
+                className="w-4 h-4"
+                src={notUseFlour ? chartBoxActiveIcon : chartBoxIcon}
+                alt=""
+              />
             </div>
             <span>مشکوک به عدم استفاده‌ مجاز از سهمیه آرد</span>
           </div>
-          <div className="" />
-        </button>
-        <button type="button" className="flex-grow flex items-center justify-between">
-          <div className="w-full flex items-center bg-white shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse">
+          {notUseFlour && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
+        </label>
+
+        <label htmlFor="isExtortion" className="flex-grow flex items-center justify-between">
+          <div
+            className={`w-full flex items-center ${
+              isExtortion ? 'bg-green-600 text-white' : 'bg-white'
+            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
+          >
             <div className="">
-              <img className="w-4 h-4" src={extortionIcon} alt="" />
+              <input
+                type="checkbox"
+                id="isExtortion"
+                className="hidden"
+                onChange={() => setIsExtortion(!isExtortion)}
+              />
+              <img
+                className="w-4 h-4"
+                src={isExtortion ? extortionActiveIcon : extortionIcon}
+                alt=""
+              />
             </div>
             <span>مشکوک به گران فروشی</span>
           </div>
-          <div className="" />
-        </button>
+          {isExtortion && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
+        </label>
       </div>
 
       <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
@@ -148,7 +210,7 @@ const OverviewAudit: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            dataSet={[...dataset]}
+            dataSet={[...filteredDataset]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
@@ -197,7 +259,7 @@ const OverviewAudit: React.FC<{}> = () => {
                 name: 'نوع تخلف قابل بررسی',
                 key: 'types',
                 render: (v: any, record: any) => (
-                  <div className="flex justify-center items-center space-x-3 rtl:space-x-reverse">
+                  <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
                     {record.notUseFlour && (
                       <div className="">
                         <img
@@ -231,7 +293,7 @@ const OverviewAudit: React.FC<{}> = () => {
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={(filteredDataset || []).length}
           />
         )}
       </div>
