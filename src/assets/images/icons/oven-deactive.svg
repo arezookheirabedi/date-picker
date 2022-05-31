@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5968" data-name="Rectangle 5968" width="60" height="60" transform="translate(-12319 -7826)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="0.57" y1="0.294" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e5e5e5"/>
+      <stop offset="1" stop-color="#8a8a8a"/>
+    </linearGradient>
+  </defs>
+  <g id="Mask_Group_44647" data-name="Mask Group 44647" transform="translate(12319 7826)" clip-path="url(#clip-path)">
+    <g id="Group_46541" data-name="Group 46541" transform="translate(-12316.865 -7819.513)">
+      <path id="Path_80486" data-name="Path 80486" d="M-11852.54-7824.466l-5.84,8.973-5.271-2.35-.285,5.271,4.417,5.769-1.283,7.55,7.834-.712,1.069-5.77,1.069-3.632,3.134-4.273-.927-5.058Z" transform="translate(11883.834 7843.46)" fill="url(#linear-gradient)"/>
+      <g id="Group_46540" data-name="Group 46540" transform="translate(0 0.049)">
+        <path id="Union_22" data-name="Union 22" d="M.544,46.3V38.247H0L.312,24.073l4.735-12.62,7.728-7.679L24.456,0l10.97.856,7.052,3.7,7.193,6.623L53.944,18.8l1.638,10.756v7.192l-.225.675V46.3Zm46.278-8.888V25.569l-3.593-8.361-6.237-6.524L28.638,8.807l-8.951,1.307-6.412,5.269L8.717,24.073V37.414Z" transform="translate(0 0)" fill="#e5e5e5"/>
+      </g>
+      <path id="Path_80488" data-name="Path 80488" d="M263.633,278.682h55.452m-55.452,0v9.241h55.452v-9.241m-55.452,0v-9.243a27.727,27.727,0,0,1,27.727-27.727m27.725,36.97v-9.243a27.727,27.727,0,0,0-27.725-27.727m0,0v9.243m0,0a18.484,18.484,0,0,1,18.484,18.484v9.243H272.876v-9.243A18.484,18.484,0,0,1,291.36,250.955ZM317.911,267.9h-8.067m-36.968,0h-7.7m11.3-8.6-7.789-4.5m14.364-1.305-4.779-8.278m21.405,8.278,4.781-8.278m1.794,14.081,7.789-4.5m-19.164,4.585c.292.474.57.935,1.066,1.783,2.346,3.986,3.636,7.216,3.636,9.292a8.216,8.216,0,0,1-8.215,8.216,8.316,8.316,0,0,1-8.216-8.131c.005.276,0,.1,0-.085a11.464,11.464,0,0,1,1-4.067l5.01,2.89Z" transform="translate(-263.633 -241.712)" fill="none" stroke="#c8c5c5" stroke-linejoin="round" stroke-width="1.56"/>
+    </g>
+  </g>
+</svg>
