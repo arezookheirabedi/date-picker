@@ -1,24 +1,15 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import axios from 'axios';
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-
 import Charts from 'src/components/Charts';
-
 import Highcharts from 'highcharts';
+import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-import {
-  cancelTokenSource,
-  msgRequestCanceled,
-  //  toPersianDigit
-} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
-// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {converters} from './constant';
 
 const {HeadlessChart} = Charts;
 
@@ -43,7 +34,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: '',
   });
 
   const cancelToken = cancelTokenSource();
@@ -52,22 +42,67 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
+  // const normalizeData = (data: Array<any>) => {
+  //   const province: any[] = [];
 
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-    });
-    // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
+  //   const unregistered: any[] = [];
+  //   data.forEach((item: any) => {
+  //     province.push(item.province);
+  //     unregistered.push(item.unregister);
+  //   });
+  //   // setCategories([...province]);
+  //   const newData = [{showInLegend: false, name: 'ثبت نام شده', data: [...unregistered]}];
+  //   // setDataset([...newData]);
+  //   setDataset({categories: [...province], series: [...newData]});
+  // };
+  const getColumnChartRegisterPercentage = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await guildService.percentageOfRegisteredGuilds(params, {
+        cancelToken: cancelToken.token,
+      });
+      const province: any[] = [];
+      const unregistered: any[] = [];
+      data.forEach((item: any) => {
+        province.push(item.province);
+        unregistered.push(item.percentage);
+      });
+      // setCategories([...province]);
+      const newData = [
+        {
+          showInLegend: false,
+          name: 'ثبت نام شده',
+          data: [...unregistered],
+          color: {
+            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+            stops: [
+              [0, '#7DA6B8'], // start
+              [1, '#175A76'], // end
+            ],
+          },
+        },
+      ];
+      // setDataset([...newData]);
+      setDataset({categories: [...province], series: [...newData]});
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    normalizeData(mockRegisterPercentage);
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartRegisterPercentage(queryParams);
+    }, 500);
+    // normalizeData(mockRegisterPercentage);
+
     return () => {
+      clearTimeout(idSetTimeOut);
+
       cancelRequest();
       setDataset([]);
     };
@@ -81,14 +116,12 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: '',
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: '',
       });
     }
   }, [selectedDayRange]);
@@ -113,7 +146,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     credits: {
       enabled: false,
     },
-    colors: ['#175A76'],
+    // colors: ['#175A76'],
     plotOptions: {
       column: {
         marker: {
@@ -122,11 +155,11 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
             hover: {
               enabled: true,
               fillColor: {
-                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-                // stops: [
-                //   [0, "#FFCC00"], // start
-                //   [1, "#FF9400"] // end
-                // ]
+                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                stops: [
+                  [0, '#7DA6B8'], // start
+                  [1, '#175A76'], // end
+                ],
               },
               lineColor: '#fff',
               lineWidth: 3,
@@ -162,7 +195,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: 'K',
+      valueSuffix: '٪',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -191,9 +224,9 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                placeholder="کل آموزش و پرورش"
-                category="grade"
-                tag="edu"
+                endPoint={guildService.getRegisterList({})}
+                placeholder="کل اصناف"
+                objectKey="categoryId"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
@@ -225,11 +258,13 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {!loading &&
+          !errorMessage &&
+          (dataset.length === 0 ? (
+            <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+          ) : (
+            <HeadlessChart data={dataset} optionsProp={optionChart} />
+          ))}
       </div>
     </fieldset>
   );

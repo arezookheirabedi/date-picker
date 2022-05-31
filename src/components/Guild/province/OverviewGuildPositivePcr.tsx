@@ -3,6 +3,8 @@ import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {useHistory, useLocation} from 'react-router-dom';
+import {sideCities} from 'src/helpers/utils';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -13,8 +15,12 @@ import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
 const {Line} = Charts;
-
-const OverviewSchoolsPositivePcr = () => {
+interface IOverviewGuildsPositivePcr {
+  cityTitle?: any;
+}
+const OverviewPositivePcr: React.FC<IOverviewGuildsPositivePcr> = ({cityTitle}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -34,7 +40,8 @@ const OverviewSchoolsPositivePcr = () => {
   };
 
   const [query, setQuery] = useState({
-    timeBoxType: 'MONTHLY',
+    // status: 'POSITIVE',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
     categoryValue: null,
@@ -49,7 +56,6 @@ const OverviewSchoolsPositivePcr = () => {
       const response = await hcsService.columnChartTestResultService(params, {
         cancelToken: source.token,
       });
-      // console.log(response.data);
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -60,34 +66,28 @@ const OverviewSchoolsPositivePcr = () => {
     }
   };
 
-  // const getLinearOverviewPublicTransport = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const response = await transportService.linearOverviewPublicTransport(params, {
-  //       cancelToken: source.token,
-  //     });
-  //     setData(response.data);
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
 
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getColumnChartTestResult({...query, province: provinceName});
+      }, 500);
+    } else {
+      history.push('/dashboard/guild/province');
+    }
     return () => {
       setData([]);
       source.cancel('Operation canceled by the user.');
       clearTimeout(idSetTimeOut);
     };
-  }, [query]);
+  }, [query, location.search]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -156,12 +156,14 @@ const OverviewSchoolsPositivePcr = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان دراصناف</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی مبتلایان در اصناف استان {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
-              placeholder="کل اصناف "
+              placeholder="کل اصناف"
               tag="guild"
               category="categoryDesc"
               setQueryParams={setQuery}
@@ -212,4 +214,4 @@ const OverviewSchoolsPositivePcr = () => {
   );
 };
 
-export default OverviewSchoolsPositivePcr;
+export default OverviewPositivePcr;

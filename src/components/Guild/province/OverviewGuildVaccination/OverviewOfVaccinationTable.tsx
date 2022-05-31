@@ -1,33 +1,32 @@
 import React, {useEffect, useState} from 'react';
-// import {Menu} from '@headlessui/react';
+import guildService from 'src/services/guild.service';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import guildService from 'src/services/guild.service';
-import DatePickerModal from '../../DatePickerModal';
-import Table from '../../TableScopeSort';
-import Calendar from '../../Calendar';
+import Calendar from 'src/components/Calendar';
 
-import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import DatePickerModal from 'src/components/DatePickerModal';
+import Table from 'src/components/TableScopeSort';
+import {useHistory, useLocation} from 'react-router-dom';
+import CategoryDonut from '../../../../containers/Guild/components/CategoryDonut';
 
-interface OverviewGuildsPerCategoryProps {
-  cityTitle?: any;
-}
-
-const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({cityTitle}) => {
-  // const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
+const OverviewOfVaccination: React.FC<{}> = () => {
+  const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [dataset, setDataset] = useState<any>([]);
-  // eslint-disable-next-line
-  const [orgDataset, setOrgDataset] = useState<any>([]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
+  const [queryParams, setQueryParams] = useState({
+    from: null,
+    to: null,
+  });
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [orgDataset, setOrgDataset] = useState<any>([]);
+  const [dataset, setDataset] = useState<any>([]);
 
   const cancelToken = cancelTokenSource();
 
@@ -35,23 +34,25 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function getOverviewByCategory(params: any) {
+  async function getOverviewByVaccinePercent(params: any) {
     setLoading(true);
     try {
-      const {data} = await guildService.guildOverviewByCategory(params, {
+      const {data} = await guildService.dosesTagBased(params, {
         cancelToken: cancelToken.token,
       });
 
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         normalizedData.push({
-          id: `ovca_${index}`,
+          id: `ovvac_${index}`,
           name: item.categoryValue || 'نامشخص',
-          employeesCount: item.membersCount || 0,
-          infectedCount: item.positiveMembersCount || 0,
-          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
-          saveCount: item.recoveredMembersCount || 0,
-          deadCount: 0,
+          firstDosePercentage: Number(item.dosesToMembersCountPercentage[1] || 0),
+          secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
+          thirdDosePercentage: Number(item.dosesToMembersCountPercentage[3] || 0),
+          otherDosesPercentage: Number(item.gtDosesToTotalDosesPercentage[3] || 0),
+          allDosesPercentage: 100 - Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
+          allDoses: Number(item.gtDoses['0'] || 0),
+          noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
         });
       });
 
@@ -64,56 +65,61 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    return () => {
-      cancelRequest();
-      setDataset([]);
-      setOrgDataset([]);
-    };
-  }, []);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       setSearchQuery('');
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      getOverviewByCategory({
-        tag: 'guild',
-        category: 'categoryDesc',
+      setQueryParams({
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
-      getOverviewByCategory({
-        tag: 'guild',
-        category: 'categoryDesc',
+      setQueryParams({
         from: null,
         to: null,
       });
     }
   }, [selectedDayRange]);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getOverviewByVaccinePercent({
+        ...queryParams,
+        tag: 'guild',
+        category: 'categoryDesc',
+        province: provinceName,
+      });
+    } else {
+      history.push('/dashboard/guild/province');
+    }
+    return () => {
+      cancelRequest();
+      setDataset([]);
+      setOrgDataset([]);
+    };
+  }, [queryParams, location.search]);
 
   function handleSearch(e: any) {
     const {value} = e.target;
-
     let tmp = [...orgDataset];
     if (value) {
       tmp = [...tmp].filter(x => x.name.indexOf(value) !== -1);
     }
-
     setDataset([...tmp]);
     setSearchQuery(value);
   }
+  const focusFromDate = () => {
+    setShowDatePicker(true);
+  };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت رسته‌ها {cityTitle}</legend>
-
+    <fieldset className="text-center  rounded-xl p-4 mb-16">
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
@@ -125,6 +131,7 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                 showDatePicker
               />
             ) : null}
+
             <Calendar
               action={focusFromDate}
               from={selectedDayRange.from}
@@ -174,22 +181,9 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                 <CategoryDonut
                   data={[
                     {
-                      name: 'deadCount',
-                      title: 'تعداد فوت‌شدگان',
-
-                      y: record.deadCount || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'saveCount',
-                      title: 'تعداد بهبودیافتگان',
-                      y: record.saveCount || 0,
+                      name: 'noDose',
+                      title: 'واکسن نزده',
+                      y: record.noDose || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -199,9 +193,9 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
                       },
                     },
                     {
-                      name: 'infectedCount',
-                      title: 'تعداد مبتلایان',
-                      y: record.infectedCount || 0,
+                      name: 'allDosesPercentage',
+                      title: 'واکسن زده',
+                      y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -225,50 +219,46 @@ const OverviewGuildsPerCategory: React.FC<OverviewGuildsPerCategoryProps> = ({ci
               ),
             },
             {
-              name: 'تعداد کارمندان',
-              key: 'employeesCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
-            },
-            {
-              name: 'درصد ابتلا',
-              key: 'infectedPercent',
+              name: 'دوز اول',
               sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
+
+              key: 'firstDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
-              name: 'تعداد مبتلایان',
+              name: 'دوز دوم',
+              key: 'secondDosePercentage',
               sortable: true,
-              key: 'infectedCount',
-              render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
-              name: 'تعداد بهبودیافتگان',
+              name: 'دوز سوم',
               sortable: true,
-              key: 'saveCount',
-              render: (v: any) => (
-                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-              ),
+              key: 'thirdDosePercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
             {
-              name: 'تعداد فوت‌شدگان',
-              key: 'deadCount',
-              render: (v: any) => (
-                <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
-              ),
+              name: 'سایر دوزها',
+              key: 'otherDosesPercentage',
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
+            {
+              name: 'کل دوزها',
+              key: 'allDoses',
+              sortable: true,
+              render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
+            },
+            // {
+            //   name: 'واکسن نزده',
+            //   key: 'noDose',
+            //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+            // },
           ]}
-          totalItems={(dataset || []).length}
+          totalItems={dataset.length || 0}
         />
       </div>
     </fieldset>
   );
 };
 
-export default OverviewGuildsPerCategory;
+export default OverviewOfVaccination;

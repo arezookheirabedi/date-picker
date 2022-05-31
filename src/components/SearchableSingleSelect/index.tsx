@@ -2,55 +2,80 @@
 
 import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
-import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import recruitmentServices from 'src/services/recruitment.service';
+import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
+// import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
 interface IProps {
-  tag: string;
-  category: string;
+  tag?: string;
+  category?: string;
+  endPoint?: any;
   queryParams: any;
-
   placeholder?: any;
   setQueryParams: (v: any) => void;
+  objectKey?: any;
 }
+
 const SearchableSingleSelect: React.FC<IProps> = ({
   placeholder,
   tag,
   category,
+  endPoint,
   setQueryParams,
   queryParams,
+  objectKey,
 }) => {
   const [selected, setSelected] = useState<{key: number | string | null; value: string}>();
   const [query, setQuery] = useState('');
 
   const [tags, setTags] = useState<any[]>([{key: null, value: placeholder}]);
 
-  const cancelToken = cancelTokenSource();
+  // const cancelToken = cancelTokenSource();
 
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const fetcher = async () => {
+  // function cancelRequest() {
+  //   cancelToken.cancel(msgRequestCanceled);
+  // }
+  const enpointFetcher = async () => {
     try {
-      const res = await recruitmentServices.tags({tag, category}, {cancelToken: cancelToken.token});
+      const res = await endPoint;
       const newData = [...tags, ...res.data];
       setTags([...newData]);
     } catch (error: any) {
       console.log(error);
     }
   };
+  const otherFetcher = async () => {
+    try {
+      const res = await recruitmentServices.tags({tag, category});
+      const newData = [...tags, ...res.data];
+      setTags([...newData]);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+  const fetcher = () => {
+    // eslint-disable-next-line no-new
+    new Promise((resolve, reject) => {
+      if (endPoint)
+        enpointFetcher()
+          .then(response => resolve(response))
+          .catch(error => reject(error));
+      else
+        otherFetcher()
+          .then(response => resolve(response))
+          .catch(error => reject(error));
+    });
+  };
 
   useEffect(() => {
     fetcher();
 
-    return () => {
-      cancelRequest();
-      setTags([]);
-    };
+    // return () => {
+    //   cancelRequest();
+    //   setTags([]);
+    // };
   }, []);
-  const filteredPeople =
+  const filteredTags =
     query === ''
       ? tags
       : tags.filter(tag => {
@@ -60,12 +85,13 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (selected) {
-      params = {...queryParams, categoryValue: selected.key};
+      params = {...queryParams, [`${objectKey}||categoryValue`]: selected.key};
     } else {
       params = {...queryParams, categoryValue: null};
     }
     setQueryParams(params);
   }, [selected]);
+
   return (
     <div className="flex  flex-col space-y-3 items-center justify-center">
       <div className="w-72 relative">
@@ -75,7 +101,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
               <Combobox.Input
                 placeholder={selected ? '' : `${placeholder}`}
                 className="inline-block border-none text-sm leading-5 text-gray-900 focus:ring-0 focus:outline-none"
-                displayValue={(person: any) => (person ? person.value : '')}
+                displayValue={(tag: any) => (tag ? tag.value : '')}
                 onChange={event => setQuery(event.target.value)}
               />
               <Combobox.Button className="absolute inset-y-0 right-0 left-auto rtl:left-0 rtl:right-auto flex items-center pr-2 rtl:pl-2 rtl:pr-0">
@@ -90,41 +116,45 @@ const SearchableSingleSelect: React.FC<IProps> = ({
               afterLeave={() => setQuery('')}
             >
               <Combobox.Options className=" absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {filteredPeople.length === 0 && query !== '' ? (
+                {filteredTags.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     موردی یافت نشد
                   </div>
                 ) : (
-                  filteredPeople?.map(person => (
-                    <Combobox.Option
-                      key={person.key}
-                      className={({active}) =>
-                        `relative cursor-default select-none rtl:text-right py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 ${
-                          active ? 'active-bg-color text-white' : 'text-gray-900'
-                        }`
-                      }
-                      value={person}
-                    >
-                      {({selected, active}) => (
-                        <>
-                          <span
-                            className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}
-                          >
-                            {person.value}
-                          </span>
-                          {selected ? (
+                  filteredTags
+                    .slice(0, filteredTags.length > 20 ? 20 : filteredTags.length)
+                    ?.map(tag => (
+                      <Combobox.Option
+                        key={tag.key}
+                        className={({active}) =>
+                          `relative cursor-default select-none rtl:text-right py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 ${
+                            active ? 'active-bg-color text-white' : 'text-gray-900'
+                          }`
+                        }
+                        value={tag}
+                      >
+                        {({selected, active}) => (
+                          <>
                             <span
-                              className={`absolute inset-y-0 left-0 rtl:right-0 rtl:left-auto flex items-center pl-3 rtl:pr-3 rtl:pl-0 ${
-                                active ? 'text-white' : 'chek-color'
+                              className={`block truncate ${
+                                selected ? 'font-medium' : 'font-normal'
                               }`}
                             >
-                              <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                              {tag.value}
                             </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Combobox.Option>
-                  ))
+                            {selected ? (
+                              <span
+                                className={`absolute inset-y-0 left-0 rtl:right-0 rtl:left-auto flex items-center pl-3 rtl:pr-3 rtl:pl-0 ${
+                                  active ? 'text-white' : 'chek-color'
+                                }`}
+                              >
+                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Combobox.Option>
+                    ))
                 )}
               </Combobox.Options>
             </Transition>
