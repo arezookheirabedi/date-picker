@@ -3,6 +3,7 @@ import {useLocation} from 'react-router-dom';
 import OverviewBakeryMap from 'src/components/Bakery/province/OverviewBakeryMap';
 import OverviewBakeryProvince from 'src/components/Bakery/province/OverviewBakeryProvince';
 import OverviewCategoriesProvince from 'src/components/Bakery/province/OverviewCategoriesProvince';
+import OverviewAuditProvince from 'src/components/Bakery/province/OverviewAuditProvince';
 import {sideCities} from 'src/helpers/utils';
 
 const BakeryProvince = () => {
@@ -32,6 +33,7 @@ const BakeryProvince = () => {
       />
       <OverviewBakeryProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
+      <OverviewAuditProvince cityTitle={cityTitle} />
     </div>
   );
 };
