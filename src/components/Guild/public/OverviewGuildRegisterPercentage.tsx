@@ -69,7 +69,20 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         unregistered.push(item.percentage);
       });
       // setCategories([...province]);
-      const newData = [{showInLegend: false, name: 'ثبت نام شده', data: [...unregistered]}];
+      const newData = [
+        {
+          showInLegend: false,
+          name: 'ثبت نام شده',
+          data: [...unregistered],
+          color: {
+            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+            stops: [
+              [0, '#7DA6B8'], // start
+              [1, '#175A76'], // end
+            ],
+          },
+        },
+      ];
       // setDataset([...newData]);
       setDataset({categories: [...province], series: [...newData]});
     } catch (error: any) {
@@ -133,7 +146,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     credits: {
       enabled: false,
     },
-    colors: ['#175A76'],
+    // colors: ['#175A76'],
     plotOptions: {
       column: {
         marker: {
@@ -142,11 +155,11 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
             hover: {
               enabled: true,
               fillColor: {
-                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-                // stops: [
-                //   [0, "#FFCC00"], // start
-                //   [1, "#FF9400"] // end
-                // ]
+                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                stops: [
+                  [0, '#7DA6B8'], // start
+                  [1, '#175A76'], // end
+                ],
               },
               lineColor: '#fff',
               lineWidth: 3,
