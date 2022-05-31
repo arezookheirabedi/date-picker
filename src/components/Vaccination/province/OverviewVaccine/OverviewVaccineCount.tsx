@@ -3,14 +3,14 @@ import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
 import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import Statistic from 'src/containers/Guild/components/Statistic';
-import GreenVaccine from 'src/assets/images/icons/green-vaccine.svg';
-import YellowVaccine from 'src/assets/images/icons/yellow-vaccine.svg';
-import PurppleVaccine from 'src/assets/images/icons/purpple-vaccine.svg';
-import NavyVaccine from 'src/assets/images/icons/navy-vaccine.svg';
-import personGrayVaccine from 'src/assets/images/icons/personGrayVaccine.svg';
+import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
+import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
+import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
+import NavyVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
+import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import greenVaccineBlackVirus from 'src/assets/images/icons/green-vaccine-black-virus.svg';
-import blueVaccine from 'src/assets/images/icons/blue-vaccine-sm.svg';
-import greyVaccine from 'src/assets/images/icons/gray-vaccine.svg';
+import blueVaccine from 'src/assets/images/icons/blue-vaccine.svg';
+import greyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import {IInitialVacinatelInfo} from '../../public/constant';
 
 interface IVaccineStatus {
