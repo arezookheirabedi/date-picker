@@ -34,7 +34,7 @@ const OverviewSchoolsPositivePcr = () => {
   };
 
   const [query, setQuery] = useState({
-    type: 'MONTHLY',
+    timeBoxType: 'MONTHLY',
     from: null,
     to: null,
     categoryValue: null,
@@ -189,10 +189,10 @@ const OverviewSchoolsPositivePcr = () => {
             changeType={v =>
               setQuery({
                 ...query,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={query.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
