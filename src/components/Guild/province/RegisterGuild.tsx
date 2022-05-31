@@ -201,19 +201,6 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
                 </div>
               ),
             },
-
-            {
-              name: 'استان',
-              key: 'province',
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              render: (v: any) => <span>تهران</span>,
-            },
-            {
-              name: 'شهر',
-              key: 'negativeCountPercentage',
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              render: (v: any) => <span>تهران</span>,
-            },
           ]}
           totalItems={(dataset || []).length}
         />
