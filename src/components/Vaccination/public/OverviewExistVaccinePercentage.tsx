@@ -9,10 +9,12 @@ import sinopharm from '../../../assets/images/logos/sinopharm.svg';
 import sputnik from '../../../assets/images/logos/sputnik.svg';
 import spikogen from '../../../assets/images/logos/spikogen.svg';
 
-const OverviewExistVaccine = () => {
+const OverviewExistVaccinePercentage = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به واکسن های موجود در کل کشور</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به درصد واکسن های موجود در کل کشور
+      </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -32,4 +34,4 @@ const OverviewExistVaccine = () => {
   );
 };
 
-export default OverviewExistVaccine;
+export default OverviewExistVaccinePercentage;
