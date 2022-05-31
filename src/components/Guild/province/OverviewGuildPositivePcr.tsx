@@ -41,10 +41,9 @@ const OverviewPositivePcr: React.FC<IOverviewGuildsPositivePcr> = ({cityTitle}) 
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
-    type: 'DAILY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
-
     categoryValue: null,
     tag: 'guild',
     category: 'categoryDesc',
@@ -192,10 +191,10 @@ const OverviewPositivePcr: React.FC<IOverviewGuildsPositivePcr> = ({cityTitle}) 
             changeType={v =>
               setQuery({
                 ...query,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={query.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
