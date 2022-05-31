@@ -35,7 +35,7 @@ const OverviewPositivePcr = () => {
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
-    type: 'DAILY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
 
@@ -190,10 +190,10 @@ const OverviewPositivePcr = () => {
             changeType={v =>
               setQuery({
                 ...query,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={query.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
