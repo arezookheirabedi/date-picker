@@ -3,7 +3,7 @@ import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import DatePickerModal from '../../DatePickerModal';
-import Table from '../../Table';
+import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import bakeryService from '../../../services/bakery.service';
@@ -39,7 +39,7 @@ const OverviewCategories: React.FC<{}> = () => {
         // if (item.total !== 0) {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.categoryValue,
+          name: item.category,
           total: item.total || 0,
           samt: item.samt || 0,
           sima: item.sima || 0,
@@ -117,15 +117,15 @@ const OverviewCategories: React.FC<{}> = () => {
         ) : (
           <Table
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
                 name: 'رسته‌های نانوایی',
                 key: 'name',
                 className: 'flex justify-start',
-                render: (v: any, record, index: number) => (
+                render: (v: any, record, index: number, page: number) => (
                   <div className="flex justify-start items-center">
-                    {(index + 1).toLocaleString('fa')}.{v}
+                    {((page - 1) * 10  + (index + 1)).toLocaleString('fa')}.{v}
                   </div>
                 ),
               },
