@@ -8,7 +8,7 @@ import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
-import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -190,7 +190,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <SearchableSingleSelect
                 placeholder="کل آموزش و پرورش"
                 category="grade"
@@ -198,7 +198,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
-            </div>
+            </div> */}
             <div className="flex items-center">
               {' '}
               {showDatePicker ? (
@@ -224,12 +224,13 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
             <Spinner />
           </div>
         )}
+
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
+        {!loading && !errorMessage && dataset.length === 0 ? (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        ) : (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
       </div>
     </fieldset>
