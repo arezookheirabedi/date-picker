@@ -45,12 +45,12 @@ const SchoolProvince = () => {
       <OverviewSchoolStudentProvince cityTitle={cityTitle} />
       <OverviewCategoriesProvince cityTitle={cityTitle} />
       <OverviewPatientsProvince cityTitle={cityTitle} />
-      <OverviewOfVaccinationProcessProvince cityTitle={cityTitle} /> */}
+      <OverviewOfVaccinationProcessProvince cityTitle={cityTitle} />
       <TheLatestSchoolOverwiewOfVaccinationProvince cityTitle={cityTitle} />
-       <OverviewPositivePcrPercentageProvince cityTitle={cityTitle} />
+      <OverviewPositivePcrPercentageProvince cityTitle={cityTitle} />
       <OverviewSchoolsVaccinationPercentagePerGradeProvince cityTitle={cityTitle} />
       <OverviewSchoolVaccinationProvince cityTitle={cityTitle} />
-      <TestsStatusProvince cityTitle={cityTitle} /> 
+      <TestsStatusProvince cityTitle={cityTitle} />
     </div>
   );
 };
