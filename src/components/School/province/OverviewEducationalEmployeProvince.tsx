@@ -106,7 +106,7 @@ const OverviewEducationalEmployeProvince: React.FC<OverviewSchoolEmployeProps> =
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
-            infoText="مجموع کارمندان آموزشی که در آموزش و پرورش فعالیت دارند."
+            infoText={`مجموع کارمندان آموزشی که در آموزش و پرورش استان ${cityTitle} فعالیت دارند.`}
             icon={totalRecritment}
             text="مجموع کارمندان آموزشی "
             count={numberOf}
