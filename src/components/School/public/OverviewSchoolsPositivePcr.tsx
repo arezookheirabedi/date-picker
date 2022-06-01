@@ -161,6 +161,7 @@ const OverviewSchoolsPositivePcr = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
+              objectKey="categoryValue"
               placeholder="کل آموزش و پرورش"
               tag="edu"
               category="grade"
