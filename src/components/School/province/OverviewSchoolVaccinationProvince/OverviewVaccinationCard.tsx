@@ -17,7 +17,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import Statistic from '../../../../containers/Guild/components/Statistic';
 import {IInitialVacinatelInfo, initialVacinatelInfo} from '../../public/constant';
 
-const OverviewOfStatusCard: React.FC<{}> = () => {
+const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,7 +49,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getNumberOf({provinceName, tag: 'edu'});
+      getNumberOf({province: provinceName, tag: 'edu'});
     } else {
       history.push('/dashboard/school/province');
     }
@@ -84,7 +84,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           />
           <Statistic
             hasInfo
-            infoText="مجموع کل دانش آموزان مشغول به تحصیل در کل کشور"
+            infoText={`مجموع دانش‌آموزان مشغول به تحصیل در استان ${cityTitle}`}
             icon={totalStudent}
             text="مجموع  دانش آموزان"
             count={totalMembers || 0}
@@ -191,7 +191,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
         {/* first card row */}
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            text="درصد واکسیناسیون کل کشور"
+            text={`درصد واکسیناسیون استان ${cityTitle}`}
             hasInfo
             infoText=" درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
             icon={GreenVaccine}

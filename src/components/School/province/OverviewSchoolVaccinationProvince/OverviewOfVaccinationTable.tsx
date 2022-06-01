@@ -90,7 +90,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getOverviewByVaccine({...query, tag: 'edu', category: 'grade', provinceName});
+      getOverviewByVaccine({...query, tag: 'edu', category: 'grade', province: provinceName});
     } else {
       history.push('/dashboard/school/province');
     }
