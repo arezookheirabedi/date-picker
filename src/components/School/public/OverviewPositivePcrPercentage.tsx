@@ -9,6 +9,7 @@ import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import hcsService from 'src/services/hcs.service';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -17,7 +18,7 @@ import {
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
+import {converters} from './constant';
 
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
@@ -53,22 +54,42 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
+  const getColumnChartPositivePcrPercentage = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
+        // const {data} = await guildService.percentageOfRegisteredGuilds(params, {
+        cancelToken: cancelToken.token,
+      });
 
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-    });
-    // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
+      const province: any[] = [];
+
+      const unregistered: any[] = [];
+      data.forEach((item: any) => {
+        province.push(item.province);
+        unregistered.push(item.percentage);
+      });
+      // setCategories([...province]);
+      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...unregistered]}];
+      // setDataset([...newData]);
+      setDataset({categories: [...province], series: [...newData]});
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    normalizeData(mockRegisterPercentage);
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartPositivePcrPercentage({...queryParams, tag: 'edu', category: 'grade'});
+    }, 500);
+    // normalizeData(mockRegisterPercentage);
     return () => {
+      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset([]);
     };
