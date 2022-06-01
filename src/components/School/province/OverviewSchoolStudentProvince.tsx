@@ -173,7 +173,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
-            infoText="مجموع دانش‌آموزان مشغول به تحصیل در کل کشور"
+            infoText={`مجموع دانش‌آموزان مشغول به تحصیل در استان ${cityTitle}`}
             icon={totalStudent}
             text="مجموع دانش آموزان"
             count={numberOf.totalPopulation || 0}
