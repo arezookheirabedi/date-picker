@@ -14,7 +14,7 @@ const OverviewVaccination: React.FC<OverviewCategoriesProvinceProps> = ({cityTit
         نگاه کلی واکسیناسیون در آموزش و پرورش در استان {cityTitle}
       </legend>
 
-      <OverviewVaccinationCard />
+      <OverviewVaccinationCard cityTitle={cityTitle} />
       <OverviewOfVaccinationTable />
     </fieldset>
   );
