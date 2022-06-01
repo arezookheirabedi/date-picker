@@ -92,7 +92,12 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
       return item.name === provinceName;
     });
     if (existsCity) {
-      getColumnChartPositivePcrPercentage(queryParams);
+      getColumnChartPositivePcrPercentage({
+        ...queryParams,
+        tag: 'edu',
+        category: 'grade',
+        provinceName,
+      });
     } else {
       history.push('/dashboard/school/province');
     }
