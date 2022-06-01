@@ -1,65 +1,71 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
-import {sideCities} from 'src/helpers/utils';
-import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-test.svg';
-import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
+import axios from 'axios';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
+import {useDispatch} from 'react-redux';
+import {addTotalEmployeMembersAc} from 'src/store/action_creators';
+import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
+import totalRecritment from 'src/assets/images/icons/people-navy.svg';
+import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
+import saveIcon from 'src/assets/images/icons/save-color.svg';
+import deadIcon from 'src/assets/images/icons/dead-color.svg';
+import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
+import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-test.svg';
+import testIcon from 'src/assets/images/icons/test-color.svg';
+import hcsService from 'src/services/hcs.service';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
+import {sideCities} from 'src/helpers/utils';
+import {useHistory, useLocation} from 'react-router-dom';
 import Statistic from '../../../containers/Guild/components/Statistic';
-import totalRecritment from '../../../assets/images/icons/people-navy.svg';
-import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
-import saveIcon from '../../../assets/images/icons/save-color.svg';
-import deadIcon from '../../../assets/images/icons/dead-color.svg';
-import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
-import testIcon from '../../../assets/images/icons/test-color.svg';
-import hcsService from '../../../services/hcs.service';
 
 interface OverviewSchoolEmployeProps {
   cityTitle: any;
 }
 
-const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}) => {
-  const [numberOf, setNumberOf] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [numberOfPositive, setNumberOfPositive] = useState(null);
-  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-
+const OverviewEducationalEmployeProvince: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line
+  const [numberOf, setNumberOf] = useState(null);
+  const [numberOfPositives, setNumberOfPositives] = useState(null);
+  // eslint-disable-next-line
+  const [numberOfNegatives, setNumberOfNegatives] = useState(null);
+  // eslint-disable-next-line
+  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  // eslint-disable-next-line
+  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
+  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
+  const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  const dispatch = useDispatch();
+
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
   const getNumberOf = async (province: string) => {
     setLoading(true);
     try {
-      const {data} = await hcsService.membersGeneral({
-        organization: 'education',
-        tags: ['student'].join(','),
-        testResultCount: true,
-        vaccinationCount: true,
-        total: true,
-        province,
-      });
+      const {data} = await hcsService.membersGeneral(
+        {
+          province,
+          organization: 'education',
+          tags: ['#type# پرسنل آموزشی'].join(','),
+          testResultCount: true,
+          vaccinationCount: true,
+          total: true,
+        },
+        {cancelToken: source.token}
+      );
+
+      dispatch(addTotalEmployeMembersAc(data.total || 0));
       setNumberOf(data.total || 0);
-      setNumberOfPositive(data.numberOfPositive || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
+      setNumberOfPositives(data.numberOfPositives || 0);
       setNumberOfVaccination(data.numberOfVaccinated || 0);
+      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+      setNumberOfRecovered(data.numberOfRecovered || 0);
       setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);
-
-      // @ts-ignore
-      setNumberOf(0);
-      // @ts-ignore
-      setNumberOfPositive(0);
-      // @ts-ignore
-      setNumberOfRecovered(0);
-      // @ts-ignore
-      setNumberOfTestResults(0);
-      // @ts-ignore
-      setNumberOfVaccination(0);
     } finally {
       setLoading(false);
     }
@@ -78,21 +84,31 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     } else {
       history.push('/dashboard/school/province');
     }
+
+    return () => {
+      setNumberOf(null);
+      setNumberOfPositives(null);
+      setNumberOfVaccination(null);
+      setNumberOfNanVaccinated(null);
+      setNumberOfRecovered(null);
+      setNumberOfTestResults(null);
+      source.cancel('Operation canceled by the user.');
+    };
   }, []);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به پرسنل اداری آموزش و پرورش در استان &nbsp; {cityTitle}
+        نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo
-            infoText="مجموع کارمندان اداری که در آموزش و پرورش فعالیت دارند."
+            infoText="مجموع کارمندان آموزشی که در آموزش و پرورش فعالیت دارند."
             icon={totalRecritment}
-            text="مجموع کارمندان اداری "
+            text="مجموع کارمندان آموزشی "
             count={numberOf}
             loading={loading}
           />
@@ -101,7 +117,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افراد مبتلا شده به بیماری کوید"
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositive}
+            count={numberOfPositives}
             loading={loading}
           />
           <Statistic
@@ -127,7 +143,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={numberOfPositive}
+            count={numberOfPositives}
             loading={loading}
           />
           <Statistic
@@ -135,7 +151,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
-            count={numberOfPositive}
+            count={numberOfPositives}
             loading={loading}
           />
           <Statistic
@@ -143,7 +159,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="تعداد افرادی که بعد از شروع به کار سامانه دوز اول را دریافت کرده اند."
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count={numberOfPositive}
+            count={numberOfPositives}
             loading={loading}
           />{' '}
           <Statistic
@@ -156,8 +172,6 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
           />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          {/* <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={guildInquiry.total}  loading={inquiryLoading}/>
-          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={guildInquiry.disqualified}  loading={inquiryLoading}/> */}
           <Statistic
             hasInfo
             infoText="تعداد کل تست های pcr که  کارمندان انجام داده اند."
@@ -171,7 +185,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
-            count={numberOfVaccination}
+            count={0}
             loading={loading}
             isPercentage
           />
@@ -186,7 +200,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
           />
           <Statistic
             hasInfo
-            infoText="نسبت مبتلایان کارمندان اداری به بیماری کرونا به کل جمعیت  کارمندان اداری"
+            infoText="نسبت مبتلایان کارمندان آموزشی به بیماری کرونا به کل جمعیت  کارمندان آموزشی"
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
             count={0}
@@ -198,4 +212,4 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
     </fieldset>
   );
 };
-export default OverviewSchoolEmploye;
+export default OverviewEducationalEmployeProvince;
