@@ -6,7 +6,8 @@ import Charts from 'src/components/Charts';
 import DatePickerModal from 'src/components/DatePickerModal';
 import Calendar from 'src/components/Calendar';
 import Spinner from 'src/components/Spinner';
-import {converters, IInitialNumberOfDoses} from '../../../Guild/public/constant';
+import {isEmpty} from 'lodash';
+import {converters} from '../../../Guild/public/constant';
 
 const {HeadlessChart} = Charts;
 
@@ -14,7 +15,7 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
   setQueryParams: (data: any) => void;
   queryParams: any;
   errorMessage: string | null;
-  numberOf: IInitialNumberOfDoses;
+  numberOf: any;
 
   loading: boolean;
 }> = ({setQueryParams, queryParams, numberOf, errorMessage, loading}) => {
@@ -33,68 +34,77 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
   // eslint-disable-next-line
 
   useEffect(() => {
-    const dataChart: any = {
-      null: 5,
-      '0': numberOf.totalNonVaccinesCount || 0, // واکسن نزدع
-      '1': numberOf.doses[1] || 0, // دوز اول
-      '2': numberOf.doses[2] || 0, // دوز دوم
-      '3': numberOf.doses[3] || 0, // دوز سوم
-      '4': numberOf.gtDoses[3] || 0, //  بیش از سه دوز
-    };
+    if (!isEmpty(numberOf)) {
+      const dataChart: any = {
+        null: 5,
+        '0': numberOf.totalNonVaccinesCount || 0, // واکسن نزدع
+        '1': numberOf.doses[1] || 0, // دوز اول
+        '2': numberOf.doses[2] || 0, // دوز دوم
+        '3': numberOf.doses[3] || 0, // دوز سوم
+        '4': numberOf.doses[4] || 0, // دوز چهارم
+        '5': numberOf.doses[5] || 0, // دوز پنجم
+      };
 
-    // eslint-disable-next-line
-    let firstDose: number = 0;
-    // eslint-disable-next-line
-    let secondDose: number = 0;
-    // eslint-disable-next-line
-    let thirdDose: number = 0;
-    // eslint-disable-next-line
-    let moreThanThreeDose: number = 0;
-    // eslint-disable-next-line
-    let noDose: number = 0;
+      // eslint-disable-next-line
+      let firstDose: number = 0;
+      // eslint-disable-next-line
+      let secondDose: number = 0;
+      // eslint-disable-next-line
+      let thirdDose: number = 0;
+      // eslint-disable-next-line
+      let forthDoses: number = 0;
+      // eslint-disable-next-line
+      let fifthDoses: number = 0;
+      // eslint-disable-next-line
+      let noDose: number = 0;
 
-    Object.entries(dataChart).forEach(([key, value]: any[]) => {
-      switch (key) {
-        case 'null':
-          // noDose += value;
-          break;
-        case '0':
-          noDose += value;
-          break;
-        case '1':
-          firstDose += value;
-          break;
-        case '2':
-          secondDose += value;
-          break;
-        case '3':
-          thirdDose += value;
-          break;
-        case '4':
-          moreThanThreeDose += value;
-          break;
+      Object.entries(dataChart).forEach(([key, value]: any[]) => {
+        switch (key) {
+          case 'null':
+            // noDose += value;
+            break;
+          case '0':
+            noDose += value;
+            break;
+          case '1':
+            firstDose += value;
+            break;
+          case '2':
+            secondDose += value;
+            break;
+          case '3':
+            thirdDose += value;
+            break;
+          case '4':
+            forthDoses += value;
+            break;
+          case '5':
+            fifthDoses += value;
+            break;
+          default:
+            break;
+        }
+      });
 
-        default:
-          break;
-      }
-    });
+      const newInitialData = {
+        categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده'],
+        series: [
+          {
+            name: 'واکسیناسیون',
+            data: [
+              {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
+              {name: 'دوز دوم', y: secondDose, color: '#209F92'},
+              {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
+              {name: ' دوز چهارم', y: forthDoses, color: '#bfdde7'},
+              {name: 'دوز پنجم', y: fifthDoses, color: '#716de3'},
+              {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
+            ],
+          },
+        ],
+      } as any;
 
-    const newInitialData = {
-      categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-      series: [
-        {
-          name: 'واکسیناسیون',
-          data: [
-            {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
-            {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
-            {name: 'دوز دوم', y: secondDose, color: '#209F92'},
-            {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
-            {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
-          ],
-        },
-      ],
-    } as any;
-    setInitialData({...newInitialData});
+      setInitialData({...newInitialData});
+    }
   }, [numberOf]);
 
   const optionChart = {
@@ -106,12 +116,12 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
       },
-      events: {
-        redraw: () => {
-          // eslint-disable-next-line
-          // console.log('redraw');
-        },
-      },
+      // events: {
+      //   redraw: () => {
+      //     // eslint-disable-next-line
+      //     // console.log('redraw');
+      //   },
+      // },
     },
     title: {
       text: '',
@@ -144,7 +154,6 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
       enabled: false,
     },
     xAxis: {
-      categories: [],
       type: 'category',
       labels: {
         rotation: 45,
@@ -243,10 +252,12 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
             <Spinner />
           </div>
         )}
-        {!loading && errorMessage ? (
-          <div className="p-40 text-red-500">{errorMessage}</div>
-        ) : (
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && !isEmpty(numberOf) && !errorMessage && (
           <HeadlessChart data={initialData} optionsProp={optionChart} />
+        )}
+        {isEmpty(numberOf) && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
     </fieldset>
