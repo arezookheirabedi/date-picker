@@ -163,6 +163,7 @@ const OverviewPositivePcr = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
+              objectKey="categoryValue"
               placeholder="کل اصناف"
               tag="guild"
               category="categoryDesc"

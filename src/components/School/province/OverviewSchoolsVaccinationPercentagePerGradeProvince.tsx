@@ -197,6 +197,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
+                objectKey="categoryValue"
                 placeholder="کل آموزش و پرورش"
                 category="grade"
                 tag="edu"
