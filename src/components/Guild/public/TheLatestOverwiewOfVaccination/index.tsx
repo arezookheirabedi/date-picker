@@ -30,7 +30,7 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
       const newData = {...initialNumberOfDoses, ...res.data};
       setNumberOf(newData);
     } catch (error: any) {
-      setErrorMessage(error.message || 'خطایی در عملیات');
+      setErrorMessage(error.message || 'موردی برای نمایش وجود ندارد.');
 
       // eslint-disable-next-line
       console.log(error);
