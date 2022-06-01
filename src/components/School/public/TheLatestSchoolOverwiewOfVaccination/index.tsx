@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import hcsService from 'src/services/hcs.service';
+import {useLocation} from 'react-router-dom';
 import LatestOverviewOfStatusCard from './LatestOverviewOfStatusCard';
 import OverviewOfTheLatestPublicSchoolVaccinationStatus from './OverviewOfTheLatestPublicSchollVaccinationStatus';
-import {IInitialNumberOfDoses, initialNumberOfDoses} from '../../../Guild/public/constant';
+// import {initialNumberOfDoses} from '../../../Guild/public/constant';
 
 const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
   });
-  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
+  const [numberOf, setNumberOf] = useState({});
 
   const cancelToken = cancelTokenSource();
 
@@ -27,7 +29,7 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
       const res = await hcsService.peopleLatestVaccinationOverview(params, {
         cancelToken: cancelToken.token,
       });
-      const newData = {...initialNumberOfDoses, ...res.data};
+      const newData = {...res.data};
       setNumberOf(newData);
     } catch (error: any) {
       setErrorMessage(error.message || 'موردی برای نمایش وجود ندارد.');
@@ -42,10 +44,16 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
   useEffect(() => {
     getGuildVaccinateInfo({...queryParams, tag: 'edu'});
     return () => {
-      cancelRequest();
-      setNumberOf(initialNumberOfDoses);
+      // cancelRequest();
+      setNumberOf({});
     };
   }, [queryParams]);
+  useEffect(() => {
+    return () => {
+      cancelRequest();
+      setNumberOf({});
+    };
+  }, [location]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -54,7 +62,7 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
         نگاه کلی به آخرین وضعیت واکسیناسیون آموزش و پرورش
       </legend>
 
-      <LatestOverviewOfStatusCard loading={loading} numberOf={numberOf} />
+      <LatestOverviewOfStatusCard loading={loading} data={numberOf} />
 
       <OverviewOfTheLatestPublicSchoolVaccinationStatus
         loading={loading}
