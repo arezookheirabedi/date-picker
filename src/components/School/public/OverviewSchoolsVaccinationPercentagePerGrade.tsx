@@ -7,6 +7,7 @@ import moment from 'moment-jalaali';
 // import hcsService from 'src/services/hcs.service';
 import DatePickerModal from 'src/components/SingleDatePickerModal';
 import Calendar from 'src/components/Calendar/SingleCalendar';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -50,7 +51,6 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   //     const {data} = await hcsService.PeopleVaccinationOverview(params, {
   //       cancelToken: cancelToken.token,
   //     });
-     
 
   //     const grade: any[] = [];
 
@@ -119,7 +119,6 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         dataLabels: {
           // enabled: true,
           // rotation: 270,
-
           // format: "{y}%"
         },
         name: 'واکسن نزده',
@@ -153,13 +152,11 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
       setQueryParams({
         ...queryParams,
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-       
       });
     } else {
       setQueryParams({
         ...queryParams,
         to: null,
-      
       });
     }
   }, [selectedDay]);
@@ -178,9 +175,19 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         نگاه کلی به درصد واکسیناسیون آموزش و پرورش در هر مقطع تحصیلی
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
+          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+            <div className="flex items-center">
+              <SearchableSingleSelect
+                placeholder="کل آموزش و پرورش"
+                category="grade"
+                tag="edu"
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              />
+            </div>
+            <div className="flex items-center">
+              {' '}
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDay={setSelectedDay}
@@ -193,7 +200,6 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
             </div>
           </div>
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />
