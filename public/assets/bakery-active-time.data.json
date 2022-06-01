@@ -1,0 +1,126 @@
+[
+  {
+    "province": "مرکزی",
+    "hour": 7.93
+  },
+  {
+    "province": "البرز",
+    "hour": 8.75
+  },
+  {
+    "province": "اردبیل",
+    "hour": 5.67
+  },
+  {
+    "province": "آذربایجان شرقی",
+    "hour": 5.53
+  },
+  {
+    "province": "آذربایجان غربی",
+    "hour": 5.48
+  },
+  {
+    "province": "بوشهر",
+    "hour": 7.65
+  },
+  {
+    "province": "چهارمحال و بختیاری",
+    "hour": 7.36
+  },
+  {
+    "province": "ایلام",
+    "hour": 6.44
+  },
+  {
+    "province": "اصفهان",
+    "hour": 7.94
+  },
+  {
+    "province": "فارس",
+    "hour": 8.12
+  },
+  {
+    "province": "گیلان",
+    "hour": 6.79
+  },
+  {
+    "province": "گلستان",
+    "hour": 5.67
+  },
+  {
+    "province": "همدان",
+    "hour": 7.67
+  },
+  {
+    "province": "هرمزگان",
+    "hour": 7.9
+  },
+  {
+    "province": "خراسان شمالی",
+    "hour": 5.68
+  },
+  {
+    "province": "خوزستان",
+    "hour": 7.12
+  },
+  {
+    "province": "خراسان رضوی",
+    "hour": 8.86
+  },
+  {
+    "province": "خراسان جنوبی",
+    "hour": 6.6
+  },
+  {
+    "province": "کهگلویه و بویراحمر",
+    "hour": 8.2
+  },
+  {
+    "province": "کردستان",
+    "hour": 5.78
+  },
+  {
+    "province": "کرمان",
+    "hour": 7.06
+  },
+  {
+    "province": "کرمانشاه",
+    "hour": 7.35
+  },
+  {
+    "province": "لرستان",
+    "hour": 7.8
+  },
+  {
+    "province": "مازندران",
+    "hour": 7.07
+  },
+  {
+    "province": "قزوین",
+    "hour": 5.63
+  },
+  {
+    "province": "قم",
+    "hour": 9.08
+  },
+  {
+    "province": "سیستان و بلوچستان",
+    "hour": 5.89
+  },
+  {
+    "province": "سمنان",
+    "hour": 7.45
+  },
+  {
+    "province": "تهران",
+    "hour": 10.88
+  },
+  {
+    "province": "یزد",
+    "hour": 6.28
+  },
+  {
+    "province": "زنجان",
+    "hour": 3.74
+  }
+]
