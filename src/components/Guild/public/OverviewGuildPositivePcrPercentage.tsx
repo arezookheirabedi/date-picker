@@ -10,6 +10,7 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
+import { isEmpty } from 'lodash';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -27,15 +28,9 @@ interface IOverviewGuildPositivePcrPercentage {}
 
 const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -44,7 +39,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: '',
   });
 
   const cancelToken = cancelTokenSource();
@@ -52,20 +46,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-
-  // const normalizeData = (data: Array<any>) => {
-  //   const province: any[] = [];
-
-  //   const unregistered: any[] = [];
-  //   data.forEach((item: any) => {
-  //     province.push(item.province);
-  //     unregistered.push(item.unregister);
-  //   });
-  //   // setCategories([...province]);
-  //   const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...unregistered]}];
-  //   // setDataset([...newData]);
-  //   setDataset({categories: [...province], series: [...newData]});
-  // };
 
   const getColumnChartPositivePcrPercentage = async (params: any) => {
     setLoading(true);
@@ -78,13 +58,13 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
 
       const province: any[] = [];
 
-      const unregistered: any[] = [];
+      const positiveMembersCount: any[] = [];
       data.forEach((item: any) => {
         province.push(item.province);
-        unregistered.push(item.percentage);
+        positiveMembersCount.push(item.positiveMembersCount);
       });
       // setCategories([...province]);
-      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...unregistered]}];
+      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCount]}];
       // setDataset([...newData]);
       setDataset({categories: [...province], series: [...newData]});
     } catch (error: any) {
@@ -116,14 +96,12 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: '',
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: '',
       });
     }
   }, [selectedDayRange]);
@@ -188,6 +166,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       title: {
         enabled: false,
       },
+      labels: {
+        format: '٪{text}'
+        },
     },
     xAxis: {
       lineDashStyle: 'dash',
@@ -259,11 +240,11 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        {!loading && !errorMessage && dataset.length === 0 ? (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        ) : (
+        {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
+        )}
+        {isEmpty(dataset) && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
     </fieldset>
