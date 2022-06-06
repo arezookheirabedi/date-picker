@@ -14,8 +14,9 @@ import grayBaggage from '../../../assets/images/icons/gray-baggage.svg';
 import redBaggage from '../../../assets/images/icons/red-baggage.svg';
 import passengerPositiveTest from '../../../assets/images/icons/passenger-positive-test.svg';
 import negetiveTestIcon from '../../../assets/images/icons/negetive-test-icon.svg';
-import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
-import noneVacsinateStart from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
+// import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
+// import noneVacsinateStart from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
+
 import {
   IInitialPcrInfo,
   IInitialTotalVacinatelInfo,
@@ -36,6 +37,7 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
+
   const getPcrResult = async (): Promise<any> => {
     setPcrLoading(true);
     try {
@@ -105,7 +107,8 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
 
       <div className="flex flex-col justify-between space-y-8">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalPassengers}
             text="مجموع مسافران زمینی"
@@ -134,7 +137,8 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
 
         {/* second card row */}
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="افرادی که دو دوز واکسن دریافت نموده اند واکسینه شده تلقی می گردند.      "
             hasInfo
@@ -165,12 +169,13 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
           />
         </div>
         {/* third card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
             icon={redBaggage}
-            text="تعداد سفرهای جلوگیری شده"
+            text="تعداد استعلام های فاقد اخذ خدمت"
             count="-"
             // loading={pcrLoading}
           />
@@ -191,14 +196,15 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
             infoText="مرجع صادر کننده بلیط اجازه صدور بلیط نداشته ولی بلیط صادر شده است."
             hasInfo
             icon={redBaggage}
-            text="مجموع سفر های غیر مجاز"
+            text="بلیط های غیر مجاز فروخته شده"
             count="-"
             // loading={pcrLoading}
             isPercentage
           />
         </div>
         {/* fourth card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             loading={pcrLoading}
             icon={testIcon}
@@ -211,7 +217,13 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
             text="تعداد تست‌های منفی"
             count={passengerPcrInfo.negativeTestResultsCount || 0}
           />
-          <Statistic
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          {/* <Statistic
             //  loading={pcrLoading}
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
@@ -222,7 +234,7 @@ const OverviewBusPassengersStatusCard: React.FC<{}> = () => {
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             // loading={pcrLoading}
             count="-"
-          />
+          /> */}
         </div>
       </div>
     </fieldset>
