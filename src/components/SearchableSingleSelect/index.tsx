@@ -4,6 +4,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
 import recruitmentServices from 'src/services/recruitment.service';
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
+import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
 // import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
 interface IProps {
@@ -30,14 +31,18 @@ const SearchableSingleSelect: React.FC<IProps> = ({
 
   const [tags, setTags] = useState<any[]>([{key: null, value: placeholder}]);
 
-  // const cancelToken = cancelTokenSource();
+  const cancelTokenTag = cancelTokenSource();
+  const cancelTokenendPoint = cancelTokenSource();
 
-  // function cancelRequest() {
-  //   cancelToken.cancel(msgRequestCanceled);
-  // }
+  function cancelRequestTag() {
+    cancelTokenTag.cancel(msgRequestCanceled);
+  }
+  function cancelRequestEndPoint() {
+    cancelTokenendPoint.cancel(msgRequestCanceled);
+  }
   const enpointFetcher = async () => {
     try {
-      const res = await endPoint;
+      const res = await endPoint({},{cancelToken:cancelTokenendPoint.token});
       const newData = [...tags, ...res.data];
       setTags([...newData]);
     } catch (error: any) {
@@ -46,7 +51,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   };
   const otherFetcher = async () => {
     try {
-      const res = await recruitmentServices.tags({tag, category});
+      const res = await recruitmentServices.tags({tag, category},{cancelToken:cancelTokenTag.token});
       const newData = [...tags, ...res.data];
       setTags([...newData]);
     } catch (error: any) {
@@ -69,11 +74,11 @@ const SearchableSingleSelect: React.FC<IProps> = ({
 
   useEffect(() => {
     fetcher();
-
-    // return () => {
-    //   cancelRequest();
-    //   setTags([]);
-    // };
+    return () => {
+      cancelRequestTag();
+      cancelRequestEndPoint()
+      setTags([]);
+    };
   }, []);
   const filteredTags =
     query === ''
