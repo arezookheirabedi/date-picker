@@ -5,6 +5,7 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import { isEmpty } from 'lodash';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
@@ -41,48 +42,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-
-  // const normalizeData = (data: Array<any>) => {
-  //   const province: any[] = [];
-  //   const registered: any[] = [];
-  //   const unregistered: any[] = [];
-  //   data.forEach((item: any) => {
-  //     province.push(item.province);
-  //     unregistered.push(item.unregister);
-  //     registered.push(item.register);
-  //   });
-  //   // setCategories([...province]);
-  //   const newData = [
-  //     {
-  //       name: 'ثبت نام نشده',
-  //       dataLabels: {
-  //         // enabled: true,
-  //       },
-  //       showInLegend: false,
-  //       data: [...unregistered],
-  //     },
-  //     {
-  //       name: 'ثبت نام شده',
-  //       dataLabels: {
-  //         // enabled: true,
-  //       },
-  //       showInLegend: false,
-  //       data: [...registered],
-  //       linearGradient: {
-  //         x1: 0,
-  //         x2: 0,
-  //         y1: 0,
-  //         y2: 1,
-  //       },
-  //       stops: [
-  //         [0, '#5F5B97'],
-  //         [1, '#DDDCE9'],
-  //       ],
-  //     },
-  //   ];
-  //   // setDataset([...newData]);
-  //   setDataset({categories: [...province], series: [...newData]});
-  // };
 
   const getColumnChartRegisterNumber = async (params: any) => {
     setLoading(true);
@@ -128,7 +87,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           ],
         },
       ];
-      // setDataset([...newData]);
       setDataset({categories: [...province], series: [...newData]});
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -145,7 +103,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       // {...newQuery, categoryId: categoryValue}
       getColumnChartRegisterNumber(queryParams);
     }, 500);
-    // normalizeData(mockRegisterPercentage);
     return () => {
       clearTimeout(idSetTimeOut);
 
@@ -200,13 +157,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           states: {
             hover: {
               enabled: true,
-              fillColor: {
-                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-                // stops: [
-                //   [0, "#FFCC00"], // start
-                //   [1, "#FF9400"] // end
-                // ]
-              },
               lineColor: '#fff',
               lineWidth: 3,
             },
@@ -215,7 +165,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         lineWidth: 2,
         threshold: null,
         borderRadius: 2,
-        // pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
@@ -233,22 +182,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         enabled: false,
       },
     },
-    // scrollbar: {
-    //   enabled: true,
-    //   barBackgroundColor: '#656565',
-    //   barBorderColor: '#eee',
-    //   barBorderRadius: 4,
-    //   barBorderWidth: 0,
-    //   height: 6,
-    //   buttonArrowColor: '#eee',
-    //   rifleColor: '#656565',
-    //   buttonBackgroundColor: 'transparent',
-    //   buttonBorderWidth: 0,
-    //   buttonBorderRadius: 0,
-    //   trackBackgroundColor: '#eee',
-    //   trackBorderWidth: 0,
-    //   trackBorderRadius: 4,
-    // },
     xAxis: {
       // scrollbar: {
       //   enabled: true,
@@ -270,8 +203,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         textAlign: 'right',
         fontFamily: 'inherit',
       },
-
-      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
       {
@@ -290,7 +221,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                endPoint={guildService.getRegisterList({})}
+                endPoint={guildService.getRegisterList}
                 placeholder="کل اصناف"
                 objectKey="categoryId"
                 setQueryParams={setQueryParams}
@@ -326,14 +257,11 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
 
         {!loading &&
           !errorMessage &&
-          (dataset.length === 0 ? (
+          (isEmpty(dataset)? (
             <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
           ) : (
             <HeadlessChart data={dataset} optionsProp={optionChart} />
           ))}
-        {/* <div className="flex justify-center items-center w-full">
-          <Stacked data={dataset} categories={categories} />
-        </div> */}
       </div>
     </fieldset>
   );
