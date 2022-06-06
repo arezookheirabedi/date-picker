@@ -184,7 +184,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
             infoText="مرجع صادر کننده بلیط اجازه صدور بلیط نداشته ولی بلیط صادر شده است."
             hasInfo
             icon={redBaggage}
-            text="بلیط های غیرمجاز فروخته شه"
+            text="بلیط های غیرمجاز فروخته شده"
             count="-"
             // loading={pcrLoading}
             isPercentage
