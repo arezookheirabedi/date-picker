@@ -87,7 +87,9 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           ],
         },
       ];
-      setDataset({categories: [...province], series: [...newData]});
+      if(data.length > 0) {
+        setDataset({categories: [...province], series: [...newData]});
+      }
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
