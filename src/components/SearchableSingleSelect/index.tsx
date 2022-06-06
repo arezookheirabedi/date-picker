@@ -14,7 +14,7 @@ interface IProps {
   queryParams: any;
   placeholder?: any;
   setQueryParams: (v: any) => void;
-  objectKey?: any;
+  objectKey: string;
 }
 
 const SearchableSingleSelect: React.FC<IProps> = ({
@@ -90,7 +90,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (selected) {
-      params = {...queryParams, [`${objectKey}||categoryValue`]: selected.key};
+      params = {...queryParams, [`${objectKey}`]: selected.key};
     } else {
       params = {...queryParams, categoryValue: null};
     }

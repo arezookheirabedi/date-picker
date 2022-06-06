@@ -98,7 +98,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getColumnChartPositivePcrPercentage(queryParams);
+      getColumnChartPositivePcrPercentage({...queryParams, tag: 'guild', category: 'categoryDesc'});
     }, 500);
     // normalizeData(mockRegisterPercentage);
     return () => {
@@ -225,6 +225,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
+                objectKey="categoryValue"
                 placeholder="کل اصناف"
                 tag="guild"
                 category="categoryDesc"

@@ -10,33 +10,35 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
+import {useHistory, useLocation} from 'react-router-dom';
 import {
   cancelTokenSource,
   msgRequestCanceled,
+  sideCities,
   //  toPersianDigit
 } from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters} from './constant';
+import {converters} from '../public/constant';
 
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
 
-interface IOverviewPositivePcrPercentage {}
+interface IOverviewPositivePcrPercentageProvince {
+  cityTitle: string;
+}
 
-const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = () => {
+const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercentageProvince> = ({
+  cityTitle,
+}) => {
+  const location = useLocation();
+  const history = useHistory();
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -84,16 +86,29 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
   };
 
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartPositivePcrPercentage({...queryParams, tag: 'edu', category: 'grade'});
-    }, 500);
-    // normalizeData(mockRegisterPercentage);
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getColumnChartPositivePcrPercentage({
+        ...queryParams,
+        tag: 'edu',
+        category: 'grade',
+        provinceName,
+      });
+    } else {
+      history.push('/dashboard/school/province');
+    }
+
     return () => {
-      clearTimeout(idSetTimeOut);
-      cancelRequest();
-      setDataset([]);
+      if (existsCity) {
+        cancelRequest();
+        setDataset([]);
+      }
     };
-  }, [queryParams]);
+  }, [location.search, queryParams]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -206,7 +221,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به درصد ابتلای آموزش و پرورش در هر مقطع تحصیلی
+        نگاه کلی به درصد ابتلای آموزش و پرورش استان {cityTitle} در هر مقطع تحصیلی
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
@@ -245,7 +260,6 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
             <Spinner />
           </div>
         )}
-
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
 
         {!loading && !errorMessage && dataset.length === 0 ? (
@@ -258,4 +272,4 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
   );
 };
 
-export default OverviewPositivePcrPercentage;
+export default OverviewPositivePcrPercentageProvince;
