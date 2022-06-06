@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
+import ButtonToggle from '../../Form/ButtonToggle';
 import DatePickerModal from '../../DatePickerModal';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
@@ -13,7 +14,6 @@ import extortionIcon from '../../../assets/images/icons/extortion.svg';
 import extortionActiveIcon from '../../../assets/images/icons/extortion-active.svg';
 import clockIcon from '../../../assets/images/icons/clock.svg';
 import clockActiveIcon from '../../../assets/images/icons/clock-active.svg';
-import checkActiveIcon from '../../../assets/images/icons/check-active.svg';
 
 const OverviewAudit: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -113,76 +113,33 @@ const OverviewAudit: React.FC<{}> = () => {
       </legend>
 
       <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm">
-        <label
-          htmlFor="overTime"
-          className="flex-grow flex items-center justify-between cursor-pointer"
-        >
-          <div
-            className={`w-full flex items-center ${
-              overTime ? 'bg-green-600 text-white' : 'bg-white'
-            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
-          >
-            <div className="">
-              <input
-                type="checkbox"
-                id="overTime"
-                className="hidden"
-                onChange={() => setOverTime(!overTime)}
-              />
-              <img className="w-4 h-4" src={overTime ? clockActiveIcon : clockIcon} alt="" />
-            </div>
-            <span>مشکوک به تخلف از ساعت فعالیت</span>
-          </div>
-          {overTime && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
-        </label>
-
-        <label htmlFor="notUseFlour" className="flex-grow flex items-center justify-between">
-          <div
-            className={`w-full flex items-center ${
-              notUseFlour ? 'bg-green-600 text-white' : 'bg-white'
-            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
-          >
-            <div className="">
-              <input
-                type="checkbox"
-                id="notUseFlour"
-                className="hidden"
-                onChange={() => setNotUseFlour(!notUseFlour)}
-              />
-              <img
-                className="w-4 h-4"
-                src={notUseFlour ? chartBoxActiveIcon : chartBoxIcon}
-                alt=""
-              />
-            </div>
-            <span>مشکوک به عدم استفاده‌ مجاز از سهمیه آرد</span>
-          </div>
-          {notUseFlour && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
-        </label>
-
-        <label htmlFor="isExtortion" className="flex-grow flex items-center justify-between">
-          <div
-            className={`w-full flex items-center ${
-              isExtortion ? 'bg-green-600 text-white' : 'bg-white'
-            } shadow rounded p-4 py-2 space-x-2 rtl:space-x-reverse`}
-          >
-            <div className="">
-              <input
-                type="checkbox"
-                id="isExtortion"
-                className="hidden"
-                onChange={() => setIsExtortion(!isExtortion)}
-              />
-              <img
-                className="w-4 h-4"
-                src={isExtortion ? extortionActiveIcon : extortionIcon}
-                alt=""
-              />
-            </div>
-            <span>مشکوک به گران فروشی</span>
-          </div>
-          {isExtortion && <img className="w-4 h-4" src={checkActiveIcon} alt="" />}
-        </label>
+        <ButtonToggle
+          name="overTime"
+          title="مشکوک به تخلف از ساعت فعالیت"
+          selected={overTime}
+          onChange={setOverTime}
+          defaultIcon={clockIcon}
+          activeIcon={clockActiveIcon}
+          showCheckedIcon
+        />
+        <ButtonToggle
+          name="notUseFlour"
+          title="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
+          selected={notUseFlour}
+          onChange={setNotUseFlour}
+          defaultIcon={chartBoxIcon}
+          activeIcon={chartBoxActiveIcon}
+          showCheckedIcon
+        />
+        <ButtonToggle
+          name="isExtortion"
+          title="مشکوک به گران فروشی"
+          selected={isExtortion}
+          onChange={setIsExtortion}
+          defaultIcon={extortionIcon}
+          activeIcon={extortionActiveIcon}
+          showCheckedIcon
+        />
       </div>
 
       <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
@@ -259,30 +216,38 @@ const OverviewAudit: React.FC<{}> = () => {
                 name: 'نوع تخلف قابل بررسی',
                 key: 'types',
                 render: (v: any, record: any) => (
-                  <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
-                    {record.notUseFlour && (
-                      <div className="">
-                        <img
-                          className="w-4 h-4"
-                          src={chartBoxIcon}
-                          alt="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
-                        />
-                      </div>
-                    )}
-                    {record.isExtortion && (
-                      <div className="">
-                        <img className="w-4 h-4" src={extortionIcon} alt="مشکوک به گران فروشی" />
-                      </div>
-                    )}
-                    {record.overTime && (
-                      <div className="">
-                        <img
-                          className="w-4 h-4"
-                          src={clockIcon}
-                          alt="مشکوک به تخلف از ساعت فعالیت"
-                        />
-                      </div>
-                    )}
+                  <div className="flex justify-center items-center">
+                    <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
+                      {record.notUseFlour ? (
+                        <div className="">
+                          <img
+                            className="w-4 h-4"
+                            src={chartBoxIcon}
+                            alt="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-4 h-4" />
+                      )}
+                      {record.isExtortion ? (
+                        <div className="">
+                          <img className="w-4 h-4" src={extortionIcon} alt="مشکوک به گران فروشی" />
+                        </div>
+                      ) : (
+                        <div className="w-4 h-4" />
+                      )}
+                      {record.overTime ? (
+                        <div className="">
+                          <img
+                            className="w-4 h-4"
+                            src={clockIcon}
+                            alt="مشکوک به تخلف از ساعت فعالیت"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-4 h-4" />
+                      )}
+                    </div>
                   </div>
                 ),
               },
