@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
 // import {schoolTypes} from 'src/helpers/sortingModels';
+import Table from 'src/components/TableScopeSort';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
-import Table from '../../TableScope';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {sideCities} from '../../../helpers/utils';
-import Spinner from '../../Spinner';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
@@ -19,21 +17,7 @@ interface TestStatusProvinceProps {
   cityTitle: any;
 }
 
-const filterTypes = [
-  {
-    name: 'پیشفرض',
-    enName: '',
-  },
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
-
+const PageSize = 10;
 // eslint-disable-next-line
 const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
@@ -101,21 +85,6 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     });
     if (existsCity) {
       overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      // getOverviewByCategory({
-      //   organization: 'education',
-      //   // resultStatus: 'POSITIVE',
-      //   // recoveredCount: true,
-      //   // total: true,
-      //   // count: true,
-      //   from: '',
-      //   to: '',
-      //   // province: provinceName,
-      //   tags: [
-      //     `#province# استان ${provinceName}`,
-      //     '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-      //   ].join(','),
-      // });
-      //
     } else {
       history.push('/dashboard/school/province');
     }
@@ -176,56 +145,6 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       </legend>
       <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex items-center">
-          <Menu
-            as="div"
-            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-          >
-            <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'پیشفرض'}
-                  {/* {filterType?.name || 'مرتب‌سازی بر اساس پیشفرض'} */}
-                </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
-              </Menu.Button>
-            </div>
-
-            <Menu.Items className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="px-1 py-1 ">
-                {filterTypes.map((value: any, index: any) => {
-                  // console.log(value);
-                  return (
-                    // eslint-disable-next-line
-                    <Menu.Item key={index}>
-                      {({active}) => (
-                        <button
-                          type="button"
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                          onClick={() => {
-                            setFilterType(value);
-                            // setQueryParams({
-                            //   ...queryParams,
-                            //   tag: value.enName,
-                            // });
-                          }}
-                        >
-                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                          {value.name}
-                        </button>
-                      )}
-                    </Menu.Item>
-                  );
-                })}
-              </div>
-            </Menu.Items>
-          </Menu>
-        </div>
-
-        <div className="flex items-center">
           {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -243,110 +162,107 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
-          <Table
-            dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
-            columns={[
-              {
-                name: 'وضعیت',
-                key: '',
-                render: (v: any, record) => (
-                  <CategoryDonut
-                    data={[
-                      {
-                        name: 'unknownCount',
-                        title: 'درصد تست‌های نامشخص',
-                        y: record.unknownCount || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#6E6E6E'], // start
-                            [1, '#393939'], // end
-                          ],
-                        },
+        <Table
+          loading={loading}
+          dataSet={[...dataset]}
+          pagination={{pageSize: PageSize, maxPages: 3}}
+          columns={[
+            {
+              name: 'وضعیت',
+              key: '',
+              render: (v: any, record) => (
+                <CategoryDonut
+                  data={[
+                    {
+                      name: 'unknownCount',
+                      title: 'درصد تست‌های نامشخص',
+                      y: record.unknownCount || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#6E6E6E'], // start
+                          [1, '#393939'], // end
+                        ],
                       },
-                      {
-                        name: 'negativeCount',
-                        title: 'درصد تست‌های منفی',
-                        y: record.negativeCountPercentage || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#05D8A4'], // start
-                            [1, '#039572'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'negativeCountPercentage',
+                      title: 'درصد تست‌های منفی',
+                      y: record.negativeCountPercentage || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#05D8A4'], // start
+                          [1, '#039572'], // end
+                        ],
                       },
-                      {
-                        name: 'positiveCount',
-                        title: 'درصد تست‌های مثبت',
-                        y: record.positivePercentage || 0,
-                        color: {
-                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                          stops: [
-                            [0, '#FE2D2F'], // start
-                            [1, '#CC0002'], // end
-                          ],
-                        },
+                    },
+                    {
+                      name: 'positiveCount',
+                      title: 'درصد تست‌های مثبت',
+                      y: record.positivePercentage || 0,
+                      color: {
+                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                        stops: [
+                          [0, '#FE2D2F'], // start
+                          [1, '#CC0002'], // end
+                        ],
                       },
-                    ]}
-                  />
-                ),
-                className: 'flex justify-center w-full',
-              },
-              {
-                name: 'دسته',
-                key: 'name',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex">
-                    {((page - 1) * 20 + (index + 1)).toPersianDigits()}.
-                    {/* eslint-disable-next-line */}
-                    {v.replace(/استان\s(.*)_/g, '').replace(/_\sاستان\s(.*)/g, '')}
-                  </div>
-                ),
-              },
-              {
-                name: 'تعداد آزمایش‌های انجام شده',
-                key: 'total',
-                render: (v: any) => (
-                  <span>
-                    {Number(v || 0)
-                      .commaSeprator()
-                      .toPersianDigits()}
-                  </span>
-                ),
-              },
-              {
-                name: 'درصد تست‌های مثبت',
-                key: 'positivePercentage',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
-              },
-              {
-                name: 'درصد تست‌های منفی',
-                key: 'negativeCountPercentage',
-                render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
-              },
-              // {
-              //   name: 'درصد تست‌های نامشخص',
-              //   key: 'unknownCount',
-              //   render: (v: any, record: any) => (
-              //     <span>
-              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-              //         .toFixed(4)
-              //         .toPersianDigits()}
-              //       %
-              //     </span>
-              //   ),
-              // },
-            ]}
-            totalItems={(dataset || []).length || 0}
-          />
-        )}
+                    },
+                  ]}
+                />
+              ),
+              className: 'flex justify-center w-full',
+            },
+            {
+              name: 'دسته',
+              key: 'name',
+              render: (v: any, record, index: number, page: number) => (
+                <div className="flex">
+                  {((page - 1) * PageSize + (index + 1)).toPersianDigits()}.{v}
+                </div>
+              ),
+            },
+            {
+              name: 'تعداد آزمایش‌های انجام شده',
+              key: 'total',
+              sortable: true,
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0)
+                    .commaSeprator()
+                    .toPersianDigits()}
+                </span>
+              ),
+            },
+            {
+              sortable: true,
+
+              name: 'درصد تست‌های مثبت',
+              key: 'positivePercentage',
+              render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
+            },
+            {
+              sortable: true,
+              name: 'درصد تست‌های منفی',
+              key: 'negativeCountPercentage',
+              render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
+            },
+            // {
+            //   name: 'درصد تست‌های نامشخص',
+            //   key: 'unknownCount',
+            //   render: (v: any, record: any) => (
+            //     <span>
+            //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+            //         .toFixed(4)
+            //         .toPersianDigits()}
+            //       %
+            //     </span>
+            //   ),
+            // },
+          ]}
+          totalItems={(dataset || []).length || 0}
+        />
       </div>
     </fieldset>
   );

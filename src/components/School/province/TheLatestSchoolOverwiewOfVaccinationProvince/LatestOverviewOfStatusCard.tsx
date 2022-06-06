@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 // import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
 import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
@@ -7,20 +7,13 @@ import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-import {isEmpty} from 'lodash';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialNumberOfDoses, initialNumberOfDoses} from '../constant';
-// import {IInitialNumberOfDoses} from '../../../Guild/public/constant';
+import {IInitialNumberOfDoses} from '../../../Guild/public/constant';
 
-const LatestOverviewOfStatusCard: React.FC<{loading: boolean; data: any}> = ({loading, data}) => {
-  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
-
-  useEffect(() => {
-    if (!isEmpty(data)) {
-      setNumberOf(data);
-    }
-  }, [data]);
-
+const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitialNumberOfDoses}> = ({
+  loading,
+  numberOf,
+}) => {
   return (
     <>
       <div className="flex  mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
