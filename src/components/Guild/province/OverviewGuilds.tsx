@@ -97,7 +97,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
-      <legend className="text-black mx-auto px-3">نگاه کلی اصناف در استان {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت اصناف در استان {cityTitle}</legend>
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
