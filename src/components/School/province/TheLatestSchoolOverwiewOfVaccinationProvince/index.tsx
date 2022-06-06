@@ -1,20 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import hcsService from 'src/services/hcs.service';
-import {useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import LatestOverviewOfStatusCard from './LatestOverviewOfStatusCard';
 import OverviewOfTheLatestPublicSchoolVaccinationStatus from './OverviewOfTheLatestPublicSchollVaccinationStatus';
-// import {initialNumberOfDoses} from '../../../Guild/public/constant';
+import {IInitialNumberOfDoses, initialNumberOfDoses} from '../../../Guild/public/constant';
 
-const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
+interface OverviewCategoriesProvinceProps {
+  cityTitle?: any;
+}
+
+const TheLatestOverwiewOfVaccination: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
   const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
   });
-  const [numberOf, setNumberOf] = useState({});
+  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
 
   const cancelToken = cancelTokenSource();
 
@@ -29,7 +34,7 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
       const res = await hcsService.peopleLatestVaccinationOverview(params, {
         cancelToken: cancelToken.token,
       });
-      const newData = {...res.data};
+      const newData = {...initialNumberOfDoses, ...res.data};
       setNumberOf(newData);
     } catch (error: any) {
       setErrorMessage(error.message || 'موردی برای نمایش وجود ندارد.');
@@ -40,29 +45,34 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getGuildVaccinateInfo({...queryParams, tag: 'edu'});
+    } else {
+      history.push('/dashboard/school/province');
+    }
 
-  useEffect(() => {
-    getGuildVaccinateInfo({...queryParams, tag: 'edu'});
     return () => {
-      // cancelRequest();
-      setNumberOf({});
+      if (existsCity) {
+        setNumberOf(initialNumberOfDoses);
+        cancelRequest();
+      }
     };
-  }, [queryParams]);
-  useEffect(() => {
-    return () => {
-      cancelRequest();
-      setNumberOf({});
-    };
-  }, [location]);
+  }, [location.search, queryParams]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         {' '}
-        نگاه کلی به آخرین وضعیت واکسیناسیون آموزش و پرورش
+        نگاه کلی به آخرین وضعیت واکسیناسیون آموزش و پرورش در استان {cityTitle}
       </legend>
 
-      <LatestOverviewOfStatusCard loading={loading} data={numberOf} />
+      <LatestOverviewOfStatusCard loading={loading} numberOf={numberOf} />
 
       <OverviewOfTheLatestPublicSchoolVaccinationStatus
         loading={loading}

@@ -2,22 +2,27 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
 // import hcsService from 'src/services/hcs.service';
 import DatePickerModal from 'src/components/SingleDatePickerModal';
 import Calendar from 'src/components/Calendar/SingleCalendar';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+// import {useHistory, useLocation} from 'react-router-dom';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import {waterMelonMockData} from './constant';
+import {waterMelonMockData} from '../public/constant';
 
 const {Stacked} = Charts;
 
-interface OverviewPerProvinceProps {}
+interface OverviewPerProvinceProps {
+  cityTitle: string;
+}
 
-const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvinceProps> = () => {
+const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPerProvinceProps> = ({
+  cityTitle,
+}) => {
+  // const location = useLocation();
+  // const history = useHistory();
   const [dataset, setDataset] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   // eslint-disable-next-line
@@ -146,6 +151,27 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
     };
   }, [queryParams]);
 
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const provinceName = params.get('provinceName') || ('تهران' as any);
+  //   const existsCity = sideCities.some((item: any) => {
+  //     return item.name === provinceName;
+  //   });
+  //   if (existsCity) {
+  //     getLinearOverview({...queryParams, provinceName});
+  //   } else {
+  //     history.push('/dashboard/school/province');
+  //   }
+
+  //   return () => {
+  //     if (existsCity) {
+  //   // clearTimeout(idSetTimeOut);
+  //   cancelRequest();
+  //   setDataset([]);
+  //     }
+  //   };
+  // }, [location.search, queryParams]);
+
   useEffect(() => {
     if (selectedDay) {
       const finalToDate = `${selectedDay.year}/${selectedDay.month}/${selectedDay.day}`;
@@ -161,18 +187,10 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
     }
   }, [selectedDay]);
 
-  // const clearselectedDay = (e: any) => {
-  //   e.stopPropagation();
-  //   setselectedDay({
-  //     from: null,
-  //     to: null,
-  //   });
-  // };
-
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به درصد واکسیناسیون آموزش و پرورش در هر مقطع تحصیلی
+        نگاه کلی به درصد واکسیناسیون آموزش و پرورش استان {cityTitle} در هر مقطع تحصیلی
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
@@ -218,4 +236,4 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   );
 };
 
-export default OverviewSchoolsVaccinationPercentagePerGrade;
+export default OverviewSchoolsVaccinationPercentagePerGradeProvince;
