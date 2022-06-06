@@ -5,6 +5,7 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {isEmpty} from 'lodash';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
@@ -42,19 +43,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  // const normalizeData = (data: Array<any>) => {
-  //   const province: any[] = [];
-
-  //   const unregistered: any[] = [];
-  //   data.forEach((item: any) => {
-  //     province.push(item.province);
-  //     unregistered.push(item.unregister);
-  //   });
-  //   // setCategories([...province]);
-  //   const newData = [{showInLegend: false, name: 'ثبت نام شده', data: [...unregistered]}];
-  //   // setDataset([...newData]);
-  //   setDataset({categories: [...province], series: [...newData]});
-  // };
   const getColumnChartRegisterPercentage = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
@@ -68,7 +56,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         province.push(item.province);
         unregistered.push(item.percentage);
       });
-      // setCategories([...province]);
       const newData = [
         {
           showInLegend: false,
@@ -83,8 +70,9 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
           },
         },
       ];
-      // setDataset([...newData]);
-      setDataset({categories: [...province], series: [...newData]});
+      if (data.length > 0) {
+        setDataset({categories: [...province], series: [...newData]});
+      }
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -98,11 +86,8 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     const idSetTimeOut = setTimeout(() => {
       getColumnChartRegisterPercentage(queryParams);
     }, 500);
-    // normalizeData(mockRegisterPercentage);
-
     return () => {
       clearTimeout(idSetTimeOut);
-
       cancelRequest();
       setDataset([]);
     };
@@ -224,7 +209,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                endPoint={guildService.getRegisterList({})}
+                endPoint={guildService.getRegisterList}
                 placeholder="کل اصناف"
                 objectKey="categoryId"
                 setQueryParams={setQueryParams}
@@ -260,7 +245,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
 
         {!loading &&
           !errorMessage &&
-          (dataset.length === 0 ? (
+          (isEmpty(dataset) ? (
             <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
           ) : (
             <HeadlessChart data={dataset} optionsProp={optionChart} />
