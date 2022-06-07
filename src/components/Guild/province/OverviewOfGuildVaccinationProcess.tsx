@@ -125,8 +125,6 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
       let thirdDose: any[] = [];
       // eslint-disable-next-line
       let fifthDose: any[] = [];
-      // eslint-disable-next-line
-      let noDose: any[] = [];
 
       data.forEach((item: any, index: number) => {
         // eslint-disable-next-line
@@ -149,10 +147,6 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
             fifthDose.push(Number(value));
           }
         }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-
-        if (noDose.length < index + 1) noDose.push(0);
         if (firstDose.length < index + 1) firstDose.push(0);
         if (secondDose.length < index + 1) secondDose.push(0);
         if (thirdDose.length < index + 1) thirdDose.push(0);
@@ -184,10 +178,7 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
             name: 'دوز پنجم',
             data: [...fifthDose],
           },
-          {
-            name: 'واکسن نزده',
-            data: [...noDose],
-          },
+         
         ],
       };
       setDataset({...newData});
@@ -235,10 +226,6 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
           <div className="w-full">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-              <div className="inline-flex flex-col justify-center items-center space-y-2">
-                <div className="w-24 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
-                  <span>واکسن نزده</span>
-                </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-24 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
                   <span>دوز پنجم</span>
