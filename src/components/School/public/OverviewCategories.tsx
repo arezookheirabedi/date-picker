@@ -230,7 +230,7 @@ const OverviewCategories: React.FC<{}> = () => {
             },
             {
               sortable: true,
-              name: 'تعداد کارکنان',
+              name: 'تعداد ',
               key: 'employeesCount',
               render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
             },
