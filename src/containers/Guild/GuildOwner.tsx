@@ -8,6 +8,7 @@ import OverviewGuildsPerCategory from 'src/components/Guild/public/OverviewGuild
 import OverviewGuildsPerProvince from 'src/components/Guild/public/OverviewGuildsPerProvince';
 import OverviewVaccination from 'src/components/Guild/public/OverviewGuildVaccination';
 import OverviewOfGuildVaccinationProcess from 'src/components/Guild/public/OverviewOfGuildVaccinationProcess';
+import RegisterGuild from 'src/components/Guild/public/RegisterGuild';
 import TestStatus from 'src/components/Guild/public/TestStatus';
 import TheLatestOverwiewOfVaccination from 'src/components/Guild/public/TheLatestOverwiewOfVaccination';
 
@@ -25,6 +26,7 @@ const GuildOwner: React.FC<any> = () => {
       <OverviewVaccination />
       <OverviewGuildsPerProvince />
       <TestStatus />
+      <RegisterGuild /> 
     </div>
   );
 };
