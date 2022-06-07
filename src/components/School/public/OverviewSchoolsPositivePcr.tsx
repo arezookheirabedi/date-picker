@@ -34,7 +34,7 @@ const OverviewSchoolsPositivePcr = () => {
   };
 
   const [query, setQuery] = useState({
-    timeBoxType: 'MONTHLY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
     categoryValue: null,
