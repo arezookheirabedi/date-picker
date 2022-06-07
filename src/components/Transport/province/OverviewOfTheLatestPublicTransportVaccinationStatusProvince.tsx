@@ -4,51 +4,31 @@ import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
+import {useLocation} from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
-// import Spinner from '../../Spinner';
+
 import Charts from '../../Charts';
-
-
+import {toPersianDigit} from '../../../helpers/utils';
+// import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
 
 const initialData = {
-  categories: ['تهران', 'خراسان رضوی', 'اصفهان', 'فارس', 'خوزستان', 'آذربایجان شرقی', 'مازندران', 'آذربایجان غربی', 'کرمان', 'گیلان', 'البرز', 'سیستان و بلوچستان', 'کرمانشاه', 'هرمزگان', 'گلستان', 'همدان', 'لرستان', 'مرکزی', 'کردستان', 'قزوین', 'اردبيل', 'یزد', 'قم', 'زنجان', 'بوشهر', 'چهارمحال و بختیاری', 'خراسان شمالی', 'خراسان جنوبی', 'سمنان', 'کهگیلویه و بویراحمد', 'ایلام'],
+  categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
   series: [
     {
-      name: 'واکسن نزده',
-      color: '#FF0060',
-      data: [100000, 150000, 53735, 55179, 68494, 39729, 6668, 22471, 24918, 35147, 53685, 38823, 12285, 33724, 1550, 19391, 32050, 15501, 17856, 10587, 15982, 17003, 18431, 10741, 9777, 4833, 5980, 6312, 6693, 7481, 9053],
-    },
-    {
-      name: 'دوز اول',
-      color: '#F3BC06',
-      data: [1000000, 950000, 3952432, 3741394, 3158926, 3013485, 2659416, 2435827, 2153507, 2120640, 2082688, 1778449, 1415348, 1367807, 1314939, 1275993, 1223690, 1113057, 1070036, 988541, 932262, 888320, 809416, 806546, 797276, 666791, 642545, 550605, 542189, 516757, 407424],
-    },
-    {
-      name: 'دوز دوم',
-      color: '#209F92',
-      data: [800000, 750000, 3632019, 3506380, 2758665, 2843383, 2519908, 2250866, 1969160, 2021944, 1939778, 1533717, 1302749, 1259730, 1194796, 1179806, 1109699, 1043458, 962752, 911895, 867004, 809516, 715786, 759066, 730534, 626414, 596822, 507991, 510790, 477946, 375940],
-    },
-    {
-      name: 'دوز سوم',
-      color: '#004D65',
-      data: [600000, 650000, 1585440, 1710132, 1078327, 1551940, 1410920, 1010415, 830194, 1053376, 923226, 652347, 630781, 626908, 492673, 552121, 494537, 517741, 378825, 420373, 416050, 337008, 255532, 406438, 295530, 306338, 275739, 203110, 269510, 218543, 155967],
-    },
-    {
-      name: 'دوز چهارم',
-      color: '#BFDDE7',
-      data: [400000, 300000, 1754, 2824, 2786, 1999, 57049, 689, 670, 2186, 2665, 921, 1132, 907, 6503, 680, 630, 723, 313, 303, 308, 470, 342, 511, 183, 520, 258, 76, 453, 387, 96],
-    },
-    {
-      name: 'دوز پنجم',
-      color: '#716DE3',
-      data: [200000, 100000, 1754, 2824, 2786, 1999, 57049, 689, 670, 2186, 2665, 921, 1132, 907, 6503, 680, 630, 723, 313, 303, 308, 470, 342, 511, 183, 520, 258, 76, 453, 387, 96],
+      name: 'واکسیناسیون',
+      data: [
+        {name: 'دوز اول', y: 30, color: '#F3BC06'},
+        {name: 'دوز دوم', y: 40, color: '#209F92'},
+        {name: 'دوز سوم', y: 35, color: '#004D65'},
+        {name: 'دوز چهارم', y: 60, color: '#BFDDE7'},
+        {name: 'دوز پنجم', y: 80, color: '#716DE3'},
+        {name: 'واکسن نزده ها', y: 50, color: '#FF0060'},
+      ],
     },
   ]
 } as any;
-
 
 const converters = {
   fa(number: any) {
@@ -67,16 +47,12 @@ const optionChart = {
       const ret = Highcharts.numberFormat.apply(0, arguments as any);
       return converters.fa(ret);
     },
-
-
     events: {
       redraw: () => {
         // eslint-disable-next-line
         // console.log('redraw');
       },
     },
-    // zoomType: 'x'
-    // styledMode: true
   },
   title: {
     text: '',
@@ -100,14 +76,9 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
   plotOptions: {
     series: {
-      // stacking: 'percent',
-      // stacking: `${notPercent?'normal':'percent'}`,
-      stacking: 'percent',
-      // borderRadius: 5,
-      pointWidth: 15,
+      borderRadius: 10,
     },
     column: {
       threshold: null,
@@ -135,9 +106,6 @@ const optionChart = {
     labels: {
       rotation: 45,
     },
-    // lineDashStyle: 'dash',
-    // lineColor: '#000000',
-    // lineWidth: 1
   },
   tooltip: {
     shared: true,
@@ -150,21 +118,24 @@ const optionChart = {
       fontSize: 10,
     },
     borderWidth: 0,
-    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
-
-  series: [],
 }
 
-const OverViewPassengerStatusVaccinateChart = () => {
+interface OverviewOfTheLatestPublicTransportVaccinationStatusProvinceProps {
+  cityTitle: any
+}
+
+const OverviewOfTheLatestPublicTransportVaccinationStatusProvince: React.FC<OverviewOfTheLatestPublicTransportVaccinationStatusProvinceProps> = ({cityTitle}) => {
   // const {CancelToken} = axios;
   // const source = CancelToken.source();
-  const [dataset] = useState<any[]>(initialData);
-  // const [categories, setCategories] = useState<any[]>([]);
+  const location = useLocation();
+  // const history = useHistory();
+  // const [categories, setCategories] = useState<any[]>();
+  const [dataset, setDataset] = useState<any[]>(initialData);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
-  const [errorMessage, setErrorMessage] = useState(null);
+  // const [errorMessage, setErrorMessage] = useState(null);
   // const [loading, setLoading] = useState(false);
+
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -194,101 +165,83 @@ const OverViewPassengerStatusVaccinateChart = () => {
       : '';
   };
 
+// eslint-disable-next-line
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: [],
+    province: 'تهران',
   });
 
+
   // // eslint-disable-next-line
-  // const getLinearOverview = async () => {
+  // const getLinearOverview = async (params: any) => {
   //   setLoading(true);
   //   setErrorMessage(null);
   //   try {
-  //     const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
+  //     const {data} = await vaccineService.membersGeneral(params,{CancelToken:source.token})
+  //     // const {data} = await hcsService.dosesTagBased(params);
+  //     const dataChart: any = {
+  //       null: 5,
+  //       '0': Number(data.totalNonVaccinesCount || 0), // واکسن نزدع
+  //       '1': Number(data.doses[1] || 0), // دوز اول
+  //       '2': Number(data.doses[2] || 0), // دوز دوم
+  //       '3': Number(data.doses[3] || 0), // دوز سوم
+  //       '4': Number(data.gtDoses[3] || 0) //  بیش از سه دوز
   //
-  //     const provinces: any[] = [];
+  //     };
   //
   //     // eslint-disable-next-line
-  //     let firstDose: any[] = [];
+  //     let firstDose: number = 0;
   //     // eslint-disable-next-line
-  //     let secondDose: any[] = [];
+  //     let secondDose: number = 0;
   //     // eslint-disable-next-line
-  //     let thirdDose: any[] = [];
+  //     let thirdDose: number = 0;
   //     // eslint-disable-next-line
-  //     let moreThanThreeDose: any[] = [];
+  //     let moreThanThreeDose: number = 0;
   //     // eslint-disable-next-line
-  //     let noDose: any[] = [];
+  //     let noDose: number = 0;
   //
-  //     data.forEach((item: any, index: number) => {
-  //       let more = 0;
+  //     Object.entries(dataChart).forEach(([key, value]: any[]) => {
+  //       switch (key) {
+  //         case 'null':
+  //           // noDose += value;
+  //           break;
+  //         case '0':
+  //           noDose += value;
+  //           break;
+  //         case '1':
+  //           firstDose += value;
+  //           break;
+  //         case '2':
+  //           secondDose += value;
+  //           break;
+  //         case '3':
+  //           thirdDose += value;
+  //           break;
+  //         case '4':
+  //           moreThanThreeDose += value;
+  //           break;
   //
-  //       // eslint-disable-next-line
-  //       for (const [key, value] of Object.entries(item.doses)) {
-  //
-  //         if (Number(key) === 1) {
-  //           firstDose.push(Number(value));
-  //         }
-  //
-  //         if (Number(key) === 2) {
-  //           secondDose.push(Number(value));
-  //         }
-  //
-  //         if (Number(key) === 3) {
-  //           thirdDose.push(Number(value));
-  //         }
-  //
-  //         if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-  //           more += Number(value);
-  //         }
+  //         default:
+  //           break;
   //       }
-  //
-  //       noDose.push(Number(item.totalNonVaccinesCount || 0));
-  //
-  //       if (noDose.length < index + 1) noDose.push(0);
-  //       if (firstDose.length < index + 1) firstDose.push(0);
-  //       if (secondDose.length < index + 1) secondDose.push(0);
-  //       if (thirdDose.length < index + 1) thirdDose.push(0);
-  //       if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
-  //
-  //       provinces.push(item.province);
   //     });
-  //
-  //     console.log('no dose => ',noDose)
-  //     console.log('first dose => ',firstDose)
-  //     console.log('second dose => ',secondDose)
-  //     console.log('third dose => ',thirdDose)
-  //     console.log('more than => ',moreThanThreeDose)
-  //     console.log('provinces => ',provinces)
   //
   //     setDataset([
   //       {
-  //         name: 'واکسن نزده',
-  //         color: '#FF0060',
-  //         data: [...noDose],
-  //       },
-  //       {
-  //         name: 'دوز اول',
-  //         color: '#F3BC06',
-  //         data: [...firstDose],
-  //       },
-  //       {
-  //         name: 'دوز دوم',
-  //         color: '#209F92',
-  //         data: [...secondDose],
-  //       },
-  //       {
-  //         name: 'دوز سوم',
-  //         color: '#004D65',
-  //         data: [...thirdDose],
-  //       },
-  //       {
-  //         name: 'بیش از ۳ دوز',
-  //         color: '#BFDDE7',
-  //         data: [...moreThanThreeDose],
+  //         name: 'واکسیناسیون',
+  //         type: 'column',
+  //         data: [
+  //           {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
+  //           {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
+  //           {name: 'دوز دوم', y: secondDose, color: '#209F92'},
+  //           {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
+  //           {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
+  //         ],
   //       },
   //     ]);
-  //     setCategories([...provinces]);
+  //
+  //     setCategories(['واکسن نزده', 'دوز اول', 'دوز دوم', 'دوز سوم', 'بیش از ۳ دوز']);
   //   } catch (error: any) {
   //     setErrorMessage(error.message);
   //     // eslint-disable-next-line
@@ -298,17 +251,50 @@ const OverViewPassengerStatusVaccinateChart = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   const idSetTimeOut = setTimeout(() => {
-  //     getLinearOverview();
-  //   }, 500);
-  //
-  //   return () => {
-  //     clearTimeout(idSetTimeOut);
-  //     source.cancel('Operation canceled by the user.');
-  //     setDataset([]);
-  //   };
-  // }, []);
+
+  useEffect(() => {
+    // setDataset([
+    //   {
+    //     name: 'واکسیناسیون',
+    //     type: 'column',
+    //     data: [
+    //       {name: 'دوز اول', y: 30, color: '#F3BC06'},
+    //       {name: 'دوز دوم', y: 40, color: '#209F92'},
+    //       {name: 'دوز سوم', y: 35, color: '#004D65'},
+    //       {name: 'دوز چهارم', y: 60, color: '#BFDDE7'},
+    //       {name: 'دوز پنجم', y: 80, color: '#716DE3'},
+    //       {name: 'واکسن نزده ها', y: 50, color: '#FF0060'},
+    //     ],
+    //   },
+    // ]);
+
+    // setCategories(['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم' , 'واکسن نزده ها']);
+    // const params = new URLSearchParams(location.search);
+    // const provinceName = params.get('provinceName') || ('تهران' as any);
+    //
+    // const existsCity = sideCities.some((item: any) => {
+    //   return item.name === provinceName;
+    // });
+    //
+    // let idSetTimeOut: any;
+    // if (existsCity) {
+    //   idSetTimeOut = setTimeout(() => {
+    //     getLinearOverview({...queryParams, province: provinceName});
+    //   }, 500);
+    // } else {
+    //   history.push('/dashboard/vaccination/province');
+    // }
+    //
+    // return () => {
+    //   if (existsCity) {
+    //     source.cancel('Operation canceled by the user.');
+    //     clearTimeout(idSetTimeOut);
+    //     setDataset([])
+    //
+    //
+    //   }
+    // };
+  }, [queryParams, location.search]);
 
 
   useEffect(() => {
@@ -321,14 +307,12 @@ const OverViewPassengerStatusVaccinateChart = () => {
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: [],
       });
     }
   }, [selectedDayRange]);
@@ -340,9 +324,37 @@ const OverViewPassengerStatusVaccinateChart = () => {
       to: null,
     });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDataset((prev: any) => {
+        return {
+          ...prev,
+          categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
+          series: [
+            {
+              name: 'واکسیناسیون',
+              data: [
+                {name: 'دوز اول', y: Math.trunc((Math.random() * 100)), color: '#F3BC06'},
+                {name: 'دوز دوم', y: Math.trunc((Math.random() * 100)), color: '#209F92'},
+                {name: 'دوز سوم', y: Math.trunc((Math.random() * 100)), color: '#004D65'},
+                {name: 'دوز چهارم', y: Math.trunc((Math.random() * 100)), color: '#BFDDE7'},
+                {name: 'دوز پنجم', y: Math.trunc((Math.random() * 100)), color: '#716DE3'},
+                {name: 'واکسن نزده ها', y: Math.trunc((Math.random() * 100)), color: '#FF0060'},
+              ],
+            },
+          ]
+        }
+      })
+    }, 5000)
+  }, [dataset])
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون مسافران</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به آخرین وضعیت واکسیناسیون حمل و نقل عمومی در استان&nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
@@ -459,9 +471,7 @@ const OverViewPassengerStatusVaccinateChart = () => {
           </div>
         </div>
 
-        {/* <Stacked data={dataset} categories={categories} /> */}
         <HeadlessChart data={dataset} optionsProp={optionChart}/>
-
         {/* {loading && (
           <div className="p-40">
             <Spinner />
@@ -469,17 +479,14 @@ const OverViewPassengerStatusVaccinateChart = () => {
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} />
+          <Stacked data={dataset} categories={categories}  notPercent/>
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )} */}
-        {/* <div className="flex justify-center items-center w-full">
-          <Stacked data={dataset} categories={categories} />
-        </div> */}
       </div>
     </fieldset>
   )
 }
 
-export default OverViewPassengerStatusVaccinateChart;
+export default OverviewOfTheLatestPublicTransportVaccinationStatusProvince;

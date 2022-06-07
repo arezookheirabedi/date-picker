@@ -1,37 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
-// import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-import {sideCities, transportationTypes} from '../../../helpers/utils';
+import {transportationTypes} from '../../../helpers/utils';
 // import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
-import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 
 const {Line} = Charts;
 
-interface OverviewPublicPatientsProvinceProps {
-  cityTitle: any;
-}
-
-const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({
-  cityTitle,
-}) => {
+const OverviewOfAffectedAfterTravelingInCountry = () => {
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -41,8 +32,9 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const location = useLocation();
-  const history = useHistory();
+  const focusFromDate = () => {
+    setShowDatePicker(true);
+  };
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
@@ -54,20 +46,13 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     tag: 'transport',
   });
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  const getColumnChartTestResult = async (params: any, province: any) => {
+  const getColumnChartTestResult = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await hcsService.columnChartTestResultService(
-        {...params, province},
-        {
-          cancelToken: source.token,
-        }
-      );
+      const response = await hcsService.columnChartTestResultService(params, {
+        cancelToken: source.token,
+      });
       setData(response.data);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -78,36 +63,34 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     }
   };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getColumnChartTestResult(query, provinceName);
-      }, 500);
-    } else {
-      history.push('/dashboard/transport/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        clearTimeout(idSetTimeOut);
-      }
-    };
-  }, [query, location.search]);
+  // const getLinearOverviewPublicTransport = async (params: any) => {
+  //   setLoading(true);
+  //   setErrorMessage(null);
+  //   try {
+  //     const response = await transportService.linearOverviewPublicTransport(params, {
+  //       cancelToken: source.token,
+  //     });
+  //     setData(response.data);
+  //   } catch (error: any) {
+  //     setErrorMessage(error.message);
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartTestResult(query);
+    }, 500);
+
     return () => {
       setData([]);
+      source.cancel('Operation canceled by the user.');
+      clearTimeout(idSetTimeOut);
     };
-  }, [history]);
+  }, [query]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -176,10 +159,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی مبتلایان حمل و نقل عمومی در &nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به مبتلا شدگان بعد از سفر در کل کشور</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
@@ -272,4 +252,5 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   );
 };
 
-export default OverviewPublicPatientsProvince;
+export default OverviewOfAffectedAfterTravelingInCountry;
+
