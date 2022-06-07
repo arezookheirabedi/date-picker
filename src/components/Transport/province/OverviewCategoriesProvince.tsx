@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Menu} from '@headlessui/react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -10,20 +9,9 @@ import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
-const filterTypes = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
 
 interface OverviewCategoriesProvinceProps {
   cityTitle?: any;
@@ -194,58 +182,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         نگاه کلی رسته‌های حمل و نقل در استان &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex items-center">
-          <Menu
-            as="div"
-            className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-          >
-            <div>
-              <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                <span className="ml-10 whitespace-nowrap truncate">
-                  {filterType?.name || 'بیشترین'}
-                </span>
-                <DownIcon className="h-2 w-2.5 mr-2" />
-              </Menu.Button>
-            </div>
-
-            <Menu.Items
-              style={{width: '250px'}}
-              className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-              <div className="px-1 py-1 ">
-                {filterTypes.map((value: any, index: any) => {
-                  // console.log(value);
-                  return (
-                    // eslint-disable-next-line
-                    <Menu.Item key={index}>
-                      {({active}) => (
-                        <button
-                          type="button"
-                          className={`${
-                            active ? 'bg-gray-100' : ''
-                          } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                          onClick={() => {
-                            setFilterType(value);
-                            // setQueryParams({
-                            //   ...queryParams,
-                            //   tag: value.enName,
-                            // });
-                          }}
-                        >
-                          {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                          {value.name}
-                        </button>
-                      )}
-                    </Menu.Item>
-                  );
-                })}
-              </div>
-            </Menu.Items>
-          </Menu>
-        </div>
+      <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center justify-start">
           {showDatePicker ? (
             <DatePickerModal
@@ -335,11 +272,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
-                name: 'درصد ابتلا',
+                name: 'درصد ابتلا کل رانندگان',
                 key: 'infectedPercent',
                 render: (v: any) => (
                   <span>
-                    {Number(v || 0).toLocaleString('fa', {
+                    {Number(v).toLocaleString('fa', {
                       minimumFractionDigits: 4,
                     })}
                     %

@@ -1,36 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
-import {Menu} from '@headlessui/react';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
-import GreenVaccine from '../../../assets/images/icons/green-vaccine.svg';
-import GrayVaccine from '../../../assets/images/icons/gray-vaccine.svg';
+import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 // import transportService from '../../../services/transport.service';
 import YellowVaccineMd from '../../../assets/images/icons/yellow-vaccine-lg.svg';
 import PurppleVaccineMd from '../../../assets/images/icons/purpple-vaccine-lg.svg';
 import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
-import BlueVaccine from '../../../assets/images/icons/blue-vaccine.svg';
 import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
 import Spinner from '../../Spinner';
-import {sideCities} from '../../../helpers/utils';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import {sideCities, toPersianDigit} from '../../../helpers/utils';
 import vaccineService from '../../../services/vaccine.service';
 import hcsService from '../../../services/hcs.service';
+import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
+import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
+import DatePickerModal from "../../DatePickerModal";
+import calendar from "../../../assets/images/icons/calendar.svg";
 
 
-const filterTypes = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps {
   cityTitle: any;
@@ -61,7 +51,45 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
     const [loading, setLoading] = useState(false);
     const [orgDataset, setOrgDataset] = useState<any>([]);
     const [dataset, setDataset] = useState<any>([]);
+    const [showDatePicker, setShowDatePicker] = useState(false);
     const [datasetLoading, setDatasetLoading] = useState<any>([]);
+
+    const [selectedDayRange, setSelectedDayRange] = useState({
+      from: null,
+      to: null,
+    }) as any;
+
+    const focusFromDate = () => {
+      setShowDatePicker(true);
+    };
+
+    const generateFromDate: any = () => {
+      // eslint-disable-next-line
+      return selectedDayRange.from
+        ? // eslint-disable-next-line
+        selectedDayRange.from.year +
+        '/' +
+        selectedDayRange.from.month +
+        '/' +
+        selectedDayRange.from.day
+        : '';
+    };
+
+    const generateToDate: any = () => {
+      // eslint-disable-next-line
+      return selectedDayRange.to
+        ? // eslint-disable-next-line
+        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+        : '';
+    };
+
+    const clearSelectedDayRange = (e: any) => {
+      e.stopPropagation();
+      setSelectedDayRange({
+        from: null,
+        to: null,
+      });
+    };
 
     const {CancelToken} = axios;
     const source = CancelToken.source();
@@ -354,52 +382,19 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
     return (
       <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی واکسیناسیون در حمل و نقل عمومی در &nbsp;
+          نگاه کلی واکسیناسیون در حمل و نقل عمومی در استان &nbsp;
           {cityTitle}
         </legend>
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
           <Statistic
             icon={totalDriver}
             text="مجموع رانندگان فعال"
             count={numberOf.totalPopulation}
             loading={loading}
             hasInfo
-            infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
-          />
-          <Statistic
-            icon={YellowVaccineMd}
-            text="تعداد واکسیناسیون دوز اول"
-            count={numberOf.doses[1] || 0}
-            loading={loading}
-            hasInfo
-            infoText="تعداد افرادی که فقط یک دوز واکسن دریافت کردند"
-          />
-          <Statistic
-            icon={PurppleVaccineMd}
-            text="تعداد واکسیناسیون دوز دوم"
-            count={numberOf.doses[2] || 0}
-            loading={loading}
-            hasInfo
-            infoText="تعداد افرادی که دو دوز واکسن رو دریافت کردند"
-          />
-          <Statistic
-            icon={NavyVaccineMd}
-            text="تعداد واکسیناسیون دوز سوم"
-            count={numberOf.doses[3] || 0}
-            loading={loading}
-            hasInfo
-            infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند"
-          />
-        </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
-          <Statistic
-            icon={BlueVaccine}
-            text="بیش از ۳ دوز"
-            count={numberOf.gtDoses[3] || 0}
-            loading={loading}
-            hasInfo
-            infoText="تعداد افرادی که بیش از ۳ دوز واکسن دریافت کرده‌اند"
+            infoText="مجموع رانندگانی که در حمل ‌و نقل عمومی فعالیت دارند."
           />
           <Statistic
             icon={GreenVaccine}
@@ -407,15 +402,50 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             count={numberOf.totalVaccinesCount || 0}
             loading={loading}
             hasInfo
-            infoText="مجموع افرادی که واکسن دریافت کرده‌اند، ( یک دوز ،دو دوز ، سه دور)"
+            infoText="تعداد کل دوز های تزریق شده در حمل‌ونقل عمومی"
           />
           <Statistic
-            icon={GrayVaccine}
-            text="تعداد اطلاعات مخدوش"
+            icon={YellowVaccineMd}
+            text="تعداد واکسیناسیون دوز اول"
+            count={numberOf.doses[1] || 0}
+            loading={loading}
+            hasInfo
+            infoText="تعداد افرادی که دوز اول واکسن را دریافت کرده‌اند."
+          />
+          <Statistic
+            icon={OrangeVaccine}
+            text="تعداد واکسیناسیون دوز دوم"
+            count={numberOf.doses[3] || 0}
+            loading={loading}
+            hasInfo
+            infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
+          />
+        </div>
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12 border-b-2 border-slate-400 pb-8">
+          <Statistic
+            icon={PurppleVaccineMd}
+            text="تعداد واکسیناسیون دوز سوم"
+            count={numberOf.doses[2] || 0}
+            loading={loading}
+            hasInfo
+            infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
+          />
+          <Statistic
+            icon={DarkgreenVaccine}
+            text="تعداد واکسیناسیون دوز چهارم"
+            count={numberOf.gtDoses[3] || 0}
+            loading={loading}
+            hasInfo
+            infoText="تعداد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
+          />
+          <Statistic
+            icon={NavyVaccineMd}
+            text="تعداد واکسیناسیون دوز پنجم"
             count={numberOf.totalUnknownVaccinesCount || 0}
             loading={loading}
             hasInfo
-            infoText="تعداد افرادی که اطلاعات آن‌ها در سامانه به درستی ثبت نشده است"
+            infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={GrayVaccine2}
@@ -423,67 +453,163 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             count={numberOf.totalNonVaccinesCount || 0}
             loading={loading}
             hasInfo
-            infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده‌اند"
+            infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
+          />
+        </div>
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+          <Statistic
+            icon={GreenVaccine}
+            text="درصد واکسیناسیون کل کشور"
+            count={numberOf.totalVaccinesCount || 0}
+            loading={loading}
+            hasInfo
+            infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
+          />
+          <Statistic
+            icon={YellowVaccineMd}
+            text="درصد واکسیناسیون دوز اول"
+            count={numberOf.doses[1] || 0}
+            loading={loading}
+            hasInfo
+            infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
+          />
+          <Statistic
+            icon={OrangeVaccine}
+            text="درصد واکسیناسیون دوز دوم"
+            count={numberOf.totalPopulation}
+            loading={loading}
+            hasInfo
+            infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
+          />
+          <Statistic
+            icon={PurppleVaccineMd}
+            text="درصد واکسیناسیون دوز سوم"
+            count={numberOf.doses[2] || 0}
+            loading={loading}
+            hasInfo
+            infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
           />
         </div>
 
-        <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex items-center">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'کمترین'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
+        <div
+          className="flex flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+          <div className="w-1/4">
+            <Statistic
+              icon={DarkgreenVaccine}
+              text="درصد واکسیناسیون دوز چهارم"
+              count={numberOf.totalVaccinesCount || 0}
+              loading={loading}
+              hasInfo
+              infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
+            />
+          </div>
+          <div className="w-1/4">
+            <Statistic
+              icon={NavyVaccineMd}
+              text="درصد واکسیناسیون دوز پنجم"
+              count={numberOf.doses[1] || 0}
+              loading={loading}
+              hasInfo
+              infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
+            />
+          </div>
 
-              <Menu.Items
-                style={{width: '250px'}}
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          <div className="w-1/4">
+            <Statistic
+              icon={GrayVaccine2}
+              text="درصد واکسیناسیون انجام نشده"
+              count={numberOf.totalNonVaccinesCount || 0}
+              loading={loading}
+              hasInfo
+              infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
+            />
+          </div>
+        </div>
+
+        <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+          <div className="flex align-center justify-between">
+            {showDatePicker ? (
+              <DatePickerModal
+                setSelectedDayRange={setSelectedDayRange}
+                selectedDayRange={selectedDayRange}
+                setShowDatePicker={setShowDatePicker}
+                showDatePicker
+              />
+            ) : null}
+            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
+              <div
+                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                onClick={focusFromDate}
               >
-                <div className="px-1 py-1 ">
-                  {filterTypes.map((value: any, index: any) => {
-                    // console.log(value);
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                            onClick={() => {
-                              setFilterType(value);
-                              // setQueryParams({
-                              //   ...queryParams,
-                              //   tag: value.enName,
-                              // });
-                            }}
-                          >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
+                {selectedDayRange.from && (
+                  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                      {toPersianDigit(generateFromDate())}
+                    </span>
+                )}
+                {selectedDayRange.to || selectedDayRange.from ? (
+                  <button type="button" onClick={clearSelectedDayRange}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center justify-start mx-4">
+              <span className="dash-separator"/>
+            </div>
+            <div className=" shadow-custom rounded-lg px-4 py-1">
+              <div
+                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                onClick={focusFromDate}
+              >
+                {selectedDayRange.to && (
+                  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                      {toPersianDigit(generateToDate())}
+                    </span>
+                )}
+                {selectedDayRange.to || selectedDayRange.from ? (
+                  <button type="button" onClick={clearSelectedDayRange}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
         {datasetLoading ? (
           <div className="p-20">
-            <Spinner />
+            <Spinner/>
           </div>
         ) : (
           <>
