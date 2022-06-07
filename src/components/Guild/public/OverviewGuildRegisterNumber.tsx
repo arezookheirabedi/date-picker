@@ -17,15 +17,9 @@ const {HeadlessChart} = Charts;
 
 const OverviewGuildRegisterNumber: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -159,6 +153,13 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           states: {
             hover: {
               enabled: true,
+              fillColor: {
+                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
+                // stops: [
+                //   [0, "#FFCC00"], // start
+                //   [1, "#FF9400"] // end
+                // ]
+              },
               lineColor: '#fff',
               lineWidth: 3,
             },
@@ -167,6 +168,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         lineWidth: 2,
         threshold: null,
         borderRadius: 2,
+        // pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
@@ -184,6 +186,22 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         enabled: false,
       },
     },
+    // scrollbar: {
+    //   enabled: true,
+    //   barBackgroundColor: '#656565',
+    //   barBorderColor: '#eee',
+    //   barBorderRadius: 4,
+    //   barBorderWidth: 0,
+    //   height: 6,
+    //   buttonArrowColor: '#eee',
+    //   rifleColor: '#656565',
+    //   buttonBackgroundColor: 'transparent',
+    //   buttonBorderWidth: 0,
+    //   buttonBorderRadius: 0,
+    //   trackBackgroundColor: '#eee',
+    //   trackBorderWidth: 0,
+    //   trackBorderRadius: 4,
+    // },
     xAxis: {
       // scrollbar: {
       //   enabled: true,
@@ -205,6 +223,8 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         textAlign: 'right',
         fontFamily: 'inherit',
       },
+  
+      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
       {

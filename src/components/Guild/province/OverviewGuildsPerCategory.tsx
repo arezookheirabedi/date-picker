@@ -130,7 +130,7 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت رسته‌ها {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت  رسته‌ها در استان &nbsp;{cityTitle}</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
