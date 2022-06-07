@@ -34,7 +34,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   }) as any;
 
   const [query, setQuery] = useState({
-    timeBoxType: 'MONTHLY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
     category: 'grade',
