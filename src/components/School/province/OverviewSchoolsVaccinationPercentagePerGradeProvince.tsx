@@ -72,36 +72,17 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
 
       setDataset([
         {
-          name: 'واکسن زده',
+          name: 'واکسن نزده',
           color: '#e21416',
-          data: [...vaccinesPercentage],
-          dataLabels: {
-            // enabled: true,
-            // rotation: 270,
-          },
+          data: [...nonVaccinesPercentage],
+    
         },
         {
-          dataLabels: {
-            // enabled: true,
-            // rotation: 270,
-            // format: "{y}%"
-          },
-          name: 'واکسن نزده',
-          // color: '#F3BC06',
-          data: [...nonVaccinesPercentage],
-          color: {
-            linearGradient: {
-              x1: 0,
-              x2: 0,
-              y1: 0,
-              y2: 1,
-            },
-            stops: [
-              [0, '#048365'],
-              [1, '#04d2a0'],
-            ],
-          },
-        },
+          name: 'واکسن زده',
+          color:'#04b086',
+          data: [...vaccinesPercentage],
+        
+        }
       ]);
       setCategories([...grade]);
     } catch (error: any) {
@@ -134,26 +115,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     };
   }, [queryParams]);
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const provinceName = params.get('provinceName') || ('تهران' as any);
-  //   const existsCity = sideCities.some((item: any) => {
-  //     return item.name === provinceName;
-  //   });
-  //   if (existsCity) {
-  //     getLinearOverview({...queryParams, provinceName});
-  //   } else {
-  //     history.push('/dashboard/school/province');
-  //   }
-
-  //   return () => {
-  //     if (existsCity) {
-  //   // clearTimeout(idSetTimeOut);
-  //   cancelRequest();
-  //   setDataset([]);
-  //     }
-  //   };
-  // }, [location.search, queryParams]);
+ 
 
   useEffect(() => {
     if (selectedDay) {
