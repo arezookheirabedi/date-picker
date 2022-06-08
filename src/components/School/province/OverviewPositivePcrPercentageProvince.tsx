@@ -11,6 +11,7 @@ import Highcharts from 'highcharts';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
 import {useHistory, useLocation} from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -56,26 +57,25 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartPositivePcrPercentage = async (params: any) => {
+  const getColumnChartPositivePcrPercentage = async (from:any,to:any,province:string) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
-        // const {data} = await guildService.percentageOfRegisteredGuilds(params, {
-        cancelToken: cancelToken.token,
+      const {data} = await hcsService.tableOverviewTestResults('edu', 'grade', {
+        lang: 'fa',
+        from,
+        to,
+        province
       });
+      const categoryValue: any[] = [];
 
-      const province: any[] = [];
-
-      const unregistered: any[] = [];
+      const positiveMembersCountToMembersCountPercentage: any[] = [];
       data.forEach((item: any) => {
-        province.push(item.province);
-        unregistered.push(item.percentage);
+        categoryValue.push(item.categoryValue);
+        positiveMembersCountToMembersCountPercentage.push(item.positiveMembersCountToMembersCountPercentage);
       });
-      // setCategories([...province]);
-      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...unregistered]}];
-      // setDataset([...newData]);
-      setDataset({categories: [...province], series: [...newData]});
+      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCountToMembersCountPercentage]}];
+      setDataset({categories: [...categoryValue], series: [...newData]});
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -92,12 +92,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
       return item.name === provinceName;
     });
     if (existsCity) {
-      getColumnChartPositivePcrPercentage({
-        ...queryParams,
-        tag: 'edu',
-        category: 'grade',
-        provinceName,
-      });
+      getColumnChartPositivePcrPercentage(queryParams.from,queryParams.to,provinceName);
     } else {
       history.push('/dashboard/school/province');
     }
@@ -190,6 +185,9 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
       title: {
         enabled: false,
       },
+      labels: {
+        format: '٪{text}',
+      },
     },
     xAxis: {
       lineDashStyle: 'dash',
@@ -199,7 +197,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: 'K',
+      valueSuffix: '%',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -211,13 +209,13 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
     series: [
       {
         lineWidth: 4,
+        showInLegend: false,
         dataLabels: {
           // enabled: true,
         },
       },
     ],
   };
-
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -261,13 +259,13 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        {!loading && !errorMessage && dataset.length === 0 ? (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        ) : (
+        {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-      </div>
+        {isEmpty(dataset) && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        )}
+        </div>
     </fieldset>
   );
 };
