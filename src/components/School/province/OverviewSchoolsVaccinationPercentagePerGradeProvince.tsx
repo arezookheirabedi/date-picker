@@ -5,7 +5,7 @@ import moment from 'moment-jalaali';
 import hcsService from 'src/services/hcs.service';
 import DatePickerModal from 'src/components/SingleDatePickerModal';
 import Calendar from 'src/components/Calendar/SingleCalendar';
-import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {useHistory, useLocation} from 'react-router-dom';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
@@ -140,7 +140,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <SearchableSingleSelect
                 objectKey="categoryValue"
                 placeholder="کل آموزش و پرورش"
@@ -149,7 +149,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
-            </div>
+            </div> */}
             <div className="flex items-center">
               {' '}
               {showDatePicker ? (
