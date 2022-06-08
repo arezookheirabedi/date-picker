@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from 'highcharts/highstock';
-import DatePickerModal from '../../../DatePickerModal';
-import Calendar from '../../../Calendar';
-import Spinner from '../../../Spinner';
-import Charts from '../../../Charts';
-import {converters, IInitialNumberOfDoses} from '../../public/constant';
+import Charts from 'src/components/Charts';
+import DatePickerModal from 'src/components/DatePickerModal';
+import Calendar from 'src/components/Calendar';
+import Spinner from 'src/components/Spinner';
+import { isEmpty } from 'lodash';
+import { converters } from '../../public/constant';
+
 
 const {HeadlessChart} = Charts;
 
@@ -14,12 +16,12 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
   setQueryParams: (data: any) => void;
   queryParams: any;
   errorMessage: string | null;
-  numberOf: IInitialNumberOfDoses;
+  numberOf:any;
 
   loading: boolean;
 }> = ({setQueryParams, queryParams, numberOf, errorMessage, loading}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [initialData, setInitialData] = useState<any>();
+  
 
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -32,70 +34,7 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
 
   // eslint-disable-next-line
 
-  useEffect(() => {
-    const dataChart: any = {
-      null: 5,
-      '0': numberOf.totalNonVaccinesCount || 0, // واکسن نزدع
-      '1': numberOf.doses[1] || 0, // دوز اول
-      '2': numberOf.doses[2] || 0, // دوز دوم
-      '3': numberOf.doses[3] || 0, // دوز سوم
-      '4': numberOf.gtDoses[3] || 0, //  بیش از سه دوز
-    };
 
-    // eslint-disable-next-line
-    let firstDose: number = 0;
-    // eslint-disable-next-line
-    let secondDose: number = 0;
-    // eslint-disable-next-line
-    let thirdDose: number = 0;
-    // eslint-disable-next-line
-    let moreThanThreeDose: number = 0;
-    // eslint-disable-next-line
-    let noDose: number = 0;
-
-    Object.entries(dataChart).forEach(([key, value]: any[]) => {
-      switch (key) {
-        case 'null':
-          // noDose += value;
-          break;
-        case '0':
-          noDose += value;
-          break;
-        case '1':
-          firstDose += value;
-          break;
-        case '2':
-          secondDose += value;
-          break;
-        case '3':
-          thirdDose += value;
-          break;
-        case '4':
-          moreThanThreeDose += value;
-          break;
-
-        default:
-          break;
-      }
-    });
-
-    const newInitialData = {
-      categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-      series: [
-        {
-          name: 'واکسیناسیون',
-          data: [
-            {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
-            {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
-            {name: 'دوز دوم', y: secondDose, color: '#209F92'},
-            {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
-            {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
-          ],
-        },
-      ],
-    } as any;
-    setInitialData({...newInitialData});
-  }, [numberOf]);
 
   const optionChart = {
     chart: {
@@ -139,6 +78,9 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
       title: {
         enabled: false,
       },
+      labels: {
+        format: '٪{text}'
+        },
     },
     legend: {
       enabled: false,
@@ -153,7 +95,7 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: ' نفر',
+      valueSuffix:"٪",
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -238,17 +180,21 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
           </div>
         </div>
 
+
         {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {!loading && errorMessage ? (
-          <div className="p-40 text-red-500">{errorMessage}</div>
-        ) : (
-          <HeadlessChart data={initialData} optionsProp={optionChart} />
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && !isEmpty(numberOf) && !errorMessage && (
+           <HeadlessChart data={numberOf} optionsProp={optionChart} />
+        )}
+        {isEmpty(numberOf) && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
+ 
     </fieldset>
   );
 };

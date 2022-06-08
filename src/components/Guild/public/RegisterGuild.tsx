@@ -2,19 +2,13 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import guildService from 'src/services/guild.service';
-import {useHistory, useLocation} from 'react-router-dom';
-import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
 import Table from '../../TableScopeSort';
-import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 
-interface ITestStatusProps {
-  cityTitle?: any;
-}
-const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
+const RegisterGuild: React.FC<{}> = () => {
+ 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,9 +38,9 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
         normalizedData.push({
           id: `ovca_${index}`,
           name: item.categoryValue || 'نامشخص',
-          total: item.testResultsCount || 0,
-          positiveCountPercentage: item.positiveTestResultsCountToTestResultsCountPercentage || 0,
-          negativeCountPercentage: item.negativeTestResultsCountToTestResultsCountPercentage || 0,
+         
+         
+          registeredCount: item.registeredCount || 0,
         });
       });
       setDataset([...normalizedData]);
@@ -60,27 +54,18 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
+    getTestResultByCategory({
+      ...queryParams,
+      tag: 'guild',
+      category: 'categoryDesc',
     });
-    if (existsCity) {
-      getTestResultByCategory({
-        ...queryParams,
-        tag: 'guild',
-        category: 'categoryDesc',
-        province: provinceName,
-      });
-    } else {
-      history.push('/dashboard/guild/province');
-    }
+
     return () => {
       cancelRequest();
       setDataset([]);
       setOrgDataset([]);
     };
-  }, [queryParams, location.search]);
+  }, [queryParams]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -121,7 +106,7 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
   // }
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">آزمایش در اصناف استان {cityTitle}</legend>
+      <legend className="text-black mx-auto px-3">اصناف ثبت نام شده در سامانه</legend>
 
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
@@ -178,41 +163,16 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[
             {
-              name: 'وضعیت',
-              key: '',
-              render: (v: any, record) => (
-                <CategoryDonut
-                  data={[
-                    {
-                      name: 'negativeCountPercentage',
-                      title: 'منفی',
-
-                      y: record.negativeCountPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'positiveCountPercentage',
-                      title: 'مثبت',
-
-                      y: record.positiveCountPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#FE2D2F'], // start
-                          [1, '#CC0002'], // end
-                        ],
-                      },
-                    },
-                  ]}
-                />
+              name: 'تعداد',
+              key: 'registeredCount',
+              sortable: true,
+              render: (v: any) => (
+                <span>
+                  {Number(v || 0)
+                    .commaSeprator()
+                    .toPersianDigits()}
+                </span>
               ),
-              className: 'flex justify-center w-full',
             },
             {
               name: 'نام رسته',
@@ -224,44 +184,6 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
                 </div>
               ),
             },
-            {
-              name: 'تعداد آزمایش‌های انجام شده',
-              key: 'total',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0)
-                    .commaSeprator()
-                    .toPersianDigits()}
-                </span>
-              ),
-            },
-            {
-              name: 'درصد تست‌های مثبت',
-              key: 'positiveCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
-            },
-            {
-              name: 'درصد تست‌های منفی',
-              key: 'negativeCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
-            },
           ]}
           totalItems={(dataset || []).length}
         />
@@ -270,4 +192,4 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
   );
 };
 
-export default TestStatus;
+export default RegisterGuild;
