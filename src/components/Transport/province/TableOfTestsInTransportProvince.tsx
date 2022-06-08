@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {useHistory, useLocation} from "react-router-dom";
+import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
 // import hcsService from 'src/services/hcs.service';
@@ -10,7 +12,8 @@ import Calendar from '../../Calendar';
 import Table from '../../TableScopeSort';
 
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
+import {sideCities} from '../../../helpers/utils';
+
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 // const order = {
@@ -29,22 +32,31 @@ const TableOfTestsInTransportProvince: React.FC<TableOfTestsInTransportProvinceP
   // const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
+  const location = useLocation();
+  const history = useHistory();
   // const [orgDataset, setOrgDataset] = useState<any>([]);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
-  const cancelToken = cancelTokenSource();
 
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
+  const [query, setQuery] = useState({
+    from: null,
+    to: null,
+    category: 'serviceType',
+    categoryValue: null,
+    tag: 'transport',
+  });
 
-  async function getTestResultByCategory(params: any) {
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+
+  async function getTestResultByCategory(params: any, province: any) {
     setLoading(true);
     try {
-      const {data} = await guildService.guildTestResultByCategory(params, {
-        cancelToken: cancelToken.token,
+      const {data} = await guildService.guildTestResultByCategory({...params, province}, {
+        cancelToken: source.token,
       });
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
@@ -68,7 +80,7 @@ const TableOfTestsInTransportProvince: React.FC<TableOfTestsInTransportProvinceP
 
   useEffect(() => {
     return () => {
-      cancelRequest();
+      source.cancel('Operation canceled by the user.');
       setDataset([]);
       // setOrgDataset([]);
     };
@@ -80,38 +92,49 @@ const TableOfTestsInTransportProvince: React.FC<TableOfTestsInTransportProvinceP
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
-      // setSearchQuery('');
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      getTestResultByCategory({
-        tag: 'guild',
-        category: 'categoryDesc',
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      setQuery({
+        ...query,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
-      getTestResultByCategory({
-        tag: 'guild',
-        category: 'categoryDesc',
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
         from: null,
         to: null,
       });
     }
   }, [selectedDayRange]);
 
-  // function handleSearch(e: any) {
-  //   const {value} = e.target;
-  //   let tmp = [...orgDataset];
-  //   if (value) {
-  //     tmp = [...tmp].filter(x => x.name.indexOf(value) !== -1);
-  //   }
-  //   setDataset([...tmp]);
-  //   setSearchQuery(value);
-  // }
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
 
-  // function handlePageChange(page: number = 1) {
-  //   setCurrentPage(page);
-  // }
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    let idSetTimeOut: any;
+    if (existsCity) {
+      idSetTimeOut = setTimeout(() => {
+        getTestResultByCategory(query, provinceName);
+      }, 500);
+    } else {
+      history.push('/dashboard/transport/province');
+    }
+
+    return () => {
+      if (existsCity) {
+        source.cancel('Operation canceled by the user.');
+        clearTimeout(idSetTimeOut);
+      }
+    };
+  }, [query, location.search]);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
