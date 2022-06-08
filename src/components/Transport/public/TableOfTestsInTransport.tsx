@@ -35,6 +35,7 @@ const TableOfTestsInTransport = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
+
   async function getTestResultByCategory(params: any) {
     setLoading(true);
     try {
@@ -60,6 +61,7 @@ const TableOfTestsInTransport = () => {
       setLoading(false);
     }
   }
+
   useEffect(() => {
     return () => {
       cancelRequest();
@@ -78,15 +80,15 @@ const TableOfTestsInTransport = () => {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       getTestResultByCategory({
-        tag: 'guild',
-        category: 'categoryDesc',
+        tag: 'transport',
+        category: 'serviceType',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
       getTestResultByCategory({
-        tag: 'guild',
-        category: 'categoryDesc',
+        tag: 'transport',
+        category: 'serviceType',
         from: null,
         to: null,
       });
