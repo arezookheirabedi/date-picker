@@ -27,17 +27,17 @@ instanceMockAdapter
         numberOfTotalBakery: 108759,
         numberOfEnableBakery: 80665,
         numberOfDisableBakery: 1076,
-        numberOfBakeryBanned: 8648,
+        numberOfBakeryBanned: 27018,
         numberOfSamt: 75751,
         numberOfSima: 108759,
         numberOfActivePos: 82067,
-        numberOfAvgSupplyFlour: 23594882.2258065,
+        numberOfAvgSupplyFlour: 23594882.23,
         numberOfBakeryWithoutPos: 21803,
-        numberOfAudit: 14800,
+        numberOfAudit: 19478,
 
-        numberOfTransactionPerDay: 8648,
-        numberOfTransaction: 14094,
-        numberOfPosActiveTime: 6263,
+        numberOfTransactionPerDay: 12390,
+        numberOfTransaction: 17814,
+        numberOfPosActiveTime: 11505,
       };
     }
 
@@ -52,138 +52,39 @@ instanceMockAdapter
 
     if (!req.params.province)
       response = [
-        {
-          category: 'لواش',
-          total: 26380,
-        },
-        {
-          category: 'بربري',
-          total: 21739,
-        },
-        {
-          category: 'سنگک',
-          total: 9811,
-        },
-        {
-          category: 'تافتون',
-          total: 9409,
-        },
-        {
-          category: 'تافتون ماشيني',
-          total: 3857,
-        },
-        {
-          category: 'فانتزي',
-          total: 2931,
-        },
-        {
-          category: 'ساير نان هاي سنتي',
-          total: 1646,
-        },
-        {
-          category: 'نان تافتون سنتي',
-          total: 1122,
-        },
-        {
-          category: 'تافتون تنوري',
-          total: 1022,
-        },
-        {
-          category: 'تنوري سنتي',
-          total: 851,
-        },
-        {
-          category: 'حجیم و نیمه حجیم',
-          total: 829,
-        },
-        {
-          category: 'ماشيني',
-          total: 714,
-        },
-        {
-          category: 'دوار',
-          total: 688,
-        },
-        {
-          category: 'خشکه پزی',
-          total: 546,
-        },
-        {
-          category: 'حرارت غيرمستقيم',
-          total: 505,
-        },
-        {
-          category: 'سنتي',
-          total: 228,
-        },
-        {
-          category: 'تنوري',
-          total: 204,
-        },
-        {
-          category: 'خام پز',
-          total: 189,
-        },
-        {
-          category: 'نان محلی',
-          total: 101,
-        },
-        {
-          category: 'نانوايي ماشيني',
-          total: 90,
-        },
-        {
-          category: 'صنعتی',
-          total: 50,
-        },
-        {
-          category: 'ساير',
-          total: 46,
-        },
-        {
-          category: 'نان روغني',
-          total: 44,
-        },
-        {
-          category: 'خانه پز',
-          total: 41,
-        },
-        {
-          category: 'صمون پزي',
-          total: 37,
-        },
-        {
-          category: 'مجتمع',
-          total: 36,
-        },
-        {
-          category: 'خشکه پز',
-          total: 28,
-        },
-        {
-          category: 'تافتون خراساني',
-          total: 22,
-        },
-        {
-          category: 'نان حجمي و نيمه حجمي',
-          total: 11,
-        },
-        {
-          category: 'ماشيني سبوس دار',
-          total: 1,
-        },
-        {
-          category: 'نيمه حجيم',
-          total: 1,
-        },
-        {
-          category: 'بولکي',
-          total: 1,
-        },
-        {
-          category: 'اسکو',
-          total: 1,
-        },
+        {category: 'لواش', total: 26380},
+        {category: 'بربري', total: 21739},
+        {category: 'سنگک', total: 9811},
+        {category: 'تافتون', total: 9409},
+        {category: 'تافتون ماشيني', total: 3857},
+        {category: 'فانتزي', total: 2931},
+        {category: 'ساير نان هاي سنتي', total: 1646},
+        {category: 'نان تافتون سنتي', total: 1122},
+        {category: 'تافتون تنوري', total: 1022},
+        {category: 'تنوري سنتي', total: 851},
+        {category: 'حجیم و نیمه حجیم', total: 829},
+        {category: 'ماشيني', total: 714},
+        {category: 'دوار', total: 688},
+        {category: 'خشکه پزی', total: 546},
+        {category: 'حرارت غيرمستقيم', total: 505},
+        {category: 'سنتي', total: 228},
+        {category: 'تنوري', total: 204},
+        {category: 'خام پز', total: 189},
+        {category: 'نان محلی', total: 101},
+        {category: 'نانوايي ماشيني', total: 90},
+        {category: 'صنعتی', total: 50},
+        {category: 'ساير', total: 46},
+        {category: 'نان روغني', total: 44},
+        {category: 'خانه پز', total: 41},
+        {category: 'صمون پزي', total: 37},
+        {category: 'مجتمع', total: 36},
+        {category: 'خشکه پز', total: 28},
+        {category: 'تافتون خراساني', total: 22},
+        {category: 'نان حجمي و نيمه حجمي', total: 11},
+        {category: 'ماشيني سبوس دار', total: 1},
+        {category: 'نيمه حجيم', total: 1},
+        {category: 'بولکي', total: 1},
+        {category: 'اسکو', total: 1},
       ];
 
     return [200, [...response]];
