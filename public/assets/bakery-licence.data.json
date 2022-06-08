@@ -1,157 +1,33 @@
 [
-  {
-    "province": "اردبیل",
-    "sima": 1829,
-    "samt": 2840
-  },
-  {
-    "province": "اصفهان",
-    "sima": 305,
-    "samt": 573
-  },
-  {
-    "province": "البرز",
-    "sima": 1690,
-    "samt": 2336
-  },
-  {
-    "province": "ايلام",
-    "sima": 247,
-    "samt": 830
-  },
-  {
-    "province": "آذربايجان شرقي",
-    "sima": 2155,
-    "samt": 6863
-  },
-  {
-    "province": "آذربايجان غربي",
-    "sima": 1300,
-    "samt": 5317
-  },
-  {
-    "province": "بوشهر",
-    "sima": 286,
-    "samt": 730
-  },
-  {
-    "province": "تهران",
-    "sima": 1776,
-    "samt": 9199
-  },
-  {
-    "province": "چهارمحال وبختيارئ",
-    "sima": 332,
-    "samt": 954
-  },
-  {
-    "province": "خراسان جنوبي",
-    "sima": 248,
-    "samt": 731
-  },
-  {
-    "province": "خراسان رضوئ",
-    "sima": 2855,
-    "samt": 5337
-  },
-  {
-    "province": "خراسان شمالي",
-    "sima": 310,
-    "samt": 1360
-  },
-  {
-    "province": "خوزستان",
-    "sima": 822,
-    "samt": 2256
-  },
-  {
-    "province": "زنجان",
-    "sima": 489,
-    "samt": 1636
-  },
-  {
-    "province": "سمنان",
-    "sima": 386,
-    "samt": 718
-  },
-  {
-    "province": "سيستان وبلوچستان",
-    "sima": 357,
-    "samt": 760
-  },
-  {
-    "province": "فارس",
-    "sima": 1418,
-    "samt": 3382
-  },
-  {
-    "province": "قزوين",
-    "sima": 1190,
-    "samt": 1734
-  },
-  {
-    "province": "قم",
-    "sima": 618,
-    "samt": 819
-  },
-  {
-    "province": "كردستان",
-    "sima": 867,
-    "samt": 2952
-  },
-  {
-    "province": "كرمان",
-    "sima": 432,
-    "samt": 1850
-  },
-  {
-    "province": "كهگيلويه وبويراحمد",
-    "sima": 250,
-    "samt": 601
-  },
-  {
-    "province": "کرمانشاه",
-    "sima": 887,
-    "samt": 2688
-  },
-  {
-    "province": "گلستان",
-    "sima": 963,
-    "samt": 2435
-  },
-  {
-    "province": "گيلان",
-    "sima": 958,
-    "samt": 4054
-  },
-  {
-    "province": "لرستان",
-    "sima": 550,
-    "samt": 2117
-  },
-  {
-    "province": "مازندران",
-    "sima": 2814,
-    "samt": 4934
-  },
-  {
-    "province": "مرکزي",
-    "sima": 1271,
-    "samt": 1764
-  },
-  {
-    "province": "هرمزگان",
-    "sima": 312,
-    "samt": 876
-  },
-  {
-    "province": "همدان",
-    "sima": 687,
-    "samt": 2022
-  },
-  {
-    "province": "يزد",
-    "sima": 279,
-    "samt": 1083
-  }
+  {"province": "اردبیل", "sima": 1829, "samt": 2840},
+  {"province": "اصفهان", "sima": 305, "samt": 573},
+  {"province": "البرز", "sima": 1690, "samt": 2336},
+  {"province": "ايلام", "sima": 247, "samt": 830},
+  {"province": "آذربايجان شرقي", "sima": 2155, "samt": 6863},
+  {"province": "آذربايجان غربي", "sima": 1300, "samt": 5317},
+  {"province": "بوشهر", "sima": 286, "samt": 730},
+  {"province": "تهران", "sima": 1776, "samt": 9199},
+  {"province": "چهارمحال وبختيارئ", "sima": 332, "samt": 954},
+  {"province": "خراسان جنوبي", "sima": 248, "samt": 731},
+  {"province": "خراسان رضوئ", "sima": 2855, "samt": 5337},
+  {"province": "خراسان شمالي", "sima": 310, "samt": 1360},
+  {"province": "خوزستان", "sima": 822, "samt": 2256},
+  {"province": "زنجان", "sima": 489, "samt": 1636},
+  {"province": "سمنان", "sima": 386, "samt": 718},
+  {"province": "سيستان وبلوچستان", "sima": 357, "samt": 760},
+  {"province": "فارس", "sima": 1418, "samt": 3382},
+  {"province": "قزوين", "sima": 1190, "samt": 1734},
+  {"province": "قم", "sima": 618, "samt": 819},
+  {"province": "كردستان", "sima": 867, "samt": 2952},
+  {"province": "كرمان", "sima": 432, "samt": 1850},
+  {"province": "كهگيلويه وبويراحمد", "sima": 250, "samt": 601},
+  {"province": "کرمانشاه", "sima": 887, "samt": 2688},
+  {"province": "گلستان", "sima": 963, "samt": 2435},
+  {"province": "گيلان", "sima": 958, "samt": 4054},
+  {"province": "لرستان", "sima": 550, "samt": 2117},
+  {"province": "مازندران", "sima": 2814, "samt": 4934},
+  {"province": "مرکزي", "sima": 1271, "samt": 1764},
+  {"province": "هرمزگان", "sima": 312, "samt": 876},
+  {"province": "همدان", "sima": 687, "samt": 2022},
+  {"province": "يزد", "sima": 279, "samt": 1083}
 ]

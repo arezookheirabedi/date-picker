@@ -1,126 +1,33 @@
 [
-  {
-    "province": "مرکزی",
-    "sellCount": 11432777.86
-  },
-  {
-    "province": "البرز",
-    "sellCount": 21177495.01
-  },
-  {
-    "province": "اردبیل",
-    "sellCount": 11516387.81
-  },
-  {
-    "province": "آذربایجان شرقی",
-    "sellCount": 12730177.97
-  },
-  {
-    "province": "آذربایجان غربی",
-    "sellCount": 12570225
-  },
-  {
-    "province": "بوشهر",
-    "sellCount": 15437375.17
-  },
-  {
-    "province": "چهارمحال و بختیاری",
-    "sellCount": 9235530.605
-  },
-  {
-    "province": "ایلام",
-    "sellCount": 11468622.06
-  },
-  {
-    "province": "اصفهان",
-    "sellCount": 15013302.78
-  },
-  {
-    "province": "فارس",
-    "sellCount": 19395280.4
-  },
-  {
-    "province": "گیلان",
-    "sellCount": 14699883.85
-  },
-  {
-    "province": "گلستان",
-    "sellCount": 10513920.81
-  },
-  {
-    "province": "همدان",
-    "sellCount": 11142113.75
-  },
-  {
-    "province": "هرمزگان",
-    "sellCount": 19116720.55
-  },
-  {
-    "province": "خراسان شمالی",
-    "sellCount": 8387361.662
-  },
-  {
-    "province": "خوزستان",
-    "sellCount": 20618782.13
-  },
-  {
-    "province": "خراسان رضوی",
-    "sellCount": 17332673.86
-  },
-  {
-    "province": "خراسان جنوبی",
-    "sellCount": 8124037.062
-  },
-  {
-    "province": "کهگلویه و بویراحمر",
-    "sellCount": 17193487.13
-  },
-  {
-    "province": "کردستان",
-    "sellCount": 11293499.94
-  },
-  {
-    "province": "کرمان",
-    "sellCount": 13982120.08
-  },
-  {
-    "province": "کرمانشاه",
-    "sellCount": 13072055
-  },
-  {
-    "province": "لرستان",
-    "sellCount": 11069901.48
-  },
-  {
-    "province": "مازندران",
-    "sellCount": 13135416.82
-  },
-  {
-    "province": "قزوین",
-    "sellCount": 13565767.49
-  },
-  {
-    "province": "قم",
-    "sellCount": 16096586.06
-  },
-  {
-    "province": "سیستان و بلوچستان",
-    "sellCount": 19498423.69
-  },
-  {
-    "province": "سمنان",
-    "sellCount": 9406484.839
-  },
-  {
-    "province": "تهران",
-    "sellCount": 30648821.63
-  },
-  {
-    "province": "یزد",
-    "sellCount": 14227064.54
-  },
-  {
-    "province": "زنجان",
-    "sellCount": 7359083.678
-  }
+  {"province": "مرکزی", "sellCount": 16176401.37},
+  {"province": "البرز", "sellCount": 16823386.4},
+  {"province": "اردبیل", "sellCount": 9904446.603},
+  {"province": "آذربایجان شرقی", "sellCount": 10899524.29},
+  {"province": "آذربایجان غربی", "sellCount": 10665855.41},
+  {"province": "بوشهر", "sellCount": 13657164.48},
+  {"province": "چهارمحال و بختیاری", "sellCount": 7831205.414},
+  {"province": "ایلام", "sellCount": 9556185.116},
+  {"province": "اصفهان", "sellCount": 12168492.83},
+  {"province": "فارس", "sellCount": 13791971.79},
+  {"province": "گیلان", "sellCount": 11496570.3},
+  {"province": "گلستان", "sellCount": 8623523.627},
+  {"province": "همدان", "sellCount": 9806044.201},
+  {"province": "هرمزگان", "sellCount": 19979522.08},
+  {"province": "خراسان شمالی", "sellCount": 2696747.163},
+  {"province": "خوزستان", "sellCount": 15524343.72},
+  {"province": "خراسان رضوی", "sellCount": 14218922.93},
+  {"province": "خراسان جنوبی", "sellCount": 9608018.907},
+  {"province": "کهگلویه و بویراحمر", "sellCount": 11748110.5},
+  {"province": "کردستان", "sellCount": 9827786.537},
+  {"province": "کرمان", "sellCount": 12247102.39},
+  {"province": "کرمانشاه", "sellCount": 10196188.61},
+  {"province": "لرستان", "sellCount": 10493516.14},
+  {"province": "مازندران", "sellCount": 12360304.12},
+  {"province": "قزوین", "sellCount": 8782893.448},
+  {"province": "قم", "sellCount": 11234995.77},
+  {"province": "سیستان و بلوچستان", "sellCount": 14127224.91},
+  {"province": "سمنان", "sellCount": 9312941.187},
+  {"province": "تهران", "sellCount": 21733255.95},
+  {"province": "یزد", "sellCount": 10400852.69},
+  {"province": "زنجان", "sellCount": 8564434.947}
 ]
