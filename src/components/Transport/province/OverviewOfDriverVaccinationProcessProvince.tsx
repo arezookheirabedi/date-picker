@@ -6,7 +6,7 @@ import axios from 'axios';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 import hcsService from "../../../services/hcs.service";
-import {sideCities} from "../../../helpers/utils";
+import {convertGregorianDateToJalaliDate, sideCities} from "../../../helpers/utils";
 
 
 const {HeadlessChart} = Charts;
@@ -184,7 +184,7 @@ const OverviewOfDriverVaccinationProcessProvince: React.FC<OverviewOfDriverVacci
           // if (forthDose.length <= index + 1) forthDose.push(0);
           // if (fifthDose.length <= index + 1) fifthDose.push(0);
         }
-        categories.push(item.date);
+        categories.push(convertGregorianDateToJalaliDate(item.date));
       });
 
       // const initialData = {
