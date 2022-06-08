@@ -3,46 +3,12 @@ import Highcharts from 'highcharts/highstock';
 import hcsService from 'src/services/hcs.service';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
 
-const initialData = {
-  categories: [
-    '۱۴۰۱/۰۱/۰۱',
-    '۱۴۰۱/۰۱/۰۲',
-    '۱۴۰۱/۰۱/۰۳',
-    '۱۴۰۱/۰۱/۰۴',
-    '۱۴۰۱/۰۱/۰۵',
-    '۱۴۰۱/۰۱/۰۶',
-    '۱۴۰۱/۰۱/۰۷',
-    '۱۴۰۱/۰۱/۰۸',
-    '۱۴۰۱/۰۱/۰۹',
-    '۱۴۰۱/۰۱/۱۰',
-  ],
-  series: [
-    {
-      name: 'دوز اول',
-      data: [502, 635, 809, 1947, 2402, 3634, 5268, 6000, 7000, 6000],
-    },
-    {
-      name: 'دوز دوم',
-      data: [106, 300, 500, 1133, 1721, 2867, 2766, 3900, 5100, 3490],
-    },
-    {
-      name: 'دوز سوم',
-      data: [163, 203, 276, 908, 1547, 1729, 1628, 2500, 3800, 2390],
-    },
-    {
-      name: 'دوز چهارم',
-      data: [18, 31, 54, 656, 339, 1218, 1201, 1300, 2450, 1903],
-    },
-    {
-      name: 'دوز پنجم',
-      data: [16, 21, 44, 196, 139, 1018, 1001, 1200, 1150, 1703],
-    },
-  ],
-} as any;
+
 
 const converters = {
   fa(number: any) {
@@ -89,7 +55,7 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  colors: ['#F3BC06', '#209F92', '#004D65', '#BFDDE7', '#716DE3'],
+  colors: ['#F3BC06', '#209F92', '#004D65', '#BFDDE7', '#716DE3', '#FF0060'],
   plotOptions: {
     series: {
       fillOpacity: 1,
@@ -132,7 +98,7 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
 }) => {
   const location = useLocation();
   const history = useHistory();
-  const [dataset, setDataset] = useState<any[]>(initialData);
+  const [dataset, setDataset] = useState<any>();
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const cancelToken = cancelTokenSource();
@@ -148,22 +114,19 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
       const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
         cancelToken: cancelToken.token,
       });
-      const provinces: any[] = [];
-
+      const date: any[] = [];
       // eslint-disable-next-line
       let firstDose: any[] = [];
       // eslint-disable-next-line
       let secondDose: any[] = [];
       // eslint-disable-next-line
+      let fourthDose: any[] = [];
+      // eslint-disable-next-line
       let thirdDose: any[] = [];
       // eslint-disable-next-line
-      let moreThanThreeDose: any[] = [];
-      // eslint-disable-next-line
-      let noDose: any[] = [];
+      let fifthDose: any[] = [];
 
       data.forEach((item: any, index: number) => {
-        let more = 0;
-
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.doses)) {
           if (Number(key) === 1) {
@@ -177,51 +140,48 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
           if (Number(key) === 3) {
             thirdDose.push(Number(value));
           }
-
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            more += Number(value);
+          if (Number(key) === 4) {
+            fourthDose.push(Number(value));
+          }
+          if (Number(key) === 5) {
+            fifthDose.push(Number(value));
           }
         }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-
-        if (noDose.length < index + 1) noDose.push(0);
         if (firstDose.length < index + 1) firstDose.push(0);
         if (secondDose.length < index + 1) secondDose.push(0);
         if (thirdDose.length < index + 1) thirdDose.push(0);
-        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
-
-        provinces.push(item.province);
+        if (fourthDose.length < index + 1) fourthDose.push(0);
+        if (fifthDose.length < index + 1) fifthDose.push(0);
+        date.push(item.date);
       });
 
-      // setDataset([
-      //   {
-      //     name: 'واکسن نزده',
-      //     color: '#FF0060',
-      //     data: [...noDose],
-      //   },
-      //   {
-      //     name: 'دوز اول',
-      //     color: '#F3BC06',
-      //     data: [...firstDose],
-      //   },
-      //   {
-      //     name: 'دوز دوم',
-      //     color: '#209F92',
-      //     data: [...secondDose],
-      //   },
-      //   {
-      //     name: 'دوز سوم',
-      //     color: '#004D65',
-      //     data: [...thirdDose],
-      //   },
-      //   {
-      //     name: 'بیش از ۳ دوز',
-      //     color: '#BFDDE7',
-      //     data: [...moreThanThreeDose],
-      //   },
-      // ]);
-      // setCategories([...provinces]);
+      const newData = {
+        categories: [...date],
+        series: [
+          {
+            name: 'دوز اول',
+            data: [...firstDose],
+          },
+          {
+            name: 'دوز دوم',
+            data: [...secondDose],
+          },
+          {
+            name: 'دوز سوم',
+            data: [...thirdDose],
+          },
+          {
+            name: 'دوز چهارم',
+            data: [...fourthDose],
+          },
+          {
+            name: 'دوز پنجم',
+            data: [...fifthDose],
+          },
+         
+        ],
+      };
+      setDataset({...newData});
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -230,6 +190,7 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -296,7 +257,7 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
           <>
             <HeadlessChart data={dataset} optionsProp={optionChart} />
 
-            {dataset.length === 0 && !loading && !errorMessage && (
+            {isEmpty(dataset)&& !loading && !errorMessage && (
               <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
             )}
           </>
