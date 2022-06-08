@@ -8,11 +8,11 @@
     "numberOfSamt": 2840,
     "numberOfSima": 8345,
     "numberOfActivePos": 5541,
-    "numberOfAvgSupplyFlour": 36747775,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 1765,
-    "numberOfTransaction": 1000,
-    "numberOfTransactionPerDay": 565,
-    "numberOfPosActiveTime": 462
+    "numberOfTransaction": 1154,
+    "numberOfTransactionPerDay": 731,
+    "numberOfPosActiveTime": 734
   },
   {
     "province": "آذربایجان غربی",
@@ -23,11 +23,11 @@
     "numberOfSamt": 573,
     "numberOfSima": 6445,
     "numberOfActivePos": 3781,
-    "numberOfAvgSupplyFlour": 31996760,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 1641,
-    "numberOfTransaction": 710,
-    "numberOfTransactionPerDay": 355,
-    "numberOfPosActiveTime": 268
+    "numberOfTransaction": 936,
+    "numberOfTransactionPerDay": 506,
+    "numberOfPosActiveTime": 531
   },
   {
     "province": "اردبیل",
@@ -38,11 +38,11 @@
     "numberOfSamt": 2336,
     "numberOfSima": 3211,
     "numberOfActivePos": 2241,
-    "numberOfAvgSupplyFlour": 16919180,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 855,
-    "numberOfTransaction": 470,
-    "numberOfTransactionPerDay": 230,
-    "numberOfPosActiveTime": 181
+    "numberOfTransaction": 475,
+    "numberOfTransactionPerDay": 243,
+    "numberOfPosActiveTime": 252
   },
   {
     "province": "اصفهان",
@@ -53,11 +53,11 @@
     "numberOfSamt": 830,
     "numberOfSima": 5996,
     "numberOfActivePos": 5553,
-    "numberOfAvgSupplyFlour": 37224639,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 894,
-    "numberOfTransaction": 904,
-    "numberOfTransactionPerDay": 574,
-    "numberOfPosActiveTime": 442
+    "numberOfTransaction": 1142,
+    "numberOfTransactionPerDay": 852,
+    "numberOfPosActiveTime": 847
   },
   {
     "province": "البرز",
@@ -68,11 +68,11 @@
     "numberOfSamt": 6863,
     "numberOfSima": 2861,
     "numberOfActivePos": 2442,
-    "numberOfAvgSupplyFlour": 21362000,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 669,
-    "numberOfTransaction": 283,
-    "numberOfTransactionPerDay": 190,
-    "numberOfPosActiveTime": 135
+    "numberOfTransaction": 397,
+    "numberOfTransactionPerDay": 267,
+    "numberOfPosActiveTime": 291
   },
   {
     "province": "ایلام",
@@ -83,11 +83,11 @@
     "numberOfSamt": 5317,
     "numberOfSima": 960,
     "numberOfActivePos": 731,
-    "numberOfAvgSupplyFlour": 6607693,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 173,
-    "numberOfTransaction": 137,
-    "numberOfTransactionPerDay": 89,
-    "numberOfPosActiveTime": 66
+    "numberOfTransaction": 161,
+    "numberOfTransactionPerDay": 103,
+    "numberOfPosActiveTime": 106
   },
   {
     "province": "بوشهر",
@@ -98,11 +98,11 @@
     "numberOfSamt": 730,
     "numberOfSima": 1112,
     "numberOfActivePos": 1031,
-    "numberOfAvgSupplyFlour": 9469880,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 205,
-    "numberOfTransaction": 183,
-    "numberOfTransactionPerDay": 92,
-    "numberOfPosActiveTime": 68
+    "numberOfTransaction": 218,
+    "numberOfTransactionPerDay": 140,
+    "numberOfPosActiveTime": 122
   },
   {
     "province": "تهران",
@@ -113,11 +113,11 @@
     "numberOfSamt": 9199,
     "numberOfSima": 10949,
     "numberOfActivePos": 9918,
-    "numberOfAvgSupplyFlour": 108581944,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 2469,
-    "numberOfTransaction": 1188,
-    "numberOfTransactionPerDay": 654,
-    "numberOfPosActiveTime": 394
+    "numberOfTransaction": 1851,
+    "numberOfTransactionPerDay": 1213,
+    "numberOfPosActiveTime": 984
   },
   {
     "province": "چهارمحال و بختیاری",
@@ -128,11 +128,11 @@
     "numberOfSamt": 954,
     "numberOfSima": 1539,
     "numberOfActivePos": 918,
-    "numberOfAvgSupplyFlour": 9537760,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 231,
-    "numberOfTransaction": 137,
-    "numberOfTransactionPerDay": 88,
-    "numberOfPosActiveTime": 68
+    "numberOfTransaction": 213,
+    "numberOfTransactionPerDay": 163,
+    "numberOfPosActiveTime": 160
   },
   {
     "province": "خراسان جنوبی",
@@ -143,11 +143,11 @@
     "numberOfSamt": 731,
     "numberOfSima": 1237,
     "numberOfActivePos": 864,
-    "numberOfAvgSupplyFlour": 8288328,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 208,
-    "numberOfTransaction": 148,
-    "numberOfTransactionPerDay": 90,
-    "numberOfPosActiveTime": 64
+    "numberOfTransaction": 173,
+    "numberOfTransactionPerDay": 106,
+    "numberOfPosActiveTime": 95
   },
   {
     "province": "خراسان رضوی",
@@ -158,11 +158,11 @@
     "numberOfSamt": 5337,
     "numberOfSima": 7602,
     "numberOfActivePos": 5765,
-    "numberOfAvgSupplyFlour": 53493229,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 1583,
-    "numberOfTransaction": 716,
-    "numberOfTransactionPerDay": 441,
-    "numberOfPosActiveTime": 352
+    "numberOfTransaction": 886,
+    "numberOfTransactionPerDay": 624,
+    "numberOfPosActiveTime": 565
   },
   {
     "province": "خراسان شمالی",
@@ -173,11 +173,11 @@
     "numberOfSamt": 1360,
     "numberOfSima": 1626,
     "numberOfActivePos": 1088,
-    "numberOfAvgSupplyFlour": 8670000,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 529,
-    "numberOfTransaction": 188,
-    "numberOfTransactionPerDay": 104,
-    "numberOfPosActiveTime": 86
+    "numberOfTransaction": 401,
+    "numberOfTransactionPerDay": 389,
+    "numberOfPosActiveTime": 363
   },
   {
     "province": "خوزستان",
@@ -188,11 +188,11 @@
     "numberOfSamt": 2256,
     "numberOfSima": 3823,
     "numberOfActivePos": 3297,
-    "numberOfAvgSupplyFlour": 44268272,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 872,
-    "numberOfTransaction": 611,
-    "numberOfTransactionPerDay": 390,
-    "numberOfPosActiveTime": 264
+    "numberOfTransaction": 816,
+    "numberOfTransactionPerDay": 543,
+    "numberOfPosActiveTime": 488
   },
   {
     "province": "زنجان",
@@ -203,11 +203,11 @@
     "numberOfSamt": 1636,
     "numberOfSima": 2294,
     "numberOfActivePos": 1437,
-    "numberOfAvgSupplyFlour": 12422393,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 450,
-    "numberOfTransaction": 519,
-    "numberOfTransactionPerDay": 524,
-    "numberOfPosActiveTime": 461
+    "numberOfTransaction": 617,
+    "numberOfTransactionPerDay": 645,
+    "numberOfPosActiveTime": 625
   },
   {
     "province": "سمنان",
@@ -218,11 +218,11 @@
     "numberOfSamt": 718,
     "numberOfSima": 1233,
     "numberOfActivePos": 962,
-    "numberOfAvgSupplyFlour": 6432767,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 173,
-    "numberOfTransaction": 144,
-    "numberOfTransactionPerDay": 94,
-    "numberOfPosActiveTime": 67
+    "numberOfTransaction": 159,
+    "numberOfTransactionPerDay": 117,
+    "numberOfPosActiveTime": 110
   },
   {
     "province": "سیستان و بلوچستان",
@@ -233,11 +233,11 @@
     "numberOfSamt": 760,
     "numberOfSima": 2696,
     "numberOfActivePos": 2041,
-    "numberOfAvgSupplyFlour": 35948835,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 285,
-    "numberOfTransaction": 424,
-    "numberOfTransactionPerDay": 250,
-    "numberOfPosActiveTime": 171
+    "numberOfTransaction": 490,
+    "numberOfTransactionPerDay": 307,
+    "numberOfPosActiveTime": 267
   },
   {
     "province": "فارس",
@@ -248,11 +248,11 @@
     "numberOfSamt": 3382,
     "numberOfSima": 5273,
     "numberOfActivePos": 5005,
-    "numberOfAvgSupplyFlour": 39030848,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 469,
-    "numberOfTransaction": 583,
-    "numberOfTransactionPerDay": 393,
-    "numberOfPosActiveTime": 259
+    "numberOfTransaction": 972,
+    "numberOfTransactionPerDay": 803,
+    "numberOfPosActiveTime": 694
   },
   {
     "province": "قزوین",
@@ -263,11 +263,11 @@
     "numberOfSamt": 1734,
     "numberOfSima": 1986,
     "numberOfActivePos": 1483,
-    "numberOfAvgSupplyFlour": 11762120,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 587,
-    "numberOfTransaction": 363,
-    "numberOfTransactionPerDay": 313,
-    "numberOfPosActiveTime": 239
+    "numberOfTransaction": 479,
+    "numberOfTransactionPerDay": 473,
+    "numberOfPosActiveTime": 454
   },
   {
     "province": "قم",
@@ -278,11 +278,11 @@
     "numberOfSamt": 819,
     "numberOfSima": 1197,
     "numberOfActivePos": 1094,
-    "numberOfAvgSupplyFlour": 10306920,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 226,
-    "numberOfTransaction": 159,
-    "numberOfTransactionPerDay": 87,
-    "numberOfPosActiveTime": 65
+    "numberOfTransaction": 256,
+    "numberOfTransactionPerDay": 211,
+    "numberOfPosActiveTime": 192
   },
   {
     "province": "گلستان",
@@ -293,11 +293,11 @@
     "numberOfSamt": 2952,
     "numberOfSima": 3154,
     "numberOfActivePos": 1960,
-    "numberOfAvgSupplyFlour": 17669120,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 735,
-    "numberOfTransaction": 316,
-    "numberOfTransactionPerDay": 155,
-    "numberOfPosActiveTime": 112
+    "numberOfTransaction": 375,
+    "numberOfTransactionPerDay": 221,
+    "numberOfPosActiveTime": 211
   },
   {
     "province": "گیلان",
@@ -308,11 +308,11 @@
     "numberOfSamt": 1850,
     "numberOfSima": 6308,
     "numberOfActivePos": 2975,
-    "numberOfAvgSupplyFlour": 25801800,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 1739,
-    "numberOfTransaction": 567,
-    "numberOfTransactionPerDay": 311,
-    "numberOfPosActiveTime": 197
+    "numberOfTransaction": 574,
+    "numberOfTransactionPerDay": 348,
+    "numberOfPosActiveTime": 341
   },
   {
     "province": "لرستان",
@@ -323,11 +323,11 @@
     "numberOfSamt": 601,
     "numberOfSima": 2647,
     "numberOfActivePos": 2010,
-    "numberOfAvgSupplyFlour": 20630207,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 374,
-    "numberOfTransaction": 435,
-    "numberOfTransactionPerDay": 220,
-    "numberOfPosActiveTime": 172
+    "numberOfTransaction": 542,
+    "numberOfTransactionPerDay": 319,
+    "numberOfPosActiveTime": 291
   },
   {
     "province": "مازندران",
@@ -338,11 +338,11 @@
     "numberOfSamt": 2688,
     "numberOfSima": 7049,
     "numberOfActivePos": 4818,
-    "numberOfAvgSupplyFlour": 33245000,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 1236,
-    "numberOfTransaction": 994,
-    "numberOfTransactionPerDay": 603,
-    "numberOfPosActiveTime": 398
+    "numberOfTransaction": 1136,
+    "numberOfTransactionPerDay": 747,
+    "numberOfPosActiveTime": 731
   },
   {
     "province": "مرکزی",
@@ -353,11 +353,11 @@
     "numberOfSamt": 2435,
     "numberOfSima": 2818,
     "numberOfActivePos": 2069,
-    "numberOfAvgSupplyFlour": 12447160,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 464,
-    "numberOfTransaction": 328,
-    "numberOfTransactionPerDay": 191,
-    "numberOfPosActiveTime": 137
+    "numberOfTransaction": 349,
+    "numberOfTransactionPerDay": 247,
+    "numberOfPosActiveTime": 233
   },
   {
     "province": "هرمزگان",
@@ -368,11 +368,11 @@
     "numberOfSamt": 4054,
     "numberOfSima": 1898,
     "numberOfActivePos": 1423,
-    "numberOfAvgSupplyFlour": 16041908,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 310,
-    "numberOfTransaction": 307,
-    "numberOfTransactionPerDay": 217,
-    "numberOfPosActiveTime": 118
+    "numberOfTransaction": 356,
+    "numberOfTransactionPerDay": 284,
+    "numberOfPosActiveTime": 210
   },
   {
     "province": "همدان",
@@ -383,11 +383,11 @@
     "numberOfSamt": 2117,
     "numberOfSima": 2397,
     "numberOfActivePos": 2295,
-    "numberOfAvgSupplyFlour": 14807040,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 310,
-    "numberOfTransaction": 398,
-    "numberOfTransactionPerDay": 224,
-    "numberOfPosActiveTime": 167
+    "numberOfTransaction": 453,
+    "numberOfTransactionPerDay": 276,
+    "numberOfPosActiveTime": 235
   },
   {
     "province": "کردستان",
@@ -398,11 +398,11 @@
     "numberOfSamt": 4934,
     "numberOfSima": 2958,
     "numberOfActivePos": 1946,
-    "numberOfAvgSupplyFlour": 16738120,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 908,
-    "numberOfTransaction": 400,
-    "numberOfTransactionPerDay": 227,
-    "numberOfPosActiveTime": 174
+    "numberOfTransaction": 435,
+    "numberOfTransactionPerDay": 229,
+    "numberOfPosActiveTime": 218
   },
   {
     "province": "کرمان",
@@ -413,11 +413,11 @@
     "numberOfSamt": 1764,
     "numberOfSima": 2863,
     "numberOfActivePos": 3144,
-    "numberOfAvgSupplyFlour": 26454505,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 255,
-    "numberOfTransaction": 541,
-    "numberOfTransactionPerDay": 364,
-    "numberOfPosActiveTime": 276
+    "numberOfTransaction": 683,
+    "numberOfTransactionPerDay": 513,
+    "numberOfPosActiveTime": 511
   },
   {
     "province": "کرمانشاه",
@@ -428,11 +428,11 @@
     "numberOfSamt": 876,
     "numberOfSima": 2915,
     "numberOfActivePos": 1894,
-    "numberOfAvgSupplyFlour": 20462956,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 600,
-    "numberOfTransaction": 382,
-    "numberOfTransactionPerDay": 227,
-    "numberOfPosActiveTime": 156
+    "numberOfTransaction": 457,
+    "numberOfTransactionPerDay": 277,
+    "numberOfPosActiveTime": 242
   },
   {
     "province": "کهگیلویه و بویراحمد",
@@ -443,11 +443,11 @@
     "numberOfSamt": 2022,
     "numberOfSima": 1067,
     "numberOfActivePos": 809,
-    "numberOfAvgSupplyFlour": 7327280,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 113,
-    "numberOfTransaction": 188,
-    "numberOfTransactionPerDay": 131,
-    "numberOfPosActiveTime": 68
+    "numberOfTransaction": 225,
+    "numberOfTransactionPerDay": 145,
+    "numberOfPosActiveTime": 101
   },
   {
     "province": "یزد",
@@ -458,10 +458,10 @@
     "numberOfSamt": 1083,
     "numberOfSima": 2300,
     "numberOfActivePos": 1532,
-    "numberOfAvgSupplyFlour": 10744910,
+    "numberOfAvgSupplyFlour": "",
     "numberOfBakeryWithoutPos": 475,
-    "numberOfTransaction": 371,
-    "numberOfTransactionPerDay": 255,
-    "numberOfPosActiveTime": 176
+    "numberOfTransaction": 433,
+    "numberOfTransactionPerDay": 348,
+    "numberOfPosActiveTime": 301
   }
 ]
