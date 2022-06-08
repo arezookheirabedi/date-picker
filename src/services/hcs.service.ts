@@ -52,7 +52,7 @@ function membersTagBased(
     ...params
   }: {
     organization: string;
-    params?: {tagPattern: string; tags: any; from: string; to: string};
+    params?: { tagPattern: string; tags: any; from: string; to: string };
   },
   config?: any
 ) {
@@ -74,7 +74,7 @@ function testResultTimeBased(
     ...params
   }: {
     organization: string;
-    params?: {status: string; type: string; from: string; to: string; tag: string};
+    params?: { status: string; type: string; from: string; to: string; tag: string };
   },
   config?: any
 ) {
@@ -99,7 +99,7 @@ function testResultTagBased(
     ...params
   }: {
     organization: string;
-    params?: {tagPattern: string; from: string; to: string};
+    params?: { tagPattern: string; from: string; to: string };
   },
   config?: any
 ) {
@@ -117,7 +117,7 @@ function testResultTagBased(
 }
 
 function dosesTagBased(
-  {organization, ...params}: {organization: string; params: any},
+  {organization, ...params}: { organization: string; params: any },
   config?: any
 ) {
   return request
@@ -133,14 +133,14 @@ function dosesTagBased(
     );
 }
 
-function doses({organization, ...params}: {organization: string; params: any}, config?: any) {
+function doses({organization, ...params}: { organization: string; params: any }, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params, {...config});
 }
 
-function tags({organization, ...params}: {organization: string; params?: any}, {...config}) {
+function tags({organization, ...params}: { organization: string; params?: any }, {...config}) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -153,6 +153,7 @@ function vaccinationOverview(tag: string, category: string, params: any = {}, co
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
 }
+
 function peopleVaccinationOverview(
   {tag, category, ...params}: any = {},
   config?: any
@@ -226,6 +227,7 @@ function accumulativeVaccinesTimeBasedReport(
       ...config,
     });
 }
+
 function positivePcrPercentageProvinceBased(
   {...params}: any = {},
   config?: any
@@ -235,6 +237,14 @@ function positivePcrPercentageProvinceBased(
     .build()
     .get(`/api/v1/hcs-reporter/test-results/overview/province-based`, params, {...config});
 }
+
+function getVaccinesGroupedByProvinceReport({...params}: any = {}, config?: any): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/vaccines/provinces`, params, {...config});
+}
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -258,6 +268,7 @@ const hcsService = {
   getPeopleVaccine,
   accumulativeVaccinesTimeBasedReport,
   positivePcrPercentageProvinceBased,
+  getVaccinesGroupedByProvinceReport
 };
 
 export default hcsService;
