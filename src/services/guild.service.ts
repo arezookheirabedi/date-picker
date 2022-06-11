@@ -223,7 +223,7 @@ function getRegisterList(params: any, config?: AxiosRequestConfig): Promise<Axio
     .build()
     .get(`/api/v1/guilds/categories/list?lang=fa`, params, {...config});
 }
-function getRegistercount(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+function getRegisterCount(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -255,5 +255,5 @@ export default {
   percentageOfRegisteredGuilds,
   numberOfRegisteredGuilds,
   getRegisterList,
-  getRegistercount
+  getRegisterCount,
 };
