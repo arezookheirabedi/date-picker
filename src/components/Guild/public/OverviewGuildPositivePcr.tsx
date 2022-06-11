@@ -3,6 +3,7 @@ import axios from 'axios';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {isEmpty} from 'lodash';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -35,12 +36,13 @@ const OverviewPositivePcr = () => {
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
-    type: 'DAILY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
-    category: 'serviceType',
+
     categoryValue: null,
-    tag: 'transport',
+    tag: 'guild',
+    category: 'categoryDesc',
   });
 
   const getColumnChartTestResult = async (params: any) => {
@@ -161,9 +163,10 @@ const OverviewPositivePcr = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
-              placeholder="کل آموزش و پرورش"
-              category="grade"
-              tag="edu"
+              objectKey="categoryValue"
+              placeholder="کل اصناف"
+              tag="guild"
+              category="categoryDesc"
               setQueryParams={setQuery}
               queryParams={query}
             />
@@ -189,10 +192,10 @@ const OverviewPositivePcr = () => {
             changeType={v =>
               setQuery({
                 ...query,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={query.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
@@ -203,8 +206,9 @@ const OverviewPositivePcr = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+
+        {!loading && !isEmpty(data) && !errorMessage && <Line data={data} />}
+        {isEmpty(data) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

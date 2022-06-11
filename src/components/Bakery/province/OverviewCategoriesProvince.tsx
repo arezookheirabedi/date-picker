@@ -4,7 +4,7 @@ import axios from 'axios';
 import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
-import Table from '../../Table';
+import Table from '../../TableScope';
 import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';

@@ -9,6 +9,8 @@ import Charts from 'src/components/Charts';
 
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import hcsService from 'src/services/hcs.service';
+import { isEmpty } from 'lodash';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -17,7 +19,7 @@ import {
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
+import {converters} from './constant';
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
@@ -26,15 +28,9 @@ interface IOverviewGuildPositivePcrPercentage {}
 
 const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -43,7 +39,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: '',
   });
 
   const cancelToken = cancelTokenSource();
@@ -52,22 +47,42 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
+  const getColumnChartPositivePcrPercentage = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
+        // const {data} = await guildService.percentageOfRegisteredGuilds(params, {
+        cancelToken: cancelToken.token,
+      });
 
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-    });
-    // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
+      const province: any[] = [];
+
+      const positiveMembersCount: any[] = [];
+      data.forEach((item: any) => {
+        province.push(item.province);
+        positiveMembersCount.push(item.positiveMembersCount);
+      });
+      // setCategories([...province]);
+      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCount]}];
+      // setDataset([...newData]);
+      setDataset({categories: [...province], series: [...newData]});
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    normalizeData(mockRegisterPercentage);
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartPositivePcrPercentage({...queryParams, tag: 'guild', category: 'categoryDesc'});
+    }, 500);
+    // normalizeData(mockRegisterPercentage);
     return () => {
+      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset([]);
     };
@@ -81,14 +96,12 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: '',
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: '',
       });
     }
   }, [selectedDayRange]);
@@ -153,6 +166,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       title: {
         enabled: false,
       },
+      labels: {
+        format: '٪{text}'
+        },
     },
     xAxis: {
       lineDashStyle: 'dash',
@@ -162,7 +178,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: 'K',
+      valueSuffix: '%',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -174,8 +190,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     series: [
       {
         lineWidth: 4,
+        showInLegend: false,
         dataLabels: {
-          enabled: true,
+          // enabled: true,
         },
       },
     ],
@@ -189,9 +206,10 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                placeholder="کل آموزش و پرورش"
-                category="grade"
-                tag="edu"
+                objectKey="categoryValue"
+                placeholder="کل اصناف"
+                tag="guild"
+                category="categoryDesc"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
@@ -222,10 +240,10 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
+        {!loading && !isEmpty(dataset) && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
+        )}
+        {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

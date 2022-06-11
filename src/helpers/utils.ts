@@ -79,6 +79,7 @@ export const msgRequestCanceled = 'Operation canceled by the user.';
 export const cancelTokenSource = (): CancelTokenSource => {
   return Axios.CancelToken.source();
 };
+
 export const convertGregorianDateToJalaliDate = (date: any) => {
   return new Date(date).toLocaleDateString("fa-IR", {
     year: "numeric",
@@ -86,9 +87,6 @@ export const convertGregorianDateToJalaliDate = (date: any) => {
     day: "2-digit"
   })
 }
-
-
-
 
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
   let mainKey = event.key;

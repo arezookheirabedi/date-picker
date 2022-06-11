@@ -14,8 +14,9 @@ import grayBaggage from 'src/assets/images/icons/gray-baggage.svg';
 import redBaggage from 'src/assets/images/icons/red-baggage.svg';
 import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-test.svg';
 import negetiveTestIcon from 'src/assets/images/icons/negetive-test-icon.svg';
-import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
-import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
+// import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
+// import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
+
 import {
   IInitialPcrInfo,
   IInitialTotalVacinatelInfo,
@@ -162,7 +163,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
             infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
             icon={redBaggage}
-            text="تعداد سفرهای جلوگیری شده"
+            text="تعداد استعلام های فاقد اخذ خدمت"
             count="-"
             // loading={pcrLoading}
           />
@@ -183,7 +184,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
             infoText="مرجع صادر کننده بلیط اجازه صدور بلیط نداشته ولی بلیط صادر شده است."
             hasInfo
             icon={redBaggage}
-            text="مجموع سفر های غیر مجاز"
+            text="بلیط های غیرمجاز فروخته شده"
             count="-"
             // loading={pcrLoading}
             isPercentage
@@ -203,18 +204,24 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
             text="تعداد تست‌های منفی"
             count={passengerPcrInfo.negativeTestResultsCount || 0}
           />
-          <Statistic
-            //  loading={pcrLoading}
-            icon={totalVacsinateStart}
-            text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count="-"
-          />
-          <Statistic
-            icon={noneVacsinateStart}
-            text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            // loading={pcrLoading}
-            count="-"
-          />
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          {/* <Statistic */}
+          {/*   //  loading={pcrLoading} */}
+          {/*   icon={totalVacsinateStart} */}
+          {/*   text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه" */}
+          {/*   count="-" */}
+          {/* /> */}
+          {/* <Statistic */}
+          {/*   icon={noneVacsinateStart} */}
+          {/*   text="مجموع افراد واکسینه نشده در زمان شروع سامانه" */}
+          {/*   // loading={pcrLoading} */}
+          {/*   count="-" */}
+          {/* /> */}
         </div>
       </div>
     </fieldset>

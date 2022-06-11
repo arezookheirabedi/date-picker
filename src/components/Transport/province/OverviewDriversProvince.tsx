@@ -3,19 +3,22 @@ import {useLocation, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 import Statistic from '../../../containers/Guild/components/Statistic';
-import transportService from '../../../services/transport.service';
+// import transportService from '../../../services/transport.service';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
 import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
 import saveIcon from '../../../assets/images/icons/save-color.svg';
 import deadIcon from '../../../assets/images/icons/dead-color.svg';
 import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
 import grayVaccineIcon from '../../../assets/images/icons/gray-vaccine-lg.svg';
-import inquiryPlaque from '../../../assets/images/icons/inquiry-plaque.svg';
-import positiveInquiryPlaque from '../../../assets/images/icons/positive-inquiry-plaque.svg';
+// import inquiryPlaque from '../../../assets/images/icons/inquiry-plaque.svg';
+// import positiveInquiryPlaque from '../../../assets/images/icons/positive-inquiry-plaque.svg';
 import testIcon from '../../../assets/images/icons/test-color.svg';
 import {sideCities} from '../../../helpers/utils';
 import vaccineService from '../../../services/vaccine.service';
 import hcsService from '../../../services/hcs.service';
+import driverInfectedIcon from "../../../assets/images/icons/driver-infected.svg";
+import totalVaccinateStart from "../../../assets/images/icons/total-vaccinate-start-work-panel.svg";
+import noneVaccinateStart from "../../../assets/images/icons/none-vaccinate-start-wok-panel.svg";
 
 
 interface OverviewDriversProvinceProps {
@@ -59,11 +62,11 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   // const [numberOfRecoveredDriversLoading, setNumberOfRecoveredDriversLoading] = useState(false);
   // const [numberOfVaccination, setNumberOfVaccination] = useState(null);
   // const [numberOfVaccinationLoading, setNumberOfVaccinationLoading] = useState(false);
-  const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
-  const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
-  const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
-  const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
-    useState(false);
+  // const [numberOfPlaqueVisited, setNumberOfPlaqueVisited] = useState(null);
+  // const [numberOfPlaqueVisitedLoading, setNumberOfPlaqueVisitedLoading] = useState(false);
+  // const [numberOfPositivePlaqueVisited, setNumberOfPositivePlaqueVisited] = useState(null);
+  // const [numberOfPositivePlaqueVisitedLoading, setNumberOfPositivePlaqueVisitedLoading] =
+  //   useState(false);
   // const [numberOfTestResults, setNumberOfTestResults] = useState(null);
   // const [numberOfTestResultsLoading, setNumberOfTestResultsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -171,35 +174,35 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
   //   }
   // };
 
-  const getNumberOfPlaqueVisited = async (province: any) => {
-    setNumberOfPlaqueVisitedLoading(true);
-    try {
-      const {data} = await transportService.numberOfPlaqueVisited(province, {
-        cancelToken: source.token,
-      });
-      setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPlaqueVisitedLoading(false);
-    }
-  };
+  // const getNumberOfPlaqueVisited = async (province: any) => {
+  //   setNumberOfPlaqueVisitedLoading(true);
+  //   try {
+  //     const {data} = await transportService.numberOfPlaqueVisited(province, {
+  //       cancelToken: source.token,
+  //     });
+  //     setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfPlaqueVisitedLoading(false);
+  //   }
+  // };
 
-  const getNumberOfPositivePlaqueVisited = async (province: any) => {
-    setNumberOfPositivePlaqueVisitedLoading(true);
-    try {
-      const {data} = await transportService.numberOfPositivePlaqueVisited(province, {
-        cancelToken: source.token,
-      });
-      setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setNumberOfPositivePlaqueVisitedLoading(false);
-    }
-  };
+  // const getNumberOfPositivePlaqueVisited = async (province: any) => {
+  //   setNumberOfPositivePlaqueVisitedLoading(true);
+  //   try {
+  //     const {data} = await transportService.numberOfPositivePlaqueVisited(province, {
+  //       cancelToken: source.token,
+  //     });
+  //     setNumberOfPositivePlaqueVisited(data.numberOfPositivePlaqueVisited);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfPositivePlaqueVisitedLoading(false);
+  //   }
+  // };
 
   // const getNumberOfTestResults = async (province: any) => {
   //   setNumberOfTestResultsLoading(true);
@@ -229,8 +232,8 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
       // getNumberOfVaccination(provinceName);
       getNumberOf(provinceName);
       getTestResults(provinceName);
-      getNumberOfPlaqueVisited(provinceName);
-      getNumberOfPositivePlaqueVisited(provinceName);
+      // getNumberOfPlaqueVisited(provinceName);
+      // getNumberOfPositivePlaqueVisited(provinceName);
       // getNumberOfTestResults(provinceName);
     } else {
       history.push('/dashboard/transport/province');
@@ -238,9 +241,9 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
 
     return () => {
       // setNumberOfDrivers(null);
-      setNumberOfPlaqueVisited(null);
+      // setNumberOfPlaqueVisited(null);
       // setNumberOfPositiveDrivers(null);
-      setNumberOfPositivePlaqueVisited(null);
+      // setNumberOfPositivePlaqueVisited(null);
       // setNumberOfRecoveredDrivers(null);
       // setNumberOfTestResults(null);
       // setNumberOfVaccination(null);
@@ -263,31 +266,35 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={numberOf.totalPopulation}
             loading={loading}
             hasInfo
-            infoText="مجموع رانندگانی که در حمل و نقل عمومی فعالیت دارند"
+            infoText="مجموع رانندگانی که در حمل‌ و نقل عمومی فعالیت دارند."
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={testResultInfo.positiveMembersCount}
             loading={testResultLoading}
+            hasInfo
+            infoText="مجموع افراد مبتلا شده به بیماری کوید."
           />
           <Statistic
             icon={saveIcon}
-            text="مجموع بهبود یافتگان"
+            text="مجموع بهبودیافتگان"
             count={testResultInfo.recoveredMembersCount}
             loading={testResultLoading}
+            hasInfo
+            infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
+          <Statistic icon={deadIcon} text="مجموع فوت‌شدگان" count="-" loading={false} hasInfo infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند." />
         </div>
 
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
-            text="مجموع واکسن زده ها"
+            text="مجموع واکسن زده‌ها"
             count={numberOf.totalVaccinesCount || 0}
             loading={loading}
             hasInfo
-            infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
+            infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
           />
           <Statistic
             icon={grayVaccineIcon}
@@ -295,7 +302,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={numberOf.totalNonVaccinesCount || 0}
             loading={loading}
             hasInfo
-            infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
+            infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده‌اند."
           />
           <Statistic
             icon={vaccineIcon}
@@ -303,6 +310,8 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
             isPercentage
+            hasInfo
+            infoText="درصد افرادی که حداقل یک دوز واکسن زده اند."
           />
           <Statistic
             icon={grayVaccineIcon}
@@ -310,33 +319,35 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
             isPercentage
+            hasInfo
+            infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            icon={vaccineIcon}
+            icon={driverInfectedIcon}
             text="درصد ابتلا به کل"
             count={testResultInfo.positiveMembersCountToTotalPopulationPercentage || 0}
             loading={testResultLoading}
             isPercentage
             hasInfo
-            infoText="این عدد استخراج شده از مجموع افراد فعال در این حوزه با نتایج مثبت آزمایش هایشان است"
+            infoText="نسبت مبتلایان به بیماری کرونا به کل جمعیت رانندگان."
           />
           <Statistic
-            icon={inquiryPlaque}
-            text="تعداد استعلام پلاک"
-            count={numberOfPlaqueVisited}
-            loading={numberOfPlaqueVisitedLoading}
+            icon={totalVaccinateStart}
+            text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
+            count={numberOf.totalVaccinesCountAfterStartOfSystem || '-'}
+            loading={loading}
             hasInfo
-            infoText="تعداد استعلام‌های وسیله نقلیه عمومی که توسط مسافران انجام شده است"
+            infoText="تعداد افرادی که بعد از شروع به کار به سامانه دوز اول واکسن را دریافت کرده اند."
           />
           <Statistic
-            icon={positiveInquiryPlaque}
-            text="تعداد استعلام های نتیجه مثبت"
-            count={numberOfPositivePlaqueVisited}
-            loading={numberOfPositivePlaqueVisitedLoading}
+            icon={noneVaccinateStart}
+            text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
+            count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || '-'}
+            loading={loading}
             hasInfo
-            infoText="تعداد استعلام‌های وسیله نقلیه عمومی با نتیجه مثبت که توسط مسافران انجام شده است"
+            infoText="تعداد افرادی که در زمان شروع سامانه در طرح واکسیناسیون شرکت نکرده‌ بوداند."
           />
           <Statistic
             icon={testIcon}
@@ -344,7 +355,7 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             count={testResultInfo.testResultsCount}
             loading={testResultLoading}
             hasInfo
-            infoText="تعداد رانندگانی که برای تست به آزمایشگاه مراجعه کرده‌اند"
+            infoText="تعداد کل تست های PCR که رانندگان انجام داده‌اند."
           />
         </div>
       </div>

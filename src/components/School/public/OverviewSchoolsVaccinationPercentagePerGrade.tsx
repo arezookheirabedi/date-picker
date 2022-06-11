@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-// import hcsService from 'src/services/hcs.service';
+import hcsService from 'src/services/hcs.service';
 import DatePickerModal from 'src/components/SingleDatePickerModal';
 import Calendar from 'src/components/Calendar/SingleCalendar';
+// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import {waterMelonMockData} from './constant';
 
 const {Stacked} = Charts;
 
@@ -42,106 +39,76 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  // const getLinearOverview = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     // eslint-disable-next-line
-  //     const {data} = await hcsService.PeopleVaccinationOverview(params, {
-  //       cancelToken: cancelToken.token,
-  //     });
-     
+  const getLinearOverview = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      // eslint-disable-next-line
+      const {data} = await hcsService.peopleVaccinationOverview(params, {
+        cancelToken: cancelToken.token,
+      });
+      const grade: any[] = [];
 
-  //     const grade: any[] = [];
+      // eslint-disable-next-line
+      let nonVaccinesPercentage: any[] = [];
+      // eslint-disable-next-line
+      let vaccinesPercentage: any[] = [];
 
-  //     // eslint-disable-next-line
-  //     let nonVaccinesPercentage: any[] = [];
-  //     // eslint-disable-next-line
-  //     let vaccinesPercentage: any[] = [];
+      data.forEach((item: any) => {
+        vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
+        nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
 
-  //     waterMelonMockData.forEach((item: any) => {
-  //       vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
-  //       nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
+        grade.push(item.categoryValue);
+      });
 
-  //       grade.push(item.province);
-  //     });
-
-  //     setDataset([
-  //       {
-  //         name: 'واکسن زده',
-  //         color: '#FF0060',
-  //         data: [...vaccinesPercentage],
-  //       },
-  //       {
-  //         name: 'واکسن نزده',
-  //         color: '#F3BC06',
-  //         data: [...nonVaccinesPercentage],
-  //       },
-  //     ]);
-  //     setCategories([...grade]);
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      setDataset( [{
+        name: 'واکسن نزده',
+            data: [...nonVaccinesPercentage],
+            color: '#e21416',
+            dataLabels: {
+              // enabled: true,
+              // rotation: 270,
+            }
+          },
+          {
+            dataLabels: {
+              // enabled: true,
+              // rotation: 270,
+              // format: "{y}%"
+            },
+            name: 'واکسن زده',
+            data: [...vaccinesPercentage],
+            color:'#04b086'
+            // color: {
+            //   linearGradient: {
+            //     x1: 0,
+            //     x2: 0,
+            //     y1: 0,
+            //     y2: 1,
+            //   },
+            //   stops: [
+            //     [0, '#048365'],
+            //     [1, '#04d2a0'],
+            //   ],
+            // },
+          },
+        ]);
+      setCategories([...grade]);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // const idSetTimeOut = setTimeout(() => {
-    //   getLinearOverview({...queryParams, tag: 'edu', category: 'grade'});
-    // }, 500);
-    const grade: any[] = [];
-    // eslint-disable-next-line
-    let nonVaccinesPercentage: any[] = [];
-    // eslint-disable-next-line
-    let vaccinesPercentage: any[] = [];
-
-    waterMelonMockData.forEach((item: any) => {
-      vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
-      nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
-
-      grade.push(item.categoryValue);
-    });
-
-    setDataset([
-      {
-        name: 'واکسن زده',
-        color: '#e21416',
-        data: [...vaccinesPercentage],
-        dataLabels: {
-          // enabled: true,
-          // rotation: 270,
-        },
-      },
-      {
-        dataLabels: {
-          // enabled: true,
-          // rotation: 270,
-
-          // format: "{y}%"
-        },
-        name: 'واکسن نزده',
-        // color: '#F3BC06',
-        data: [...nonVaccinesPercentage],
-        color: {
-          linearGradient: {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 1,
-          },
-          stops: [
-            [0, '#048365'],
-            [1, '#04d2a0'],
-          ],
-        },
-      },
-    ]);
-    setCategories([...grade]);
+    const idSetTimeOut = setTimeout(() => {
+      getLinearOverview({...queryParams, tag: 'edu', category: 'grade'});
+    }, 500);
     return () => {
-      // clearTimeout(idSetTimeOut);
+      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset([]);
     };
@@ -153,24 +120,14 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
       setQueryParams({
         ...queryParams,
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-       
       });
     } else {
       setQueryParams({
         ...queryParams,
         to: null,
-      
       });
     }
   }, [selectedDay]);
-
-  // const clearselectedDay = (e: any) => {
-  //   e.stopPropagation();
-  //   setselectedDay({
-  //     from: null,
-  //     to: null,
-  //   });
-  // };
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -178,9 +135,20 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         نگاه کلی به درصد واکسیناسیون آموزش و پرورش در هر مقطع تحصیلی
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
+          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+            {/* <div className="flex items-center">
+              <SearchableSingleSelect
+                objectKey="categoryValue"
+                placeholder="کل آموزش و پرورش"
+                category="grade"
+                tag="edu"
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              />
+            </div> */}
+            <div className="flex items-center">
+              {' '}
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDay={setSelectedDay}
@@ -193,7 +161,6 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
             </div>
           </div>
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />

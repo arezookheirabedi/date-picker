@@ -1,41 +1,28 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-// import axios from 'axios';
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-
 import Charts from 'src/components/Charts';
-
 import Highcharts from 'highcharts';
-import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import hcsService from 'src/services/hcs.service';
+import {isEmpty} from 'lodash';
 import {
   cancelTokenSource,
   msgRequestCanceled,
-  //  toPersianDigit
 } from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters, mockRegisterPercentage} from './constant';
-
-// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
+import {converters} from './constant';
 
 const {HeadlessChart} = Charts;
 
-interface IOverviewPositivePcrPercentage {}
+interface IOverviewGuildPositivePcrPercentage {}
 
-const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = () => {
+const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -44,7 +31,6 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    tags: '',
   });
 
   const cancelToken = cancelTokenSource();
@@ -53,22 +39,43 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const normalizeData = (data: Array<any>) => {
-    const province: any[] = [];
+  const getColumnChartPositivePcrPercentage = async (from:any,to:any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} =await hcsService.tableOverviewTestResults('edu', 'grade', {
+        lang: 'fa',
+        from,
+        to,
+      });
 
-    const unregistered: any[] = [];
-    data.forEach((item: any) => {
-      province.push(item.province);
-      unregistered.push(item.unregister);
-    });
-    // setCategories([...province]);
-    const newData = [{showInLegend: false, name: 'ثبت نام نشده', data: [...unregistered]}];
-    // setDataset([...newData]);
-    setDataset({categories: [...province], series: [...newData]});
+      const categoryValue: any[] = [];
+
+      const positiveMembersCountToMembersCountPercentage: any[] = [];
+      data.forEach((item: any) => {
+        categoryValue.push(item.categoryValue);
+        positiveMembersCountToMembersCountPercentage.push(item.positiveMembersCountToMembersCountPercentage);
+      });
+      // setCategories([...province]);
+      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCountToMembersCountPercentage]}];
+      // setDataset([...newData]);
+      setDataset({categories: [...categoryValue], series: [...newData]});
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
-    normalizeData(mockRegisterPercentage);
+    const idSetTimeOut = setTimeout(() => {
+      getColumnChartPositivePcrPercentage(queryParams.from,queryParams.to);
+    }, 500);
+    // normalizeData(mockRegisterPercentage);
     return () => {
+      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset([]);
     };
@@ -82,14 +89,12 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: '',
       });
     } else {
       setQueryParams({
         ...queryParams,
         from: null,
         to: null,
-        tags: '',
       });
     }
   }, [selectedDayRange]);
@@ -154,6 +159,9 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
       title: {
         enabled: false,
       },
+      labels: {
+        format: '٪{text}',
+      },
     },
     xAxis: {
       lineDashStyle: 'dash',
@@ -163,7 +171,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: 'K',
+      valueSuffix: '%',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -175,6 +183,7 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
     series: [
       {
         lineWidth: 4,
+        showInLegend: false,
         dataLabels: {
           // enabled: true,
         },
@@ -190,15 +199,16 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center space-x-5 rtl:space-x-reverse">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <SearchableSingleSelect
+                objectKey="categoryValue"
                 placeholder="کل آموزش و پرورش"
                 category="grade"
                 tag="edu"
                 setQueryParams={setQueryParams}
                 queryParams={queryParams}
               />
-            </div>
+            </div> */}
             <div className="flex items-center">
               {' '}
               {showDatePicker ? (
@@ -225,10 +235,10 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-        {dataset.length === 0 && !loading && !errorMessage && (
+        {!loading && !isEmpty(dataset) && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
+        )}
+        {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
@@ -236,4 +246,4 @@ const OverviewPositivePcrPercentage: React.FC<IOverviewPositivePcrPercentage> = 
   );
 };
 
-export default OverviewPositivePcrPercentage;
+export default OverviewGuildPositivePcrPercentage;
