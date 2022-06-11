@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from "axios";
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
@@ -7,44 +8,45 @@ import Highcharts from "highcharts/highstock";
 import DatePickerModal from '../../DatePickerModal';
 import {toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
-// import Spinner from '../../Spinner';
+import Spinner from '../../Spinner';
 import Charts from '../../Charts';
+import hcsService from "../../../services/hcs.service";
 
 
 const {HeadlessChart} = Charts;
 
 const initialData = {
-  categories: ['تهران', 'خراسان رضوی', 'اصفهان', 'فارس', 'خوزستان', 'آذربایجان شرقی', 'مازندران', 'آذربایجان غربی', 'کرمان', 'گیلان', 'البرز', 'سیستان و بلوچستان', 'کرمانشاه', 'هرمزگان', 'گلستان', 'همدان', 'لرستان', 'مرکزی', 'کردستان', 'قزوین', 'اردبيل', 'یزد', 'قم', 'زنجان', 'بوشهر', 'چهارمحال و بختیاری', 'خراسان شمالی', 'خراسان جنوبی', 'سمنان', 'کهگیلویه و بویراحمد', 'ایلام'],
+  categories: [],
   series: [
     {
       name: 'واکسن نزده',
       color: '#FF0060',
-      data: [100000, 150000, 53735, 55179, 68494, 39729, 6668, 22471, 24918, 35147, 53685, 38823, 12285, 33724, 1550, 19391, 32050, 15501, 17856, 10587, 15982, 17003, 18431, 10741, 9777, 4833, 5980, 6312, 6693, 7481, 9053],
+      data: [],
     },
     {
       name: 'دوز اول',
       color: '#F3BC06',
-      data: [1000000, 950000, 3952432, 3741394, 3158926, 3013485, 2659416, 2435827, 2153507, 2120640, 2082688, 1778449, 1415348, 1367807, 1314939, 1275993, 1223690, 1113057, 1070036, 988541, 932262, 888320, 809416, 806546, 797276, 666791, 642545, 550605, 542189, 516757, 407424],
+      data: [],
     },
     {
       name: 'دوز دوم',
       color: '#209F92',
-      data: [800000, 750000, 3632019, 3506380, 2758665, 2843383, 2519908, 2250866, 1969160, 2021944, 1939778, 1533717, 1302749, 1259730, 1194796, 1179806, 1109699, 1043458, 962752, 911895, 867004, 809516, 715786, 759066, 730534, 626414, 596822, 507991, 510790, 477946, 375940],
+      data: [],
     },
     {
       name: 'دوز سوم',
       color: '#004D65',
-      data: [600000, 650000, 1585440, 1710132, 1078327, 1551940, 1410920, 1010415, 830194, 1053376, 923226, 652347, 630781, 626908, 492673, 552121, 494537, 517741, 378825, 420373, 416050, 337008, 255532, 406438, 295530, 306338, 275739, 203110, 269510, 218543, 155967],
+      data: [],
     },
     {
       name: 'دوز چهارم',
       color: '#BFDDE7',
-      data: [400000, 300000, 1754, 2824, 2786, 1999, 57049, 689, 670, 2186, 2665, 921, 1132, 907, 6503, 680, 630, 723, 313, 303, 308, 470, 342, 511, 183, 520, 258, 76, 453, 387, 96],
+      data: [],
     },
     {
       name: 'دوز پنجم',
       color: '#716DE3',
-      data: [200000, 100000, 1754, 2824, 2786, 1999, 57049, 689, 670, 2186, 2665, 921, 1132, 907, 6503, 680, 630, 723, 313, 303, 308, 470, 342, 511, 183, 520, 258, 76, 453, 387, 96],
+      data: [],
     },
   ]
 } as any;
@@ -157,17 +159,24 @@ const optionChart = {
 }
 
 const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
-  // const {CancelToken} = axios;
-  // const source = CancelToken.source();
-  const [dataset] = useState<any[]>(initialData);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+  const [dataset, setDataset] = useState<any[]>(initialData) as any;
   // const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
-  const [errorMessage, setErrorMessage] = useState(null);
-  // const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null) as any;
+  // eslint-disable-next-line
+  const [loading, setLoading] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
+  }) as any;
+
+  const [query, setQuery] = useState({
+    resultReceiptDateFrom: null,
+    resultReceiptDateTo: null,
   }) as any;
 
   const focusFromDate = () => {
@@ -194,121 +203,120 @@ const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
       : '';
   };
 
-  const [queryParams, setQueryParams] = useState({
-    from: null,
-    to: null,
-    tags: [],
-  });
+  // eslint-disable-next-line
+  const getVaccinesGroupedByProvinceReport = async (params: any) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data} = await hcsService.getVaccinesGroupedByProvinceReport({
+        tag: 'transport',
+        ...params
+      }, {cancelToken: source.token});
 
-  // // eslint-disable-next-line
-  // const getLinearOverview = async () => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
-  //
-  //     const provinces: any[] = [];
-  //
-  //     // eslint-disable-next-line
-  //     let firstDose: any[] = [];
-  //     // eslint-disable-next-line
-  //     let secondDose: any[] = [];
-  //     // eslint-disable-next-line
-  //     let thirdDose: any[] = [];
-  //     // eslint-disable-next-line
-  //     let moreThanThreeDose: any[] = [];
-  //     // eslint-disable-next-line
-  //     let noDose: any[] = [];
-  //
-  //     data.forEach((item: any, index: number) => {
-  //       let more = 0;
-  //
-  //       // eslint-disable-next-line
-  //       for (const [key, value] of Object.entries(item.doses)) {
-  //
-  //         if (Number(key) === 1) {
-  //           firstDose.push(Number(value));
-  //         }
-  //
-  //         if (Number(key) === 2) {
-  //           secondDose.push(Number(value));
-  //         }
-  //
-  //         if (Number(key) === 3) {
-  //           thirdDose.push(Number(value));
-  //         }
-  //
-  //         if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-  //           more += Number(value);
-  //         }
-  //       }
-  //
-  //       noDose.push(Number(item.totalNonVaccinesCount || 0));
-  //
-  //       if (noDose.length < index + 1) noDose.push(0);
-  //       if (firstDose.length < index + 1) firstDose.push(0);
-  //       if (secondDose.length < index + 1) secondDose.push(0);
-  //       if (thirdDose.length < index + 1) thirdDose.push(0);
-  //       if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
-  //
-  //       provinces.push(item.province);
-  //     });
-  //
-  //     console.log('no dose => ',noDose)
-  //     console.log('first dose => ',firstDose)
-  //     console.log('second dose => ',secondDose)
-  //     console.log('third dose => ',thirdDose)
-  //     console.log('more than => ',moreThanThreeDose)
-  //     console.log('provinces => ',provinces)
-  //
-  //     setDataset([
-  //       {
-  //         name: 'واکسن نزده',
-  //         color: '#FF0060',
-  //         data: [...noDose],
-  //       },
-  //       {
-  //         name: 'دوز اول',
-  //         color: '#F3BC06',
-  //         data: [...firstDose],
-  //       },
-  //       {
-  //         name: 'دوز دوم',
-  //         color: '#209F92',
-  //         data: [...secondDose],
-  //       },
-  //       {
-  //         name: 'دوز سوم',
-  //         color: '#004D65',
-  //         data: [...thirdDose],
-  //       },
-  //       {
-  //         name: 'بیش از ۳ دوز',
-  //         color: '#BFDDE7',
-  //         data: [...moreThanThreeDose],
-  //       },
-  //     ]);
-  //     setCategories([...provinces]);
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      console.log(data);
 
-  // useEffect(() => {
-  //   const idSetTimeOut = setTimeout(() => {
-  //     getLinearOverview();
-  //   }, 500);
-  //
-  //   return () => {
-  //     clearTimeout(idSetTimeOut);
-  //     source.cancel('Operation canceled by the user.');
-  //     setDataset([]);
-  //   };
-  // }, []);
+      const provinces: any[] = [];
+
+      // eslint-disable-next-line
+      let firstDose: any[] = [];
+      // eslint-disable-next-line
+      let secondDose: any[] = [];
+      // eslint-disable-next-line
+      let thirdDose: any[] = [];
+      // eslint-disable-next-line
+      // eslint-disable-next-line
+      let forthDose: any[] = [];
+      // eslint-disable-next-line
+      let fifthDose: any[] = [];
+      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+      // eslint-disable-next-line
+      let noDose: any[] = [];
+
+      data.forEach((item: any) => {
+
+        // eslint-disable-next-line
+        for (const [key, value] of Object.entries({...initialDoses, ...item.doses})) {
+          if (Number(key) === 1) {
+            firstDose.push(Number(value));
+          }
+
+          if (Number(key) === 2) {
+            secondDose.push(Number(value));
+          }
+
+          if (Number(key) === 3) {
+            thirdDose.push(Number(value));
+          }
+
+          if (Number(key) === 4) {
+            forthDose.push(Number(value));
+          }
+
+          if (Number(key) === 5) {
+            fifthDose.push(Number(value));
+          }
+        }
+
+        noDose.push(Number(item.totalNonVaccinesCount || 0));
+        provinces.push(item.province);
+      });
+
+      setDataset(() => {
+        return {
+          categories: provinces,
+          series: [
+            {
+              name: 'واکسن نزده',
+              color: '#FF0060',
+              data: [...noDose],
+            },
+            {
+              name: 'دوز اول',
+              color: '#F3BC06',
+              data: [...firstDose]
+            }, {
+              name: 'دوز دوم',
+              color: '#209F92',
+              data: [...secondDose]
+            }, {
+              name: 'دوز سوم',
+              color: '#004D65',
+              data: [...thirdDose]
+            }, {
+              name: 'دوز چهارم',
+              color: '#BFDDE7',
+              data: [...forthDose]
+            }, {
+              name: 'دوز پنجم',
+              color: '#716DE3',
+              data: [...fifthDose]
+            }]
+        }
+      })
+
+    } catch (error: any) {
+      setErrorMessage('خطا در اتصال به سرویس');
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const idSetTimeOut = setTimeout(() => {
+      getVaccinesGroupedByProvinceReport({
+        from: query.resultReceiptDateFrom,
+        to: query.resultReceiptDateTo
+      });
+    }, 500);
+
+    return () => {
+      clearTimeout(idSetTimeOut);
+      source.cancel('Operation canceled by the user.');
+      setDataset([]);
+    };
+  }, [query]);
 
 
   useEffect(() => {
@@ -317,20 +325,19 @@ const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
       // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
+      setQuery({
+        ...query,
+        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
     } else {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-        tags: [],
+      setQuery({
+        ...query,
+        resultReceiptDateFrom: null,
+        resultReceiptDateTo: null,
       });
     }
+
   }, [selectedDayRange]);
 
   const clearSelectedDayRange = (e: any) => {
@@ -340,6 +347,7 @@ const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
       to: null,
     });
   };
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون حمل و نقل عمومی کشور</legend>
@@ -460,20 +468,20 @@ const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
         </div>
 
         {/* <Stacked data={dataset} categories={categories} /> */}
-        <HeadlessChart data={dataset} optionsProp={optionChart}/>
 
-        {/* {loading && (
+
+        {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} />
+        {!loading && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
-        {dataset.length === 0 && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )} */}
+        {/* {dataset.length === 0 && !loading && !errorMessage && ( */}
+        {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
+        {/* )} */}
         {/* <div className="flex justify-center items-center w-full">
           <Stacked data={dataset} categories={categories} />
         </div> */}

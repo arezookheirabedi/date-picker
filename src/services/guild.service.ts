@@ -140,7 +140,7 @@ function guildTestResultByCategory({tag, category, ...params}: any = {}, config?
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}`, params, {
+    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}?lang=fa`, params, {
       ...config,
     });
 }
