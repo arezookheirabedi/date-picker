@@ -35,7 +35,7 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
   async function getTestResultByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await guildService.getRegistercount(params, {
+      const {data} = await guildService.getRegisterCount(params, {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];
@@ -43,7 +43,7 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
         normalizedData.push({
           id: `ovca_${index}`,
           name: item.categoryName || 'نامشخص',
-          registeredCount:item.count || 0,
+          registeredCount: item.count || 0,
         });
       });
       setDataset([...normalizedData]);
@@ -65,8 +65,6 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
     if (existsCity) {
       getTestResultByCategory({
         ...queryParams,
-
-    
         province: provinceName,
       });
     } else {
@@ -181,13 +179,7 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
               name: 'تعداد',
               key: 'registeredCount',
               sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v)
-                    .commaSeprator()
-                    .toPersianDigits()}
-                </span>
-              ),
+              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
             },
             {
               name: 'نام رسته',
