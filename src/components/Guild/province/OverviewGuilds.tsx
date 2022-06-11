@@ -51,7 +51,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
         const newData = {...guildVacinateInfo, ...res.data};
         setGuildVacinateInfo(newData);
       } // eslint-disable-next-line
-      console.log(res);
     } catch (error) {
       // eslint-disable-next-line
       console.log(error);

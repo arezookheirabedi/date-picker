@@ -5,7 +5,7 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
@@ -52,7 +52,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         allCount.push(item.allCount);
         registered.push(item.registeredCount);
       });
-      // setCategories([...province]);
       const newData = [
         {
           name: 'کل',
@@ -81,7 +80,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           ],
         },
       ];
-      if(data.length > 0) {
+      if (data.length > 0) {
         setDataset({categories: [...province], series: [...newData]});
       }
     } catch (error: any) {
@@ -95,8 +94,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      // const {categoryValue, ...newQuery}: any = queryParams;
-      // {...newQuery, categoryId: categoryValue}
       getColumnChartRegisterNumber(queryParams);
     }, 500);
     return () => {
@@ -176,6 +173,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         },
       },
     },
+
     yAxis: {
       gridLineDashStyle: 'dash',
       lineDashStyle: 'dash',
@@ -186,27 +184,29 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         enabled: false,
       },
     },
-    // scrollbar: {
-    //   enabled: true,
-    //   barBackgroundColor: '#656565',
-    //   barBorderColor: '#eee',
-    //   barBorderRadius: 4,
-    //   barBorderWidth: 0,
-    //   height: 6,
-    //   buttonArrowColor: '#eee',
-    //   rifleColor: '#656565',
-    //   buttonBackgroundColor: 'transparent',
-    //   buttonBorderWidth: 0,
-    //   buttonBorderRadius: 0,
-    //   trackBackgroundColor: '#eee',
-    //   trackBorderWidth: 0,
-    //   trackBorderRadius: 4,
-    // },
+
     xAxis: {
-      // scrollbar: {
-      //   enabled: true,
-      //   showFull: false,
-      // },
+      scrollbar: {
+        enabled: true,
+        barBackgroundColor: '#656565',
+        barBorderColor: '#eee',
+        barBorderRadius: 4,
+        barBorderWidth: 0,
+        height: 6,
+        buttonArrowColor: '#eee',
+        rifleColor: '#656565',
+        buttonBackgroundColor: 'transparent',
+        buttonBorderWidth: 0,
+        buttonBorderRadius: 0,
+        trackBackgroundColor: '#eee',
+        trackBorderWidth: 0,
+        trackBorderRadius: 4,
+        showFull: false,
+      },
+   
+      min: 0,
+      max: 30,
+    
       lineDashStyle: 'dash',
       lineColor: '#000000',
       lineWidth: 1,
@@ -223,7 +223,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         textAlign: 'right',
         fontFamily: 'inherit',
       },
-  
+
       // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
@@ -279,7 +279,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
 
         {!loading &&
           !errorMessage &&
-          (isEmpty(dataset)? (
+          (isEmpty(dataset) ? (
             <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
           ) : (
             <HeadlessChart data={dataset} optionsProp={optionChart} />
