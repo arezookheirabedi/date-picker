@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
 import {IInitialNumberOfDoses, initialNumberOfDoses} from "../../Passengers/public/constant";
-import {cancelTokenSource, msgRequestCanceled} from "../../../helpers/utils";
+import {cancelTokenSource, msgRequestCanceled, sideCities} from "../../../helpers/utils";
 import hcsService from "../../../services/hcs.service";
 import Statistic from "../../../containers/Guild/components/Statistic";
 import YellowVaccine from "../../../assets/images/icons/big-yellow-vaccine.svg";
@@ -9,6 +10,7 @@ import PurpleVaccine from "../../../assets/images/icons/big-purpule-vaccine.svg"
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
 import VaccineIcon from "../../../assets/images/icons/vaccine-color.svg";
 import GreyVaccine from "../../../assets/images/icons/big-gray-vaccine.svg";
+
 
 interface OverviewOfTheLatestPublicTransportVaccinationStatusCardProvinceProps {
   cityTitle: any
@@ -19,6 +21,8 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
+  const location = useLocation();
+  const history = useHistory();
 
   const cancelToken = cancelTokenSource();
 
@@ -26,12 +30,13 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getPassengerVaccinateInfo = async () => {
+  const getPassengerVaccinateInfo = async (province : any) => {
     setLoading(true);
     try {
       const res = await hcsService.getPeopleVaccine(
         {
           tag: 'transport',
+          province
         },
         {cancelToken: cancelToken.token}
       );
@@ -49,14 +54,24 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
   };
 
   useEffect(() => {
-    getPassengerVaccinateInfo();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getPassengerVaccinateInfo(provinceName);
+
+    } else {
+      history.push('/dashboard/transport/province');
+    }
     // getPcrResult();
     return () => {
       cancelRequest();
       setNumberOf(initialNumberOfDoses);
       // setGuildPcrInfo(initialPcrInfo);
     };
-  }, []);
+  }, [location.search]);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">

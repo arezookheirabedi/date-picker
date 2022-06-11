@@ -1,31 +1,33 @@
 import React, {useEffect, useState} from 'react';
+import {useHistory, useLocation} from "react-router-dom";
 import Highcharts from "highcharts/highstock";
-
-import vaccineService from 'src/services/vaccine.service';
 import axios from 'axios';
 
-// import Spinner from '../../Spinner';
+import Spinner from '../../Spinner';
 import Charts from '../../Charts';
+import hcsService from "../../../services/hcs.service";
+import {convertGregorianDateToJalaliDate, sideCities} from "../../../helpers/utils";
+
 
 const {HeadlessChart} = Charts;
 
 const initialData = {
-  categories: ['۱۴۰۱/۰۱/۰۱', '۱۴۰۱/۰۱/۰۲', '۱۴۰۱/۰۱/۰۳', '۱۴۰۱/۰۱/۰۴', '۱۴۰۱/۰۱/۰۵', '۱۴۰۱/۰۱/۰۶', '۱۴۰۱/۰۱/۰۷', '۱۴۰۱/۰۱/۰۸', '۱۴۰۱/۰۱/۰۹', '۱۴۰۱/۰۱/۱۰'],
+  categories: [],
   series: [{
     name: 'دوز اول',
-    data: [502, 635, 809, 1947, 2402, 3634, 5268, 6000, 7000, 6000]
+    data: []
   }, {
     name: 'دوز دوم',
-    data: [106, 300, 500, 1133, 1721, 2867, 2766, 3900, 5100, 3490]
+    data: []
   }, {
     name: 'دوز سوم',
-    data: [163, 203, 276, 908, 1547, 1729, 1628, 2500, 3800, 2390]
+    data: []
   }, {
     name: 'دوز چهارم',
-    data: [18, 31, 54, 656, 339, 1218, 1201, 1300, 2450, 1903]
+    data: []
   }, {
     name: 'دوز پنجم',
-    data: [16, 21, 44, 196, 139, 1018, 1001, 1200, 1150, 1703]
+    data: []
   }]
 } as any;
 
@@ -112,30 +114,34 @@ const optionChart = {
 
 }
 
-interface OverviewOfDriverVaccinationProcessProvinceProps{
-  cityTitle : any
+interface OverviewOfDriverVaccinationProcessProvinceProps {
+  cityTitle: any
 }
 
-const OverviewOfDriverVaccinationProcessProvince : React.FC<OverviewOfDriverVaccinationProcessProvinceProps> = ({cityTitle}) => {
+const OverviewOfDriverVaccinationProcessProvince: React.FC<OverviewOfDriverVaccinationProcessProvinceProps> = ({cityTitle}) => {
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
-  const [dataset, setDataset] = useState<any[]>(initialData);
+  const [dataset, setDataset] = useState<any[]>(initialData) as any;
   // const [categories, setCategories] = useState<any[]>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const history = useHistory();
 
   // eslint-disable-next-line
-  const getLinearOverview = async () => {
+  const getAreaChartVaccination = async (province: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
+      const {data} = await hcsService.accumulativeVaccinesTimeBasedReport({tag: 'transport', province}, {
+        cancelToken: source.token
+      });
 
-      const provinces: any[] = [];
+      const categories: any[] = [];
 
       // eslint-disable-next-line
       let firstDose: any[] = [];
@@ -144,16 +150,14 @@ const OverviewOfDriverVaccinationProcessProvince : React.FC<OverviewOfDriverVacc
       // eslint-disable-next-line
       let thirdDose: any[] = [];
       // eslint-disable-next-line
-      let moreThanThreeDose: any[] = [];
+      let forthDose: any[] = [];
       // eslint-disable-next-line
-      let noDose: any[] = [];
-
-      data.forEach((item: any, index: number) => {
-        let more = 0;
-
+      let fifthDose: any[] = [];
+      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+      data.forEach((item: any) => {
         // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.doses)) {
-
+        for (const [key, value] of Object.entries({...initialDoses, ...item.doses})) {
+          // console.log(key)
           if (Number(key) === 1) {
             firstDose.push(Number(value));
           }
@@ -166,21 +170,64 @@ const OverviewOfDriverVaccinationProcessProvince : React.FC<OverviewOfDriverVacc
             thirdDose.push(Number(value));
           }
 
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            more += Number(value);
+          if (Number(key) === 4) {
+            forthDose.push(Number(value));
           }
+
+          if (Number(key) === 5) {
+            fifthDose.push(Number(value));
+          }
+
+          // if (firstDose.length <= index + 1) firstDose.push(0);
+          // if (secondDose.length <= index + 1) secondDose.push(0);
+          // if (thirdDose.length <= index + 1) thirdDose.push(0);
+          // if (forthDose.length <= index + 1) forthDose.push(0);
+          // if (fifthDose.length <= index + 1) fifthDose.push(0);
         }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-
-        if (noDose.length < index + 1) noDose.push(0);
-        if (firstDose.length < index + 1) firstDose.push(0);
-        if (secondDose.length < index + 1) secondDose.push(0);
-        if (thirdDose.length < index + 1) thirdDose.push(0);
-        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
-
-        provinces.push(item.province);
+        categories.push(convertGregorianDateToJalaliDate(item.date));
       });
+
+      // const initialData = {
+      //   categories: [],
+      //   series: [{
+      //     name: 'دوز اول',
+      //     data: []
+      //   }, {
+      //     name: 'دوز دوم',
+      //     data: []
+      //   }, {
+      //     name: 'دوز سوم',
+      //     data: []
+      //   }, {
+      //     name: 'دوز چهارم',
+      //     data: []
+      //   }, {
+      //     name: 'دوز پنجم',
+      //     data: []
+      //   }]
+      // } as any;
+
+      setDataset(() => {
+        return {
+          categories,
+          series: [{
+            name: 'دوز اول',
+            data: [...firstDose]
+          }, {
+            name: 'دوز دوم',
+            data: [...secondDose]
+          }, {
+            name: 'دوز سوم',
+            data: [...thirdDose]
+          }, {
+            name: 'دوز چهارم',
+            data: [...forthDose]
+          }, {
+            name: 'دوز پنجم',
+            data: [...fifthDose]
+          }]
+        }
+      })
 
       // setDataset([
       //   {
@@ -219,17 +266,25 @@ const OverviewOfDriverVaccinationProcessProvince : React.FC<OverviewOfDriverVacc
     }
   };
 
+
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview();
-    }, 500);
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getAreaChartVaccination(provinceName);
+
+    } else {
+      history.push('/dashboard/transport/province');
+    }
 
     return () => {
-      clearTimeout(idSetTimeOut);
       source.cancel('Operation canceled by the user.');
-      setDataset([]);
+      setDataset(initialData);
     };
-  }, []);
+  }, [location.search]);
 
 
   return (
@@ -270,18 +325,18 @@ const OverviewOfDriverVaccinationProcessProvince : React.FC<OverviewOfDriverVacc
           </div>
         </div>
 
-        {/* {loading && ( */}
-        {/*  <div className="p-40"> */}
-        {/*    <Spinner /> */}
-        {/*  </div> */}
-        {/* )} */}
-        {/* {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>} */}
-        {/* {!loading && dataset.length > 0 && !errorMessage && ( */}
-        <HeadlessChart data={dataset} optionsProp={optionChart}/>
-        {/* )} */}
-        {/* {dataset.length === 0 && !loading && !errorMessage && ( */}
-        {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
-        {/* )} */}
+        {loading && (
+          <div className="p-40">
+            <Spinner/>
+          </div>
+        )}
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && dataset.categories.length > 0 && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
+        )}
+        {dataset.categories.length === 0 && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        )}
         {/* <div className="flex justify-center items-center w-full">
           <Stacked data={dataset} categories={categories} />
         </div> */}
