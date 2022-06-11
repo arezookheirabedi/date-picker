@@ -101,7 +101,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center  rounded-xl p-4 mb-16">
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">

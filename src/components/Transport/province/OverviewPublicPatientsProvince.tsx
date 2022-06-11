@@ -14,6 +14,7 @@ import {sideCities, transportationTypes} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 
 const {Line} = Charts;
 
@@ -27,10 +28,10 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  const [isCancel, setIsCancel] = useState(false);
+
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -45,7 +46,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
-    // type: 'MONTHLY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
     category: 'serviceType',
@@ -69,7 +70,8 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
       );
       setData(response.data);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      // setErrorMessage(error.message);
+      setErrorMessage('خطا در اتصال به سرور')
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -105,7 +107,6 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
   useEffect(() => {
     return () => {
       setData([]);
-      setIsCancel(false);
     };
   }, [history]);
 
@@ -182,7 +183,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between flex-grow px-8">
+          <div className="flex align-center justify-start flex-grow px-8">
             <Menu
               as="div"
               className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
@@ -197,7 +198,6 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                   <DownIcon className="h-2 w-2.5 mr-2" />
                 </Menu.Button>
               </div>
-
               <Menu.Items className="z-40 absolute left-0 xl:right-0 w-52 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
                   {transportationTypes.map((value: any, index: any) => {
@@ -228,7 +228,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
                 </div>
               </Menu.Items>
             </Menu>
-            <div className="flex align-center justify-between">
+            <div className="flex align-center justify-between mr-8">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -245,28 +245,27 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
               />
             </div>
           </div>
-          {/* 
+
           <RangeDateSliderFilter
             changeType={v =>
-              setQueryParams({
-                ...queryParams,
-                type: v,
+              setQuery({
+                ...query,
+                timeBoxType: v,
               })
             }
-            selectedType={queryParams.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          /> */}
+          />
         </div>
-
-        {(loading || isCancel) && (
+        {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && !isCancel && (
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

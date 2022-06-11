@@ -34,12 +34,12 @@ const OverviewSchoolsPositivePcr = () => {
   };
 
   const [query, setQuery] = useState({
-    type: 'MONTHLY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
-    category: 'grade',
     categoryValue: null,
     tag: 'edu',
+    category: 'grade',
   });
 
   const getColumnChartTestResult = async (params: any) => {
@@ -161,9 +161,10 @@ const OverviewSchoolsPositivePcr = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
+              objectKey="categoryValue"
               placeholder="کل آموزش و پرورش"
-              category="grade"
               tag="edu"
+              category="grade"
               setQueryParams={setQuery}
               queryParams={query}
             />
@@ -189,10 +190,10 @@ const OverviewSchoolsPositivePcr = () => {
             changeType={v =>
               setQuery({
                 ...query,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={query.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />

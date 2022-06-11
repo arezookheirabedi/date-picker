@@ -57,7 +57,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
 
   return (
     <>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="flex  border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             hasInfo

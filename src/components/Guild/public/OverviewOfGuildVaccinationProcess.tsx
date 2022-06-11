@@ -1,51 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-
-import vaccineService from 'src/services/vaccine.service';
-import axios from 'axios';
-
 // import Spinner from '../../Spinner';
+import hcsService from 'src/services/hcs.service';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {isEmpty} from 'lodash';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
-
-const initialData = {
-  categories: [
-    '۱۴۰۱/۰۱/۰۱',
-    '۱۴۰۱/۰۱/۰۲',
-    '۱۴۰۱/۰۱/۰۳',
-    '۱۴۰۱/۰۱/۰۴',
-    '۱۴۰۱/۰۱/۰۵',
-    '۱۴۰۱/۰۱/۰۶',
-    '۱۴۰۱/۰۱/۰۷',
-    '۱۴۰۱/۰۱/۰۸',
-    '۱۴۰۱/۰۱/۰۹',
-    '۱۴۰۱/۰۱/۱۰',
-  ],
-  series: [
-    {
-      name: 'دوز اول',
-      data: [502, 635, 809, 1947, 2402, 3634, 5268, 6000, 7000, 6000],
-    },
-    {
-      name: 'دوز دوم',
-      data: [106, 300, 500, 1133, 1721, 2867, 2766, 3900, 5100, 3490],
-    },
-    {
-      name: 'دوز سوم',
-      data: [163, 203, 276, 908, 1547, 1729, 1628, 2500, 3800, 2390],
-    },
-    {
-      name: 'دوز چهارم',
-      data: [18, 31, 54, 656, 339, 1218, 1201, 1300, 2450, 1903],
-    },
-    {
-      name: 'دوز پنجم',
-      data: [16, 21, 44, 196, 139, 1018, 1001, 1200, 1150, 1703],
-    },
-  ],
-} as any;
-
 const converters = {
   fa(number: any) {
     return number.toString().replace(/\d/g, (d: any) => {
@@ -63,7 +24,10 @@ const optionChart = {
       const ret = Highcharts.numberFormat.apply(0, arguments as any);
       return converters.fa(ret);
     },
-
+    // scrollablePlotArea: {
+    //   // minWidth: 700,
+    //   scrollPositionX: 1
+    // },
     events: {
       redraw: () => {
         // eslint-disable-next-line
@@ -77,6 +41,9 @@ const optionChart = {
     text: '',
   },
   xAxis: {
+    scrollbar: {
+      enabled: true,
+    },
     tickmarkPlacement: 'off',
     title: {
       enabled: false,
@@ -101,12 +68,6 @@ const optionChart = {
     },
     area: {
       stacking: 'normal',
-      // lineColor: '#666666',
-      // lineWidth: 1,
-      // marker: {
-      //   lineWidth: 1,
-      //   lineColor: '#666666'
-      // }
     },
   },
   legend: {
@@ -123,43 +84,41 @@ const optionChart = {
       fontSize: 10,
     },
     borderWidth: 0,
-    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
 };
 
 const OverviewOfGuildVaccinationProcess = () => {
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  const [dataset, setDataset] = useState<any[]>(initialData);
-  // const [categories, setCategories] = useState<any[]>([]);
-  // const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  const [dataset, setDataset] = useState<any>();
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line
-  const getLinearOverview = async () => {
+  const getAreaChartVaccination = async (params: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.dosesTagBased({}, {cancelToken: source.token});
-
-      const provinces: any[] = [];
-
+      const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
+        cancelToken: cancelToken.token,
+      });
+      const date: any[] = [];
       // eslint-disable-next-line
       let firstDose: any[] = [];
       // eslint-disable-next-line
       let secondDose: any[] = [];
       // eslint-disable-next-line
+      let fourthDose: any[] = [];
+      // eslint-disable-next-line
       let thirdDose: any[] = [];
       // eslint-disable-next-line
-      let moreThanThreeDose: any[] = [];
-      // eslint-disable-next-line
-      let noDose: any[] = [];
+      let fifthDose: any[] = [];
+  
 
       data.forEach((item: any, index: number) => {
-        let more = 0;
-
         // eslint-disable-next-line
         for (const [key, value] of Object.entries(item.doses)) {
           if (Number(key) === 1) {
@@ -173,51 +132,48 @@ const OverviewOfGuildVaccinationProcess = () => {
           if (Number(key) === 3) {
             thirdDose.push(Number(value));
           }
-
-          if (Number(key) !== 0 && key !== 'null' && Number(key) > 3) {
-            more += Number(value);
+          if (Number(key) === 4) {
+            fourthDose.push(Number(value));
+          }
+          if (Number(key) === 5) {
+            fifthDose.push(Number(value));
           }
         }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-
-        if (noDose.length < index + 1) noDose.push(0);
         if (firstDose.length < index + 1) firstDose.push(0);
         if (secondDose.length < index + 1) secondDose.push(0);
         if (thirdDose.length < index + 1) thirdDose.push(0);
-        if (moreThanThreeDose.length < index + 1) moreThanThreeDose.push(more);
-
-        provinces.push(item.province);
+        if (fourthDose.length < index + 1) fourthDose.push(0);
+        if (fifthDose.length < index + 1) fifthDose.push(0);
+        date.push(item.date);
       });
 
-      // setDataset([
-      //   {
-      //     name: 'واکسن نزده',
-      //     color: '#FF0060',
-      //     data: [...noDose],
-      //   },
-      //   {
-      //     name: 'دوز اول',
-      //     color: '#F3BC06',
-      //     data: [...firstDose],
-      //   },
-      //   {
-      //     name: 'دوز دوم',
-      //     color: '#209F92',
-      //     data: [...secondDose],
-      //   },
-      //   {
-      //     name: 'دوز سوم',
-      //     color: '#004D65',
-      //     data: [...thirdDose],
-      //   },
-      //   {
-      //     name: 'بیش از ۳ دوز',
-      //     color: '#BFDDE7',
-      //     data: [...moreThanThreeDose],
-      //   },
-      // ]);
-      // setCategories([...provinces]);
+      const newData = {
+        categories: [...date],
+        series: [
+          {
+            name: 'دوز اول',
+            data: [...firstDose],
+          },
+          {
+            name: 'دوز دوم',
+            data: [...secondDose],
+          },
+          {
+            name: 'دوز سوم',
+            data: [...thirdDose],
+          },
+          {
+            name: 'دوز چهارم',
+            data: [...fourthDose],
+          },
+          {
+            name: 'دوز پنجم',
+            data: [...fifthDose],
+          },
+          
+        ],
+      };
+      setDataset({...newData});
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -229,12 +185,12 @@ const OverviewOfGuildVaccinationProcess = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getLinearOverview();
+      getAreaChartVaccination({tag: 'guild'});
     }, 500);
 
     return () => {
       clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
+      cancelRequest();
       setDataset([]);
     };
   }, []);
@@ -247,6 +203,7 @@ const OverviewOfGuildVaccinationProcess = () => {
           <div className="w-full">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+               
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-24 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
                   <span>دوز پنجم</span>
@@ -278,7 +235,7 @@ const OverviewOfGuildVaccinationProcess = () => {
           <>
             <HeadlessChart data={dataset} optionsProp={optionChart} />
 
-            {dataset.length === 0 && !loading && !errorMessage && (
+            {isEmpty(dataset) && !loading && !errorMessage && (
               <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
             )}
           </>

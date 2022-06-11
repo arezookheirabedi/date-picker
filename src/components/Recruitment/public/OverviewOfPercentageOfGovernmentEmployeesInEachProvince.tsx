@@ -8,7 +8,7 @@ import DatePickerModal from '../../DatePickerModal';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 // import TagsSelect from '../../TagsSelect';
-import SearchableSingleSelect from "../../SearchableSingleSelect"
+import SearchableSingleSelect from '../../SearchableSingleSelect';
 
 const {Line} = Charts;
 
@@ -139,11 +139,14 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به درصد ابتلای کارکنان دولت در هر استان</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به درصد ابتلای کارکنان دولت در هر استان
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
+              objectKey="categoryValue"
               placeholder="کل کارکنان"
               tag="employee"
               category="heName"
@@ -168,22 +171,21 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
               />
             </div>
           </div>
-
         </div>
 
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
     </fieldset>
   );
-}
+};
 
 export default OverviewOfPercentageOfGovernmentEmployeesInEachProvince;

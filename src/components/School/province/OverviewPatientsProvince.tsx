@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import TagsSelect from 'src/components/TagsSelect';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-import {sideCities} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 
@@ -28,7 +27,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  const [isCancel, setIsCancel] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -36,8 +34,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   }) as any;
 
   const [query, setQuery] = useState({
-    // status: 'POSITIVE',
-    // type: 'MONTHLY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
     category: 'grade',
@@ -48,8 +45,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   const location = useLocation();
   const history = useHistory();
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -62,7 +62,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       const response = await hcsService.columnChartTestResultService(
         {...params, province},
         {
-          cancelToken: source.token,
+          cancelToken: cancelToken.token,
         }
       );
       setData(response.data);
@@ -108,12 +108,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     if (existsCity) {
       setProvinceTitle(provinceName);
       idSetTimeOut = setTimeout(() => {
-        // getLinearOverview({
-        //   organization: 'education',
-        //   ...queryParams,
-        //   tags: [...(queryParams.tags || []), `#province# استان ${provinceName}`].join(','),
-        //   // tags: ['#grade# دانش آموز پایه هشتم', `#province# استان ${provinceName}`].join(','),
-        // });
         getColumnChartTestResult(query, provinceName);
       }, 500);
     } else {
@@ -122,7 +116,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
     return () => {
       if (existsCity) {
-        source.cancel('Operation canceled by the user.');
+        cancelRequest();
         clearTimeout(idSetTimeOut);
       }
     };
@@ -131,7 +125,6 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
   useEffect(() => {
     return () => {
       setData([]);
-      setIsCancel(false);
     };
   }, [history]);
 
@@ -208,16 +201,16 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between flex-grow px-8">
-            <TagsSelect
+          <div className="flex align-center justify-start flex-grow px-8">
+            <SearchableSingleSelect
+              objectKey="categoryValue"
               placeholder="کل آموزش و پرورش"
-              category="grade"
               tag="edu"
+              category="grade"
               setQueryParams={setQuery}
               queryParams={query}
             />
-
-            <div className="flex align-center justify-between">
+            <div className="flex align-center justify-between mr-8">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -235,27 +228,26 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
             </div>
           </div>
 
-          {/* <RangeDateSliderFilter
+          <RangeDateSliderFilter
             changeType={v =>
-              setQueryParams({
-                ...queryParams,
-                type: v,
+              setQuery({
+                ...query,
+                timeBoxType: v,
               })
             }
-            selectedType={queryParams.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          /> */}
+          />
         </div>
-
-        {(loading || isCancel) && (
+        {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && !isCancel && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isCancel && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && !isCancel && (
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

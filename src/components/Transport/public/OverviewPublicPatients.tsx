@@ -20,7 +20,7 @@ const OverviewPublicPatients = () => {
   const [data, setData] = useState([]);
   const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
@@ -38,7 +38,7 @@ const OverviewPublicPatients = () => {
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
-    type: 'DAILY',
+    timeBoxType: 'DAILY',
     from: null,
     to: null,
     category: 'serviceType',
@@ -55,7 +55,7 @@ const OverviewPublicPatients = () => {
       });
       setData(response.data);
     } catch (error: any) {
-      setErrorMessage(error.message);
+        setErrorMessage('خطا در اتصال به سرور')
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -229,10 +229,10 @@ const OverviewPublicPatients = () => {
             changeType={v =>
               setQuery({
                 ...query,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={query.type}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />

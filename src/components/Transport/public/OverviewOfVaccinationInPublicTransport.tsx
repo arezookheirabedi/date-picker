@@ -537,8 +537,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
-
-
       </div>
 
       <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
