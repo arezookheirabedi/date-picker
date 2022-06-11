@@ -10,7 +10,7 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -65,9 +65,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       });
       // setCategories([...province]);
       const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCount]}];
-  if(data.length>0){
-    setDataset({categories: [...province], series: [...newData]});
-  }
+      if (data.length > 0) {
+        setDataset({categories: [...province], series: [...newData]});
+      }
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -169,34 +169,34 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         enabled: false,
       },
       labels: {
-        format: '٪{text}'
-        },
+        format: '٪{text}',
+      },
     },
     xAxis: {
       lineDashStyle: 'dash',
       lineColor: '#000000',
       lineWidth: 1,
+    },
+    scrollbar: {
+      enabled: true,
+      barBackgroundColor: '#656565',
+      barBorderColor: '#eee',
+      barBorderRadius: 4,
+      barBorderWidth: 0,
+      height: 6,
+      buttonArrowColor: '#eee',
+      rifleColor: '#656565',
+      buttonBackgroundColor: 'transparent',
+      buttonBorderWidth: 0,
+      buttonBorderRadius: 0,
+      trackBackgroundColor: '#eee',
+      trackBorderWidth: 0,
+      trackBorderRadius: 4,
+      showFull: false,
+    },
 
-    },      scrollbar: {
-        enabled: true,
-        barBackgroundColor: '#656565',
-        barBorderColor: '#eee',
-        barBorderRadius: 4,
-        barBorderWidth: 0,
-        height: 6,
-        buttonArrowColor: '#eee',
-        rifleColor: '#656565',
-        buttonBackgroundColor: 'transparent',
-        buttonBorderWidth: 0,
-        buttonBorderRadius: 0,
-        trackBackgroundColor: '#eee',
-        trackBorderWidth: 0,
-        trackBorderRadius: 4,
-        showFull: false,
-      },
-   
-      min: 0,
-      max: 20,
+    min: 0,
+    max: 20,
     tooltip: {
       shared: true,
       useHTML: true,
