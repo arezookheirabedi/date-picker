@@ -47,8 +47,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         lang: 'fa',
         from,
         to,
-      });
-
+      },{cancelToken: cancelToken.token});
       const categoryValue: any[] = [];
 
       const positiveMembersCountToMembersCountPercentage: any[] = [];
@@ -171,7 +170,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: '%',
+      valueSuffix: '٪',
       style: {
         direction: 'rtl',
         textAlign: 'right',

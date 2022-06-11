@@ -210,7 +210,7 @@ const OverviewOfVaccinationProcessProvince: React.FC<OverviewOfVaccinationProvin
         getAreaChartVaccination({tag: 'edu', province: provinceName});
       }, 500);
     } else {
-      history.push('/dashboard/guild/province');
+      history.push('/dashboard/school/province');
     }
 
     return () => {
