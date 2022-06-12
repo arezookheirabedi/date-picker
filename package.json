@@ -143,9 +143,10 @@
     "fs": "^0.0.1-security",
     "http-proxy-middleware": "^2.0.1",
     "postcss": "^7",
-    "prettier": "^2.3.2",
+    "prettier": "^2.6.2",
     "prettier-airbnb-config": "^1.0.0",
     "prettier-eslint-cli": "^5.0.1",
+    "prettier-plugin-tailwindcss": "^0.1.11",
     "sass": "^1.45.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
