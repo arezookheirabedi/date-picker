@@ -67,7 +67,6 @@ const OverviewSteudent = () => {
         {tag: 'edu', category: 'type', categoryValue: 'STUDENT'},
         {cancelToken: cancelToken.token}
       );
-      console.log(data, 'vaccin');
       setNumberOf((prev: any) => {
         return {
           ...prev,
