@@ -1,13 +1,22 @@
 import React from 'react';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4} from 'uuid';
 import {
-  getAcctivationStatus,
-  getBooleanValue,
-  getInseptorType,
-  getMoshtariMadari,
-  getMozoeGozaresh,
-  getOwnerType,
-  getPoseStatus,
+   getAcctivationStatus,
+   getAfzodani,
+   getArzenan,
+   getBooleanValue,
+   getInseptorType,
+   getQuality,
+   getMozoeGozaresh,
+   getNameNan,
+   getNaneMantaghe,
+   getOwnerType,
+   getPoseStatus,
+   getٰRaayateVazneChane,
+   getPousheshDivarha,
+   getTajhizatBehdashti,
+   getNoeDar,
+   getKhamirgir,
 } from './constant';
 
 export const ExpandedForm: React.FC<any> = ({...record}) => {
@@ -172,9 +181,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
             <div>
               <span className="text-xs font-bold lg:text-sm "> ۲-مشتری مداری :</span>
-              <span className="">
-                {getMoshtariMadari(record.allData.parameters.moshtariMadari)}
-              </span>
+              <span className="">{getQuality(record.allData.parameters.moshtariMadari)}</span>
             </div>
           </div>
         </div>
@@ -182,9 +189,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
             <div>
               <span className="text-xs font-bold lg:text-sm ">۳-نظافت کارگران:</span>
-              <span className="">
-                {getMoshtariMadari(record.allData.parameters.nezafateKargaran)}
-              </span>
+              <span className="">{getQuality(record.allData.parameters.nezafateKargaran)}</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۴-استعمال دخانیات:</span>
@@ -210,8 +215,12 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <>
               {record.allData.parameters.mizaneTakhsis.map((item: any) => {
                 return (
-                  <div key={uuidv4()} className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
-                    <div>
+                  <div
+                    key={uuidv4()}
+                    className="mb-1 flex items-center space-x-2 pl-4 rtl:space-x-reverse lg:pl-2"
+                  >
+                    <div className=" h-2 w-2 rounded-full bg-gray-400" />
+                    <div className="">
                       <span className="p-1">({(item.count || '').toPersianDigits()})</span>
                       <span className="text-xs font-bold lg:text-sm "> کیسه</span>
                     </div>
@@ -284,9 +293,279 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
       </fieldset>
       <fieldset className="mb-16 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت نان </legend>
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm "> ۱- نان منطقه:</span>
+              <span className="">
+                {getNaneMantaghe(record.allData.parameters.naneMantagheTaminAst)}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۲-تنوع پخت در شعاع:</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">لواش</span>
+              <span>({(record.allData.parameters.tedadeKhamirGir || '').toPersianDigits()})</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">تافتون</span>
+              <span>({(record.allData.parameters.tedadeNanDarar || '').toPersianDigits()})</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">مجموع واحد ها:</span>
+              <span>
+                ({(record.allData.parameters.majmoueVahedhaDarShoa || '').toPersianDigits()})
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm "> ۳-نوع پخت :</span>
+            </div>
+
+            {record.allData.parameters.noePokht.length === 0 ? (
+              <></>
+            ) : (
+              record.allData.parameters.noePokht.map((item: any) => {
+                return (
+                  <div key={uuidv4()}>
+                    <span className="text-xs font-bold lg:text-sm ">{getNameNan(item)}</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm "> ۴-کیفت:</span>
+              <span className="">{getQuality(record.allData.parameters.keyfiat)}</span>
+            </div>
+          </div>
+        </div>
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm "> ۵-تعداد پخت :</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">سنگک</span>
+              <span>-</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">بربری</span>
+              <span>({(record.allData.parameters.tedadeKhamirGir || '').toPersianDigits()})</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">تافتون </span>
+              <span>-</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">خراساني </span>
+              <span>-</span>
+            </div>
+          </div>
+        </div>
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm "> ۶-افزودنی ها:</span>
+            </div>
+
+            {record.allData.parameters.afzoudaniha.length === 0 ? (
+              <></>
+            ) : (
+              record.allData.parameters.afzoudaniha.map((item: any) => {
+                return (
+                  <div key={uuidv4()}>
+                    <span className="text-xs font-bold lg:text-sm ">{getAfzodani(item)}</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۷-عرضه نان به قیمت مصوب:</span>
+              <span className="">
+                {getArzenan(record.allData.parameters.arzeNanBeGheymateMosavab)}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۸-وزن چانه به گرم:</span>
+              <span className="">
+                {(record.allData.parameters.vazneChaneh || '').toPersianDigits()}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۹-رعایت وزن چانه زدن :</span>
+              <span className="">
+                {getٰRaayateVazneChane(record.allData.parameters.reayateVazneChaneVaNan)}
+              </span>
+            </div>
+          </div>
+        </div>
       </fieldset>
+
       <fieldset className="mb-16 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت نانوایی </legend>
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱-مساحت:</span>
+              <span className="">
+                ( {(record.allData.parameters.masahat || '').toPersianDigits()}) متر
+              </span>
+              <span className="text-xs font-bold lg:text-sm ">, ارتفاع </span>
+
+              <span className="">
+                ( {(record.allData.parameters.ertefa || '').toPersianDigits()}) متر
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۲-زیر زمین </span>
+              <span className="">{getBooleanValue(record.allData.parameters.zirZaminDarad)}</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۳-بالکن :</span>
+              <span className="">{getBooleanValue(record.allData.parameters.balkonDarad)}</span>
+            </div>
+          </div>
+        </div>{' '}
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۴-بهداشت عمومی:</span>
+              <span className="">{getQuality(record.allData.parameters.behdashtOmoumi)}</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۵-پروانه کسب:</span>
+              <span className="">
+                {getBooleanValue(record.allData.parameters.parvaneKasbDarad)}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۶-وضعیت ظاهری:</span>
+              <span className="">{getQuality(record.allData.parameters.vazeiateZaheri)}</span>
+            </div>
+          </div>
+        </div>{' '}
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۷-پوشش دیوارها:</span>
+              {record.allData.parameters.poushesheDivarha.length === 0 ? (
+                <></>
+              ) : (
+                record.allData.parameters.poushesheDivarha.map((item: any) => {
+                  return (
+                    <span key={uuidv4()} className=" ">
+                      {' '}
+                      ({getPousheshDivarha(item)})
+                    </span>
+                  );
+                })
+              )}
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۸-پوشش کف:</span>
+              {record.allData.parameters.poushesheKaf.length === 0 ? (
+                <></>
+              ) : (
+                record.allData.parameters.poushesheKaf.map((item: any) => {
+                  return (
+                    <span key={uuidv4()} className="">
+                      {' '}
+                      ({getPousheshDivarha(item)})
+                    </span>
+                  );
+                })
+              )}
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۹-تجهیزات بهداشتی :</span>
+              {record.allData.parameters.tajhizateBehdashti.length === 0 ? (
+                <></>
+              ) : (
+                record.allData.parameters.tajhizateBehdashti.map((item: any) => {
+                  return (
+                    <span key={uuidv4()} className="">
+                      {' '}
+                      ({getTajhizatBehdashti(item)})
+                    </span>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>{' '}
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۰-نوع درب و پنجره:</span>
+              {record.allData.parameters.noeDarbVaPanjareh.length === 0 ? (
+                <></>
+              ) : (
+                record.allData.parameters.noeDarbVaPanjareh.map((item: any) => {
+                  return (
+                    <span key={uuidv4()} className="">
+                      {' '}
+                      ({getNoeDar(item)})
+                    </span>
+                  );
+                })
+              )}
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۱-محل استراحت:</span>
+              <span className="">
+                {getBooleanValue(record.allData.parameters.mahaleEsterahatDarad)}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۲-خمیر گیر :</span>
+              {record.allData.parameters.khmirgir.length === 0 ? (
+                <></>
+              ) : (
+                record.allData.parameters.khmirgir.map((item: any) => {
+                  return (
+                    <span key={uuidv4()} className="">
+                      {' '}
+                      ({getKhamirgir(item)})
+                    </span>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="align-center flex p-1 lg:p-2">
+          <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۳-محل نگهداری آرد:</span>
+              <span className="">{getBooleanValue(record.allData.parameters.mahaleNegahdariArdDarad)}</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۴-میز نان سرد کن:</span>
+              <span className="">
+                {getBooleanValue(record.allData.parameters.mizeNansardkonDarad)}
+              </span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۵-سرویس بهداشتی :</span>
+              <span className="">{getBooleanValue(record.allData.parameters.serviceBehdashtiDarad)}</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold lg:text-sm ">۱۶-محل انتظار مشتری :</span>
+              <span className="">{getBooleanValue(record.allData.parameters.mahaleEntezareMoshtariDarad)}</span>
+            </div>
+          </div>
+        </div>
       </fieldset>
       <fieldset className="mb-16 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">گزارش بازرسین </legend>
