@@ -147,7 +147,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           </div>
           <div className="align-center flex p-1 lg:p-2">
             <div className="pl-4 lg:pl-2">
-              <div className="flex pl-1 text-xs font-bold lg:text-sm">۸-وضعیت پوز</div>
+              <div className="flex pl-1 text-xs font-bold lg:text-sm">۸-وضعیت POS</div>
               {record.allData.poses ? (
                 <>
                   {record.allData.poses.length === 0 ? (
@@ -162,14 +162,14 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                               key={item.posNumber}
                               className="pl-2 text-xs font-bold  lg:text-sm"
                             >
-                              شماره پوز:
+                              شماره POS:
                             </span>
                             <span className="pl-2">{item.posNumber }</span>
                             <span
                               key={item.posNumber}
                               className="pl-2 text-xs font-bold  lg:text-sm"
                             >
-                              عنوان پوز:
+                              عنوان POS:
                             </span>
                             <span className="pl-2">{getPoseStatus(item.bank)}</span>
                           </div>
