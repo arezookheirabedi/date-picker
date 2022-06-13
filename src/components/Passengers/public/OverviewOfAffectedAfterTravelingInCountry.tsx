@@ -207,7 +207,7 @@ const OverviewOfAffectedAfterTravelingInCountry = () => {
             {/*    </div> */}
             {/*  </Menu.Items> */}
             {/* </Menu> */}
-            <div className="flex align-center justify-between mr-8">
+            <div className="flex align-center justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}

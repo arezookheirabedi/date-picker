@@ -38,7 +38,7 @@ const TestStatus: React.FC<{}> = () => {
           negativeCount: item.negativeTestResultsCount || 0,
           unknownCount:
             (item.testResultsCount || 0) -
-              ((item.positiveTestResultsCount || 0) + (item.negativeTestResultsCount || 0)) || 0,
+            ((item.positiveTestResultsCount || 0) + (item.negativeTestResultsCount || 0)) || 0,
           // deadCount: 120,
         });
       });
@@ -70,11 +70,11 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -82,7 +82,7 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -97,9 +97,9 @@ const TestStatus: React.FC<{}> = () => {
         category: 'heName',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       getOverviewByCategory({
         tag: 'employee',
         category: 'heName',
@@ -209,12 +209,12 @@ const TestStatus: React.FC<{}> = () => {
                     </svg>
                   </button>
                 ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 )}
               </div>
             </div>
             <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
+              <span className="dash-separator"/>
             </div>
             <div className=" shadow-custom rounded-lg px-4 py-1">
               <div
@@ -244,7 +244,7 @@ const TestStatus: React.FC<{}> = () => {
                     </svg>
                   </button>
                 ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 )}
               </div>
             </div>
@@ -347,7 +347,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'تعداد آزمایش‌های انجام شده',
               key: 'total',
-              sortable : true,
+              sortable: true,
               render: (v: any) => (
                 <span>
                   {Number(v || 0)
@@ -359,7 +359,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'درصد تست‌های مثبت',
               key: 'positiveCount',
-              sortable : true,
+              sortable: true,
               render: (v: any, record: any) => (
                 <span>
                   {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
@@ -372,7 +372,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'درصد تست‌های منفی',
               key: 'negativeCount',
-              sortable : true,
+              sortable: true,
               render: (v: any, record: any) => (
                 <span>
                   {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
