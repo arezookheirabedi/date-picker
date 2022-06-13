@@ -43,6 +43,7 @@ export const obj = {
   operatorFirstName: 'string',
   operatorLastName: 'string',
   parameters: {
+    reayateVazneChaneVaNan:true,
     afzoudaniha: ['ABE_BEHDASHTI'],
     arzeNanBeGheymateMosavab: true,
     balkonDarad: true,
@@ -69,12 +70,11 @@ export const obj = {
     nezafateKargaran: 'HIGH',
     noeArd: 'string',
     noeDarbVaPanjareh: ['FELEZI_MOSHABAK'],
-    noePokht: ['BARBARI'],
+    noePokht: [ 'BARBARI', 'FANTEZI', 'GARDAN', 'KHORASANI', 'LAVASH', 'OTHER', 'SANGAK', 'TAFTOUN'],
     parvaneKasbDarad: true,
     parvaneKasbRoyatGardid: true,
     poushesheDivarha: ['KASHI'], // start
-    poushesheKaf: ['KASHI'],
-    reayateVazneChaneVaNan: false,
+    poushesheKaf: ['SERAMIK','KASHI'],
     serviceBehdashtiDarad: true,
     tajhizateBehdashti: ['HASHARE_KOSH'],
     tanavoePokhtDarShoa: null,
@@ -118,8 +118,16 @@ export enum EOwnerType {
   RENTER = 'RENTER',
   STEWARD = 'STEWARD',
 }
+export enum ENoeDar {
+  FELEZI_MOSHABAK= 'FELEZI_MOSHABAK',
+  KERKEREI = 'KERKEREI',
+  NARDE_AHANI = 'NARDE_AHANI',
+  SEQOURIT='SEQOURIT'
+}
+
+
 export enum EBank {
-  PERSIAN = ' PERSIAN',
+  PERSIAN = 'PERSIAN',
   DAMAVAND = 'DAMAVAND',
   MELAT = 'MELAT',
   PASARGAD = 'PASARGAD',
@@ -132,6 +140,44 @@ export enum EBank {
   IRAN_KISH = 'IRAN_KISH',
   SEPEHR = 'SEPEHR',
 }
+export enum ENoeNan {
+  BARBARI = 'BARBARI',
+  FANTEZI = 'FANTEZI',
+  GARDAN = 'GARDAN',
+  KHORASANI = 'KHORASANI',
+  LAVASH = 'LAVASH',
+  OTHER = 'OTHER',
+  SANGAK = 'SANGAK',
+  TAFTOUN = 'TAFTOUN',
+}
+export enum EAfzoudaniha {
+  ABE_BEHDASHTI = 'ABE_BEHDASHTI',
+  BEHBOUD_DAHANDEH = 'BEHBOUD_DAHANDEH',
+  JOUSHE_SHIRIN = 'JOUSHE_SHIRIN',
+  KHAMIR_MAYEH = 'KHAMIR_MAYEH',
+  NAMAKE_BEHDASHTI = 'NAMAKE_BEHDASHTI',
+  KONJED='KONJED'
+}
+export enum EKhamirgir {
+  ALUMINIUM = 'ALUMINIUM',
+  CHODAN = 'CHODAN',
+  STEEL = 'STEEL',
+ 
+}
+export enum EPoushesheDivarha {
+  KASHI = 'KASHI',
+  MOZAEIK = 'MOZAEIK',
+  SANG = 'SANG',
+  SERAMIK='SERAMIK'
+}
+export enum ETajhizateBehdashti {
+  HASHARE_KOSH = 'HASHARE_KOSH',
+  PALET = 'PALET',
+  STLE_ZOBALE= 'STLE_ZOBALE',
+  TAHVIE='TAHVIE'
+}
+
+
 export const getPoseStatus = (data: EBank) => {
   switch (data) {
     case EBank.PERSIAN:
@@ -175,6 +221,37 @@ export const getOwnerType = (data: EOwnerType) => {
   }
 };
 
+export const getNoeDar = (data: ENoeDar) => {
+  switch (data) {
+    case ENoeDar.FELEZI_MOSHABAK:
+      return 'فلزی مشبک';
+    case ENoeDar.KERKEREI:
+      return 'کرکره ای';
+    case ENoeDar.NARDE_AHANI:
+      return 'نرده آهنی';
+      case ENoeDar.SEQOURIT:
+      return 'سکوریت';
+    default:
+      return '-';
+  }
+};
+
+
+
+export const getTajhizatBehdashti = (data: ETajhizateBehdashti) => {
+  switch (data) {
+    case ETajhizateBehdashti.HASHARE_KOSH:
+      return 'حشره کش';
+    case ETajhizateBehdashti.PALET:
+      return 'پالت';
+    case ETajhizateBehdashti.STLE_ZOBALE:
+      return 'سطل زباله';
+      case ETajhizateBehdashti.TAHVIE:
+        return 'تهویه';
+    default:
+      return '-';
+  }
+};
 export const getInseptorType = (data: EInseptorOrder) => {
   switch (data) {
     case EInseptorOrder.ORDER:
@@ -187,7 +264,7 @@ export const getInseptorType = (data: EInseptorOrder) => {
       return '-';
   }
 };
-export const getMoshtariMadari = (data: EMoshtariMadari) => {
+export const getQuality = (data: EMoshtariMadari) => {
   switch (data) {
     case EMoshtariMadari.HIGH:
       return 'خوب';
@@ -231,3 +308,99 @@ export const getBooleanValue = (data: any) => {
       return '-';
   }
 };
+export const getNaneMantaghe = (data: any) => {
+  switch (data) {
+    case true:
+      return 'تامین است';
+    case false:
+      return 'تامین نیست';
+    default:
+      return '-';
+  }
+};
+export const getArzenan = (data: any) => {
+  switch (data) {
+    case true:
+      return 'مصوب';
+    case false:
+      return 'غیر مصوب';
+    default:
+      return '-';
+  }
+};
+export const getٰRaayateVazneChane= (data: any) => {
+  switch (data) {
+    case true:
+      return 'بلی';
+    case false:
+      return 'خیر';
+    default:
+      return '-';
+  }
+};
+export const getNameNan = (data: ENoeNan) => {
+  switch (data) {
+    case ENoeNan.BARBARI:
+      return 'بربری';
+    case ENoeNan.FANTEZI:
+      return 'فانتری';
+    case ENoeNan.GARDAN:
+      return 'گردان';
+    case ENoeNan.KHORASANI:
+      return 'خراسانی';
+    case ENoeNan.LAVASH:
+      return 'لواش';
+    case ENoeNan.OTHER:
+      return 'سایر';
+    case ENoeNan.SANGAK:
+      return 'سنگک';
+    case ENoeNan.TAFTOUN:
+      return 'تافتون';
+    default:
+      return '-';
+  }
+};
+export const getAfzodani = (data: EAfzoudaniha) => {
+  switch (data) {
+    case EAfzoudaniha.ABE_BEHDASHTI:
+      return 'آب بهداشتی';
+    case EAfzoudaniha.BEHBOUD_DAHANDEH:
+      return 'بهبود دهنده';
+    case EAfzoudaniha.JOUSHE_SHIRIN:
+      return 'جوش شیرین';
+    case EAfzoudaniha.KHAMIR_MAYEH:
+      return 'خمیر مایه';
+    case EAfzoudaniha.KONJED:
+      return 'کنجد';
+    case EAfzoudaniha.NAMAKE_BEHDASHTI:
+      return 'نمک بهداشتی';
+    default:
+      return '-';
+  }
+};
+export const getKhamirgir = (data: EKhamirgir) => {
+  switch (data) {
+    case EKhamirgir.ALUMINIUM:
+      return 'آلومینیوم';
+    case EKhamirgir.CHODAN:
+      return 'چدن';
+    case EKhamirgir.STEEL:
+      return 'استیل';
+    default:
+      return '-';
+  }
+}
+export const getPousheshDivarha = (data: EPoushesheDivarha) => {
+  switch (data) {
+    case EPoushesheDivarha.KASHI:
+      return 'کاشی';
+    case EPoushesheDivarha.MOZAEIK:
+      return 'موزاییک';
+    case EPoushesheDivarha.SANG:
+      return 'سنگ';
+      case EPoushesheDivarha.SERAMIK:
+        return 'سرامیک';
+    default:
+      return '-';
+  }
+}
