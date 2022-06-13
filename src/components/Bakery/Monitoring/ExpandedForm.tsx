@@ -19,6 +19,7 @@ import {
   getTajhizatBehdashti,
   getNoeDar,
   getKhamirgir,
+  getNerkhname,
 } from './constant';
 
 export const ExpandedForm: React.FC<any> = ({...record}) => {
@@ -53,7 +54,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
                 <div>
                   <span className="text-xs font-bold lg:text-sm ">شماره مجوز:</span>
-                  <span className="pr-1">{record.allData.permissionNumber || '-'}</span>
+                  <span className="pr-1">{record.allData.permissionNumber}</span>
                 </div>
                 <div>
                   <span className="text-xs font-bold lg:text-sm "> تاریخ:</span>
@@ -94,7 +95,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div className="pl-4 lg:pl-2">
               <span className="text-xs font-bold lg:text-sm "> ۱-شماره واحد:</span>
               <span className="pr-1">
-                {(record.allData.permissionNumber || 0).toPersianDigits()}
+                {record.allData.permissionNumber }
               </span>
             </div>
             <div className="pl-4 lg:pl-2">
@@ -141,7 +142,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             </div>
             <div className="pl-4 lg:pl-2">
               <span className="text-xs font-bold lg:text-sm ">۷-نرخ نامه:</span>
-              <span className="pr-1">{getInseptorType(record.allData.inspectionType || '-')}</span>
+              <span className="pr-1">{getNerkhname(record.allData.parameters.nerkhName)}</span>
             </div>
           </div>
           <div className="align-center flex p-1 lg:p-2">
@@ -163,7 +164,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                             >
                               شماره پوز:
                             </span>
-                            <span className="pl-2">{(item.posNumber || 0).toPersianDigits()}</span>
+                            <span className="pl-2">{item.posNumber }</span>
                             <span
                               key={item.posNumber}
                               className="pl-2 text-xs font-bold  lg:text-sm"
@@ -197,28 +198,28 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm "> ۱-تعداد کارگران:</span>
               <span className="">
-                {(record.allData.parameters.jameTedadeKargaran || 0).toPersianDigits()}
+                {Number(record.allData.parameters.jameTedadeKargaran|| 0).toPersianDigits()}
               </span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">شاطر</span>
-              <span>({(record.allData.parameters.tedadeShater || 0).toPersianDigits()})</span>
+              <span>({Number(record.allData.parameters.tedadeShater || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">خمیرگیر</span>
-              <span>({(record.allData.parameters.tedadeKhamirGir || 0).toPersianDigits()})</span>
+              <span>({Number(record.allData.parameters.tedadeKhamirGir || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">نان درآر</span>
-              <span>({(record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()})</span>
+              <span>({Number(record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">چانه گیر</span>
-              <span>({(record.allData.parameters.tedadeChaneGir || 0).toPersianDigits()})</span>
+              <span>({Number(record.allData.parameters.tedadeChaneGir || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">فروشنده</span>
-              <span>({(record.allData.parameters.tedadeForoushandeh || 0).toPersianDigits()})</span>
+              <span>({Number(record.allData.parameters.tedadeForoushandeh || 0).toPersianDigits()})</span>
             </div>
           </div>
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
@@ -267,11 +268,11 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                       >
                         <div className=" h-2 w-2 rounded-full bg-gray-400" />
                         <div className="">
-                          <span className="p-1">({(item.count || 0).toPersianDigits()})</span>
+                          <span className="p-1">({Number(item.count || 0).toPersianDigits()})</span>
                           <span className="text-xs font-bold lg:text-sm "> کیسه</span>
                         </div>
                         <div>
-                          <span className="p-1">({(item.value || 0).toPersianDigits()})</span>
+                          <span className="p-1">({Number(item.value || 0).toPersianDigits()})</span>
                           <span className="text-xs font-bold lg:text-sm ">کیلوگرم</span>
                         </div>
                       </div>
@@ -306,7 +307,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                         </div>
                         <div>
                           <span className="text-xs font-bold lg:text-sm "> تعداد</span>
-                          <span className="p-1">({(item.count || 0).toPersianDigits()})</span>
+                          <span className="p-1">({Number(item.count || 0).toPersianDigits()})</span>
                         </div>
                         <div>
                           <span className="text-xs font-bold lg:text-sm ">از کارخانه</span>
@@ -345,7 +346,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                           </div>
                           <div>
                             <span className="text-xs font-bold lg:text-sm "> تعداد</span>
-                            <span className="">({(item.count || 0).toPersianDigits()})</span>
+                            <span className="">({Number(item.count || 0).toPersianDigits()})</span>
                           </div>
                           <div>
                             <span className="text-xs font-bold lg:text-sm ">از کارخانه</span>
@@ -377,14 +378,22 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold lg:text-sm ">۲-تنوع پخت در شعاع:</span>
             </div>
 
-            <div>
-              <span className="text-xs font-bold lg:text-sm ">تافتون</span>
-              <span>({(record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()})</span>
-            </div>
+            {record.allData.parameters.tanavoePokhtDarShoa ? (
+              <div>
+                {Object.entries(record.allData.parameters.tanavoePokhtDarShoa).map((item: any) => (
+                  <>
+                    <span>{getNameNan(item[0])}:</span>
+                    <span className="pl-2">{(item[1] || 0).toPersianDigits()}</span>
+                  </>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
             <div>
               <span className="text-xs font-bold lg:text-sm ">مجموع واحد ها:</span>
               <span>
-                ({(record.allData.parameters.majmoueVahedhaDarShoa || 0).toPersianDigits()})
+                ({Number(record.allData.parameters.majmoueVahedhaDarShoa || 0).toPersianDigits()})
               </span>
             </div>
           </div>
@@ -431,7 +440,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                 {Object.entries(record.allData.parameters.tedadePokht).map((item: any) => (
                   <>
                     <span>{getNameNan(item[0])}:</span>
-                    <span className="pl-2">{(item[1] || 0).toPersianDigits()}</span>
+                    <span className="pl-2">{Number(item[1] || 0).toPersianDigits()}</span>
                   </>
                 ))}
               </div>
@@ -455,7 +464,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                   record.allData.parameters.afzoudaniha.map((item: any) => {
                     return (
                       <div key={uuidv4()}>
-                        <span className="text-xs font-bold lg:text-sm ">{getAfzodani(item)}</span>
+                        <span className=" ">{getAfzodani(item)}</span>
                       </div>
                     );
                   })
@@ -478,11 +487,11 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm ">۸-وزن چانه به گرم:</span>
               <span className="">
-                {(record.allData.parameters.vazneChaneh || '').toPersianDigits()}
+                {Number(record.allData.parameters.vazneChaneh || 0).toPersianDigits()}
               </span>
             </div>
             <div>
-              <span className="text-xs font-bold lg:text-sm ">۹-رعایت وزن چانه زدن :</span>
+              <span className="text-xs font-bold lg:text-sm ">۹-رعایت وزنه چانه زدن :</span>
               <span className="">
                 {getٰRaayateVazneChane(record.allData.parameters.reayateVazneChaneVaNan)}
               </span>
@@ -498,12 +507,12 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱-مساحت:</span>
               <span className="">
-                ( {(record.allData.parameters.masahat || 0).toPersianDigits()}) متر
+                ( {Number(record.allData.parameters.masahat || 0).toPersianDigits()}) متر
               </span>
               <span className="text-xs font-bold lg:text-sm ">, ارتفاع </span>
 
               <span className="">
-                ( {(record.allData.parameters.ertefa || 0).toPersianDigits()}) متر
+                ( {Number(record.allData.parameters.ertefa || 0).toPersianDigits()}) متر
               </span>
             </div>
             <div>
