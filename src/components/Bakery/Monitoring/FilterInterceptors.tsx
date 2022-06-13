@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 // import dayjs from 'dayjs';
 import DotLoading from 'src/components/Loading/DotLoading';
 import DatePicker from 'src/components/Form/DatePicker';
+import dayjs from 'dayjs';
 // import calendar from "src/assets/images/icons/calendar.svg";
 
 interface Iprops {
@@ -35,31 +36,36 @@ const FilterSavedInquiry: React.FC<Iprops> = ({handleSetFilters}) => {
     control,
     register,
     reset,
+    getValues,
     formState: {errors},
   } = useForm<ISavedVisite>({
     mode: 'onChange',
     // @ts-ignore
     resolver: yupResolver(validationSchema),
   });
-
+  const convertDay = (day: any) => {
+    const date = new Date(day);
+    return dayjs(date).locale("en").format("YYYY-MM-DDT00:00:00");
+  }
   const onSubmit = (values: any) => {
     handleSetFilters((filters: any) => {
       return {
         ...filters,
-        // from: values.inquiryDate ? convertDay(values.inquiryDate) : null,
-        inspectorId: values.inspectorId,
-        inspectorNationalId: values.inspectorNationalId,
-        qrCode: values.qrCode,
+        from: values.from ? convertDay(values.from) : null,
+        to: values.to ? convertDay(values.to) : null,
+        inspectorId: values.inspectorId?values.inspectorId:null,
+        inspectorNationalId: values.inspectorNationalId?values.inspectorNationalId:null,
+        qrCode: values.qrCode?values.qrCode:null,
         currentPage: 1,
       };
     });
   };
 
+  
   return (
     <>
       <form className="w-full space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex  rtl:space-x-reverse">
-    
         <div className="w-full">
             <Controller
               control={control}
@@ -67,6 +73,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({handleSetFilters}) => {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               render={({field: {onChange, onBlur, value, ref, name}}) => (
                 <DatePicker
+                max={getValues().to}
                   onChange={onChange}
                   onBlur={onBlur}
                   placeholder='از تاریخ'
@@ -98,6 +105,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({handleSetFilters}) => {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               render={({field: {onChange, onBlur, value, ref, name}}) => (
                 <DatePicker
+                min={getValues().from}
                   onChange={onChange}
                   onBlur={onBlur}
                   placeholder='تا تاریخ'
