@@ -51,16 +51,16 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         cancelToken: cancelToken.token,
       });
       const province: any[] = [];
-      const unregistered: any[] = [];
+      const registered: any[] = [];
       data.forEach((item: any) => {
         province.push(item.province);
-        unregistered.push(item.percentage);
+        registered.push(item.percentage);
       });
       const newData = [
         {
           showInLegend: false,
           name: 'ثبت نام شده',
-          data: [...unregistered],
+          data: [...registered],
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
@@ -162,7 +162,11 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         },
       },
     },
+
     yAxis: {
+      labels: {
+        format: '٪{text}'
+        },
       gridLineDashStyle: 'dash',
       lineDashStyle: 'dash',
       lineColor: '#000000',
@@ -173,6 +177,26 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
       },
     },
     xAxis: {
+      scrollbar: {
+        enabled: true,
+        barBackgroundColor: '#656565',
+        barBorderColor: '#eee',
+        barBorderRadius: 4,
+        barBorderWidth: 0,
+        height: 6,
+        buttonArrowColor: '#eee',
+        rifleColor: '#656565',
+        buttonBackgroundColor: 'transparent',
+        buttonBorderWidth: 0,
+        buttonBorderRadius: 0,
+        trackBackgroundColor: '#eee',
+        trackBorderWidth: 0,
+        trackBorderRadius: 4,
+        showFull: false,
+      },
+   
+      min: 0,
+      max: 30,
       lineDashStyle: 'dash',
       lineColor: '#000000',
       lineWidth: 1,
