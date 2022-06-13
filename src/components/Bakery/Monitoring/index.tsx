@@ -5,17 +5,22 @@ import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
 // import DatePickerModal from 'src/components/DatePickerModal';
 // import Calendar from 'src/components/Calendar';
-import { toPersianDigit} from 'src/helpers/utils';
+import {
+   cancelTokenSource,
+   msgRequestCanceled,
+   toPersianDigit,
+} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
-import { isEmpty} from 'lodash';
+import {isEmpty} from 'lodash';
 // import guildService from 'src/services/guild.service';
-import { mock} from './constant';
-import { ExpandedForm} from './ExpandedForm';
+import {ExpandedForm} from './ExpandedForm';
+import { initialValue } from './constant';
 // import FilterInterceptors from './FilterInterceptors';
 
 const BakeryMonitoringList: React.FC<{}> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
+  // const [dataSet, setDataSet] = useState<any[]>(initialValue);
   const [dataSet, setDataSet] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(2);
@@ -33,11 +38,11 @@ const BakeryMonitoringList: React.FC<{}> = () => {
     inspectorId: null,
     qrCode: null,
   });
-  // const cancelToken = cancelTokenSource();
+  const cancelToken = cancelTokenSource();
 
-  // function cancelRequest() {
-  //   cancelToken.cancel(msgRequestCanceled);
-  // }
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
   const pageSize = 1;
 
   // async function fetcher(params: any) {
@@ -92,7 +97,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   const normalizer = () => {
     const normalizedData: any[] = [];
 
-    mock.forEach((item: any, index: number) => {
+    initialValue.forEach((item: any, index: number) => {
       normalizedData.push({
         id: `bakery${index}`,
         inspectionDateTime: item.inspectionDateTime,
@@ -118,10 +123,10 @@ const BakeryMonitoringList: React.FC<{}> = () => {
     //   pageNumber: query.currentPage - 1,
     //   pageSize,
     // });
-    // return () => {
-    //   setDataSet([]);
-    //   cancelRequest();
-    // };
+    return () => {
+      setDataSet([]);
+      cancelRequest();
+    };
   }, [query]);
 
   function handlePageChange(page: number = 1) {
@@ -194,9 +199,9 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   render: (v: any, record: any) => (
                     <div className="flex w-full justify-center">
                       <span className="whitespace-normal text-gray-500 ">
-                        {toPersianDigit(
+                        {record.inspectionDateTime?toPersianDigit(
                           dayjs(record.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
-                        )}
+                        ):<>-</>}
                       </span>
                     </div>
                   ),
