@@ -1,24 +1,24 @@
 import dayjs from 'dayjs';
 import React from 'react';
-import { toPersianDigit} from 'src/helpers/utils';
-import { v4 as uuidv4} from 'uuid';
+import {toPersianDigit} from 'src/helpers/utils';
+import {v4 as uuidv4} from 'uuid';
 import {
-   getAcctivationStatus,
-   getAfzodani,
-   getArzenan,
-   getBooleanValue,
-   getInseptorType,
-   getQuality,
-   getMozoeGozaresh,
-   getNameNan,
-   getNaneMantaghe,
-   getOwnerType,
-   getPoseStatus,
-   getٰRaayateVazneChane,
-   getPousheshDivarha,
-   getTajhizatBehdashti,
-   getNoeDar,
-   getKhamirgir,
+  getAcctivationStatus,
+  getAfzodani,
+  getArzenan,
+  getBooleanValue,
+  getInseptorType,
+  getQuality,
+  getMozoeGozaresh,
+  getNameNan,
+  getNaneMantaghe,
+  getOwnerType,
+  getPoseStatus,
+  getٰRaayateVazneChane,
+  getPousheshDivarha,
+  getTajhizatBehdashti,
+  getNoeDar,
+  getKhamirgir,
 } from './constant';
 
 export const ExpandedForm: React.FC<any> = ({...record}) => {
@@ -58,10 +58,14 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                 <div>
                   <span className="text-xs font-bold lg:text-sm "> تاریخ:</span>
                   <span className="whitespace-normal text-gray-500 ">
-                    {toPersianDigit(
-                      dayjs(record.allData.inspectionDateTime)
-                        .calendar('jalali')
-                        .format('YYYY/MM/DD')
+                    {record.allData.inspectionDateTime ? (
+                      toPersianDigit(
+                        dayjs(record.allData.inspectionDateTime)
+                          .calendar('jalali')
+                          .format('YYYY/MM/DD')
+                      )
+                    ) : (
+                      <>-</>
                     )}
                   </span>
                 </div>
@@ -102,16 +106,26 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div className="pl-4 lg:pl-2">
               <span className="text-xs font-bold lg:text-sm "> ۳-تاریخ بازرسی:</span>
               <span className="pr-1">
-                {toPersianDigit(
-                  dayjs(record.allData.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                {record.allData.inspectionDateTime ? (
+                  toPersianDigit(
+                    dayjs(record.allData.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                  )
+                ) : (
+                  <>-</>
                 )}
               </span>
             </div>
             <div className="pl-4 lg:pl-2">
               <span className="text-xs font-bold lg:text-sm ">۴-تاریخ آخرین بازرسی:</span>
               <span className="pr-1">
-                {toPersianDigit(
-                  dayjs(record.allData.lastInspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                {record.allData.lastInspectionDateTime ? (
+                  toPersianDigit(
+                    dayjs(record.allData.lastInspectionDateTime)
+                      .calendar('jalali')
+                      .format('YYYY/MM/DD')
+                  )
+                ) : (
+                  <>-</>
                 )}
               </span>
             </div>
@@ -133,26 +147,38 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="align-center flex p-1 lg:p-2">
             <div className="pl-4 lg:pl-2">
               <div className="flex pl-1 text-xs font-bold lg:text-sm">۸-وضعیت پوز</div>
-              {record.allData.poses.length === 0 ? (
-                <div>{}</div>
-              ) : (
+              {record.allData.poses ? (
                 <>
-                  {record.allData.poses.map((item: any) => {
-                    return (
-                      <div className="mb-1 flex items-center">
-                        <div className="ml-2 h-2 w-2 rounded-full bg-gray-400" />
-                        <span key={item.posNumber} className="pl-2 text-xs font-bold  lg:text-sm">
-                          شماره پوز:
-                        </span>
-                        <span>{(item.posNumber || '').toPersianDigits()}</span>
-                        <span key={item.posNumber} className="pl-2 text-xs font-bold  lg:text-sm">
-                          عنوان پوز:
-                        </span>
-                        <span>{getPoseStatus(item.bank)}</span>
-                      </div>
-                    );
-                  })}
+                  {record.allData.poses.length === 0 ? (
+                    <div>{}</div>
+                  ) : (
+                    <>
+                      {record.allData.poses.map((item: any) => {
+                        return (
+                          <div className="mb-1 flex items-center">
+                            <div className="ml-2 h-2 w-2 rounded-full bg-gray-400" />
+                            <span
+                              key={item.posNumber}
+                              className="pl-2 text-xs font-bold  lg:text-sm"
+                            >
+                              شماره پوز:
+                            </span>
+                            <span className="pl-2">{(item.posNumber || 0).toPersianDigits()}</span>
+                            <span
+                              key={item.posNumber}
+                              className="pl-2 text-xs font-bold  lg:text-sm"
+                            >
+                              عنوان پوز:
+                            </span>
+                            <span className="pl-2">{getPoseStatus(item.bank)}</span>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
                 </>
+              ) : (
+                <></>
               )}
             </div>
           </div>
@@ -171,30 +197,28 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm "> ۱-تعداد کارگران:</span>
               <span className="">
-                {(record.allData.parameters.jameTedadeKargaran || '').toPersianDigits()}
+                {(record.allData.parameters.jameTedadeKargaran || 0).toPersianDigits()}
               </span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">شاطر</span>
-              <span>({(record.allData.parameters.tedadeShater || '').toPersianDigits()})</span>
+              <span>({(record.allData.parameters.tedadeShater || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">خمیرگیر</span>
-              <span>({(record.allData.parameters.tedadeKhamirGir || '').toPersianDigits()})</span>
+              <span>({(record.allData.parameters.tedadeKhamirGir || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">نان درآر</span>
-              <span>({(record.allData.parameters.tedadeNanDarar || '').toPersianDigits()})</span>
+              <span>({(record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">چانه گیر</span>
-              <span>({(record.allData.parameters.tedadeChaneGir || '').toPersianDigits()})</span>
+              <span>({(record.allData.parameters.tedadeChaneGir || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">فروشنده</span>
-              <span>
-                ({(record.allData.parameters.tedadeForoushandeh || '').toPersianDigits()})
-              </span>
+              <span>({(record.allData.parameters.tedadeForoushandeh || 0).toPersianDigits()})</span>
             </div>
           </div>
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
@@ -228,85 +252,114 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
 
         <div className="pl-4 pb-1 lg:pl-2">
           <div className="flex pl-1 text-xs font-bold lg:text-sm">۱-میزان تخصیص</div>
-          {record.allData.parameters.mizaneTakhsis.length === 0 ? (
-            <div>{}</div>
-          ) : (
+          {record.allData.parameters.mizaneTakhsis ? (
             <>
-              {record.allData.parameters.mizaneTakhsis.map((item: any) => {
-                return (
-                  <div
-                    key={uuidv4()}
-                    className="mb-1 flex items-center space-x-2 pl-4 rtl:space-x-reverse lg:pl-2"
-                  >
-                    <div className=" h-2 w-2 rounded-full bg-gray-400" />
-                    <div className="">
-                      <span className="p-1">({(item.count || '').toPersianDigits()})</span>
-                      <span className="text-xs font-bold lg:text-sm "> کیسه</span>
-                    </div>
-                    <div>
-                      <span className="p-1">({(item.value || '').toPersianDigits()})</span>
-                      <span className="text-xs font-bold lg:text-sm ">کیلوگرم</span>
-                    </div>
-                  </div>
-                );
-              })}
+              {' '}
+              {record.allData.parameters.mizaneTakhsis.length === 0 ? (
+                <div>{}</div>
+              ) : (
+                <>
+                  {record.allData.parameters.mizaneTakhsis.map((item: any) => {
+                    return (
+                      <div
+                        key={uuidv4()}
+                        className="mb-1 flex items-center space-x-2 pl-4 rtl:space-x-reverse lg:pl-2"
+                      >
+                        <div className=" h-2 w-2 rounded-full bg-gray-400" />
+                        <div className="">
+                          <span className="p-1">({(item.count || 0).toPersianDigits()})</span>
+                          <span className="text-xs font-bold lg:text-sm "> کیسه</span>
+                        </div>
+                        <div>
+                          <span className="p-1">({(item.value || 0).toPersianDigits()})</span>
+                          <span className="text-xs font-bold lg:text-sm ">کیلوگرم</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
             </>
+          ) : (
+            <></>
           )}
         </div>
         <div className="pl-4 pb-1 lg:pl-2">
           <div className="flex pl-1 text-xs font-bold lg:text-sm">۲-تاریخ تخلیه آرد</div>
-          {record.allData.parameters.tarikheTakhlieArd.length === 0 ? (
-            <div>{}</div>
-          ) : (
+          {record.allData.parameters.tarikheTakhlieArd ? (
             <>
-              {record.allData.parameters.tarikheTakhlieArd.map((item: any, index: any) => {
-                return (
-                  <div key={uuidv4()} className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
-                    <div>
-                      <span className="text-xs font-bold lg:text-sm ">
-                        مرحله {(index + 1).toPersianDigits()}:
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold lg:text-sm "> تعداد</span>
-                      <span className="p-1">({(item.count || '').toPersianDigits()})</span>
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold lg:text-sm ">از کارخانه</span>
-                      <span className="p-1">({item.fromCompany || ''})</span>
-                    </div>
-                  </div>
-                );
-              })}
+              {' '}
+              {record.allData.parameters.tarikheTakhlieArd.length === 0 ? (
+                <div>{}</div>
+              ) : (
+                <>
+                  {record.allData.parameters.tarikheTakhlieArd.map((item: any, index: any) => {
+                    return (
+                      <div
+                        key={uuidv4()}
+                        className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2"
+                      >
+                        <div>
+                          <span className="text-xs font-bold lg:text-sm ">
+                            مرحله {(index + 1).toPersianDigits()}:
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-xs font-bold lg:text-sm "> تعداد</span>
+                          <span className="p-1">({(item.count || 0).toPersianDigits()})</span>
+                        </div>
+                        <div>
+                          <span className="text-xs font-bold lg:text-sm ">از کارخانه</span>
+                          <span className="p-1">({item.fromCompany || ''})</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
             </>
+          ) : (
+            <></>
           )}
         </div>
         <div className="pl-4 pb-1 lg:pl-2">
           <div className="flex pl-1 text-xs font-bold lg:text-sm">۳-موجودی در زمان بازرسی</div>
-          {record.allData.parameters.mojoudiDarZamaneBazresi.length === 0 ? (
-            <div>{}</div>
-          ) : (
+          {record.allData.parameters.mojoudiDarZamaneBazresi ? (
             <>
-              {record.allData.parameters.mojoudiDarZamaneBazresi.map((item: any, index: any) => {
-                return (
-                  <div key={uuidv4()} className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
-                    <div>
-                      <span className="text-xs font-bold lg:text-sm ">
-                        مرحله{(index + 1).toPersianDigits()}:
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold lg:text-sm "> تعداد</span>
-                      <span className="">({(item.count || '').toPersianDigits()})</span>
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold lg:text-sm ">از کارخانه</span>
-                      <span className="">({item.fromCompany || ''})</span>
-                    </div>
-                  </div>
-                );
-              })}
+              {' '}
+              {record.allData.parameters.mojoudiDarZamaneBazresi.length === 0 ? (
+                <div>{}</div>
+              ) : (
+                <>
+                  {record.allData.parameters.mojoudiDarZamaneBazresi.map(
+                    (item: any, index: any) => {
+                      return (
+                        <div
+                          key={uuidv4()}
+                          className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2"
+                        >
+                          <div>
+                            <span className="text-xs font-bold lg:text-sm ">
+                              مرحله{(index + 1).toPersianDigits()}:
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-xs font-bold lg:text-sm "> تعداد</span>
+                            <span className="">({(item.count || 0).toPersianDigits()})</span>
+                          </div>
+                          <div>
+                            <span className="text-xs font-bold lg:text-sm ">از کارخانه</span>
+                            <span className="">({item.fromCompany || ''})</span>
+                          </div>
+                        </div>
+                      );
+                    }
+                  )}
+                </>
+              )}
             </>
+          ) : (
+            <></>
           )}
         </div>
       </fieldset>
@@ -323,18 +376,15 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm ">۲-تنوع پخت در شعاع:</span>
             </div>
-            <div>
-              <span className="text-xs font-bold lg:text-sm ">لواش</span>
-              <span>({(record.allData.parameters.tedadeKhamirGir || '').toPersianDigits()})</span>
-            </div>
+
             <div>
               <span className="text-xs font-bold lg:text-sm ">تافتون</span>
-              <span>({(record.allData.parameters.tedadeNanDarar || '').toPersianDigits()})</span>
+              <span>({(record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()})</span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">مجموع واحد ها:</span>
               <span>
-                ({(record.allData.parameters.majmoueVahedhaDarShoa || '').toPersianDigits()})
+                ({(record.allData.parameters.majmoueVahedhaDarShoa || 0).toPersianDigits()})
               </span>
             </div>
           </div>
@@ -345,16 +395,23 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold lg:text-sm "> ۳-نوع پخت :</span>
             </div>
 
-            {record.allData.parameters.noePokht.length === 0 ? (
-              <></>
+            {record.allData.parameters.noePokht ? (
+              <>
+                {' '}
+                {record.allData.parameters.noePokht.length === 0 ? (
+                  <></>
+                ) : (
+                  record.allData.parameters.noePokht.map((item: any) => {
+                    return (
+                      <div key={uuidv4()}>
+                        <span className="">{getNameNan(item)}</span>
+                      </div>
+                    );
+                  })
+                )}
+              </>
             ) : (
-              record.allData.parameters.noePokht.map((item: any) => {
-                return (
-                  <div key={uuidv4()}>
-                    <span className="text-xs font-bold lg:text-sm ">{getNameNan(item)}</span>
-                  </div>
-                );
-              })
+              <></>
             )}
           </div>
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
@@ -369,22 +426,18 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm "> ۵-تعداد پخت :</span>
             </div>
-            <div>
-              <span className="text-xs font-bold lg:text-sm ">سنگک</span>
-              <span>-</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold lg:text-sm ">بربری</span>
-              <span>({(record.allData.parameters.tedadeKhamirGir || '').toPersianDigits()})</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold lg:text-sm ">تافتون </span>
-              <span>-</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold lg:text-sm ">خراساني </span>
-              <span>-</span>
-            </div>
+            {record.allData.parameters.tedadePokht ? (
+              <div>
+                {Object.entries(record.allData.parameters.tedadePokht).map((item: any) => (
+                  <>
+                    <span>{getNameNan(item[0])}:</span>
+                    <span className="pl-2">{(item[1] || 0).toPersianDigits()}</span>
+                  </>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className="align-center flex p-1 lg:p-2">
@@ -393,16 +446,23 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold lg:text-sm "> ۶-افزودنی ها:</span>
             </div>
 
-            {record.allData.parameters.afzoudaniha.length === 0 ? (
-              <></>
+            {record.allData.parameters.afzoudaniha ? (
+              <>
+                {' '}
+                {record.allData.parameters.afzoudaniha.length === 0 ? (
+                  <></>
+                ) : (
+                  record.allData.parameters.afzoudaniha.map((item: any) => {
+                    return (
+                      <div key={uuidv4()}>
+                        <span className="text-xs font-bold lg:text-sm ">{getAfzodani(item)}</span>
+                      </div>
+                    );
+                  })
+                )}
+              </>
             ) : (
-              record.allData.parameters.afzoudaniha.map((item: any) => {
-                return (
-                  <div key={uuidv4()}>
-                    <span className="text-xs font-bold lg:text-sm ">{getAfzodani(item)}</span>
-                  </div>
-                );
-              })
+              <></>
             )}
           </div>
         </div>
@@ -438,12 +498,12 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱-مساحت:</span>
               <span className="">
-                ( {(record.allData.parameters.masahat||0).toPersianDigits()}) متر
+                ( {(record.allData.parameters.masahat || 0).toPersianDigits()}) متر
               </span>
               <span className="text-xs font-bold lg:text-sm ">, ارتفاع </span>
 
               <span className="">
-                ( {(record.allData.parameters.ertefa||0).toPersianDigits()}) متر
+                ( {(record.allData.parameters.ertefa || 0).toPersianDigits()}) متر
               </span>
             </div>
             <div>
@@ -478,37 +538,51 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
             <div>
               <span className="text-xs font-bold lg:text-sm ">۷-پوشش دیوارها:</span>
-              {record.allData.parameters.poushesheDivarha.length === 0 ? (
-                <></>
+              {record.allData.parameters.poushesheDivarha ? (
+                <>
+                  {' '}
+                  {record.allData.parameters.poushesheDivarha.length === 0 ? (
+                    <></>
+                  ) : (
+                    record.allData.parameters.poushesheDivarha.map((item: any) => {
+                      return (
+                        <span key={uuidv4()} className=" ">
+                          {' '}
+                          ({getPousheshDivarha(item)})
+                        </span>
+                      );
+                    })
+                  )}
+                </>
               ) : (
-                record.allData.parameters.poushesheDivarha.map((item: any) => {
-                  return (
-                    <span key={uuidv4()} className=" ">
-                      {' '}
-                      ({getPousheshDivarha(item)})
-                    </span>
-                  );
-                })
+                <></>
               )}
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۸-پوشش کف:</span>
-              {record.allData.parameters.poushesheKaf.length === 0 ? (
-                <></>
+              {record.allData.parameters.poushesheKaf ? (
+                <>
+                  {' '}
+                  {record.allData.parameters.poushesheKaf.length === 0 ? (
+                    <></>
+                  ) : (
+                    record.allData.parameters.poushesheKaf.map((item: any) => {
+                      return (
+                        <span key={uuidv4()} className="">
+                          {' '}
+                          ({getPousheshDivarha(item)})
+                        </span>
+                      );
+                    })
+                  )}
+                </>
               ) : (
-                record.allData.parameters.poushesheKaf.map((item: any) => {
-                  return (
-                    <span key={uuidv4()} className="">
-                      {' '}
-                      ({getPousheshDivarha(item)})
-                    </span>
-                  );
-                })
+                <></>
               )}
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۹-تجهیزات بهداشتی :</span>
-              {record.allData.parameters.tajhizateBehdashti.length === 0 ? (
+              {!record.allData.parameters.tajhizateBehdashti ? (
                 <></>
               ) : (
                 record.allData.parameters.tajhizateBehdashti.map((item: any) => {
@@ -527,7 +601,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱۰-نوع درب و پنجره:</span>
-              {record.allData.parameters.noeDarbVaPanjareh.length === 0 ? (
+              {!record.allData.parameters.noeDarbVaPanjareh ? (
                 <></>
               ) : (
                 record.allData.parameters.noeDarbVaPanjareh.map((item: any) => {
@@ -548,7 +622,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱۲-خمیر گیر :</span>
-              {record.allData.parameters.khmirgir.length === 0 ? (
+              {!record.allData.parameters.khmirgir ? (
                 <></>
               ) : (
                 record.allData.parameters.khmirgir.map((item: any) => {
@@ -595,17 +669,20 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">گزارش بازرسین </legend>
         <div className="flex">
-        <span>{record.allData.inspectionResult || '-'}</span></div>
+          <span>{record.allData.inspectionResult || '-'}</span>
+        </div>
       </fieldset>
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">نظر مسئول بازرسی </legend>
         <div className="flex">
-        <span>{record.allData.inspectorComment || '-'}</span></div>
+          <span>{record.allData.inspectorComment || '-'}</span>
+        </div>
       </fieldset>
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black"> مدیریت</legend>
         <div className="flex">
-        <span>{record.allData.managerComment || '-'}</span></div>
+          <span>{record.allData.managerComment || '-'}</span>
+        </div>
       </fieldset>
     </div>
   );
