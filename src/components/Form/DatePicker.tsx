@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from "react";
-import dayjs from "dayjs";
-import {Day} from "@hassanmojab/react-modern-calendar-datepicker";
-import calendar from "src/assets/images/icons/calendar.svg";
-import SingleDatePickerModal from "../SingleDatePickerModal";
+import React, {useEffect, useRef, useState} from 'react';
+import dayjs from 'dayjs';
+import {Day} from '@hassanmojab/react-modern-calendar-datepicker';
+import calendar from 'src/assets/images/icons/calendar.svg';
+import SingleDatePickerModal from '../SingleDatePickerModal';
 
 interface IProps extends React.HTMLProps<HTMLInputElement> {
   selected?: any;
@@ -10,7 +10,7 @@ interface IProps extends React.HTMLProps<HTMLInputElement> {
   min?: any;
   max?: any;
   iClass?: any;
-  placeholder?: any
+  placeholder?: any;
 }
 
 const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, ...rest}) => {
@@ -25,10 +25,10 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
       // @ts-ignore
       selectedDay
         ? dayjs(
-        `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`,
-        // @ts-ignore
-        {jalali: true}
-        ).valueOf()
+            `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`,
+            // @ts-ignore
+            {jalali: true}
+          ).valueOf()
         : null
     );
   }, [selectedDay]);
@@ -37,10 +37,7 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
     // eslint-disable-next-line no-undef-init
     let defaultValue: Day | null | undefined = undefined;
     if (selected) {
-      const date = dayjs(selected)
-        .calendar("jalali")
-        .format("YYYY-MM-DD")
-        .split("-");
+      const date = dayjs(selected).calendar('jalali').format('YYYY-MM-DD').split('-');
 
       defaultValue = {
         day: Number(date[2]),
@@ -54,7 +51,6 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
     setTimeout(() => {
       setSelectedDay(defaultValue);
     }, 100);
-
   }, [selected]);
 
   return (
@@ -73,12 +69,13 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
           // eslint-disable-next-line no-unneeded-ternary
           aria-invalid={rest.error ? true : false}
           className={iClass}
-          placeholder={placeholder||"انتخاب تاریخ"}
+          placeholder={placeholder || 'انتخاب تاریخ'}
           onClick={() => setShowDatePicker(true)}
           // @ts-ignore
           value={
-            selectedDay?`${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`.toPersianDigits():""
-          
+            selectedDay
+              ? `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`.toPersianDigits()
+              : ''
           }
         />
       </div>
