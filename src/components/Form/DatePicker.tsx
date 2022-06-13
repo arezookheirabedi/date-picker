@@ -63,8 +63,8 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
       <div className="relative w-full">
         <img
           src={calendar}
-          // className="absolute right-3 top-1/2 z-[2] -translate-y-1/2 transform"
-          className="absolute right-3"
+          className="absolute w-4 h-4 left-3 top-1/2 z-10 -translate-y-1/2 transform"
+          // className="absolute right-3"
           alt="calendar"
         />
 

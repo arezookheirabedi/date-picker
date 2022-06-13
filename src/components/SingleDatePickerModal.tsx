@@ -8,6 +8,8 @@ const DatePickerModel: React.FC<any> = ({
   selectedDay,
   showDatePicker,
   setShowDatePicker,
+  min = null,
+  max = null,
 }) => {
   const [error, setError] = useState<string | null>(null);
   const [innerDay, setInnerDay] = useState(selectedDay || null) as any;
@@ -102,6 +104,8 @@ const DatePickerModel: React.FC<any> = ({
                   value={innerDay}
                   calendarClassName="calendar-modal"
                   onChange={setDate}
+                  maximumDate={max}
+                  minimumDate={min}
                   renderFooter={renderFooterDatePicker}
                   calendarRangeStartClassName="calendar-range-start"
                   calendarRangeBetweenClassName="calendar-range-between"
