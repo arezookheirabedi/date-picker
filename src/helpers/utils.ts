@@ -86,9 +86,9 @@ export const convertGregorianDateToObjectDate = (date: any, calendar?: 'gregory'
   const d = dayjs(new Date(date));
 
   return {
-    year: Number(d.calendar(calendar || "jalali").format('YYYY')),
-    month: Number(d.calendar(calendar || "jalali").format('MM')),
-    day: Number(d.calendar(calendar || "jalali").format('DD')),
+    year: Number(d.calendar(calendar || 'jalali').format('YYYY')),
+    month: Number(d.calendar(calendar || 'jalali').format('MM')),
+    day: Number(d.calendar(calendar || 'jalali').format('DD')),
   };
 };
 
