@@ -10,6 +10,7 @@ import calendar from '../../../assets/images/icons/calendar.svg';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import hcsService from "../../../services/hcs.service";
+import Spinner from "../../Spinner";
 // import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
 
@@ -352,6 +353,11 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
 
         </div>
 
+        {loading && (
+          <div className="p-40">
+            <Spinner />
+          </div>
+        )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>

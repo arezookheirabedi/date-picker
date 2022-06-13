@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import Highcharts from "highcharts/highstock";
-
+import {useHistory, useLocation} from "react-router-dom";
 import axios from 'axios';
 
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 import hcsService from "../../../services/hcs.service";
-import {convertGregorianDateToJalaliDate} from "../../../helpers/utils";
+import {convertGregorianDateToJalaliDate, sideCities} from "../../../helpers/utils";
+
 
 const {HeadlessChart} = Charts;
 
@@ -133,7 +134,11 @@ const optionChart = {
 
 }
 
-const OverviewOfGovernmentEmployeesVaccinationProcess = () => {
+interface OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps {
+  cityTitle: any
+}
+
+const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps> = ({cityTitle}) => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
   const [dataset, setDataset] = useState<any[]>(initialData) as any;
@@ -268,33 +273,49 @@ const OverviewOfGovernmentEmployeesVaccinationProcess = () => {
       //   },
       // ]);
       // setCategories([...provinces]);
+      setErrorMessage(null)
     } catch (error: any) {
-      setErrorMessage(error.message);
+      return error.message !== 'cancel' && setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
+
     }
   };
 
+  const location = useLocation();
+  const history = useHistory();
+
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
       getAreaChartVaccination({
-        tag: 'employee'
+        tag: 'employee',
+        province: provinceName
       });
-    }, 500);
+    } else {
+      history.push('/dashboard/recruitment/province');
+    }
 
     return () => {
-      clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
+      setDataset(initialData);
+      source.cancel('');
     };
-  }, []);
+  }, [location.search]);
 
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به روند واکسیناسیون کارکنان دولت</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به روند واکسیناسیون کارکنان دولت در استان&nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
@@ -332,7 +353,7 @@ const OverviewOfGovernmentEmployeesVaccinationProcess = () => {
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && dataset.categories.length === 0 && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.categories.length > 0 && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
@@ -347,4 +368,4 @@ const OverviewOfGovernmentEmployeesVaccinationProcess = () => {
   )
 }
 
-export default OverviewOfGovernmentEmployeesVaccinationProcess;
+export default OverviewOfGovernmentEmployeesVaccinationProcessProvince;

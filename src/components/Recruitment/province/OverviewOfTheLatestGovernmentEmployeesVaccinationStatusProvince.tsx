@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
-
+import {useHistory, useLocation} from "react-router-dom";
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 
 import Charts from '../../Charts';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import hcsService from "../../../services/hcs.service";
 
 import Spinner from '../../Spinner';
+
 
 const {HeadlessChart} = Charts;
 
@@ -120,13 +121,17 @@ const optionChart = {
   },
 }
 
-const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
+interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvinceProps {
+  cityTitle: any
+}
+
+const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince: React.FC<OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvinceProps> = ({cityTitle}) => {
 
   // const history = useHistory();
   // const [categories, setCategories] = useState<any[]>();
   // eslint-disable-next-line
   const [dataset, setDataset] = useState<any[]>(initialData);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
@@ -136,12 +141,14 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getVaccinateInfo = async () => {
+  // eslint-disable-next-line consistent-return
+  const getVaccinateInfo = async (province: any) => {
     setLoading(true);
     try {
       const {data} = await hcsService.getPeopleVaccine(
         {
           tag: 'employee',
+          province
         },
         {cancelToken: cancelToken.token}
       );
@@ -171,27 +178,48 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
 
       setDataset(dataTemp)
     } catch (error) {
-      // eslint-disable-next-line
-      setErrorMessage(error.message);
+      console.log(error)
+      if(error.status >=500){
+        setErrorMessage('خطا در اتصال به سرور');
+        return null;
+      }
+      return error.message !== 'cancel' && setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  const location = useLocation();
+  const history = useHistory();
+
   useEffect(() => {
-    getVaccinateInfo();
+
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getVaccinateInfo(provinceName);
+    } else {
+      history.push('/dashboard/recruitment/province');
+    }
+
     // getPcrResult();
     return () => {
       cancelRequest();
       setDataset(initialData)
       // setGuildPcrInfo(initialPcrInfo);
     };
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت
+        نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت در استان &nbsp;
+        {cityTitle}
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
@@ -236,7 +264,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
           </div>
         )}
 
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage &&  <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
@@ -248,4 +276,4 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
   )
 }
 
-export default OverviewOfTheLatestGovernmentEmployeesVaccinationStatus;
+export default OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince;

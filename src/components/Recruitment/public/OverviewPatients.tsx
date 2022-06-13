@@ -16,7 +16,7 @@ const {Line} = Charts;
 interface IParams {
   tag: string;
   category: string;
-  type?: string;
+  timeBoxType?: string;
   from?: any;
   to?: any;
 }
@@ -24,7 +24,7 @@ interface IParams {
 const OverviewPatients: React.FC<{}> = () => {
   const [data, setData] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
@@ -40,7 +40,7 @@ const OverviewPatients: React.FC<{}> = () => {
   const [queryParams, setQueryParams] = useState<IParams>({
     tag: 'employee',
     category: 'heName',
-    type: 'DAILY',
+    timeBoxType: 'DAILY',
     from: '',
     to: '',
   }) as any;
@@ -52,7 +52,8 @@ const OverviewPatients: React.FC<{}> = () => {
       const response = await recruitmentServices.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      setErrorMessage('خطا در اتصال به سرور')
+      // setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -175,10 +176,10 @@ const OverviewPatients: React.FC<{}> = () => {
             changeType={v =>
               setQueryParams({
                 ...queryParams,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={queryParams.type!}
+            selectedType={queryParams.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
