@@ -169,7 +169,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   name: 'کد بازرس',
                   key: 'inspectorId',
                   render: (v: any, record: any) => (
-                    <span>{(Number(record.inspectorId||0)).toPersianDigits()}</span>
+                    <span>{record.inspectorId}</span>
                   ),
                 },
                 {
@@ -177,7 +177,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   key: 'qrCode',
                   render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                      {(Number(record.qrCode||0)).toPersianDigits()}
+                      {record.qrCode}
                       {/* {record.qrCode||" "} */}
                     </span>
                   ),
@@ -187,7 +187,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   key: 'unitNumber',
                   render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                      {(Number(record.unitNumber||0)).toPersianDigits()}
+                      {record.unitNumber}
                     </span>
                   ),
                 },
