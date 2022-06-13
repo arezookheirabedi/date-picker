@@ -223,6 +223,11 @@ function getRegisterList(params: any, config?: AxiosRequestConfig): Promise<Axio
     .build()
     .get(`/api/v1/guilds/categories/list?lang=fa`, params, {...config});
 }
+function bakeryInspections(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/inspections/bakeries`, params, {...config});}
 function getRegisterCount(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -255,5 +260,6 @@ export default {
   percentageOfRegisteredGuilds,
   numberOfRegisteredGuilds,
   getRegisterList,
+  bakeryInspections,
   getRegisterCount,
 };
