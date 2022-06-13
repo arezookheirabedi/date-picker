@@ -30,7 +30,7 @@ export const obj = {
     darsadeSabousGiri: 0,
     ertefa: 0,
     estemaleDokhaniat: true,
-    jameTedadeKargaran: 0,
+    jameTedadeKargaran: 4,
     karteBehdasht: true,
     keyfiat: '0',
     khmirgir: ['0'],
@@ -283,6 +283,16 @@ export const getBooleanValue = (data: any) => {
       return 'دارد';
     case false:
       return 'ندارد';
+    default:
+      return '-';
+  }
+};
+export const getNerkhname = (data: any) => {
+  switch (data) {
+    case true:
+      return 'نصب شده است';
+    case false:
+      return 'نصب نشده است';
     default:
       return '-';
   }
