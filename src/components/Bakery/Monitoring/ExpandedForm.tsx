@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import React from 'react';
+import { toPersianDigit} from 'src/helpers/utils';
 import { v4 as uuidv4} from 'uuid';
 import {
    getAcctivationStatus,
@@ -21,8 +23,8 @@ import {
 
 export const ExpandedForm: React.FC<any> = ({...record}) => {
   return (
-    <div className="w-full rounded bg-white p-4 px-2 pb-2 shadow-lg">
-      <fieldset className="mb-16 rounded-xl border  p-2 text-center lg:p-1">
+    <div className="rounded bg-white p-4 px-2 pb-2 shadow-lg">
+      <fieldset className="m-8 rounded-xl border  p-2 text-center lg:p-1">
         <legend className="mx-auto px-3 text-black">مشخصات بازرسین</legend>
         {record.allData.inspectors.length === 0 ? (
           <div>{}</div>
@@ -46,33 +48,42 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                 );
               })}
             </div>
-            <div className="align-center flex p-1  lg:p-2">
-              <div className="pl-4 lg:pl-2">
-                <span className="text-xs font-bold lg:text-sm ">شماره مجوز:</span>
-                <span className="pr-1">{record.allData.permissionNumber || '-'}</span>
-              </div>
-              <div className="pl-4 lg:pl-2">
-                <span className="text-xs font-bold lg:text-sm "> تاریخ:</span>
-                <span className="pr-1">{record.allData.inspectionDateTime || '-'}</span>
-              </div>
-              <div className="pl-4 lg:pl-2">
-                <span className="text-xs font-bold lg:text-sm "> نوع گزارش:</span>
-                <span className="pr-1">
-                  {getInseptorType(record.allData.inspectionType || '-')}
-                </span>
-              </div>
-              <div className="pl-4 lg:pl-2">
-                <span className="text-xs font-bold lg:text-sm ">موضوع گزارش :</span>
-                <span className="pr-1">
-                  {getMozoeGozaresh(record.allData.parameters.mozoueGozaresh || '-')}
-                </span>
+
+            <div className="align-center flex p-1 lg:p-2">
+              <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
+                <div>
+                  <span className="text-xs font-bold lg:text-sm ">شماره مجوز:</span>
+                  <span className="pr-1">{record.allData.permissionNumber || '-'}</span>
+                </div>
+                <div>
+                  <span className="text-xs font-bold lg:text-sm "> تاریخ:</span>
+                  <span className="whitespace-normal text-gray-500 ">
+                    {toPersianDigit(
+                      dayjs(record.allData.inspectionDateTime)
+                        .calendar('jalali')
+                        .format('YYYY/MM/DD')
+                    )}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-xs font-bold lg:text-sm "> نوع گزارش:</span>
+                  <span className="pr-1">
+                    {getInseptorType(record.allData.inspectionType || '-')}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-xs font-bold lg:text-sm ">موضوع گزارش :</span>
+                  <span className="pr-1">
+                    {getMozoeGozaresh(record.allData.parameters.mozoueGozaresh || '-')}
+                  </span>
+                </div>
               </div>
             </div>
           </>
         )}
       </fieldset>
 
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">محل بازرسی </legend>
         <>
           <div className="align-center flex p-1 lg:p-2">
@@ -90,11 +101,19 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             </div>
             <div className="pl-4 lg:pl-2">
               <span className="text-xs font-bold lg:text-sm "> ۳-تاریخ بازرسی:</span>
-              <span className="pr-1">{record.allData.inspectionDateTime || '-'}</span>
+              <span className="pr-1">
+                {toPersianDigit(
+                  dayjs(record.allData.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                )}
+              </span>
             </div>
             <div className="pl-4 lg:pl-2">
               <span className="text-xs font-bold lg:text-sm ">۴-تاریخ آخرین بازرسی:</span>
-              <span className="pr-1">{record.allData.lastInspectionDateTime || '-'}</span>
+              <span className="pr-1">
+                {toPersianDigit(
+                  dayjs(record.allData.lastInspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                )}
+              </span>
             </div>
           </div>
           <div className="align-center flex p-1 lg:p-2">
@@ -145,7 +164,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           </div>
         </>
       </fieldset>
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت کارگران</legend>
         <div className="align-center flex p-1 lg:p-2">
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
@@ -204,7 +223,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           </div>
         </div>
       </fieldset>
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت آرد تخصیصی</legend>
 
         <div className="pl-4 pb-1 lg:pl-2">
@@ -291,7 +310,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           )}
         </div>
       </fieldset>
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت نان </legend>
         <div className="align-center flex p-1 lg:p-2">
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
@@ -412,19 +431,19 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
         </div>
       </fieldset>
 
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت نانوایی </legend>
         <div className="align-center flex p-1 lg:p-2">
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱-مساحت:</span>
               <span className="">
-                ( {(record.allData.parameters.masahat || '').toPersianDigits()}) متر
+                ( {(record.allData.parameters.masahat||0).toPersianDigits()}) متر
               </span>
               <span className="text-xs font-bold lg:text-sm ">, ارتفاع </span>
 
               <span className="">
-                ( {(record.allData.parameters.ertefa || '').toPersianDigits()}) متر
+                ( {(record.allData.parameters.ertefa||0).toPersianDigits()}) متر
               </span>
             </div>
             <div>
@@ -548,7 +567,9 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱۳-محل نگهداری آرد:</span>
-              <span className="">{getBooleanValue(record.allData.parameters.mahaleNegahdariArdDarad)}</span>
+              <span className="">
+                {getBooleanValue(record.allData.parameters.mahaleNegahdariArdDarad)}
+              </span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱۴-میز نان سرد کن:</span>
@@ -558,23 +579,33 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱۵-سرویس بهداشتی :</span>
-              <span className="">{getBooleanValue(record.allData.parameters.serviceBehdashtiDarad)}</span>
+              <span className="">
+                {getBooleanValue(record.allData.parameters.serviceBehdashtiDarad)}
+              </span>
             </div>
             <div>
               <span className="text-xs font-bold lg:text-sm ">۱۶-محل انتظار مشتری :</span>
-              <span className="">{getBooleanValue(record.allData.parameters.mahaleEntezareMoshtariDarad)}</span>
+              <span className="">
+                {getBooleanValue(record.allData.parameters.mahaleEntezareMoshtariDarad)}
+              </span>
             </div>
           </div>
         </div>
       </fieldset>
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">گزارش بازرسین </legend>
+        <div className="flex">
+        <span>{record.allData.inspectionResult || '-'}</span></div>
       </fieldset>
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">نظر مسئول بازرسی </legend>
+        <div className="flex">
+        <span>{record.allData.inspectorComment || '-'}</span></div>
       </fieldset>
-      <fieldset className="mb-16 rounded-xl border  p-4 text-center">
+      <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black"> مدیریت</legend>
+        <div className="flex">
+        <span>{record.allData.managerComment || '-'}</span></div>
       </fieldset>
     </div>
   );
