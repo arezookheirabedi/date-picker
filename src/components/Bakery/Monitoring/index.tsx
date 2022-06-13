@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect,  useState} from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
 // import DatePickerModal from 'src/components/DatePickerModal';
 // import Calendar from 'src/components/Calendar';
-import {toPersianDigit} from 'src/helpers/utils';
+import { toPersianDigit} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
-import {isEmpty} from 'lodash';
+import { isEmpty} from 'lodash';
 // import guildService from 'src/services/guild.service';
-import {mock} from './constant';
-import {ExpandedForm} from './ExpandedForm';
+import { mock} from './constant';
+import { ExpandedForm} from './ExpandedForm';
 // import FilterInterceptors from './FilterInterceptors';
 
 const BakeryMonitoringList: React.FC<{}> = () => {
@@ -165,15 +165,17 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                 {
                   name: 'کد بازرس',
                   key: 'inspectorId',
-                  render: (v: any, record: any) => <span> {record.inspectorId}</span>,
+                  render: (v: any, record: any) => (
+                    <span>{(Number(record.inspectorId) || 0).toPersianDigits()}</span>
+                  ),
                 },
                 {
                   name: ' QR-Code',
                   key: 'qrCode',
                   render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                      {record.qrCode}
-                      {/* {toPersianDigit(record.inspectorId)} */}
+                      {(Number(record.qrCode) || 0).toPersianDigits()}
+                      {/* {record.qrCode||" "} */}
                     </span>
                   ),
                 },
@@ -182,8 +184,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   key: 'unitNumber',
                   render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                      {record.unitNumber}
-                      {/* {toPersianDigit(record.unitNumber)} */}
+                      {(Number(record.unitNumber) || 0).toPersianDigits()}
                     </span>
                   ),
                 },
@@ -210,13 +211,6 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                         <span className="whitespace-normal text-gray-500 ">
                           {toPersianDigit(
                             dayjs(record.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
-                          )}
-                        </span>
-                      </div>
-                      <div className="pt-3">
-                        <span className="whitespace-normal text-gray-500">
-                          {toPersianDigit(
-                            dayjs(record.requestDateTime).calendar('jalali').format('HH:mm')
                           )}
                         </span>
                       </div>

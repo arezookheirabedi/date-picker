@@ -49,7 +49,7 @@ export const obj = {
     balkonDarad: true,
     behdashtOmoumi: 'HIGH',
     darsadeSabousGiri: 0,
-    ertefa: 0,
+    ertefa: 10,
     estemaleDokhaniat: true,
     jameTedadeKargaran: 12,
     karteBehdasht: true,
