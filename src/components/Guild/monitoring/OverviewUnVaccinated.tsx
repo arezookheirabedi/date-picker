@@ -104,7 +104,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
               //     ).format('YYYY-MM-DD')
               //   : null,
               reportType: 'NON_VACCINES',
-              cityTitle,
+              province: cityTitle,
               reportName: `واحد‌های صنفی بدون واکسیناسیون ${cityTitle ? `استان ${cityTitle}` : ''}`,
             }}
           />
