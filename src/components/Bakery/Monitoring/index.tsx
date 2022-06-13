@@ -43,7 +43,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const pageSize = 10;
+  const pageSize = 5;
 
   async function fetcher(params: any) {
     setLoading(true);
