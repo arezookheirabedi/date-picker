@@ -3,8 +3,6 @@ import React, { useEffect,  useState} from 'react';
 // import moment from 'moment-jalaali';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
-// import DatePickerModal from 'src/components/DatePickerModal';
-// import Calendar from 'src/components/Calendar';
 import {
    cancelTokenSource,
    msgRequestCanceled,
@@ -12,9 +10,9 @@ import {
 } from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
-// import guildService from 'src/services/guild.service';
+import guildService from 'src/services/guild.service';
 import {ExpandedForm} from './ExpandedForm';
-import { initialValue } from './constant';
+
 // import FilterInterceptors from './FilterInterceptors';
 
 const BakeryMonitoringList: React.FC<{}> = () => {
@@ -45,34 +43,34 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   }
   const pageSize = 1;
 
-  // async function fetcher(params: any) {
-  //   setLoading(true);
-  //   try {
-  //     const {data} = await guildService.bakeryInspections(params, {
-  //       cancelToken: cancelToken.token,
-  //     });
-  //     const normalizedData: any[] = [];
-  //     data.content.forEach((item: any, index: number) => {
-  //       normalizedData.push({
-  //         id: `bakery${index}`,
-  //         inspectionDateTime: item.inspectionDateTime,
-  //         lastInspectionDateTime: item.lastInspectionDateTime,
-  //         inspectorId: item.inspectors ? item.inspectors[0].inspectorId : '-',
-  //         qrCode: item.qrCode,
-  //         unitNumber: item.unitNumber,
-  //         allData: item,
-  //       });
-  //     });
+  async function fetcher(params: any) {
+    setLoading(true);
+    try {
+      const {data} = await guildService.bakeryInspections(params, {
+        cancelToken: cancelToken.token,
+      });
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `bakery${index}`,
+          inspectionDateTime: item.inspectionDateTime,
+          lastInspectionDateTime: item.lastInspectionDateTime,
+          inspectorId: item.inspectors ? item.inspectors[0].inspectorId : '-',
+          qrCode: item.qrCode,
+          unitNumber: item.unitNumber,
+          allData: item,
+        });
+      });
 
-  //     setDataSet([...normalizedData]);
-  //     setTotalItems(data.totalElements);
-  //   } catch (error: any) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+    } catch (error: any) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {
@@ -94,35 +92,35 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   //   }
   // }, [selectedDayRange]);
 
-  const normalizer = () => {
-    const normalizedData: any[] = [];
+  // const normalizer = () => {
+  //   const normalizedData: any[] = [];
 
-    initialValue.forEach((item: any, index: number) => {
-      normalizedData.push({
-        id: `bakery${index}`,
-        inspectionDateTime: item.inspectionDateTime,
-        lastInspectionDateTime: item.lastInspectionDateTime,
-        inspectorId: item.inspectors ? item.inspectors[0].inspectorId : '-',
-        qrCode: item.qrCode,
-        unitNumber: item.unitNumber,
-        allData: item,
-      });
-    });
+  //   initialValue.forEach((item: any, index: number) => {
+  //     normalizedData.push({
+  //       id: `bakery${index}`,
+  //       inspectionDateTime: item.inspectionDateTime,
+  //       lastInspectionDateTime: item.lastInspectionDateTime,
+  //       inspectorId: item.inspectors ? item.inspectors[0].inspectorId : '-',
+  //       qrCode: item.qrCode,
+  //       unitNumber: item.unitNumber,
+  //       allData: item,
+  //     });
+  //   });
 
-    setDataSet([...normalizedData]);
-  };
+  //   setDataSet([...normalizedData]);
+  // };
 
   useEffect(() => {
-    normalizer();
+    // normalizer();
 
-    // fetcher({
-    //   sort: 'DESC',
-    //   //   sortKey: ['reportStatus'].join(','),
-    //   fromReportDate: query.fromReportDate,
-    //   toReportDate: query.toReportDate,
-    //   pageNumber: query.currentPage - 1,
-    //   pageSize,
-    // });
+    fetcher({
+      sort: 'DESC',
+      //   sortKey: ['reportStatus'].join(','),
+      fromReportDate: query.fromReportDate,
+      toReportDate: query.toReportDate,
+      pageNumber: query.currentPage - 1,
+      pageSize,
+    });
     return () => {
       setDataSet([]);
       cancelRequest();
@@ -171,7 +169,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   name: 'کد بازرس',
                   key: 'inspectorId',
                   render: (v: any, record: any) => (
-                    <span>{(Number(record.inspectorId) || 0).toPersianDigits()}</span>
+                    <span>{(Number(record.inspectorId||0)).toPersianDigits()}</span>
                   ),
                 },
                 {
@@ -179,7 +177,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   key: 'qrCode',
                   render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                      {(Number(record.qrCode) || 0).toPersianDigits()}
+                      {(Number(record.qrCode||0)).toPersianDigits()}
                       {/* {record.qrCode||" "} */}
                     </span>
                   ),
@@ -189,7 +187,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   key: 'unitNumber',
                   render: (v: any, record: any) => (
                     <span className="text-gray-500">
-                      {(Number(record.unitNumber) || 0).toPersianDigits()}
+                      {(Number(record.unitNumber||0)).toPersianDigits()}
                     </span>
                   ),
                 },
