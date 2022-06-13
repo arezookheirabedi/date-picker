@@ -223,7 +223,7 @@ function getRegisterList(params: any, config?: AxiosRequestConfig): Promise<Axio
     .build()
     .get(`/api/v1/guilds/categories/list?lang=fa`, params, {...config});
 }
-function bakeryInspections({params}: any = {}, config?: any) {
+function bakeryInspections(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()

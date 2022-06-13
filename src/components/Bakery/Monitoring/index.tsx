@@ -9,9 +9,11 @@ import {
    toPersianDigit,
 } from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
-import {isEmpty} from 'lodash';
+import { isEmpty} from 'lodash';
 import guildService from 'src/services/guild.service';
-import {ExpandedForm} from './ExpandedForm';
+import { ExpandedForm} from './ExpandedForm';
+import FilterInterceptors from './FilterInterceptors';
+// import FilterInterceptors from './FilterInterceptors';
 
 // import FilterInterceptors from './FilterInterceptors';
 
@@ -21,7 +23,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   // const [dataSet, setDataSet] = useState<any[]>(initialValue);
   const [dataSet, setDataSet] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [totalItems, setTotalItems] = useState(2);
+  const [totalItems, setTotalItems] = useState(0);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -29,11 +31,11 @@ const BakeryMonitoringList: React.FC<{}> = () => {
     to: null,
   }) as any;
   const [query, setQuery] = useState({
-    fromReportDate: null,
-    toReportDate: null,
+    from: null,
+    to: null,
     currentPage: 1,
-    inspectorNationalId: null,
     inspectorId: null,
+    inspectorNationalId: null,
     qrCode: null,
   });
   const cancelToken = cancelTokenSource();
@@ -41,7 +43,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const pageSize = 1;
+  const pageSize = 10;
 
   async function fetcher(params: any) {
     setLoading(true);
@@ -72,54 +74,17 @@ const BakeryMonitoringList: React.FC<{}> = () => {
     }
   }
 
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-  //     setQuery({
-  //       ...query,
-  //       currentPage: 1,
-  //       fromReportDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       toReportDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //     });
-  //   }
-  //   if (selectedDayRange.clear) {
-  //     setQuery({
-  //       ...query,
-  //       fromReportDate: null,
-  //       toReportDate: null,
-  //     });
-  //   }
-  // }, [selectedDayRange]);
-
-  // const normalizer = () => {
-  //   const normalizedData: any[] = [];
-
-  //   initialValue.forEach((item: any, index: number) => {
-  //     normalizedData.push({
-  //       id: `bakery${index}`,
-  //       inspectionDateTime: item.inspectionDateTime,
-  //       lastInspectionDateTime: item.lastInspectionDateTime,
-  //       inspectorId: item.inspectors ? item.inspectors[0].inspectorId : '-',
-  //       qrCode: item.qrCode,
-  //       unitNumber: item.unitNumber,
-  //       allData: item,
-  //     });
-  //   });
-
-  //   setDataSet([...normalizedData]);
-  // };
-
   useEffect(() => {
-    // normalizer();
-
     fetcher({
       sort: 'DESC',
       //   sortKey: ['reportStatus'].join(','),
-      fromReportDate: query.fromReportDate,
-      toReportDate: query.toReportDate,
+      from: query.from,
+      to: query.to,
       pageNumber: query.currentPage - 1,
       pageSize,
+      inspectorId: query.inspectorId,
+      inspectorNationalId: query.inspectorNationalId,
+      qrCode: query.qrCode,
     });
     return () => {
       setDataSet([]);
@@ -134,9 +99,9 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   return (
     <>
       <fieldset className="mb-16 rounded-xl border p-4 text-center">
-        {/* <div className="mb-8 flex flex-col items-center justify-center space-y-6">
+        <div className="mb-8 flex flex-col items-center justify-center space-y-6">
           <FilterInterceptors handleSetFilters={setQuery} />
-        </div> */}
+        </div>
         <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
           {loading ? (
             <div className="p-20">
@@ -168,9 +133,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                 {
                   name: 'کد بازرس',
                   key: 'inspectorId',
-                  render: (v: any, record: any) => (
-                    <span>{record.inspectorId}</span>
-                  ),
+                  render: (v: any, record: any) => <span>{record.inspectorId}</span>,
                 },
                 {
                   name: ' QR-Code',
@@ -186,9 +149,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   name: 'شماره واحد',
                   key: 'unitNumber',
                   render: (v: any, record: any) => (
-                    <span className="text-gray-500">
-                      {record.unitNumber}
-                    </span>
+                    <span className="text-gray-500">{record.unitNumber}</span>
                   ),
                 },
                 {
@@ -197,9 +158,13 @@ const BakeryMonitoringList: React.FC<{}> = () => {
                   render: (v: any, record: any) => (
                     <div className="flex w-full justify-center">
                       <span className="whitespace-normal text-gray-500 ">
-                        {record.inspectionDateTime?toPersianDigit(
-                          dayjs(record.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
-                        ):<>-</>}
+                        {record.inspectionDateTime ? (
+                          toPersianDigit(
+                            dayjs(record.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                          )
+                        ) : (
+                          <>-</>
+                        )}
                       </span>
                     </div>
                   ),
