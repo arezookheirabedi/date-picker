@@ -8,7 +8,7 @@ import download from '../../../assets/images/icons/download.svg';
 import DotLoading from '../../DotLoading';
 
 export interface IReportRequestParams {
-  cityTitle: string | undefined;
+  province: string | undefined;
   reportName: string;
   reportType: string;
 }
