@@ -32,7 +32,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           icon={GreenVaccine}
           hasInfo
           infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده اند."
-          text=" درصد واکسیناسیون کل کشور"
+          text=" درصد واکسیناسیون استان"
           count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
           loading={loading}
         />
@@ -109,7 +109,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           hasInfo
           infoText=""
           icon={YellowVaccine}
-          text="وضعیت دوز اول در سطح کشور"
+          text="وضعیت دوز اول در استان"
           count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
           loading={loading}
         />
@@ -118,7 +118,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           hasInfo
           infoText=""
           icon={OrangeVaccine}
-          text="وضعیت دوز دوم در سطح کشور"
+          text="وضعیت دوز دوم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
           loading={loading}
         />
@@ -127,7 +127,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           hasInfo
           infoText=""
           icon={PurppleVaccine}
-          text="وضعیت دوز سوم در سطح کشور"
+          text="وضعیت دوز سوم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
           loading={loading}
         />
@@ -136,7 +136,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           hasInfo
           infoText=""
           icon={DarkgreenVaccine}
-          text="وضعیت دوز چهارم در سطح کشور"
+          text="وضعیت دوز چهارم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
           loading={loading}
         />
@@ -148,7 +148,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           icon={NavyVaccine}
           hasInfo
           infoText=""
-          text="وضعیت دوز پنجم در سطح کشور"
+          text="وضعیت دوز پنجم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
           loading={loading}
         />
