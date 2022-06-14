@@ -29,11 +29,10 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div>{}</div>
         ) : (
           <>
-            {record.allData.inspectors.map((item: any, index: number) => {
+            {record.allData.inspectors.map((item: any) => {
               return (
-                <div key={item.inspectorId} className="flex">
+                <div key={uuidv4()} className="flex">
                   <div className="flex justify-start w-1/2 px-4 py-1">
-                    <span>{(index + 1).toPersianDigits()}-</span>{' '}
                     <span className="text-xs font-bold text-sm ">نام و نام خانوادگی:</span>
                     <span className="pr-1">
                       {item.inspectorFirstName} {item.inspectorLastName}
@@ -93,11 +92,11 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
         <>
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm "> ۱-شماره واحد:</span>
-              <span className="pr-1">{record.allData.permissionNumber}</span>
+              <span className="text-xs font-bold text-sm "> شماره واحد:</span>
+              <span className="pr-1">{record.allData.unitNumber}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm "> ۲-نام و نام خانوادگی متصدی:</span>
+              <span className="text-xs font-bold text-sm "> نام و نام خانوادگی متصدی:</span>
               <span className="pr-1">
                 {record.allData.operatorFirstName || '-'} {record.allData.operatorLastName || '-'}
               </span>
@@ -105,7 +104,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           </div>
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm "> ۳-تاریخ بازرسی:</span>
+              <span className="text-xs font-bold text-sm "> تاریخ بازرسی:</span>
               <span className="pr-1">
                 {record.allData.inspectionDateTime ? (
                   toPersianDigit(
@@ -117,7 +116,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               </span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm ">۴-تاریخ آخرین بازرسی:</span>
+              <span className="text-xs font-bold text-sm ">تاریخ آخرین بازرسی:</span>
               <span className="pr-1">
                 {record.allData.lastInspectionDateTime ? (
                   toPersianDigit(
@@ -133,24 +132,24 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           </div>
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm ">۵-وضعیت فعالیت:</span>
+              <span className="text-xs font-bold text-sm ">وضعیت فعالیت:</span>
               <span className="pr-1">{getAcctivationStatus(record.allData.activationStatus)}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm ">۶-اداره نانوایی توسط:</span>
+              <span className="text-xs font-bold text-sm ">اداره نانوایی توسط:</span>
               <span className="pr-1">{getOwnerType(record.allData.guildManagementType)}</span>
             </div>
           </div>
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm ">۷-نرخ نامه:</span>
+              <span className="text-xs font-bold text-sm ">نرخ نامه:</span>
               <span className="pr-1">{getNerkhname(record.allData.parameters.nerkhName)}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">{/* kkkkkk */}</div>
           </div>
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
-              <span className="text-xs font-bold text-sm ">۸-آدرس:</span>
+              <span className="text-xs font-bold text-sm ">آدرس:</span>
               <span className="pr-1">{record.allData.address}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">{/* kkkkkk */}</div>
@@ -199,7 +198,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex justify-start w-full px-4 py-1">
             <div className="flex space-x-2 pl-4 rtl:space-x-reverse lg:pl-2">
               <div>
-                <span className="text-xs font-bold text-sm "> ۱-تعداد کارگران:</span>
+                <span className="text-xs font-bold text-sm ">تعداد کارگران:</span>
                 <span className="pr-1">
                   {Number(record.allData.parameters.jameTedadeKargaran || 0).toPersianDigits()}
                 </span>
@@ -240,23 +239,23 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
 
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
-            <span className="text-xs font-bold text-sm "> ۲-مشتری مداری :</span>
+            <span className="text-xs font-bold text-sm ">مشتری مداری :</span>
             <span className="pr-1">{getQuality(record.allData.parameters.moshtariMadari)}</span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
-            <span className="text-xs font-bold text-sm ">۳-نظافت کارگران:</span>
+            <span className="text-xs font-bold text-sm ">نظافت کارگران:</span>
             <span className="pr-1">{getQuality(record.allData.parameters.nezafateKargaran)}</span>
           </div>
         </div>
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
-            <span className="text-xs font-bold text-sm ">۴-استعمال دخانیات:</span>
+            <span className="text-xs font-bold text-sm ">استعمال دخانیات:</span>
             <span className="pr-1">
               {getBooleanValue(record.allData.parameters.estemaleDokhaniat)}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
-            <span className="text-xs font-bold text-sm ">۵-کارت بهداشت:</span>
+            <span className="text-xs font-bold text-sm ">کارت بهداشت:</span>
             <span className="pr-1">{getBooleanValue(record.allData.parameters.karteBehdasht)}</span>
           </div>
         </div>
