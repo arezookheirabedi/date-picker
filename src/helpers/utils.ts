@@ -1,4 +1,5 @@
 import Axios, {AxiosRequestConfig, CancelTokenSource} from 'axios';
+import dayjs from 'dayjs';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
 import {ILogin, IProfile} from 'src/models/authentication.model';
@@ -80,13 +81,25 @@ export const cancelTokenSource = (): CancelTokenSource => {
   return Axios.CancelToken.source();
 };
 
+export const convertGregorianDateToObjectDate = (date: any, calendar?: 'gregory' | 'jalali') => {
+  if (!date) return null;
+  const d = dayjs(new Date(date));
+
+  return {
+    year: Number(d.calendar(calendar || 'jalali').format('YYYY')),
+    month: Number(d.calendar(calendar || 'jalali').format('MM')),
+    day: Number(d.calendar(calendar || 'jalali').format('DD')),
+  };
+};
+
 export const convertGregorianDateToJalaliDate = (date: any) => {
-  return new Date(date).toLocaleDateString("fa-IR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  })
-}
+  if (!date) return null;
+  return new Date(date).toLocaleDateString('fa-IR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+};
 
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
   let mainKey = event.key;

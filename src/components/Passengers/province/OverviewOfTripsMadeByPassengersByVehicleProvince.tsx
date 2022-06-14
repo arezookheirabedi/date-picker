@@ -1,56 +1,44 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import {useHistory, useLocation} from "react-router-dom";
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 import DatePickerModal from '../../DatePickerModal';
-import {toPersianDigit} from '../../../helpers/utils';
 import calendar from '../../../assets/images/icons/calendar.svg';
-import Spinner from '../../Spinner';
+
 import Charts from '../../Charts';
+import {cancelTokenSource, sideCities, toPersianDigit} from '../../../helpers/utils';
 import hcsService from "../../../services/hcs.service";
+import Spinner from "../../Spinner";
 
-
+// import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
 
 const initialData = {
   categories: [],
   series: [
     {
-      name: 'واکسن نزده',
-      color: '#FF0060',
-      data: [],
-    },
-    {
-      name: 'دوز اول',
-      color: '#F3BC06',
-      data: [],
-    },
-    {
-      name: 'دوز دوم',
-      color: '#209F92',
-      data: [],
-    },
-    {
-      name: 'دوز سوم',
-      color: '#004D65',
-      data: [],
-    },
-    {
-      name: 'دوز چهارم',
-      color: '#BFDDE7',
-      data: [],
-    },
-    {
-      name: 'دوز پنجم',
-      color: '#716DE3',
-      data: [],
+      name: 'واکسیناسیون',
+      color: {
+        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+        stops: [
+          [0, '#175A76'], // start
+          [1, '#7DA6B8'], // end
+        ],
+      },
+      data: [
+        {name: 'دوز اول', y: 0},
+        {name: 'دوز دوم', y: 0},
+        {name: 'دوز سوم', y: 0},
+        {name: 'دوز چهارم', y: 0},
+        {name: 'دوز پنجم', y: 0},
+        {name: 'واکسن نزده ها', y: 0},
+      ],
     },
   ]
 } as any;
-
 
 const converters = {
   fa(number: any) {
@@ -69,16 +57,12 @@ const optionChart = {
       const ret = Highcharts.numberFormat.apply(0, arguments as any);
       return converters.fa(ret);
     },
-
-
     events: {
       redraw: () => {
         // eslint-disable-next-line
         // console.log('redraw');
       },
     },
-    // zoomType: 'x'
-    // styledMode: true
   },
   title: {
     text: '',
@@ -102,14 +86,9 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
   plotOptions: {
     series: {
-      // stacking: 'percent',
-      // stacking: `${notPercent?'normal':'percent'}`,
-      stacking: 'percent',
-      // borderRadius: 5,
-      pointWidth: 15,
+      borderRadius: 10,
     },
     column: {
       threshold: null,
@@ -137,9 +116,6 @@ const optionChart = {
     labels: {
       rotation: 45,
     },
-    // lineDashStyle: 'dash',
-    // lineColor: '#000000',
-    // lineWidth: 1
   },
   tooltip: {
     shared: true,
@@ -152,31 +128,29 @@ const optionChart = {
       fontSize: 10,
     },
     borderWidth: 0,
-    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
-
-  series: [],
 }
 
-const OverviewVaccinePerProvince = () => {
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+interface OverviewOfTripsMadeByPassengersByVehicleProvinceProps {
+  cityTitle: any
+}
+
+const OverviewOfTripsMadeByPassengersByVehicleProvince: React.FC<OverviewOfTripsMadeByPassengersByVehicleProvinceProps> = ({cityTitle}) => {
+  // const {CancelToken} = axios;
+  // const source = CancelToken.source();
+  // const history = useHistory();
+  // const [categories, setCategories] = useState<any[]>();
+
+  // eslint-disable-next-line
   const [dataset, setDataset] = useState<any[]>(initialData) as any;
-  // const [categories, setCategories] = useState<any[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null) as any;
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+  const cancelToken = cancelTokenSource();
+
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
-    clear: false,
-  }) as any;
-
-  const [query, setQuery] = useState({
-    resultReceiptDateFrom: null,
-    resultReceiptDateTo: null,
   }) as any;
 
   const focusFromDate = () => {
@@ -203,156 +177,118 @@ const OverviewVaccinePerProvince = () => {
       : '';
   };
 
-  // eslint-disable-next-line
-  const getVaccinesGroupedByProvinceReport = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await hcsService.getVaccinesGroupedByProvinceReport({
-        tag: 'employee',
-        ...params
-      }, {cancelToken: source.token});
+// eslint-disable-next-line
+  const [queryParams, setQueryParams] = useState({
+    from: null,
+    to: null,
+  });
 
-      console.log(data);
-
-      const provinces: any[] = [];
-
-      // eslint-disable-next-line
-      let firstDose: any[] = [];
-      // eslint-disable-next-line
-      let secondDose: any[] = [];
-      // eslint-disable-next-line
-      let thirdDose: any[] = [];
-      // eslint-disable-next-line
-      // eslint-disable-next-line
-      let forthDose: any[] = [];
-      // eslint-disable-next-line
-      let fifthDose: any[] = [];
-      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-      // eslint-disable-next-line
-      let noDose: any[] = [];
-
-      data.forEach((item: any) => {
-
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries({...initialDoses, ...item.doses})) {
-          if (Number(key) === 1) {
-            firstDose.push(Number(value));
-          }
-
-          if (Number(key) === 2) {
-            secondDose.push(Number(value));
-          }
-
-          if (Number(key) === 3) {
-            thirdDose.push(Number(value));
-          }
-
-          if (Number(key) === 4) {
-            forthDose.push(Number(value));
-          }
-
-          if (Number(key) === 5) {
-            fifthDose.push(Number(value));
-          }
-        }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-        provinces.push(item.province);
-      });
-
-      setDataset(() => {
-        return {
-          categories: provinces,
-          series: [
-            {
-              name: 'واکسن نزده',
-              color: '#FF0060',
-              data: [...noDose],
-            },
-            {
-              name: 'دوز اول',
-              color: '#F3BC06',
-              data: [...firstDose]
-            }, {
-              name: 'دوز دوم',
-              color: '#209F92',
-              data: [...secondDose]
-            }, {
-              name: 'دوز سوم',
-              color: '#004D65',
-              data: [...thirdDose]
-            }, {
-              name: 'دوز چهارم',
-              color: '#BFDDE7',
-              data: [...forthDose]
-            }, {
-              name: 'دوز پنجم',
-              color: '#716DE3',
-              data: [...fifthDose]
-            }]
-        }
-      })
-
-    } catch (error: any) {
-      setErrorMessage('خطا در اتصال به سرویس');
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getVaccinesGroupedByProvinceReport({
-        from: query.resultReceiptDateFrom,
-        to: query.resultReceiptDateTo
-      });
-    }, 500);
-
-    return () => {
-      clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, [query]);
-
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    } else {
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: null,
-        resultReceiptDateTo: null,
-      });
-    }
-
-  }, [selectedDayRange]);
 
   const clearSelectedDayRange = (e: any) => {
     e.stopPropagation();
     setSelectedDayRange({
       from: null,
       to: null,
-    });
+      clear: true
+    })
   };
+
+
+  const getTripsCountCategoryBased = async (params: any, province: any) => {
+    setLoading(true);
+    try {
+      const {data} = await hcsService.getTripsCountCategoryBased(
+        {
+          ...params,
+          province
+        },
+        {cancelToken: cancelToken.token}
+      );
+
+      const categories: any = [];
+      const newData: any = [];
+
+      data.forEach((item: any) => {
+        categories.push(item.categoryValue)
+        newData.push({
+          name: item.categories,
+          y: item.count
+        })
+      })
+
+      setDataset({
+        categories,
+        series: [
+          {
+            name: 'واکسیناسیون',
+            color: {
+              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+              stops: [
+                [0, '#175A76'], // start
+                [1, '#7DA6B8'], // end
+              ],
+            },
+            data: [...newData],
+          },
+        ]
+      })
+    } catch (error) {
+      // eslint-disable-next-line
+      setErrorMessage('خطا در اتصال به سرور');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const location = useLocation();
+  const history = useHistory();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getTripsCountCategoryBased(queryParams, provinceName);
+    } else {
+      history.push('/dashboard/passenger/province');
+    }
+
+    // getPcrResult();
+    return () => {
+      setDataset(initialData)
+      // setGuildPcrInfo(initialPcrInfo);
+    };
+  }, [queryParams, location.search]);
+
+
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      setQueryParams({
+        ...queryParams,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
+    }
+    if (selectedDayRange.clear) {
+      setQueryParams({
+        ...queryParams,
+        from: null,
+        to: null,
+      });
+    }
+  }, [selectedDayRange]);
+
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-       <legend className="text-black mx-auto px-3">
-         نگاه کلی به وضعیت واکسیناسیون کارکنان دولت
-       </legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به سفرهای انجام شده مسافران به تفکیک وسیله در استان &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
@@ -435,42 +371,7 @@ const OverviewVaccinePerProvince = () => {
             </div>
           </div>
 
-          <div className="w-2/4">
-            <div
-              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div
-                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}}/>
-                  <span>واکسن نزده</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}}/>
-                  <span>دوز پنجم</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}}/>
-                  <span>دوز چهارم</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}}/>
-                  <span>دوز سوم</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}}/>
-                  <span>دوز دوم</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}}/>
-                  <span>دوز اول</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
-        {/* <Stacked data={dataset} categories={categories} /> */}
-
 
         {loading && (
           <div className="p-40">
@@ -478,18 +379,16 @@ const OverviewVaccinePerProvince = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !errorMessage && (
+        {!loading && dataset.categories.length > 0 && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
-        {/* {dataset.length === 0 && !loading && !errorMessage && ( */}
-        {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
-        {/* )} */}
-        {/* <div className="flex justify-center items-center w-full">
-          <Stacked data={dataset} categories={categories} />
-        </div> */}
+        {dataset.categories.length === 0 && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        )}
       </div>
     </fieldset>
   )
 }
 
-export default OverviewVaccinePerProvince;
+export default OverviewOfTripsMadeByPassengersByVehicleProvince;
+

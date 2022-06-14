@@ -1,17 +1,16 @@
-
-
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
-import {useLocation} from 'react-router-dom';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 
 import Charts from '../../Charts';
-import {toPersianDigit} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
+import hcsService from "../../../services/hcs.service";
+import Spinner from "../../Spinner";
 // import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
 
@@ -28,12 +27,12 @@ const initialData = {
         ],
       },
       data: [
-        {name: 'دوز اول', y: 30},
-        {name: 'دوز دوم', y: 40},
-        {name: 'دوز سوم', y: 35},
-        {name: 'دوز چهارم', y: 60},
-        {name: 'دوز پنجم', y: 80},
-        {name: 'واکسن نزده ها', y: 50},
+        {name: 'دوز اول', y: 0},
+        {name: 'دوز دوم', y: 0},
+        {name: 'دوز سوم', y: 0},
+        {name: 'دوز چهارم', y: 0},
+        {name: 'دوز پنجم', y: 0},
+        {name: 'واکسن نزده ها', y: 0},
       ],
     },
   ]
@@ -133,13 +132,19 @@ const optionChart = {
 const OverviewOfTripsMadeByPassengersByVehicle = () => {
   // const {CancelToken} = axios;
   // const source = CancelToken.source();
-  const location = useLocation();
   // const history = useHistory();
   // const [categories, setCategories] = useState<any[]>();
-  const [dataset, setDataset] = useState<any[]>(initialData);
+
+  // eslint-disable-next-line
+  const [dataset, setDataset] = useState<any[]>(initialData) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState(null);
-  // const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
 
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -174,132 +179,7 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
-    province: 'تهران',
   });
-
-
-  // // eslint-disable-next-line
-  // const getLinearOverview = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const {data} = await vaccineService.membersGeneral(params,{CancelToken:source.token})
-  //     // const {data} = await hcsService.dosesTagBased(params);
-  //     const dataChart: any = {
-  //       null: 5,
-  //       '0': Number(data.totalNonVaccinesCount || 0), // واکسن نزدع
-  //       '1': Number(data.doses[1] || 0), // دوز اول
-  //       '2': Number(data.doses[2] || 0), // دوز دوم
-  //       '3': Number(data.doses[3] || 0), // دوز سوم
-  //       '4': Number(data.gtDoses[3] || 0) //  بیش از سه دوز
-  //
-  //     };
-  //
-  //     // eslint-disable-next-line
-  //     let firstDose: number = 0;
-  //     // eslint-disable-next-line
-  //     let secondDose: number = 0;
-  //     // eslint-disable-next-line
-  //     let thirdDose: number = 0;
-  //     // eslint-disable-next-line
-  //     let moreThanThreeDose: number = 0;
-  //     // eslint-disable-next-line
-  //     let noDose: number = 0;
-  //
-  //     Object.entries(dataChart).forEach(([key, value]: any[]) => {
-  //       switch (key) {
-  //         case 'null':
-  //           // noDose += value;
-  //           break;
-  //         case '0':
-  //           noDose += value;
-  //           break;
-  //         case '1':
-  //           firstDose += value;
-  //           break;
-  //         case '2':
-  //           secondDose += value;
-  //           break;
-  //         case '3':
-  //           thirdDose += value;
-  //           break;
-  //         case '4':
-  //           moreThanThreeDose += value;
-  //           break;
-  //
-  //         default:
-  //           break;
-  //       }
-  //     });
-  //
-  //     setDataset([
-  //       {
-  //         name: 'واکسیناسیون',
-  //         type: 'column',
-  //         data: [
-  //           {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
-  //           {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
-  //           {name: 'دوز دوم', y: secondDose, color: '#209F92'},
-  //           {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
-  //           {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
-  //         ],
-  //       },
-  //     ]);
-  //
-  //     setCategories(['واکسن نزده', 'دوز اول', 'دوز دوم', 'دوز سوم', 'بیش از ۳ دوز']);
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
-  useEffect(() => {
-    // setDataset([
-    //   {
-    //     name: 'واکسیناسیون',
-    //     type: 'column',
-    //     data: [
-    //       {name: 'دوز اول', y: 30, color: '#F3BC06'},
-    //       {name: 'دوز دوم', y: 40, color: '#209F92'},
-    //       {name: 'دوز سوم', y: 35, color: '#004D65'},
-    //       {name: 'دوز چهارم', y: 60, color: '#BFDDE7'},
-    //       {name: 'دوز پنجم', y: 80, color: '#716DE3'},
-    //       {name: 'واکسن نزده ها', y: 50, color: '#FF0060'},
-    //     ],
-    //   },
-    // ]);
-
-    // setCategories(['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم' , 'واکسن نزده ها']);
-    // const params = new URLSearchParams(location.search);
-    // const provinceName = params.get('provinceName') || ('تهران' as any);
-    //
-    // const existsCity = sideCities.some((item: any) => {
-    //   return item.name === provinceName;
-    // });
-    //
-    // let idSetTimeOut: any;
-    // if (existsCity) {
-    //   idSetTimeOut = setTimeout(() => {
-    //     getLinearOverview({...queryParams, province: provinceName});
-    //   }, 500);
-    // } else {
-    //   history.push('/dashboard/vaccination/province');
-    // }
-    //
-    // return () => {
-    //   if (existsCity) {
-    //     source.cancel('Operation canceled by the user.');
-    //     clearTimeout(idSetTimeOut);
-    //     setDataset([])
-    //
-    //
-    //   }
-    // };
-  }, [queryParams, location.search]);
 
 
   useEffect(() => {
@@ -330,36 +210,59 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
     });
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setDataset((prev: any) => {
-        return {
-          ...prev,
-          categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-          series: [
-            {
-              name: 'واکسیناسیون',
-              color: {
-                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                stops: [
-                  [0, '#175A76'], // start
-                  [1, '#7DA6B8'], // end
-                ],
-              },
-              data: [
-                {name: 'دوز اول', y: Math.trunc((Math.random() * 100))},
-                {name: 'دوز دوم', y: Math.trunc((Math.random() * 100))},
-                {name: 'دوز سوم', y: Math.trunc((Math.random() * 100))},
-                {name: 'دوز چهارم', y: Math.trunc((Math.random() * 100))},
-                {name: 'دوز پنجم', y: Math.trunc((Math.random() * 100))},
-                {name: 'واکسن نزده ها', y: Math.trunc((Math.random() * 100))},
+
+  const getTripsCountCategoryBased = async () => {
+    setLoading(true);
+    try {
+      const {data} = await hcsService.getTripsCountCategoryBased(
+        {},
+        {cancelToken: cancelToken.token}
+      );
+
+      const categories: any = [];
+      const newData: any = [];
+
+      data.forEach((item: any) => {
+        categories.push(item.categoryValue)
+        newData.push({
+          name: item.categories,
+          y: item.count
+        })
+      })
+
+      setDataset({
+        categories,
+        series: [
+          {
+            name: 'واکسیناسیون',
+            color: {
+              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+              stops: [
+                [0, '#175A76'], // start
+                [1, '#7DA6B8'], // end
               ],
             },
-          ]
-        }
+            data: [...newData],
+          },
+        ]
       })
-    }, 5000)
-  }, [dataset])
+    } catch (error) {
+      // eslint-disable-next-line
+      setErrorMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getTripsCountCategoryBased();
+    // getPcrResult();
+    return () => {
+      cancelRequest();
+      setDataset(initialData)
+      // setGuildPcrInfo(initialPcrInfo);
+    };
+  }, []);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -450,19 +353,18 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
 
         </div>
 
-        <HeadlessChart data={dataset} optionsProp={optionChart}/>
-        {/* {loading && (
+        {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories}  notPercent/>
+        {!loading && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
-        {dataset.length === 0 && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )} */}
+        {/* {!loading && !errorMessage && ( */}
+        {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
+        {/* )} */}
       </div>
     </fieldset>
   )

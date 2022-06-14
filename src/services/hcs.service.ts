@@ -46,6 +46,15 @@ function patientsAfterTrip(params: any, config?: any) {
     });
 }
 
+function getTripsCountCategoryBased(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/category-based/count?lang=fa`, params, {
+      ...config,
+    });
+}
+
 function membersTagBased(
   {
     organization,
@@ -245,6 +254,20 @@ function getVaccinesGroupedByProvinceReport({...params}: any = {}, config?: any)
     .get(`/api/v1/hcs-reporter/vaccines/provinces`, params, {...config});
 }
 
+function getVaccinesTripGroupedByProvinceReport(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get('/api/v1/hcs-reporter/trips/vaccines/provinces', params, {...config});
+}
+
+function getPeopleVaccinesTripGeneralReport(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get('/api/v1/hcs-reporter/trips/people/vaccines/general', params, {...config});
+}
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -268,7 +291,10 @@ const hcsService = {
   getPeopleVaccine,
   accumulativeVaccinesTimeBasedReport,
   positivePcrPercentageProvinceBased,
-  getVaccinesGroupedByProvinceReport
+  getVaccinesGroupedByProvinceReport,
+  getVaccinesTripGroupedByProvinceReport,
+  getPeopleVaccinesTripGeneralReport,
+  getTripsCountCategoryBased
 };
 
 export default hcsService;
