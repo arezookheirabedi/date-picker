@@ -7,7 +7,7 @@ import Calendar from 'src/components/Calendar';
 import DatePickerModal from 'src/components/DatePickerModal';
 import Highcharts from 'highcharts';
 import {converters} from 'src/components/Guild/public/constant';
-import { isEmpty } from 'lodash';
+import {isEmpty } from 'lodash';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
