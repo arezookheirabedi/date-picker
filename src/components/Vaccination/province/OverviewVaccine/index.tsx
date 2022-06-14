@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import vaccineService from 'src/services/vaccine.service';
 import {useHistory, useLocation} from 'react-router-dom';
+import hcsService from 'src/services/hcs.service';
 import {IInitialVacinatelInfo, initialVacinatelInfo} from '../../public/constant';
 import OverViewVaccinationPercentageStatus from './OverviewVaccinePercentage';
 import OverviewVaccinationStatus from './OverviewVaccineCount';
@@ -11,6 +12,9 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
+  const [thelatestNumberOf, setThelatestNumberOf] =
+    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
+  const [theLatestloading, setTheLatestLoading] = useState(false);
 
   const cancelToken = cancelTokenSource();
 
@@ -38,7 +42,21 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
       setLoading(false);
     }
   };
-
+  const getTheLatestNumber = async (params: any) => {
+    setTheLatestLoading(true);
+    try {
+      const res = await hcsService.peopleLatestVaccinationOverview(params, {
+        cancelToken: cancelToken.token,
+      });
+      const finalResponse: any = {...res.data};
+      setThelatestNumberOf(finalResponse);
+    } catch (error: any) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setTheLatestLoading(false);
+    }
+  };
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -47,6 +65,7 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     });
     if (existsCity) {
       getNumberOf(provinceName);
+      getTheLatestNumber({province:provinceName});
     } else {
       history.push('/dashboard/vaccination/province');
     }
@@ -54,22 +73,28 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     return () => {
       cancelRequest();
       setNumberOf(initialVacinatelInfo);
+      setThelatestNumberOf(initialVacinatelInfo);
     };
   }, [location.search]);
 
   return (
     <div id="vaccination-overview">
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
+      <fieldset className="mb-16 rounded-xl border p-4 text-center">
+        <legend className="mx-auto px-3 text-black">
           نگاه کلی به وضعیت واکسیناسیون در استان {cityTitle}
         </legend>
         <OverviewVaccinationStatus loading={loading} numberOf={numberOf} />
       </fieldset>
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
+      <fieldset className="mb-16 rounded-xl border p-4 text-center">
+        <legend className="mx-auto px-3 text-black">
           نگاه کلی به درصد واکسیناسیون در استان {cityTitle}
         </legend>
-        <OverViewVaccinationPercentageStatus loading={loading} numberOf={numberOf} />
+        <OverViewVaccinationPercentageStatus
+          theLatestloading={theLatestloading}
+          thelatestNumberOf={thelatestNumberOf}
+          loading={loading}
+          numberOf={numberOf}
+        />
       </fieldset>
     </div>
   );
