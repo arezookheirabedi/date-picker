@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+
 import Statistic from "../../../containers/Guild/components/Statistic";
 import YellowVaccine from "../../../assets/images/icons/big-yellow-vaccine.svg";
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
@@ -7,11 +9,16 @@ import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg
 import VaccineIcon from "../../../assets/images/icons/vaccine-color.svg";
 import GreyVaccine from "../../../assets/images/icons/big-gray-vaccine.svg";
 import {IInitialNumberOfDoses, initialNumberOfDoses} from "../../Passengers/public/constant";
-import {cancelTokenSource, msgRequestCanceled} from "../../../helpers/utils";
+import {cancelTokenSource, msgRequestCanceled, sideCities} from "../../../helpers/utils";
 // import passengerService from "../../../services/passenger.service";
 import hcsService from "../../../services/hcs.service";
 
-const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard = () => {
+
+interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvinceProps {
+  cityTitle: any
+}
+
+const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React.FC<OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvinceProps> = ({cityTitle}) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
@@ -23,12 +30,13 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getVaccinateInfo = async () => {
+  const getVaccinateInfo = async (province: any) => {
     setLoading(true);
     try {
       const res = await hcsService.getPeopleVaccine(
         {
           tag: 'employee',
+          province
         },
         {cancelToken: cancelToken.token}
       );
@@ -45,19 +53,35 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard = () => {
     }
   };
 
+  const location = useLocation();
+  const history = useHistory();
+
   useEffect(() => {
-    getVaccinateInfo();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getVaccinateInfo(provinceName);
+    } else {
+      history.push('/dashboard/recruitment/province');
+    }
+
     // getPcrResult();
     return () => {
       cancelRequest();
       setNumberOf(initialNumberOfDoses);
       // setGuildPcrInfo(initialPcrInfo);
     };
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت در استان &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col justify-between space-y-8">
         {/* first card row */}
         <div
@@ -213,4 +237,4 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard = () => {
   )
 }
 
-export default OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard;
+export default OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince;

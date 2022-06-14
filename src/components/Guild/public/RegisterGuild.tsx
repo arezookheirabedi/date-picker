@@ -8,7 +8,6 @@ import Calendar from '../../Calendar';
 import Table from '../../TableScopeSort';
 
 const RegisterGuild: React.FC<{}> = () => {
- 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,17 +29,15 @@ const RegisterGuild: React.FC<{}> = () => {
   async function getTestResultByCategory(params: any) {
     setLoading(true);
     try {
-      const {data} = await guildService.guildTestResultByCategory(params, {
+      const {data} = await guildService.getRegisterCount(params, {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.categoryValue || 'نامشخص',
-         
-         
-          registeredCount: item.registeredCount || 0,
+          name: item.categoryName || 'نامشخص',
+          registeredCount: item.count || 0,
         });
       });
       setDataset([...normalizedData]);
@@ -56,8 +53,6 @@ const RegisterGuild: React.FC<{}> = () => {
   useEffect(() => {
     getTestResultByCategory({
       ...queryParams,
-      tag: 'guild',
-      category: 'categoryDesc',
     });
 
     return () => {

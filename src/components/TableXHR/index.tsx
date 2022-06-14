@@ -1,8 +1,9 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {Fragment, ReactNode, useEffect, useState} from 'react';
 // import qs from 'qs';
 // import {useLocation} from 'react-router-dom';
 import Empty from '../Empty';
 import Pagination from '../PaginationScope';
+import TableRow from './TableRow';
 
 const PAGE_SIZE = parseInt(process.env.REACT_APP_PAGE_SIZE || '15', 10);
 
@@ -42,11 +43,17 @@ interface IProps {
   totalItems: number;
   columns: IColumn[];
   dataSet: any[];
+  // eslint-disable-next-line react/require-default-props
   handlePageChange?: (page: number) => void;
+  // eslint-disable-next-line react/require-default-props
+  expandable?: {
+    rowExpandable: (record: any) => boolean;
+    expandedRowRender: (record: any) => any;
+  };
 }
 
 const Table: React.FC<IProps> = (props: IProps) => {
-  const {dataSet, pagination, columns, totalItems = 0, handlePageChange} = props;
+  const {dataSet, expandable, pagination, columns, totalItems = 0, handlePageChange} = props;
 
   // eslint-disable-next-line
   const [page, setPage] = useState<number>(pagination?.currentPage || 1);
@@ -62,6 +69,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
         <table className="w-full table-auto">
           <thead className="">
             <tr className="border-b border-gray-100">
+              {expandable ? <th>{}</th> : ''}
               {columns.map((column, i) => (
                 <th
                   // scope="col"
@@ -77,22 +85,15 @@ const Table: React.FC<IProps> = (props: IProps) => {
           <tbody className="bg-white dark:bg-gray-900 max-h-screen overflow-hidden overflow-y-scroll">
             {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
               dataSet.map((data, i) => (
-                // eslint-disable-next-line
-                <tr className="transition-all border-b border-gray-100" key={i}>
-                  {columns?.map((column, j) => (
-                    <td
-                      className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${
-                        column.className ? column.className : ''
-                      }`}
-                      // eslint-disable-next-line
-                      key={j}
-                    >
-                      {column.render
-                        ? column.render(data[column.key], data, i, page)
-                        : data[column.key]}
-                    </td>
-                  ))}
-                </tr>
+                <Fragment key={i}>
+                  <TableRow
+                    data={data}
+                    columns={columns}
+                    expandable={expandable}
+                    index={i}
+                    key={i}
+                  />
+                </Fragment>
               ))
             ) : (
               <tr>
@@ -113,7 +114,6 @@ const Table: React.FC<IProps> = (props: IProps) => {
           currentPage={pagination?.currentPage || page}
           setPage={setPage}
           pageSize={pageSize}
-          // maxPages={pagination?.maxPages || 4}
           maxPages={4}
         />
       ) : (

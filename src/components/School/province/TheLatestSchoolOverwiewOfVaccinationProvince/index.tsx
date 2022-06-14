@@ -130,7 +130,7 @@ const TheLatestOverwiewOfVaccination: React.FC<OverviewCategoriesProvinceProps> 
       if (existsCity) {
         getGuildVaccinateInfo({...queryParams, tag: 'edu', province: provinceName});
       } else {
-        history.push('/dashboard/guild/province');
+        history.push('/dashboard/school/province');
       }
     }, 500);
 

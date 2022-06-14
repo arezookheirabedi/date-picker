@@ -1,15 +1,26 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import OverviewPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewPassengersStatusCardProvince';
-import OverviewAirPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewAirPassengersStatusCardProvince';
-import OverviewLandPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewLandPassengersStatusCardProvince';
-import OverviewRailPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewRailPassengersStatusCardProvince';
-import OverviewSeaPassengerStatusCardProvince from 'src/components/Passengers/province/OverviewSeaPassengersStatusCardProvince';
-import OverviewPassengersVaccinateComponentProvince from 'src/components/Passengers/province/OverviewPassengerVaccinateProvince';
+import OverviewPassengerStatusCardProvince
+  from 'src/components/Passengers/province/OverviewPassengersStatusCardProvince';
+import OverviewAirPassengerStatusCardProvince
+  from 'src/components/Passengers/province/OverviewAirPassengersStatusCardProvince';
+import OverviewLandPassengerStatusCardProvince
+  from 'src/components/Passengers/province/OverviewLandPassengersStatusCardProvince';
+import OverviewRailPassengerStatusCardProvince
+  from 'src/components/Passengers/province/OverviewRailPassengersStatusCardProvince';
+import OverviewSeaPassengerStatusCardProvince
+  from 'src/components/Passengers/province/OverviewSeaPassengersStatusCardProvince';
+import OverviewPassengersVaccinateComponentProvince
+  from 'src/components/Passengers/province/OverviewPassengerVaccinateProvince';
 import {sideCities} from 'src/helpers/utils';
-import OverviewPaasengersVaccinePerDosesProvince from 'src/components/Passengers/province/OverviewPassengersVaccinePerDosesProvince';
-import OverviewPatientsPassengersProvince from 'src/components/Passengers/province/OverviewPatientsPassengersProvince';
+import OverviewPaasengersVaccinePerDosesProvince
+  from 'src/components/Passengers/province/OverviewPassengersVaccinePerDosesProvince';
+// import OverviewPatientsPassengersProvince from 'src/components/Passengers/province/OverviewPatientsPassengersProvince';
 import OverviewMap from '../../components/Passengers/province/OverviewMap';
+import OverviewOfTripsMadeByPassengersByVehicleProvince
+  from "../../components/Passengers/province/OverviewOfTripsMadeByPassengersByVehicleProvince";
+import OverviewOfAffectedAfterTravelingInCountryProvince
+  from "../../components/Passengers/province/OverviewOfAffectedAfterTravelingInCountryProvince";
 
 const PassengerProvince = () => {
   const location = useLocation();
@@ -34,14 +45,16 @@ const PassengerProvince = () => {
         sideCityStatus={sideCities}
         destinationId="passenger-overview"
       />
-      <OverviewPassengerStatusCardProvince cityTitle={cityTitle} />
-      <OverviewAirPassengerStatusCardProvince cityTitle={cityTitle} />
-      <OverviewLandPassengerStatusCardProvince cityTitle={cityTitle} />
-      <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle} />
-      <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle} />
-      <OverviewPassengersVaccinateComponentProvince cityTitle={cityTitle} />
-      <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle} />
-      <OverviewPatientsPassengersProvince cityTitle={cityTitle} />
+      <OverviewPassengerStatusCardProvince cityTitle={cityTitle}/>
+      <OverviewAirPassengerStatusCardProvince cityTitle={cityTitle}/>
+      <OverviewLandPassengerStatusCardProvince cityTitle={cityTitle}/>
+      <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle}/>
+      <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle}/>
+      <OverviewPassengersVaccinateComponentProvince cityTitle={cityTitle}/>
+      <OverviewPaasengersVaccinePerDosesProvince cityTitle={cityTitle}/>
+      {/* <OverviewPatientsPassengersProvince cityTitle={cityTitle}/> */}
+      <OverviewOfAffectedAfterTravelingInCountryProvince cityTitle={cityTitle}/>
+      <OverviewOfTripsMadeByPassengersByVehicleProvince cityTitle={cityTitle}/>
     </div>
   );
 };

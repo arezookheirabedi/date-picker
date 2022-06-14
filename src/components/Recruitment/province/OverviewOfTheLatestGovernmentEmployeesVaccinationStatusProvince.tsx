@@ -1,52 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import {useHistory, useLocation} from "react-router-dom";
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 
-import Spinner from '../../Spinner';
 import Charts from '../../Charts';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import hcsService from "../../../services/hcs.service";
+
+import Spinner from '../../Spinner';
 
 
 const {HeadlessChart} = Charts;
 
 const initialData = {
-  categories: [],
+  categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
   series: [
     {
-      name: 'واکسن نزده',
-      color: '#FF0060',
-      data: [],
-    },
-    {
-      name: 'دوز اول',
-      color: '#F3BC06',
-      data: [],
-    },
-    {
-      name: 'دوز دوم',
-      color: '#209F92',
-      data: [],
-    },
-    {
-      name: 'دوز سوم',
-      color: '#004D65',
-      data: [],
-    },
-    {
-      name: 'دوز چهارم',
-      color: '#BFDDE7',
-      data: [],
-    },
-    {
-      name: 'دوز پنجم',
-      color: '#716DE3',
-      data: [],
+      name: 'واکسیناسیون',
+      data: [
+        {name: 'دوز اول', y: 0, color: '#F3BC06'},
+        {name: 'دوز دوم', y: 0, color: '#209F92'},
+        {name: 'دوز سوم', y: 0, color: '#004D65'},
+        {name: 'دوز چهارم', y: 0, color: '#BFDDE7'},
+        {name: 'دوز پنجم', y: 0, color: '#716DE3'},
+        {name: 'واکسن نزده ها', y: 0, color: '#FF0060'},
+      ],
     },
   ]
 } as any;
-
 
 const converters = {
   fa(number: any) {
@@ -65,16 +47,12 @@ const optionChart = {
       const ret = Highcharts.numberFormat.apply(0, arguments as any);
       return converters.fa(ret);
     },
-
-
     events: {
       redraw: () => {
         // eslint-disable-next-line
         // console.log('redraw');
       },
     },
-    // zoomType: 'x'
-    // styledMode: true
   },
   title: {
     text: '',
@@ -98,14 +76,9 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
   plotOptions: {
     series: {
-      // stacking: 'percent',
-      // stacking: `${notPercent?'normal':'percent'}`,
-      stacking: 'percent',
-      // borderRadius: 5,
-      pointWidth: 15,
+      borderRadius: 10,
     },
     column: {
       threshold: null,
@@ -133,14 +106,11 @@ const optionChart = {
     labels: {
       rotation: 45,
     },
-    // lineDashStyle: 'dash',
-    // lineColor: '#000000',
-    // lineWidth: 1
   },
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: ' نفر',
+    valueSuffix: ' درصد',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -148,135 +118,109 @@ const optionChart = {
       fontSize: 10,
     },
     borderWidth: 0,
-    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
-
-  series: [],
 }
 
-const OverViewPassengerStatusVaccinateChart = () => {
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  const [dataset, setDataset] = useState<any[]>(initialData) as any;
-  // const [categories, setCategories] = useState<any[]>([]);
-  // const [showDatePicker, setShowDatePicker] = useState(false);
+interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvinceProps {
+  cityTitle: any
+}
+
+const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince: React.FC<OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvinceProps> = ({cityTitle}) => {
+
+  // const history = useHistory();
+  // const [categories, setCategories] = useState<any[]>();
   // eslint-disable-next-line
+  const [dataset, setDataset] = useState<any[]>(initialData);
   const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
-  // eslint-disable-next-line
-  const getVaccinesGroupedByProvinceReport = async () => {
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+
+  // eslint-disable-next-line consistent-return
+  const getVaccinateInfo = async (province: any) => {
     setLoading(true);
-    setErrorMessage(null);
     try {
-      const {data} = await hcsService.getVaccinesTripGroupedByProvinceReport({}, {cancelToken: source.token});
+      const {data} = await hcsService.getPeopleVaccine(
+        {
+          tag: 'employee',
+          province
+        },
+        {cancelToken: cancelToken.token}
+      );
 
-      console.log(data);
-
-      const provinces: any[] = [];
-
-      // eslint-disable-next-line
-      let firstDose: any[] = [];
-      // eslint-disable-next-line
-      let secondDose: any[] = [];
-      // eslint-disable-next-line
-      let thirdDose: any[] = [];
-      // eslint-disable-next-line
-      // eslint-disable-next-line
-      let forthDose: any[] = [];
-      // eslint-disable-next-line
-      let fifthDose: any[] = [];
       const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-      // eslint-disable-next-line
-      let noDose: any[] = [];
+      const dosesToTotalPopulationPercentage = {...initialDoses, ...data.dosesToTotalPopulationPercentage}
+      const dataTemp = {
+        categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
+        series: [
+          {
+            name: 'واکسیناسیون',
+            data: [
+              {name: 'دوز اول', y: dosesToTotalPopulationPercentage['1'], color: '#F3BC06'},
+              {name: 'دوز دوم', y: dosesToTotalPopulationPercentage['2'], color: '#209F92'},
+              {name: 'دوز سوم', y: dosesToTotalPopulationPercentage['3'], color: '#004D65'},
+              {name: 'دوز چهارم', y: dosesToTotalPopulationPercentage['4'], color: '#BFDDE7'},
+              {name: 'دوز پنجم', y: dosesToTotalPopulationPercentage['5'], color: '#716DE3'},
+              {
+                name: 'واکسن نزده ها',
+                y: data.totalNonVaccinesCountToTotalPopulationPercentage || 0,
+                color: '#FF0060'
+              },
+            ],
+          },
+        ]
+      } as any;
 
-      data.forEach((item: any) => {
-
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries({...initialDoses, ...item.doses})) {
-          if (Number(key) === 1) {
-            firstDose.push(Number(value));
-          }
-
-          if (Number(key) === 2) {
-            secondDose.push(Number(value));
-          }
-
-          if (Number(key) === 3) {
-            thirdDose.push(Number(value));
-          }
-
-          if (Number(key) === 4) {
-            forthDose.push(Number(value));
-          }
-
-          if (Number(key) === 5) {
-            fifthDose.push(Number(value));
-          }
-        }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-        provinces.push(item.province);
-      });
-
-      setDataset(() => {
-        return {
-          categories: provinces,
-          series: [
-            {
-              name: 'واکسن نزده',
-              color: '#FF0060',
-              data: [...noDose],
-            },
-            {
-              name: 'دوز اول',
-              color: '#F3BC06',
-              data: [...firstDose]
-            }, {
-              name: 'دوز دوم',
-              color: '#209F92',
-              data: [...secondDose]
-            }, {
-              name: 'دوز سوم',
-              color: '#004D65',
-              data: [...thirdDose]
-            }, {
-              name: 'دوز چهارم',
-              color: '#BFDDE7',
-              data: [...forthDose]
-            }, {
-              name: 'دوز پنجم',
-              color: '#716DE3',
-              data: [...fifthDose]
-            }]
-        }
-      })
-
-    } catch (error: any) {
-      setErrorMessage('خطا در اتصال به سرویس');
-      // eslint-disable-next-line
-      console.log(error);
+      setDataset(dataTemp)
+    } catch (error) {
+      console.log(error)
+      if(error.status >=500){
+        setErrorMessage('خطا در اتصال به سرور');
+        return null;
+      }
+      return error.message !== 'cancel' && setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getVaccinesGroupedByProvinceReport();
-    }, 500);
+  const location = useLocation();
+  const history = useHistory();
 
+  useEffect(() => {
+
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getVaccinateInfo(provinceName);
+    } else {
+      history.push('/dashboard/recruitment/province');
+    }
+
+    // getPcrResult();
     return () => {
-      clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
+      cancelRequest();
+      setDataset(initialData)
+      // setGuildPcrInfo(initialPcrInfo);
     };
-  }, []);
+  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون مسافران</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت در استان &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
@@ -313,27 +257,23 @@ const OverViewPassengerStatusVaccinateChart = () => {
           </div>
         </div>
 
-        {/* <Stacked data={dataset} categories={categories} /> */}
-
 
         {loading && (
           <div className="p-40">
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+
+        {errorMessage &&  <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
-        {/* {dataset.length === 0 && !loading && !errorMessage && ( */}
+        {/* {!loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}
-        {/* <div className="flex justify-center items-center w-full">
-          <Stacked data={dataset} categories={categories} />
-        </div> */}
       </div>
     </fieldset>
   )
 }
 
-export default OverViewPassengerStatusVaccinateChart;
+export default OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince;
