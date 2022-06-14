@@ -21,7 +21,7 @@ interface IVaccineStatus {
 const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}) => {
   return (
     <div className="flex flex-col justify-between space-y-8">
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={GreenVaccine}
           hasInfo
@@ -55,7 +55,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           loading={loading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           hasInfo
           infoText="تعداد افرادی که دوز چهارم واکسن را دریافت کرده‌اند."
@@ -90,7 +90,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           loading={loading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           hasInfo
           infoText="تعداد افرادی که حداقل یک دوز واکسن را دریافت کرده بوداند و بر اثر بیماری کرونا فوت کردند."
@@ -103,7 +103,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText=" مجموع تعداد دوز های تزریق شده در کل کشور"
           icon={blueVaccine}
           text="مجموع تعداد دوز واکسن تزریقی"
-          count={numberOf.gtDosesToTotalDosesPercentage[3] || 0}
+          count={numberOf.gtDoses[0] || 0}
           loading={loading}
           isPercentage
         />

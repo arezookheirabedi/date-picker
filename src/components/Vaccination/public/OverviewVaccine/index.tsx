@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import vaccineService from 'src/services/vaccine.service';
+import hcsService from 'src/services/hcs.service';
 import {IInitialVacinatelInfo, initialVacinatelInfo} from '../constant';
 import OverViewVaccinationPercentageStatus from './OverviewVaccinePercentage';
 import OverviewVaccinationStatus from './OverviewVaccineCount';
 
 const OverviewVaccine: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
+  const [theLatestloading, setTheLatestLoading] = useState(false);
+
   const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
+  const [thelatestNumberOf, setThelatestNumberOf] =
+    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
 
   const cancelToken = cancelTokenSource();
 
@@ -28,23 +33,49 @@ const OverviewVaccine: React.FC<{}> = () => {
     }
   };
 
+  const getTheLatestNumber = async () => {
+    setTheLatestLoading(true);
+    try {
+      const res = await hcsService.peopleLatestVaccinationOverview(
+        {},
+        {
+          cancelToken: cancelToken.token,
+        }
+      );
+      const finalResponse: any = {...res.data};
+      setThelatestNumberOf(finalResponse);
+    } catch (error: any) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setTheLatestLoading(false);
+    }
+  };
+
   useEffect(() => {
+    getTheLatestNumber();
     getNumberOf();
     return () => {
       cancelRequest();
       setNumberOf(initialVacinatelInfo);
+      setThelatestNumberOf(initialVacinatelInfo);
     };
   }, []);
 
   return (
     <>
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون کل کشور</legend>
+      <fieldset className="mb-16 rounded-xl border p-4 text-center">
+        <legend className="mx-auto px-3 text-black">نگاه کلی به وضعیت واکسیناسیون کل کشور</legend>
         <OverviewVaccinationStatus loading={loading} numberOf={numberOf} />
       </fieldset>
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">نگاه کلی به درصد واکسیناسیون کل کشور</legend>
-        <OverViewVaccinationPercentageStatus loading={loading} numberOf={numberOf} />
+      <fieldset className="mb-16 rounded-xl border p-4 text-center">
+        <legend className="mx-auto px-3 text-black">نگاه کلی به درصد واکسیناسیون کل کشور</legend>
+        <OverViewVaccinationPercentageStatus
+          theLatestloading={theLatestloading}
+          thelatestNumberOf={thelatestNumberOf}
+          loading={loading}
+          numberOf={numberOf}
+        />
       </fieldset>
     </>
   );

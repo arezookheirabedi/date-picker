@@ -15,12 +15,19 @@ import {IInitialVacinatelInfo} from '../constant';
 interface IVaccineStatus {
   loading: boolean;
   numberOf: IInitialVacinatelInfo;
+  thelatestNumberOf: IInitialVacinatelInfo;
+  theLatestloading: boolean;
 }
 
-const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}) => {
+const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
+  loading,
+  numberOf,
+  thelatestNumberOf,
+  theLatestloading,
+}) => {
   return (
     <div className="flex flex-col justify-between space-y-8">
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           isPercentage
           icon={GreenVaccine}
@@ -36,8 +43,8 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
           icon={YellowVaccine}
           text="درصد افراد دوز یک"
-          count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-          loading={loading}
+          count={thelatestNumberOf.dosesToTotalPopulationPercentage[1] || 0}
+          loading={theLatestloading}
         />
         <Statistic
           isPercentage
@@ -45,8 +52,8 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           icon={OrangeVaccine}
           text="درصد افراد دوز دوم"
-          count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
-          loading={loading}
+          count={thelatestNumberOf.dosesToTotalPopulationPercentage[2] || 0}
+          loading={theLatestloading}
         />
         <Statistic
           isPercentage
@@ -54,19 +61,19 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
           icon={PurppleVaccine}
           text="درصد افراد دوز سوم"
-          count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-          loading={loading}
+          count={thelatestNumberOf.dosesToTotalPopulationPercentage[3] || 0}
+          loading={theLatestloading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           isPercentage
           hasInfo
           infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
           icon={DarkgreenVaccine}
           text="درصد افراد دوز چهارم"
-          count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
-          loading={loading}
+          count={thelatestNumberOf.dosesToTotalPopulationPercentage[4] || 0}
+          loading={theLatestloading}
         />
         <Statistic
           isPercentage
@@ -74,8 +81,8 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}
           hasInfo
           infoText="درصد افرادی دوز پنجم واکسن را دریافت کرده‌اند."
           text="درصد افراد دوز پنجم"
-          count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-          loading={loading}
+          count={thelatestNumberOf.dosesToTotalPopulationPercentage[5] || 0}
+          loading={theLatestloading}
         />
         <Statistic
           isPercentage
@@ -96,7 +103,56 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}
           loading={loading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+        <Statistic
+          isPercentage
+          hasInfo
+          infoText=""
+          icon={YellowVaccine}
+          text="وضعیت دوز اول در سطح کشور"
+          count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
+          loading={loading}
+        />
+        <Statistic
+          isPercentage
+          hasInfo
+          infoText=""
+          icon={OrangeVaccine}
+          text="وضعیت دوز دوم در سطح کشور"
+          count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
+          loading={loading}
+        />
+        <Statistic
+          isPercentage
+          hasInfo
+          infoText=""
+          icon={PurppleVaccine}
+          text="وضعیت دوز سوم در سطح کشور"
+          count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
+          loading={loading}
+        />
+        <Statistic
+          isPercentage
+          hasInfo
+          infoText=""
+          icon={DarkgreenVaccine}
+          text="وضعیت دوز چهارم در سطح کشور"
+          count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
+          loading={loading}
+        />
+      </div>
+
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+        <Statistic
+          isPercentage
+          icon={NavyVaccine}
+          hasInfo
+          infoText=""
+          text="وضعیت دوز پنجم در سطح کشور"
+          count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
+          loading={loading}
+        />
         <Statistic
           isPercentage
           hasInfo
@@ -114,42 +170,10 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({loading, numberOf}
           count={numberOf.totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage || 0}
           loading={loading}
         />{' '}
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
-          {/* cvxdvcv */}
-        </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
       </div>
-
-      {/* <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic
-            icon={personGrayVaccine}
-            text="درصد افراد واکسینه نشده"
-            count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
-            isPercentage
-          />
-          <Statistic
-            icon={blueVaccine}
-            text="تعداد واکسیناسیون بیش از ۳ دوز"
-            count={numberOf.gtDoses[3] || 0}
-            loading={loading}
-          />
-          <Statistic
-            icon={blueVaccine}
-            text="درصد افراد با بیش از ۳ دوز"
-            count={numberOf.gtDosesToTotalDosesPercentage[3] || 0}
-            loading={loading}
-            isPercentage
-          />
-        </div> */}
-
-      {/* <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={greenVaccineBlackVirus} text="درصد فوتی های واکسینه شده" count="-" />
-          <Statistic icon={greyVaccine} text="مجموع تعداد دوز واکسن تزریقی" count="-" />
-          <Statistic icon={greyVaccine} text="تعداد اطلاعات مخدوش" loading={loading} count="-" />
-        </div> */}
     </div>
   );
 };
