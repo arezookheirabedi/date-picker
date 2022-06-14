@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from 'src/components/Vaccination/province/OverviewMap';
 import OverviewExistVaccineCount from 'src/components/Vaccination/province/OverviewExistVaccineCount';
-import OverviewVaccinePerDoses from 'src/components/Vaccination/province/OverviewVaccinePerDoses';
 import OverviewVaccine from 'src/components/Vaccination/province/OverviewVaccine';
 import OverviewExistVaccinePercentage from 'src/components/Vaccination/province/OverviewExistVaccinePercentage';
 
@@ -37,7 +36,6 @@ const Vaccination: React.FC<{}> = () => {
       {/* <OverviewVaccinationStatus cityTitle={cityTitle} /> */}
       <OverviewExistVaccineCount cityTitle={cityTitle} />
       <OverviewExistVaccinePercentage cityTitle={cityTitle} />
-      <OverviewVaccinePerDoses cityTitle={cityTitle} />
     </div>
   );
 };
