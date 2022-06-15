@@ -23,7 +23,6 @@ import Citizens from './containers/Citizens/Citizens';
 import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
-
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
 
 const routes: IRoute[] = [
