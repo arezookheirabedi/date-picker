@@ -1,5 +1,5 @@
 import React from 'react';
-import BakeryMonitoringList from 'src/components/Bakery/monitoring1';
+import BakeryMonitoringList from 'src/components/Bakery/monitoring';
 
 const BakeryMonitoring = () => {
   return (
