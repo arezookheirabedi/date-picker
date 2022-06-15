@@ -23,6 +23,7 @@ import Citizens from './containers/Citizens/Citizens';
 import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
+import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
 
 const routes: IRoute[] = [
   {
@@ -133,6 +134,13 @@ const routes: IRoute[] = [
         link: '/dashboard/bakery/province',
         icon: active => <IconWrapperStyle name="sub-bakery" active={active} />,
         main: BakeryProvince,
+      },
+      {
+        keyIndex: '3',
+        title: 'بازرسی آرد و نان',
+        link: '/dashboard/bakery/monitring',
+        icon: active => <IconWrapperStyle name="sub-bakery" active={active} />,
+        main: BakeryMonitoring,
       },
     ],
     // disabled: true,

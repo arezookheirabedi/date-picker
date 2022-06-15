@@ -146,6 +146,12 @@ function guildInquiry({ ...params }: any = {}, config?: any){
   .build()
   .get(`/api/v1/guilds/visit-histories/general/count`, params, { ...config });
 }
+function bakeryInspections(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/guilds/inspections/bakeries`, params, {...config});}
+
 export default {
   registerGuild,
   registerWorkshop,
@@ -162,5 +168,6 @@ export default {
   dosesTagBased,
   guildOverviewByCategory,
   guildTestResultByCategory,
-  guildInquiry
+  guildInquiry,
+  bakeryInspections
 };
