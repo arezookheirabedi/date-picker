@@ -74,7 +74,7 @@ export const obj = {
   qrCode: '0',
   unitNumber: '0',
 };
-export const initialValue = [{...obj}];
+export const mock = [{...obj}];
 
 export enum EMoshtariMadari {
   HIGH = 'HIGH',
@@ -297,26 +297,26 @@ export const getNerkhname = (data: any) => {
       return '-';
   }
 };
-export const getNaneMantaghe = (data: any) => {
-  switch (data) {
-    case true:
-      return 'تامین است';
-    case false:
-      return 'تامین نیست';
-    default:
-      return '-';
-  }
-};
-export const getArzenan = (data: any) => {
-  switch (data) {
-    case true:
-      return 'مصوب';
-    case false:
-      return 'غیر مصوب';
-    default:
-      return '-';
-  }
-};
+// export const getNaneMantaghe = (data: any) => {
+//   switch (data) {
+//     case true:
+//       return 'تامین است';
+//     case false:
+//       return 'تامین نیست';
+//     default:
+//       return '-';
+//   }
+// };
+// export const getArzenan = (data: any) => {
+//   switch (data) {
+//     case true:
+//       return 'مصوب';
+//     case false:
+//       return 'غیر مصوب';
+//     default:
+//       return '-';
+//   }
+// };
 export const getٰRaayateVazneChane= (data: any) => {
   switch (data) {
     case true:
