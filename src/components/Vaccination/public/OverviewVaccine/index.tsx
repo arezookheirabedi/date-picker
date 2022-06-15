@@ -9,18 +9,14 @@ import OverviewVaccinationStatus from './OverviewVaccineCount';
 const OverviewVaccine: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [theLatestloading, setTheLatestLoading] = useState(false);
-
   const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
   const [thelatestNumberOf, setThelatestNumberOf] =
     useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-
   const cancelToken = cancelTokenSource();
-
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  /*  */
   const getNumberOf = async () => {
     setLoading(true);
     try {
