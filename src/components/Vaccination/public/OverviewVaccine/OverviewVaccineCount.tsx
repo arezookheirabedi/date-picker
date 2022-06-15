@@ -71,7 +71,6 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           text="تعداد واکسیناسیون دوز پنجم"
           count={numberOf.doses[5] || 0}
           loading={loading}
-          isPercentage
         />
         <Statistic
           hasInfo
@@ -105,7 +104,6 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           text="مجموع تعداد دوز واکسن تزریقی"
           count={numberOf.gtDoses[0] || 0}
           loading={loading}
-          isPercentage
         />
         <Statistic
           hasInfo
@@ -124,35 +122,6 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           loading={loading}
         />{' '}
       </div>
-
-      {/* <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic
-            icon={personGrayVaccine}
-            text="درصد افراد واکسینه نشده"
-            count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
-            isPercentage
-          />
-          <Statistic
-            icon={blueVaccine}
-            text="تعداد واکسیناسیون بیش از ۳ دوز"
-            count={numberOf.gtDoses[3] || 0}
-            loading={loading}
-          />
-          <Statistic
-            icon={blueVaccine}
-            text="درصد افراد با بیش از ۳ دوز"
-            count={numberOf.gtDosesToTotalDosesPercentage[3] || 0}
-            loading={loading}
-            isPercentage
-          />
-        </div> */}
-
-      {/* <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={greenVaccineBlackVirus} text="درصد فوتی های واکسینه شده" count="-" />
-          <Statistic icon={greyVaccine} text="مجموع تعداد دوز واکسن تزریقی" count="-" />
-          <Statistic icon={greyVaccine} text="تعداد اطلاعات مخدوش" loading={loading} count="-" />
-        </div> */}
     </div>
   );
 };
