@@ -107,7 +107,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText=""
+          infoText="-"
           icon={YellowVaccine}
           text="وضعیت دوز اول در استان"
           count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
@@ -116,7 +116,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText=""
+          infoText="-"
           icon={OrangeVaccine}
           text="وضعیت دوز دوم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
@@ -125,7 +125,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText=""
+          infoText="-"
           icon={PurppleVaccine}
           text="وضعیت دوز سوم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
@@ -134,7 +134,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText=""
+          infoText="-"
           icon={DarkgreenVaccine}
           text="وضعیت دوز چهارم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
@@ -147,7 +147,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           isPercentage
           icon={NavyVaccine}
           hasInfo
-          infoText=""
+          infoText="-"
           text="وضعیت دوز پنجم در استان"
           count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
           loading={loading}
