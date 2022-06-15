@@ -55,7 +55,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
            <div className="flex">
               <div className="flex justify-start w-1/2 px-4 py-1">
                 <span className="text-xs font-bold text-sm ">شماره مجوز:</span>
-                <span className="pr-1">{record.allData.permissionNumber}</span>
+                <span className="pr-1">{record.allData.permissionNumber||"-"}</span>
               </div>
               <div className="flex justify-start w-1/2 px-4 py-1">
                 <span className="text-xs font-bold text-sm "> تاریخ:</span>
@@ -96,7 +96,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm "> شماره واحد:</span>
-              <span className="pr-1">{record.allData.unitNumber}</span>
+              <span className="pr-1">{record.allData.unitNumber||"-"}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm "> نام و نام خانوادگی متصدی:</span>
@@ -153,7 +153,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm ">آدرس:</span>
-              <span className="pr-1">{record.allData.address}</span>
+              <span className="pr-1">{record.allData.address||"-"}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">{/* kkkkkk */}</div>
           </div>
@@ -390,7 +390,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
                 <>
                   {' '}
                   {record.allData.parameters.noePokht.length === 0 ? (
-                    <></>
+                    <span>-</span>
                   ) : (
                     record.allData.parameters.noePokht.map((item: any) => {
                       return (
