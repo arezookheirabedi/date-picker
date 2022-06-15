@@ -228,12 +228,15 @@ function bakeryInspections(params: any = {}, config?: any) {
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/guilds/inspections/bakeries`, params, {...config});}
+<<<<<<< HEAD
 function getRegisterCount(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/guilds/reports/registered/category/count?lang=fa`, params, {...config});
 }
+=======
+>>>>>>> feature/bread-monitoring
 
 export default {
   registerGuild,
