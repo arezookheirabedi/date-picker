@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Statistic from '../../../containers/Guild/components/Statistic';
 import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import barekat from '../../../assets/images/logos/barekat.svg';
