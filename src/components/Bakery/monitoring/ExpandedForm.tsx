@@ -25,7 +25,8 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
     <div className="rounded bg-white p-4 px-2 pb-2 shadow-lg">
       <fieldset className="m-8 rounded-xl border  p-2 text-center lg:p-1">
         <legend className="mx-auto px-3 text-black">مشخصات بازرسین</legend>
-        {record.allData.inspectors.length === 0 ? (
+        <>
+        {record.allData.inspectors===null ? (
           <div>{}</div>
         ) : (
           <>
@@ -48,10 +49,13 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               );
             })}
 
-            <div className="flex">
+         
+          </>
+        )}
+           <div className="flex">
               <div className="flex justify-start w-1/2 px-4 py-1">
                 <span className="text-xs font-bold text-sm ">شماره مجوز:</span>
-                <span className="pr-1">{record.allData.permissionNumber}</span>
+                <span className="pr-1">{record.allData.permissionNumber||"-"}</span>
               </div>
               <div className="flex justify-start w-1/2 px-4 py-1">
                 <span className="text-xs font-bold text-sm "> تاریخ:</span>
@@ -80,12 +84,11 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <div className="flex justify-start w-1/2 px-4 py-1">
                 <span className="text-xs font-bold text-sm">موضوع گزارش :</span>
                 <span className="pr-1">
-                  {getMozoeGozaresh(record.allData.parameters.mozoueGozaresh || '-')}
+                  {getMozoeGozaresh(record.allData.parameters&&record.allData.parameters.mozoueGozaresh || '-')}
                 </span>
               </div>
             </div>
-          </>
-        )}
+        </>
       </fieldset>
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">محل بازرسی </legend>
@@ -93,7 +96,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm "> شماره واحد:</span>
-              <span className="pr-1">{record.allData.unitNumber}</span>
+              <span className="pr-1">{record.allData.unitNumber||"-"}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm "> نام و نام خانوادگی متصدی:</span>
@@ -143,14 +146,14 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm ">نرخ نامه:</span>
-              <span className="pr-1">{getNerkhname(record.allData.parameters.nerkhName)}</span>
+              <span className="pr-1">{getNerkhname(record.allData.parameters?record.allData.parameters.nerkhName||"":"")}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">{/* kkkkkk */}</div>
           </div>
           <div className="flex">
             <div className="flex justify-start w-1/2 px-4 py-1">
               <span className="text-xs font-bold text-sm ">آدرس:</span>
-              <span className="pr-1">{record.allData.address}</span>
+              <span className="pr-1">{record.allData.address||"-"}</span>
             </div>
             <div className="flex justify-start w-1/2 px-4 py-1">{/* kkkkkk */}</div>
           </div>
@@ -200,37 +203,37 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <div>
                 <span className="text-xs font-bold text-sm ">تعداد کارگران:</span>
                 <span className="pr-1">
-                  {Number(record.allData.parameters.jameTedadeKargaran || 0).toPersianDigits()}
+                  {Number(record.allData.parameters&&record.allData.parameters.jameTedadeKargaran||0 ).toPersianDigits()}
                 </span>
               </div>
               <div>
                 <span className="text-xs font-bold text-sm ">شاطر:</span>
                 <span className="pr-1">
-                  {Number(record.allData.parameters.tedadeShater || 0).toPersianDigits()}
+                  {Number(record.allData.parameters&&record.allData.parameterstedadeShater||0).toPersianDigits()}
                 </span>
               </div>
               <div>
                 <span className="text-xs font-bold text-sm ">خمیرگیر:</span>
                 <span className="pr-1">
-                  {Number(record.allData.parameters.tedadeKhamirGir || 0).toPersianDigits()}
+                  {Number(record.allData.parameters&&record.allData.parameters.tedadeKhamirGir||0 ).toPersianDigits()}
                 </span>
               </div>
               <div>
                 <span className="text-xs font-bold text-sm ">نان درآر:</span>
                 <span className="pr-1">
-                  {Number(record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()}
+                  {Number(record.allData.parameters&&record.allData.parameters.tedadeNanDarar || 0).toPersianDigits()}
                 </span>
               </div>
               <div>
                 <span className="text-xs font-bold text-sm ">چانه گیر:</span>
                 <span className="pr-1">
-                  {Number(record.allData.parameters.tedadeChaneGir || 0).toPersianDigits()}
+                  {Number(record.allData.parameters&&record.allData.parameters.tedadeChaneGir || 0).toPersianDigits()}
                 </span>
               </div>
               <div>
                 <span className="text-xs font-bold text-sm ">فروشنده:</span>
                 <span className="pr-1">
-                  {Number(record.allData.parameters.tedadeForoushandeh || 0).toPersianDigits()}
+                  {Number(record.allData.parameters&&record.allData.parameters.tedadeForoushandeh || 0).toPersianDigits()}
                 </span>
               </div>
             </div>
@@ -240,33 +243,33 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">مشتری مداری :</span>
-            <span className="pr-1">{getQuality(record.allData.parameters.moshtariMadari)}</span>
+            <span className="pr-1">{getQuality(record.allData.parameters&&record.allData.parameters.moshtariMadari||"")}</span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">نظافت کارگران:</span>
-            <span className="pr-1">{getQuality(record.allData.parameters.nezafateKargaran)}</span>
+            <span className="pr-1">{getQuality(record.allData.parameters&&record.allData.parameters.nezafateKargaran||"")}</span>
           </div>
         </div>
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">استعمال دخانیات:</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.estemaleDokhaniat)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.estemaleDokhaniat||"")}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">کارت بهداشت:</span>
-            <span className="pr-1">{getBooleanValue(record.allData.parameters.karteBehdasht)}</span>
+            <span className="pr-1">{getBooleanValue(record.allData.parameters&&record.allData.parameters.karteBehdasht||"")}</span>
           </div>
         </div>
       </fieldset>
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت آرد تخصیصی</legend>
         <>
-          {record.allData.parameters.mizaneTakhsis ? (
+          {record.allData.parameters ? (
             <>
               {' '}
-              {record.allData.parameters.mizaneTakhsis.length === 0 ? (
+              {record.allData.parameters.mizaneTakhsis===null? (
                 <div>{}</div>
               ) : (
                 <>
@@ -305,10 +308,10 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت تخلیه آرد</legend>
         <>
-          {record.allData.parameters.tarikheTakhlieArd ? (
+          {record.allData.parameters ? (
             <>
               {' '}
-              {record.allData.parameters.tarikheTakhlieArd.length === 0 ? (
+              {record.allData.parameters.tarikheTakhlieArd===null ? (
                 <div>{}</div>
               ) : (
                 <>
@@ -345,10 +348,10 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
       <fieldset className="m-8 rounded-xl border  p-4 text-center">
         <legend className="mx-auto px-3 text-black">وضعیت موجودی آرد در زمان بازرسی</legend>
         <>
-          {record.allData.parameters.mojoudiDarZamaneBazresi ? (
+          {record.allData.parameters ? (
             <>
               {' '}
-              {record.allData.parameters.mojoudiDarZamaneBazresi.length === 0 ? (
+              {record.allData.parameters.mojoudiDarZamaneBazresi===null ? (
                 <div>{}</div>
               ) : (
                 <>
@@ -383,11 +386,11 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">نوع پخت:</span>
             </div>
             <div>
-              {record.allData.parameters.noePokht ? (
+            {record.allData.parameters&&record.allData.parameters.noePokht ? (
                 <>
                   {' '}
                   {record.allData.parameters.noePokht.length === 0 ? (
-                    <></>
+                    <span>-</span>
                   ) : (
                     record.allData.parameters.noePokht.map((item: any) => {
                       return (
@@ -409,7 +412,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">تعداد پخت:</span>
             </div>
             <div>
-              {record.allData.parameters.tedadePokht ? (
+              {record.allData.parameters&&record.allData.parameters.tedadePokht ? (
                 Object.entries(record.allData.parameters.tedadePokht).map((item: any) => (
                   <div key={uuidv4()} className="mb-1 flex items-center">
                     <div className="w-2 h-2 rounded-full bg-gray-400 ml-2" />
@@ -430,7 +433,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">افزودنی ها:</span>
             </div>
             <div>
-              {record.allData.parameters.afzoudaniha ? (
+              {record.allData.parameters&&record.allData.parameters.afzoudaniha ? (
                 <>
                   {' '}
                   {record.allData.parameters.afzoudaniha.length === 0 ? (
@@ -456,7 +459,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">تنوع پخت در شعاع:</span>
             </div>
             <div>
-              {record.allData.parameters.tanavoePokhtDarShoa ? (
+              {record.allData.parameters&&record.allData.parameters.tanavoePokhtDarShoa ? (
                 Object.entries(record.allData.parameters.tanavoePokhtDarShoa).map((item: any) => (
                   <div key={uuidv4()} className="mb-1 flex items-center">
                     <div className="w-2 h-2 rounded-full bg-gray-400 ml-2" />
@@ -474,12 +477,12 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm "> مجموع واحد ها در شعاع:</span>
             <span className="pr-1">
-              {Number(record.allData.parameters.majmoueVahedhaDarShoa || 0).toPersianDigits()}
+              {Number(record.allData.parameters&&record.allData.parameters.majmoueVahedhaDarShoa || 0).toPersianDigits()}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm "> کیفیت نان تولیدی:</span>
-            <span className="pr-1">{getQuality(record.allData.parameters.keyfiat)}</span>
+            <span className="pr-1">{getQuality(record.allData.parameters&&record.allData.parameters.keyfiat||"")}</span>
           </div>
         </div>
         <div className="flex">
@@ -487,13 +490,13 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
             {' '}
             <span className="text-xs font-bold text-sm "> نان منطقه تامین است:</span>
             <span className="pr-1">
-              {getٰRaayateVazneChane(record.allData.parameters.naneMantagheTaminAst)}
+              {getٰRaayateVazneChane(record.allData.parameters&&record.allData.parameters.naneMantagheTaminAst||"")}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">عرضه نان به قیمت مصوب:</span>
             <span className="pr-1">
-              {getٰRaayateVazneChane(record.allData.parameters.arzeNanBeGheymateMosavab)}
+              {getٰRaayateVazneChane(record.allData.parameters&&record.allData.parameters.arzeNanBeGheymateMosavab||"")}
             </span>
           </div>
         </div>
@@ -501,13 +504,13 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">وزن چانه به گرم:</span>
             <span className="pr-1">
-              {Number(record.allData.parameters.vazneChaneh || 0).toPersianDigits()}
+              {Number(record.allData.parameters&&record.allData.parameters.vazneChaneh || 0).toPersianDigits()}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">رعایت وزن چانه:</span>
             <span className="pr-1">
-              {getٰRaayateVazneChane(record.allData.parameters.reayateVazneChaneVaNan)}
+              {getٰRaayateVazneChane(record.allData.parameters&&record.allData.parameters.reayateVazneChaneVaNan||"")}
             </span>
           </div>
         </div>
@@ -518,49 +521,49 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">مساحت:</span>
             <span className="pr-1">
-              {Number(record.allData.parameters.masahat || 0).toPersianDigits()} متر مربع
+              {Number(record.allData.parameters&&record.allData.parameters.masahat || 0).toPersianDigits()} متر مربع
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">ارتفاع:</span>
             <span className="pr-1">
-              {Number(record.allData.parameters.ertefa || 0).toPersianDigits()} متر
+              {Number(record.allData.parameters&&record.allData.parameters.ertefa || 0).toPersianDigits()} متر
             </span>
           </div>
         </div>
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">زیرزمین:</span>
-            <span className="pr-1">{getBooleanValue(record.allData.parameters.zirZaminDarad)}</span>
+            <span className="pr-1">{getBooleanValue(record.allData.parameters&&record.allData.parameters.zirZaminDarad||"")}</span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">بالکن:</span>
-            <span className="pr-1">{getBooleanValue(record.allData.parameters.balkonDarad)}</span>
+            <span className="pr-1">{getBooleanValue(record.allData.parameters&&record.allData.parameters.balkonDarad||"")}</span>
           </div>
         </div>
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">پروانه کسب:</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.parvaneKasbDarad)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.parvaneKasbDarad||"")}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">پروانه کسب روئت گردید:</span>
             <span className="pr-1">
-              {getٰRaayateVazneChane(record.allData.parameters.parvaneKasbRoyatGardid)}
+              {getٰRaayateVazneChane(record.allData.parameters&&record.allData.parameters.parvaneKasbRoyatGardid||"")}
             </span>
           </div>
         </div>
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">وضعیت ظاهری:</span>
-            <span className="pr-1">{getQuality(record.allData.parameters.vazeiateZaheri)}</span>
+            <span className="pr-1">{getQuality(record.allData.parameters&&record.allData.parameters.vazeiateZaheri||"")}</span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">محل استراحت:</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.mahaleEsterahatDarad)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.mahaleEsterahatDarad||"")}
             </span>
           </div>
         </div>
@@ -570,7 +573,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">پوشش دیوارها:</span>
             </div>
             <div>
-              {record.allData.parameters.poushesheDivarha ? (
+              {record.allData.parameters&&record.allData.parameters.poushesheDivarha ? (
                 <>
                   {record.allData.parameters.poushesheDivarha.length === 0 ? (
                     <></>
@@ -595,7 +598,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">پوشش کف:</span>
             </div>
             <div>
-            {record.allData.parameters.poushesheKaf ? (
+            {record.allData.parameters&&record.allData.parameters.poushesheKaf ? (
                 <>
                   {record.allData.parameters.poushesheKaf.length === 0 ? (
                     <></>
@@ -622,7 +625,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">تجهیزات بهداشتی:</span>
             </div>
             <div>
-              {record.allData.parameters.tajhizateBehdashti ? (
+              {record.allData.parameters&&record.allData.parameters.tajhizateBehdashti ? (
                 <>
                   {record.allData.parameters.tajhizateBehdashti.length === 0 ? (
                     <></>
@@ -647,7 +650,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">نوع درب و پنجره:</span>
             </div>
             <div>
-            {record.allData.parameters.noeDarbVaPanjareh ? (
+            {record.allData.parameters&&record.allData.parameters.noeDarbVaPanjareh ? (
                 <>
                   {record.allData.parameters.noeDarbVaPanjareh.length === 0 ? (
                     <></>
@@ -674,7 +677,7 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
               <span className="text-xs font-bold text-sm ">نوع خمیرگیر:</span>
             </div>
             <div>
-              {record.allData.parameters.khmirgir ? (
+              {record.allData.parameters&&record.allData.parameters.khmirgir ? (
                 <>
                   {record.allData.parameters.khmirgir.length === 0 ? (
                     <></>
@@ -696,20 +699,20 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">بهداشت عمومی:</span>
-            <span className="pr-1">{getQuality(record.allData.parameters.behdashtOmoumi)}</span>
+            <span className="pr-1">{getQuality(record.allData.parameters&&record.allData.parameters.behdashtOmoumi)}</span>
           </div>
         </div>
         <div className="flex">
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">محل نگهداری آرد:</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.mahaleNegahdariArdDarad)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.mahaleNegahdariArdDarad)}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">میز نان سرد کن:</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.mizeNansardkonDarad)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.mizeNansardkonDarad)}
             </span>
           </div>
         </div>
@@ -717,14 +720,14 @@ export const ExpandedForm: React.FC<any> = ({...record}) => {
           <div className="flex justify-start w-1/2 px-4 py-1">
             <span className="text-xs font-bold text-sm ">سرویس بهداشتی :</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.serviceBehdashtiDarad)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.serviceBehdashtiDarad)}
             </span>
           </div>
           <div className="flex justify-start w-1/2 px-4 py-1">
             {' '}
             <span className="text-xs font-bold text-sm ">محل انتظار مشتری :</span>
             <span className="pr-1">
-              {getBooleanValue(record.allData.parameters.mahaleEntezareMoshtariDarad)}
+              {getBooleanValue(record.allData.parameters&&record.allData.parameters.mahaleEntezareMoshtariDarad)}
             </span>
           </div>
         </div>
