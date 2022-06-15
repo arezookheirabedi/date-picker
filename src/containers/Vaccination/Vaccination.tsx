@@ -8,12 +8,11 @@ import OverviewVaccinationStatusChart from '../../components/Vaccination/public/
 const Vaccination = () => {
   return (
     <div className="space-y-16 mb-8">
-      {/* <OverviewVaccinationStatus />
-      <OverViewVaccinationPercentageStatus /> */}
+  
       <OverviewVaccine />
-      <OverviewExistVaccine />
+       <OverviewExistVaccine />
       <OverviewExistVaccinePercentage />
-      <OverviewVaccinationStatusChart />
+      <OverviewVaccinationStatusChart /> 
     </div>
   );
 };
