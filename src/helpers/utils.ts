@@ -1,4 +1,5 @@
 import Axios, {AxiosRequestConfig, CancelTokenSource} from 'axios';
+import dayjs from 'dayjs';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
 import {ILogin, IProfile} from 'src/models/authentication.model';
@@ -78,6 +79,17 @@ export const removeToken: () => void = () => {
 export const msgRequestCanceled = 'Operation canceled by the user.';
 export const cancelTokenSource = (): CancelTokenSource => {
   return Axios.CancelToken.source();
+};
+
+export const convertGregorianDateToObjectDate = (date: any, calendar?: 'gregory' | 'jalali') => {
+  if (!date) return null;
+  const d = dayjs(new Date(date));
+
+  return {
+    year: Number(d.calendar(calendar || 'jalali').format('YYYY')),
+    month: Number(d.calendar(calendar || 'jalali').format('MM')),
+    day: Number(d.calendar(calendar || 'jalali').format('DD')),
+  };
 };
 
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
