@@ -93,4 +93,5 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
     </>
   );
 };
+
 export default DatePicker;

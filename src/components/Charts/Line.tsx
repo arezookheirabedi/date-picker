@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
+import {toPersianDigit} from "../../helpers/utils";
 
 const converters = {
   fa(number: any) {
@@ -127,7 +128,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلای�
       const categories = [] as any;
       data.map((value: any) => {
         series.push(value.positiveMembersCount);
-        return categories.push(value.date);
+        return categories.push(toPersianDigit(value.date));
       });
       // console.log('series => ', series);
       // console.log('categories => ', categories);

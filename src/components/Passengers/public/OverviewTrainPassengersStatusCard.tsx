@@ -30,6 +30,10 @@ const OverviewTrainPassengersStatusCard: React.FC<{}> = () => {
   const [pcrLoading, setPcrLoading] = useState<boolean>(false);
   const [tripLoading, setTripLoading] = useState<boolean>(false);
   const [tripCount, setTripCount] = useState(0);
+  const [numberOfInquiryLoading, setNumberOfInquiryLoading] = useState<boolean>(false);
+  const [inquiryCount, setInquiryCount] = useState<number>(0);
+  const [illegalTicketsSoldLoading, setIllegalTicketsSoldLoading] = useState<boolean>(false);
+  const [illegalTicketsSold, setIllegalTicketsSold] = useState<number>(0);
   const [passengerVaccinateInfo, setPassengerVaccinateInfo] =
     useState<IInitialTotalVacinatelInfo>(initialTotalVacinatelInfo);
   const cancelToken = cancelTokenSource();
@@ -86,10 +90,44 @@ const OverviewTrainPassengersStatusCard: React.FC<{}> = () => {
     }
   };
 
+  const getNumberOfInquiry = async () => {
+    setNumberOfInquiryLoading(true);
+    try {
+      const {data} = await hcsService.getPassengerPermissionsCount({
+        permissionStatus: 'DISQUALIFIED',
+        type: 'TRAIN'
+      }, {cancelToken: cancelToken.token});
+      setInquiryCount(data.count);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNumberOfInquiryLoading(false);
+    }
+  }
+
+  const getIllegalTicketsSold = async () => {
+    setIllegalTicketsSoldLoading(true);
+    try {
+      const {data} = await hcsService.getPassengerPermissionsCount({
+        forSale: true,
+        permissionStatus: 'DISQUALIFIED',
+        type: 'TRAIN'
+      }, {cancelToken: cancelToken.token});
+      setIllegalTicketsSold(data.count);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIllegalTicketsSoldLoading(false);
+    }
+  }
+
   useEffect(() => {
     getPassengerVaccinateInfo();
     getPcrResult();
     getTripCount();
+    getNumberOfInquiry();
+    getIllegalTicketsSold();
+
     return () => {
       cancelRequest();
       setPassengerVaccinateInfo(initialTotalVacinatelInfo);
@@ -169,9 +207,9 @@ const OverviewTrainPassengersStatusCard: React.FC<{}> = () => {
             infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
             icon={redBaggage}
-            text="تعداد استعلام های فاقد اخذ خدمت"
-            count="-"
-            // loading={pcrLoading}
+            text="تعداد استعلام فاقد مجوز"
+            count={inquiryCount}
+            loading={numberOfInquiryLoading}
           />
           <Statistic
             icon={grayBaggage}
@@ -191,9 +229,8 @@ const OverviewTrainPassengersStatusCard: React.FC<{}> = () => {
             hasInfo
             icon={redBaggage}
             text="بلیط های غیرمجاز فروخته شده"
-            count="-"
-            // loading={pcrLoading}
-            isPercentage
+            count={illegalTicketsSold}
+            loading={illegalTicketsSoldLoading}
           />
         </div>
         {/* fourth card row */}

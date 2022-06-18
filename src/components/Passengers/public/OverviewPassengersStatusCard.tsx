@@ -28,6 +28,10 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pcrLoading, setPcrLoading] = useState<boolean>(false);
   const [tripLoading, setTripLoading] = useState<boolean>(false);
+  const [numberOfInquiryLoading, setNumberOfInquiryLoading] = useState<boolean>(false);
+  const [inquiryCount, setInquiryCount] = useState<number>(0);
+  const [illegalTicketsSoldLoading, setIllegalTicketsSoldLoading] = useState<boolean>(false);
+  const [illegalTicketsSold, setIllegalTicketsSold] = useState<number>(0);
   const [tripCount, setTripCount] = useState(0);
   const [passengerPcrInfo, setPassengerPcrInfo] = useState<IInitialPcrInfo>(initialpcrInfo);
   const [passengerVaccinateInfo, setPassengerVaccinateInfo] =
@@ -37,6 +41,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
+
   const getPcrResult = async (): Promise<any> => {
     setPcrLoading(true);
     try {
@@ -52,6 +57,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
       setPcrLoading(false);
     }
   };
+
   const getPassengerVaccinateInfo = async () => {
     setLoading(true);
     try {
@@ -80,10 +86,41 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
     }
   };
 
+  const getNumberOfInquiry = async () => {
+    setNumberOfInquiryLoading(true);
+    try {
+      const {data} = await hcsService.getPassengerPermissionsCount({
+        permissionStatus: 'DISQUALIFIED'
+      }, {cancelToken: cancelToken.token});
+      setInquiryCount(data.count);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setNumberOfInquiryLoading(false);
+    }
+  }
+
+  const getIllegalTicketsSold = async () => {
+    setIllegalTicketsSoldLoading(true);
+    try {
+      const {data} = await hcsService.getPassengerPermissionsCount({
+        forSale: true,
+        permissionStatus: 'DISQUALIFIED'
+      }, {cancelToken: cancelToken.token});
+      setIllegalTicketsSold(data.count);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIllegalTicketsSoldLoading(false);
+    }
+  }
+
   useEffect(() => {
     getPassengerVaccinateInfo();
     getPcrResult();
     getTripCount();
+    getNumberOfInquiry();
+    getIllegalTicketsSold();
     return () => {
       cancelRequest();
       setPassengerVaccinateInfo(initialTotalVacinatelInfo);
@@ -98,7 +135,8 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
 
       <div className="flex flex-col justify-between space-y-8">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalPassengers}
             text="مجموع مسافران "
@@ -127,7 +165,8 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
 
         {/* second card row */}
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="افرادی که دو دوز واکسن دریافت نموده اند واکسینه شده تلقی می گردند.      "
             hasInfo
@@ -158,14 +197,15 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
           />
         </div>
         {/* third card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
             icon={redBaggage}
-            text="تعداد استعلام های فاقد اخذ خدمت"
-            count="-"
-            // loading={pcrLoading}
+            text="تعداد استعلام فاقد مجوز"
+            count={inquiryCount}
+            loading={numberOfInquiryLoading}
           />
           <Statistic
             icon={grayBaggage}
@@ -185,13 +225,13 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
             hasInfo
             icon={redBaggage}
             text="بلیط های غیرمجاز فروخته شده"
-            count="-"
-            // loading={pcrLoading}
-            isPercentage
+            count={illegalTicketsSold}
+            loading={illegalTicketsSoldLoading}
           />
         </div>
         {/* fourth card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             loading={pcrLoading}
             icon={testIcon}
