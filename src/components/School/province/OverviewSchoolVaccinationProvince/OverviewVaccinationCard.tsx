@@ -64,8 +64,8 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
 
   return (
     <>
-      <div className="flex mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="mt-7 flex flex-col justify-between space-y-8 border-gray-100 py-5">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع کارمندان آموزشی که در  آموزش و پرورش فعالیت دارند."
@@ -102,13 +102,13 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="تعداد افرادی  که دوز اول واکسن را دریافت کرده‌اند."
             hasInfo
             icon={YellowVaccine}
             text="تعداد واکسیناسیون دوز اول"
-            count={numberOf.doses[1]}
+            count={numberOf.doses[1] || 0}
             loading={loading}
           />
 
@@ -116,7 +116,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             infoText="تعداد افرادی  که دوز دوم واکسن را دریافت کرده‌اند."
             icon={OrangeVaccine}
             text="تعداد واکسیناسیون دوز دوم"
-            count={numberOf.doses[2]}
+            count={numberOf.doses[2] || 0}
             hasInfo
             loading={loading}
           />
@@ -125,7 +125,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             hasInfo
             infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
             icon={PurppleVaccine}
-            count={numberOf.doses[3]}
+            count={numberOf.doses[3] || 0}
             loading={loading}
           />
 
@@ -133,7 +133,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             infoText="تعداد افرادی  که دوز چهارم  واکسن را دریافت کرده‌اند."
             icon={DarkgreenVaccine}
             text="تعداد واکسیناسیون دوز چهارم"
-            count={numberOf.doses[4]}
+            count={numberOf.doses[4] || 0}
             hasInfo
             loading={loading}
           />
@@ -164,32 +164,32 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
           </div>
         </div> */}
       </div>
-      <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           infoText="تعداد افرادی  که دوز پنجم واکسن را دریافت کرده‌اند "
           hasInfo
           icon={BlueVaccine}
           text="تعداد واکسیناسیون دوز پنجم"
-          count={numberOf.doses[5]}
+          count={numberOf.doses[5] || 0}
           loading={loading}
         />
 
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
       </div>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="mt-7 flex flex-col justify-between space-y-8 border-t-4 border-solid border-gray-100 py-5">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             text={`درصد واکسیناسیون استان ${cityTitle}`}
             hasInfo
@@ -205,7 +205,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
             icon={YellowVaccine}
             text="درصد افراد با دوز یک "
-            count={numberOf.dosesToTotalPopulationPercentage[1]}
+            count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
             loading={loading}
             isPercentage
           />
@@ -214,7 +214,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             hasInfo
             icon={OrangeVaccine}
             text="درصد افراد با دوز دوم "
-            count={numberOf.dosesToTotalPopulationPercentage[2]}
+            count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
             loading={loading}
             isPercentage
           />
@@ -222,7 +222,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
             icon={PurppleVaccine}
             text="درصد افراد با دوز سوم"
-            count={numberOf.dosesToTotalPopulationPercentage[3]}
+            count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
             hasInfo
             loading={loading}
             isPercentage
@@ -231,12 +231,12 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
             icon={DarkgreenVaccine}
             text="درصد افراد با دوز چهارم"
-            count={numberOf.dosesToTotalPopulationPercentage[4]}
+            count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             hasInfo
             loading={loading}
             isPercentage
@@ -247,7 +247,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             hasInfo
             icon={BlueVaccine}
             text="درصد افراد با دوز پنجم"
-            count={numberOf.dosesToTotalPopulationPercentage[5]}
+            count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
             loading={loading}
             isPercentage
           />
@@ -262,10 +262,10 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             isPercentage
           /> */}
 
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
         </div>
