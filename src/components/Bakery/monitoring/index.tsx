@@ -172,14 +172,25 @@ const BakeryMonitoringList: React.FC<{}> = () => {
 
                 {
                   name: 'تاریخ آخرین بازرسی',
-                  key: 'inspectionDateTime',
+                  key: 'lastInspectionDateTime',
                   render: (v: any, record: any) => (
                     <>
                       <div className="flex w-full justify-center">
                         <span className="whitespace-normal text-gray-500 ">
-                          {toPersianDigit(
-                            dayjs(record.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
-                          )}
+
+
+                        {record.lastInspectionDateTime ? (
+                          toPersianDigit(
+                            dayjs(record.lastInspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                          )
+                        ) : (
+                          <>-</>
+                        )}
+
+
+
+
+                         
                         </span>
                       </div>
                     </>

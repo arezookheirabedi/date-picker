@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from "react-router-dom";
+import axios from "axios";
+import hcsService from 'src/services/hcs.service';
 import testIcon from 'src/assets/images/icons/test-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
+import {cancelTokenSource, sideCities} from 'src/helpers/utils';
+import passengerService from 'src/services/passenger.service';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import GreyVaccine from '../../../assets/images/icons/big-gray-vaccine.svg';
 import totalPassengers from '../../../assets/images/icons/total-passengers.svg';
@@ -13,91 +16,115 @@ import grayBaggage from '../../../assets/images/icons/gray-baggage.svg';
 import redBaggage from '../../../assets/images/icons/red-baggage.svg';
 import passengerPositiveTest from '../../../assets/images/icons/passenger-positive-test.svg';
 import negetiveTestIcon from '../../../assets/images/icons/negetive-test-icon.svg';
-import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
-import noneVacsinateStart from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
-import hcsService from '../../../services/hcs.service';
-import {sideCities} from '../../../helpers/utils';
+// import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
+// import noneVacsinateStart from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
 
-const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-const initialNumberOf = {
-  doses: {...initialDoses},
-  // dosesPercentage: {...initialDoses},
-  dosesToTotalPopulationPercentage: {...initialDoses},
-  gtDoses: {...initialDoses},
-  // gtDosesPercentage: {...initialDoses},
-  // gtDosesToTotalPopulationPercentage: {...initialDoses},
-  gtDosesToTotalDosesPercentage: {...initialDoses},
-  totalPopulation: 0,
-  totalUnknownVaccinesCount: 0,
-  totalPassengerCount: 0,
-  totalPassengerCountToTotalPopulationPercentage: 0,
-  totalVaccinesPercentage: 0,
-};
+import {
+  IInitialPcrInfo,
+  IInitialTotalVacinatelInfo,
+  initialpcrInfo,
+  initialTotalVacinatelInfo,
+} from '../public/constant';
 
-const initialTestResults = {
-  totalPopulation: 0,
-  positiveMembersCountAfterTrip: 0,
-  testResultsCount: 0,
-  negativeTestResultsCount: 0,
-  positiveMembersCountAfterTripToTotalPopulationPercentage: 0,
-};
 
 const OverviewRailPassengersStatusCardProvince: React.FC<any> = ({cityTitle}) => {
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  const [testResultloading, setTestResultloading] = useState(false);
-  // eslint-disable-next-line
-  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
-  const [testResults, setTestResults] = useState<any>(initialTestResults);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [passengerPcrInfo, setPassengerPcrInfo] = useState<IInitialPcrInfo>(initialpcrInfo);
+  const [pcrLoading, setPcrLoading] = useState<boolean>(false);
+  const [tripLoading, setTripLoading] = useState<boolean>(false);
   const [tripCount, setTripCount] = useState(0);
+  // const [numberOfInquiryLoading, setNumberOfInquiryLoading] = useState<boolean>(false);
+  // const [inquiryCount, setInquiryCount] = useState<number>(0);
+  // const [illegalTicketsSoldLoading, setIllegalTicketsSoldLoading] = useState<boolean>(false);
+  // const [illegalTicketsSold, setIllegalTicketsSold] = useState<number>(0);
+  const [passengerVaccinateInfo, setPassengerVaccinateInfo] =
+    useState<IInitialTotalVacinatelInfo>(initialTotalVacinatelInfo);
+  const cancelToken = cancelTokenSource();
+
   const {CancelToken} = axios;
   const source = CancelToken.source();
-  const getNumberOf = async (province: string) => {
-    setLoading(true);
+
+  const getPcrResult = async (province: any): Promise<any> => {
+    setPcrLoading(true);
     try {
-      const {data} = await hcsService.tripVaccinationGeneral(
+      const res = await passengerService.passengerTestResult(
         {province, type: 'TRAIN'},
         {cancelToken: source.token}
       );
-      setNumberOf({...data});
+      if (res.status === 200) {
+        const newData = {...passengerPcrInfo, ...res.data};
+        setPassengerPcrInfo(newData);
+      }
     } catch (error) {
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setPcrLoading(false);
+    }
+  };
+  const getPassengerVaccinateInfo = async (province: any) => {
+    setLoading(true);
+    try {
+      const res = await passengerService.getDoses(
+        {province, type: 'TRAIN'},
+        {cancelToken: source.token}
+      );
+      if (res.status === 200) {
+        const newData = {...passengerVaccinateInfo, ...res.data};
+        setPassengerVaccinateInfo(newData);
+      }
+    } catch (error) {
+      // eslint-disable-next-line
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getTestResults = async (province: string) => {
-    setTestResultloading(true);
+  const getTripCount = async (province: any) => {
+    setTripLoading(true);
     try {
-      const {data} = await hcsService.tripTestResultsGeneral(
-        {province, type: 'TRAIN'},
-        {cancelToken: source.token}
-      );
-      // console.log(data);
-      setTestResults({...data});
-      // setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTestResultloading(false);
-    }
-  };
-
-  const getTripCount = async (province: string) => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.tripsCount(
-        {province, type: 'TRAIN'},
-        {cancelToken: source.token}
-      );
+      const {data} = await hcsService.tripsCount({province, type: 'TRAIN'}, {cancelToken: cancelToken.token});
       setTripCount(data.count);
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setTripLoading(false);
     }
   };
+
+  // const getNumberOfInquiry = async (province: any) => {
+  //   setNumberOfInquiryLoading(true);
+  //   try {
+  //     const {data} = await hcsService.getPassengerPermissionsCount({
+  //       province,
+  //       permissionStatus: 'DISQUALIFIED',
+  //       type: 'TRAIN'
+  //     }, {cancelToken: cancelToken.token});
+  //     setInquiryCount(data.count);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setNumberOfInquiryLoading(false);
+  //   }
+  // }
+  //
+  // const getIllegalTicketsSold = async (province: any) => {
+  //   setIllegalTicketsSoldLoading(true);
+  //   try {
+  //     const {data} = await hcsService.getPassengerPermissionsCount({
+  //       province,
+  //       forSale: true,
+  //       permissionStatus: 'DISQUALIFIED',
+  //       type: 'TRAIN'
+  //     }, {cancelToken: cancelToken.token});
+  //     setIllegalTicketsSold(data.count);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setIllegalTicketsSoldLoading(false);
+  //   }
+  // }
 
   const history = useHistory();
   const location = useLocation();
@@ -109,132 +136,150 @@ const OverviewRailPassengersStatusCardProvince: React.FC<any> = ({cityTitle}) =>
       return item.name === provinceName;
     });
     if (existsCity) {
-      getNumberOf(provinceName);
-      getTestResults(provinceName);
+      getPassengerVaccinateInfo(provinceName);
+      getPcrResult(provinceName);
       getTripCount(provinceName);
+      // getNumberOfInquiry(provinceName);
+      // getIllegalTicketsSold(provinceName);
     } else {
       history.push('/dashboard/passenger/province');
     }
 
     return () => {
-      setNumberOf(initialNumberOf);
-      setTestResults(initialTestResults);
+      setPassengerVaccinateInfo(initialTotalVacinatelInfo);
+      setPassengerPcrInfo(initialpcrInfo);
       setTripCount(0);
+      // setInquiryCount(0);
+      // setIllegalTicketsSold(0);
       source.cancel('Operation canceled by the user.');
     };
   }, [location.search]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="passenger-overview">
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به وضعیت مسافران ریلی در استان &nbsp; {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalPassengers}
-            text="مجموع مسافران "
-            count={numberOf.totalPopulation}
+            text="مجموع مسافران ریلی"
+            count={passengerVaccinateInfo.totalPopulation}
             loading={loading}
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان بعد از سفر"
-            count={testResults.positiveMembersCountAfterTrip}
-            loading={testResultloading}
+            count={passengerPcrInfo.positiveMembersCountAfterTrip || 0}
+            loading={pcrLoading}
           />
           <Statistic
             icon={suspiciousCovid}
             text="مجموع مسافران مشکوک به کوید"
             count="-"
-            loading={false}
+            // loading={pcrLoading}
           />
-          <Statistic icon={deadIcon} text="مجموع مسافران با تست نامشخص" count="-" loading={false} />
+          <Statistic
+            icon={deadIcon}
+            text="مجموع مسافران با تست نامشخص"
+            count="-"
+            // loading={pcrLoading}
+          />
         </div>
 
         {/* second card row */}
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="افرادی که دو دوز واکسن دریافت نموده اند واکسینه شده تلقی می گردند.      "
             hasInfo
             icon={VaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={numberOf.totalVaccinesCount || 0}
+            count={passengerVaccinateInfo.totalVaccinesCount}
             loading={loading}
           />
           <Statistic
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
-            count={numberOf.totalNonVaccinesCount || 0}
+            count={passengerVaccinateInfo.totalNonVaccinesCount}
             loading={loading}
           />
           <Statistic
             icon={VaccineIcon}
             text="درصد افراد واکسینه شده"
-            count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
+            count={passengerVaccinateInfo.totalVaccinesCountToTotalPopulationPercentage}
             loading={loading}
             isPercentage
           />
           <Statistic
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
-            count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
+            count={passengerVaccinateInfo.totalNonVaccinesCountToTotalPopulationPercentage}
             loading={loading}
             isPercentage
           />
         </div>
         {/* third card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
             icon={redBaggage}
-            text="تعداد سفر های جلوگیری شده"
+            text="تعداد استعلام فاقد مجوز"
             count="-"
-            loading={false}
+            // loading={numberOfInquiryLoading}
           />
           <Statistic
-            infoText=""
             icon={grayBaggage}
             text="مجموع سفرهای صورت گرفته"
             count={tripCount}
-            loading={false}
+            loading={tripLoading}
           />
           <Statistic
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
-            count={testResults.positiveMembersCountAfterTripToTotalPopulationPercentage || 0}
-            loading={testResultloading}
+            count={passengerPcrInfo.positiveMembersCountAfterTripToTotalPopulationPercentage || 0}
+            loading={pcrLoading}
             isPercentage
           />
           <Statistic
             infoText="مرجع صادر کننده بلیط اجازه صدور بلیط نداشته ولی بلیط صادر شده است."
             hasInfo
             icon={redBaggage}
-            text="مجموع سفر های غیر مجاز"
+            text="بلیط های غیرمجاز فروخته شده"
             count="-"
-            loading={false}
-            isPercentage
+            // loading={illegalTicketsSoldLoading}
           />
         </div>
         {/* fourth card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
+            loading={pcrLoading}
             icon={testIcon}
             text="تعداد آزمایش‌های مسافران"
-            count={testResults.testResultsCount || 0}
-            loading={testResultloading}
+            count={passengerPcrInfo.testResultsCount || 0}
           />
           <Statistic
+            loading={pcrLoading}
             icon={negetiveTestIcon}
             text="تعداد تست‌های منفی"
-            count={testResults.negativeTestResultsCount || 0}
-            loading={testResultloading}
+            count={passengerPcrInfo.negativeTestResultsCount || 0}
           />
-          <Statistic
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+            {/* cvxdvcv */}
+          </div>
+          {/* <Statistic
+            //  loading={pcrLoading}
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
             count="-"
@@ -242,8 +287,9 @@ const OverviewRailPassengersStatusCardProvince: React.FC<any> = ({cityTitle}) =>
           <Statistic
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
+            // loading={pcrLoading}
             count="-"
-          />
+          /> */}
         </div>
       </div>
     </fieldset>
@@ -251,3 +297,4 @@ const OverviewRailPassengersStatusCardProvince: React.FC<any> = ({cityTitle}) =>
 };
 
 export default OverviewRailPassengersStatusCardProvince;
+
