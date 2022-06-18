@@ -207,7 +207,7 @@ const OverviewTrainPassengersStatusCard: React.FC<{}> = () => {
             infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
             icon={redBaggage}
-            text="تعداد استعلام های فاقد اخذ خدمت"
+            text="تعداد استعلام فاقد مجوز"
             count={inquiryCount}
             loading={numberOfInquiryLoading}
           />
