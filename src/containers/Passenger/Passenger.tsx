@@ -29,6 +29,8 @@ const Passenger = () => {
        <OverviewOfAffectedAfterTravelingInCountry/>
        <OverviewOfLatestPassengersVaccinationStatus/>
       <OverviewOfTripsMadeByPassengersByVehicle/>
+
+      {/* out of data */}
       {/* <OverviewPassengerPatients /> */}
     </div>
   );
