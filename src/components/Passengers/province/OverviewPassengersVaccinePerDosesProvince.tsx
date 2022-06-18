@@ -17,7 +17,7 @@ interface OverviewPaasengersVaccinePerDosesProvinceProps {
   cityTitle: string;
 }
 
-const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVaccinePerDosesProvinceProps> =
+const OverviewPassengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVaccinePerDosesProvinceProps> =
   ({cityTitle}) => {
     const {CancelToken} = axios;
     const source = CancelToken.source();
@@ -252,4 +252,4 @@ const OverviewPaasengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
     );
   };
 
-export default OverviewPaasengersVaccinePerDosesProvince;
+export default OverviewPassengersVaccinePerDosesProvince;
