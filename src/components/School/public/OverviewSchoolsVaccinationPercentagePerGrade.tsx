@@ -101,7 +101,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [queryParams]);
 

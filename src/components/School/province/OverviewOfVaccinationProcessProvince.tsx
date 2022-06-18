@@ -217,7 +217,7 @@ const OverviewOfVaccinationProcessProvince: React.FC<OverviewOfVaccinationProvin
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [location.search]);
 

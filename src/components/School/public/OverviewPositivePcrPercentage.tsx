@@ -5,10 +5,7 @@ import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
-import {
-  cancelTokenSource,
-  msgRequestCanceled,
-} from '../../../helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
@@ -39,24 +36,37 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartPositivePcrPercentage = async (from:any,to:any) => {
+  const getColumnChartPositivePcrPercentage = async (from: any, to: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} =await hcsService.tableOverviewTestResults('edu', 'grade', {
-        lang: 'fa',
-        from,
-        to,
-      },{cancelToken: cancelToken.token});
+      const {data} = await hcsService.tableOverviewTestResults(
+        'edu',
+        'grade',
+        {
+          lang: 'fa',
+          from,
+          to,
+        },
+        {cancelToken: cancelToken.token}
+      );
       const categoryValue: any[] = [];
 
       const positiveMembersCountToMembersCountPercentage: any[] = [];
       data.forEach((item: any) => {
         categoryValue.push(item.categoryValue);
-        positiveMembersCountToMembersCountPercentage.push(item.positiveMembersCountToMembersCountPercentage);
+        positiveMembersCountToMembersCountPercentage.push(
+          item.positiveMembersCountToMembersCountPercentage
+        );
       });
       // setCategories([...province]);
-      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCountToMembersCountPercentage]}];
+      const newData = [
+        {
+          showInLegend: false,
+          name: 'درصد ابتلا',
+          data: [...positiveMembersCountToMembersCountPercentage],
+        },
+      ];
       // setDataset([...newData]);
       setDataset({categories: [...categoryValue], series: [...newData]});
     } catch (error: any) {
@@ -70,13 +80,13 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getColumnChartPositivePcrPercentage(queryParams.from,queryParams.to);
+      getColumnChartPositivePcrPercentage(queryParams.from, queryParams.to);
     }, 500);
     // normalizeData(mockRegisterPercentage);
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [queryParams]);
 
@@ -191,13 +201,13 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد ابتلای آموزش و پرورش در هر مقطع تحصیلی
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             {/* <div className="flex items-center">
               <SearchableSingleSelect
                 objectKey="categoryValue"
