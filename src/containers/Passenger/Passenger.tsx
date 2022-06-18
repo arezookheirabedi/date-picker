@@ -4,7 +4,7 @@ import OverviewAirlinesPassengersStatusCard
 import OverviewBusPassengersStatusCard from 'src/components/Passengers/public/OverviewBusPassengersStatusCard';
 import OverviewShipPassengersStatusCard from 'src/components/Passengers/public/OverviewShipPassengersStatusCard';
 import OverviewTrainPassengersStatusCard from 'src/components/Passengers/public/OverviewTrainPassengersStatusCard';
-
+//
 import OverviewPassengersVaccinate from 'src/components/Passengers/public/OverviewPassengerVaccinate';
 // import OverviewPassengerPatients from 'src/components/Passengers/public/OverviewPatients';
 import OverViewPassengerStatusVaccinateChart
@@ -26,8 +26,8 @@ const Passenger = () => {
       <OverviewShipPassengersStatusCard/>
       <OverviewPassengersVaccinate/>
       <OverViewPassengerStatusVaccinateChart/>
-      <OverviewOfAffectedAfterTravelingInCountry/>
-      <OverviewOfLatestPassengersVaccinationStatus/>
+       <OverviewOfAffectedAfterTravelingInCountry/>
+       <OverviewOfLatestPassengersVaccinationStatus/>
       <OverviewOfTripsMadeByPassengersByVehicle/>
       {/* <OverviewPassengerPatients /> */}
     </div>

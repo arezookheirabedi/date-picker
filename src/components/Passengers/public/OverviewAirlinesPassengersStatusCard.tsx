@@ -211,7 +211,7 @@ const OverviewAirlinesPassengersStatusCard: React.FC<{}> = () => {
           <Statistic
             loading={pcrLoading}
             icon={testIcon}
-            text="تعداد استعلام فاقد مجوز"
+            text="تعداد آزمایش های مسافران"
             count={passengerPcrInfo.testResultsCount || 0}
           />
           <Statistic

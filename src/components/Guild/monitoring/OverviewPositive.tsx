@@ -111,7 +111,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
               //     ).format('YYYY-MM-DD')
               //   : null,
               reportType: 'POSITIVE_CHAIN',
-              cityTitle,
+              province: cityTitle,
               reportName: ` واحد‌های صنفی ${
                 cityTitle ? `استان ${cityTitle}` : ''
               } با زنجیره مثبت کوید `,
