@@ -60,23 +60,6 @@ const OverviewSchoolsPositivePcr = () => {
     }
   };
 
-  // const getLinearOverviewPublicTransport = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const response = await transportService.linearOverviewPublicTransport(params, {
-  //       cancelToken: source.token,
-  //     });
-  //     setData(response.data);
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
       getColumnChartTestResult(query);
@@ -93,8 +76,6 @@ const OverviewSchoolsPositivePcr = () => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQuery({
         ...query,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
@@ -110,56 +91,12 @@ const OverviewSchoolsPositivePcr = () => {
     }
   }, [selectedDayRange]);
 
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
-  //     const tmp: any[] = [];
-  //     let lastState = 'ANNUAL';
-
-  //     const start = moment(finalFromDate, 'jYYYY/jM/jD');
-  //     const end = moment(finalToDate, 'jYYYY/jM/jD');
-
-  //     const duration = moment.duration(end.diff(start));
-
-  //     if (!duration.years()) {
-  //       tmp.push(3);
-  //       lastState = 'MONTHLY';
-  //     }
-
-  //     if (!duration.months() && !duration.years()) {
-  //       tmp.push(2);
-  //       lastState = 'WEEKLY';
-  //     }
-
-  //     if (!duration.weeks() && !duration.months() && !duration.years()) {
-  //       tmp.push(1);
-  //       lastState = 'DAILY';
-  //     }
-
-  //     setQueryParams({
-  //       ...queryParams,
-  //       type: lastState,
-  //       fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //     });
-  //   } else {
-  //     setQueryParams({
-  //       ...queryParams,
-  //       type: 'MONTHLY',
-  //       fromDate: null,
-  //       toDate: null,
-  //     });
-  //   }
-  // }, [selectedDayRange]);
-
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان در آموزش و پرورش</legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-start flex-grow px-8">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی مبتلایان در آموزش و پرورش</legend>
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="mb-10 mt-6 flex items-center justify-between">
+          <div className="align-center flex flex-grow justify-start px-8">
             <SearchableSingleSelect
               objectKey="categoryValue"
               placeholder="کل آموزش و پرورش"
@@ -168,7 +105,7 @@ const OverviewSchoolsPositivePcr = () => {
               setQueryParams={setQuery}
               queryParams={query}
             />
-            <div className="flex align-center justify-between mr-8">
+            <div className="align-center mr-8 flex justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
