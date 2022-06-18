@@ -167,7 +167,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
               //   : null,
 
               reportType: 'NON_VISITED',
-              cityTitle,
+              province: cityTitle,
               reportName: `واحد‌های صنفی  ${
                 cityTitle ? `استان ${cityTitle}` : ''
               } که QR کد آن‌ها اسکن نشده `,
