@@ -7,6 +7,7 @@ import Calendar from 'src/components/Calendar';
 import DatePickerModal from 'src/components/DatePickerModal';
 import Highcharts from 'highcharts';
 import {converters} from 'src/components/Guild/public/constant';
+import {isEmpty } from 'lodash';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -58,6 +59,9 @@ const optionChart = {
     title: {
       enabled: false,
     },
+    labels: {
+      format: '٪{text}'
+      },
   },
   legend: {
     enabled: false,
@@ -72,7 +76,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: ' نفر',
+    valueSuffix:"٪",
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -87,7 +91,8 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
   const history = useHistory();
   // const [categories, setCategories] = useState<any[]>([]);
   // const [dataset, setDataset] = useState<any[]>([]);
-  const [initialData, setInitialData] = useState<any>();
+  const [chartData, setChartData] = useState<any>();
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -111,68 +116,78 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     try {
       const {data} = await vaccineService.membersGeneral(params, {CancelToken: cancelToken.token});
       // const {data} = await hcsService.dosesTagBased(params);
-      const dataChart: any = {
-        null: 5,
-        '0': Number(data.totalNonVaccinesCount || 0), // واکسن نزدع
-        '1': Number(data.doses[1] || 0), // دوز اول
-        '2': Number(data.doses[2] || 0), // دوز دوم
-        '3': Number(data.doses[3] || 0), // دوز سوم
-        '4': Number(data.gtDoses[3] || 0), //  بیش از سه دوز
-      };
+      const finalResponse: any = {...data};
+      if (!isEmpty(finalResponse)) {
+        const dataChart: any = {
+          null: 5,
+          '0': finalResponse.totalNonVaccinesCountToTotalPopulationPercentage || 0, // واکسن نزدع
+          '1': finalResponse.dosesToTotalPopulationPercentage[1] || 0, // دوز اول
+          '2': finalResponse.dosesToTotalPopulationPercentage[2] || 0, // دوز دوم
+          '3': finalResponse.dosesToTotalPopulationPercentage[3] || 0, // دوز سوم
+          '4': finalResponse.dosesToTotalPopulationPercentage[4] || 0, // دوز چهارم
+          '5': finalResponse.dosesToTotalPopulationPercentage[5] || 0, // دوز پنجم
+        };
 
-      // eslint-disable-next-line
-      let firstDose: number = 0;
-      // eslint-disable-next-line
-      let secondDose: number = 0;
-      // eslint-disable-next-line
-      let thirdDose: number = 0;
-      // eslint-disable-next-line
-      let moreThanThreeDose: number = 0;
-      // eslint-disable-next-line
-      let noDose: number = 0;
+        // eslint-disable-next-line
+        let firstDose: number = 0;
+        // eslint-disable-next-line
+        let secondDose: number = 0;
+        // eslint-disable-next-line
+        let thirdDose: number = 0;
+        // eslint-disable-next-line
+        let forthDoses: number = 0;
+        // eslint-disable-next-line
+        let fifthDoses: number = 0;
+        // eslint-disable-next-line
+        let noDose: number = 0;
 
-      Object.entries(dataChart).forEach(([key, value]: any[]) => {
-        switch (key) {
-          case 'null':
-            // noDose += value;
-            break;
-          case '0':
-            noDose += value;
-            break;
-          case '1':
-            firstDose += value;
-            break;
-          case '2':
-            secondDose += value;
-            break;
-          case '3':
-            thirdDose += value;
-            break;
-          case '4':
-            moreThanThreeDose += value;
-            break;
+        Object.entries(dataChart).forEach(([key, value]: any[]) => {
+          switch (key) {
+            case 'null':
+              // noDose += value;
+              break;
+            case '0':
+              noDose += value;
+              break;
+            case '1':
+              firstDose += value;
+              break;
+            case '2':
+              secondDose += value;
+              break;
+            case '3':
+              thirdDose += value;
+              break;
+            case '4':
+              forthDoses += value;
+              break;
+            case '5':
+              fifthDoses += value;
+              break;
+            default:
+              break;
+          }
+        });
 
-          default:
-            break;
-        }
-      });
+        const newInitialData = {
+          categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده'],
+          series: [
+            {
+              name: 'واکسیناسیون',
+              data: [
+                {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
+                {name: 'دوز دوم', y: secondDose, color: '#209F92'},
+                {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
+                {name: ' دوز چهارم', y: forthDoses, color: '#bfdde7'},
+                {name: 'دوز پنجم', y: fifthDoses, color: '#716de3'},
+                {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
+              ],
+            },
+          ],
+        } as any;
 
-      const newInitialData = {
-        categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-        series: [
-          {
-            name: 'واکسیناسیون',
-            data: [
-              {name: 'واکسن نزده', y: noDose, color: '#FF0060'},
-              {name: 'دوز اول', y: firstDose, color: '#F3BC06'},
-              {name: 'دوز دوم', y: secondDose, color: '#209F92'},
-              {name: 'دوز سوم', y: thirdDose, color: '#004D65'},
-              {name: 'بیش از ۳ دوز', y: moreThanThreeDose, color: '#BFDDE7'},
-            ],
-          },
-        ],
-      } as any;
-      setInitialData({...newInitialData});
+        setChartData({...newInitialData});
+      }
     } catch (error: any) {
       setErrorMessage(error.message || 'خطایی در عملیات');
       // eslint-disable-next-line
@@ -203,7 +218,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       if (existsCity) {
         cancelRequest();
         clearTimeout(idSetTimeOut);
-        setInitialData({});
+        setChartData({});
       }
     };
   }, [queryParams, location.search]);
@@ -267,36 +282,42 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
-                  <span>دوز اول</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
+                  <span>دوز پنجم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
-                  <span>دوز دوم</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <span>دوز چهارم</span>
                 </div>
-              </div>
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
-                  <span>بیش از ۳ دوز</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <span>دوز دوم</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <span>دوز اول</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+
         {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {!loading && errorMessage ? (
-          <div className="p-40 text-red-500">{errorMessage}</div>
-        ) : (
-          <HeadlessChart data={initialData} optionsProp={optionChart} />
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && !isEmpty(chartData) && !errorMessage && (
+           <HeadlessChart data={chartData} optionsProp={optionChart} />
+        )}
+        {isEmpty(chartData) && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
     </fieldset>
