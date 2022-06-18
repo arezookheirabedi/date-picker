@@ -195,7 +195,7 @@ const OverviewOfVaccinationProcess = () => {
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, []);
 
