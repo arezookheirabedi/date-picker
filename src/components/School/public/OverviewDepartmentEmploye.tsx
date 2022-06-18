@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+// import axios from 'axios';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
-import {useDispatch} from 'react-redux';
-import {addTotalEmployeMembersAc} from 'src/store/action_creators';
+// import {useDispatch} from 'react-redux';
+// import {addTotalEmployeMembersAc} from 'src/store/action_creators';
 import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import totalRecritment from 'src/assets/images/icons/people-navy.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
@@ -11,101 +11,101 @@ import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-test.svg';
 import testIcon from 'src/assets/images/icons/test-color.svg';
-import hcsService from 'src/services/hcs.service';
+// import hcsService from 'src/services/hcs.service';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import Statistic from '../../../containers/Guild/components/Statistic';
 
 const OverviewDepartmentEmploye = () => {
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [numberOf, setNumberOf] = useState(null);
-  const [numberOfPositives, setNumberOfPositives] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfNegatives, setNumberOfNegatives] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfVaccination, setNumberOfVaccination] = useState(null);
-  // eslint-disable-next-line
-  const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
-  const [numberOfRecovered, setNumberOfRecovered] = useState(null);
-  const [numberOfTestResults, setNumberOfTestResults] = useState(null);
-  const dispatch = useDispatch();
+  // const [loading, setLoading] = useState(false);
+  // // eslint-disable-next-line
+  // const [numberOf, setNumberOf] = useState(null);
+  // const [numberOfPositives, setNumberOfPositives] = useState(null);
+  // // eslint-disable-next-line
+  // const [numberOfNegatives, setNumberOfNegatives] = useState(null);
+  // // eslint-disable-next-line
+  // const [numberOfVaccination, setNumberOfVaccination] = useState(null);
+  // // eslint-disable-next-line
+  // const [numberOfNanVaccinated, setNumberOfNanVaccinated] = useState(null);
+  // const [numberOfRecovered, setNumberOfRecovered] = useState(null);
+  // const [numberOfTestResults, setNumberOfTestResults] = useState(null);
+  // const dispatch = useDispatch();
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  // const {CancelToken} = axios;
+  // const source = CancelToken.source();
 
-  const getNumberOf = async () => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.membersGeneral(
-        {
-          organization: 'education',
-          tags: ['#type# پرسنل اداری'].join(','),
-          testResultCount: true,
-          vaccinationCount: true,
-          total: true,
-        },
-        {cancelToken: source.token}
-      );
+  // const getNumberOf = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const {data} = await hcsService.membersGeneral(
+  //       {
+  //         organization: 'education',
+  //         tags: ['#type# پرسنل اداری'].join(','),
+  //         testResultCount: true,
+  //         vaccinationCount: true,
+  //         total: true,
+  //       },
+  //       {cancelToken: source.token}
+  //     );
 
-      dispatch(addTotalEmployeMembersAc(data.total || 0));
-      setNumberOf(data.total || 0);
-      setNumberOfPositives(data.numberOfPositives || 0);
-      setNumberOfVaccination(data.numberOfVaccinated || 0);
-      setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
-      setNumberOfRecovered(data.numberOfRecovered || 0);
-      setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     dispatch(addTotalEmployeMembersAc(data.total || 0));
+  //     setNumberOf(data.total || 0);
+  //     setNumberOfPositives(data.numberOfPositives || 0);
+  //     setNumberOfVaccination(data.numberOfVaccinated || 0);
+  //     setNumberOfNanVaccinated(data.numberOfNonVaccinated || 0);
+  //     setNumberOfRecovered(data.numberOfRecovered || 0);
+  //     setNumberOfTestResults(data.numberOfNegatives + data.numberOfPositives || 0);
+  //   } catch (error) {
+  //     // eslint-disable-next-line
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getNumberOf();
-    return () => {
-      setNumberOf(null);
-      setNumberOfPositives(null);
-      setNumberOfVaccination(null);
-      setNumberOfNanVaccinated(null);
-      setNumberOfRecovered(null);
-      setNumberOfTestResults(null);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
+  // useEffect(() => {
+  //   getNumberOf();
+  //   return () => {
+  //     setNumberOf(null);
+  //     setNumberOfPositives(null);
+  //     setNumberOfVaccination(null);
+  //     setNumberOfNanVaccinated(null);
+  //     setNumberOfRecovered(null);
+  //     setNumberOfTestResults(null);
+  //     source.cancel('Operation canceled by the user.');
+  //   };
+  // }, []);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به پرسنل اداری آموزش و پرورش کل کشور
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع کارمندان اداری که در آموزش و پرورش فعالیت دارند."
             icon={totalRecritment}
             text="مجموع کارمندان اداری "
-            count={numberOf}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
           <Statistic
             hasInfo
             infoText="مجموع افراد مبتلا شده به بیماری کوید"
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count={numberOfPositives}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
           <Statistic
             hasInfo
             infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count={numberOfRecovered}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
           <Statistic
             hasInfo
@@ -113,44 +113,44 @@ const OverviewDepartmentEmploye = () => {
             icon={deadIcon}
             text="مجموع فوت‌ شدگان"
             count="-"
-            loading={false}
+            // loading={loading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={numberOfPositives}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
           <Statistic
             hasInfo
             infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
-            count={numberOfPositives}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
           <Statistic
             hasInfo
             infoText="تعداد افرادی که بعد از شروع به کار سامانه دوز اول را دریافت کرده اند."
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count={numberOfPositives}
-            loading={loading}
-          />{' '}
+            count="-"
+            // loading={loading}
+          />
           <Statistic
             hasInfo
             infoText="تعداد افرادی که در زمان شروع به کار سامانه در طرح واکسیناسیون شرکت نکرده بودند."
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count={0}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           {/* <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={guildInquiry.total}  loading={inquiryLoading}/>
           <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={guildInquiry.disqualified}  loading={inquiryLoading}/> */}
           <Statistic
@@ -158,35 +158,35 @@ const OverviewDepartmentEmploye = () => {
             infoText="تعداد کل تست های pcr که  کارمندان انجام داده اند."
             icon={testIcon}
             text="تعداد آزمایش های کارمندان"
-            count={numberOfTestResults}
-            loading={loading}
+            count="-"
+            // loading={loading}
           />
           <Statistic
             hasInfo
             infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
-            count={0}
-            loading={loading}
-            isPercentage
+            count="-"
+            // loading={loading}
+            // isPercentage
           />
           <Statistic
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
-            count={0}
-            loading={loading}
-            isPercentage
+            count="-"
+            // loading={loading}
+            // isPercentage
           />
           <Statistic
             hasInfo
             infoText="نسبت مبتلایان کارمندان اداری به بیماری کرونا به کل جمعیت  کارمندان اداری"
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
-            count={0}
-            loading={loading}
-            isPercentage
+            count="-"
+            // loading={loading}
+            // isPercentage
           />
         </div>
       </div>

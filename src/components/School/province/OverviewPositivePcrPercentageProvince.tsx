@@ -11,7 +11,7 @@ import Highcharts from 'highcharts';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
 import {useHistory, useLocation} from 'react-router-dom';
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -22,8 +22,6 @@ import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
 import {converters} from '../public/constant';
-
-// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
 
@@ -57,7 +55,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartPositivePcrPercentage = async (from:any,to:any,province:string) => {
+  const getColumnChartPositivePcrPercentage = async (from: any, to: any, province: string) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -65,16 +63,24 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
         lang: 'fa',
         from,
         to,
-        province
+        province,
       });
       const categoryValue: any[] = [];
 
       const positiveMembersCountToMembersCountPercentage: any[] = [];
       data.forEach((item: any) => {
         categoryValue.push(item.categoryValue);
-        positiveMembersCountToMembersCountPercentage.push(item.positiveMembersCountToMembersCountPercentage);
+        positiveMembersCountToMembersCountPercentage.push(
+          item.positiveMembersCountToMembersCountPercentage
+        );
       });
-      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCountToMembersCountPercentage]}];
+      const newData = [
+        {
+          showInLegend: false,
+          name: 'درصد ابتلا',
+          data: [...positiveMembersCountToMembersCountPercentage],
+        },
+      ];
       setDataset({categories: [...categoryValue], series: [...newData]});
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -92,7 +98,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
       return item.name === provinceName;
     });
     if (existsCity) {
-      getColumnChartPositivePcrPercentage(queryParams.from,queryParams.to,provinceName);
+      getColumnChartPositivePcrPercentage(queryParams.from, queryParams.to, provinceName);
     } else {
       history.push('/dashboard/school/province');
     }
@@ -100,7 +106,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
     return () => {
       if (existsCity) {
         cancelRequest();
-        setDataset([]);
+        setDataset({});
       }
     };
   }, [location.search, queryParams]);
@@ -197,7 +203,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: '%',
+      valueSuffix: '٪',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -212,18 +218,19 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
         showInLegend: false,
         dataLabels: {
           // enabled: true,
+          // format: '{y}٪',
         },
       },
     ],
   };
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد ابتلای آموزش و پرورش استان {cityTitle} در هر مقطع تحصیلی
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             {/* <div className="flex items-center">
               <SearchableSingleSelect
                 placeholder="کل آموزش و پرورش"
@@ -265,7 +272,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
         {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
-        </div>
+      </div>
     </fieldset>
   );
 };
