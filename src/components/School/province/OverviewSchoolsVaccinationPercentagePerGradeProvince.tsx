@@ -75,14 +75,12 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
           name: 'واکسن نزده',
           color: '#e21416',
           data: [...nonVaccinesPercentage],
-    
         },
         {
           name: 'واکسن زده',
-          color:'#04b086',
+          color: '#04b086',
           data: [...vaccinesPercentage],
-        
-        }
+        },
       ]);
       setCategories([...grade]);
     } catch (error: any) {
@@ -102,7 +100,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     });
     const idSetTimeOut = setTimeout(() => {
       if (existsCity) {
-        getLinearOverview({...queryParams, tag: 'edu', category: 'grade',province:provinceName});
+        getLinearOverview({...queryParams, tag: 'edu', category: 'grade', province: provinceName});
       } else {
         history.push('/dashboard/school/province');
       }
@@ -114,8 +112,6 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
       setDataset([]);
     };
   }, [queryParams]);
-
- 
 
   useEffect(() => {
     if (selectedDay) {
@@ -133,13 +129,13 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
   }, [selectedDay]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد واکسیناسیون آموزش و پرورش استان {cityTitle} در هر مقطع تحصیلی
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             {/* <div className="flex items-center">
               <SearchableSingleSelect
                 objectKey="categoryValue"
@@ -171,7 +167,12 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} tooltipSuffix="٪" />
+          <Stacked
+            data={dataset}
+            categories={categories}
+            tooltipSuffix="٪"
+            yAxisLabelFormat="٪{text}"
+          />
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>

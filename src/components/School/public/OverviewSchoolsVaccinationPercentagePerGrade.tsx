@@ -61,38 +61,39 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         grade.push(item.categoryValue);
       });
 
-      setDataset( [{
-        name: 'واکسن نزده',
-            data: [...nonVaccinesPercentage],
-            color: '#e21416',
-            dataLabels: {
-              // enabled: true,
-              // rotation: 270,
-            }
+      setDataset([
+        {
+          name: 'واکسن نزده',
+          data: [...nonVaccinesPercentage],
+          color: '#e21416',
+          dataLabels: {
+            // enabled: true,
+            // rotation: 270,
           },
-          {
-            dataLabels: {
-              // enabled: true,
-              // rotation: 270,
-              // format: "{y}%"
-            },
-            name: 'واکسن زده',
-            data: [...vaccinesPercentage],
-            color:'#04b086'
-            // color: {
-            //   linearGradient: {
-            //     x1: 0,
-            //     x2: 0,
-            //     y1: 0,
-            //     y2: 1,
-            //   },
-            //   stops: [
-            //     [0, '#048365'],
-            //     [1, '#04d2a0'],
-            //   ],
-            // },
+        },
+        {
+          dataLabels: {
+            // enabled: true,
+            // rotation: 270,
+            // format: "{y}%"
           },
-        ]);
+          name: 'واکسن زده',
+          data: [...vaccinesPercentage],
+          color: '#04b086',
+          // color: {
+          //   linearGradient: {
+          //     x1: 0,
+          //     x2: 0,
+          //     y1: 0,
+          //     y2: 1,
+          //   },
+          //   stops: [
+          //     [0, '#048365'],
+          //     [1, '#04d2a0'],
+          //   ],
+          // },
+        },
+      ]);
       setCategories([...grade]);
     } catch (error: any) {
       setErrorMessage(error.message);
@@ -130,13 +131,13 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   }, [selectedDay]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد واکسیناسیون آموزش و پرورش در هر مقطع تحصیلی
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             {/* <div className="flex items-center">
               <SearchableSingleSelect
                 objectKey="categoryValue"
@@ -168,7 +169,12 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && dataset.length > 0 && !errorMessage && (
-          <Stacked data={dataset} categories={categories} tooltipSuffix="٪" />
+          <Stacked
+            data={dataset}
+            categories={categories}
+            tooltipSuffix="٪"
+            yAxisLabelFormat="٪{text}"
+          />
         )}
         {dataset.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>

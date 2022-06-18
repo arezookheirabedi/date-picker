@@ -96,8 +96,13 @@ const converters = {
   },
 };
 
-
-const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltipSuffix?:string}> = ({data, categories,notPercent,tooltipSuffix}) => {
+const Column: React.FC<{
+  data: any;
+  categories?: any;
+  notPercent?: boolean;
+  tooltipSuffix?: string;
+  yAxisLabelFormat?: string;
+}> = ({data, categories, notPercent, tooltipSuffix, yAxisLabelFormat}) => {
   const chartRef = useRef<any>(null);
   const options = {
     chart: {
@@ -108,7 +113,6 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
       },
-
 
       events: {
         redraw: () => {
@@ -145,7 +149,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
     plotOptions: {
       series: {
         // stacking: 'percent',
-        stacking: `${notPercent?'normal':'percent'}`,
+        stacking: `${notPercent ? 'normal' : 'percent'}`,
         // borderRadius: 5,
         pointWidth: 15,
       },
@@ -165,6 +169,9 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
       title: {
         enabled: false,
       },
+      labels: {
+        format: `${yAxisLabelFormat || '{text}'}`,
+      },
     },
     legend: {
       enabled: false,
@@ -182,7 +189,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix:  `${tooltipSuffix||"نفر"}`,
+      valueSuffix: `${tooltipSuffix || 'نفر'}`,
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -192,13 +199,9 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;tooltip
       borderWidth: 0,
       // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
-  
+
     series: [],
   };
-
-
-
-
 
   useEffect(() => {
     if (chartRef && chartRef.current) {
