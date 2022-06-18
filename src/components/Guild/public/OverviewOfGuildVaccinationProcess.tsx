@@ -2,7 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 // import Spinner from '../../Spinner';
 import hcsService from 'src/services/hcs.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {
+  cancelTokenSource,
+  convertGregorianDateToJalaliDate,
+  msgRequestCanceled,
+} from 'src/helpers/utils';
 import {isEmpty} from 'lodash';
 import Charts from '../../Charts';
 
@@ -58,7 +62,7 @@ const optionChart = {
     //   trackBorderRadius: 4,
     //   showFull: false,
     // },
- 
+
     // min: 0,
     // max:500,
     tickmarkPlacement: 'off',
@@ -133,7 +137,6 @@ const OverviewOfGuildVaccinationProcess = () => {
       let thirdDose: any[] = [];
       // eslint-disable-next-line
       let fifthDose: any[] = [];
-  
 
       data.forEach((item: any, index: number) => {
         // eslint-disable-next-line
@@ -161,7 +164,7 @@ const OverviewOfGuildVaccinationProcess = () => {
         if (thirdDose.length < index + 1) thirdDose.push(0);
         if (fourthDose.length < index + 1) fourthDose.push(0);
         if (fifthDose.length < index + 1) fifthDose.push(0);
-        date.push(item.date);
+        date.push(convertGregorianDateToJalaliDate(item.date));
       });
 
       const newData = {
@@ -187,7 +190,6 @@ const OverviewOfGuildVaccinationProcess = () => {
             name: 'دوز پنجم',
             data: [...fifthDose],
           },
-          
         ],
       };
       setDataset({...newData});
@@ -213,32 +215,31 @@ const OverviewOfGuildVaccinationProcess = () => {
   }, []);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به روند واکسیناسیون اصناف </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی به روند واکسیناسیون اصناف </legend>
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="w-full">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-               
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
+            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-24 rounded" style={{backgroundColor: '#716DE3'}} />
                   <span>دوز پنجم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-24 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>دوز چهارم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-24 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-24 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-24 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
               </div>
