@@ -2,8 +2,9 @@ import {useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from 'src/components/Vaccination/province/OverviewMap';
-import OverviewVaccinationStatus from 'src/components/Vaccination/province/OverviewVaccinationStatus';
-import OverviewExistVaccine from 'src/components/Vaccination/province/OverviewExistVaccine';
+import OverviewExistVaccineCount from 'src/components/Vaccination/province/OverviewExistVaccineCount';
+import OverviewVaccine from 'src/components/Vaccination/province/OverviewVaccine';
+import OverviewExistVaccinePercentage from 'src/components/Vaccination/province/OverviewExistVaccinePercentage';
 import OverviewVaccinePerDoses from 'src/components/Vaccination/province/OverviewVaccinePerDoses';
 
 const Vaccination: React.FC<{}> = () => {
@@ -32,9 +33,11 @@ const Vaccination: React.FC<{}> = () => {
         selectDefault
       />
 
-      <OverviewVaccinationStatus cityTitle={cityTitle} />
-      <OverviewExistVaccine cityTitle={cityTitle} />
-      <OverviewVaccinePerDoses cityTitle={cityTitle} />
+      <OverviewVaccine cityTitle={cityTitle} />
+      {/* <OverviewVaccinationStatus cityTitle={cityTitle} /> */}
+      <OverviewExistVaccineCount cityTitle={cityTitle} />
+      <OverviewExistVaccinePercentage cityTitle={cityTitle} />
+      <OverviewVaccinePerDoses cityTitle={cityTitle}/>
     </div>
   );
 };
