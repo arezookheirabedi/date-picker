@@ -58,13 +58,23 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
 
       const province: any[] = [];
 
-      const positiveMembersCount: any[] = [];
+      const positiveMembersCountToTotalMembersPercentag: any[] = [];
       data.forEach((item: any) => {
         province.push(item.province);
-        positiveMembersCount.push(item.positiveMembersCountToTotalMembersPercentage);
+        positiveMembersCountToTotalMembersPercentag.push(
+          item.positiveMembersCountToTotalMembersPercentage
+        );
       });
-      // setCategories([...province]);
-      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCount]}];
+
+      const sortPositiveMembersCountToTotalMembersPercentag =
+        positiveMembersCountToTotalMembersPercentag.sort((a, b) => (a > b ? 1 : -1));
+      const newData = [
+        {
+          showInLegend: false,
+          name: 'درصد ابتلا',
+          data: [...sortPositiveMembersCountToTotalMembersPercentag],
+        },
+      ];
       if (data.length > 0) {
         setDataset({categories: [...province], series: [...newData]});
       }

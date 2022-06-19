@@ -56,11 +56,12 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         province.push(item.province);
         registered.push(item.percentage);
       });
+      const sortRegistered = registered.sort((a, b) => (a > b ? 1 : -1));
       const newData = [
         {
           showInLegend: false,
           name: 'ثبت نام شده',
-          data: [...registered],
+          data: [...sortRegistered],
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
@@ -70,6 +71,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
           },
         },
       ];
+
       if (data.length > 0) {
         setDataset({categories: [...province], series: [...newData]});
       }
@@ -117,6 +119,10 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
 
   const optionChart = {
     chart: {
+      scrollablePlotArea: {
+        // minWidth: 700,
+        scrollPositionX: 1,
+      },
       type: 'column',
       numberFormatter() {
         // eslint-disable-next-line prefer-rest-params
@@ -165,8 +171,8 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
 
     yAxis: {
       labels: {
-        format: '٪{text}'
-        },
+        format: '٪{text}',
+      },
       gridLineDashStyle: 'dash',
       lineDashStyle: 'dash',
       lineColor: '#000000',
@@ -194,7 +200,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         trackBorderRadius: 4,
         showFull: false,
       },
-   
       min: 0,
       max: 30,
       lineDashStyle: 'dash',
@@ -224,13 +229,13 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
   };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد اصناف ثبت نامی در هر استان
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
                 endPoint={guildService.getRegisterList}
