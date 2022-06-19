@@ -17,7 +17,7 @@ Highcharts.setOptions({
     thousandsSep: ',',
   },
 });
-const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلایان'}) => {
+const Line: React.FC<any> = ({data, borderRadius, pointWidth, name = 'مبتلایان', showInLegends}) => {
   const [options, setOptions] = useState({
     chart: {
       type: 'column',
@@ -64,7 +64,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلای�
             lineWidth: 1,
           },
         },
-        
+
       },
     },
     yAxis: {
@@ -118,6 +118,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلای�
         dataLabels: {
           enabled: true,
         },
+        showInLegend: !!showInLegends
       },
     ],
   }) as any;
@@ -139,7 +140,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلای�
           lineColor: '#000000',
           lineWidth: 1,
         },
-        series: [{data: series}],
+        series: [{data: series, showInLegend: !!showInLegends}],
       });
     }
   }, [data]);
@@ -185,7 +186,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth,name = 'مبتلای�
     <>
       {/* <button onClick={updateSeries} type="button">update series</button> */}
       {/* <button onClick={updateCategories} type="button">update categories</button> */}
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={options}/>
     </>
   );
 };
