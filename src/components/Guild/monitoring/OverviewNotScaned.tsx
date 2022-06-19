@@ -83,7 +83,6 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   //   //     setLoading(false);
   //   //   };
   // }, [ currentPage]);
-  
 
   const cancelToken = cancelTokenSource();
 
@@ -120,7 +119,7 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
     }
   };
   useEffect(() => {
-    setCurrentPage(0);
+    setCurrentPage(1);
   }, [cityTitle]);
 
   useEffect(() => {
@@ -144,12 +143,12 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
   }
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center" id="guild-overview">
+      <legend className="mx-auto px-3 text-black">
         واحد‌های صنفی که QR کد آن‌ها اسکن نشده {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
 
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <div className="inline-flex">
           <ExportButton
             params={{
@@ -290,13 +289,13 @@ const OverviewNotScaned: React.FC<OverviewNotScanedProps> = ({cityTitle}) => {
         </div> */}
       </div>
 
-      {loading ? (
+      {loading && dataSet.length === 0 ? (
         <div className="p-20">
           <Spinner />
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
+          <div className="flex w-full flex-col items-center justify-center rounded-xl bg-white p-4 shadow">
             <Table
               handlePageChange={handlePageChange}
               dataSet={[...dataSet]}

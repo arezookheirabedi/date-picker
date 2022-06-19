@@ -58,7 +58,7 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   };
 
   useEffect(() => {
-    setCurrentPage(0);
+    setCurrentPage(1);
   }, [cityTitle]);
 
   useEffect(() => {
@@ -82,12 +82,12 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
   }
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center" id="guild-overview">
+      <legend className="mx-auto px-3 text-black">
         واحد‌های صنفی بدون واکسیناسیون {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
 
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <div className="inline-flex">
           <ExportButton
             params={{
@@ -111,13 +111,13 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
         </div>
       </div>
 
-      {loading ? (
+      {loading && dataSet.length === 0 ? (
         <div className="p-20">
           <Spinner />
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
+          <div className="flex w-full flex-col items-center justify-center rounded-xl bg-white p-4 shadow">
             <Table
               handlePageChange={handlePageChange}
               dataSet={[...dataSet]}
@@ -181,10 +181,10 @@ const OverviewUnVaccinated: React.FC<OverviewUnVaccinatedProps> = ({cityTitle}) 
           </div>
         </>
       )}
-      <div className="border-t-4 my-4 py-4 flec justify-center items-center">
-        <div className=" inline-flex  p-4 border rounded-lg  unVaccinated-count-wrapper">
+      <div className="flec my-4 items-center justify-center border-t-4 py-4">
+        <div className=" unVaccinated-count-wrapper  inline-flex rounded-lg border  p-4">
           <span className="text">جمع کل واحد های صنفی بدون واکسیناسیون:</span>
-          <span className="px-1 count">{toPersianDigit(totalItems.toString())}</span>
+          <span className="count px-1">{toPersianDigit(totalItems.toString())}</span>
           <span className="count">واحد صنفی</span>
         </div>
       </div>
