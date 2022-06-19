@@ -142,7 +142,7 @@ const RegisterGuild: React.FC<{}> = () => {
             </svg>
             <input
               type="text"
-              placeholder="جستجوی واحد صنفی"
+              placeholder="جستجوی رسته"
               className="focus:outline-none rounded-lg border border-gray-300 py-2 px-4 pr-10 text-sm"
               onChange={handleSearch}
               value={searchQuery}
