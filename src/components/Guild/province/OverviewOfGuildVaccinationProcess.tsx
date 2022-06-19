@@ -213,7 +213,7 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [location.search]);
 

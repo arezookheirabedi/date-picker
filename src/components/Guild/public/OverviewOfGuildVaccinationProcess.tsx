@@ -210,7 +210,7 @@ const OverviewOfGuildVaccinationProcess = () => {
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, []);
 

@@ -52,21 +52,20 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         allCount.push(item.allCount);
         registered.push(item.registeredCount);
       });
+      const sortAllCount = allCount.sort((a, b) => (a > b ? 1 : -1));
       const newData = [
         {
           name: 'کل',
           dataLabels: {
             // enabled: true,
           },
-          showInLegend: false,
-          data: [...allCount],
+          data: [...sortAllCount],
         },
         {
           name: 'ثبت نام شده',
           dataLabels: {
             // enabled: true,
           },
-          showInLegend: false,
           data: [...registered],
           linearGradient: {
             x1: 0,
@@ -100,7 +99,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       clearTimeout(idSetTimeOut);
 
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [queryParams]);
 
@@ -203,10 +202,10 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         trackBorderRadius: 4,
         showFull: false,
       },
-   
+
       min: 0,
       max: 30,
-    
+
       lineDashStyle: 'dash',
       lineColor: '#000000',
       lineWidth: 1,
@@ -234,13 +233,13 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
   };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به تعداد اصناف ثبت نامی در هر استان
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
                 endPoint={guildService.getRegisterList}
