@@ -80,8 +80,8 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                               return checkMenuIsActive(r, loc);
                             }}
                           >
-                            <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
-                            {r.icon && r.icon(location.pathname.includes(r.link))}
+                            {/* <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" /> */}
+                            {r.icon && r.icon(location.pathname.includes(r.simLink))}
                             {r.title}
                           </NavLink>
                           {r.children && (
@@ -101,6 +101,29 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                                       {c.icon && c.icon(location.pathname.includes(c.link))}
                                       {c.title}
                                     </NavLink>
+                                    {c.children && (
+                                      <ul
+                                        className={`pr-5 ${
+                                          checkMenuIsActive(c) ? 'sub-menu-open' : 'sub-menu-close'
+                                        }`}
+                                      >
+                                        {r.children.map((d: any) => {
+                                          return (
+                                            <li key={d.keyIndex} className="text-gray-400">
+                                              <NavLink
+                                                to={d.link}
+                                                className="flex items-center pt-3 text-xs font-normal"
+                                              >
+                                                <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                                                {d.icon &&
+                                                  d.icon(location.pathname.includes(d.link))}
+                                                {d.title}
+                                              </NavLink>
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    )}
                                   </li>
                                 );
                               })}
