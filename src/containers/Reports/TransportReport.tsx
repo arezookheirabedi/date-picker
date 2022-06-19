@@ -1,64 +1,60 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+// import {useLocation} from 'react-router-dom';
+// @ts-ignore
+import moment from 'moment-jalaali';
+import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
-import axios from 'axios';
 import transportService from 'src/services/transport.service';
 import DatePickerModal from '../../components/DatePickerModal';
-import calendar from '../../assets/images/icons/calendar.svg';
-import download from '../../assets/images/icons/download.svg';
-import Table from '../../components/Table';
-import {toPersianDigit} from '../../helpers/utils';
+import Calendar from '../../components/Calendar';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../helpers/utils';
 import Spinner from '../../components/Spinner';
+import ExportButton from './ExportButton';
 
 const TransportReport: React.FC<{}> = () => {
-  const location = useLocation();
-  const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  // eslint-disable-next-line
-  // const [totalItems, setTotalItems] = useState(0);
+  const [dataSet, setDataSet] = useState<any[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const [refresh, shouldRefresh] = useState<boolean>(false);
+
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
   }) as any;
+  const [query, setQuery] = useState({
+    fromReportDate: null,
+    toReportDate: null,
+    currentPage: 1,
+  });
+  const cancelToken = cancelTokenSource();
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  const generateFromDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.from
-      ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
-      : '';
-  };
-
-  const generateToDate: any = () => {
-    // eslint-disable-next-line
-    return selectedDayRange.to
-      ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
-      : '';
-  };
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  const pageSize = 10;
 
   async function fetchReports(params: any) {
     setLoading(true);
     try {
-      const response = await transportService.fetchRequestedReports(params, {
-        cancelToken: source.token,
+      const {data} = await transportService.transportReportoverviewStatus(params, {
+        cancelToken: cancelToken.token,
       });
-      setDataset([...response.data.content]);
-      // setTotalItems(response.data.totalElements);
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any) => {
+        normalizedData.push({
+          id: item.id,
+          reportName: item.reportName,
+          requestDateTime: item.requestDateTime,
+          lastModifiedDate: item.lastModifiedDate,
+          trackingCode: item.trackingCode,
+          reportStatus: item.reportStatus,
+        });
+      });
+
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
     } catch (error: any) {
       // eslint-disable-next-line
       console.log(error);
@@ -68,163 +64,71 @@ const TransportReport: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-      // setTotalItems(0);
-      setLoading(false);
-    };
-  }, [history]);
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      setQuery({
+        ...query,
+        currentPage: 1,
+        fromReportDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        toReportDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
+        fromReportDate: null,
+        toReportDate: null,
+      });
+    }
+  }, [selectedDayRange]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
-  }, [location.search]);
-
-  async function handlePreDownload(id: string) {
-    try {
-      const params = new URLSearchParams(location.search);
-
-      const response = await transportService.preDownloadReport(id, {
-        cancelToken: source.token,
-      });
-
-      const newWindow = window.open(
-        process.env.REACT_APP_BASE_API_URL + response.data.downloadLink,
-        '_blank',
-        'noopener,noreferrer'
-      );
-      if (newWindow) newWindow.opener = null;
-      fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    }
-  }
-
-  async function handleRetry(id: string) {
-    try {
-      const params = new URLSearchParams(location.search);
-
-      await transportService.retryReport(id, {
-        cancelToken: source.token,
-      });
-
-      fetchReports({pageNumber: Number(params.get('page') || 1) - 1, sort: 'DESC', pageSize: 20});
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    }
-  }
-
-  const clearSelectedDayRange = (e: any) => {
-    e.stopPropagation();
-    setSelectedDayRange({
-      from: null,
-      to: null,
+    fetchReports({
+      sort: 'DESC',
+      sortKey: ['reportStatus'].join(','),
+      fromReportDate: query.fromReportDate,
+      toReportDate: query.toReportDate,
+      pageNumber: query.currentPage - 1,
+      pageSize,
     });
+    return () => {
+      setDataSet([]);
+      cancelRequest();
+    };
+  }, [query, refresh]);
+
+  const focusFromDate = () => {
+    setShowDatePicker(true);
   };
 
+  function handlePageChange(page: number = 1) {
+    setQuery({...query, currentPage: page});
+  }
   return (
     <>
-      <fieldset className="text-center border rounded-xl p-1 mb-16">
-        <legend className="text-black mx-auto px-3"> لیست گزارش حمل و نقل</legend>
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
+        <legend className="text-black mx-auto px-3">لیست گزارش حمل و نقل</legend>
 
         <div className="flex align-center justify-between mb-8">
-          <div className="flex align-center justify-start">
-            {showDatePicker ? (
-              <DatePickerModal
-                setSelectedDayRange={setSelectedDayRange}
-                selectedDayRange={selectedDayRange}
-                setShowDatePicker={setShowDatePicker}
-                showDatePicker
-              />
-            ) : null}
-            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
-              <div
-                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                onClick={focusFromDate}
-              >
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateFromDate())}
-                </span>
-                {selectedDayRange.to || selectedDayRange.from ? (
-                  <button type="button" onClick={clearSelectedDayRange}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
-            </div>
-            <div className=" shadow-custom rounded-lg px-4 py-1">
-              <div
-                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
-                onClick={focusFromDate}
-              >
-                <span className="ml-4 whitespace-nowrap truncate text-xs">
-                  {toPersianDigit(generateToDate())}
-                </span>
-                {selectedDayRange.to || selectedDayRange.from ? (
-                  <button type="button" onClick={clearSelectedDayRange}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="flex align-center">
-            <div className="relative inline-flex align-center leading-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          <div className="flex items-center justify-between">
+            <div className="flex align-center justify-between flex-grow">
+              <div className="flex align-center justify-between">
+                {showDatePicker ? (
+                  <DatePickerModal
+                    setSelectedDayRange={setSelectedDayRange}
+                    selectedDayRange={selectedDayRange}
+                    setShowDatePicker={setShowDatePicker}
+                    showDatePicker
+                  />
+                ) : null}
+                <Calendar
+                  action={focusFromDate}
+                  from={selectedDayRange.from}
+                  to={selectedDayRange.to}
+                  setSelectedDayRange={setSelectedDayRange}
                 />
-              </svg>
-              <input
-                type="text"
-                placeholder="جستجو"
-                className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
-              />
+              </div>
             </div>
           </div>
         </div>
@@ -235,40 +139,37 @@ const TransportReport: React.FC<{}> = () => {
             </div>
           ) : (
             <Table
-              dataSet={[...dataset]}
-              pagination={{pageSize: 20, maxPages: 3}}
+              handlePageChange={handlePageChange}
+              dataSet={[...dataSet]}
+              pagination={{pageSize, currentPage: query.currentPage}}
+              totalItems={totalItems}
               columns={[
                 {
-                  name: 'نام گزارش',
-                  key: 'reportName',
-                  render: (v, record, index: number, page: number) => (
-                    <div className="flex">
-                      {v || `گزارش شماره ${((page - 1) * 20 + (index + 1)).toLocaleString('fa')}`}
+                  name: 'ردیف',
+                  key: '',
+                  render: (v: any, record, index: number) => (
+                    <div className="flex w-full justify-center">
+                      {toPersianDigit(
+                        ((query.currentPage - 1) * pageSize + (index + 1)).toString()
+                      )}
+                      .
                     </div>
                   ),
                 },
                 {
-                  name: 'دسته‌بندی',
-                  key: 'category',
-                  render: v => <span>{v || '-'}</span>,
+                  name: 'نام گزارش',
+                  key: 'reportName',
+                  render: (v: any, record: any) => <span> {record.reportName}</span>,
                 },
                 {
                   name: 'تاریخ گزارش',
                   key: '',
-                  render: (v, record: any) => (
-                    <div className="flex flex-col text-gray-500">
-                      <span>
-                        {record.from
-                          ? toPersianDigit(
-                              dayjs(record.from).calendar('jalali').format('YYYY/MM/DD')
-                            )
-                          : ''}
-                      </span>
-                      <span>-</span>
-                      <span>
-                        {record.to
-                          ? toPersianDigit(dayjs(record.to).calendar('jalali').format('YYYY/MM/DD'))
-                          : ''}
+                  render: (v: any, record: any) => (
+                    <div className="flex w-full justify-center">
+                      <span className="text-gray-500 whitespace-normal ">
+                        {toPersianDigit(
+                          dayjs(record.requestDateTime).calendar('jalali').format('YYYY/MM/DD')
+                        )}
                       </span>
                     </div>
                   ),
@@ -276,92 +177,69 @@ const TransportReport: React.FC<{}> = () => {
                 {
                   name: 'شماره شناسه',
                   key: 'trackingCode',
-                  render: v => <span>{v || '-'}</span>,
+                  render: (v: any, record: any) => (
+                    <span className="text-gray-500">{toPersianDigit(record.trackingCode)}</span>
+                  ),
                 },
                 {
                   name: 'تاریخ درخواست',
-                  key: 'createdDate',
-                  render: v => (
-                    <div className="flex justify-center">
-                      <div style={{width: '64px'}}>
-                        <span className="text-gray-400 whitespace-normal">
-                          {v
-                            ? toPersianDigit(dayjs(v).calendar('jalali').format('YYYY/MM/DD HH:mm'))
-                            : ''}
+                  key: 'requestDateTime',
+                  render: (v: any, record: any) => (
+                    <>
+                      <div className="flex w-full justify-center">
+                        <span className="text-gray-500 whitespace-normal ">
+                          {toPersianDigit(
+                            dayjs(record.requestDateTime).calendar('jalali').format('YYYY/MM/DD')
+                          )}
                         </span>
                       </div>
-                    </div>
+                      <div className="pt-3">
+                        <span className="text-gray-500 whitespace-normal">
+                          {toPersianDigit(
+                            dayjs(record.requestDateTime).calendar('jalali').format('HH:mm')
+                          )}
+                        </span>
+                      </div>
+                    </>
                   ),
                 },
                 {
                   name: 'آخرین به‌روزرسانی',
                   key: 'lastModifiedDate',
-                  render: v => (
-                    <div className="flex justify-center">
-                      <div style={{width: '64px'}}>
-                        <span className="text-gray-500 whitespace-normal">
-                          {v
-                            ? toPersianDigit(dayjs(v).calendar('jalali').format('YYYY/MM/DD HH:mm'))
-                            : ''}
+                  render: (v: any, record: any) => (
+                    <>
+                      <div className="flex w-full justify-center">
+                        <span className="text-gray-500 whitespace-normal ">
+                          {toPersianDigit(
+                            dayjs(record.lastModifiedDate).calendar('jalali').format('YYYY/MM/DD')
+                          )}
                         </span>
                       </div>
-                    </div>
+                      <div className="pt-3">
+                        <span className="text-gray-500 whitespace-normal">
+                          {toPersianDigit(
+                            dayjs(record.lastModifiedDate).calendar('jalali').format('HH:mm')
+                          )}
+                        </span>
+                      </div>
+                    </>
                   ),
                 },
                 {
                   name: 'وضعیت',
                   key: 'reportStatus',
-                  render: (v: string, record: any) =>
-                    (() => {
-                      switch (v) {
-                        case 'PROCESSING':
-                          return <span className="text-yellow-500">در حال پردازش</span>;
-                        case 'READY_FOR_DOWNLOAD':
-                          return (
-                            <div className="inline-flex">
-                              <button
-                                type="button"
-                                className="button button--primary px-8 inline-flex w-auto justify-center items-center space-x-2 rtl:space-x-reverse"
-                                onClick={() => handlePreDownload(record.id)}
-                              >
-                                <img src={download} alt="download" className="w-5 h-4" />
-                                <span>دانلود</span>
-                              </button>
-                            </div>
-                          );
-                        case 'DOWNLOADED':
-                          return <span className="text-gray-400">دانلود شده</span>;
-                        default:
-                          return (
-                            <div className="flex justify-center items-center">
-                              <button
-                                type="button"
-                                onClick={() => handleRetry(record.id)}
-                                className="text-red-600 flex justify-center items-center space-x-1 rtl:space-x-reverse"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                  />
-                                </svg>
-                                <span>خطا</span>
-                              </button>
-                            </div>
-                          );
-                      }
-                    })(),
+                  render: (v: any, record: any) => (
+                    <div className="flex w-full justify-center">
+                      <ExportButton
+                        item={record}
+                        reportType="transport"
+                        shouldRefresh={shouldRefresh}
+                        refresh={refresh}
+                      />
+                    </div>
+                  ),
                 },
               ]}
-              totalItems={(dataset || []).length}
             />
           )}
         </div>

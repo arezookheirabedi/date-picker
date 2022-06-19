@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
+import {toPersianDigit} from "../../helpers/utils";
 
 const converters = {
   fa(number: any) {
@@ -16,7 +17,7 @@ Highcharts.setOptions({
     thousandsSep: ',',
   },
 });
-const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
+const Line: React.FC<any> = ({data, borderRadius, pointWidth, name = 'مبتلایان', showInLegends}) => {
   const [options, setOptions] = useState({
     chart: {
       type: 'column',
@@ -63,7 +64,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
             lineWidth: 1,
           },
         },
-        
+
       },
     },
     yAxis: {
@@ -111,12 +112,13 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
     },
     series: [
       {
-        name: 'مبتلایان ',
+        name,
         data: [50, 550, 330, 100, 400, 210, 270, 400, 300, 350, 200, 150],
         lineWidth: 4,
         dataLabels: {
           enabled: true,
         },
+        showInLegend: !!showInLegends
       },
     ],
   }) as any;
@@ -127,7 +129,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
       const categories = [] as any;
       data.map((value: any) => {
         series.push(value.positiveMembersCount);
-        return categories.push(value.date);
+        return categories.push(toPersianDigit(value.date));
       });
       // console.log('series => ', series);
       // console.log('categories => ', categories);
@@ -138,7 +140,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
           lineColor: '#000000',
           lineWidth: 1,
         },
-        series: [{data: series}],
+        series: [{data: series, showInLegend: !!showInLegends}],
       });
     }
   }, [data]);
@@ -184,7 +186,7 @@ const Line: React.FC<any> = ({data,borderRadius,pointWidth}) => {
     <>
       {/* <button onClick={updateSeries} type="button">update series</button> */}
       {/* <button onClick={updateCategories} type="button">update categories</button> */}
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={options}/>
     </>
   );
 };

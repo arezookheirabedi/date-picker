@@ -8,33 +8,21 @@ function passengerTestResult({...params}: any = {}, config?: any): Promise<Axios
     .get(`/api/v1/hcs-reporter/trips/test-results/general`, params, {...config});
 }
 
-
-function getDoses(
-  params: any = {}, config?: any
-) {
+function getDoses(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/trips/vaccines/general`, params, {...config});
 }
 
-
-
-
-
-function dosesTagBased(
-  params: any = {}, config?: any
-) {
+function dosesTagBased(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/trips/vaccines/provinces`, params, {...config});
 }
 
-function passengerOverViewByCategory(
-  params: any = {},
-  config?: any
-) {
+function passengerOverViewByCategory(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -42,10 +30,7 @@ function passengerOverViewByCategory(
       ...config,
     });
 }
-function passengerTestResultByCategory(
-  {tag, category, ...params}: any = {},
-  config?: any
-) {
+function passengerTestResultByCategory({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -62,14 +47,11 @@ function columnChartTestResultService(params: any = {}, config?: any) {
     });
 }
 
-
-
-
 export default {
   passengerTestResult,
   getDoses,
   dosesTagBased,
   passengerOverViewByCategory,
   passengerTestResultByCategory,
-  columnChartTestResultService
+  columnChartTestResultService,
 };

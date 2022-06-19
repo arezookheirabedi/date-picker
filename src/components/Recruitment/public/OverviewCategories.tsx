@@ -1,25 +1,12 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import {Menu} from '@headlessui/react';
 import recruitmentServices from 'src/services/recruitment.service';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
-import Table from '../../TableScope';
+import Table from '../../TableScopeSort';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../../helpers/utils';
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-
-const filterTypes: any[] = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
 
 const OverviewCategories: React.FC<{}> = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -178,80 +165,8 @@ const OverviewCategories: React.FC<{}> = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به کارکنان دولت کشور</legend>
-      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center">
-          <div className="relative inline-flex align-center leading-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="جستجو"
-              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
-              onChange={handleSearch}
-              value={searchQuery}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-grow items-center justify-end space-x-5 rtl:space-x-reverse">
-          <div className="flex items-center">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
-
-              <Menu.Items
-                style={{minWidth: '200px'}}
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              >
-                <div className="px-1 py-1 ">
-                  {filterTypes.map((value: any, index: any) => {
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                            onClick={() => {
-                              setFilterType(value);
-                            }}
-                          >
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
-          </div>
-
+      <div className="flex align-center justify-between space-x-5 rtl:space-x-reverse mb-8">
+        <div className="flex items-center justify-end space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             {showDatePicker ? (
               <DatePickerModal
@@ -330,6 +245,31 @@ const OverviewCategories: React.FC<{}> = () => {
             </div>
           </div>
         </div>
+        <div className="flex align-center">
+          <div className="relative inline-flex align-center leading-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              type="text"
+              placeholder="جستجو"
+              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              onChange={handleSearch}
+              value={searchQuery}
+            />
+          </div>
+        </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <Table
@@ -396,11 +336,13 @@ const OverviewCategories: React.FC<{}> = () => {
             {
               name: 'تعداد کارکنان',
               key: 'employeesCount',
+              sortable: true,
               render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
             },
             {
               name: 'درصد ابتلا',
               key: 'infectedPercent',
+              sortable: true,
               render: (v: any) => (
                 <span>
                   {Number(v).toLocaleString('fa', {
@@ -413,11 +355,13 @@ const OverviewCategories: React.FC<{}> = () => {
             {
               name: 'تعداد مبتلایان',
               key: 'infectedCount',
+              sortable: true,
               render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
             },
             {
               name: 'تعداد بهبودیافتگان',
               key: 'saveCount',
+              sortable: true,
               render: (v: any) => (
                 <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
               ),

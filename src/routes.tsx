@@ -23,6 +23,7 @@ import Citizens from './containers/Citizens/Citizens';
 import PassengerProvince from './containers/Passenger/PassengerProvince';
 import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
+import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
 
 const routes: IRoute[] = [
@@ -31,7 +32,7 @@ const routes: IRoute[] = [
     icon: active => <IconWrapperStyle name="dashboard" active={active} />,
     link: '/dashboard/overview',
     exact: true,
-    inMenu: true,
+    inMenu: false,
     title: 'جامع',
     main: Overview,
     showGuildList: true,
@@ -42,13 +43,24 @@ const routes: IRoute[] = [
     icon: active => <IconWrapperStyle name="citizenship" active={active} />,
     link: '/dashboard/citizenship',
     exact: true,
-    inMenu: true,
+    inMenu: false,
     title: 'شهروندان',
     disabled: true,
     main: Citizens,
   },
   {
     keyIndex: '3',
+    icon: (active, disabled) => (
+      <IconWrapperStyle name="service-port" active={active} disabled={disabled} />
+    ),
+    link: '/dashboard/service-port',
+    exact: true,
+    inMenu: true,
+    title: 'درگاه تبادل داده و خدمات',
+    main: ServicePort,
+  },
+  {
+    keyIndex: '4',
     icon: (active, disabled) => (
       <IconWrapperStyle name="vaccine" active={active} disabled={disabled} />
     ),
@@ -75,7 +87,7 @@ const routes: IRoute[] = [
     ],
   },
   {
-    keyIndex: '4',
+    keyIndex: '5',
     icon: (active, disabled) => (
       <IconWrapperStyle name="transport" active={active} disabled={disabled} />
     ),
@@ -147,7 +159,7 @@ const routes: IRoute[] = [
     main: Bakery,
   },
   {
-    keyIndex: '5',
+    keyIndex: '6',
     icon: (active, disabled) => (
       <IconWrapperStyle name="guild" active={active} disabled={disabled} />
     ),
@@ -214,7 +226,7 @@ const routes: IRoute[] = [
     ],
   },
   {
-    keyIndex: '6',
+    keyIndex: '7',
     icon: (active, disabled) => (
       <IconWrapperStyle name="passenger" active={active} disabled={disabled} />
     ),
@@ -242,7 +254,7 @@ const routes: IRoute[] = [
     // main: Passenger,
   },
   {
-    keyIndex: '7',
+    keyIndex: '8',
     icon: (active, disabled) => (
       <IconWrapperStyle name="school" active={active} disabled={disabled} />
     ),
@@ -271,7 +283,7 @@ const routes: IRoute[] = [
     main: School,
   },
   {
-    keyIndex: '8',
+    keyIndex: '9',
     icon: (active, disabled) => (
       <IconWrapperStyle name="recruitment" active={active} disabled={disabled} />
     ),
@@ -299,7 +311,7 @@ const routes: IRoute[] = [
     main: Recruitment,
   },
   {
-    keyIndex: '9',
+    keyIndex: '11',
     icon: (active, disabled) => (
       <IconWrapperStyle name="reports-requested" active={active} disabled={disabled} />
     ),
