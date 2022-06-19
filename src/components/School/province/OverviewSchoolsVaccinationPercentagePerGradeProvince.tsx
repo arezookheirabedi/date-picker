@@ -243,20 +243,9 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         نگاه کلی به درصد واکسیناسیون آموزش و پرورش استان {cityTitle} در هر مقطع تحصیلی
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
-        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
-          <div className="align-center flex space-x-5 rtl:space-x-reverse">
-            {/* <div className="flex items-center">
-              <SearchableSingleSelect
-                objectKey="categoryValue"
-                placeholder="کل آموزش و پرورش"
-                category="grade"
-                tag="edu"
-                setQueryParams={setQueryParams}
-                queryParams={queryParams}
-              />
-            </div> */}
-            <div className="flex items-center">
-              {' '}
+        <div className="mb-10 mt-6 flex items-center justify-between px-8">
+          <div className="align-center flex w-3/4 justify-between">
+            <div className="align-center flex justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDay={setSelectedDay}
@@ -266,6 +255,21 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
                 />
               ) : null}
               <Calendar action={focusFromDate} to={selectedDay} setSelectedDay={setSelectedDay} />
+            </div>
+          </div>
+          <div className="w-2/4">
+            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}} />
+                  <span>واکسن نزده</span>
+                </div>
+
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}} />
+                  <span>واکسن زده </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

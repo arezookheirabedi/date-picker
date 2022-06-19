@@ -58,13 +58,23 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
 
       const province: any[] = [];
 
-      const positiveMembersCount: any[] = [];
+      const positiveMembersCountToTotalMembersPercentag: any[] = [];
       data.forEach((item: any) => {
         province.push(item.province);
-        positiveMembersCount.push(item.positiveMembersCount);
+        positiveMembersCountToTotalMembersPercentag.push(
+          item.positiveMembersCountToTotalMembersPercentage
+        );
       });
-      // setCategories([...province]);
-      const newData = [{showInLegend: false, name: 'درصد ابتلا', data: [...positiveMembersCount]}];
+
+      const sortPositiveMembersCountToTotalMembersPercentag =
+        positiveMembersCountToTotalMembersPercentag.sort((a, b) => (a > b ? 1 : -1));
+      const newData = [
+        {
+          showInLegend: false,
+          name: 'درصد ابتلا',
+          data: [...sortPositiveMembersCountToTotalMembersPercentag],
+        },
+      ];
       if (data.length > 0) {
         setDataset({categories: [...province], series: [...newData]});
       }
@@ -85,7 +95,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [queryParams]);
 
@@ -221,11 +231,11 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به درصد ابتلای اصناف در هر استان</legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-          <div className="flex align-center space-x-5 rtl:space-x-reverse">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی به درصد ابتلای اصناف در هر استان</legend>
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+          <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
                 objectKey="categoryValue"

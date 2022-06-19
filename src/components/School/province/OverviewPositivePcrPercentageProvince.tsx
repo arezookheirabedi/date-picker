@@ -74,11 +74,15 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
           item.positiveMembersCountToMembersCountPercentage
         );
       });
+      const sortPositiveMembersCountToMembersCountPercentage =
+        positiveMembersCountToMembersCountPercentage.sort((a, b) => (a > b ? 1 : -1));
+
+      // setCategories([...province]);
       const newData = [
         {
           showInLegend: false,
           name: 'درصد ابتلا',
-          data: [...positiveMembersCountToMembersCountPercentage],
+          data: [...sortPositiveMembersCountToMembersCountPercentage],
         },
       ];
       setDataset({categories: [...categoryValue], series: [...newData]});
