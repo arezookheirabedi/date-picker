@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+// @ts-ignore
+import moment from 'moment-jalaali';
 // import {Menu} from '@headlessui/react';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
@@ -60,6 +62,10 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [datasetLoading, setDatasetLoading] = useState<any>([]);
+  const [query, setQuery] = useState({
+    from: null,
+    to: null
+  })
   // const [countsLoading, setCountsLoading] = useState(false);
 
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -96,6 +102,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     setSelectedDayRange({
       from: null,
       to: null,
+      clear : true
     });
   };
 
@@ -126,10 +133,10 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     }
   };
 
-  const getOverviewByVaccine = async () => {
+  const getOverviewByVaccine = async (params: any) => {
     setDatasetLoading(true);
     try {
-      const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {lang: 'fa'});
+      const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {...params, lang: 'fa'});
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         // eslint-disable-next-line
@@ -167,14 +174,38 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     }
   };
 
-  useEffect(() => {
+  useEffect(()=>{
     getNumberOf();
-    getOverviewByVaccine();
+  },[]);
+
+  useEffect(() => {
+    getOverviewByVaccine(query);
     return () => {
       source.cancel('Operation canceled by the user.');
-      setNumberOf(initialNumberOf);
     };
-  }, []);
+  }, [query]);
+
+  useEffect(() => {
+    if (selectedDayRange.from && selectedDayRange.to) {
+      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+      setQuery({
+        ...query,
+        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+      });
+    }
+    if (selectedDayRange.clear) {
+      setQuery({
+        ...query,
+        from: null,
+        to: null,
+      });
+    }
+  }, [selectedDayRange]);
+
 
   // const [reportsDose, setReportsDose] = useState({}) as any;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -661,18 +692,18 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                               ],
                             },
                           },
-                          {
-                            name: 'unknownInformation',
-                            title: 'اطلاعات مخدوش',
-                            y: record.unknownInformation || 0,
-                            color: {
-                              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                              stops: [
-                                [0, '#eee'], // start
-                                [1, '#a8a8a8'], // end
-                              ],
-                            },
-                          },
+                          // {
+                          //   name: 'unknownInformation',
+                          //   title: 'اطلاعات مخدوش',
+                          //   y: record.unknownInformation || 0,
+                          //   color: {
+                          //     linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          //     stops: [
+                          //       [0, '#eee'], // start
+                          //       [1, '#a8a8a8'], // end
+                          //     ],
+                          //   },
+                          // },
                         ]}
                       />
                     );
@@ -723,20 +754,20 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                     <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
                   ),
                 },
-                {
-                  name: 'اطلاعات مخدوش',
-                  key: 'unknownInformation',
-                  render: (v: any) => (
-                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
-                  ),
-                },
-                {
-                  name: 'واکسن نزده',
-                  key: 'noDose',
-                  render: (v: any) => (
-                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
-                  ),
-                },
+                // {
+                //   name: 'اطلاعات مخدوش',
+                //   key: 'unknownInformation',
+                //   render: (v: any) => (
+                //     <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                //   ),
+                // },
+                // {
+                //   name: 'واکسن نزده',
+                //   key: 'noDose',
+                //   render: (v: any) => (
+                //     <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
+                //   ),
+                // },
               ]}
               totalItems={0}
             />

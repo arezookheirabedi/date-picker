@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+// @ts-ignore
+import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
@@ -19,7 +21,6 @@ import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
 import DatePickerModal from "../../DatePickerModal";
 import calendar from "../../../assets/images/icons/calendar.svg";
-
 
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps {
@@ -53,6 +54,10 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
     const [dataset, setDataset] = useState<any>([]);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [datasetLoading, setDatasetLoading] = useState<any>([]);
+    const [query, setQuery] = useState({
+      from: null,
+      to: null
+    })
 
     const [selectedDayRange, setSelectedDayRange] = useState({
       from: null,
@@ -88,6 +93,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
       setSelectedDayRange({
         from: null,
         to: null,
+        clear : true
       });
     };
 
@@ -280,10 +286,11 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
       }
     };
 
-    const getOverviewByVaccine = async (province: any) => {
+    const getOverviewByVaccine = async (params: any, province: any) => {
       setDatasetLoading(true);
       try {
         const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {
+          ...params,
           lang: 'fa',
           province,
         });
@@ -340,7 +347,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           // getReportsDose({province: provinceName});
           // getOverviewByVaccinePercent({province: provinceName});
           getNumberOf(provinceName);
-          getOverviewByVaccine(provinceName);
           // getLinearOverviewPublicTransport();
         }, 500);
       } else {
@@ -357,6 +363,36 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
         }
       };
     }, [location.search]);
+
+    useEffect(() => {
+      const params = new URLSearchParams(location.search);
+      const provinceName = params.get('provinceName') || ('تهران' as any);
+      const existsCity = sideCities.some((item: any) => {
+        return item.name === provinceName;
+      });
+
+      let idSetTimeOut: any;
+      if (existsCity) {
+        idSetTimeOut = setTimeout(() => {
+          // getReportsDose({province: provinceName});
+          // getOverviewByVaccinePercent({province: provinceName});
+          getOverviewByVaccine(query, provinceName);
+          // getLinearOverviewPublicTransport();
+        }, 500);
+      } else {
+        history.push('/dashboard/transport/province');
+      }
+
+      return () => {
+        if (existsCity) {
+          source.cancel('Operation canceled by the user.');
+          setNumberOf(initialNumberOf);
+          setDataset([]);
+          setOrgDataset([]);
+          clearTimeout(idSetTimeOut);
+        }
+      };
+    }, [query, location.search]);
 
     useEffect(() => {
       const tmp = [...orgDataset].sort((a: any, b: any) => {
@@ -378,6 +414,27 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
 
       setDataset(tmp);
     }, [filterType]);
+
+    useEffect(() => {
+      if (selectedDayRange.from && selectedDayRange.to) {
+        const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+        const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+        // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
+        // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
+        setQuery({
+          ...query,
+          from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+          to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+        });
+      }
+      if (selectedDayRange.clear) {
+        setQuery({
+          ...query,
+          from: null,
+          to: null,
+        });
+      }
+    }, [selectedDayRange]);
 
     return (
       <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
