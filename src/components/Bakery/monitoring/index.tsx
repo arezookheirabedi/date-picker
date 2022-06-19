@@ -1,35 +1,20 @@
-import React, { useEffect,  useState} from 'react';
+import React, {useEffect, useState} from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
-import {
-   cancelTokenSource,
-   msgRequestCanceled,
-   toPersianDigit,
-} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
-import { isEmpty} from 'lodash';
+import {isEmpty} from 'lodash';
 import guildService from 'src/services/guild.service';
-import { ExpandedForm} from './ExpandedForm';
 import FilterInterceptors from './FilterInterceptors';
-// import FilterInterceptors from './FilterInterceptors';
-
-// import FilterInterceptors from './FilterInterceptors';
+import ExpandedForm from './ExpandedForm';
 
 const BakeryMonitoringList: React.FC<{}> = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
-  // const [dataSet, setDataSet] = useState<any[]>(initialValue);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
   const [query, setQuery] = useState({
     from: null,
     to: null,
@@ -43,7 +28,7 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const pageSize = 5;
+  const pageSize = 10;
 
   async function fetcher(params: any) {
     setLoading(true);
@@ -172,13 +157,19 @@ const BakeryMonitoringList: React.FC<{}> = () => {
 
                 {
                   name: 'تاریخ آخرین بازرسی',
-                  key: 'inspectionDateTime',
+                  key: 'lastInspectionDateTime',
                   render: (v: any, record: any) => (
                     <>
                       <div className="flex w-full justify-center">
                         <span className="whitespace-normal text-gray-500 ">
-                          {toPersianDigit(
-                            dayjs(record.inspectionDateTime).calendar('jalali').format('YYYY/MM/DD')
+                          {record.lastInspectionDateTime ? (
+                            toPersianDigit(
+                              dayjs(record.lastInspectionDateTime)
+                                .calendar('jalali')
+                                .format('YYYY/MM/DD')
+                            )
+                          ) : (
+                            <>-</>
                           )}
                         </span>
                       </div>
