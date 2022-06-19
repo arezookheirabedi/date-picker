@@ -95,7 +95,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [queryParams]);
 

@@ -91,7 +91,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     return () => {
       clearTimeout(idSetTimeOut);
       cancelRequest();
-      setDataset([]);
+      setDataset({});
     };
   }, [queryParams]);
 
