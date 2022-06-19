@@ -297,26 +297,6 @@ export const obj = {
         return '-';
     }
   };
-  // export const getNaneMantaghe = (data: any) => {
-  //   switch (data) {
-  //     case true:
-  //       return 'تامین است';
-  //     case false:
-  //       return 'تامین نیست';
-  //     default:
-  //       return '-';
-  //   }
-  // };
-  // export const getArzenan = (data: any) => {
-  //   switch (data) {
-  //     case true:
-  //       return 'مصوب';
-  //     case false:
-  //       return 'غیر مصوب';
-  //     default:
-  //       return '-';
-  //   }
-  // };
   export const getٰRaayateVazneChane= (data: any) => {
     switch (data) {
       case true:
