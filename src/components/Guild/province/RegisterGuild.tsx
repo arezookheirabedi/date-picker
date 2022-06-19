@@ -115,14 +115,14 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
   //   setCurrentPage(page);
   // }
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         {' '}
         اصناف ثبت نام شده در سامانه استان {cityTitle}
       </legend>
 
-      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             {showDatePicker ? (
               <DatePickerModal
@@ -142,11 +142,11 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
           </div>
         </div>
 
-        <div className="flex flex-grow align-center justify-end">
-          <div className="relative inline-flex align-center leading-3">
+        <div className="align-center flex flex-grow justify-end">
+          <div className="align-center relative inline-flex leading-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+              className="absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 transform"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -160,8 +160,8 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
             </svg>
             <input
               type="text"
-              placeholder="جستجوی واحد صنفی"
-              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              placeholder="جستجوی رسته"
+              className="focus:outline-none rounded-lg border border-gray-300 py-2 px-4 pr-10 text-sm"
               onChange={handleSearch}
               value={searchQuery}
             />
@@ -169,27 +169,28 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
         </div>
       </div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={loading}
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[
             {
-              name: 'تعداد',
-              key: 'registeredCount',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-            },
-            {
               name: 'نام رسته',
               key: 'name',
 
               render: (v: any, record, index: number, page: number) => (
-                <div className="flex">
+                <div className="flex justify-center">
                   {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
                 </div>
               ),
+            },
+
+            {
+              name: 'تعداد',
+              key: 'registeredCount',
+              sortable: true,
+              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
             },
           ]}
           totalItems={(dataset || []).length}
