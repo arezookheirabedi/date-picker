@@ -8,18 +8,20 @@ import {sideCities} from 'src/helpers/utils';
 
 const GuildMonitoring = () => {
   const location = useLocation();
-  const [cityTitle, setCityTitle] = useState('تهران');
+
+  const [cityTitle, setCityTitle] = useState<string | undefined>();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    // console.log(provinceName)
+    const provinceName = params.get('provinceName') as any;
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
 
     if (existsCity) {
       setCityTitle(provinceName);
+    } else {
+      setCityTitle(undefined);
     }
   }, [location.search]);
 

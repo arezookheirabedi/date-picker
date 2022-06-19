@@ -42,11 +42,11 @@ const Logout: React.FC<IProps> = () => {
             <Transition.Child
               as="div"
               enter="ease-out duration-300"
-              enterFrom="all"
-              enterTo="all"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
               leave="ease-in duration-200"
-              leaveFrom="all"
-              leaveTo="all"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
               <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90" />
             </Transition.Child>

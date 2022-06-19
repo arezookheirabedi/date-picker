@@ -2,25 +2,11 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import recruitmentServices from 'src/services/recruitment.service';
-import {Menu} from '@headlessui/react';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
-import Table from '../../TableScope';
+import Table from '../../TableScopeSort';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import {toPersianDigit} from '../../../helpers/utils';
-
-import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-
-const filterTypes = [
-  {
-    name: 'بیشترین',
-    enName: 'HIGHEST',
-  },
-  {
-    name: 'کمترین',
-    enName: 'LOWEST',
-  },
-];
 
 const TestStatus: React.FC<{}> = () => {
   const [filterType, setFilterType] = useState({name: 'بیشترین', enName: 'HIGHEST'});
@@ -52,7 +38,7 @@ const TestStatus: React.FC<{}> = () => {
           negativeCount: item.negativeTestResultsCount || 0,
           unknownCount:
             (item.testResultsCount || 0) -
-              ((item.positiveTestResultsCount || 0) + (item.negativeTestResultsCount || 0)) || 0,
+            ((item.positiveTestResultsCount || 0) + (item.negativeTestResultsCount || 0)) || 0,
           // deadCount: 120,
         });
       });
@@ -84,11 +70,11 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.from
       ? // eslint-disable-next-line
-        selectedDayRange.from.year +
-          '/' +
-          selectedDayRange.from.month +
-          '/' +
-          selectedDayRange.from.day
+      selectedDayRange.from.year +
+      '/' +
+      selectedDayRange.from.month +
+      '/' +
+      selectedDayRange.from.day
       : '';
   };
 
@@ -96,7 +82,7 @@ const TestStatus: React.FC<{}> = () => {
     // eslint-disable-next-line
     return selectedDayRange.to
       ? // eslint-disable-next-line
-        selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
+      selectedDayRange.to.year + '/' + selectedDayRange.to.month + '/' + selectedDayRange.to.day
       : '';
   };
 
@@ -111,9 +97,9 @@ const TestStatus: React.FC<{}> = () => {
         category: 'heName',
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        tags: [],
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       getOverviewByCategory({
         tag: 'employee',
         category: 'heName',
@@ -182,84 +168,8 @@ const TestStatus: React.FC<{}> = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">وضعیت آزمایش کارکنان دولت</legend>
 
-      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center">
-          <div className="relative inline-flex align-center leading-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="جستجو"
-              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
-              onChange={handleSearch}
-              value={searchQuery}
-            />
-          </div>
-        </div>
-        <div className="flex flex-grow align-center justify-end space-x-5 rtl:space-x-reverse">
-          <div className="flex items-center">
-            <Menu
-              as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
-            >
-              <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                  {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-                  {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
-                    {filterType?.name || 'بیشترین'}
-                  </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
-                </Menu.Button>
-              </div>
-
-              <Menu.Items
-                style={{width: '250px'}}
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-              >
-                <div className="px-1 py-1 ">
-                  {filterTypes.map((value: any, index: any) => {
-                    // console.log(value);
-                    return (
-                      // eslint-disable-next-line
-                      <Menu.Item key={index}>
-                        {({active}) => (
-                          <button
-                            type="button"
-                            className={`${
-                              active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
-                            onClick={() => {
-                              setFilterType(value);
-                              // setQueryParams({
-                              //   ...queryParams,
-                              //   tag: value.enName,
-                              // });
-                            }}
-                          >
-                            {/* <IconWrapper className="w-4 h-4 ml-3" name="exit" /> */}
-                            {value.name}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    );
-                  })}
-                </div>
-              </Menu.Items>
-            </Menu>
-          </div>
+      <div className="flex align-center justify-between space-x-5 rtl:space-x-reverse mb-8">
+        <div className="flex flex-grow align-center justify-between space-x-5 rtl:space-x-reverse">
 
           <div className="flex items-center">
             {showDatePicker ? (
@@ -299,12 +209,12 @@ const TestStatus: React.FC<{}> = () => {
                     </svg>
                   </button>
                 ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 )}
               </div>
             </div>
             <div className="flex items-center justify-start mx-4">
-              <span className="dash-separator" />
+              <span className="dash-separator"/>
             </div>
             <div className=" shadow-custom rounded-lg px-4 py-1">
               <div
@@ -334,10 +244,35 @@ const TestStatus: React.FC<{}> = () => {
                     </svg>
                   </button>
                 ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="w-5 h-5"/>
                 )}
               </div>
             </div>
+          </div>
+        </div>
+        <div className="flex align-center">
+          <div className="relative inline-flex align-center leading-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              type="text"
+              placeholder="جستجو"
+              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              onChange={handleSearch}
+              value={searchQuery}
+            />
           </div>
         </div>
       </div>
@@ -405,8 +340,14 @@ const TestStatus: React.FC<{}> = () => {
               ),
             },
             {
+              name: 'تعداد کارکنان',
+              key: 'employeesCount',
+              render: () => <span>-</span>,
+            },
+            {
               name: 'تعداد آزمایش‌های انجام شده',
               key: 'total',
+              sortable: true,
               render: (v: any) => (
                 <span>
                   {Number(v || 0)
@@ -418,6 +359,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'درصد تست‌های مثبت',
               key: 'positiveCount',
+              sortable: true,
               render: (v: any, record: any) => (
                 <span>
                   {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
@@ -430,6 +372,7 @@ const TestStatus: React.FC<{}> = () => {
             {
               name: 'درصد تست‌های منفی',
               key: 'negativeCount',
+              sortable: true,
               render: (v: any, record: any) => (
                 <span>
                   {((Number(v || 0) * 100) / Number(record.total || 0) || 0)

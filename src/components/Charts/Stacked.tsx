@@ -96,8 +96,13 @@ const converters = {
   },
 };
 
-
-const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({data, categories,notPercent}) => {
+const Column: React.FC<{
+  data: any;
+  categories?: any;
+  notPercent?: boolean;
+  tooltipSuffix?: string;
+  yAxisLabelFormat?: string;
+}> = ({data, categories, notPercent, tooltipSuffix, yAxisLabelFormat}) => {
   const chartRef = useRef<any>(null);
   const options = {
     chart: {
@@ -109,11 +114,10 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
         return converters.fa(ret);
       },
 
-
       events: {
         redraw: () => {
           // eslint-disable-next-line
-          console.log('redraw');
+          // console.log('redraw');
         },
       },
       // zoomType: 'x'
@@ -145,7 +149,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
     plotOptions: {
       series: {
         // stacking: 'percent',
-        stacking: `${notPercent?'normal':'percent'}`,
+        stacking: `${notPercent ? 'normal' : 'percent'}`,
         // borderRadius: 5,
         pointWidth: 15,
       },
@@ -165,6 +169,9 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
       title: {
         enabled: false,
       },
+      labels: {
+        format: `${yAxisLabelFormat || '{text}'}`,
+      },
     },
     legend: {
       enabled: false,
@@ -182,7 +189,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix: ' نفر',
+      valueSuffix: `${tooltipSuffix || 'نفر'}`,
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -192,13 +199,9 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
       borderWidth: 0,
       // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
-  
+
     series: [],
   };
-
-
-
-
 
   useEffect(() => {
     if (chartRef && chartRef.current) {
@@ -231,7 +234,7 @@ const Column: React.FC<{data: any; categories?: any; notPercent?:boolean;}> = ({
         highcharts={Highcharts}
         options={options}
         ref={chartRef}
-        containerProps={{className: 'flex w-full', style: {maxWidth: 'calc(100vw - 550px)'}}}
+        containerProps={{className: 'flex w-full'}}
       />
     </>
   );

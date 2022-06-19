@@ -92,6 +92,15 @@ export const convertGregorianDateToObjectDate = (date: any, calendar?: 'gregory'
   };
 };
 
+export const convertGregorianDateToJalaliDate = (date: any) => {
+  if (!date) return null;
+  return new Date(date).toLocaleDateString('fa-IR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+};
+
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
   let mainKey = event.key;
   const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
