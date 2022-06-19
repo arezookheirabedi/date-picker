@@ -53,7 +53,7 @@ function tags({ tag, category, ...params }: any = {}, config?: any) {
   return request
     .withHeaders({ 'Content-Type': 'application/json;utf-8' })
     .build()
-    .get(`/api/v1/hcs-reporter/tags/${tag}/categories/${category}/category-values`, params, {
+    .get(`/api/v1/hcs-reporter/tags/${tag}/categories/${category}/category-values?lang=fa`, params, {
       ...config,
     });
 }
