@@ -156,18 +156,18 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     };
   }, [cityTitle, currentPage]);
   useEffect(() => {
-    setCurrentPage(0);
+    setCurrentPage(1);
   }, [cityTitle]);
   function handlePageChange(page: number = 1) {
     setCurrentPage(page);
   }
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="drivers-overview">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center" id="drivers-overview">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به وضعیت رانندگان حمل و نقل عمومی {cityTitle ? `استان ${cityTitle}` : ''}
       </legend>
 
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <div className="inline-flex">
           <ExportButton
             params={{
@@ -182,13 +182,13 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
         </div>
       </div>
 
-      {loading ? (
+      {loading && dataSet.length === 0 ? (
         <div className="p-20">
           <Spinner />
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center justify-center w-full rounded-xl bg-white p-4 shadow">
+          <div className="flex w-full flex-col items-center justify-center rounded-xl bg-white p-4 shadow">
             <Table
               handlePageChange={handlePageChange}
               dataSet={[...dataSet]}
@@ -199,7 +199,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                   name: 'رسته',
                   key: 'serviceType',
                   render: (v: any, record, index: number) => (
-                    <span className="flex justify-start w-full">
+                    <span className="flex w-full justify-start">
                       {`${toPersianDigit(
                         ((currentPage - 1) * pageSize + (index + 1)).toString()
                       )}. ${getServiceTypeName(v)}`}
@@ -234,7 +234,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
                     return (
                       <div className="flex justify-center">
                         <div
-                          className={`bg-gradient-to-l ${colors} w-4 h-4 rounded-full shadow-2xl`}
+                          className={`bg-gradient-to-l ${colors} h-4 w-4 rounded-full shadow-2xl`}
                           style={{boxShadow: '-3px 4px 8px -3px rgba(0,0,0,.5)'}}
                         />
                       </div>
