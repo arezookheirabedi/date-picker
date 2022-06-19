@@ -1,9 +1,9 @@
 import React from 'react';
 import BakeryMonitoringList from 'src/components/Bakery/monitoring';
 
-const BakeryMonitoring = () => {
+const BakeryMonitoring : React.FC<{}> = () => {
   return (
-    <div className="space-y-16 mb-8">
+    <div className="mb-8 space-y-16">
       <BakeryMonitoringList />
     </div>
   );
