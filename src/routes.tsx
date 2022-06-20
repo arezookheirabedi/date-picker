@@ -284,7 +284,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/guilds',
     exact: true,
     inMenu: true,
-    title: 'اصناف',
+    title: 'بازرسی اصناف',
     subMenu: [
       {
         keyIndex: '10',
