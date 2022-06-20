@@ -15,22 +15,35 @@ import activeTimeIcon from '../../../assets/images/icons/active-time.svg';
 import posDeactiveIcon from '../../../assets/images/icons/pos-deactive.svg';
 import ovenDeactiveIcon from '../../../assets/images/icons/oven-deactive.svg';
 import bakeryBannedIcon from '../../../assets/images/icons/bakery-banned.svg';
+import posSubmittedIcon from '../../../assets/images/icons/pos-submitted.svg';
+import unnormalTransactionIcon from '../../../assets/images/icons/unnormal-transaction.svg';
+import withoutTransactionIcon from '../../../assets/images/icons/without-transaction.svg';
+import wheatGardIcon from '../../../assets/images/icons/wheat-gard.svg';
+import wheatGrayIcon from '../../../assets/images/icons/wheat-gray.svg';
+import withPosIcon from '../../../assets/images/icons/with-pos.svg';
 import bakeryService from '../../../services/bakery.service';
 
 const initialNumberOf = {
   numberOfTotalBakery: 0,
   numberOfEnableBakery: 0,
   numberOfDisableBakery: 0,
-  numberOfAudit: 0,
-  numberOfSamt: 0,
-  numberOfSima: 0,
-  numberOfActivePos: 0,
-  numberOfAvgSupplyFlour: 0,
-  numberOfBakeryWithoutPos: 0,
   numberOfBakeryBanned: 0,
+  numberOfSamt: 0,
+  numberOfValidLicence: 0,
+  numberOfInvalidLicence: 0,
+  numberOfWithDead: 0,
+  numberOfAvgSupplyFlour: 732.0,
+  numberOfActivePos: 0,
+  numberOfSubmittedPos: 0,
+  numberOfBakeryWithoutPos: 0,
+  numberOfBakeryWithPos: 0,
+  numberOfIncludeAudit: 0,
+  numberOfAudit: 0,
   numberOfTransactionPerDay: 0,
   numberOfTransaction: 0,
   numberOfPosActiveTime: 0,
+  numberOfPosUnnormal: 0,
+  numberOfPosWithoutTransaction: 0,
 };
 
 const OverviewBakery = () => {
@@ -89,14 +102,7 @@ const OverviewBakery = () => {
               count={numberOf.numberOfDisableBakery || 0}
               loading={loading}
             />
-            <Statistic
-              icon={thermometerIcon}
-              text="مجموع بازرسی‌های صورت گرفته"
-              count={numberOf.numberOfAudit || 0}
-              loading={loading}
-            />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+
             <Statistic
               icon={frenchBreadIcon}
               text="مجموع واحدهای نانوایی صمت"
@@ -105,13 +111,46 @@ const OverviewBakery = () => {
               // hasInfo
               // infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={wheatIcon}
-              text="مجموع مجوز‌های سیما"
-              count={numberOf.numberOfSima || 0}
+              text="مجموع پروانه کسب‌های معتبر در اصناف"
+              count={numberOf.numberOfValidLicence || 0}
               loading={loading}
               // hasInfo
               // infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
+            />
+            <Statistic
+              icon={wheatGrayIcon}
+              text="مجموع پروانه کسب‌های نامعتبر در اصناف"
+              count={numberOf.numberOfInvalidLicence || 0}
+              loading={loading}
+              // hasInfo
+              // infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
+            />
+            <Statistic
+              icon={bakeryBannedIcon}
+              text="مجموع نانوایی‌های سیما با مالک فوتی"
+              count={numberOf.numberOfWithDead || 0}
+              loading={loading}
+              // hasInfo
+              // infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
+            />
+
+            <Statistic
+              icon={flourIcon}
+              text="مجموع سهمیه دریافتی در ماه"
+              count={numberOf.numberOfAvgSupplyFlour || 0}
+              loading={loading}
+            />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+            <Statistic
+              icon={posSubmittedIcon}
+              text="تعداد کارتخوان های ثبت شده"
+              count={numberOf.numberOfSubmittedPos || 0}
+              loading={loading}
             />
             <Statistic
               icon={posIcon}
@@ -120,13 +159,13 @@ const OverviewBakery = () => {
               loading={loading}
             />
             <Statistic
-              icon={flourIcon}
-              text="متوسط تامین آرد در هر استان"
-              count={numberOf.numberOfAvgSupplyFlour || 0}
+              icon={withPosIcon}
+              text="مجموع نانوایی‌های با کارتخوان"
+              count={numberOf.numberOfBakeryWithPos || 0}
               loading={loading}
+              // hasInfo
+              // infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={posDeactiveIcon}
               text="مجموع نانوایی‌های بدون کارتخوان"
@@ -135,14 +174,23 @@ const OverviewBakery = () => {
               // hasInfo
               // infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
-              icon={bakeryBannedIcon}
-              text="مجموع نانوایی‌های مسدود شده"
-              count={numberOf.numberOfBakeryBanned || 0}
+              icon={wheatGardIcon}
+              text="مجموع واحد‌های مشمول بازرسی"
+              count={numberOf.numberOfIncludeAudit || 0}
               loading={loading}
               // hasInfo
               // infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
             />
+            <Statistic
+              icon={thermometerIcon}
+              text="مجموع بازرسی‌های صورت گرفته"
+              count={numberOf.numberOfAudit || 0}
+              loading={loading}
+            />
+
             <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
             <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
           </div>
@@ -180,6 +228,26 @@ const OverviewBakery = () => {
               // hasInfo
               // infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
             />
+            <Statistic
+              icon={unnormalTransactionIcon}
+              text="تراکنش‌های غیر عادی"
+              count={numberOf.numberOfPosUnnormal || 0}
+              loading={loading}
+              // hasInfo
+              // infoText="این عدد مشتمل بر افرادی است که هیچگونه واکسنی دریافت نکرده اند "
+            />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+            <Statistic
+              icon={withoutTransactionIcon}
+              text="واحدهای بدون تراکنش"
+              count={numberOf.numberOfPosWithoutTransaction || 0}
+              loading={loading}
+              // hasInfo
+              // infoText="این عدد مشتمل بر مجموع تعداد افراد واکسینه در دوزهای اول و دوم سوم است"
+            />
+            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
             <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
           </div>
         </div>
