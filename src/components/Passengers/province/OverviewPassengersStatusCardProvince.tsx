@@ -165,23 +165,31 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             text="مجموع مسافران "
             count={passengerVaccinateInfo.totalPopulation}
             loading={loading}
+            hasInfo
+            infoText="مجموع افرادی که حداقل یک بلیط مسافرتی برای آنها صادر شده است."
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان بعد از سفر"
             count={passengerPcrInfo.positiveMembersCountAfterTrip || 0}
             loading={pcrLoading}
+            hasInfo
+            infoText="مجموع مسافرانی که تا ۱۵ روز بعد از سفر تست کوید آنها مثبت شده است."
           />
           <Statistic
             icon={suspiciousCovid}
             text="مجموع مسافران مشکوک به کوید"
             count="-"
+            hasInfo
+            infoText="مجموع مسافرانی که به دلیل همسفری با افراد مبتلا، مشکوک ابتلا به کوید هستند."
             // loading={pcrLoading}
           />
           <Statistic
             icon={deadIcon}
             text="مجموع مسافران با تست نامشخص"
             count="-"
+            hasInfo
+            infoText="مجموع مسافرانی که وضعیت کوید آنها مشخص نیست."
             // loading={pcrLoading}
           />
         </div>
@@ -191,7 +199,7 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
         <div
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            infoText="افرادی که دو دوز واکسن دریافت نموده اند واکسینه شده تلقی می گردند.      "
+            infoText="تعداد مسافرانی که حداقل یک دوز واکسن را دریافت کرده اند."
             hasInfo
             icon={VaccineIcon}
             text="مجموع افراد واکسینه شده"
@@ -203,6 +211,8 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             text="مجموع افراد واکسینه نشده"
             count={passengerVaccinateInfo.totalNonVaccinesCount}
             loading={loading}
+            hasInfo
+            infoText="تعداد مسافرانی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
           <Statistic
             icon={VaccineIcon}
@@ -210,6 +220,8 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             count={passengerVaccinateInfo.totalVaccinesCountToTotalPopulationPercentage}
             loading={loading}
             isPercentage
+            hasInfo
+            infoText="درصد مسافرانی که حداقل یک دوز واکسن را دریافت کرده اند."
           />
           <Statistic
             icon={GreyVaccine}
@@ -217,14 +229,16 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             count={passengerVaccinateInfo.totalNonVaccinesCountToTotalPopulationPercentage}
             loading={loading}
             isPercentage
+            hasInfo
+            infoText="درصد مسافرانی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
         {/* third card row */}
         <div
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            infoText="افرادی که در هنگام صدور بلیط مجاز به خرید بلیط تشخیص داده نشده اند."
             hasInfo
+            infoText="تعداد مسافرانی که به دلیل محدودیت‌های اعلام شده اجازه سفر ندارند."
             icon={redBaggage}
             text="تعداد استعلام فاقد مجوز"
             count="-"
@@ -235,6 +249,8 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             text="مجموع سفرهای صورت گرفته"
             count={tripCount}
             loading={tripLoading}
+            hasInfo
+            infoText="مجموع تمام سفرهای انجام شده از ابتدای راه اندازی سامانه."
           />
           <Statistic
             icon={passengerPositiveTest}
@@ -242,10 +258,12 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             count={passengerPcrInfo.positiveMembersCountAfterTripToTotalPopulationPercentage || 0}
             loading={pcrLoading}
             isPercentage
+            hasInfo
+            infoText="درصد مسافران با تست کوید مثبت"
           />
           <Statistic
-            infoText="مرجع صادر کننده بلیط اجازه صدور بلیط نداشته ولی بلیط صادر شده است."
             hasInfo
+            infoText="تعداد بلیط فروخته شده به افرادی که مجوز خرید بلیط را ندارند."
             icon={redBaggage}
             text="بلیط های غیرمجاز فروخته شده"
             count="-"
@@ -260,12 +278,16 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             icon={testIcon}
             text="تعداد آزمایش‌های مسافران"
             count={passengerPcrInfo.testResultsCount || 0}
+            hasInfo
+            infoText="تعداد آزمایش های کوید انجام شده توسط مسافران"
           />
           <Statistic
             loading={pcrLoading}
             icon={negetiveTestIcon}
             text="تعداد تست‌های منفی"
             count={passengerPcrInfo.negativeTestResultsCount || 0}
+            hasInfo
+            infoText="تعداد نتایج منفی آزمایش‌هایش های کوید انجام شده توسط مسافران"
           />
           <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
             {/* cvxdvcv */}
