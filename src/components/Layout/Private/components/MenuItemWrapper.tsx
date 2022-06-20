@@ -75,7 +75,7 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                         <li key={r.keyIndex} className="text-gray-400">
                           <NavLink
                             to={r.link}
-                            className="flex items-center pt-3 text-xs font-normal"
+                            className="flex items-center pt-4 text-xs font-normal"
                             isActive={(match: any, loc: any) => {
                               return checkMenuIsActive(r, loc);
                             }}
@@ -96,6 +96,9 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                                     <NavLink
                                       to={c.link}
                                       className="flex items-center pt-3 text-xs font-normal"
+                                      isActive={(match: any, loc: any) => {
+                                        return checkMenuIsActive(c, loc);
+                                      }}
                                     >
                                       <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
                                       {c.icon && c.icon(location.pathname.includes(c.link))}
@@ -107,7 +110,7 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                                           checkMenuIsActive(c) ? 'sub-menu-open' : 'sub-menu-close'
                                         }`}
                                       >
-                                        {r.children.map((d: any) => {
+                                        {c.children.map((d: any) => {
                                           return (
                                             <li key={d.keyIndex} className="text-gray-400">
                                               <NavLink
