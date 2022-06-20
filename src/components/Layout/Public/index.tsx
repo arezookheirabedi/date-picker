@@ -35,7 +35,7 @@ export const PublicRoute: (any) => any = props => {
     <Route
       {...rest}
       render={comprops => (
-        restricted && isLogin() ? <Redirect to="/dashboard/vaccination/public"/> :
+        restricted && isLogin() ? <Redirect to="/dashboard/health/vaccination/public"/> :
           <PublicLayout>
             <Component {...comprops} />
           </PublicLayout>
