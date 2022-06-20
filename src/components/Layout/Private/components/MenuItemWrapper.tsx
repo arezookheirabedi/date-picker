@@ -75,13 +75,13 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                         <li key={r.keyIndex} className="text-gray-400">
                           <NavLink
                             to={r.link}
-                            className="flex items-center pt-3 text-xs font-normal"
+                            className="flex items-center pt-4 text-xs font-normal"
                             isActive={(match: any, loc: any) => {
                               return checkMenuIsActive(r, loc);
                             }}
                           >
-                            <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
-                            {r.icon && r.icon(location.pathname.includes(r.link))}
+                            {/* <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" /> */}
+                            {r.icon && r.icon(location.pathname.includes(r.simLink))}
                             {r.title}
                           </NavLink>
                           {r.children && (
@@ -96,11 +96,37 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                                     <NavLink
                                       to={c.link}
                                       className="flex items-center pt-3 text-xs font-normal"
+                                      isActive={(match: any, loc: any) => {
+                                        return checkMenuIsActive(c, loc);
+                                      }}
                                     >
                                       <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
                                       {c.icon && c.icon(location.pathname.includes(c.link))}
                                       {c.title}
                                     </NavLink>
+                                    {c.children && (
+                                      <ul
+                                        className={`pr-5 ${
+                                          checkMenuIsActive(c) ? 'sub-menu-open' : 'sub-menu-close'
+                                        }`}
+                                      >
+                                        {c.children.map((d: any) => {
+                                          return (
+                                            <li key={d.keyIndex} className="text-gray-400">
+                                              <NavLink
+                                                to={d.link}
+                                                className="flex items-center pt-3 text-xs font-normal"
+                                              >
+                                                <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                                                {d.icon &&
+                                                  d.icon(location.pathname.includes(d.link))}
+                                                {d.title}
+                                              </NavLink>
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    )}
                                   </li>
                                 );
                               })}

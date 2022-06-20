@@ -177,15 +177,27 @@ const PrivateLayout: React.FC<any> = () => {
                         component={routeArg.main}
                       />
                     ) : (
-                      routeArg.children.map((routeChildren: any, inc: any) => (
-                        <Route
-                          path={routeChildren.link}
-                          exact={routeChildren.exact}
-                          // eslint-disable-next-line
-                          key={inc}
-                          component={routeChildren.main}
-                        />
-                      ))
+                      routeArg.children.map((routeChildren: any, inc1: any) =>
+                        !routeChildren.children ? (
+                          <Route
+                            path={routeChildren.link}
+                            exact={routeChildren.exact}
+                            // eslint-disable-next-line
+                            key={inc1}
+                            component={routeChildren.main}
+                          />
+                        ) : (
+                          routeChildren.children.map((routeChildren1: any, inc2: any) => (
+                            <Route
+                              path={routeChildren1.link}
+                              exact={routeChildren1.exact}
+                              // eslint-disable-next-line
+                              key={inc2}
+                              component={routeChildren1.main}
+                            />
+                          ))
+                        )
+                      )
                     )
                   )
                 )
