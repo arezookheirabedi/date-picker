@@ -127,5 +127,5 @@ const IconWrapper: React.FC<IProps> = props => {
 export default IconWrapper;
 
 export const IconWrapperStyle = styled(IconWrapper)`
-  margin-left: 1rem !important;
+  margin-left: 0.75rem !important;
 `;

@@ -76,7 +76,7 @@ export default function Login() {
       // );
       // eslint-disable-next-line
       console.log('you are logged in');
-      history.push("/dashboard/vaccination/public");
+      history.push("/dashboard/health/vaccination/public");
     } catch (error: any) {
       handleCaptcha();
       const {message} = error;

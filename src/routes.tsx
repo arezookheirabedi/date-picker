@@ -39,9 +39,10 @@ const routes: IRoute[] = [
       {
         keyIndex: '3',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="service-port" active={active} disabled={disabled} />
+          <IconWrapperStyle name="service-port" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/service-port',
+        simLink: '/dashboard/health/service-port',
         exact: true,
         inMenu: true,
         title: 'درگاه تبادل داده و خدمات',
@@ -50,7 +51,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '4',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="vaccine" active={active} disabled={disabled} />
+          <IconWrapperStyle name="vaccine" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/vaccination/public',
         simLink: '/dashboard/health/vaccination',
@@ -59,14 +60,14 @@ const routes: IRoute[] = [
         title: 'واکسیناسیون',
         children: [
           {
-            keyIndex: '1',
+            keyIndex: '41',
             title: 'عمومی',
             link: '/dashboard/health/vaccination/public',
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
             main: Vaccination,
           },
           {
-            keyIndex: '2',
+            keyIndex: '42',
             title: 'استانی',
             link: '/dashboard/health/vaccination/province',
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
@@ -77,7 +78,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '5',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="transport" active={active} disabled={disabled} />
+          <IconWrapperStyle name="transport" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/transport/public',
         simLink: '/dashboard/health/transport',
@@ -86,21 +87,21 @@ const routes: IRoute[] = [
         title: 'حمل و نقل عمومی',
         children: [
           {
-            keyIndex: '1',
+            keyIndex: '51',
             title: 'عمومی',
             link: '/dashboard/health/transport/public',
             icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
             main: Transport,
           },
           {
-            keyIndex: '2',
+            keyIndex: '52',
             title: 'استانی',
             link: '/dashboard/health/transport/province',
             icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
             main: TransportProvince,
           },
           {
-            keyIndex: '3',
+            keyIndex: '53',
             title: 'نظارت و بازرسی',
             link: '/dashboard/health/transport/monitoring',
             icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
@@ -113,7 +114,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '6',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="guild" active={active} disabled={disabled} />
+          <IconWrapperStyle name="guild" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/guild/owner/public',
         simLink: '/dashboard/health/guild',
@@ -123,21 +124,21 @@ const routes: IRoute[] = [
         // disabled: true,
         children: [
           {
-            keyIndex: '1',
+            keyIndex: '61',
             title: 'مالکان واحدهای صنفی',
             simLink: '/dashboard/health/guild/owner',
             link: '/dashboard/health/guild/owner/public',
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
             children: [
               {
-                keyIndex: '1',
+                keyIndex: '611',
                 title: 'عمومی',
                 link: '/dashboard/health/guild/owner/public',
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
                 main: GuildOwner,
               },
               {
-                keyIndex: '2',
+                keyIndex: '612',
                 title: 'استانی',
                 link: '/dashboard/health/guild/owner/province',
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
@@ -146,21 +147,21 @@ const routes: IRoute[] = [
             ],
           },
           {
-            keyIndex: '2',
+            keyIndex: '62',
             title: 'کارکنان واحدهای صنفی',
             link: '/dashboard/health/guild/employee/public',
             simLink: '/dashboard/health/guild/employee',
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
             children: [
               {
-                keyIndex: '1',
+                keyIndex: '621',
                 title: 'عمومی',
                 link: '/dashboard/health/guild/employee/public',
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
                 main: GuildEmployee,
               },
               {
-                keyIndex: '2',
+                keyIndex: '622',
                 title: 'استانی',
                 link: '/dashboard/health/guild/employee/province',
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active} />,
@@ -169,7 +170,7 @@ const routes: IRoute[] = [
             ],
           },
           {
-            keyIndex: '3',
+            keyIndex: '63',
             title: 'نظارت و بازرسی',
             link: '/dashboard/health/guild/monitoring',
             icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
@@ -180,7 +181,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '7',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="passenger" active={active} disabled={disabled} />
+          <IconWrapperStyle name="passenger" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/passenger/public',
         simLink: '/dashboard/health/passenger',
@@ -208,7 +209,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '8',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="school" active={active} disabled={disabled} />
+          <IconWrapperStyle name="school" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/school/public',
         simLink: '/dashboard/health/school',
@@ -237,7 +238,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '9',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="recruitment" active={active} disabled={disabled} />
+          <IconWrapperStyle name="recruitment" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/recruitment/public',
         simLink: '/dashboard/health/recruitment',
@@ -265,7 +266,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '11',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="reports-requested" active={active} disabled={disabled} />
+          <IconWrapperStyle name="reports-requested" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/health/reports/requested',
         simLink: '/dashboard/health/reports/requested',
@@ -288,7 +289,7 @@ const routes: IRoute[] = [
       {
         keyIndex: '10',
         icon: (active, disabled) => (
-          <IconWrapperStyle name="bakery" active={active} disabled={disabled} />
+          <IconWrapperStyle name="bakery" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/guilds/bakery/public',
         simLink: '/dashboard/guilds',
