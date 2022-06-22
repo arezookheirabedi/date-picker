@@ -77,7 +77,8 @@ const RegisterGuild: React.FC<{}> = () => {
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,

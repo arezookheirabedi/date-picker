@@ -41,6 +41,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -107,7 +108,8 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         tags: [],
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,
@@ -138,7 +140,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
       setDataset([]);
       setOrgDataset([]);
     };
-  }, [queryParams,location.search]);
+  }, [queryParams, location.search]);
 
   useEffect(() => {
     const tmp = [...orgDataset].sort((a: any, b: any) => {
@@ -217,33 +219,33 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
     });
   };
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         بیشترین واکسیناسیون در اصناف در &nbsp;
         {cityTitle}
       </legend>
 
-      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center space-x-5 rtl:space-x-reverse">
+      <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             <Menu
               as="div"
-              className="relative z-20 inline-block text-left shadow-custom rounded-lg px-5 py-1 "
+              className="shadow-custom relative z-20 inline-block rounded-lg px-5 py-1 text-left "
             >
               <div>
-                <Menu.Button className="inline-flex justify-between items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <Menu.Button className="focus:outline-none inline-flex w-full items-center justify-between py-2 text-sm font-medium focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
                   {/* <img src={avatar} alt="z" className="w-5 h-5" /> */}
-                  <span className="ml-10 whitespace-nowrap truncate">
+                  <span className="ml-10 truncate whitespace-nowrap">
                     {filterType?.name || 'بیشترین'}
                   </span>
-                  <DownIcon className="h-2 w-2.5 mr-2" />
+                  <DownIcon className="mr-2 h-2 w-2.5" />
                 </Menu.Button>
               </div>
 
               <Menu.Items
                 style={{width: '250px'}}
-                className="z-40 absolute left-0 xl:right-0 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                className="focus:outline-none absolute left-0 z-40 mt-2 max-w-xs origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 xl:right-0"
               >
                 <div className="px-1 py-1 ">
                   {filterTypes.map((value: any, index: any) => {
@@ -255,7 +257,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
                             type="button"
                             className={`${
                               active ? 'bg-gray-100' : ''
-                            } text-gray-900 group flex rounded-md items-center whitespace-nowrap truncate w-full px-2 py-2 text-sm`}
+                            } group flex w-full items-center truncate whitespace-nowrap rounded-md px-2 py-2 text-sm text-gray-900`}
                             onClick={() => {
                               setFilterType(value);
                             }}
@@ -281,13 +283,13 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
               />
             ) : null}
 
-            <div className="relative z-20 inline-block text-left shadow-custom rounded-lg px-4 py-1">
+            <div className="shadow-custom relative z-20 inline-block rounded-lg px-4 py-1 text-left">
               <div
-                className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                className="focus:outline-none inline-flex w-full cursor-pointer items-center justify-center py-2 text-sm font-medium focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                 onClick={focusFromDate}
               >
                 {selectedDayRange.from && (
-                  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  <span className="ml-4 truncate whitespace-nowrap text-xs">
                     {toPersianDigit(generateFromDate())}
                   </span>
                 )}
@@ -309,20 +311,20 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
                     </svg>
                   </button>
                 ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="h-5 w-5" />
                 )}
               </div>
             </div>
-            <div className="flex items-center justify-start mx-4">
+            <div className="mx-4 flex items-center justify-start">
               <span className="dash-separator" />
             </div>
             <div className=" shadow-custom rounded-lg px-4 py-1">
               <div
-                className="flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 cursor-pointer"
+                className="focus:outline-none flex w-full cursor-pointer items-center justify-center py-2 text-sm font-medium focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                 onClick={focusFromDate}
               >
                 {selectedDayRange.to && (
-                  <span className="ml-4 whitespace-nowrap truncate text-xs">
+                  <span className="ml-4 truncate whitespace-nowrap text-xs">
                     {toPersianDigit(generateToDate())}
                   </span>
                 )}
@@ -344,18 +346,18 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
                     </svg>
                   </button>
                 ) : (
-                  <img src={calendar} alt="x" className="w-5 h-5" />
+                  <img src={calendar} alt="x" className="h-5 w-5" />
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-grow align-center justify-end">
-          <div className="relative inline-flex align-center leading-3">
+        <div className="align-center flex flex-grow justify-end">
+          <div className="align-center relative inline-flex leading-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+              className="absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 transform"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -370,7 +372,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
             <input
               type="text"
               placeholder="جستجوی سازمان"
-              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              className="focus:outline-none rounded-lg border border-gray-300 py-2 px-4 pr-10 text-sm"
               onChange={handleSearch}
               value={searchQuery}
             />
@@ -378,7 +380,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
         </div>
       </div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={loading}
           dataSet={[...dataset]}
