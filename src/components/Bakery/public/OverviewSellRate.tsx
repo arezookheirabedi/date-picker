@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-import bakeryService from 'src/services/bakery.service';
+// import bakeryService from 'src/services/bakery.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import DatePickerModal from '../../DatePickerModal';
+// import DatePickerModal from '../../DatePickerModal';
 import Spinner from '../../Spinner';
-import Calendar from '../../Calendar';
-import TagsSelect from '../TagsSelect';
+// import Calendar from '../../Calendar';
+// import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
 
@@ -27,7 +27,7 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  colors: ['#E20002'],
+  colors: ['#004D65'],
   plotOptions: {
     column: {
       marker: {
@@ -76,7 +76,6 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: ' ریال ',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -95,10 +94,10 @@ const optionChart = {
   ],
 };
 
-const OverviewActiveTime: React.FC<{}> = () => {
+const OverviewSellRate: React.FC<{}> = () => {
   const [data, setData] = useState({});
   // const [serviceType, setServiceType] = useState(null) as any;
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
@@ -121,42 +120,44 @@ const OverviewActiveTime: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  // const focusFromDate = () => {
+  //   setShowDatePicker(true);
+  // };
 
-  const [query, setQuery] = useState({
-    from: null,
-    to: null,
-  });
+  // const [query, setQuery] = useState({
+  //   from: null,
+  //   to: null,
+  // });
 
-  const getColumnChartTestResult = async (params: any) => {
+  // const getColumnChartTestResult = async (params: any) => {
+  const getColumnChartTestResult = async () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await bakeryService.bakerySellRate(params, {
-        cancelToken: cancelToken.token,
-      });
+      // const response = await bakeryService.bakerySellRate(params, {
+      //   cancelToken: cancelToken.token,
+      // });
 
-      const province: any[] = [];
-      const sellCount: any[] = [];
-      response.data.forEach((item: any) => {
-        province.push(item.province);
-        sellCount.push(item.sellCount);
-      });
+      // const province: any[] = [];
+      // const sellCount: any[] = [];
+      // response.data.forEach((item: any) => {
+      //   province.push(item.province);
+      //   sellCount.push(item.sellCount);
+      // });
       // setCategories([...province]);
-      const newData = [
-        {
-          name: 'نرخ فروش',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: false,
-          data: [...sellCount],
-        },
-      ];
+      // const newData = [
+      //   {
+      //     name: 'میانگین تعداد نان فرخته شده',
+      //     dataLabels: {
+      //       // enabled: true,
+      //     },
+      //     showInLegend: false,
+      //     data: [...sellCount],
+      //   },
+      // ];
       // setDataset([...newData]);
-      setData({categories: [...province], series: [...newData]});
+      // setData({categories: [...province], series: [...newData]});
+      setData([])
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -168,7 +169,8 @@ const OverviewActiveTime: React.FC<{}> = () => {
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
+      getColumnChartTestResult()
+      // getColumnChartTestResult(query);
     }, 500);
 
     return () => {
@@ -176,43 +178,44 @@ const OverviewActiveTime: React.FC<{}> = () => {
       cancelRequest();
       clearTimeout(idSetTimeOut);
     };
-  }, [query]);
+  }, []);  
+  // }, [query]);
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQuery({
-        ...query,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     setQuery({
+  //       ...query,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //     });
+  //   }
+  //   if (selectedDayRange.clear) {
+  //     setQuery({
+  //       ...query,
+  //       from: null,
+  //       to: null,
+  //     });
+  //   }
+  // }, [selectedDayRange]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به متوسط نرخ فروش نان در کشور</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به متوسط تعداد نان فروخته شده</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8">
-            <TagsSelect
+        {/* <div className="flex items-center justify-between mb-10 mt-6"> */}
+          {/* <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8"> */}
+            {/* <TagsSelect
               placeholder="نوع نان"
               // tag="employee"
               // category="heName"
               setQueryParams={setQuery}
               queryParams={query}
-            />
+            /> */}
 
-            <div className="flex align-center justify-between">
-              {showDatePicker ? (
+            {/* <div className="flex align-center justify-between"> */}
+              {/* {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
                   selectedDayRange={selectedDayRange}
@@ -225,9 +228,18 @@ const OverviewActiveTime: React.FC<{}> = () => {
                 from={selectedDayRange.from}
                 to={selectedDayRange.to}
                 setSelectedDayRange={setSelectedDayRange}
-              />
-            </div>
-          </div>
+              /> */}
+              {/* <div className='relative z-20 inline-block text-left shadow rounded px-5 py-1'>
+                <div className="inline-flex justify-center items-center w-full text-sm font-medium">
+                  <span className="mx-3 whitespace-nowrap truncate">
+                    <span className="text-gray-500">
+                      منبع :
+                    </span> بانک مرکزی
+                  </span>
+                </div>
+              </div> */}
+            {/* </div>
+          </div> */}
           {/* 
           <RangeDateSliderFilter
             changeType={v =>
@@ -240,7 +252,7 @@ const OverviewActiveTime: React.FC<{}> = () => {
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           /> */}
-        </div>
+        {/* </div> */}
 
         {loading && (
           <div className="p-40">
@@ -251,12 +263,15 @@ const OverviewActiveTime: React.FC<{}> = () => {
         {!loading && !isEmpty(data) && !errorMessage && (
           <HeadlessChart data={data} optionsProp={optionChart} />
         )}
-        {isEmpty(data) && !loading && !errorMessage && (
+        {/* {isEmpty(data) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
+        )} */}
+         {isEmpty(data) && !loading && !errorMessage && (
+          <div className="p-20 text-red-500">به زودی</div>
         )}
       </div>
     </fieldset>
   );
 };
 
-export default OverviewActiveTime;
+export default OverviewSellRate;
