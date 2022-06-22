@@ -34,6 +34,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: null,
   }) as any;
 
   const [queryParams, setQueryParams] = useState({
@@ -108,7 +109,8 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,
