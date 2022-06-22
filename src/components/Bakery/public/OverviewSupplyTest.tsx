@@ -27,7 +27,7 @@ const optionChart = {
   credits: {
     enabled: false,
   },
-  colors: ['#175A76'],
+  colors: ['#14B8A6'],
   plotOptions: {
     column: {
       marker: {
@@ -76,7 +76,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: 'K',
+    valueSuffix: ' ریال ',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -95,7 +95,7 @@ const optionChart = {
   ],
 };
 
-const OverviewSoldCount: React.FC<{}> = () => {
+const OverviewSupplyFlour: React.FC<{}> = () => {
   const [data, setData] = useState({});
   // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -126,36 +126,26 @@ const OverviewSoldCount: React.FC<{}> = () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await bakeryService.bakerySoldCount(params, {
+      const response = await bakeryService.bakerySupplyFlour(params, {
         cancelToken: cancelToken.token,
       });
+
       const province: any[] = [];
-      const registered: any[] = [];
-      const unregistered: any[] = [];
+      const sellCount: any[] = [];
       response.data.forEach((item: any) => {
         province.push(item.province);
-        unregistered.push(item.membersCount / 100);
-        registered.push(item.totalNonVaccinesCount);
+        sellCount.push(item.sellCount);
       });
       // setCategories([...province]);
       const newData = [
         {
-          name: 'ثبت نام شده',
+          name: 'نرخ فروش',
           dataLabels: {
             // enabled: true,
           },
           showInLegend: false,
-          data: [...registered],
-          linearGradient: {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 1,
-          },
-          stops: [
-            [0, '#5F5B97'],
-            [1, '#DDDCE9'],
-          ],
+          data: [...sellCount],
+          
         },
       ];
       // setDataset([...newData]);
@@ -202,7 +192,7 @@ const OverviewSoldCount: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به متوسط تعداد نان فروخته شده</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به متوسط تامین آرد به تفکیک استان</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8">
@@ -262,4 +252,4 @@ const OverviewSoldCount: React.FC<{}> = () => {
   );
 };
 
-export default OverviewSoldCount;
+export default OverviewSupplyFlour;
