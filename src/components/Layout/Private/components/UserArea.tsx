@@ -37,12 +37,17 @@ const UserArea: React.FC<any> = () => {
 
   return (
     <>
-      <Menu as="div" className="relative z-20 inline-block text-left shadow-xl rounded-full px-5 py-1">
+      <Menu
+        as="div"
+        className="relative z-20 inline-block text-left shadow-xl rounded-full px-5 py-1"
+      >
         <div>
           <Menu.Button className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             <img src={avatar} alt={profile.nationalId} className="w-5 h-5" />
-            <span className="mx-3 whitespace-nowrap truncate">{window.localStorage.getItem('ministers-username') || ""}</span>
+            <span className="mx-3 whitespace-nowrap truncate">
+              {window.localStorage.getItem('ministers-username') || ''}
+            </span>
             <DownIcon className="h-2 w-2.5 mr-2" />
           </Menu.Button>
         </div>
@@ -82,11 +87,11 @@ const UserArea: React.FC<any> = () => {
             <Transition.Child
               as="div"
               enter="ease-out duration-300"
-              enterFrom="all"
-              enterTo="all"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
               leave="ease-in duration-200"
-              leaveFrom="all"
-              leaveTo="all"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
               <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90" />
             </Transition.Child>

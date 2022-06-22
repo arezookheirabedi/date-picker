@@ -5,17 +5,18 @@ import moment from 'moment-jalaali';
 import recruitmentServices from 'src/services/recruitment.service';
 import Calendar from 'src/components/Calendar';
 import DatePickerModal from '../../DatePickerModal';
-// import RangeDateSliderFilter from '../../RangeDateSliderFilter';
+import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
-import TagsSelect from '../../TagsSelect';
+// import TagsSelect from '../../TagsSelect';
+import SearchableSingleSelect from '../../SearchableSingleSelect';
 
 const {Line} = Charts;
 
 interface IParams {
   tag: string;
   category: string;
-  type?: string;
+  timeBoxType?: string;
   from?: any;
   to?: any;
 }
@@ -23,7 +24,7 @@ interface IParams {
 const OverviewPatients: React.FC<{}> = () => {
   const [data, setData] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
@@ -39,7 +40,7 @@ const OverviewPatients: React.FC<{}> = () => {
   const [queryParams, setQueryParams] = useState<IParams>({
     tag: 'employee',
     category: 'heName',
-    // type: 'MONTHLY',
+    timeBoxType: 'DAILY',
     from: '',
     to: '',
   }) as any;
@@ -51,7 +52,8 @@ const OverviewPatients: React.FC<{}> = () => {
       const response = await recruitmentServices.testResultTimeBased(params);
       setData(response.data);
     } catch (error: any) {
-      setErrorMessage(error.message);
+      setErrorMessage('خطا در اتصال به سرور')
+      // setErrorMessage(error.message);
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -142,8 +144,9 @@ const OverviewPatients: React.FC<{}> = () => {
       <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان کارکنان دولت</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-between flex-grow px-8">
-            <TagsSelect
+          <div className="flex align-center justify-start flex-grow px-8">
+            <SearchableSingleSelect
+              objectKey="categoryValue"
               placeholder="کل کارکنان"
               tag="employee"
               category="heName"
@@ -151,7 +154,7 @@ const OverviewPatients: React.FC<{}> = () => {
               queryParams={queryParams}
             />
 
-            <div className="flex align-center justify-between">
+            <div className="flex align-center justify-between mr-8">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -169,17 +172,17 @@ const OverviewPatients: React.FC<{}> = () => {
             </div>
           </div>
 
-          {/* <RangeDateSliderFilter
+          <RangeDateSliderFilter
             changeType={v =>
               setQueryParams({
                 ...queryParams,
-                type: v,
+                timeBoxType: v,
               })
             }
-            selectedType={queryParams.type!}
+            selectedType={queryParams.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          /> */}
+          />
         </div>
 
         {loading && (
