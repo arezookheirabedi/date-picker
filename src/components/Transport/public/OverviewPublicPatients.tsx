@@ -1,26 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-// @ts-ignore
-import moment from 'moment-jalaali';
+
 // import {Menu} from '@headlessui/react';
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import DatePickerModal from '../../DatePickerModal';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 // import {transportationTypes} from '../../../helpers/utils';
 // import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
-import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 import SearchableSingleSelect from "../../SearchableSingleSelect";
+import DatepickerQuery from "../../DatepickerQuery";
 
 const {Line} = Charts;
 
 const OverviewPublicPatients = () => {
   const [data, setData] = useState([]);
   // const [serviceType, setServiceType] = useState(null) as any;
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null) as any;
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
@@ -33,9 +30,6 @@ const OverviewPublicPatients = () => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
@@ -56,7 +50,7 @@ const OverviewPublicPatients = () => {
       });
       setData(response.data);
     } catch (error: any) {
-        setErrorMessage('خطا در اتصال به سرور')
+      setErrorMessage('خطا در اتصال به سرور')
       // eslint-disable-next-line
       console.log(error);
     } finally {
@@ -92,27 +86,6 @@ const OverviewPublicPatients = () => {
       clearTimeout(idSetTimeOut);
     };
   }, [query]);
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQuery({
-        ...query,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {
@@ -217,20 +190,7 @@ const OverviewPublicPatients = () => {
             {/*  </Menu.Items> */}
             {/* </Menu> */}
             <div className="flex align-center justify-between mr-8">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={query} setQuery={setQuery}/>
             </div>
           </div>
 
@@ -248,11 +208,11 @@ const OverviewPublicPatients = () => {
         </div>
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} showInLegends={false} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data} showInLegends={false}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
