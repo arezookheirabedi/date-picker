@@ -13,6 +13,7 @@ import Spinner from '../../Spinner';
 
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
+// import TagsSelect from 'src/components/TagsSelect';
 
 const {Line} = Charts;
 

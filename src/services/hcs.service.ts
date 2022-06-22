@@ -1,3 +1,4 @@
+import {AxiosResponse} from 'axios';
 import qs from 'qs';
 import request from '../helpers/request';
 
@@ -45,13 +46,22 @@ function patientsAfterTrip(params: any, config?: any) {
     });
 }
 
+function getTripsCountCategoryBased(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/trips/category-based/count?lang=fa`, params, {
+      ...config,
+    });
+}
+
 function membersTagBased(
   {
     organization,
     ...params
   }: {
     organization: string;
-    params?: {tagPattern: string; tags: any; from: string; to: string};
+    params?: { tagPattern: string; tags: any; from: string; to: string };
   },
   config?: any
 ) {
@@ -73,7 +83,7 @@ function testResultTimeBased(
     ...params
   }: {
     organization: string;
-    params?: {status: string; type: string; from: string; to: string; tag: string};
+    params?: { status: string; type: string; from: string; to: string; tag: string };
   },
   config?: any
 ) {
@@ -98,7 +108,7 @@ function testResultTagBased(
     ...params
   }: {
     organization: string;
-    params?: {tagPattern: string; from: string; to: string};
+    params?: { tagPattern: string; from: string; to: string };
   },
   config?: any
 ) {
@@ -116,7 +126,7 @@ function testResultTagBased(
 }
 
 function dosesTagBased(
-  {organization, ...params}: {organization: string; params: any},
+  {organization, ...params}: { organization: string; params: any },
   config?: any
 ) {
   return request
@@ -132,14 +142,14 @@ function dosesTagBased(
     );
 }
 
-function doses({organization, ...params}: {organization: string; params: any}, config?: any) {
+function doses({organization, ...params}: { organization: string; params: any }, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params, {...config});
 }
 
-function tags({organization, ...params}: {organization: string; params?: any}, {...config}) {
+function tags({organization, ...params}: { organization: string; params?: any }, {...config}) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
@@ -151,6 +161,25 @@ function vaccinationOverview(tag: string, category: string, params: any = {}, co
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
+}
+
+function peopleVaccinationOverview(
+  {tag, category, ...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/people/vaccines/tags/${tag}/categories/${category}`, params, {
+      ...config,
+    });
+}
+
+function peopleLatestVaccinationOverview(params: any, config?: any): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/people/vaccines/general`, params, {...config});
 }
 
 function testResults(params: any = {}, config?: any) {
@@ -187,6 +216,65 @@ function columnChartTestResultService(params: any = {}, config?: any) {
     });
 }
 
+function getPeopleVaccine(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/people/vaccines/general`, params, {
+      ...config,
+    });
+}
+
+function accumulativeVaccinesTimeBasedReport(
+  params: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/vaccines/time-based/accumulative`, params, {
+      ...config,
+    });
+}
+
+function positivePcrPercentageProvinceBased(
+  {...params}: any = {},
+  config?: any
+): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/test-results/overview/province-based`, params, {...config});
+}
+
+function getVaccinesGroupedByProvinceReport({...params}: any = {}, config?: any): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/hcs-reporter/vaccines/provinces`, params, {...config});
+}
+
+function getVaccinesTripGroupedByProvinceReport(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get('/api/v1/hcs-reporter/trips/vaccines/provinces', params, {...config});
+}
+
+function getPeopleVaccinesTripGeneralReport(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get('/api/v1/hcs-reporter/trips/people/vaccines/general', params, {...config});
+}
+
+function getPassengerPermissionsCount(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get('/api/v1/trip/passengers/permissions/count', params, {...config});
+}
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -205,6 +293,16 @@ const hcsService = {
   tableOverviewTestResults,
   testResultsCategory,
   columnChartTestResultService,
+  peopleVaccinationOverview,
+  peopleLatestVaccinationOverview,
+  getPeopleVaccine,
+  accumulativeVaccinesTimeBasedReport,
+  positivePcrPercentageProvinceBased,
+  getVaccinesGroupedByProvinceReport,
+  getVaccinesTripGroupedByProvinceReport,
+  getPeopleVaccinesTripGeneralReport,
+  getTripsCountCategoryBased,
+  getPassengerPermissionsCount
 };
 
 export default hcsService;

@@ -1,0 +1,13 @@
+.unVaccinated-count-wrapper {
+  background-color: #075985;
+  .text {
+    color:#D5D5D5;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .count {
+    color: $color-grey-light-2;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
