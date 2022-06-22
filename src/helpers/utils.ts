@@ -310,6 +310,141 @@ export const transportationTypes = [
 
 export const sideCities = [
   {
+    name: 'تهران',
+    color: '#FBE186',
+  },
+  {
+    name: 'هرمزگان',
+    color: '#FBE186',
+  },
+  {
+    name: 'بوشهر',
+    color: '#FBE186',
+  },
+  {
+    name: 'کهگیلویه و بویراحمد',
+    color: '#FBE186',
+  },
+  {
+    name: 'فارس',
+    color: '#FBE186',
+  },
+  {
+    name: 'اصفهان',
+    color: '#FBE186',
+  },
+  {
+    name: 'سمنان',
+    color: '#FBE186',
+  },
+  {
+    name: 'گلستان',
+    color: '#FBE186',
+  },
+  {
+    name: 'مازندران',
+    color: '#FBE186',
+  },
+  {
+    name: 'مرکزی',
+    color: '#FBE186',
+  },
+  {
+    name: 'یزد',
+    color: '#FBE186',
+  },
+  {
+    name: 'چهارمحال و بختیاری',
+    color: '#FBE186',
+  },
+  {
+    name: 'خوزستان',
+    color: '#FBE186',
+  },
+  {
+    name: 'لرستان',
+    color: '#FBE186',
+  },
+  {
+    name: 'ایلام',
+    color: '#FBE186',
+  },
+  {
+    name: 'اردبیل',
+    color: '#FBE186',
+  },
+  {
+    name: 'قم',
+    color: '#FBE186',
+  },
+  {
+    name: 'همدان',
+    color: '#FBE186',
+  },
+  {
+    name: 'زنجان',
+    color: '#FBE186',
+  },
+  {
+    name: 'قزوین',
+    color: '#FBE186',
+  },
+  {
+    name: 'آذربایجان غربی',
+    color: '#FBE186',
+  },
+  {
+    name: 'آذربایجان شرقی',
+    color: '#FBE186',
+  },
+  {
+    name: 'کرمانشاه',
+    color: '#FBE186',
+  },
+  {
+    name: 'گیلان',
+    color: '#FBE186',
+  },
+  {
+    name: 'کردستان',
+    color: '#FBE186',
+  },
+  {
+    name: 'خراسان جنوبی',
+    color: '#FBE186',
+  },
+  {
+    name: 'خراسان رضوی',
+    color: '#FBE186',
+  },
+  {
+    name: 'خراسان شمالی',
+    color: '#FBE186',
+  },
+  {
+    name: 'سیستان و بلوچستان',
+    color: '#FBE186',
+  },
+  {
+    name: 'کرمان',
+    color: '#FBE186',
+  },
+  {
+    name: 'البرز',
+    color: '#FBE186',
+  },
+];
+
+export const sidesCities = [
+  {
+    name: 'همه',
+    color: '#ccc',
+  },
+  {
+    name: 'تهران',
+    color: '#ccc',
+  },
+  {
     name: 'هرمزگان',
     color: '#ccc',
   },
@@ -339,10 +474,6 @@ export const sideCities = [
   },
   {
     name: 'مازندران',
-    color: '#ccc',
-  },
-  {
-    name: 'تهران',
     color: '#ccc',
   },
   {
