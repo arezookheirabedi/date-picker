@@ -179,7 +179,8 @@ const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         tags: [],
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,
@@ -198,14 +199,14 @@ const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
   // };
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به وضعیت واکسیناسیون آموزش و پرورش کشور
       </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="mb-10 mt-6 flex items-center justify-between px-8">
+          <div className="align-center flex w-3/4 justify-between">
+            <div className="align-center flex justify-between">
               {/* {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -285,28 +286,28 @@ const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
+            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}} />
                   <span>واکسن نزده</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
               </div>
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>بیش از ۳ دوز</span>
                 </div>
               </div>

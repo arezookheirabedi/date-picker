@@ -22,6 +22,7 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -88,11 +89,11 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
       setQueryParams({
         ...queryParams,
-
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,

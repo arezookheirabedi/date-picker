@@ -18,6 +18,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
   const [query, setQuery] = useState({
     from: null,
@@ -74,7 +75,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQuery({
         ...query,
         resultReceiptDateFrom: null,
@@ -107,9 +109,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     setShowDatePicker(true);
   };
   return (
-    <fieldset className="text-center  p-4 mb-16">
-      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center space-x-5 rtl:space-x-reverse">
+    <fieldset className="mb-16  p-4 text-center">
+      <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             {showDatePicker ? (
               <DatePickerModal
@@ -130,7 +132,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         </div>
       </div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           totalItems={dataset.length || 0}
           loading={datasetLoading}
