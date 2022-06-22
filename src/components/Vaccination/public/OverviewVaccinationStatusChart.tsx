@@ -20,6 +20,7 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -147,7 +148,8 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,

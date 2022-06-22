@@ -41,6 +41,7 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
 
   const [queryParams, setQueryParams] = useState({
@@ -125,7 +126,8 @@ const OverviewPositivePcrPercentageProvince: React.FC<IOverviewPositivePcrPercen
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         tags: '',
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,

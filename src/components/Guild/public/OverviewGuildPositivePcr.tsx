@@ -25,6 +25,7 @@ const OverviewPositivePcr = () => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
 
   const {CancelToken} = axios;
@@ -94,11 +95,11 @@ const OverviewPositivePcr = () => {
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی مبتلایان در اصناف </legend>
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-start flex-grow px-8">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی مبتلایان در اصناف </legend>
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="mb-10 mt-6 flex items-center justify-between">
+          <div className="align-center flex flex-grow justify-start px-8">
             <SearchableSingleSelect
               objectKey="categoryValue"
               placeholder="کل اصناف"
@@ -107,7 +108,7 @@ const OverviewPositivePcr = () => {
               setQueryParams={setQuery}
               queryParams={query}
             />
-            <div className="flex align-center justify-between mr-8">
+            <div className="align-center mr-8 flex justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}

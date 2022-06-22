@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
+// import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
 import bakeryService from 'src/services/bakery.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import DatePickerModal from '../../DatePickerModal';
+import Information from '../../../assets/images/icons/information.svg';
+// import DatePickerModal from '../../DatePickerModal';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Spinner from '../../Spinner';
 // import TagsSelect from '../../TagsSelect';
-import Calendar from '../../Calendar';
-import TagsSelect from '../TagsSelect';
+// import Calendar from '../../Calendar';
+// import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
 
@@ -28,6 +29,10 @@ const optionChart = {
   },
   credits: {
     enabled: false,
+  },
+  legend: {
+    align: 'center',
+    rtl : true
   },
   colors: ['#209F92', '#F3BC06'],
   plotOptions: {
@@ -117,47 +122,51 @@ const optionChart = {
 };
 
 const OverviewLicence: React.FC<{}> = () => {
-  const [data, setData] = useState({});
+  const [dataset, setDataSet] = useState({});
   // const [serviceType, setServiceType] = useState(null) as any;
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
 
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  // const focusFromDate = () => {
+  //   setShowDatePicker(true);
+  // };
 
-  const [query, setQuery] = useState({
-    from: null,
-    to: null,
-  });
+  // const [query, setQuery] = useState({
+  //   from: null,
+  //   to: null,
+  // });
 
-  const getColumnChartTestResult = async (params: any) => {
+  // const getColumnChartTestResult = async (params: any) => {
+    const getColumnChartTestResult = async () => {
     setLoading(true);
     setErrorMessage(null);
     try {
-      const response = await bakeryService.bakeryLicense(params, {
-        cancelToken: cancelToken.token,
-      });
-
+      // const response = await bakeryService.bakeryLicense(params, {
+      //   cancelToken: cancelToken.token,
+      // });i
+      const {data} = await bakeryService.bakeryReport(
+        { reportName: "permission" },
+        { cancelToken: cancelToken.token }
+      );
       const province: any[] = [];
       const samt: any[] = [];
       const sima: any[] = [];
-      response.data.forEach((item: any) => {
+      data.forEach((item: any) => {
         province.push(item.province);
-        samt.push(item.samt);
-        sima.push(item.sima);
+        samt.push(Number(item.samt));
+        sima.push(Number(item.sima));
       });
       // setCategories([...province]);
       const newData = [
@@ -166,7 +175,7 @@ const OverviewLicence: React.FC<{}> = () => {
           dataLabels: {
             // enabled: true,
           },
-          showInLegend: false,
+          showInLegend: true,
           data: [...samt],
         },
         {
@@ -174,7 +183,7 @@ const OverviewLicence: React.FC<{}> = () => {
           dataLabels: {
             // enabled: true,
           },
-          showInLegend: false,
+          showInLegend: true,
           data: [...sima],
           linearGradient: {
             x1: 0,
@@ -189,7 +198,7 @@ const OverviewLicence: React.FC<{}> = () => {
         },
       ];
       // setDataset([...newData]);
-      setData({categories: [...province], series: [...newData]});
+      setDataSet({categories: [...province], series: [...newData]});
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -200,42 +209,53 @@ const OverviewLicence: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
+    // const idSetTimeOut = setTimeout(() => {
+      getColumnChartTestResult();
+      // getColumnChartTestResult(query);
+    // }, 500);
 
     return () => {
-      setData([]);
+      setDataSet([]);
       cancelRequest();
-      clearTimeout(idSetTimeOut);
+      // clearTimeout(idSetTimeOut);
     };
-  }, [query]);
+  }, []);
+  // }, [query]);
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQuery({
-        ...query,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
+  // useEffect(() => {
+  //   if (selectedDayRange.from && selectedDayRange.to) {
+  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
+  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+  //     setQuery({
+  //       ...query,
+  //       from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //       to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
+  //     });
+  //   }
+  //   if (selectedDayRange.clear) {
+  //     setQuery({
+  //       ...query,
+  //       from: null,
+  //       to: null,
+  //     });
+  //   }
+  // }, [selectedDayRange]);
+  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">وضعیت استانی مجوز‌های واحدهای صنفی و سیما</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6">
-          <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8">
+
+        <div className="flex items-center justify-between mb-10 mt-6 px-5">
+          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative">
+            <span className="tooltip absolute -top-4 right-4 cursor-pointer">
+              <img src={Information} className="inline " width="18" height="18" alt=""/>
+              {/* <span className="tooltip__tooltiptext text-left rtl:text-right text-gray-400 p-3 py-2">
+              در این بخش تعداد نانوایی هایی که در نتیجه بررسی های صورت گرفته مشمول دریافت سهمیه ی آرد نبودند قرار گرفته است.
+              </span> */}
+            </span>
+          </fieldset>
+          {/* <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8">
             <TagsSelect
               placeholder="نوع نان"
               // tag="employee"
@@ -260,9 +280,8 @@ const OverviewLicence: React.FC<{}> = () => {
                 setSelectedDayRange={setSelectedDayRange}
               />
             </div>
-          </div>
-          {/* 
-          <RangeDateSliderFilter
+          </div> */}
+          {/* <RangeDateSliderFilter
             changeType={v =>
               setQueryParams({
                 ...queryParams,
@@ -272,8 +291,8 @@ const OverviewLicence: React.FC<{}> = () => {
             selectedType={queryParams.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          /> */}
-        </div>
+          />  */}
+        </div> 
 
         {loading && (
           <div className="p-40">
@@ -281,10 +300,10 @@ const OverviewLicence: React.FC<{}> = () => {
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isEmpty(data) && !errorMessage && (
-          <HeadlessChart data={data} optionsProp={optionChart} />
+        {!loading && !isEmpty(dataset) && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-        {isEmpty(data) && !loading && !errorMessage && (
+        {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
