@@ -4,23 +4,22 @@ import React, {useEffect, useState} from 'react';
 import {isEmpty} from 'lodash';
 import bakeryService from 'src/services/bakery.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import Information from '../../../assets/images/icons/information.svg';
 // import DatePickerModal from '../../DatePickerModal';
-// import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Spinner from '../../Spinner';
-// import TagsSelect from '../../TagsSelect';
 // import Calendar from '../../Calendar';
 // import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
 
+// eslint-disable-next-line
+
 const optionChart = {
   chart: {
     type: 'column',
     // numberFormatter() {
-    //   // eslint-disable-next-line prefer-rest-params
-    //   const ret = Highcharts.numberFormat.apply(0, arguments as any);
-    //   return converters.fa(ret);
+    // eslint-disable-next-line prefer-rest-params
+    // const ret = Highcharts.numberFormat.apply(0, arguments as any);
+    // return converters.fa(ret);
     // },
     className: 'transport-line-chart',
   },
@@ -34,20 +33,20 @@ const optionChart = {
     align: 'center',
     rtl : true
   },
-  colors: ['#209F92', '#F3BC06'],
+  colors: ['#B82DEB', '#F69D29'],
   plotOptions: {
     column: {
       marker: {
         enabled: false,
         states: {
           hover: {
-            enabled: true,
+            enabled: false,
             fillColor: {
-              // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-              // stops: [
-              //   [0, "#FFCC00"], // start
-              //   [1, "#FF9400"] // end
-              // ]
+              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+              stops: [
+                [0, '#7DA6B8'], // start
+                [1, '#175A76'], // end
+              ],
             },
             lineColor: '#fff',
             lineWidth: 3,
@@ -75,27 +74,7 @@ const optionChart = {
       enabled: false,
     },
   },
-  // scrollbar: {
-  //   enabled: true,
-  //   barBackgroundColor: '#656565',
-  //   barBorderColor: '#eee',
-  //   barBorderRadius: 4,
-  //   barBorderWidth: 0,
-  //   height: 6,
-  //   buttonArrowColor: '#eee',
-  //   rifleColor: '#656565',
-  //   buttonBackgroundColor: 'transparent',
-  //   buttonBorderWidth: 0,
-  //   buttonBorderRadius: 0,
-  //   trackBackgroundColor: '#eee',
-  //   trackBorderWidth: 0,
-  //   trackBorderRadius: 4,
-  // },
   xAxis: {
-    // scrollbar: {
-    //   enabled: true,
-    //   showFull: false,
-    // },
     lineDashStyle: 'dash',
     lineColor: '#000000',
     lineWidth: 1,
@@ -103,25 +82,24 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    borderRadius: 16,
-    borderWidth: 0,
-    valueDecimals: 0,
+    // eslint-disable-next-line
+    
     style: {
       direction: 'rtl',
       textAlign: 'right',
       fontFamily: 'inherit',
+      fontSize: 10,
     },
-
-    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
+    borderWidth: 0,
   },
   series: [
     {
-      lineWidth: 4,
+      lineWidth: 4
     },
   ],
 };
 
-const OverviewLicence: React.FC<{}> = () => {
+const OverviewSellCostAverage: React.FC<{}> = () => {
   const [dataset, setDataSet] = useState({});
   // const [serviceType, setServiceType] = useState(null) as any;
   // const [showDatePicker, setShowDatePicker] = useState(false);
@@ -130,8 +108,16 @@ const OverviewLicence: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   // const [selectedDayRange, setSelectedDayRange] = useState({
-  //   from: null,
-  //   to: null,
+  //   from: {
+  //     day: 6,
+  //     month: 3,
+  //     year: 1401,
+  //   },
+  //   to: {
+  //     day: 6,
+  //     month: 3,
+  //     year: 1401,
+  //   },
   // }) as any;
 
   const cancelToken = cancelTokenSource();
@@ -139,6 +125,7 @@ const OverviewLicence: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
+
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
   // };
@@ -149,53 +136,70 @@ const OverviewLicence: React.FC<{}> = () => {
   // });
 
   // const getColumnChartTestResult = async (params: any) => {
-    const getColumnChartTestResult = async () => {
+  const getColumnChartTestResult = async () => {
     setLoading(true);
     setErrorMessage(null);
+
     try {
-      // const response = await bakeryService.bakeryLicense(params, {
+      // const response = await bakeryService.bakeryActiveTime(params, {
       //   cancelToken: cancelToken.token,
-      // });i
+      // });
       const {data} = await bakeryService.bakeryReport(
-        { reportName: "permission" },
+        { reportName: "salesValue" },
         { cancelToken: cancelToken.token }
       );
       const province: any[] = [];
-      const samt: any[] = [];
-      const sima: any[] = [];
+      const todaysAverage: any[] = [];
+      const similarDayAverageInMonth: any[] = [];
+
       data.forEach((item: any) => {
         province.push(item.province);
-        samt.push(Number(item.samt));
-        sima.push(Number(item.sima));
+        todaysAverage.push(Number(item.todaysAverage));
+        similarDayAverageInMonth.push(Number(item.similarDayAverageInMonth));
       });
       // setCategories([...province]);
       const newData = [
         {
-          name: 'صمت',
+          name: 'میانگین تراکنش',
           dataLabels: {
             // enabled: true,
           },
           showInLegend: true,
-          data: [...samt],
+          data: [...todaysAverage],
         },
         {
-          name: 'سیما',
+          name: 'میانگین تراکنش روزهای مشابه در سه ماه گذشته',
           dataLabels: {
             // enabled: true,
           },
           showInLegend: true,
-          data: [...sima],
-          linearGradient: {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 1,
-          },
-          stops: [
-            [0, '#5F5B97'],
-            [1, '#DDDCE9'],
-          ],
+          data: [...similarDayAverageInMonth],
         },
+        // {
+        //   name: 'متوسط فعالیت',
+        //   color: {
+        //     linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+        //     stops: [
+        //       [0, '#7DA6B8'], // start
+        //       [1, '#175A76'], // end
+        //     ],
+        //   },
+        //   dataLabels: {
+        //     // enabled: true,
+        //   },
+        //   showInLegend: false,
+        //   data: [...hour],
+        //   linearGradient: {
+        //     x1: 0,
+        //     x2: 0,
+        //     y1: 0,
+        //     y2: 1,
+        //   },
+        //   stops: [
+        //     [0, '#5F5B97'],
+        //     [1, '#DDDCE9'],
+        //   ],
+        // },
       ];
       // setDataset([...newData]);
       setDataSet({categories: [...province], series: [...newData]});
@@ -209,15 +213,15 @@ const OverviewLicence: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    // const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult();
+    const idSetTimeOut = setTimeout(() => {
       // getColumnChartTestResult(query);
-    // }, 500);
+      getColumnChartTestResult();
+    }, 500);
 
     return () => {
       setDataSet([]);
       cancelRequest();
-      // clearTimeout(idSetTimeOut);
+      clearTimeout(idSetTimeOut);
     };
   }, []);
   // }, [query]);
@@ -240,32 +244,26 @@ const OverviewLicence: React.FC<{}> = () => {
   //     });
   //   }
   // }, [selectedDayRange]);
-  
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">وضعیت استانی مجوز‌های واحدهای صنفی و سیما</legend>
+      <legend className="text-black mx-auto px-3">
+      نگاه کلی به متوسط ارزش فروش تراکنش‌ها در کشور
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-
-        <div className="flex items-center justify-between mb-10 mt-6 px-5">
-          <fieldset className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative">
-            <span className="tooltip absolute -top-4 right-4 cursor-pointer">
-              <img src={Information} className="inline " width="18" height="18" alt=""/>
-              {/* <span className="tooltip__tooltiptext text-left rtl:text-right text-gray-400 p-3 py-2">
-              در این بخش تعداد نانوایی هایی که در نتیجه بررسی های صورت گرفته مشمول دریافت سهمیه ی آرد نبودند قرار گرفته است.
-              </span> */}
-            </span>
-          </fieldset>
-          {/* <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8">
-            <TagsSelect
+        <div className="flex items-center justify-between mb-10 mt-6">
+          {/* <div className="flex align-center justify-start space-x-6 rtl:space-x-reverse flex-grow px-8"> */}
+          <div className="flex align-center justify-end space-x-6 rtl:space-x-reverse flex-grow px-8">
+            {/* <TagsSelect
               placeholder="نوع نان"
               // tag="employee"
               // category="heName"
               setQueryParams={setQuery}
               queryParams={query}
-            />
+            /> */}
 
             <div className="flex align-center justify-between">
-              {showDatePicker ? (
+              {/* {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
                   selectedDayRange={selectedDayRange}
@@ -278,10 +276,20 @@ const OverviewLicence: React.FC<{}> = () => {
                 from={selectedDayRange.from}
                 to={selectedDayRange.to}
                 setSelectedDayRange={setSelectedDayRange}
-              />
+              /> */}
             </div>
-          </div> */}
-          {/* <RangeDateSliderFilter
+            <div className='relative z-20 inline-block text-left shadow rounded px-5 py-1'>
+              <div className="inline-flex justify-center items-center w-full text-sm font-medium">
+                <span className="mx-3 whitespace-nowrap truncate">
+                  <span className="text-gray-500">
+                    منبع :
+                  </span> بانک مرکزی
+                </span>
+              </div>
+            </div>
+          </div>
+          {/* 
+          <RangeDateSliderFilter
             changeType={v =>
               setQueryParams({
                 ...queryParams,
@@ -291,8 +299,8 @@ const OverviewLicence: React.FC<{}> = () => {
             selectedType={queryParams.type}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
-          />  */}
-        </div> 
+          /> */}
+        </div>
 
         {loading && (
           <div className="p-40">
@@ -311,4 +319,4 @@ const OverviewLicence: React.FC<{}> = () => {
   );
 };
 
-export default OverviewLicence;
+export default OverviewSellCostAverage;
