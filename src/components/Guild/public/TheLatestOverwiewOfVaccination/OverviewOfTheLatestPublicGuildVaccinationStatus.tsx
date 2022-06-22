@@ -6,7 +6,7 @@ import Charts from 'src/components/Charts';
 import DatePickerModal from 'src/components/DatePickerModal';
 import Calendar from 'src/components/Calendar';
 import Spinner from 'src/components/Spinner';
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 import {converters} from '../constant';
 
 const {HeadlessChart} = Charts;
@@ -20,7 +20,6 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
   loading: boolean;
 }> = ({setQueryParams, queryParams, numberOf, errorMessage, loading}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  
 
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
@@ -32,8 +31,6 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
   };
 
   // eslint-disable-next-line
-
-
 
   const optionChart = {
     chart: {
@@ -78,8 +75,8 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
         enabled: false,
       },
       labels: {
-        format: '٪{text}'
-        },
+        format: '٪{text}',
+      },
     },
     legend: {
       enabled: false,
@@ -94,7 +91,7 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
     tooltip: {
       shared: true,
       useHTML: true,
-      valueSuffix:"٪",
+      valueSuffix: '٪',
       style: {
         direction: 'rtl',
         textAlign: 'right',
@@ -114,7 +111,8 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,
@@ -124,11 +122,11 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
   }, [selectedDayRange]);
 
   return (
-    <fieldset className="text-center  p-4 mb-16">
-      <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="flex align-center justify-between w-3/4">
-            <div className="flex align-center justify-between">
+    <fieldset className="mb-16  p-4 text-center">
+      <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="mb-10 mt-6 flex items-center justify-between px-8">
+          <div className="align-center flex w-3/4 justify-between">
+            <div className="align-center flex justify-between">
               {showDatePicker ? (
                 <DatePickerModal
                   setSelectedDayRange={setSelectedDayRange}
@@ -148,37 +146,36 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
+            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}} />
                   <span>واکسن نزده</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}} />
                   <span>دوز پنجم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>دوز چهارم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                <div className="inline-flex flex-col items-center justify-center space-y-2">
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
 
         {loading && (
           <div className="p-40">
@@ -187,13 +184,12 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && !isEmpty(numberOf) && !errorMessage && (
-           <HeadlessChart data={numberOf} optionsProp={optionChart} />
+          <HeadlessChart data={numberOf} optionsProp={optionChart} />
         )}
         {isEmpty(numberOf) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
- 
     </fieldset>
   );
 };
