@@ -18,6 +18,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false,
   }) as any;
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -74,7 +75,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         from: null,
         to: null,
@@ -119,9 +121,9 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   };
 
   return (
-    <fieldset className="text-center  rounded-xl p-4 mb-16">
-      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center space-x-5 rtl:space-x-reverse">
+    <fieldset className="mb-16  rounded-xl p-4 text-center">
+      <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
             {showDatePicker ? (
               <DatePickerModal
@@ -141,11 +143,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           </div>
         </div>
 
-        <div className="flex flex-grow align-center justify-end">
-          <div className="relative inline-flex align-center leading-3">
+        <div className="align-center flex flex-grow justify-end">
+          <div className="align-center relative inline-flex leading-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4 absolute top-1/2 transform -translate-y-1/2 right-4"
+              className="absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 transform"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -160,7 +162,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             <input
               type="text"
               placeholder="جستجوی واحد صنفی"
-              className="py-2 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none"
+              className="focus:outline-none rounded-lg border border-gray-300 py-2 px-4 pr-10 text-sm"
               onChange={handleSearch}
               value={searchQuery}
             />
@@ -168,7 +170,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         </div>
       </div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={loading}
           dataSet={[...dataset]}
