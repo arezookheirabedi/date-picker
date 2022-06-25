@@ -62,7 +62,7 @@ const OverviewBakeryInspectionNeed = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={tpsIcon}
-              text="میانگین تراکنش در هر روز"
+              text="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
               count={bakeries.bakery[0] || 0}
               loading={loading}
               hasInfo
@@ -70,7 +70,7 @@ const OverviewBakeryInspectionNeed = () => {
             />
             <Statistic
               icon={transactionsIcon}
-              text="مبلغ تراکنش"
+              text="مشکوک به گران فروشی"
               count={bakeries.bakery[1] || 0}
               loading={loading}
               hasInfo
@@ -78,7 +78,7 @@ const OverviewBakeryInspectionNeed = () => {
             />
             <Statistic
               icon={activeTimeIcon}
-              text="زمان فعال بودن کارتخوان‌ها"
+              text="مشکوک به تخلف از ساعت فعالیت"
               count={bakeries.bakery[2] || 0}
               loading={loading}
               hasInfo
@@ -86,7 +86,7 @@ const OverviewBakeryInspectionNeed = () => {
             />
             <Statistic
               icon={unusualTransactionIcon}
-              text="تراکنش‌های غیر عادی"
+              text="مشکوک به تراکنش‌های غیر عادی"
               count={bakeries.bakery[3] || 0}
               loading={loading}
               hasInfo
@@ -96,7 +96,7 @@ const OverviewBakeryInspectionNeed = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={bakeryWithoutTransactionIcon}
-              text="واحدهای بدون تراکنش"
+              text="مشکوک به عدم فعالیت"
               count={bakeries.bakery[4] || 0}
               loading={loading}
               hasInfo
