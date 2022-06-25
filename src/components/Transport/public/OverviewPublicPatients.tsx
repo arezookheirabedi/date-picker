@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React, {useState} from 'react';
 
 // import {Menu} from '@headlessui/react';
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
@@ -9,27 +8,19 @@ import Charts from '../../Charts';
 // import {transportationTypes} from '../../../helpers/utils';
 // import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
-import hcsService from '../../../services/hcs.service';
 import SearchableSingleSelect from "../../SearchableSingleSelect";
 import DatepickerQuery from "../../DatepickerQuery";
+import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
 
 const {Line} = Charts;
 
 const OverviewPublicPatients = () => {
-  const [data, setData] = useState([]);
-  // const [serviceType, setServiceType] = useState(null) as any;
-  const [errorMessage, setErrorMessage] = useState(null) as any;
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false
   }) as any;
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
@@ -41,95 +32,7 @@ const OverviewPublicPatients = () => {
     tag: 'transport',
   });
 
-  const getColumnChartTestResult = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await hcsService.columnChartTestResultService(params, {
-        cancelToken: source.token,
-      });
-      setData(response.data);
-    } catch (error: any) {
-      setErrorMessage('خطا در اتصال به سرور')
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // const getLinearOverviewPublicTransport = async (params: any) => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const response = await transportService.linearOverviewPublicTransport(params, {
-  //       cancelToken: source.token,
-  //     });
-  //     setData(response.data);
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
-
-    return () => {
-      setData([]);
-      source.cancel('Operation canceled by the user.');
-      clearTimeout(idSetTimeOut);
-    };
-  }, [query]);
-
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
-  //     const tmp: any[] = [];
-  //     let lastState = 'ANNUAL';
-
-  //     const start = moment(finalFromDate, 'jYYYY/jM/jD');
-  //     const end = moment(finalToDate, 'jYYYY/jM/jD');
-
-  //     const duration = moment.duration(end.diff(start));
-
-  //     if (!duration.years()) {
-  //       tmp.push(3);
-  //       lastState = 'MONTHLY';
-  //     }
-
-  //     if (!duration.months() && !duration.years()) {
-  //       tmp.push(2);
-  //       lastState = 'WEEKLY';
-  //     }
-
-  //     if (!duration.weeks() && !duration.months() && !duration.years()) {
-  //       tmp.push(1);
-  //       lastState = 'DAILY';
-  //     }
-
-  //     setQueryParams({
-  //       ...queryParams,
-  //       type: lastState,
-  //       fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //     });
-  //   } else {
-  //     setQueryParams({
-  //       ...queryParams,
-  //       type: 'MONTHLY',
-  //       fromDate: null,
-  //       toDate: null,
-  //     });
-  //   }
-  // }, [selectedDayRange]);
+  const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

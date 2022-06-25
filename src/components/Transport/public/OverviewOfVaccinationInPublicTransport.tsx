@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React, {useState} from 'react';
 // import {Menu} from '@headlessui/react';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
@@ -12,44 +11,23 @@ import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
-// import {getServiceTypeName} from '../../../helpers/utils';
-// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import vaccineService from '../../../services/vaccine.service';
-import hcsService from '../../../services/hcs.service';
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
 import DatepickerQuery from "../../DatepickerQuery";
-
-const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-const initialNumberOf = {
-  doses: {...initialDoses},
-  dosesToTotalPopulationPercentage: {...initialDoses},
-  gtDoses: {...initialDoses},
-  gtDosesToTotalDosesPercentage: {...initialDoses},
-  totalNonVaccinesCount: 0,
-  totalNonVaccinesCountToTotalPopulationPercentage: 0,
-  totalPopulation: 0,
-  totalVaccinesCount: 0,
-  totalVaccinesCountToTotalPopulationPercentage: 0,
-  // dosesPercentage: {...initialDoses},
-  // gtDosesPercentage: {...initialDoses},
-  // gtDosesToTotalPopulationPercentage: {...initialDoses},
-  // totalUnknownVaccinesCount: 0,
-  // totalVaccinesPercentage: 0,
-};
+import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
+import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
-  // const [filterType, setFilterType] = useState({name: 'کمترین', enName: 'LOWEST'});
-  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
-  const [loading, setLoading] = useState(false);
-  // const [orgDataset, setOrgDataset] = useState<any>([]);
-  const [dataset, setDataset] = useState<any>([]);
-  const [datasetLoading, setDatasetLoading] = useState<any>([]);
   const [query, setQuery] = useState({
+    tag: 'transport',
+    category: 'serviceType',
     from: null,
     to: null
   })
   // eslint-disable-next-line
+  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'});
+  // eslint-disable-next-line
+  const {data: dataset, loading: datasetLoading, error: errorMessage} = useGetOverviewOfVaccinationTable(query)
 
   // const [counts, setCounts] = useState<any>({
   //   numberOfDrivers: null,
@@ -58,79 +36,9 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   //   numberOfUnvaccinated: null,
   // });
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const getNumberOf = async () => {
-    setLoading(true);
-    try {
-      const {data} = await vaccineService.membersGeneral(
-        {tag: 'transport'},
-        {cancelToken: source.token}
-      );
-      setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getOverviewByVaccine = async (params: any) => {
-    setDatasetLoading(true);
-    try {
-      const {data} = await hcsService.vaccinationOverview('transport', 'serviceType', {...params, lang: 'fa'});
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // eslint-disable-next-line
-
-        normalizedData.push({
-          id: `ovvac_${index}`,
-          name: item.categoryValue,
-          firstDosePercentage: item.dosesToMembersCountPercentage[1],
-          secondDosePercentage: item.dosesToMembersCountPercentage[2],
-          thirdDosePercentage: item.dosesToMembersCountPercentage[3],
-          otherDose: item.gtDosesToTotalDosesPercentage[3],
-          unknownInformation: 0,
-          allDoses:
-            item.gtDosesToTotalDosesPercentage[0] -
-            item.totalNonVaccinesCountToMembersCountPercentage,
-          noDose: item.totalNonVaccinesCountToMembersCountPercentage,
-          // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
-          // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
-          // // eslint-disable-next-line
-          // notVaccine: item.doseCountMap
-          //   ? item.doseCountMap[0]
-          //     ? (item.doseCountMap[0] * 100) / total
-          //     : 0
-          //   : 0,
-        });
-      });
-
-      setDataset([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
-      // setFilterType({name: 'کمترین', enName: 'LOWEST'});
-    } catch (e: any) {
-      console.log(e);
-    } finally {
-      setDatasetLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getNumberOf();
-  }, []);
-
-  useEffect(() => {
-    getOverviewByVaccine(query);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [query]);
 
   // const [reportsDose, setReportsDose] = useState({}) as any;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [reportsDoseLoading, setReportsDoseLoading] = useState(false) as any;
 
   // async function getOverviewByVaccine(params: any) {
   //   setCountsLoading(true);
@@ -379,7 +287,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={OrangeVaccine}
           text="تعداد واکسیناسیون دوز دوم"
-          count={numberOf.doses[3] || 0}
+          count={numberOf.doses[2] || 0}
           loading={loading}
           hasInfo
           infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
@@ -390,7 +298,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
-          count={numberOf.doses[2] || 0}
+          count={numberOf.doses[3] || 0}
           loading={loading}
           hasInfo
           infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
@@ -398,7 +306,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={DarkgreenVaccine}
           text="تعداد واکسیناسیون دوز چهارم"
-          count={numberOf.gtDoses[3] || 0}
+          count={numberOf.doses[4] || 0}
           loading={loading}
           hasInfo
           infoText="تعداد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
@@ -406,7 +314,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={NavyVaccineMd}
           text="تعداد واکسیناسیون دوز پنجم"
-          count={numberOf.totalUnknownVaccinesCount || 0}
+          count={numberOf.doses[5] || 0}
           loading={loading}
           hasInfo
           infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
@@ -425,7 +333,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={GreenVaccine}
           text="درصد واکسیناسیون کل کشور"
-          count={numberOf.totalVaccinesCount || 0}
+          count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
           loading={loading}
           hasInfo
           infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
@@ -433,7 +341,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={YellowVaccineMd}
           text="درصد واکسیناسیون دوز اول"
-          count={numberOf.doses[1] || 0}
+          count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
           loading={loading}
           hasInfo
           infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
@@ -441,7 +349,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={OrangeVaccine}
           text="درصد واکسیناسیون دوز دوم"
-          count={numberOf.totalPopulation}
+          count={numberOf.dosesToTotalPopulationPercentage[2]}
           loading={loading}
           hasInfo
           infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
@@ -449,7 +357,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <Statistic
           icon={PurppleVaccineMd}
           text="درصد واکسیناسیون دوز سوم"
-          count={numberOf.doses[2] || 0}
+          count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
           loading={loading}
           hasInfo
           infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
@@ -462,7 +370,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           <Statistic
             icon={DarkgreenVaccine}
             text="درصد واکسیناسیون دوز چهارم"
-            count={numberOf.totalVaccinesCount || 0}
+            count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
@@ -472,7 +380,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           <Statistic
             icon={NavyVaccineMd}
             text="درصد واکسیناسیون دوز پنجم"
-            count={numberOf.doses[1] || 0}
+            count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
@@ -483,7 +391,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           <Statistic
             icon={GrayVaccine2}
             text="درصد واکسیناسیون انجام نشده"
-            count={numberOf.totalNonVaccinesCount || 0}
+            count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
             hasInfo
             infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
