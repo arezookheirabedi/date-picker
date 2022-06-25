@@ -15,6 +15,7 @@ import thermometerIcon from '../../../assets/images/icons/thermometer.svg';
 import posIcon from '../../../assets/images/icons/pos.svg';
 import wheatIcon from '../../../assets/images/icons/wheat.svg';
 import whitewheatIocn from '../../../assets/images/icons/whitewheat.svg';
+import redwheatIcon from '../../../assets/images/icons/redwheat.svg';
 import frenchBreadIcon from '../../../assets/images/icons/french-bread.svg';
 import flourWhiteIcon from '../../../assets/images/icons/flourWhite.svg';
 import posDeactiveIcon from '../../../assets/images/icons/pos-deactive.svg';
@@ -112,46 +113,46 @@ const OverviewBakery = () => {
              infoText="مجموع نانوایی های غیر فعال در سامانه سیما"
            />
            <Statistic
-             icon={frenchBreadIcon}
-             text="مجموع نانوایی‌های موجود در صمت"
-             count={bakeries.bakery[3] || 0}
+             icon={flourIcon}
+             text="مجموع سهمیه دریافتی در ماه (واحد هزار تن)"
+             count={Math.floor(bakeries.bakery[7]) || 0}
              loading={loading}
              hasInfo
-             infoText="مجموع نانوایی های ثبت شده در سامانه وزارت صمت"
+             infoText="مجموع سهمیه دریافتی خبازی ها در ماه (واحد هزار تن)"
            />
          </div>
          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
+                icon={frenchBreadIcon}
+                text="تعداد نانوایی های دارای مجوز معتبر در صمت"
+                count={bakeries.bakery[3] || 0}
+                loading={loading}
+                hasInfo
+                infoText="مجموع نانوایی های ثبت شده در سامانه وزارت صمت"
+              />
+            <Statistic
              icon={wheatIcon}
-             text="مجموع پروانه کسب‌های معتبر در اصناف"
+             text="مجموع پروانه کسب‌ های منطبق در صمت و سیما"
              count={bakeries.bakery[4] || 0}
              loading={loading}
              hasInfo
-             infoText="مجموع نانوایی موجود در سامانه سیما با پروانه کسب معتبر صادر شده از وزارت صمت"
+             infoText="مجموع نانوایی موجود در سامانه سیما  دارای پروانه کسب معتبر صادر شده از وزارت صمت"
            />
            <Statistic
-             icon={whitewheatIocn}
-             text="مجموع پروانه کسب‌های نامعتبر در اصناف"
+             icon={redwheatIcon}
+             text="مجموع پروانه کسب‌ های نامنطبق در صمت و سیما"
              count={bakeries.bakery[5] || 0}
              loading={loading}
              hasInfo
-             infoText="مجموع نانوایی موجود در سامانه سیما که فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
+             infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه منطبق است و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
            />
            <Statistic
-             icon={flourWhiteIcon}
-             text="مجموع نانوایی‌های سیما با مالک فوتی"
-             count={bakeries.bakery[6] || 0}
+             icon={whitewheatIocn}
+             text="مجموع پروانه کسب‌ های ناموجود در صمت و سیما"
+             count={0}
              loading={loading}
              hasInfo
-             infoText="مجموع نانوایی ها موجود در سامانه سیما که مالک واحد فوت کرده است."
-           />
-           <Statistic
-             icon={flourIcon}
-             text="مجموع سهمیه دریافتی در ماه (واحد هزار تن)"
-             count={bakeries.bakery[7] || 0}
-             loading={loading}
-             hasInfo
-             infoText="مجموع سهمیه دریافتی خبازی ها در ماه (واحد هزار تن)"
+             infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه نامنطبق و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
            />
          </div>
          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -205,7 +206,14 @@ const OverviewBakery = () => {
              hasInfo
              infoText="مجموع تعداد بازرسی های صورت گرفته."
            /> 
-           <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+           <Statistic
+             icon={flourWhiteIcon}
+             text="مجموع نانوایی‌های سیما با مالک فوتی"
+             count={bakeries.bakery[6] || 0}
+             loading={loading}
+             hasInfo
+             infoText="مجموع نانوایی ها موجود در سامانه سیما که مالک واحد فوت کرده است."
+           />
            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
          </div>
        </div>
