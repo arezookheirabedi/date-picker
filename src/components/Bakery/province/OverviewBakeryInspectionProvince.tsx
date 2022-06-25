@@ -80,7 +80,7 @@ const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = 
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={tpsIcon}
-              text="میانگین تراکنش در هر روز"
+              text="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
               count={bakeries.dailyTransactionAverage || 0}
               loading={loading}
               hasInfo
@@ -88,7 +88,7 @@ const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = 
             />
             <Statistic
               icon={transactionsIcon}
-              text="مبلغ تراکنش"
+              text="مشکوک به گران فروشی"
               count={bakeries.transactionAmout || 0}
               loading={loading}
               hasInfo
@@ -96,7 +96,7 @@ const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = 
             />
             <Statistic
               icon={activeTimeIcon}
-              text="زمان فعال بودن کارتخوان‌ها"
+              text="مشکوک به تخلف از ساعت فعالیت"
               count={bakeries.posActiveTime || 0}
               loading={loading}
               hasInfo
@@ -104,7 +104,7 @@ const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = 
             />
             <Statistic
               icon={unusualTransactionIcon}
-              text="تراکنش‌های غیر عادی"
+              text="مشکوک به تراکنش‌های غیر عادی"
               count={bakeries.unsualTransaction === "0" ? 0 : bakeries.unsualTransaction || 0}
               loading={loading}
               hasInfo
@@ -114,7 +114,7 @@ const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = 
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={bakeryWithoutTransactionIcon}
-              text="واحدهای بدون تراکنش"
+              text="مشکوک به عدم فعالیت"
               count={bakeries.bakeryWithoutTransaction || 0}
               loading={loading}
               hasInfo
