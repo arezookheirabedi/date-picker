@@ -1,12 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 // import hcsService from 'src/services/hcs.service';
 // import {Menu} from '@headlessui/react';
-import guildService from 'src/services/guild.service';
 import Table from '../../TableScopeSort';
-
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import DatepickerQuery from "../../DatepickerQuery";
+import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 // const order = {
@@ -18,8 +16,6 @@ import DatepickerQuery from "../../DatepickerQuery";
 const TableOfTestsInTransport = () => {
   // const [searchQuery, setSearchQuery] = useState('');
   // const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
   // const [orgDataset, setOrgDataset] = useState<any>([]);
   const [query, setQuery] = useState({
     tag: 'transport',
@@ -27,47 +23,9 @@ const TableOfTestsInTransport = () => {
     from: null,
     to: null,
   })
-  const cancelToken = cancelTokenSource();
 
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  async function getTestResultByCategory(params: any) {
-    setLoading(true);
-    try {
-      const {data} = await guildService.guildTestResultByCategory(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryValue || 'نامشخص',
-          total: item.testResultsCount || 0,
-          positiveCountPercentage: item.positiveTestResultsCountToTestResultsCountPercentage || 0,
-          negativeCountPercentage: item.negativeTestResultsCountToTestResultsCountPercentage || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    getTestResultByCategory(query)
-    return () => {
-      cancelRequest();
-      setDataset([]);
-    };
-  }, [query]);
-
-
+// eslint-disable-next-line
+  const {data: dataset, loading, error: errorMessage} = useGetTestResultsTable(query);
   // function handleSearch(e: any) {
   //   const {value} = e.target;
   //   let tmp = [...orgDataset];

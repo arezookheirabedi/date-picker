@@ -1,100 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-
-// import transportService from 'src/services/transport.service';
-
+import React, {useState} from 'react';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 // import {getServiceTypeName} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-
-import hcsService from '../../../services/hcs.service';
 import DatepickerQuery from "../../DatepickerQuery";
+import useGetOverviewOfCategories from "../../../hooks/apis/useGetOverviewOfCategories";
 
 const OverviewCategories: React.FC<{}> = () => {
 
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-
   const [query, setQuery] = useState({
+    tag: 'transport',
+    category: 'serviceType',
     from: null,
     to: null,
   }) as any;
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const overviewTestResults = async (params: any) => {
-    try {
-      setLoading(true);
-      const {data} = await hcsService.tableOverviewTestResults('transport', 'serviceType', {
-        ...params,
-        lang: 'fa',
-      }, {cancelToken: source.token});
-
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryValue,
-          employeesCount: item.membersCount || 0,
-          infectedCount: item.positiveMembersCount || 0,
-          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
-          saveCount: item.recoveredMembersCount || 0,
-          // deadCount: 120,
-        });
-
-      });
-      setDataset([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
-      // setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // async function getOverviewByCategory(params: any) {
-  //   setLoading(true);
-  //   try {
-  //     const {data} = await transportService.overviewCategory(params, {cancelToken: source.token});
-  //     const normalizedData: any[] = [];
-  //     data.forEach((item: any, index: number) => {
-  //       // if (item.total !== 0) {
-  //       normalizedData.push({
-  //         id: `ovca_${index}`,
-  //         name: getServiceTypeName(item.serviceType),
-  //         employeesCount: item.total || 0,
-  //         infectedCount: item.count || 0,
-  //         infectedPercent: ((item.count || 0) * 100) / (item.total || 0),
-  //         saveCount: item.recoveredCount || 0,
-  //         // deadCount: 120,
-  //       });
-  //       // }
-  //     });
-  //     setDataset([...normalizedData]);
-  //     setOrgDataset([...normalizedData]);
-  //     setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  useEffect(() => {
-    // getOverviewByCategory(query);
-    overviewTestResults(query);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, [query]);
-
+// eslint-disable-next-line
+  const {data: dataset, loading, error} = useGetOverviewOfCategories(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
