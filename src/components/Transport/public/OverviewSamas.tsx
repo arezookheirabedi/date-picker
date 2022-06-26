@@ -1,76 +1,13 @@
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
 import driverInfectedIcon from '../../../assets/images/icons/driver-infected.svg';
 import deactiveFuelCardIcon from '../../../assets/images/icons/deactive-fuel-card.svg';
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
 import deactivateInquiryIcon from '../../../assets/images/icons/deactivate-inquiry.svg';
 import Statistic from '../../../containers/Guild/components/Statistic';
-import transportService from '../../../services/transport.service';
+import useGetNationalTravelInformationSystem from "../../../hooks/apis/useGetNationalTravelInformationSystem";
 
 const OverviewSamas = () => {
-
   // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState({
-    healthStatusCalls: null
-  })
-
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const getNumberOfDrivers = async () => {
-    setLoading(true);
-    try {
-      const {data} = await transportService.getSamasInfo(null, {cancelToken: source.token});
-      setDataset(data);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // const getNumberOfPlaqueVisited = async () => {
-  //   setNumberOfPlaqueVisitedLoading(true);
-  //   try {
-  //     const {data} = await transportService.numberOfPlaqueVisited(null, {
-  //       cancelToken: source.token,
-  //     });
-  //     setNumberOfPlaqueVisited(data.numberOfPlaqueVisited);
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setNumberOfPlaqueVisitedLoading(false);
-  //   }
-  // };
-
-  // const getNumberOfPositiveDrivers = async () => {
-  //   setNumberOfPositiveDriversLoading(true);
-  //   try {
-  //     const {data} = await transportService.numberOfPositiveDrivers(null, {
-  //       cancelToken: source.token,
-  //     });
-  //     setNumberOfPositiveDrivers(data.numberOfPositiveDrivers);
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setNumberOfPositiveDriversLoading(false);
-  //   }
-  // };
-
-  useEffect(() => {
-    getNumberOfDrivers();
-    return () => {
-      setDataset({
-        healthStatusCalls: null
-      })
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
+  const {data, loading, error} = useGetNationalTravelInformationSystem();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -83,7 +20,7 @@ const OverviewSamas = () => {
             icon={driverInfectedIcon}
             text="موارد مثبت اعلامی به سماس"
             // count={numberOfDrivers}
-            count={dataset.healthStatusCalls}
+            count={data.healthStatusCalls}
             loading={loading}
             hasInfo
             infoText="مجموع موارد مبتلایان مثبت و اعلام شده به سماس در رسته‌های مختلف."
