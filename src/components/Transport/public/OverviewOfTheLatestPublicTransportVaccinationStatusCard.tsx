@@ -1,4 +1,3 @@
-import React, {useEffect, useState} from 'react';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import YellowVaccine from '../../../assets/images/icons/big-yellow-vaccine.svg';
 import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
@@ -6,53 +5,16 @@ import PurpleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg'
 import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
 import VaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
 import GreyVaccine from '../../../assets/images/icons/big-gray-vaccine.svg';
-import {IInitialNumberOfDoses, initialNumberOfDoses} from '../../Passengers/public/constant';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
-import hcsService from '../../../services/hcs.service';
+
+import useGetOverviewOfTheLatestVaccinationStatus from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatus";
 
 const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
+
   // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
+  const {data : numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus({
+    tag: 'transport',
+  })
 
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getPassengerVaccinateInfo = async () => {
-    setLoading(true);
-    try {
-      const res = await hcsService.getPeopleVaccine(
-        {
-          tag: 'transport',
-        },
-        {cancelToken: cancelToken.token}
-      );
-      console.log('res => ', res);
-      if (res.status === 200) {
-        const newData = {...initialNumberOfDoses, ...res.data};
-        setNumberOf(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getPassengerVaccinateInfo();
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setNumberOf(initialNumberOfDoses);
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -60,7 +22,8 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
       </legend>
       <div className="flex flex-col justify-between space-y-8">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون آنها یک دوز واکسن است."
             hasInfo
@@ -97,7 +60,8 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex  flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <div className="w-1/4">
             <Statistic
               hasInfo
@@ -133,7 +97,8 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
 
       <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             infoText="درصد  افرادی که اخرین وضعیت واکسیناسیون آنها یک دوز واکسن است."
             hasInfo
@@ -170,7 +135,8 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex  flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <div className="w-1/4">
             <Statistic
               hasInfo
