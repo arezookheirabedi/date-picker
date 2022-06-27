@@ -45,10 +45,10 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
       const {data} = await guildService.percentageOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
-      const SortData = data.sort((a: any, b: any) => (a.percentage > b.percentage ? 1 : -1));
+      const sortData = data.sort((a: any, b: any) => (a.percentage > b.percentage ? 1 : -1));
       const province: any[] = [];
       const registered: any[] = [];
-      SortData.forEach((item: any) => {
+      sortData.forEach((item: any) => {
         province.push(item.province ? item.province.trim() : '');
         registered.push(item.percentage);
       });

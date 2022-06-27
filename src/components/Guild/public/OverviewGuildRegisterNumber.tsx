@@ -45,11 +45,11 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       const {data} = await guildService.numberOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
-      const SortData = data.sort((a: any, b: any) => (a.allCount > b.allCount ? 1 : -1));
+      const sortData = data.sort((a: any, b: any) => (a.allCount > b.allCount ? 1 : -1));
       const province: any[] = [];
       const registered: any[] = [];
       const allCount: any[] = [];
-      SortData.forEach((item: any) => {
+      sortData.forEach((item: any) => {
         province.push(item.province);
         allCount.push(item.allCount);
         registered.push(item.registeredCount);
