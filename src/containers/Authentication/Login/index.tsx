@@ -76,7 +76,7 @@ export default function Login() {
       // );
       // eslint-disable-next-line
       console.log('you are logged in');
-      history.push("/dashboard/health/vaccination/public");
+      history.push('/dashboard/health/vaccination/public');
     } catch (error: any) {
       handleCaptcha();
       const {message} = error;
@@ -116,7 +116,7 @@ export default function Login() {
     return () => {
       setCaptchaCode('');
       setInputCaptchaId('');
-    }
+    };
   }, []);
 
   return (
@@ -146,7 +146,7 @@ export default function Login() {
           />
 
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-          <img src={eyes} alt="" onClick={() => setTypeInputText(!typeInputText)}/>
+          <img src={eyes} alt="" onClick={() => setTypeInputText(!typeInputText)} />
           {errors.password && <span className="inputError"> {errors.password.message}</span>}
         </div>
 
@@ -157,7 +157,7 @@ export default function Login() {
               src={`data:image/png;base64, ${captchaCode}`}
               alt=""
             />
-            <RefreshLogo onHandleRefreshLogo={handleCaptcha}/>
+            <RefreshLogo onHandleRefreshLogo={handleCaptcha} />
           </div>
           <input
             style={{border: '1px solid #b2b2b2'}}
@@ -181,7 +181,7 @@ export default function Login() {
             className={`login_button ${!true ? ' deactive' : ' active'}`}
             disabled={!true}
           >
-            {!isLoading ? 'ورود' : <DotLoading/>}
+            {!isLoading ? 'ورود' : <DotLoading />}
           </button>
         </div>
       </form>

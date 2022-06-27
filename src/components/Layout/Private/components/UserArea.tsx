@@ -11,7 +11,7 @@ import {IProfile} from 'src/models/authentication.model';
 const UserArea: React.FC<any> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const history = useHistory();
-  const [profile] = useLocalStorage<IProfile>('userinfo', {
+  const [profile] = useLocalStorage<IProfile>('ministers-userinfo', {
     birthday: '',
     categoryId: '',
     firstName: '',
@@ -20,6 +20,7 @@ const UserArea: React.FC<any> = () => {
     lastName: '',
     nationalId: '',
     qrCode: '',
+    roles: [],
   });
 
   const closeModal: () => void = () => {

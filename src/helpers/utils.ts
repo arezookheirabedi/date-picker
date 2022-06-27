@@ -51,12 +51,28 @@ export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   }
 };
 
+const parseJwt = (token: string) => {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split('')
+      .map(c => {
+        return `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
+      })
+      .join('')
+  );
+
+  return JSON.parse(jsonPayload);
+};
+
 export const setLogin: (param: IProfile) => void = param => {
-  localStorage.setItem('userinfo', JSON.stringify(param));
+  localStorage.setItem('ministers-userinfo', JSON.stringify(param));
 };
 
 export const getToken: () => ILogin = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('ministers-token');
   const tokenObj = JSON.parse(token!);
   return tokenObj;
 };
@@ -69,11 +85,12 @@ export const setToken: (token: ILogin) => void = token => {
     expires_in: token.expires_in,
     scope: token.scope,
   });
-  localStorage.setItem('token', newToken);
+  localStorage.setItem('ministers-token', newToken);
 };
 
 export const removeToken: () => void = () => {
-  localStorage.removeItem('token');
+  localStorage.removeItem('ministers-token');
+  localStorage.removeItem('ministers-userinfo');
 };
 
 export const msgRequestCanceled = 'Operation canceled by the user.';
@@ -139,8 +156,8 @@ export const toPersianDigit = (str: any) => {
 };
 
 export function isLogin() {
-  // const profileStr = localStorage.getItem('userinfo');
-  const tokenStr = localStorage.getItem('token');
+  const profileStr = localStorage.getItem('ministers-userinfo');
+  const tokenStr = localStorage.getItem('ministers-token');
   const firstLogin = localStorage.getItem('ministers-first-login');
   if (tokenStr && firstLogin) {
     if (new Date().getTime() > Number(firstLogin) + 24 * 60 * 60 * 1000) {
@@ -150,6 +167,17 @@ export function isLogin() {
       return false;
     }
     const token: ILogin = JSON.parse(tokenStr);
+
+    if (token.access_token) {
+      const profile = JSON.parse(profileStr || '{}');
+      const payload = parseJwt(token.access_token);
+      debugger;
+      localStorage.setItem(
+        'ministers-userinfo',
+        JSON.stringify({...profile, roles: payload.authorities || []})
+      );
+    }
+
     if (token && token.access_token.length > 0) {
       return true;
     }
