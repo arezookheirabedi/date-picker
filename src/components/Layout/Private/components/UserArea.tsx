@@ -21,6 +21,7 @@ const UserArea: React.FC<any> = () => {
     nationalId: '',
     qrCode: '',
     roles: [],
+    permissions: [],
   });
 
   const closeModal: () => void = () => {

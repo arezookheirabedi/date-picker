@@ -23,6 +23,7 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
     nationalId: '',
     qrCode: '',
     roles: [],
+    permissions: []
   });
 
   // eslint-disable-next-line
@@ -52,7 +53,7 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
     <>
       {route.roles &&
       profile.roles &&
-      route.roles.some((roleV1: string) => profile.roles.includes(roleV1))
+      route.roles.some((roleL1: string) => profile.roles.includes(roleL1))
         ? route.inMenu && (
             <>
               <MenuItem
@@ -95,8 +96,8 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                               <>
                                 {routeL2.roles &&
                                 profile.roles &&
-                                routeL2.roles.some((roleV2: string) =>
-                                  profile.roles.includes(roleV2)
+                                routeL2.roles.some((roleL2: string) =>
+                                  profile.roles.includes(roleL2)
                                 ) ? (
                                   <li key={routeL2.keyIndex} className="text-gray-400">
                                     <NavLink
@@ -121,52 +122,77 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                                       >
                                         {routeL2.children.map((routeL3: any) => {
                                           return (
-                                            <li key={routeL3.keyIndex} className="text-gray-400">
-                                              <NavLink
-                                                to={routeL3.link}
-                                                className="flex items-center pt-3 text-xs font-normal"
-                                                isActive={(match: any, loc: any) => {
-                                                  return checkMenuIsActive(routeL3, loc);
-                                                }}
-                                              >
-                                                <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
-                                                {routeL3.icon &&
-                                                  routeL3.icon(
-                                                    location.pathname.includes(routeL3.link)
-                                                  )}
-                                                {routeL3.title}
-                                              </NavLink>
-                                              {routeL3.children && (
-                                                <ul
-                                                  className={`pr-5 ${
-                                                    checkMenuIsActive(routeL3)
-                                                      ? 'sub-menu-open'
-                                                      : 'sub-menu-close'
-                                                  }`}
+                                            <>
+                                              {routeL3.roles &&
+                                              profile.roles &&
+                                              routeL3.roles.some((roleL3: string) =>
+                                                profile.roles.includes(roleL3)
+                                              ) ? (
+                                                <li
+                                                  key={routeL3.keyIndex}
+                                                  className="text-gray-400"
                                                 >
-                                                  {routeL3.children.map((routeL4: any) => {
-                                                    return (
-                                                      <li
-                                                        key={routeL4.keyIndex}
-                                                        className="text-gray-400"
-                                                      >
-                                                        <NavLink
-                                                          to={routeL4.link}
-                                                          className="flex items-center pt-3 text-xs font-normal"
-                                                        >
-                                                          <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
-                                                          {routeL4.icon &&
-                                                            routeL4.icon(
-                                                              location.pathname.includes(routeL4.link)
+                                                  <NavLink
+                                                    to={routeL3.link}
+                                                    className="flex items-center pt-3 text-xs font-normal"
+                                                    isActive={(match: any, loc: any) => {
+                                                      return checkMenuIsActive(routeL3, loc);
+                                                    }}
+                                                  >
+                                                    <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                                                    {routeL3.icon &&
+                                                      routeL3.icon(
+                                                        location.pathname.includes(routeL3.link)
+                                                      )}
+                                                    {routeL3.title}
+                                                  </NavLink>
+                                                  {routeL3.children && (
+                                                    <ul
+                                                      className={`pr-5 ${
+                                                        checkMenuIsActive(routeL3)
+                                                          ? 'sub-menu-open'
+                                                          : 'sub-menu-close'
+                                                      }`}
+                                                    >
+                                                      {routeL3.children.map((routeL4: any) => {
+                                                        return (
+                                                          <>
+                                                            {routeL4.roles &&
+                                                            profile.roles &&
+                                                            routeL4.roles.some((roleL4: string) =>
+                                                              profile.roles.includes(roleL4)
+                                                            ) ? (
+                                                              <li
+                                                                key={routeL4.keyIndex}
+                                                                className="text-gray-400"
+                                                              >
+                                                                <NavLink
+                                                                  to={routeL4.link}
+                                                                  className="flex items-center pt-3 text-xs font-normal"
+                                                                >
+                                                                  <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                                                                  {routeL4.icon &&
+                                                                    routeL4.icon(
+                                                                      location.pathname.includes(
+                                                                        routeL4.link
+                                                                      )
+                                                                    )}
+                                                                  {routeL4.title}
+                                                                </NavLink>
+                                                              </li>
+                                                            ) : (
+                                                              ''
                                                             )}
-                                                          {routeL4.title}
-                                                        </NavLink>
-                                                      </li>
-                                                    );
-                                                  })}
-                                                </ul>
+                                                          </>
+                                                        );
+                                                      })}
+                                                    </ul>
+                                                  )}
+                                                </li>
+                                              ) : (
+                                                ''
                                               )}
-                                            </li>
+                                            </>
                                           );
                                         })}
                                       </ul>
