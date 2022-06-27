@@ -20,7 +20,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(null) as any;
+  const [selectedDay, setSelectedDay] = useState({to: null, clear: false}) as any;
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -106,13 +106,14 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   }, [queryParams]);
 
   useEffect(() => {
-    if (selectedDay) {
+    if (selectedDay.to) {
       const finalToDate = `${selectedDay.year}/${selectedDay.month}/${selectedDay.day}`;
       setQueryParams({
         ...queryParams,
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDay.clear) {
       setQueryParams({
         ...queryParams,
         to: null,
@@ -245,7 +246,11 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
                   showDatePicker
                 />
               ) : null}
-              <Calendar action={focusFromDate} to={selectedDay} setSelectedDay={setSelectedDay} />
+              <Calendar
+                action={focusFromDate}
+                to={selectedDay.to}
+                setSelectedDay={setSelectedDay}
+              />
             </div>
           </div>
           <div className="w-2/4">

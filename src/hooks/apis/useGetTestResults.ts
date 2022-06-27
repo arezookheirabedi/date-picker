@@ -1,7 +1,16 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
+import {useEffect, useState} from 'react';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
 
+interface IInitialTestResults {
+  positiveMembersCount: number;
+  recoveredMembersCount: number;
+  testResultsCount: number;
+  totalPopulation: number;
+  positiveMembersCountToTotalPopulationPercentage: number;
+  recoveredMembersCountToTotalPopulationPercentage: number;
+  positiveMembersCountToTestResultsCountPercentage: number;
+}
 const initialTestResults = {
   positiveMembersCount: 0,
   positiveMembersCountToTestResultsCountPercentage: 0,
@@ -12,15 +21,15 @@ const initialTestResults = {
   totalPopulation: 0,
 };
 
-export default function useGetTestResults(query : any) {
+export default function useGetTestResults(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [data, setData] = useState<any>(initialTestResults);
+  const [data, setData] = useState<IInitialTestResults>(initialTestResults);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getTestResults = async (params : any) => {
+  const getTestResults = async (params: any) => {
     setLoading(true);
     setError(false);
     try {
@@ -32,7 +41,7 @@ export default function useGetTestResults(query : any) {
         };
       });
     } catch (err: any) {
-      setError(err.message || '')
+      setError(err.message || '');
     } finally {
       setLoading(false);
     }
