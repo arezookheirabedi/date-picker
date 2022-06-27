@@ -19,4 +19,5 @@ export interface IProfile{
   lastName: string
   nationalId: string
   qrCode: string
+  roles: string[]
 }

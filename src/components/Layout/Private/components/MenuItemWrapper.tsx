@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {NavLink, useLocation} from 'react-router-dom';
 import toast from 'cogo-toast';
 import Alert from 'src/components/Alert';
+import useLocalStorage from 'src/hooks/useLocalStorage';
+import {IProfile} from 'src/models/authentication.model';
 import MenuItem from './MenuItem';
 
 const {Info} = Alert;
@@ -11,6 +13,18 @@ interface IProps {
 }
 
 const MenuItemWrapper: React.FC<IProps> = ({route}) => {
+  const [profile] = useLocalStorage<IProfile>('ministers-userinfo', {
+    birthday: '',
+    categoryId: '',
+    firstName: '',
+    guildCode: '',
+    id: '',
+    lastName: '',
+    nationalId: '',
+    qrCode: '',
+    roles: [],
+  });
+
   // eslint-disable-next-line
   const [close, setClose] = useState<any>(true);
   const location = useLocation();
@@ -35,114 +49,145 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
   };
 
   return (
-    route.inMenu && (
-      <>
-        <MenuItem
-          className={`py-3 px-3 pr-12 relative ${route.disabled && 'text-gray-300 cursor-pointer'}`}
-        >
-          {route.disabled ? (
-            <button
-              type="button"
-              className="flex items-center"
-              onClick={() =>
-                handleDisabled(`سامانه ${route.title} به زودی به بهره برداری خواهد رسید`)
-              }
-            >
-              {route.icon && route.icon(location.pathname === route.link, true)}
-              {route.title}
-            </button>
-          ) : (
-            <ul className="">
-              <li>
-                <NavLink
-                  to={route.link}
-                  className="flex items-center"
-                  isActive={(match: any, loc: any) => {
-                    return checkMenuIsActive(route, loc);
-                  }}
-                >
-                  {route.icon && route.icon(checkMenuIsActive(route))}
-                  {route.title}
-                </NavLink>
-                {route.subMenu && (
-                  <ul
-                    className={`pr-10 ${
-                      checkMenuIsActive(route) ? 'sub-menu-open' : 'sub-menu-close'
-                    }`}
+    <>
+      {route.roles &&
+      profile.roles &&
+      route.roles.some((roleV1: string) => profile.roles.includes(roleV1))
+        ? route.inMenu && (
+            <>
+              <MenuItem
+                className={`py-3 px-3 pr-12 relative ${
+                  route.disabled && 'text-gray-300 cursor-pointer'
+                }`}
+              >
+                {route.disabled ? (
+                  <button
+                    type="button"
+                    className="flex items-center"
+                    onClick={() =>
+                      handleDisabled(`سامانه ${route.title} به زودی به بهره برداری خواهد رسید`)
+                    }
                   >
-                    {route.subMenu.map((r: any) => {
-                      return (
-                        <li key={r.keyIndex} className="text-gray-400">
-                          <NavLink
-                            to={r.link}
-                            className="flex items-center pt-4 text-xs font-normal"
-                            isActive={(match: any, loc: any) => {
-                              return checkMenuIsActive(r, loc);
-                            }}
-                          >
-                            {/* <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" /> */}
-                            {r.icon && r.icon(location.pathname.includes(r.simLink))}
-                            {r.title}
-                          </NavLink>
-                          {r.children && (
-                            <ul
-                              className={`pr-10 ${
-                                checkMenuIsActive(r) ? 'sub-menu-open' : 'sub-menu-close'
-                              }`}
-                            >
-                              {r.children.map((c: any) => {
-                                return (
-                                  <li key={c.keyIndex} className="text-gray-400">
+                    {route.icon && route.icon(location.pathname === route.link, true)}
+                    {route.title}
+                  </button>
+                ) : (
+                  <ul className="">
+                    <li>
+                      <NavLink
+                        to={route.link}
+                        className="flex items-center"
+                        isActive={(match: any, loc: any) => {
+                          return checkMenuIsActive(route, loc);
+                        }}
+                      >
+                        {route.icon && route.icon(checkMenuIsActive(route))}
+                        {route.title}
+                      </NavLink>
+                      {route.subMenu && (
+                        <ul
+                          className={`pr-10 ${
+                            checkMenuIsActive(route) ? 'sub-menu-open' : 'sub-menu-close'
+                          }`}
+                        >
+                          {route.subMenu.map((routeL2: any) => {
+                            return (
+                              <>
+                                {routeL2.roles &&
+                                profile.roles &&
+                                routeL2.roles.some((roleV2: string) =>
+                                  profile.roles.includes(roleV2)
+                                ) ? (
+                                  <li key={routeL2.keyIndex} className="text-gray-400">
                                     <NavLink
-                                      to={c.link}
-                                      className="flex items-center pt-3 text-xs font-normal"
+                                      to={routeL2.link}
+                                      className="flex items-center pt-4 text-xs font-normal"
                                       isActive={(match: any, loc: any) => {
-                                        return checkMenuIsActive(c, loc);
+                                        return checkMenuIsActive(routeL2, loc);
                                       }}
                                     >
-                                      <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
-                                      {c.icon && c.icon(location.pathname.includes(c.link))}
-                                      {c.title}
+                                      {/* <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" /> */}
+                                      {routeL2.icon &&
+                                        routeL2.icon(location.pathname.includes(routeL2.simLink))}
+                                      {routeL2.title}
                                     </NavLink>
-                                    {c.children && (
+                                    {routeL2.children && (
                                       <ul
-                                        className={`pr-5 ${
-                                          checkMenuIsActive(c) ? 'sub-menu-open' : 'sub-menu-close'
+                                        className={`pr-10 ${
+                                          checkMenuIsActive(routeL2)
+                                            ? 'sub-menu-open'
+                                            : 'sub-menu-close'
                                         }`}
                                       >
-                                        {c.children.map((d: any) => {
+                                        {routeL2.children.map((routeL3: any) => {
                                           return (
-                                            <li key={d.keyIndex} className="text-gray-400">
+                                            <li key={routeL3.keyIndex} className="text-gray-400">
                                               <NavLink
-                                                to={d.link}
+                                                to={routeL3.link}
                                                 className="flex items-center pt-3 text-xs font-normal"
+                                                isActive={(match: any, loc: any) => {
+                                                  return checkMenuIsActive(routeL3, loc);
+                                                }}
                                               >
                                                 <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
-                                                {d.icon &&
-                                                  d.icon(location.pathname.includes(d.link))}
-                                                {d.title}
+                                                {routeL3.icon &&
+                                                  routeL3.icon(
+                                                    location.pathname.includes(routeL3.link)
+                                                  )}
+                                                {routeL3.title}
                                               </NavLink>
+                                              {routeL3.children && (
+                                                <ul
+                                                  className={`pr-5 ${
+                                                    checkMenuIsActive(routeL3)
+                                                      ? 'sub-menu-open'
+                                                      : 'sub-menu-close'
+                                                  }`}
+                                                >
+                                                  {routeL3.children.map((routeL4: any) => {
+                                                    return (
+                                                      <li
+                                                        key={routeL4.keyIndex}
+                                                        className="text-gray-400"
+                                                      >
+                                                        <NavLink
+                                                          to={routeL4.link}
+                                                          className="flex items-center pt-3 text-xs font-normal"
+                                                        >
+                                                          <div className="w-1 h-1 rounded-full bg-gray-400 ml-2" />
+                                                          {routeL4.icon &&
+                                                            routeL4.icon(
+                                                              location.pathname.includes(routeL4.link)
+                                                            )}
+                                                          {routeL4.title}
+                                                        </NavLink>
+                                                      </li>
+                                                    );
+                                                  })}
+                                                </ul>
+                                              )}
                                             </li>
                                           );
                                         })}
                                       </ul>
                                     )}
                                   </li>
-                                );
-                              })}
-                            </ul>
-                          )}
-                        </li>
-                      );
-                    })}
+                                ) : (
+                                  ''
+                                )}
+                              </>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </li>
                   </ul>
                 )}
-              </li>
-            </ul>
-          )}
-        </MenuItem>
-      </>
-    )
+              </MenuItem>
+            </>
+          )
+        : ''}
+    </>
   );
 };
 
