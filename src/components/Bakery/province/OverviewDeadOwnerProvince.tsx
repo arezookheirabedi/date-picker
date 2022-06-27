@@ -205,7 +205,7 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
                 render: (v: any) => <span>{v}</span>,
               },
               {
-                name: 'شناسه POS بانکی',
+                name: 'نام و نام‌خانوادگی',
                 key: 'fullName',
                 render: (v: any) => <span>{v || '-'}</span>,
               },
