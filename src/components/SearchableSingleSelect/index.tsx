@@ -91,10 +91,9 @@ const SearchableSingleSelect: React.FC<IProps> = ({
     let params = {...queryParams};
     if (selected) {
       params = {...queryParams, [`${objectKey}`]: selected.key};
-    } else {
-      params = {...queryParams, categoryValue: null};
+      setQueryParams(params);
     }
-    setQueryParams(params);
+
   }, [selected]);
 
   return (

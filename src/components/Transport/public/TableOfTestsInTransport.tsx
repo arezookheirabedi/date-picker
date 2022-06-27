@@ -1,16 +1,10 @@
-import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
+import React, {useState} from 'react';
 // import hcsService from 'src/services/hcs.service';
 // import {Menu} from '@headlessui/react';
-import guildService from 'src/services/guild.service';
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
-
 import Table from '../../TableScopeSort';
-
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
+import DatepickerQuery from "../../DatepickerQuery";
+import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 // const order = {
@@ -20,81 +14,18 @@ import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 // };
 
 const TableOfTestsInTransport = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
   // const [searchQuery, setSearchQuery] = useState('');
   // const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
   // const [orgDataset, setOrgDataset] = useState<any>([]);
-  const [selectedDayRange, setSelectedDayRange] = useState({
+  const [query, setQuery] = useState({
+    tag: 'transport',
+    category: 'serviceType',
     from: null,
     to: null,
-  }) as any;
-  const cancelToken = cancelTokenSource();
+  })
 
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  async function getTestResultByCategory(params: any) {
-    setLoading(true);
-    try {
-      const {data} = await guildService.guildTestResultByCategory(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryValue || 'نامشخص',
-          total: item.testResultsCount || 0,
-          positiveCountPercentage: item.positiveTestResultsCountToTestResultsCountPercentage || 0,
-          negativeCountPercentage: item.negativeTestResultsCountToTestResultsCountPercentage || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    return () => {
-      cancelRequest();
-      setDataset([]);
-      // setOrgDataset([]);
-    };
-  }, []);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      // setSearchQuery('');
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      getTestResultByCategory({
-        tag: 'transport',
-        category: 'serviceType',
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    } else {
-      getTestResultByCategory({
-        tag: 'transport',
-        category: 'serviceType',
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
+// eslint-disable-next-line
+  const {data: dataset, loading, error: errorMessage} = useGetTestResultsTable(query);
   // function handleSearch(e: any) {
   //   const {value} = e.target;
   //   let tmp = [...orgDataset];
@@ -115,21 +46,7 @@ const TableOfTestsInTransport = () => {
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
-            {showDatePicker ? (
-              <DatePickerModal
-                setSelectedDayRange={setSelectedDayRange}
-                selectedDayRange={selectedDayRange}
-                setShowDatePicker={setShowDatePicker}
-                showDatePicker
-              />
-            ) : null}
-
-            <Calendar
-              action={focusFromDate}
-              from={selectedDayRange.from}
-              to={selectedDayRange.to}
-              setSelectedDayRange={setSelectedDayRange}
-            />
+            <DatepickerQuery query={query} setQuery={setQuery}/>
           </div>
         </div>
 
