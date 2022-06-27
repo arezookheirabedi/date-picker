@@ -45,22 +45,22 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       const {data} = await guildService.numberOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
+      const SortData = data.sort((a: any, b: any) => (a.allCount > b.allCount ? 1 : -1));
       const province: any[] = [];
       const registered: any[] = [];
       const allCount: any[] = [];
-      data.forEach((item: any) => {
+      SortData.forEach((item: any) => {
         province.push(item.province);
         allCount.push(item.allCount);
         registered.push(item.registeredCount);
       });
-      const sortAllCount = allCount.sort((a, b) => (a > b ? 1 : -1));
       const newData = [
         {
           name: 'کل',
           dataLabels: {
             // enabled: true,
           },
-          data: [...sortAllCount],
+          data: [...allCount],
         },
         {
           name: 'ثبت نام شده',
