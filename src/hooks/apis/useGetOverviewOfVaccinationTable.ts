@@ -6,6 +6,7 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -42,7 +43,7 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
       });
 
       setData([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       // setFilterType({name: 'کمترین', enName: 'LOWEST'});
     } catch (e: any) {
       setError(e.message || '')
@@ -59,5 +60,5 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
     };
   }, [query]);
 
-  return {loading, error, data};
+  return {loading, error, data ,setData , orgDataset};
 }

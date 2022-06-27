@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
-// api services
-import axios from 'axios';
-import bakeryService from '../../../services/bakery.service';
+// hooks
+import useOverviewOfInspectionNeedProvince from "../../../hooks/apis/bakery/useOverviewOfInspectionNeedProvince";
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
@@ -20,42 +19,14 @@ interface OverviewBakeryProvinceProps {
   cityTitle: any;
 }
 
-const initialNumberOf = {
-  bakeryWithoutTransaction: 0,
-  dailyTransactionAverage: 0,
-  posActiveTime: 0,
-  province: 'تهران',
-  transactionAmout: 0,
-  unsualTransaction: 0,
-};
-
 const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitle}) => {
-  const [loading, setLoading] = useState(false);
-  const [bakeries, setBakeries] = useState<any>(initialNumberOf);
+  
+  // call bakery hook
+  const {loading, list: bakeries, setProvinceName} = useOverviewOfInspectionNeedProvince(cityTitle);
+
   const location = useLocation();
   const history = useHistory();
-   
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  const getBakeries = async (province: any) => {
-    setLoading(true);
-    try {
-      const {data} = await bakeryService.bakeryReport(
-        {reportName: "inspectionNeedProvince", province},
-        {cancelToken: source.token}
-      );
-      const result = data.find((x: any) => {
-        return x.province === cityTitle
-      })
-      setBakeries({...result});
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -63,7 +34,7 @@ const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = 
       return item.name === provinceName;
     });
     if (existsCity) {
-      getBakeries(provinceName);
+      setProvinceName(provinceName);
     } else {
       history.push('/dashboard/bakery/province');
     }

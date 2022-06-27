@@ -6,6 +6,7 @@ export default function useGetTestResultsTable(query : any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -27,7 +28,7 @@ export default function useGetTestResultsTable(query : any) {
         });
       });
       setData([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
     } catch (err: any) {
       // eslint-disable-next-line
       setError(err.message || '')
@@ -45,5 +46,5 @@ export default function useGetTestResultsTable(query : any) {
     };
   }, [query]);
 
-  return {loading, error, data};
+  return {loading, error, data , setData , orgDataset};
 }

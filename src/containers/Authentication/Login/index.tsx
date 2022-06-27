@@ -127,19 +127,23 @@ export default function Login() {
         <div className="inputwraper">
           <input
             style={{border: '1px solid #b2b2b2'}}
-            className={`${errors.username ? 'u-border-red u-color-red' : ''}`}
+            className={`${
+              errors.username ? 'u-border-red u-color-red' : ''
+            } ltr placeholder-rtl py-5 px-2.5`}
             type="text"
             {...register('username', loginValidation.username)}
-            placeholder="پست الکترونیکی"
+            placeholder="پست الکترونیکی/نام کاربری"
           />
           {errors.username && <span className="inputError">{errors.username.message}</span>}
         </div>
 
         <div className="inputwraper icon ">
           <input
-            style={{border: '1px solid #b2b2b2'}}
+            style={{border: '1px solid #b2b2b2', paddingLeft: '40px'}}
             autoComplete="new-password"
-            className={`${errors.password ? 'u-border-red u-color-red' : ''}`}
+            className={`${
+              errors.password ? 'u-border-red u-color-red' : ''
+            }  ltr placeholder-rtl py-5 px-2.5`}
             type={`${typeInputText ? 'text' : 'password'}`}
             {...register('password', loginValidation.password)}
             placeholder="رمز عبور"
@@ -160,13 +164,15 @@ export default function Login() {
             <RefreshLogo onHandleRefreshLogo={handleCaptcha} />
           </div>
           <input
-            style={{border: '1px solid #b2b2b2'}}
+            style={{border: '1px solid #b2b2b2', paddingLeft: '200px'}}
             {...register('captcha', loginValidation.captcha)}
             maxLength={7}
             autoComplete="off"
             type="text"
             placeholder="  کد امنیتی"
-            className={`${errors.captcha ? 'u-border-red u-color-red' : ''}`}
+            className={`${
+              errors.captcha ? 'u-border-red u-color-red' : ''
+            }   ltr placeholder-rtl py-5 px-2.5 `}
           />
           {errors.captcha && <span className="inputError">{errors.captcha.message}</span>}
         </div>

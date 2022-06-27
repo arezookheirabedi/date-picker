@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from 'react';
-// @ts-ignore
-// eslint-disable-next-line
-import moment from 'moment-jalaali';
-import recruitmentServices from 'src/services/recruitment.service';
-import Calendar from 'src/components/Calendar';
-import DatePickerModal from '../../DatePickerModal';
+import React, {useState} from 'react';
+
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 // import TagsSelect from '../../TagsSelect';
 import SearchableSingleSelect from '../../SearchableSingleSelect';
+import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
+import DatepickerQuery from "../../DatepickerQuery";
 
 const {Line} = Charts;
 
@@ -22,75 +19,23 @@ interface IParams {
 }
 
 const OverviewPatients: React.FC<{}> = () => {
-  const [data, setData] = useState([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null) as any;
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
+
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false
   }) as any;
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  const [queryParams, setQueryParams] = useState<IParams>({
+  const [query, setQuery] = useState<IParams>({
+    timeBoxType: 'DAILY',
+    from: null,
+    to: null,
     tag: 'employee',
     category: 'heName',
-    timeBoxType: 'DAILY',
-    from: '',
-    to: '',
   }) as any;
 
-  const getLinearOverview = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await recruitmentServices.testResultTimeBased(params);
-      setData(response.data);
-    } catch (error: any) {
-      setErrorMessage('خطا در اتصال به سرور')
-      // setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({
-        ...queryParams,
-      });
-    }, 500);
-
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
+  const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {
@@ -150,36 +95,23 @@ const OverviewPatients: React.FC<{}> = () => {
               placeholder="کل کارکنان"
               tag="employee"
               category="heName"
-              setQueryParams={setQueryParams}
-              queryParams={queryParams}
+              setQueryParams={setQuery}
+              queryParams={query}
             />
 
             <div className="flex align-center justify-between mr-8">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={query} setQuery={setQuery}/>
             </div>
           </div>
 
           <RangeDateSliderFilter
             changeType={v =>
-              setQueryParams({
-                ...queryParams,
+              setQuery({
+                ...query,
                 timeBoxType: v,
               })
             }
-            selectedType={queryParams.timeBoxType}
+            selectedType={query.timeBoxType}
             dates={selectedDayRange}
             wrapperClassName="w-1/4"
           />
