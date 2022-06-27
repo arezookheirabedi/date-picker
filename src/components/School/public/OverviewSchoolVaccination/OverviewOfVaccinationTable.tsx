@@ -10,7 +10,7 @@ import moment from 'moment-jalaali';
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>([]);
-  const [datasetLoading, setDatasetLoading] = useState<any>([]);
+  const [loading, setLoading] = useState<any>(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -26,8 +26,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
   }
 
   const getOverviewByVaccine = async ({tag, category, ...params}: any = {}) => {
-    setDatasetLoading(true);
-
+    setLoading(true);
     try {
       const {data} = await hcsService.vaccinationOverview(tag, category, params, {
         cancelToken: cancelToken.token,
@@ -35,7 +34,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
         // eslint-disable-next-line
-
         normalizedData.push({
           id: `ovvac_${index}`,
           name: item.categoryValue || 'نامشخص',
@@ -55,7 +53,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     } catch (e: any) {
       console.log(e);
     } finally {
-      setDatasetLoading(false);
+      setLoading(false);
     }
   };
 
@@ -69,8 +67,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    }
-    if (selectedDayRange.clear) {
+    } else {
       getOverviewByVaccine({
         tag: 'edu',
         category: 'grade',
@@ -117,7 +114,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           totalItems={dataset.length || 0}
-          loading={datasetLoading}
+          loading={loading}
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[
@@ -204,21 +201,6 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               key: 'otherDose',
               render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
             },
-            // {
-            //   name: 'درصد کل دوزها',
-            //   key: 'allDosesPercentage',
-            //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            // },
-            // {
-            //   name: 'واکسن نزده',
-            //   key: 'noDose',
-            //   render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            // },
-            // {
-            //   name: 'اطلاعات مخدوش',
-            //   key: 'unknownInformation',
-            //   render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-            // },
             {
               name: 'کل دوزها',
               sortable: true,

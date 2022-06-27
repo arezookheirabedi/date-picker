@@ -18,15 +18,9 @@ interface IOverviewGuildRegisterPercentage {}
 
 const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
@@ -51,18 +45,18 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
       const {data} = await guildService.percentageOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
+      const sortData = data.sort((a: any, b: any) => (a.percentage > b.percentage ? 1 : -1));
       const province: any[] = [];
       const registered: any[] = [];
-      data.forEach((item: any) => {
-        province.push(item.province);
+      sortData.forEach((item: any) => {
+        province.push(item.province ? item.province.trim() : '');
         registered.push(item.percentage);
       });
-      const sortRegistered = registered.sort((a, b) => (a > b ? 1 : -1));
       const newData = [
         {
           showInLegend: false,
           name: 'ثبت نام شده',
-          data: [...sortRegistered],
+          data: [...registered],
           color: {
             linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
             stops: [
@@ -73,9 +67,10 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         },
       ];
 
-      if (data.length > 0) {
-        setDataset({categories: [...province], series: [...newData]});
-      }
+      // if (data.length > 0) {
+      setDataset({categories: [...province], series: [...newData]});
+
+      // }
     } catch (error: any) {
       setErrorMessage(error.message);
       // eslint-disable-next-line
@@ -172,6 +167,8 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     },
 
     yAxis: {
+      tickInterval: 25,
+      tickAmount: 5,
       labels: {
         format: '٪{text}',
       },
@@ -235,6 +232,10 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
       <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد اصناف ثبت نامی در هر استان
       </legend>
+
+      {/* {JSON.stringify(data1, null, 2)} */}
+      {/* {JSON.stringify(dataset, null, 2)} */}
+
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
           <div className="align-center flex space-x-5 rtl:space-x-reverse">

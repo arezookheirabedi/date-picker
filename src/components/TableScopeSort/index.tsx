@@ -80,12 +80,13 @@ const Table: React.FC<IProps> = (props: IProps) => {
     } else {
       temp = [...data];
     }
-    setSortData(temp);
+    const newData = temp.slice((page - 1) * pageSize, page * pageSize);
+    setSortData(newData);
   };
 
   useEffect(() => {
     setPage(1);
-  }, [dataSet]);
+  }, [dataSet, orders]);
 
   useEffect(() => {
     const data = dataSet.slice((page - 1) * pageSize, page * pageSize);
@@ -94,8 +95,9 @@ const Table: React.FC<IProps> = (props: IProps) => {
     const valueArray = Object.values(orders);
     const orderIndex = valueArray.findIndex(element => element !== undefined);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    orderIndex !== -1 && getData(keyArray[orderIndex], valueArray[orderIndex], data);
+    orderIndex !== -1 && getData(keyArray[orderIndex], valueArray[orderIndex], dataSet);
   }, [orders, dataSet, page]);
+
   const handleSortOrder = (key: any, order: OrderDirection) => {
     if (!isEqual(orders, {...orders, [key]: order})) {
       const newOrderList = {...firstOrderList, [key]: order};
@@ -109,7 +111,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
   };
   return (
     <>
-      <div className="relative pl-3 -ml-3 h-full w-full overflow-hidden overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
+      <div className="relative -ml-3 h-full w-full overflow-hidden overflow-x-scroll pl-3 scrollbar-thin scrollbar-track-gray-300 scrollbar-thumb-gray-400">
         <table className="w-full table-auto">
           <thead className="">
             <tr className="border-b border-gray-100">
@@ -125,11 +127,11 @@ const Table: React.FC<IProps> = (props: IProps) => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-900 max-h-screen overflow-hidden overflow-y-scroll">
+          <tbody className="max-h-screen overflow-hidden overflow-y-scroll bg-white dark:bg-gray-900">
             {loading ? (
               <tr>
                 <td colSpan={columns.length + 1}>
-                  <div className="px-4 py-10 flex justify-center items-center">
+                  <div className="flex items-center justify-center px-4 py-10">
                     <Loading />
                   </div>
                 </td>
@@ -140,10 +142,10 @@ const Table: React.FC<IProps> = (props: IProps) => {
                   // sortData.slice((page - 1) * pageSize, page * pageSize).map((data, i) => (
                   sortData.map((data, i) => (
                     // eslint-disable-next-line
-                    <tr className="transition-all border-b border-gray-100" key={i}>
+                    <tr className="border-b border-gray-100 transition-all" key={i}>
                       {columns?.map((column, j) => (
                         <td
-                          className={`px-3 py-3 text-sm text-gray-900 whitespace-nowrap ${
+                          className={`whitespace-nowrap px-3 py-3 text-sm text-gray-900 ${
                             column.className ? column.className : ''
                           }`}
                           // eslint-disable-next-line
@@ -159,7 +161,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
                 ) : (
                   <tr>
                     <td colSpan={columns.length + 1}>
-                      <div className="px-4 py-10 flex justify-center items-center">
+                      <div className="flex items-center justify-center px-4 py-10">
                         <Empty />
                       </div>
                     </td>
