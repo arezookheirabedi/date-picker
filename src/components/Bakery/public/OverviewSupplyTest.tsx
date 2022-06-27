@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-import bakeryService from 'src/services/bakery.service';
+import bakeryService from 'src/services/bakery/mock/bakery.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import DatePickerModal from '../../DatePickerModal';
 import Spinner from '../../Spinner';

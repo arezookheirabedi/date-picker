@@ -1,25 +1,11 @@
 // import qs from 'qs';
-import request from '../helpers/request';
+import request from '../../../helpers/request';
 
 function bakeryGeneral({ tag, ...params }: any = {}, config?: any) {
     return request
         .withHeaders({ 'Content-Type': 'application/json;utf-8' })
         .build({ mock: true })
         .get(`/api/v1/bakery/general`, params, { ...config });
-}
-
-function bakeryCount({ tag, ...params }: any = {}, config?: any) {
-    return request
-        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
-        .build()
-        .get(`/api/v1/guilds/inspections/bakeries/count`, params, { ...config });
-}
-
-function bakeryReport({ reportName, ...params }: any = {}, config?: any) {
-    return request
-        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
-        .build()
-        .get(`/api/v1/hcs-reporter/bakery/report-name/${reportName}`, params, { ...config });
 }
 
 function bakeryPerCategory({ tag, ...params }: any = {}, config?: any) {
@@ -74,8 +60,6 @@ function bakeryAudit({ tag, ...params }: any = {}, config?: any) {
 
 const bakeryService = {
     bakeryGeneral,
-    bakeryReport,
-    bakeryCount,
     bakeryPerCategory,
     bakeryLicense,
     bakeryActiveTime,
