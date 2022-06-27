@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
-
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {Menu} from '@headlessui/react';
@@ -8,21 +6,17 @@ import {Menu} from '@headlessui/react';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
 
 import {sidesCities} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
+// hooks
+import useOverviewOfRegistered from "../../../hooks/apis/bakery/useOverviewOfRegistered";
+
 const OverviewInvalidGuildCode: React.FC<{}> = () => {
 
   // states
-  const [loading, setLoading] = useState(false);
   const [serviceType, setServiceType] = useState(null) as any;
-  const [dataset, setDataset] = useState<any>([]);
-  const [filteredDataset, setFilteredDataset] = useState<any>([]);
-  const [count, setCount] = useState<any>(0);
-  const { CancelToken } = axios;
-  const source = CancelToken.source();
   const [query, setQuery] = useState<string>("");
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -37,48 +31,15 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
 
    // const [showDatePicker, setShowDatePicker] = useState(false);
 
-
-  // const overviewTestResults = async (from: any = null, to: any = null) => {
-  const overviewTestResults = async () => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "invalidGuildCodeDetail" },
-        { cancelToken: source.token }
-      );
-      // const {data} = await bakeryService.bakeryAudit({
-      //   lang: 'fa',
-      //   // from,
-      //   // to,
-      // });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          ...item
-        });
-      });
-      setCount(normalizedData.length);
-      setDataset([...normalizedData]);
-      setFilteredDataset([...normalizedData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  useEffect(() => {
-    overviewTestResults();
-    // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, []);
+  // call bakery hook
+  const {
+    loading, 
+    list: dataset, 
+    count,
+    setCount,
+    filteredDataset,
+    setFilteredDataset
+  } = useOverviewOfRegistered({reportName: "invalidGuildCodeDetail"});
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);

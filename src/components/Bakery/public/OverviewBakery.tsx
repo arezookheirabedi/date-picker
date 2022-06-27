@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
 
-// api services
-import axios from 'axios';
-import bakeryService from '../../../services/bakery.service';
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
+
+// hooks
+import useOverviewOfBakery from "../../../hooks/apis/bakery/useOverviewOfBakery";
 
 // images
 import breadIcon from '../../../assets/images/icons/bread.svg';
@@ -24,62 +23,11 @@ import registeredPos from '../../../assets/images/icons/registeredPos.svg';
 import activePosIcon from '../../../assets/images/icons/activePos.svg';
 import cinderIcon from '../../../assets/images/icons/cinder.svg';
 
-const initialBakeries = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0};
-const initialNumber = {
-  bakery: {...initialBakeries}
-};
 
 const OverviewBakery = () => {
-  const [loading, setLoading] = useState(false);
-  const [bakeries, setBakeries] = useState<any>(initialNumber);
-  const [count, setCount] = useState<any>(0);
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  // get count of inspections
-  const getCount = async () => {
-    setLoading(true);
-    try {
-      const {data} = await bakeryService.bakeryCount(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
-      setCount(data)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const getBakeries = async () => {
-    setLoading(true);
-    try {
-      const {data} = await bakeryService.bakeryReport(
-        {reportName: "general"},
-        {cancelToken: source.token}
-      );
-      const temp = [] as any;
-      data.map((res: any) => {
-        temp.push(res.value)
-        return temp;
-      });
-      setBakeries({bakery: {...temp}})
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getBakeries();
-    getCount()
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
+  // call bakery hook
+  const {loading, list: bakeries, count} = useOverviewOfBakery();
   
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -87,7 +35,6 @@ const OverviewBakery = () => {
 
        <div className="flex flex-col justify-between space-y-8">
          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-           
            <Statistic
              icon={breadIcon}
              text="مجموع نانوایی‌های کل کشور"
