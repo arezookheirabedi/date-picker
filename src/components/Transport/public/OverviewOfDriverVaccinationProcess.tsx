@@ -111,7 +111,6 @@ const OverviewOfDriverVaccinationProcess = () => {
   // const [showDatePicker, setShowDatePicker] = useState(false);
 
   const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess({
-    category: 'serviceType',
     tag: 'transport'
   })
 

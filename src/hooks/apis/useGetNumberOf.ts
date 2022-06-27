@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import vaccineService from "../../services/vaccine.service";
+import hcsService from "../../services/hcs.service";
 
 const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
 const initialNumberOf = {
@@ -27,7 +27,7 @@ export default function useGetNumberOf(query : any) {
     setLoading(true);
     setError(false);
     try {
-      const {data: result} = await vaccineService.membersGeneral(
+      const {data: result} = await hcsService.numberOf(
         params,
         {cancelToken: source.token}
       );
