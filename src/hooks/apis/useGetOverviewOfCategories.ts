@@ -6,6 +6,7 @@ export default function useGetOverviewOfCategories(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -35,7 +36,7 @@ export default function useGetOverviewOfCategories(query: any) {
 
       });
       setData([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       // setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
     } catch (e) {
       console.log(e);
@@ -52,5 +53,5 @@ export default function useGetOverviewOfCategories(query: any) {
     };
   }, [query]);
 
-  return {loading, error, data};
+  return {loading, error, data , setData , orgDataset};
 }

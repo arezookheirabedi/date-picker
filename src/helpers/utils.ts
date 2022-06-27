@@ -212,9 +212,9 @@ export const getServiceTypeName = (item: any) => {
     case 'SCHOOL_SERVICE':
       return 'سرویس مدارس';
     case 'AGENCIES_UNDER_THE_SUPERVISION_OF_THE_MUNICIPALITY':
-      return 'سازمان های زیر نظر شهرداری';
+      return 'آژانس های تحت نظارت شهرداری';
     case 'GUILD_AGENCIES':
-      return 'آژانس';
+      return 'آژانس های صنفی';
     case 'BUS_DRIVING':
       return 'اتوبوسرانی';
     case 'BIKE_DELIVERY':
@@ -224,9 +224,9 @@ export const getServiceTypeName = (item: any) => {
     case 'IN_CITY_TAXI':
       return 'تاکسی درون شهری';
     case 'CARGO_FLEET':
-      return 'ناوگان باربری';
+      return 'ناوگان باری';
     case 'ONLINE_TAXI':
-      return 'تاکسی آنلاین';
+      return 'تاکسی اینترنتی';
     case 'SAMAS':
       return 'سماس';
     default:
