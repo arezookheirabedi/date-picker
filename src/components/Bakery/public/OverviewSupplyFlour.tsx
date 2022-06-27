@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-import bakeryService from 'src/services/bakery.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import DatePickerModal from '../../DatePickerModal';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
 // import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
+
+// hooks
+import useOverviewOfSupplyFlour from "../../../hooks/apis/bakery/useOverviewOfSupplyFlour";
 
 const optionChart = {
   chart: {
@@ -95,12 +96,12 @@ const optionChart = {
 };
 
 const OverviewSellRate: React.FC<{}> = () => {
-  const [dataset, setDataSet] = useState({});
+
+  // call bakery hook
+  const { loading, list: dataset, error: errorMessage } = useOverviewOfSupplyFlour();
+
   // const [serviceType, setServiceType] = useState(null) as any;
   // const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: {
@@ -115,11 +116,6 @@ const OverviewSellRate: React.FC<{}> = () => {
   //   },
   // }) as any;
 
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
   // };
@@ -129,55 +125,6 @@ const OverviewSellRate: React.FC<{}> = () => {
   //   to: null,
   // });
 
-  // const getColumnChartTestResult = async (params: any) => {
-    const getColumnChartTestResult = async () => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await bakeryService.bakeryReport(
-        { reportName: "numberOfShareFlour" },
-        { cancelToken: cancelToken.token }
-      );
-      const province: any[] = [];
-      const NumberOfShareFlour: any[] = [];
-      data.forEach((item: any) => {
-        province.push(item.title);
-        NumberOfShareFlour.push(Number(item.numberOfShareFlour));
-      });
-      // setCategories([...province]);
-      const newData = [
-        {
-          name: 'میزان سهم آرد',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: false,
-          data: [...NumberOfShareFlour],
-        },
-      ];
-      // setDataset([...newData]);
-      setDataSet({categories: [...province], series: [...newData]});
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult();
-    }, 500);
-
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-      clearTimeout(idSetTimeOut);
-    };
-  }, []);
-  // }, [query]);
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {

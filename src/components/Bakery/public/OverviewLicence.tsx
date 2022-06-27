@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-import bakeryService from 'src/services/bakery.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Information from '../../../assets/images/icons/information.svg';
 // import DatePickerModal from '../../DatePickerModal';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -13,6 +11,9 @@ import Spinner from '../../Spinner';
 // import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
+
+// hooks
+import useOverviewOfLicence from "../../../hooks/apis/bakery/useOverviewOfLicence";
 
 const optionChart = {
   chart: {
@@ -122,23 +123,21 @@ const optionChart = {
 };
 
 const OverviewLicence: React.FC<{}> = () => {
-  const [dataset, setDataSet] = useState({});
+ 
+   // call bakery hook
+   const {
+    loading, 
+    list: dataset,
+    error: errorMessage
+  } = useOverviewOfLicence();
+
   // const [serviceType, setServiceType] = useState(null) as any;
   // const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
   // }) as any;
 
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
   // };
@@ -147,80 +146,6 @@ const OverviewLicence: React.FC<{}> = () => {
   //   from: null,
   //   to: null,
   // });
-
-  // const getColumnChartTestResult = async (params: any) => {
-    const getColumnChartTestResult = async () => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      // const response = await bakeryService.bakeryLicense(params, {
-      //   cancelToken: cancelToken.token,
-      // });i
-      const {data} = await bakeryService.bakeryReport(
-        { reportName: "permission" },
-        { cancelToken: cancelToken.token }
-      );
-      const province: any[] = [];
-      const samt: any[] = [];
-      const sima: any[] = [];
-      data.forEach((item: any) => {
-        province.push(item.province);
-        samt.push(Number(item.samt));
-        sima.push(Number(item.sima));
-      });
-      // setCategories([...province]);
-      const newData = [
-        {
-          name: 'صمت',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: true,
-          data: [...samt],
-        },
-        {
-          name: 'سیما',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: true,
-          data: [...sima],
-          linearGradient: {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 1,
-          },
-          stops: [
-            [0, '#5F5B97'],
-            [1, '#DDDCE9'],
-          ],
-        },
-      ];
-      // setDataset([...newData]);
-      setDataSet({categories: [...province], series: [...newData]});
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult();
-      // getColumnChartTestResult(query);
-    // }, 500);
-
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-      // clearTimeout(idSetTimeOut);
-    };
-  }, []);
-  // }, [query]);
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {

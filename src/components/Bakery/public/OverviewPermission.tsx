@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 
 // @ts-ignore
 // import moment from 'moment-jalaali';
@@ -7,15 +6,16 @@ import axios from 'axios';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
+
+// hooks
+import useOverviewOfPermission from "../../../hooks/apis/bakery/useOverviewOfPermission";
+
 
 const OverviewPermission: React.FC<{}> = () => {
 
-  // states
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  const { CancelToken } = axios;
-  const source = CancelToken.source();
+  // call bakery hook
+  const { loading, list: dataset } = useOverviewOfPermission();
+
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
@@ -28,47 +28,6 @@ const OverviewPermission: React.FC<{}> = () => {
   // }) as any;
 
    // const [showDatePicker, setShowDatePicker] = useState(false);
-
-
-  // const overviewTestResults = async (from: any = null, to: any = null) => {
-  const overviewTestResults = async () => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "permission" },
-        { cancelToken: source.token }
-      );
-      // const {data} = await bakeryService.bakeryAudit({
-      //   lang: 'fa',
-      //   // from,
-      //   // to,
-      // });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          ...item
-        });
-      });
-      setDataset([...normalizedData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  useEffect(() => {
-    overviewTestResults();
-    // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, []);
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
