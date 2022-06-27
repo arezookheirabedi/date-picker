@@ -76,7 +76,7 @@ export default function Login() {
       // );
       // eslint-disable-next-line
       console.log('you are logged in');
-      history.push("/dashboard/health/vaccination/public");
+      history.push('/dashboard/health/vaccination/public');
     } catch (error: any) {
       handleCaptcha();
       const {message} = error;
@@ -116,7 +116,7 @@ export default function Login() {
     return () => {
       setCaptchaCode('');
       setInputCaptchaId('');
-    }
+    };
   }, []);
 
   return (
@@ -127,26 +127,30 @@ export default function Login() {
         <div className="inputwraper">
           <input
             style={{border: '1px solid #b2b2b2'}}
-            className={`${errors.username ? 'u-border-red u-color-red' : ''}`}
+            className={`${
+              errors.username ? 'u-border-red u-color-red' : ''
+            } ltr placeholder-rtl py-5 px-2.5`}
             type="text"
             {...register('username', loginValidation.username)}
-            placeholder="پست الکترونیکی"
+            placeholder="پست الکترونیکی/نام کاربری"
           />
           {errors.username && <span className="inputError">{errors.username.message}</span>}
         </div>
 
         <div className="inputwraper icon ">
           <input
-            style={{border: '1px solid #b2b2b2'}}
+            style={{border: '1px solid #b2b2b2', paddingLeft: '40px'}}
             autoComplete="new-password"
-            className={`${errors.password ? 'u-border-red u-color-red' : ''}`}
+            className={`${
+              errors.password ? 'u-border-red u-color-red' : ''
+            }  ltr placeholder-rtl py-5 px-2.5`}
             type={`${typeInputText ? 'text' : 'password'}`}
             {...register('password', loginValidation.password)}
             placeholder="رمز عبور"
           />
 
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-          <img src={eyes} alt="" onClick={() => setTypeInputText(!typeInputText)}/>
+          <img src={eyes} alt="" onClick={() => setTypeInputText(!typeInputText)} />
           {errors.password && <span className="inputError"> {errors.password.message}</span>}
         </div>
 
@@ -157,16 +161,18 @@ export default function Login() {
               src={`data:image/png;base64, ${captchaCode}`}
               alt=""
             />
-            <RefreshLogo onHandleRefreshLogo={handleCaptcha}/>
+            <RefreshLogo onHandleRefreshLogo={handleCaptcha} />
           </div>
           <input
-            style={{border: '1px solid #b2b2b2'}}
+            style={{border: '1px solid #b2b2b2', paddingLeft: '200px'}}
             {...register('captcha', loginValidation.captcha)}
             maxLength={7}
             autoComplete="off"
             type="text"
             placeholder="  کد امنیتی"
-            className={`${errors.captcha ? 'u-border-red u-color-red' : ''}`}
+            className={`${
+              errors.captcha ? 'u-border-red u-color-red' : ''
+            }   ltr placeholder-rtl py-5 px-2.5 `}
           />
           {errors.captcha && <span className="inputError">{errors.captcha.message}</span>}
         </div>
@@ -181,7 +187,7 @@ export default function Login() {
             className={`login_button ${!true ? ' deactive' : ' active'}`}
             disabled={!true}
           >
-            {!isLoading ? 'ورود' : <DotLoading/>}
+            {!isLoading ? 'ورود' : <DotLoading />}
           </button>
         </div>
       </form>
