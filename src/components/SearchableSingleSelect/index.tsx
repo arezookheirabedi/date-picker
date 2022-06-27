@@ -4,7 +4,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
 import recruitmentServices from 'src/services/recruitment.service';
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
-import { cancelTokenSource, msgRequestCanceled } from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
 interface IProps {
@@ -42,7 +42,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   }
   const enpointFetcher = async () => {
     try {
-      const res = await endPoint({},{cancelToken:cancelTokenendPoint.token});
+      const res = await endPoint({}, {cancelToken: cancelTokenendPoint.token});
       const newData = [...tags, ...res.data];
       setTags([...newData]);
     } catch (error: any) {
@@ -51,7 +51,10 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   };
   const otherFetcher = async () => {
     try {
-      const res = await recruitmentServices.tags({tag, category},{cancelToken:cancelTokenTag.token});
+      const res = await recruitmentServices.tags(
+        {tag, category},
+        {cancelToken: cancelTokenTag.token}
+      );
       const newData = [...tags, ...res.data];
       setTags([...newData]);
     } catch (error: any) {
@@ -76,7 +79,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
     fetcher();
     return () => {
       cancelRequestTag();
-      cancelRequestEndPoint()
+      cancelRequestEndPoint();
       setTags([]);
     };
   }, []);
@@ -93,22 +96,39 @@ const SearchableSingleSelect: React.FC<IProps> = ({
       params = {...queryParams, [`${objectKey}`]: selected.key};
       setQueryParams(params);
     }
-
   }, [selected]);
 
   return (
-    <div className="flex  flex-col space-y-3 items-center justify-center">
-      <div className="w-72 relative">
+    <div className="flex  flex-col items-center justify-center space-y-3">
+      <div className="relative w-72">
         <Combobox value={selected} onChange={setSelected}>
           <div className=" single-select">
-            <div className="flex items-center rtl:flex-row-reverse py-2 pl-2 pr-10 rtl:pl-10 rtl:pr-2 relative w-full shadow cursor-default overflow-hidden rounded-lg bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+            <div className="focus:outline-none relative flex w-full cursor-default items-center overflow-hidden rounded-lg bg-white py-2 pl-2 pr-10 text-left shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm">
+              {selected ? (
+                ''
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              )}
               <Combobox.Input
                 placeholder={selected ? '' : `${placeholder}`}
-                className="inline-block border-none text-sm leading-5 text-gray-900 focus:ring-0 focus:outline-none"
+                className="focus:outline-none inline-block border-none pr-1 text-sm leading-5 text-gray-900 focus:ring-0"
                 displayValue={(tag: any) => (tag ? tag.value : '')}
                 onChange={event => setQuery(event.target.value)}
               />
-              <Combobox.Button className="absolute inset-y-0 right-0 left-auto rtl:left-0 rtl:right-auto flex items-center pr-2 rtl:pl-2 rtl:pr-0">
+              <Combobox.Button className="absolute inset-y-0 right-0 left-auto flex items-center pr-2 rtl:left-0 rtl:right-auto rtl:pl-2 rtl:pr-0">
                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </Combobox.Button>
             </div>
@@ -119,7 +139,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
               leaveTo="opacity-0"
               afterLeave={() => setQuery('')}
             >
-              <Combobox.Options className=" absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Combobox.Options className=" focus:outline-none absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
                 {filteredTags.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     موردی یافت نشد
@@ -131,7 +151,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
                       <Combobox.Option
                         key={tag.key}
                         className={({active}) =>
-                          `relative cursor-default select-none rtl:text-right py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 ${
+                          `relative cursor-default select-none py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 rtl:text-right ${
                             active ? 'active-bg-color text-white' : 'text-gray-900'
                           }`
                         }
@@ -148,7 +168,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
                             </span>
                             {selected ? (
                               <span
-                                className={`absolute inset-y-0 left-0 rtl:right-0 rtl:left-auto flex items-center pl-3 rtl:pr-3 rtl:pl-0 ${
+                                className={`absolute inset-y-0 left-0 flex items-center pl-3 rtl:right-0 rtl:left-auto rtl:pr-3 rtl:pl-0 ${
                                   active ? 'text-white' : 'chek-color'
                                 }`}
                               >
