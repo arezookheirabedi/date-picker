@@ -12,7 +12,7 @@ const DatePickerModel: React.FC<any> = ({
   max = null,
 }) => {
   const [error, setError] = useState<string | null>(null);
-  const [innerDay, setInnerDay] = useState(selectedDay || null) as any;
+  const [innerDay, setInnerDay] = useState(selectedDay.to || null) as any;
 
   const closeModal: () => void = () => {
     setShowDatePicker(false);
@@ -31,7 +31,7 @@ const DatePickerModel: React.FC<any> = ({
       setError('لطفا بازه زمانی را درست انتخاب کنید.');
       return null;
     }
-    setSelectedDay(innerDay);
+    setSelectedDay({to: innerDay});
     return closeModal();
   };
 
@@ -40,7 +40,7 @@ const DatePickerModel: React.FC<any> = ({
       <div className="u-width-80 u-mx-auto u-d-flex u-justify-content-s-b u-mb-1">
         <button
           type="button"
-          className="button button--primary w-1/3 mx-auto"
+          className="button button--primary mx-auto w-1/3"
           onClick={confirmDate}
         >
           تایید
@@ -52,7 +52,7 @@ const DatePickerModel: React.FC<any> = ({
   return (
     <>
       <Transition appear show={showDatePicker} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 overflow-y-auto z-50" onClose={closeModal}>
+        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as="div"
@@ -63,7 +63,7 @@ const DatePickerModel: React.FC<any> = ({
               leaveFrom="all"
               leaveTo="all"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90" />
+              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -79,10 +79,10 @@ const DatePickerModel: React.FC<any> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-lg p-10 my-8 overflow-hidden align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+              <div className="relative my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
                 <button
                   type="button"
-                  className="absolute top-3 left-4 text-gray-300 cursor-pointer"
+                  className="absolute top-3 left-4 cursor-pointer text-gray-300"
                   onClick={closeModal}
                 >
                   <svg
@@ -113,7 +113,7 @@ const DatePickerModel: React.FC<any> = ({
                   shouldHighlightWeekends
                   locale="fa"
                 />
-                {error ? <p className="text-sm mt-4 text-red-500">{error}</p> : null}
+                {error ? <p className="mt-4 text-sm text-red-500">{error}</p> : null}
               </div>
             </Transition.Child>
           </div>
