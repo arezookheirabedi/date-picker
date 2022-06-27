@@ -51,7 +51,7 @@ export const setMediaTypeConfig: (config: EHEADER) => void = config => {
   }
 };
 
-const parseJwt = (token: string) => {
+export const parseJwt = (token: string) => {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
@@ -170,11 +170,12 @@ export function isLogin() {
 
     if (token.access_token) {
       const profile = JSON.parse(profileStr || '{}');
+      // eslint-disable-next-line
       const payload = parseJwt(token.access_token);
-      debugger;
       localStorage.setItem(
         'ministers-userinfo',
         JSON.stringify({...profile, roles: payload.authorities || []})
+        // JSON.stringify({...profile, roles: ["ROLE_ADMIN_HEALTH"] || []})
       );
     }
 

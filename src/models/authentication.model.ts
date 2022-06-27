@@ -10,14 +10,15 @@ export interface ILoginForm {
   username: string;
   password: string;
 }
-export interface IProfile{
-  birthday: string
-  categoryId: string
-  firstName: string
-  guildCode: string
-  id: string
-  lastName: string
-  nationalId: string
-  qrCode: string
-  roles: string[]
+export interface IProfile {
+  birthday: string;
+  categoryId: string;
+  firstName: string;
+  guildCode: string;
+  id: string;
+  lastName: string;
+  nationalId: string;
+  qrCode: string;
+  roles: string[];
+  permissions: string[];
 }
