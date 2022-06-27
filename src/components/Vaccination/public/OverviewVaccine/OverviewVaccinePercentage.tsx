@@ -40,7 +40,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
+          infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها یک دوز واکسن است."
           icon={YellowVaccine}
           text="درصد افراد دوز یک"
           count={thelatestNumberOf.dosesToTotalPopulationPercentage[1] || 0}
@@ -49,7 +49,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
+          infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها دو دوز واکسن است."
           icon={OrangeVaccine}
           text="درصد افراد دوز دوم"
           count={thelatestNumberOf.dosesToTotalPopulationPercentage[2] || 0}
@@ -58,7 +58,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
+          infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها سه دوز واکسن است."
           icon={PurppleVaccine}
           text="درصد افراد دوز سوم"
           count={thelatestNumberOf.dosesToTotalPopulationPercentage[3] || 0}
@@ -69,7 +69,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
+          infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها چهار دوز واکسن است."
           icon={DarkgreenVaccine}
           text="درصد افراد دوز چهارم"
           count={thelatestNumberOf.dosesToTotalPopulationPercentage[4] || 0}
@@ -79,7 +79,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           isPercentage
           icon={NavyVaccine}
           hasInfo
-          infoText="درصد افرادی دوز پنجم واکسن را دریافت کرده‌اند."
+          infoText="درصد افرادی که آخرین وضعیت واکسیناسیون آنها پنج دوز واکسن است."
           text="درصد افراد دوز پنجم"
           count={thelatestNumberOf.dosesToTotalPopulationPercentage[5] || 0}
           loading={theLatestloading}
@@ -108,7 +108,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="-"
+          infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
           icon={YellowVaccine}
           text="وضعیت دوز اول در سطح کشور"
           count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
@@ -117,7 +117,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="-"
+          infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           icon={OrangeVaccine}
           text="وضعیت دوز دوم در سطح کشور"
           count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
@@ -126,7 +126,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="-"
+          infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
           icon={PurppleVaccine}
           text="وضعیت دوز سوم در سطح کشور"
           count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
@@ -135,7 +135,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
         <Statistic
           isPercentage
           hasInfo
-          infoText="-"
+          infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
           icon={DarkgreenVaccine}
           text="وضعیت دوز چهارم در سطح کشور"
           count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
@@ -148,7 +148,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           isPercentage
           icon={NavyVaccine}
           hasInfo
-          infoText="-"
+          infoText="درصد افرادی دوز پنجم واکسن را دریافت کرده‌اند."
           text="وضعیت دوز پنجم در سطح کشور"
           count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
           loading={loading}
