@@ -1,12 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // @ts-ignore
-import moment from 'moment-jalaali';
 import Highcharts from 'highcharts/highstock';
 import Charts from 'src/components/Charts';
-import DatePickerModal from 'src/components/DatePickerModal';
-import Calendar from 'src/components/Calendar';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
+import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {converters} from '../constant';
 
 const {HeadlessChart} = Charts;
@@ -19,18 +17,6 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
 
   loading: boolean;
 }> = ({setQueryParams, queryParams, numberOf, errorMessage, loading}) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-    clear: false,
-  }) as any;
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
   // eslint-disable-next-line
 
   const optionChart = {
@@ -103,46 +89,13 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
     },
   };
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
   return (
     <fieldset className="mb-16  p-4 text-center">
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams} />
             </div>
           </div>
 
