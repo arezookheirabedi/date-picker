@@ -1,13 +1,13 @@
-import React from 'react';
-// import Highcharts from "highcharts/highstock";
-// import axios from 'axios';
-// import Charts from '../Charts';
-// import Spinner from '../Spinner';
+import React, {useEffect, useState} from 'react';
+import Highcharts from "highcharts/highstock";
+import axios from 'axios';
+import Charts from '../Charts';
+import Spinner from '../Spinner';
 
-// import dataExchangePortService from "../../services/data-exchange-port.service";
+import dataExchangePortService from "../../services/data-exchange-port.service";
 
 
-// const {HeadlessChart} = Charts;
+const {HeadlessChart} = Charts;
 
 // const mock: any = [
 //   {date: 'استعلام مسافران', positiveMembersCount: 80000},
@@ -33,170 +33,170 @@ import React from 'react';
 //   {date: 'امور استخدامی', positiveMembersCount: 110000},
 // ];
 
-// const converters = {
-//   fa(number: any) {
-//     return number.toString().replace(/\d/g, (d: any) => {
-//       return String.fromCharCode(d.charCodeAt(0) + 1728);
-//     });
-//   },
-// };
+const converters = {
+  fa(number: any) {
+    return number.toString().replace(/\d/g, (d: any) => {
+      return String.fromCharCode(d.charCodeAt(0) + 1728);
+    });
+  },
+};
 
-// const optionChart = {
-//   chart: {
-//     type: 'column',
-//     numberFormatter() {
-//       // eslint-disable-next-line prefer-rest-params
-//       const ret = Highcharts.numberFormat.apply(0, arguments as any);
-//       return converters.fa(ret);
-//     },
-//     className: 'transport-line-chart',
-//   },
-//   title: {
-//     text: '',
-//   },
-//   categories: [],
-//   colors: ['#ff0000', '#000000', '#AB0A0A'],
-//   plotOptions: {
-//     column: {
-//       marker: {
-//         enabled: false,
-//         states: {
-//           hover: {
-//             enabled: true,
-//             fillColor: {
-//               // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-//               // stops: [
-//               //   [0, "#FFCC00"], // start
-//               //   [1, "#FF9400"] // end
-//               // ]
-//             },
-//             lineColor: '#fff',
-//             lineWidth: 3,
-//           },
-//         },
-//       },
-//       lineWidth: 2,
-//       threshold: null,
-//       states: {
-//         hover: {
-//           lineWidth: 1,
-//         },
-//       },
-//
-//     },
-//   },
-//   yAxis: {
-//     gridLineDashStyle: 'dash',
-//     lineDashStyle: 'dash',
-//     lineColor: '#000000',
-//     lineWidth: 1,
-//     opposite: true,
-//     title: {
-//       enabled: false,
-//     },
-//   },
-//   xAxis: {
-//     categories: [],
-//     lineDashStyle: 'dash',
-//     lineColor: '#000000',
-//     lineWidth: 1,
-//   },
-//   tooltip: {
-//     shared: true,
-//     useHTML: true,
-//     borderRadius: 16,
-//     borderWidth: 0,
-//     valueDecimals: 0,
-//     style: {
-//       direction: 'rtl',
-//       textAlign: 'right',
-//       fontFamily: 'inherit',
-//     },
-//
-//     // headerFormat: `<div style="min-width:220px">{point.x}</div>`
-//   },
-//   credits: {
-//     enabled: false
-//   },
-//   series: [
-//     {
-//       data: [],
-//       showInLegend: false,
-//     },
-//   ],
-// }
+const optionChart = {
+  chart: {
+    type: 'column',
+    numberFormatter() {
+      // eslint-disable-next-line prefer-rest-params
+      const ret = Highcharts.numberFormat.apply(0, arguments as any);
+      return converters.fa(ret);
+    },
+    className: 'transport-line-chart',
+  },
+  title: {
+    text: '',
+  },
+  categories: [],
+  colors: ['#ff0000', '#000000', '#AB0A0A'],
+  plotOptions: {
+    column: {
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: true,
+            fillColor: {
+              // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
+              // stops: [
+              //   [0, "#FFCC00"], // start
+              //   [1, "#FF9400"] // end
+              // ]
+            },
+            lineColor: '#fff',
+            lineWidth: 3,
+          },
+        },
+      },
+      lineWidth: 2,
+      threshold: null,
+      states: {
+        hover: {
+          lineWidth: 1,
+        },
+      },
 
-// const initialData = {
-//   categories: [],
-//   series: [{
-//     data: []
-//   }]
-// } as any;
+    },
+  },
+  yAxis: {
+    gridLineDashStyle: 'dash',
+    lineDashStyle: 'dash',
+    lineColor: '#000000',
+    lineWidth: 1,
+    opposite: true,
+    title: {
+      enabled: false,
+    },
+  },
+  xAxis: {
+    categories: [],
+    lineDashStyle: 'dash',
+    lineColor: '#000000',
+    lineWidth: 1,
+  },
+  tooltip: {
+    shared: true,
+    useHTML: true,
+    borderRadius: 16,
+    borderWidth: 0,
+    valueDecimals: 0,
+    style: {
+      direction: 'rtl',
+      textAlign: 'right',
+      fontFamily: 'inherit',
+    },
+
+    // headerFormat: `<div style="min-width:220px">{point.x}</div>`
+  },
+  credits: {
+    enabled: false
+  },
+  series: [
+    {
+      data: [],
+      showInLegend: false,
+    },
+  ],
+}
+
+const initialData = {
+  categories: [],
+  series: [{
+    data: []
+  }]
+} as any;
 
 const CallChart: React.FC<any> = () => {
-  // const [dataset, setDataset] = useState<any[]>(initialData) as any;
-  // const [errorMessage, setErrorMessage] = useState(null);
+  const [dataset, setDataset] = useState<any[]>(initialData) as any;
+  const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line
-  // const [loading, setLoading] = useState(false);
-  // const [isCancel, setIsCancel] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
 
-  // console.log('dataset => ', dataset)
-  // const {CancelToken} = axios;
-  // const source = CancelToken.source();
+  console.log('dataset => ', dataset)
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
-  // const getColumnChartTestResult = async () => {
-  //   setLoading(true);
-  //   setErrorMessage(null);
-  //   try {
-  //     const {data: responseDate} = await dataExchangePortService.getServicesStatistic();
-  //     const categories: any[] = [];
-  //     const series: any[] = [];
-  //     // {date: 'استعلام مسافران', positiveMembersCount: 80000},
-  //     responseDate.forEach((item: any) => {
-  //       categories.push(item.endPoint || 'نامشخص');
-  //       series.push(item.totalCalls || 0)
-  //       // console.log(item)
-  //       // normalizedData.push({
-  //       //   date: item.endPoint || 'نامشخص',
-  //       //   positiveMembersCount: item.totalCalls || 0,
-  //       // });
-  //     });
-  //
-  //     const sortSeries = series.sort((a, b) => (a > b) ? 1 : -1);
-  //
-  //     setDataset(() => {
-  //       return {
-  //         categories,
-  //         series: {
-  //           data: [...sortSeries],
-  //           name: 'نمودار فراخوانی',
-  //           showInLegend: false,
-  //         },
-  //       }
-  //     })
-  //   } catch (error: any) {
-  //     setErrorMessage(error.message);
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const getColumnChartTestResult = async () => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      const {data: responseDate} = await dataExchangePortService.getServicesStatistic();
+      const categories: any[] = [];
+      const series: any[] = [];
+      // {date: 'استعلام مسافران', positiveMembersCount: 80000},
+      responseDate.forEach((item: any) => {
+        categories.push(item.endPoint || 'نامشخص');
+        series.push(item.totalCalls || 0)
+        // console.log(item)
+        // normalizedData.push({
+        //   date: item.endPoint || 'نامشخص',
+        //   positiveMembersCount: item.totalCalls || 0,
+        // });
+      });
+
+      const sortSeries = series.sort((a, b) => (a > b) ? 1 : -1);
+
+      setDataset(() => {
+        return {
+          categories,
+          series: {
+            data: [...sortSeries],
+            name: 'نمودار فراخوانی',
+            showInLegend: false,
+          },
+        }
+      })
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      // eslint-disable-next-line
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
-  // useEffect(() => {
-  //   getColumnChartTestResult();
-  //   return () => {
-  //     source.cancel('Operation canceled by the user.');
-  //   };
-  // }, []);
+  useEffect(() => {
+    getColumnChartTestResult();
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   return () => {
-  //     setDataset(initialData);
-  //     setIsCancel(false);
-  //   };
-  // }, []);
+  useEffect(() => {
+    return () => {
+      setDataset(initialData);
+      setIsCancel(false);
+    };
+  }, []);
 
 
   return (
@@ -204,10 +204,6 @@ const CallChart: React.FC<any> = () => {
       <legend className="text-black mx-auto px-3">
         نمودار فراخوانی
       </legend>
-      <div className="p-40">
-        به زودی ...
-      </div>
-      {/*
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-12 shadow">
         {(loading || isCancel) && (
           <div className="p-40">
@@ -222,7 +218,6 @@ const CallChart: React.FC<any> = () => {
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
-      */}
     </fieldset>
   );
 };
