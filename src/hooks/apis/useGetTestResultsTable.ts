@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import guildService from "../../services/guild.service";
+import {useEffect, useState} from 'react';
+import axios from 'axios';
+import hcsService from 'src/services/hcs.service';
 
-export default function useGetTestResultsTable(query : any) {
+export default function useGetTestResultsTable(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
@@ -14,7 +14,7 @@ export default function useGetTestResultsTable(query : any) {
   async function getIt(params: any) {
     setLoading(true);
     try {
-      const {data: result} = await guildService.guildTestResultByCategory(params, {
+      const {data: result} = await hcsService.testResultByCategory(params, {
         cancelToken: source.token,
       });
       const normalizedData: any[] = [];
@@ -31,7 +31,7 @@ export default function useGetTestResultsTable(query : any) {
       setOrgDataset([...normalizedData]);
     } catch (err: any) {
       // eslint-disable-next-line
-      setError(err.message || '')
+      setError(err.message || '');
       console.log(err);
     } finally {
       setLoading(false);
@@ -39,12 +39,12 @@ export default function useGetTestResultsTable(query : any) {
   }
 
   useEffect(() => {
-    getIt(query)
+    getIt(query);
     return () => {
       source.cancel('Operation canceled by the user.');
       setData([]);
     };
   }, [query]);
 
-  return {loading, error, data , setData , orgDataset};
+  return {loading, error, data, setData, orgDataset};
 }
