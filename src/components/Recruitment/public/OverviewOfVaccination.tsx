@@ -4,28 +4,31 @@ import totalEmployee from '../../../assets/images/icons/people-dark-green.svg';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
 import Table from '../../TableScopeSort';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import YellowVaccineMd from "../../../assets/images/icons/yellow-vaccine-lg.svg";
-import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
-import PurppleVaccineMd from "../../../assets/images/icons/purpple-vaccine-lg.svg";
-import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
-import NavyVaccineMd from "../../../assets/images/icons/navy-vaccine-lg.svg";
-import GrayVaccine2 from "../../../assets/images/icons/gray-vaccine-2.svg";
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
-import DatepickerQuery from "../../DatepickerQuery";
-import LocalTableSearch from "../../LocalTableSearch";
+import YellowVaccineMd from '../../../assets/images/icons/yellow-vaccine-lg.svg';
+import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
+import PurppleVaccineMd from '../../../assets/images/icons/purpple-vaccine-lg.svg';
+import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
+import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
+import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
+import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
+import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
+import DatepickerQuery from '../../DatepickerQuery';
+import LocalTableSearch from '../../LocalTableSearch';
 
 const OverviewOfVaccination: React.FC<{}> = () => {
-
   const [query, setQuery] = useState({
     tag: 'employee',
     category: 'heName',
     from: null,
-    to: null
-  })
+    to: null,
+  });
 
-  // eslint-disable-next-line
-  const {data: numberOf, loading, error} = useGetNumberOf({
+  const {
+    data: numberOf,
+    loading,
+    // eslint-disable-next-line
+    error,
+  } = useGetNumberOf({
     tag: 'employee',
     category: 'heName',
   });
@@ -36,16 +39,15 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     // eslint-disable-next-line
     error: errorMessage,
     orgDataset,
-    setData
-  } = useGetOverviewOfVaccinationTable(query)
+    setData,
+  } = useGetOverviewOfVaccinationTable(query);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
 
-      <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="mb-8 mt-12 flex flex-col justify-between space-y-8">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={totalEmployee}
             text="مجموع کارکنان دولت"
@@ -79,8 +81,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12 border-b-2 border-slate-400 pb-8">
+        <div className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={PurppleVaccineMd}
             text="تعداد واکسیناسیون دوز سوم"
@@ -114,8 +115,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
@@ -148,10 +148,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             hasInfo
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
           />
-
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <div className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <div className="w-1/4">
             <Statistic
               icon={DarkgreenVaccine}
@@ -186,18 +184,18 @@ const OverviewOfVaccination: React.FC<{}> = () => {
         </div>
       </div>
 
-      <div className="flex align-center justify-between space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center justify-between">
-          <DatepickerQuery query={query} setQuery={setQuery}/>
+      <div className="align-center mb-8 flex justify-between space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex justify-between">
+          <DatepickerQuery query={query} setQuery={setQuery} />
         </div>
-        <div className="flex align-center">
-          <div className="relative inline-flex align-center leading-3">
-            <LocalTableSearch orgDataset={orgDataset} setData={setData} query={query}/>
+        <div className="align-center flex">
+          <div className="align-center relative inline-flex leading-3">
+            <LocalTableSearch orgDataset={orgDataset} setData={setData} query={query} />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={datasetLoading}
           dataSet={[...dataset]}
@@ -212,7 +210,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
                     {
                       name: 'allDosesPercentage',
                       title: 'دوز کل',
-                      y: record.allDoses || 0,
+                      y: record.allDosesPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
