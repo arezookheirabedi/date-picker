@@ -175,9 +175,13 @@ const PrivateLayout: React.FC<any> = () => {
             </div>
           </div>
           <div className="bg-white relative">
+            <>profile: {JSON.stringify(profile.roles)}</>
             <Switch>
               {routes.map((routeL1, i) => (
                 <>
+                  <pre className="ltr">{JSON.stringify(routeL1.link, null, 2)}</pre>
+                  <pre className="ltr">{JSON.stringify(routeL1.roles, null, 2)}</pre>
+
                   {routeL1.roles &&
                   profile.roles &&
                   routeL1.roles.some((roleL1: string) => profile.roles.includes(roleL1)) ? (
@@ -195,7 +199,7 @@ const PrivateLayout: React.FC<any> = () => {
                           <>
                             {routeL2.roles &&
                             profile.roles &&
-                            routeL1.roles.some((roleL2: string) =>
+                            routeL2.roles.some((roleL2: string) =>
                               profile.roles.includes(roleL2)
                             ) ? (
                               <>
@@ -208,27 +212,49 @@ const PrivateLayout: React.FC<any> = () => {
                                     component={routeL2.main}
                                   />
                                 ) : (
-                                  routeL2.children.map((routeL3: any, k: any) =>
-                                    !routeL3.children ? (
-                                      <Route
-                                        path={routeL3.link}
-                                        exact={routeL3.exact}
-                                        // eslint-disable-next-line
-                                        key={k}
-                                        component={routeL3.main}
-                                      />
-                                    ) : (
-                                      routeL3.children.map((routeL4: any, m: any) => (
-                                        <Route
-                                          path={routeL4.link}
-                                          exact={routeL4.exact}
-                                          // eslint-disable-next-line
-                                          key={m}
-                                          component={routeL4.main}
-                                        />
-                                      ))
-                                    )
-                                  )
+                                  routeL2.children.map((routeL3: any, k: any) => (
+                                    <>
+                                      {routeL3.roles &&
+                                      profile.roles &&
+                                      routeL3.roles.some((roleL3: string) =>
+                                        profile.roles.includes(roleL3)
+                                      ) ? (
+                                        <>
+                                          {!routeL3.children ? (
+                                            <Route
+                                              path={routeL3.link}
+                                              exact={routeL3.exact}
+                                              // eslint-disable-next-line
+                                              key={k}
+                                              component={routeL3.main}
+                                            />
+                                          ) : (
+                                            routeL3.children.map((routeL4: any, m: any) => (
+                                              <>
+                                                {routeL4.roles &&
+                                                profile.roles &&
+                                                routeL4.roles.some((roleL4: string) =>
+                                                  profile.roles.includes(roleL4)
+                                                ) ? (
+                                                  <Route
+                                                    path={routeL4.link}
+                                                    exact={routeL4.exact}
+                                                    // eslint-disable-next-line
+                                                    key={m}
+                                                    component={routeL4.main}
+                                                  />
+                                                ) : (
+                                                  ''
+                                                )}
+                                              </>
+                                            ))
+                                          )}
+                                        </>
+                                      ) : (
+                                        ''
+                                      )}
+                                    </>
+                                  ))
                                 )}
                               </>
                             ) : (
