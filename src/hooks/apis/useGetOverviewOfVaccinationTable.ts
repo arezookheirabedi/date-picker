@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
+import {useEffect, useState} from 'react';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
 
 export default function useGetOverviewOfVaccinationTable(query: any) {
   const [loading, setLoading] = useState(false);
@@ -27,9 +27,10 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
           thirdDosePercentage: item.dosesToMembersCountPercentage[3],
           otherDose: item.gtDosesToTotalDosesPercentage[3],
           unknownInformation: 0,
-          allDoses:
+          allDosesPercentage:
             item.gtDosesToTotalDosesPercentage[0] -
-            item.totalNonVaccinesCountToMembersCountPercentage,
+              item.totalNonVaccinesCountToMembersCountPercentage || 0,
+          allDoses: item.gtDoses['0'] || 0,
           noDose: item.totalNonVaccinesCountToMembersCountPercentage,
           // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
           // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
@@ -46,7 +47,7 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
       setOrgDataset([...normalizedData]);
       // setFilterType({name: 'کمترین', enName: 'LOWEST'});
     } catch (e: any) {
-      setError(e.message || '')
+      setError(e.message || '');
       console.log(e);
     } finally {
       setLoading(false);
@@ -60,5 +61,5 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
     };
   }, [query]);
 
-  return {loading, error, data ,setData , orgDataset};
+  return {loading, error, data, setData, orgDataset};
 }
