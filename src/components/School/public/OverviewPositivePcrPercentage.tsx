@@ -1,121 +1,22 @@
-import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
+import React, {useState} from 'react';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
-import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
+import DatepickerQuery from 'src/components/DatepickerQuery';
+import useGetOverviewOfPationColumnChart from 'src/hooks/apis/useGetOverviewOfPationColumnChart';
 import Spinner from '../../Spinner';
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
 import {converters} from './constant';
 
 const {HeadlessChart} = Charts;
 
-interface IOverviewGuildPositivePcrPercentage {}
-
-const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
-  const [dataset, setDataset] = useState<any>({});
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
+const OverviewGuildPositivePcrPercentage: React.FC<{}> = () => {
+  const [query, setQuery] = useState({
     from: null,
     to: null,
-    clear: false,
-  }) as any;
-
-  const [queryParams, setQueryParams] = useState({
-    from: null,
-    to: null,
+    tag: 'edu',
+    category: 'grade',
   });
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getColumnChartPositivePcrPercentage = async (from: any, to: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await hcsService.tableOverviewTestResults(
-        'edu',
-        'grade',
-        {
-          lang: 'fa',
-          from,
-          to,
-        },
-        {cancelToken: cancelToken.token}
-      );
-      const categoryValue: any[] = [];
-
-      const positiveMembersCountToMembersCountPercentage: any[] = [];
-      data.forEach((item: any) => {
-        categoryValue.push(item.categoryValue);
-        positiveMembersCountToMembersCountPercentage.push(
-          item.positiveMembersCountToMembersCountPercentage
-        );
-      });
-      const sortPositiveMembersCountToMembersCountPercentage =
-        positiveMembersCountToMembersCountPercentage.sort((a, b) => (a > b ? 1 : -1));
-
-      // setCategories([...province]);
-      const newData = [
-        {
-          showInLegend: false,
-          name: 'درصد ابتلا',
-          data: [...sortPositiveMembersCountToMembersCountPercentage],
-        },
-      ];
-      // setDataset([...newData]);
-      setDataset({categories: [...categoryValue], series: [...newData]});
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartPositivePcrPercentage(queryParams.from, queryParams.to);
-    }, 500);
-    // normalizeData(mockRegisterPercentage);
-    return () => {
-      clearTimeout(idSetTimeOut);
-      cancelRequest();
-      setDataset({});
-    };
-  }, [queryParams]);
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+  const {dataset, loading, error: errorMessage} = useGetOverviewOfPationColumnChart(query);
 
   const optionChart = {
     chart: {
@@ -141,13 +42,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           states: {
             hover: {
               enabled: true,
-              fillColor: {
-                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-                // stops: [
-                //   [0, "#FFCC00"], // start
-                //   [1, "#FF9400"] // end
-                // ]
-              },
               lineColor: '#fff',
               lineWidth: 3,
             },
@@ -156,7 +50,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         lineWidth: 2,
         threshold: null,
         borderRadius: 2,
-        // pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
@@ -198,9 +91,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       {
         lineWidth: 4,
         showInLegend: false,
-        dataLabels: {
-          // enabled: true,
-        },
       },
     ],
   };
@@ -213,32 +103,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
           <div className="align-center flex space-x-5 rtl:space-x-reverse">
-            {/* <div className="flex items-center">
-              <SearchableSingleSelect
-                objectKey="categoryValue"
-                placeholder="کل آموزش و پرورش"
-                category="grade"
-                tag="edu"
-                setQueryParams={setQueryParams}
-                queryParams={queryParams}
-              />
-            </div> */}
             <div className="flex items-center">
               {' '}
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={query} setQuery={setQuery} />
             </div>
           </div>
         </div>
