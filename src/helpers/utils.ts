@@ -174,8 +174,8 @@ export function isLogin() {
       const payload = parseJwt(token.access_token);
       localStorage.setItem(
         'ministers-userinfo',
-        JSON.stringify({...profile, roles: payload.authorities || []})
-        // JSON.stringify({...profile, roles: ["ROLE_ADMIN_HEALTH"] || []})
+        // JSON.stringify({...profile, roles: payload.authorities || []})
+        JSON.stringify({...profile, roles: ["ROLE_ADMIN_GUILD"] || []})
       );
     }
 
