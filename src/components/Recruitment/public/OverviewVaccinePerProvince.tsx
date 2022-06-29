@@ -124,6 +124,8 @@ const OverviewVaccinePerProvince = () => {
 
   const {data: dataset, loading, error: errorMessage} = useGetOverviewOfVaccinationStackChart(query);
 
+  console.log(errorMessage)
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
