@@ -11,7 +11,7 @@ import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-
 import greenVaccineBlackVirus from 'src/assets/images/icons/green-vaccine-black-virus.svg';
 import blueVaccine from 'src/assets/images/icons/blue-vaccine.svg';
 import greyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
-import {IInitialVacinatelInfo} from '../constant';
+import {IInitialVacinatelInfo} from 'src/hooks/apis/useGetNumberOf';
 
 interface IVaccineStatus {
   loading: boolean;
