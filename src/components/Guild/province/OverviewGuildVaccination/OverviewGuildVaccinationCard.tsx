@@ -14,7 +14,7 @@ import Statistic from '../../../../containers/Guild/components/Statistic';
 
 const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {data: guildVacinateInfo, loading, error} = useGetNumberOf({tag: 'guild'});
+  const {data: guildVacinateInfo, loading, error} = useGetNumberOf({tag: 'guild'}, true);
 
   return (
     <>
