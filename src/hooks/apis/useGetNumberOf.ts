@@ -40,7 +40,12 @@ export default function useGetNumberOf(query: any, hasProvince: boolean = false)
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getNumberOf = async (params: any) => {
+  const clear = () => {
+    setData(initialVacinatelInfo);
+    source.cancel('Operation canceled by the user.');
+  }
+
+  const getIt = async (params: any) => {
     setLoading(true);
     setError(false);
     try {
@@ -61,12 +66,9 @@ export default function useGetNumberOf(query: any, hasProvince: boolean = false)
     if (hasProvince) {
       return;
     }
-    getNumberOf(query);
+    getIt(query);
     // eslint-disable-next-line consistent-return
-    return () => {
-      setData(initialVacinatelInfo);
-      source.cancel('Operation canceled by the user.');
-    };
+    return clear;
   }, []);
 
   const location = useLocation();
@@ -82,15 +84,12 @@ export default function useGetNumberOf(query: any, hasProvince: boolean = false)
       return item.name === provinceName;
     });
     if (existsCity) {
-      getNumberOf({...query, 'province': provinceName});
+      getIt({...query, 'province': provinceName});
     } else {
       history.push('/dashboard/health/transport/province');
     }
     // eslint-disable-next-line consistent-return
-    return () => {
-      setData(initialVacinatelInfo);
-      source.cancel('Operation canceled by the user.');
-    };
+    return clear;
   }, [location.search]);
 
   return {loading, error, data};
