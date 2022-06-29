@@ -101,7 +101,7 @@ const OverviewOfDriverVaccinationProcessProvince: React.FC<OverviewOfDriverVacci
   console.log(dataset, 'dataset')
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی به روند واکسیناسیون رانندگان در استان &nbsp;
         {cityTitle}

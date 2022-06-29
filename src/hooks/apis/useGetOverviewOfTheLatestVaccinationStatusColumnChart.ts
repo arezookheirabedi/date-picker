@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
 import axios from "axios";
 import hcsService from "../../services/hcs.service";
+import {sideCities} from "../../helpers/utils";
 
 const initialData = {
   categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
@@ -19,7 +21,7 @@ const initialData = {
   ]
 } as any;
 
-export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(query: any) {
+export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>(initialData);
@@ -69,12 +71,40 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
   };
 
   useEffect(() => {
+    if (hasProvince) {
+      return;
+    }
     getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       setData(initialData);
       source.cancel('Operation canceled by the user.');
     };
   }, []);
+
+  const location = useLocation();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getIt({...query, 'province': provinceName});
+    } else {
+      history.push('/dashboard/health/transport/province');
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData(initialData);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search]);
 
   return {loading, error, data};
 }
