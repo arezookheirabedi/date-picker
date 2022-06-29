@@ -335,6 +335,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           text="درصد واکسیناسیون کل کشور"
           count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
           loading={loading}
+          isPercentage
           hasInfo
           infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
         />
@@ -343,6 +344,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           text="درصد واکسیناسیون دوز اول"
           count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
           loading={loading}
+          isPercentage
           hasInfo
           infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
         />
@@ -351,6 +353,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           text="درصد واکسیناسیون دوز دوم"
           count={numberOf.dosesToTotalPopulationPercentage[2]}
           loading={loading}
+          isPercentage
           hasInfo
           infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
         />
@@ -359,6 +362,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           text="درصد واکسیناسیون دوز سوم"
           count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
           loading={loading}
+          isPercentage
           hasInfo
           infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
         />
@@ -372,6 +376,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             text="درصد واکسیناسیون دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             loading={loading}
+            isPercentage
             hasInfo
             infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
           />
@@ -382,6 +387,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             text="درصد واکسیناسیون دوز پنجم"
             count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
             loading={loading}
+            isPercentage
             hasInfo
             infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
           />
@@ -393,6 +399,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
             text="درصد واکسیناسیون انجام نشده"
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
             loading={loading}
+            isPercentage
             hasInfo
             infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
