@@ -5,15 +5,13 @@ import ListOfServices from "../../components/ServicePort/ListOfServices";
 import CallChart from "../../components/ServicePort/CallChart";
 
 
-
 const ServicePort: React.FC<any> = () => {
-
   return (
     <div className="space-y-16 mb-8">
       <Overview/>
-      <CountUpTimer />
-      <ListOfServices />
-      <CallChart />
+      <CountUpTimer/>
+      <ListOfServices/>
+      <CallChart/>
     </div>
   )
 }
