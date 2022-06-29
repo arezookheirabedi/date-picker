@@ -31,11 +31,11 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getOverviewByVaccine = async ({tag, category, ...params}: any = {}) => {
+  const getOverviewByVaccine = async (params: any) => {
     setDatasetLoading(true);
 
     try {
-      const {data} = await hcsService.vaccinationOverview(tag, category, params, {
+      const {data} = await hcsService.getVaccinationOverview(params, {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {addTotalStudentMembersAc} from 'src/store/action_creators';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
@@ -12,113 +12,34 @@ import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import testIcon from 'src/assets/images/icons/test-color.svg';
-import vaccineService from 'src/services/vaccine.service';
-import hcsService from 'src/services/hcs.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-
-const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-const initialNumberOf = {
-  totalVaccinesCountAfterStartOfSystem: 0,
-  totalNonVaccinesCountBeforeStartOfSystem: 0,
-  doses: {...initialDoses},
-  dosesToTotalPopulationPercentage: {...initialDoses},
-  gtDoses: {...initialDoses},
-  gtDosesToTotalDosesPercentage: {...initialDoses},
-  totalNonVaccinesCount: 0,
-  totalNonVaccinesCountToTotalPopulationPercentage: 0,
-  totalPopulation: 0,
-  totalVaccinesCount: 0,
-  totalVaccinesCountToTotalPopulationPercentage: 0,
-  // dosesPercentage: {...initialDoses},
-  // gtDosesPercentage: {...initialDoses},
-  // gtDosesToTotalPopulationPercentage: {...initialDoses},
-  // totalUnknownVaccinesCount: 0,
-  // totalVaccinesPercentage: 0,
-};
-
-const initialTestResults = {
-  positiveMembersCount: 0,
-  positiveMembersCountToTestResultsCountPercentage: 0,
-  positiveMembersCountToTotalPopulationPercentage: 0,
-  recoveredMembersCount: 0,
-  recoveredMembersCountToTotalPopulationPercentage: 0,
-  testResultsCount: 0,
-  totalPopulation: 0,
-};
+import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
+import useGetTestResults from 'src/hooks/apis/useGetTestResults';
 
 const OverviewSteudent = () => {
-  const [loading, setLoading] = useState(false);
-  const [testResultLoading, setTestResultLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
-  const [testResultInfo, setTestResultInfo] = useState<any>(initialTestResults);
-
   const dispatch = useDispatch();
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getNumberOf = async () => {
-    setLoading(true);
-    try {
-      const {data} = await vaccineService.membersGeneral(
-        {tag: 'edu', category: 'type', categoryValue: 'STUDENT'},
-        {cancelToken: cancelToken.token}
-      );
-      setNumberOf((prev: any) => {
-        return {
-          ...prev,
-          ...data,
-        };
-      });
-      dispatch(addTotalStudentMembersAc(data.totalPopulation || 0));
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getTestResults = async () => {
-    setTestResultLoading(true);
-    try {
-      const {data} = await hcsService.testResults(
-        {tag: 'edu', category: 'type', categoryValue: 'STUDENT'},
-        {cancelToken: cancelToken.token}
-      );
-      console.log(data, 'test');
-      setTestResultInfo((prev: any) => {
-        return {
-          ...prev,
-          ...data,
-        };
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTestResultLoading(false);
-    }
-  };
+  const {
+    data: numberOf,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error,
+  } = useGetNumberOf({tag: 'edu', category: 'type', categoryValue: 'STUDENT'});
+  const {
+    data: testResultInfo,
+    loading: testResultLoading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error: errorTestResult,
+  } = useGetTestResults({tag: 'edu', category: 'type', categoryValue: 'STUDENT'});
 
   useEffect(() => {
-    getNumberOf();
-    getTestResults();
-    return () => {
-      setNumberOf(initialNumberOf);
-      setTestResultInfo(initialTestResults);
-      cancelRequest();
-    };
-  }, []);
+    dispatch(addTotalStudentMembersAc(numberOf.totalPopulation || 0));
+  }, [numberOf]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به دانش آموزان کل کشور</legend>
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی به دانش آموزان کل کشور</legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع دانش‌آموزان مشغول به تحصیل در کل کشور"
@@ -152,7 +73,7 @@ const OverviewSteudent = () => {
             loading={false}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
@@ -186,7 +107,7 @@ const OverviewSteudent = () => {
             loading={loading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="تعداد کل تست های pcr که  کارمندان انجام داده اند."

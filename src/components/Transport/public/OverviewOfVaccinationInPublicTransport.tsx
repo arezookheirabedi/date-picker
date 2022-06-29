@@ -11,23 +11,28 @@ import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
-import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
-import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
-import DatepickerQuery from "../../DatepickerQuery";
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
+import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
+import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
+import DatepickerQuery from '../../DatepickerQuery';
+import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
+import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [query, setQuery] = useState({
     tag: 'transport',
     category: 'serviceType',
     from: null,
-    to: null
-  })
+    to: null,
+  });
   // eslint-disable-next-line
   const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'});
-  // eslint-disable-next-line
-  const {data: dataset, loading: datasetLoading, error: errorMessage} = useGetOverviewOfVaccinationTable(query)
+
+  const {
+    data: dataset,
+    loading: datasetLoading,
+    // eslint-disable-next-line
+    error: errorMessage,
+  } = useGetOverviewOfVaccinationTable(query);
 
   // const [counts, setCounts] = useState<any>({
   //   numberOfDrivers: null,
@@ -35,7 +40,6 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   //   numberOfSecondDose: null,
   //   numberOfUnvaccinated: null,
   // });
-
 
   // const [reportsDose, setReportsDose] = useState({}) as any;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -255,11 +259,10 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   // }, [filterType]);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان فعال"
@@ -293,8 +296,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
         />
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12 border-b-2 border-slate-400 pb-8">
+      <div className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
@@ -328,8 +330,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
         />
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={GreenVaccine}
           text="درصد واکسیناسیون کل کشور"
@@ -366,10 +367,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           hasInfo
           infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
         />
-
       </div>
-      <div
-        className="flex flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+      <div className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <div className="w-1/4">
           <Statistic
             icon={DarkgreenVaccine}
@@ -406,17 +405,17 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         </div>
       </div>
 
-      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
-        <DatepickerQuery query={query} setQuery={setQuery}/>
+      <div className="align-center mb-8 flex justify-start space-x-5 rtl:space-x-reverse">
+        <DatepickerQuery query={query} setQuery={setQuery} />
       </div>
 
       {datasetLoading ? (
         <div className="p-20">
-          <Spinner/>
+          <Spinner />
         </div>
       ) : (
         <>
-          <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+          <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
             <Table
               dataSet={[...dataset]}
               pagination={{pageSize: 20, maxPages: 3}}
@@ -429,9 +428,9 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                       <CategoryDonut
                         data={[
                           {
-                            name: 'allDoses',
+                            name: 'allDosesPercentage',
                             title: 'دوز کل',
-                            y: record.allDoses || 0,
+                            y: record.allDosesPercentage || 0,
                             color: {
                               linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                               stops: [
@@ -510,9 +509,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
                 {
                   name: 'کل دوزها',
                   key: 'allDoses',
-                  render: (v: any) => (
-                    <span>{v ? `${Number(v).toLocaleString('fa')}%` : '۰%'}</span>
-                  ),
+                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
                 },
                 // {
                 //   name: 'اطلاعات مخدوش',

@@ -1,62 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import vaccineService from 'src/services/vaccine.service';
-import hcsService from 'src/services/hcs.service';
-import {IInitialVacinatelInfo, initialVacinatelInfo} from '../constant';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React from 'react';
+import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
+import useGetTheLatestVaccinesInfo from 'src/hooks/apis/useGetTheLatestVaccinesInfo';
 import OverViewVaccinationPercentageStatus from './OverviewVaccinePercentage';
 import OverviewVaccinationStatus from './OverviewVaccineCount';
 
 const OverviewVaccine: React.FC<{}> = () => {
-  const [loading, setLoading] = useState(false);
-  const [theLatestloading, setTheLatestLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-  const [thelatestNumberOf, setThelatestNumberOf] =
-    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-  const cancelToken = cancelTokenSource();
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {data: numberOf, loading, error} = useGetNumberOf();
 
-  const getNumberOf = async () => {
-    setLoading(true);
-    try {
-      const {data} = await vaccineService.membersGeneral({}, {cancelToken: cancelToken.token});
-      setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getTheLatestNumber = async () => {
-    setTheLatestLoading(true);
-    try {
-      const res = await hcsService.peopleLatestVaccinationOverview(
-        {},
-        {
-          cancelToken: cancelToken.token,
-        }
-      );
-      const finalResponse: any = {...res.data};
-      setThelatestNumberOf(finalResponse);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setTheLatestLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getTheLatestNumber();
-    getNumberOf();
-    return () => {
-      cancelRequest();
-      setNumberOf(initialVacinatelInfo);
-      setThelatestNumberOf(initialVacinatelInfo);
-    };
-  }, []);
+  const {
+    cartData: thelatestNumberOf,
+    loading: theLatestloading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error: errorMessage,
+  } = useGetTheLatestVaccinesInfo();
 
   return (
     <>
