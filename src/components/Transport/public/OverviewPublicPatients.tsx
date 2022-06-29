@@ -41,7 +41,7 @@ const OverviewPublicPatients = () => {
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
-              objectKey="serviceType"
+              objectKey="categoryValue"
               placeholder="کل حمل و نقل"
               tag="transport"
               category="serviceType"

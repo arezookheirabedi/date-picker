@@ -123,6 +123,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={YellowVaccineMd}
@@ -131,6 +132,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={OrangeVaccine}
@@ -139,6 +141,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={PurppleVaccineMd}
@@ -147,6 +150,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
+            isPercentage
           />
 
         </div>
@@ -160,6 +164,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               loading={loading}
               hasInfo
               infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -170,6 +175,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               loading={loading}
               hasInfo
               infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
+              isPercentage
             />
           </div>
 
@@ -181,6 +187,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               loading={loading}
               hasInfo
               infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
+              isPercentage
             />
           </div>
         </div>
