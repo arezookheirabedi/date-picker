@@ -1,8 +1,10 @@
-import {useEffect, useState} from 'react';
-import axios from 'axios';
-import hcsService from '../../services/hcs.service';
+import {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import axios from "axios";
+import hcsService from "../../services/hcs.service";
+import {sideCities} from "../../helpers/utils";
 
-export default function useGetOverviewOfVaccinationTable(query: any) {
+export default function useGetOverviewOfVaccinationTable(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
@@ -11,10 +13,13 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getOverviewByVaccine = async (params: any) => {
+  const getIt = async (params: any) => {
     setLoading(true);
     try {
-      const {data: result} = await hcsService.getVaccinationOverview({...params, lang: 'fa'});
+      const {data: result} = await hcsService.getVaccinationOverview({
+        ...params,
+        lang: 'fa'
+      }, {cancelToken: source.token});
       const normalizedData: any[] = [];
       result.forEach((item: any, index: number) => {
         // eslint-disable-next-line
@@ -29,7 +34,7 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
           unknownInformation: 0,
           allDosesPercentage:
             item.gtDosesToTotalDosesPercentage[0] -
-              item.totalNonVaccinesCountToMembersCountPercentage || 0,
+            item.totalNonVaccinesCountToMembersCountPercentage || 0,
           allDoses: item.gtDoses['0'] || 0,
           noDose: item.totalNonVaccinesCountToMembersCountPercentage,
           // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
@@ -55,11 +60,42 @@ export default function useGetOverviewOfVaccinationTable(query: any) {
   };
 
   useEffect(() => {
-    getOverviewByVaccine(query);
+    if (hasProvince) {
+      return;
+    }
+    getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       source.cancel('Operation canceled by the user.');
+      setData([])
     };
   }, [query]);
 
+
+  const location = useLocation();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getIt({...query, 'province': provinceName});
+    } else {
+      history.push('/dashboard/health/transport/province');
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData([])
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search, query]);
+
   return {loading, error, data, setData, orgDataset};
 }
+

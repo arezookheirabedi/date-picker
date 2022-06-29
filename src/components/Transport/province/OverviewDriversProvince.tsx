@@ -1,5 +1,7 @@
 import React from 'react';
 
+import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
+import useGetTestResults from "../../../hooks/apis/useGetTestResults";
 import Statistic from '../../../containers/Guild/components/Statistic';
 // import transportService from '../../../services/transport.service';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
@@ -14,8 +16,7 @@ import testIcon from '../../../assets/images/icons/test-color.svg';
 import driverInfectedIcon from "../../../assets/images/icons/driver-infected.svg";
 import totalVaccinateStart from "../../../assets/images/icons/total-vaccinate-start-work-panel.svg";
 import noneVaccinateStart from "../../../assets/images/icons/none-vaccinate-start-wok-panel.svg";
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetTestResults from "../../../hooks/apis/useGetTestResults";
+
 
 
 interface OverviewDriversProvinceProps {
@@ -25,23 +26,24 @@ interface OverviewDriversProvinceProps {
 const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTitle}) => {
 
   // eslint-disable-next-line
-  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'},true);
+  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'}, true);
   const {
     data: testResultInfo,
     loading: testResultLoading,
     // eslint-disable-next-line
     error: testResultError
-  } = useGetTestResults({tag: 'transport'},true);
+  } = useGetTestResults({tag: 'transport'}, true);
 
   return (
-    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" >
+    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16" id="province-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی رانندگان در استان &nbsp;
         {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={totalDriver}
             text="مجموع رانندگان فعال"
@@ -66,10 +68,12 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             hasInfo
             infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌شدگان" count="-" loading={false} hasInfo infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند." />
+          <Statistic icon={deadIcon} text="مجموع فوت‌شدگان" count="-" loading={false} hasInfo
+                     infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."/>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={vaccineIcon}
             text="مجموع واکسن زده‌ها"
@@ -105,7 +109,8 @@ const OverviewDriversProvince: React.FC<OverviewDriversProvinceProps> = ({cityTi
             infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={driverInfectedIcon}
             text="درصد ابتلا به کل"
