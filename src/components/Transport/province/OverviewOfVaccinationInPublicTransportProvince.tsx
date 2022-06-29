@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-
+import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
+import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
@@ -13,8 +14,6 @@ import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
 import Spinner from '../../Spinner';
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
 import DatepickerQuery from "../../DatepickerQuery";
 
 

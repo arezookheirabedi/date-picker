@@ -1,5 +1,7 @@
 import React from 'react';
 
+import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
+import useGetTestResults from "../../../hooks/apis/useGetTestResults";
 import Statistic from '../../../containers/Guild/components/Statistic';
 // import transportService from '../../../services/transport.service';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
@@ -14,8 +16,7 @@ import testIcon from '../../../assets/images/icons/test-color.svg';
 import driverInfectedIcon from "../../../assets/images/icons/driver-infected.svg";
 import totalVaccinateStart from "../../../assets/images/icons/total-vaccinate-start-work-panel.svg";
 import noneVaccinateStart from "../../../assets/images/icons/none-vaccinate-start-wok-panel.svg";
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetTestResults from "../../../hooks/apis/useGetTestResults";
+
 
 
 interface OverviewDriversProvinceProps {
