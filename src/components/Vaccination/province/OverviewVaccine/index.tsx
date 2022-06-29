@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
-import vaccineService from 'src/services/vaccine.service';
 import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
 import {IInitialVacinatelInfo, initialVacinatelInfo} from '../../public/constant';
@@ -16,7 +15,6 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     useState<IInitialVacinatelInfo>(initialVacinatelInfo);
   const [theLatestloading, setTheLatestLoading] = useState(false);
 
-
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
@@ -26,11 +24,10 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const getNumberOf = async (provinceName: string) => {
     setLoading(true);
     try {
-      const {data} =  await vaccineService.membersGeneral(
-            {province: provinceName},
-            {cancelToken: cancelToken.token}
-          );
-    
+      const {data} = await hcsService.numberOf(
+        {province: provinceName},
+        {cancelToken: cancelToken.token}
+      );
 
       setNumberOf((prev: any) => {
         return {
@@ -66,14 +63,13 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
       return item.name === provinceName;
     });
     const idSetTimeOut = setTimeout(() => {
-
-    if (existsCity) {
-      getNumberOf(provinceName);
-      getTheLatestNumber({province:provinceName});
-    } else {
-      history.push('/dashboard/vaccination/province');
-    }
-  }, 500);
+      if (existsCity) {
+        getNumberOf(provinceName);
+        getTheLatestNumber({province: provinceName});
+      } else {
+        history.push('/dashboard/vaccination/province');
+      }
+    }, 500);
 
     return () => {
       clearTimeout(idSetTimeOut);
@@ -101,9 +97,7 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
           loading={loading}
           numberOf={numberOf}
         />
-
-</fieldset>
-
+      </fieldset>
     </div>
   );
 };
