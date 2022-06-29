@@ -3,21 +3,21 @@ import {useLocation} from 'react-router-dom';
 // import {useLocation} from "react-router-dom";
 
 import OverviewDriversMap from '../../components/Transport/province/OverviewDriversMap';
-import OverviewDriversProvince from '../../components/Transport/province/OverviewDriversProvince';
+// import OverviewDriversProvince from '../../components/Transport/province/OverviewDriversProvince';
 import OverviewOfDriverVaccinationProcessProvince
   from "../../components/Transport/province/OverviewOfDriverVaccinationProcessProvince";
-import OverviewSamasProvince from '../../components/Transport/province/OverviewSamasProvince';
-import OverviewPublicPatientsProvince from '../../components/Transport/province/OverviewPublicPatientsProvince';
+// import OverviewSamasProvince from '../../components/Transport/province/OverviewSamasProvince';
+// import OverviewPublicPatientsProvince from '../../components/Transport/province/OverviewPublicPatientsProvince';
 // import TestsInTransportProvince from '../../components/Transport/province/TestsInTransportProvince';
-import OverviewCategoriesProvince from '../../components/Transport/province/OverviewCategoriesProvince';
-import OverviewOfVaccinationInPublicTransportProvince
-  from '../../components/Transport/province/OverviewOfVaccinationInPublicTransportProvince';
+// import OverviewCategoriesProvince from '../../components/Transport/province/OverviewCategoriesProvince';
+// import OverviewOfVaccinationInPublicTransportProvince
+//   from '../../components/Transport/province/OverviewOfVaccinationInPublicTransportProvince';
 
-import OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince
-  from "../../components/Transport/province/OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince";
-import OverviewOfTheLatestPublicTransportVaccinationStatusProvince
-  from "../../components/Transport/province/OverviewOfTheLatestPublicTransportVaccinationStatusProvince";
-import TableOfTestsInTransportProvince from "../../components/Transport/province/TableOfTestsInTransportProvince";
+// import OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince
+//   from "../../components/Transport/province/OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince";
+// import OverviewOfTheLatestPublicTransportVaccinationStatusProvince
+//   from "../../components/Transport/province/OverviewOfTheLatestPublicTransportVaccinationStatusProvince";
+// import TableOfTestsInTransportProvince from "../../components/Transport/province/TableOfTestsInTransportProvince";
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
 import {sideCities} from '../../helpers/utils';
@@ -61,15 +61,23 @@ const TransportProvince = () => {
         destinationId="province-overview"
         selectDefault
       />
+
+      {/*
       <OverviewDriversProvince cityTitle={cityTitle}/>
       <OverviewSamasProvince cityTitle={cityTitle}/>
       <OverviewCategoriesProvince cityTitle={cityTitle}/>
       <OverviewPublicPatientsProvince cityTitle={cityTitle}/>
+      */}
+
       <OverviewOfDriverVaccinationProcessProvince cityTitle={cityTitle}/>
+      {/*
       <OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince cityTitle={cityTitle}/>
       <OverviewOfTheLatestPublicTransportVaccinationStatusProvince cityTitle={cityTitle}/>
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
       <TableOfTestsInTransportProvince cityTitle={cityTitle}/>
+      */}
+
+      {/* deprecate component */}
       {/* <TestsInTransportProvince cityTitle={cityTitle} /> */}
     </div>
   );
