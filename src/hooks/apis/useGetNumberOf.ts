@@ -37,7 +37,7 @@ export interface IInitialVacinatelInfo {
   totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: number;
 }
 
-export default function useGetNumberOf(query: any, hasProvince: boolean = false) {
+export default function useGetNumberOf(query?: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
