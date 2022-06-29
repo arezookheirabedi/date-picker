@@ -123,6 +123,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={YellowVaccineMd}
@@ -131,6 +132,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={OrangeVaccine}
@@ -139,6 +141,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={PurppleVaccineMd}
@@ -147,6 +150,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
+            isPercentage
           />
         </div>
         <div className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -158,6 +162,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               loading={loading}
               hasInfo
               infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -168,6 +173,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               loading={loading}
               hasInfo
               infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
+              isPercentage
             />
           </div>
 
@@ -179,6 +185,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
               loading={loading}
               hasInfo
               infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
+              isPercentage
             />
           </div>
         </div>

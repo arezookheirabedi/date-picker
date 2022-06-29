@@ -52,6 +52,7 @@ const RecruitmentProvince = () => {
       <OverviewOfVaccinationProvince cityTitle={cityTitle}/>
       <TestStatusProvince cityTitle={cityTitle}/>
 
+
       {/* deprecated */}
       {/* <OverviewOfVaccinationProvince cityTitle={cityTitle}/> */}
       {/*  <TestsStatusProvince cityTitle={cityTitle} /> */}

@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
 import axios from "axios";
 import hcsService from "../../services/hcs.service";
-import {convertGregorianDateToJalaliDate} from "../../helpers/utils";
+import {convertGregorianDateToJalaliDate, sideCities} from "../../helpers/utils";
 
 const initialData = {
   categories: [],
@@ -23,7 +24,7 @@ const initialData = {
   }]
 } as any;
 
-export default function useGetOverviewOfTheVaccinationProcess(query: any) {
+export default function useGetOverviewOfTheVaccinationProcess(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false) as any;
   const [data, setData] = useState<any[]>(initialData) as any;
@@ -32,7 +33,7 @@ export default function useGetOverviewOfTheVaccinationProcess(query: any) {
   const source = CancelToken.source();
 
   // eslint-disable-next-line
-  const getAreaChartVaccination = async (params: any) => {
+  const getIt = async (params: any) => {
     setLoading(true);
     setError(null);
     try {
@@ -166,12 +167,41 @@ export default function useGetOverviewOfTheVaccinationProcess(query: any) {
   };
 
   useEffect(() => {
-    getAreaChartVaccination(query);
+    if (hasProvince) {
+      return;
+    }
+    getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       source.cancel('Operation canceled by the user.');
       setData(initialData);
     };
   }, []);
+
+  const location = useLocation();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getIt({...query, 'province': provinceName});
+    } else {
+      history.push('/dashboard/health/transport/province');
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData(initialData);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search]);
 
   return {loading, error, data};
 }

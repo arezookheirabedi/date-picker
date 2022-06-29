@@ -522,6 +522,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             loading={loading}
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={YellowVaccineMd}
@@ -530,6 +531,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={OrangeVaccine}
@@ -538,6 +540,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
+            isPercentage
           />
           <Statistic
             icon={PurppleVaccineMd}
@@ -546,6 +549,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             loading={loading}
             hasInfo
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
+            isPercentage
           />
         </div>
 
@@ -559,6 +563,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
               loading={loading}
               hasInfo
               infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -569,6 +574,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
               loading={loading}
               hasInfo
               infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
+              isPercentage
             />
           </div>
 
@@ -580,6 +586,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
               loading={loading}
               hasInfo
               infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
+              isPercentage
             />
           </div>
         </div>

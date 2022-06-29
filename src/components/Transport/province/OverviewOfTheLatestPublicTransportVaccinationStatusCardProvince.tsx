@@ -164,6 +164,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
             text="درصد افراد با دوز اول"
             count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -172,6 +173,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
             text="درصد افراد با دوز دوم"
             count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -180,6 +182,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
             text="درصد افراد با دوز سوم"
             count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -188,6 +191,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
             text="درصد افراد با دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             loading={loading}
+            isPercentage
           />
         </div>
 
@@ -203,6 +207,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
               text="درصد افراد با دوز پنجم"
               count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
               loading={loading}
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -213,6 +218,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
               text="درصد افراد واکسینه شده"
               count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
               loading={loading}
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -223,6 +229,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
               text="درصد افراد واکسینه نشده"
               count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
               loading={loading}
+              isPercentage
             />
           </div>
         </div>

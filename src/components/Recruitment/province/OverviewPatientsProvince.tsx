@@ -25,8 +25,8 @@ interface IParams {
   to?: any;
 }
 
-interface OverviewPatientsProvinceProps{
-  cityTitle : any
+interface OverviewPatientsProvinceProps {
+  cityTitle: any
 }
 
 const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({cityTitle}) => {
@@ -82,7 +82,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
       });
       if (existsCity) {
         getLinearOverview({
-          ...queryParams,provinceName
+          ...queryParams, province: provinceName
         });
       } else {
         history.push('/dashboard/recruitment/province');
@@ -92,7 +92,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     }, 500);
 
     return () => clearTimeout(idSetTimeOut);
-  }, [queryParams,location.search]);
+  }, [queryParams, location.search]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -164,10 +164,10 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-       <legend className="text-black mx-auto px-3">
-         نگاه کلی مبتلایان کارکنان دولت در استان &nbsp;
-         {cityTitle}
-       </legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی مبتلایان کارکنان دولت در استان &nbsp;
+        {cityTitle}
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
@@ -213,11 +213,11 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
