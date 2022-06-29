@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import vaccineService from 'src/services/vaccine.service';
 import {useHistory, useLocation} from 'react-router-dom';
 import Calendar from 'src/components/Calendar';
 import DatePickerModal from 'src/components/DatePickerModal';
 import Highcharts from 'highcharts';
 import {converters} from 'src/components/Guild/public/constant';
 import {isEmpty} from 'lodash';
+import hcsService from 'src/services/hcs.service';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -115,7 +115,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.membersGeneral(params, {CancelToken: cancelToken.token});
+      const {data} = await hcsService.numberOf(params, {CancelToken: cancelToken.token});
       // const {data} = await hcsService.dosesTagBased(params);
       const finalResponse: any = {...data};
       if (!isEmpty(finalResponse)) {
