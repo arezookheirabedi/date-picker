@@ -136,6 +136,9 @@ export default function useGetOverviewOfVaccinationStackChart(query : any) {
       })
 
     } catch (err: any) {
+      if (err.message === 'cancel') {
+        return;
+      }
       setError('خطا در اتصال به سرویس');
       // eslint-disable-next-line
       console.log(err);
@@ -147,6 +150,7 @@ export default function useGetOverviewOfVaccinationStackChart(query : any) {
     getIt(query);
     return () => {
       setData(initialData);
+      setError(null)
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);

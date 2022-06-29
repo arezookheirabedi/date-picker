@@ -1,8 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
-import {IInitialNumberOfDoses, initialNumberOfDoses} from "../../Passengers/public/constant";
-import {cancelTokenSource, msgRequestCanceled, sideCities} from "../../../helpers/utils";
-import hcsService from "../../../services/hcs.service";
+import React from "react";
+
 import Statistic from "../../../containers/Guild/components/Statistic";
 import YellowVaccine from "../../../assets/images/icons/big-yellow-vaccine.svg";
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
@@ -10,6 +7,7 @@ import PurpleVaccine from "../../../assets/images/icons/big-purpule-vaccine.svg"
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
 import VaccineIcon from "../../../assets/images/icons/vaccine-color.svg";
 import GreyVaccine from "../../../assets/images/icons/big-gray-vaccine.svg";
+import useGetOverviewOfTheLatestVaccinationStatus from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatus";
 
 
 interface OverviewOfTheLatestPublicTransportVaccinationStatusCardProvinceProps {
@@ -18,62 +16,12 @@ interface OverviewOfTheLatestPublicTransportVaccinationStatusCardProvinceProps {
 
 const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<OverviewOfTheLatestPublicTransportVaccinationStatusCardProvinceProps> = ({cityTitle}) => {
   // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
-  const location = useLocation();
-  const history = useHistory();
+  const {data : numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus({
+    tag: 'transport',
+  },true)
 
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getPassengerVaccinateInfo = async (province : any) => {
-    setLoading(true);
-    try {
-      const res = await hcsService.getPeopleVaccine(
-        {
-          tag: 'transport',
-          province
-        },
-        {cancelToken: cancelToken.token}
-      );
-      console.log('res => ', res);
-      if (res.status === 200) {
-        const newData = {...initialNumberOfDoses, ...res.data};
-        setNumberOf(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getPassengerVaccinateInfo(provinceName);
-
-    } else {
-      history.push('/dashboard/transport/province');
-    }
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setNumberOf(initialNumberOfDoses);
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [location.search]);
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آخرین وضعیت واکسیناسیون حمل و نقل عمومی در استان &nbsp;
         {cityTitle}
