@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-
+import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
 
 import Table from '../../TableScopeSort';
 
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
 import DatepickerQuery from "../../DatepickerQuery";
 
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
