@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
 // import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
@@ -10,50 +10,19 @@ import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import vaccineService from 'src/services/vaccine.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
+import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialVacinatelInfo, initialVacinatelInfo} from '../constant';
 
 const OverviewOfStatusCard: React.FC<{}> = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'edu'});
   const {total: totalMembers, employe: totalEmploye} = useSelector(state => state.studentMembers);
-  const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getNumberOf = async () => {
-    setLoading(true);
-    try {
-      const {data} = await vaccineService.membersGeneral(
-        {tag: 'edu'},
-        {cancelToken: cancelToken.token}
-      );
-      setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    getNumberOf();
-
-    return () => {
-      cancelRequest();
-      setNumberOf(initialVacinatelInfo);
-    };
-  }, []);
 
   return (
     <>
-      <div className="flex mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="mt-7 flex flex-col justify-between space-y-8 border-gray-100 py-5">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع کارمندان آموزشی که در  آموزش و پرورش فعالیت دارند."
@@ -90,7 +59,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="تعداد افرادی  که دوز اول واکسن را دریافت کرده‌اند."
             hasInfo
@@ -152,7 +121,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           </div>
         </div> */}
       </div>
-      <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           infoText="تعداد افرادی  که دوز پنجم واکسن را دریافت کرده‌اند "
           hasInfo
@@ -162,22 +131,22 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           loading={loading}
         />
 
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
-        <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+        <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
           {/* cvxdvcv */}
         </div>
       </div>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="mt-7 flex flex-col justify-between space-y-8 border-t-4 border-solid border-gray-100 py-5">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             text="درصد واکسیناسیون کل کشور"
             hasInfo
@@ -219,7 +188,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
             icon={DarkgreenVaccine}
@@ -250,10 +219,10 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             isPercentage
           /> */}
 
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
         </div>

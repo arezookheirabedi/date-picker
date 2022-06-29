@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import {isEmpty} from 'lodash';
+import {IObjectOption} from './useGetNumberOf';
 
 export const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
 export const initialVacinatelInfo = {
@@ -12,25 +13,28 @@ export const initialVacinatelInfo = {
   totalNonVaccinesCount: 0,
   totalNonVaccinesCountToTotalPopulationPercentage: 0,
   totalVaccinesCountToTotalPopulationPercentage: 0,
-
+  totalNonVaccinesCountBeforeStartOfSystemToTotalPopulationPercentage: 0,
   totalNonVaccinesCountBeforeStartOfSystem: 0,
   totalVaccinesCountAfterStartOfSystem: 0,
   totalVaccinesCount: 0,
+  totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: 0,
 };
 export interface IInitialVacinatelInfo {
+  totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: number;
+  totalNonVaccinesCountBeforeStartOfSystemToTotalPopulationPercentage: number;
   totalPopulation: number;
   totalNonVaccinesCount: number;
   totalNonVaccinesCountToTotalPopulationPercentage: number;
   totalVaccinesCountToTotalPopulationPercentage: number;
-  gtDoses: any;
-  doses: any;
-  dosesToTotalPopulationPercentage: any;
+  gtDoses: IObjectOption;
+  doses: IObjectOption;
+  dosesToTotalPopulationPercentage: IObjectOption;
   totalNonVaccinesCountBeforeStartOfSystem: number;
   totalVaccinesCountAfterStartOfSystem: number;
   totalVaccinesCount: number;
 }
 
-export default function useGetNumberOf(query: any) {
+export default function useGetNumberOf(query?: any) {
   const [loading, setLoading] = useState(false);
   const [error, setErrorMessage] = useState(null);
   const [chartData, setChartData] = useState<any>();
@@ -42,7 +46,7 @@ export default function useGetNumberOf(query: any) {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getGuildVaccinateInfo = async (params: any) => {
+  const getGuildVaccinateInfo = async (params: any = {}) => {
     setErrorMessage(null);
     setLoading(true);
     try {
@@ -134,7 +138,6 @@ export default function useGetNumberOf(query: any) {
   };
   useEffect(() => {
     getGuildVaccinateInfo(query);
-
     return () => {
       cancelRequest();
       setChartData({});
