@@ -4,7 +4,7 @@ import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
 import Charts from 'src/components/Charts';
-import {converters} from './constant';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;

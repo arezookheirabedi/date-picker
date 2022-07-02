@@ -7,6 +7,7 @@ import Calendar from 'src/components/Calendar/SingleCalendar';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -51,7 +52,13 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
       // eslint-disable-next-line
       let vaccinesPercentage: any[] = [];
 
-      data.forEach((item: any) => {
+      const sortData = data.sort((a: any, b: any) =>
+        a.nonVaccinesCountToMembersCountPercentage > b.nonVaccinesCountToMembersCountPercentage
+          ? 1
+          : -1
+      );
+
+      sortData.forEach((item: any) => {
         vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
         nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
 
@@ -120,13 +127,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
       });
     }
   }, [selectedDay]);
-  const converters = {
-    fa(number: any) {
-      return number.toString().replace(/\d/g, (d: any) => {
-        return String.fromCharCode(d.charCodeAt(0) + 1728);
-      });
-    },
-  };
+
   const optionChart = {
     chart: {
       renderTo: 'container',
