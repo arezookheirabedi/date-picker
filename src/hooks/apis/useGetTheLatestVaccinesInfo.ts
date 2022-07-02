@@ -26,6 +26,7 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
       const res = await hcsService.peopleLatestVaccinationOverview(params, {
         cancelToken: cancelToken.token,
       });
+
       const finalResponse: any = {...res.data};
       if (!isEmpty(finalResponse)) {
         const dataChart: any = {
@@ -98,15 +99,16 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
 
         setChartData({...newInitialData});
       }
-
       setCartData(finalResponse);
-    } catch (errors: any) {
-      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
-
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
       setLoading(false);
+    } catch (errors: any) {
+      if (errors.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
+      setLoading(false);
+      // eslint-disable-next-line
     }
   };
   useEffect(() => {
