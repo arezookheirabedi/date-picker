@@ -133,7 +133,7 @@ const OverviewOfVaccination: React.FC<OverviewOfVaccinationProps> = ({cityTitle}
         province: provinceName,
       });
     } else {
-      history.push('/dashboard/guild/province');
+      history.go(-1);
     }
     return () => {
       cancelRequest();
