@@ -12,8 +12,8 @@ import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
 import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
 import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
-import DatepickerQuery from '../../DatepickerQuery';
 import LocalTableSearch from '../../LocalTableSearch';
+import SingleDatepickerQuery from "../../SingleDatepickerQuery";
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [query, setQuery] = useState({
@@ -193,7 +193,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
       <div className="align-center mb-8 flex justify-between space-x-5 rtl:space-x-reverse">
         <div className="align-center flex justify-between">
-          <DatepickerQuery query={query} setQuery={setQuery} />
+          <SingleDatepickerQuery query={query} setQuery={setQuery} />
         </div>
         <div className="align-center flex">
           <div className="align-center relative inline-flex leading-3">
