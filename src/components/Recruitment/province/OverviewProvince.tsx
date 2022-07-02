@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import axios from "axios";
-import {useHistory, useLocation} from "react-router-dom";
+import React from 'react';
 
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalRecruitment from '../../../assets/images/icons/people-navy.svg';
@@ -14,101 +12,24 @@ import totalVaccinateStart from "../../../assets/images/icons/total-vaccinate-st
 import noneVaccinateStart from "../../../assets/images/icons/none-vaccinate-start-wok-panel.svg";
 import passengerPositiveTest from "../../../assets/images/icons/passenger-positive-test.svg";
 
-import hcsService from "../../../services/hcs.service";
-import vaccineService from "../../../services/vaccine.service";
-import {sideCities} from "../../../helpers/utils";
+import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
+import useGetTestResults from "../../../hooks/apis/useGetTestResults";
 
-
-const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-const initialNumberOf = {
-  doses: {...initialDoses},
-  // dosesPercentage: {...initialDoses},
-  dosesToTotalPopulationPercentage: {...initialDoses},
-  gtDoses: {...initialDoses},
-  // gtDosesPercentage: {...initialDoses},
-  // gtDosesToTotalPopulationPercentage: {...initialDoses},
-  gtDosesToTotalDosesPercentage: {...initialDoses},
-  totalPopulation: 0,
-  totalUnknownVaccinesCount: 0,
-  totalPassengerCount: 0,
-  totalPassengerCountToTotalPopulationPercentage: 0,
-  totalVaccinesPercentage: 0,
-};
-
-const initialTestResults = {
-  positiveMembersCount: 0,
-  positiveMembersCountToTestResultsCountPercentage: 0,
-  positiveMembersCountToTotalPopulationPercentage: 0,
-  recoveredMembersCount: 0,
-  recoveredMembersCountToTotalPopulationPercentage: 0,
-  testResultsCount: 0,
-  totalPopulation: 0,
-};
 
 interface OverviewProvinceProps {
   cityTitle: any
 }
 
 const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
-  const [loading, setLoading] = useState(false);
-  const [testResultLoading, setTestResultLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<any>(initialNumberOf);
-  const [testResultInfo, setTestResultInfo] = useState<any>(initialTestResults);
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const getNumberOf = async (province: any) => {
-    setLoading(true);
-    try {
-      const {data} = await vaccineService.membersGeneral(
-        {tag: 'employee', province},
-        {cancelToken: source.token}
-      );
-      setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getTestResults = async (province: any) => {
-    setTestResultLoading(true);
-    try {
-      const {data} = await hcsService.testResults({tag: 'employee', province}, {cancelToken: source.token});
-      setTestResultInfo((prev: any) => {
-        return {
-          ...prev,
-          ...data,
-        };
-      });
-      // setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTestResultLoading(false);
-    }
-  };
-
-
-  const location = useLocation();
-  const history = useHistory();
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      getNumberOf(provinceName);
-      getTestResults(provinceName);
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
-  }, [location.search]);
+  // eslint-disable-next-line
+  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'employee'},true);
+  const {
+    data: testResultInfo,
+    loading: testResultLoading,
+    // eslint-disable-next-line
+    error: testResultError
+  } = useGetTestResults({tag: 'employee'},true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="recruitment-overview">

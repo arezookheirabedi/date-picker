@@ -114,7 +114,6 @@ const optionChart = {
 
 const OverviewOfGovernmentEmployeesVaccinationProcess = () => {
 
-
   const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess({
     tag: 'employee'
   })
