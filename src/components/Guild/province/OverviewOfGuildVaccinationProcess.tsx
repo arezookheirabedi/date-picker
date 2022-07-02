@@ -1,19 +1,11 @@
 import React from 'react';
 import Highcharts from 'highcharts/highstock';
-
-import {isEmpty} from 'lodash';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
+import Spinner from 'src/components/Spinner';
 import Charts from '../../Charts';
 import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';
 
 const {HeadlessChart} = Charts;
-
-const converters = {
-  fa(number: any) {
-    return number.toString().replace(/\d/g, (d: any) => {
-      return String.fromCharCode(d.charCodeAt(0) + 1728);
-    });
-  },
-};
 
 const optionChart = {
   chart: {
@@ -24,15 +16,6 @@ const optionChart = {
       const ret = Highcharts.numberFormat.apply(0, arguments as any);
       return converters.fa(ret);
     },
-
-    events: {
-      redraw: () => {
-        // eslint-disable-next-line
-        // console.log('redraw');
-      },
-    },
-    // zoomType: 'x'
-    // styledMode: true
   },
   title: {
     text: '',
@@ -62,12 +45,6 @@ const optionChart = {
     },
     area: {
       stacking: 'normal',
-      // lineColor: '#666666',
-      // lineWidth: 1,
-      // marker: {
-      //   lineWidth: 1,
-      //   lineColor: '#666666'
-      // }
     },
   },
   legend: {
@@ -138,16 +115,17 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
           </div>
         </div>
 
-        {errorMessage ? (
-          <div className="p-40 text-red-500">{errorMessage}</div>
-        ) : (
-          <>
-            <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-            {isEmpty(dataset) && !loading && !errorMessage && (
-              <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-            )}
-          </>
+        {loading && (
+          <div className="p-40">
+            <Spinner />
+          </div>
+        )}
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && dataset.categories.length > 0 && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
+        )}
+        {dataset.categories.length === 0 && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
     </fieldset>
