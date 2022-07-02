@@ -50,11 +50,15 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
 
       setData([...normalizedData]);
       setOrgDataset([...normalizedData]);
+      setError(false)
+      setLoading(false);
       // setFilterType({name: 'کمترین', enName: 'LOWEST'});
-    } catch (e: any) {
-      setError(e.message || '');
-      console.log(e);
-    } finally {
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || '');
       setLoading(false);
     }
   };
