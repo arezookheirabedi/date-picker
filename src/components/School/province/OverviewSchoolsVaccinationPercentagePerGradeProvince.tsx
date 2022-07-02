@@ -10,7 +10,12 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
 import Charts from '../../Charts';
-import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
+import {
+  chartNumberconverters as converters,
+  cancelTokenSource,
+  msgRequestCanceled,
+  sideCities,
+} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
@@ -63,8 +68,12 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
       let nonVaccinesPercentage: any[] = [];
       // eslint-disable-next-line
       let vaccinesPercentage: any[] = [];
-
-      data.forEach((item: any) => {
+      const sortData = data.sort((a: any, b: any) =>
+        a.nonVaccinesCountToMembersCountPercentage > b.nonVaccinesCountToMembersCountPercentage
+          ? 1
+          : -1
+      );
+      sortData.forEach((item: any) => {
         vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
         nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
 
@@ -92,13 +101,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
       setLoading(false);
     }
   };
-  const converters = {
-    fa(number: any) {
-      return number.toString().replace(/\d/g, (d: any) => {
-        return String.fromCharCode(d.charCodeAt(0) + 1728);
-      });
-    },
-  };
+
   const optionChart = {
     chart: {
       renderTo: 'container',
