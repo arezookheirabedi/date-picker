@@ -5,9 +5,10 @@ import {useHistory, useLocation} from 'react-router-dom';
 import Calendar from 'src/components/Calendar';
 import DatePickerModal from 'src/components/DatePickerModal';
 import Highcharts from 'highcharts';
-import {converters} from 'src/components/Guild/public/constant';
+
 import {isEmpty} from 'lodash';
 import hcsService from 'src/services/hcs.service';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -206,19 +207,16 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       return item.name === provinceName;
     });
 
-    let idSetTimeOut: any;
     if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getLinearOverview({...queryParams, province: provinceName});
-      }, 500);
+      getLinearOverview({...queryParams, province: provinceName});
     } else {
-      history.push('/dashboard/vaccination/province');
+      history.go(-1);
     }
 
     return () => {
       if (existsCity) {
         cancelRequest();
-        clearTimeout(idSetTimeOut);
+
         setChartData({});
       }
     };

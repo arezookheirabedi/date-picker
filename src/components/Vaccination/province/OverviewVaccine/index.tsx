@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
 import hcsService from 'src/services/hcs.service';
-import {IInitialVacinatelInfo, initialVacinatelInfo} from '../../public/constant';
+import {IInitialVacinatelInfo, initialVacinatelInfo} from 'src/hooks/apis/useGetNumberOf';
 import OverViewVaccinationPercentageStatus from './OverviewVaccinePercentage';
 import OverviewVaccinationStatus from './OverviewVaccineCount';
 
@@ -62,17 +62,14 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
-    const idSetTimeOut = setTimeout(() => {
-      if (existsCity) {
-        getNumberOf(provinceName);
-        getTheLatestNumber({province: provinceName});
-      } else {
-        history.push('/dashboard/vaccination/province');
-      }
-    }, 500);
 
+    if (existsCity) {
+      getNumberOf(provinceName);
+      getTheLatestNumber({province: provinceName});
+    } else {
+      history.go(-1);
+    }
     return () => {
-      clearTimeout(idSetTimeOut);
       cancelRequest();
       setNumberOf(initialVacinatelInfo);
       setThelatestNumberOf(initialVacinatelInfo);
