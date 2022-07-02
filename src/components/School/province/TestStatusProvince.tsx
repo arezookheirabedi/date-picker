@@ -1,17 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-// @ts-ignore
-import moment from 'moment-jalaali';
-import {useHistory, useLocation} from 'react-router-dom';
-// import {schoolTypes} from 'src/helpers/sortingModels';
+import React, {useState} from 'react';
 import Table from 'src/components/TableScopeSort';
-import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
+import useGetTestResultsTable from 'src/hooks/apis/useGetTestResultsTable';
+import DatepickerQuery from 'src/components/DatepickerQuery';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import {sideCities} from '../../../helpers/utils';
-
-import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 
 interface TestStatusProvinceProps {
   cityTitle: any;
@@ -20,148 +11,31 @@ interface TestStatusProvinceProps {
 const PageSize = 10;
 // eslint-disable-next-line
 const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [filterType, setFilterType] = useState({name: 'پیشفرض', enName: ''});
-  const [loading, setLoading] = useState(false);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
-  const [dataset, setDataset] = useState<any>([]);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  // eslint-disable-next-line
-  const [selectedDayRange, setSelectedDayRange] = useState({
+  const [query, setQuery] = useState({
     from: null,
     to: null,
-  }) as any;
-
-  const [query, setQuery] = useState({
-    resultReceiptDateFrom: null,
-    resultReceiptDateTo: null,
-    province: null,
-  }) as any;
-
-  const overviewTestResults = async (from: any = null, to: any = null, province: any) => {
-    try {
-      setLoading(true);
-      const {data} = await hcsService.testResultsCategory('edu', 'grade', {
-        lang: 'fa',
-        from,
-        to,
-        province,
-      });
-      // console.log(data);
-
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryValue || 'نامشخص',
-          total: item.testResultsCount || 0,
-          positiveCount: item.positiveTestResultsCount || 0,
-          positivePercentage: item.positiveTestResultsCountToTestResultsCountPercentage || 0,
-          negativeCountPercentage: item.negativeTestResultsCountToTestResultsCountPercentage || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'پیشفرض', enName: ''});
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-    } else {
-      history.push('/dashboard/school/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        setDataset([]);
-        source.cancel('Operation canceled by the user.');
-      }
-    };
-  }, [location.search, query]);
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: null,
-        resultReceiptDateTo: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  useEffect(() => {
-    const tmp = [...orgDataset].sort((a: any, b: any) => {
-      // eslint-disable-next-line
-      const reverse = filterType.enName === 'HIGHEST' ? 1 : filterType.enName === 'LOWEST' ? -1 : 0;
-
-      if (a.positivePercentage < b.positivePercentage) {
-        return reverse * 1;
-      }
-
-      if (a.positivePercentage > b.positivePercentage) {
-        return reverse * -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
-
-    setDataset(tmp);
-  }, [filterType]);
+    tag: 'edu',
+    category: 'grade',
+  });
+  const {
+    data: dataset,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error,
+  } = useGetTestResultsTable(query, true);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         آزمایش در آموزش و پرورش در استان‌ &nbsp;
         {cityTitle}
       </legend>
-      <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
+      <div className="align-center mb-8 flex justify-start space-x-5 rtl:space-x-reverse">
         <div className="flex items-center">
-          {showDatePicker ? (
-            <DatePickerModal
-              setSelectedDayRange={setSelectedDayRange}
-              selectedDayRange={selectedDayRange}
-              setShowDatePicker={setShowDatePicker}
-              showDatePicker
-            />
-          ) : null}
-          <Calendar
-            action={focusFromDate}
-            from={selectedDayRange.from}
-            to={selectedDayRange.to}
-            setSelectedDayRange={setSelectedDayRange}
-          />
+          <DatepickerQuery query={query} setQuery={setQuery} />
         </div>
       </div>
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={loading}
           dataSet={[...dataset]}
@@ -198,9 +72,9 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
                       },
                     },
                     {
-                      name: 'positiveCount',
+                      name: 'positiveCountPercentage',
                       title: 'درصد تست‌های مثبت',
-                      y: record.positivePercentage || 0,
+                      y: record.positiveCountPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -239,7 +113,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
               sortable: true,
 
               name: 'درصد تست‌های مثبت',
-              key: 'positivePercentage',
+              key: 'positiveCountPercentage',
               render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
             },
             {
