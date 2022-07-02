@@ -175,7 +175,7 @@ export function isLogin() {
       localStorage.setItem(
         'ministers-userinfo',
         // JSON.stringify({...profile, roles: payload.authorities || []})
-        JSON.stringify({...profile, roles: ["ROLE_ADMIN_GUILD_BAKERY_GENERAL"] || []})
+        JSON.stringify({...profile, roles: ["ROLE_REPORT_VIEWER_GUILD_BAKERY_GENERAL"] || []})
       );
     }
 
