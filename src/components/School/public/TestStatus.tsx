@@ -66,9 +66,9 @@ const TestStatus: React.FC<{}> = () => {
                       },
                     },
                     {
-                      name: 'positiveCount',
+                      name: 'positiveCountPercentage',
                       title: 'درصد تست‌های مثبت',
-                      y: record.positivePercentage || 0,
+                      y: record.positiveCountPercentage || 0,
                       color: {
                         linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
                         stops: [
@@ -107,7 +107,7 @@ const TestStatus: React.FC<{}> = () => {
               sortable: true,
 
               name: 'درصد تست‌های مثبت',
-              key: 'positivePercentage',
+              key: 'positiveCountPercentage',
               render: (v: any) => <span>{Number(v || 0).toPersianDigits()}%</span>,
             },
             {
