@@ -7,7 +7,7 @@ import DatePickerModal from 'src/components/DatePickerModal';
 import Calendar from 'src/components/Calendar';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
-import {converters} from '../../public/constant';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 
 const {HeadlessChart} = Charts;
 
