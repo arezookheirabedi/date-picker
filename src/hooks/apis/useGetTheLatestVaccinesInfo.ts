@@ -134,7 +134,7 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
     if (existsCity) {
       getIt({...query, province: provinceName});
     } else {
-      history.push('/dashboard/health/transport/province');
+      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {
