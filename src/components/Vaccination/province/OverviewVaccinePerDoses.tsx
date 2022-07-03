@@ -8,6 +8,7 @@ import DatePickerModal from 'src/components/DatePickerModal';
 import Highcharts from 'highcharts';
 import {converters} from 'src/components/Guild/public/constant';
 import {isEmpty} from 'lodash';
+import RetryButton from 'src/components/RetryButton';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -92,9 +93,9 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
   // const [categories, setCategories] = useState<any[]>([]);
   // const [dataset, setDataset] = useState<any[]>([]);
   const [chartData, setChartData] = useState<any>();
-
+  const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [queryParams, setQueryParams] = useState({
     from: null,
@@ -222,7 +223,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         setChartData({});
       }
     };
-  }, [queryParams, location.search]);
+  }, [queryParams, location.search, shouldUpdate]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
@@ -313,7 +314,12 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton shouldUpdate={shouldUpdate} setShouldUpdate={setShouldUpdate} />
+          </div>
+        )}
         {!loading && !isEmpty(chartData) && !errorMessage && (
           <HeadlessChart data={chartData} optionsProp={optionChart} />
         )}
