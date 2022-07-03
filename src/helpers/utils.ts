@@ -612,3 +612,10 @@ export const sidesCities = [
     color: '#ccc',
   },
 ];
+export const chartNumberconverters = {
+  fa(number: any) {
+    return number.toString().replace(/\d/g, (d: any) => {
+      return String.fromCharCode(d.charCodeAt(0) + 1728);
+    });
+  },
+};

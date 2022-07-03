@@ -1,40 +1,13 @@
 import {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import {isEmpty} from 'lodash';
-import {IObjectOption} from './useGetNumberOf';
+import {useHistory, useLocation} from 'react-router-dom';
+import {IInitialVacinatelInfo, initialVacinatelInfo} from './useGetNumberOf';
 
-export const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
-export const initialVacinatelInfo = {
-  doses: {...initialDoses},
-  dosesToTotalPopulationPercentage: {...initialDoses},
-  gtDoses: {...initialDoses},
-  totalPopulation: 0,
-  totalNonVaccinesCount: 0,
-  totalNonVaccinesCountToTotalPopulationPercentage: 0,
-  totalVaccinesCountToTotalPopulationPercentage: 0,
-  totalNonVaccinesCountBeforeStartOfSystemToTotalPopulationPercentage: 0,
-  totalNonVaccinesCountBeforeStartOfSystem: 0,
-  totalVaccinesCountAfterStartOfSystem: 0,
-  totalVaccinesCount: 0,
-  totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: 0,
-};
-export interface IInitialVacinatelInfo {
-  totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: number;
-  totalNonVaccinesCountBeforeStartOfSystemToTotalPopulationPercentage: number;
-  totalPopulation: number;
-  totalNonVaccinesCount: number;
-  totalNonVaccinesCountToTotalPopulationPercentage: number;
-  totalVaccinesCountToTotalPopulationPercentage: number;
-  gtDoses: IObjectOption;
-  doses: IObjectOption;
-  dosesToTotalPopulationPercentage: IObjectOption;
-  totalNonVaccinesCountBeforeStartOfSystem: number;
-  totalVaccinesCountAfterStartOfSystem: number;
-  totalVaccinesCount: number;
-}
-
-export default function useGetNumberOf(query?: any) {
+export default function useGetNumberOf(query?: any, hasProvince: boolean = false) {
+  const location = useLocation();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [error, setErrorMessage] = useState(null);
   const [chartData, setChartData] = useState<any>();
@@ -46,13 +19,14 @@ export default function useGetNumberOf(query?: any) {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getGuildVaccinateInfo = async (params: any = {}) => {
+  const getIt = async (params: any = {}) => {
     setErrorMessage(null);
     setLoading(true);
     try {
       const res = await hcsService.peopleLatestVaccinationOverview(params, {
         cancelToken: cancelToken.token,
       });
+
       const finalResponse: any = {...res.data};
       if (!isEmpty(finalResponse)) {
         const dataChart: any = {
@@ -125,25 +99,52 @@ export default function useGetNumberOf(query?: any) {
 
         setChartData({...newInitialData});
       }
-
       setCartData(finalResponse);
-    } catch (errors: any) {
-      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
-
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
       setLoading(false);
+    } catch (errors: any) {
+      if (errors.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
+      setLoading(false);
+      // eslint-disable-next-line
     }
   };
   useEffect(() => {
-    getGuildVaccinateInfo(query);
+    if (hasProvince) {
+      return;
+    }
+    getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       cancelRequest();
       setChartData({});
       setCartData({...initialVacinatelInfo});
     };
   }, [query]);
+
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getIt({...query, province: provinceName});
+    } else {
+      history.go(-1);
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      cancelRequest();
+      setChartData({});
+      setCartData({...initialVacinatelInfo});
+    };
+  }, [location.search, query]);
 
   return {loading, error, chartData, cartData};
 }

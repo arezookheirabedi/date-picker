@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Statistic from 'src/containers/Guild/components/Statistic';
 import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
@@ -9,97 +9,33 @@ import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import testIcon from 'src/assets/images/icons/test-color.svg';
-import {useHistory, useLocation} from 'react-router-dom';
-import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
-import vaccineService from 'src/services/vaccine.service';
-import guildService from 'src/services/guild.service';
 import guildPositiveIcon from 'src/assets/images/icons/guild-positive.svg';
-
-import {
-  IInitialPcrInfo,
-  IInitialVacinatelInfo,
-  initialPcrInfo,
-  initialVacinatelInfo,
-} from '../public/constant';
+import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
+import useGetTestResults from 'src/hooks/apis/useGetTestResults';
 
 interface OverviewGuildsProvinceProps {
   cityTitle?: any;
 }
 
 const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [guildVacinateInfo, setGuildVacinateInfo] =
-    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-  const [pcrLoading, setPcrLoading] = useState<boolean>(false);
-  const [guildPcrInfo, setGuildPcrInfo] = useState<IInitialPcrInfo>(initialPcrInfo);
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getGuildVacinateInfo = async (params: any) => {
-    setLoading(true);
-    try {
-      const res = await vaccineService.membersGeneral(params, {
-        cancelToken: cancelToken.token,
-      });
-      if (res.status === 200) {
-        const newData = {...guildVacinateInfo, ...res.data};
-        setGuildVacinateInfo(newData);
-      } // eslint-disable-next-line
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const getPcrResult = async (params: any): Promise<any> => {
-    setPcrLoading(true);
-    try {
-      const res = await guildService.guildTestResult(params, {cancelToken: cancelToken.token});
-      if (res.status === 200) {
-        const newData = {...guildPcrInfo, ...res.data};
-        setGuildPcrInfo(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setPcrLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getPcrResult({tag: 'guild', province: provinceName});
-      getGuildVacinateInfo({tag: 'guild', province: provinceName});
-    } else {
-      history.push('/dashboard/guild/province');
-    }
-
-    return () => {
-      cancelRequest();
-      setGuildVacinateInfo(initialVacinatelInfo);
-      setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [location.search]);
+  // eslint-disable-next-line
+  const {data: guildVacinateInfo, loading, error} = useGetNumberOf({tag: 'guild'}, true);
+  // eslint-disable-next-line
+  const {
+    data: guildPcrInfo,
+    loading: pcrLoading,
+    // eslint-disable-next-line
+    error: testResultError,
+  } = useGetTestResults({tag: 'guild'}, true);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="guild-overview">
-      <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت اصناف در استان {cityTitle}</legend>
+    <fieldset className="mb-16 rounded-xl border p-4 text-center" id="guild-overview">
+      <legend className="mx-auto px-3 text-black">
+        نگاه کلی به وضعیت اصناف در استان {cityTitle}
+      </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع کارفرمایانی که در اصناف فعالیت دارند."
@@ -132,7 +68,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             count="-"
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
@@ -166,9 +102,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             loading={loading}
           />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          {/* <Statistic icon={scanIcon} text="تعداد استعلام شهروندان" count={guildInquiry.total}  loading={inquiryLoading}/>
-          <Statistic icon={scanDangerIcon} text="تعداد استعلامهای نتیجه مثبت" count={guildInquiry.disqualified}  loading={inquiryLoading}/> */}
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="تعداد کل تست های pcr که کارفرمایان صنفی انجام داده اند."

@@ -113,36 +113,11 @@ function guildMessageSeen(
     .post(`/api/v1/guilds/${params.guildCode}/published-messages/seen/${params.messageId}?lang=fa`);
 }
 
-function guildTestResult({...params}: any = {}, config?: any) {
-  return request
-    .withHeaders({'Content-Type': 'application/json;utf-8'})
-    .build()
-    .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
-}
-
 function dosesTagBased({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
-}
-
-function guildOverviewByCategory({tag, category, ...params}: any = {}, config?: any) {
-  return request
-    .withHeaders({'Content-Type': 'application/json;utf-8'})
-    .build()
-    .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {
-      ...config,
-    });
-}
-
-function guildTestResultByCategory({tag, category, ...params}: any = {}, config?: any) {
-  return request
-    .withHeaders({'Content-Type': 'application/json;utf-8'})
-    .build()
-    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}?lang=fa`, params, {
-      ...config,
-    });
 }
 
 function guildInquiry({...params}: any = {}, config?: any) {
@@ -227,7 +202,8 @@ function bakeryInspections(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/guilds/inspections/bakeries`, params, {...config});}
+    .get(`/api/v1/guilds/inspections/bakeries`, params, {...config});
+}
 function getRegisterCount(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -247,10 +223,7 @@ export default {
   updateEmployeHealthStatus,
   guildMessages,
   guildMessageSeen,
-  guildTestResult,
   dosesTagBased,
-  guildOverviewByCategory,
-  guildTestResultByCategory,
   guildInquiry,
   guildOverview,
   guildReportoverviewStatus,
