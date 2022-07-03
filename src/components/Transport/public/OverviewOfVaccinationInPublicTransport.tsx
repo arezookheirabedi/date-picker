@@ -13,9 +13,9 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
 import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
 import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
-import DatepickerQuery from '../../DatepickerQuery';
 import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
 import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
+import SingleDatepickerQuery from "../../SingleDatepickerQuery";
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [query, setQuery] = useState({
@@ -262,7 +262,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">نگاه کلی واکسیناسیون در حمل و نقل عمومی</legend>
 
-      <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+      <div
+        className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={totalDriver}
           text="مجموع رانندگان فعال"
@@ -296,7 +297,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
         />
       </div>
-      <div className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+      <div
+        className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={PurppleVaccineMd}
           text="تعداد واکسیناسیون دوز سوم"
@@ -330,7 +332,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
         />
       </div>
-      <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+      <div
+        className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={GreenVaccine}
           text="درصد واکسیناسیون کل کشور"
@@ -368,7 +371,8 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
           infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
         />
       </div>
-      <div className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+      <div
+        className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <div className="w-1/4">
           <Statistic
             icon={DarkgreenVaccine}
@@ -406,12 +410,12 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
       </div>
 
       <div className="align-center mb-8 flex justify-start space-x-5 rtl:space-x-reverse">
-        <DatepickerQuery query={query} setQuery={setQuery} />
+        <SingleDatepickerQuery query={query} setQuery={setQuery}/>
       </div>
 
       {datasetLoading ? (
         <div className="p-20">
-          <Spinner />
+          <Spinner/>
         </div>
       ) : (
         <>

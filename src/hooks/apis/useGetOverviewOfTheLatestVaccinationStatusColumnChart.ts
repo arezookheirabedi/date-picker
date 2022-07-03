@@ -22,16 +22,17 @@ const initialData = {
 } as any;
 
 export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(query: any, hasProvince: boolean = false) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<any>(false);
   const [data, setData] = useState<any>(initialData);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
   const getIt = async (params: any) => {
-    setLoading(true);
+
     try {
+      setLoading(true);
       const {data: result} = await hcsService.getPeopleVaccine(
         params,
         {cancelToken: source.token}
@@ -61,12 +62,17 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
       } as any;
 
       setData(dataTemp)
+      setError(null);
+      setLoading(false);
     } catch (err: any) {
+      setLoading(false);
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
       // eslint-disable-next-line
       console.log(err);
       setError(err.message || '')
-    } finally {
-      setLoading(false);
     }
   };
 
