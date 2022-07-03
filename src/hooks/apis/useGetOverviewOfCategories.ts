@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
-import {sideCities} from "../../helpers/utils";
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {sideCities} from '../../helpers/utils';
 
-export default function useGetOverviewOfCategories(query: any, hasProvince : boolean = false) {
+export default function useGetOverviewOfCategories(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
@@ -18,10 +18,13 @@ export default function useGetOverviewOfCategories(query: any, hasProvince : boo
     setError(false);
     try {
       setLoading(true);
-      const {data: result} = await hcsService.getTableOverviewTestResults({
-        ...params,
-        lang: 'fa',
-      }, {cancelToken: source.token});
+      const {data: result} = await hcsService.getTableOverviewTestResults(
+        {
+          ...params,
+          lang: 'fa',
+        },
+        {cancelToken: source.token}
+      );
 
       const normalizedData: any[] = [];
       result.forEach((item: any, index: number) => {
@@ -35,7 +38,6 @@ export default function useGetOverviewOfCategories(query: any, hasProvince : boo
           saveCount: item.recoveredMembersCount || 0,
           // deadCount: 120,
         });
-
       });
       setData([...normalizedData]);
       setOrgDataset([...normalizedData]);
@@ -72,10 +74,9 @@ export default function useGetOverviewOfCategories(query: any, hasProvince : boo
       return item.name === provinceName;
     });
     if (existsCity) {
-      getIt({...query, 'province': provinceName});
-
+      getIt({...query, province: provinceName});
     } else {
-      history.push('/dashboard/health/transport/province');
+      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {
@@ -83,8 +84,6 @@ export default function useGetOverviewOfCategories(query: any, hasProvince : boo
       setData([]);
     };
   }, [location.search, query]);
-
-
 
   return {loading, error, data, setData, orgDataset};
 }
