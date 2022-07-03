@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import useGetOverviewOfVaccinationStackChart from '../../../hooks/apis/useGetOverviewOfVaccinationStackChart';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
@@ -9,13 +10,6 @@ import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
 
 interface OverviewGuildsPerProvinceProps {}
-export const converters = {
-  fa(number: any) {
-    return number.toString().replace(/\d/g, (d: any) => {
-      return String.fromCharCode(d.charCodeAt(0) + 1728);
-    });
-  },
-};
 
 const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () => {
   const [query, setQuery] = useState<any>({

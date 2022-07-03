@@ -47,11 +47,10 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-
   const clear = () => {
     setData(initialVacinatelInfo);
     source.cancel('Operation canceled by the user.');
-  }
+  };
 
   const getIt = async (params: any = {}) => {
     setLoading(true);
@@ -93,9 +92,9 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
       return item.name === provinceName;
     });
     if (existsCity) {
-      getIt({...query, 'province': provinceName});
+      getIt({...query, province: provinceName});
     } else {
-      history.push('/dashboard/health/transport/province');
+      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return clear;

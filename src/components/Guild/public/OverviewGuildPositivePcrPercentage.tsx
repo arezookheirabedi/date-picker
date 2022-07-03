@@ -11,6 +11,7 @@ import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import {
   cancelTokenSource,
   msgRequestCanceled,
@@ -19,11 +20,9 @@ import {
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters} from './constant';
 // import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
-
 interface IOverviewGuildPositivePcrPercentage {}
 
 const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {

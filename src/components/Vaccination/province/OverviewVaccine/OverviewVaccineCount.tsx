@@ -11,7 +11,7 @@ import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-
 import greenVaccineBlackVirus from 'src/assets/images/icons/green-vaccine-black-virus.svg';
 import blueVaccine from 'src/assets/images/icons/blue-vaccine.svg';
 import greyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
-import {IInitialVacinatelInfo} from '../../public/constant';
+import {IInitialVacinatelInfo} from 'src/hooks/apis/useGetNumberOf';
 
 interface IVaccineStatus {
   loading: boolean;
@@ -21,7 +21,7 @@ interface IVaccineStatus {
 const OverviewVaccineCount: React.FC<IVaccineStatus> = ({loading, numberOf}) => {
   return (
     <div className="flex flex-col justify-between space-y-8">
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           icon={GreenVaccine}
           hasInfo
@@ -55,7 +55,7 @@ const OverviewVaccineCount: React.FC<IVaccineStatus> = ({loading, numberOf}) => 
           loading={loading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           hasInfo
           infoText="تعداد افرادی که دوز چهارم واکسن را دریافت کرده‌اند."
@@ -89,7 +89,7 @@ const OverviewVaccineCount: React.FC<IVaccineStatus> = ({loading, numberOf}) => 
           loading={loading}
         />
       </div>
-      <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           hasInfo
           infoText="تعداد افرادی که حداقل یک دوز واکسن را دریافت کرده بوداند و بر اثر بیماری کرونا فوت کردند."
