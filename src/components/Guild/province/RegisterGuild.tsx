@@ -69,7 +69,7 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
         province: provinceName,
       });
     } else {
-      history.push('/dashboard/guild/province');
+      history.go(-1);
     }
     return () => {
       cancelRequest();

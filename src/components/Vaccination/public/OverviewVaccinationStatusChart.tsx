@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {converters} from 'src/components/Guild/public/constant';
 import Highcharts from 'highcharts';
 import useGetOverviewOfVaccinationStackChart from 'src/hooks/apis/useGetOverviewOfVaccinationStackChart';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 
