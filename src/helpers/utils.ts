@@ -3,9 +3,7 @@ import dayjs from 'dayjs';
 import Setup from 'src/config/setup';
 import EHEADER from 'src/constants/headerRequest.enum';
 // eslint-disable-next-line
-import {getRolePermissions, ROLES} from 'src/constants/roles.constant';
-// eslint-disable-next-line
-import {PERMISSIONS, PERMISSIONS_HEALTH} from 'src/constants/permissions.constants';
+import {getRolePermissions} from 'src/constants/roles.constant';
 import {ILogin, IProfile} from 'src/models/authentication.model';
 
 const baseUrl = Setup.endpoint;
@@ -181,8 +179,11 @@ export function isLogin() {
         JSON.stringify({
           ...profile,
           roles: payload.authorities || [],
-          permissions:
-            (payload.authorities || []).map((role: string) => getRolePermissions[role]) || [],
+          permissions: (payload.authorities || []).reduce((result: any[], role: string) => {
+            const prems = getRolePermissions[role];
+            const r = result.concat(prems);
+            return r;
+          }, []),
         })
       );
     }
