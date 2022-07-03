@@ -4,6 +4,7 @@ import Highcharts from 'highcharts';
 import useGetOverviewOfVaccinationStackChart from 'src/hooks/apis/useGetOverviewOfVaccinationStackChart';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
+import RetryButton from 'src/components/RetryButton';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 
@@ -13,11 +14,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   const [query, setQuery] = useState<any>({
     to: null,
   });
+  const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
   const {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetOverviewOfVaccinationStackChart(query);
+  } = useGetOverviewOfVaccinationStackChart(query, shouldUpdate);
 
   const optionChart = {
     chart: {
@@ -164,7 +166,12 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton shouldUpdate={shouldUpdate} setShouldUpdate={setShouldUpdate} />
+          </div>
+        )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
