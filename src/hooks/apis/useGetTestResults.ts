@@ -43,9 +43,14 @@ export default function useGetTestResults(query: any, hasProvince: boolean = fal
           ...result,
         };
       });
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
       setError(err.message || '');
-    } finally {
       setLoading(false);
     }
   };

@@ -58,9 +58,14 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
     try {
       const {data: result} = await hcsService.numberOf(params, {cancelToken: source.token});
       setData({...result});
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
       setError(err.message || '');
-    } finally {
       setLoading(false);
     }
   };

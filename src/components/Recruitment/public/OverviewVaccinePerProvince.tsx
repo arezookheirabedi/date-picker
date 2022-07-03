@@ -4,7 +4,7 @@ import Highcharts from "highcharts/highstock";
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 import useGetOverviewOfVaccinationStackChart from "../../../hooks/apis/useGetOverviewOfVaccinationStackChart";
-import DatepickerQuery from "../../DatepickerQuery";
+import SingleDatepickerQuery from "../../SingleDatepickerQuery";
 
 const {HeadlessChart} = Charts;
 
@@ -135,7 +135,7 @@ const OverviewVaccinePerProvince = () => {
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="flex align-center justify-between w-3/4">
             <div className="flex align-center justify-between">
-              <DatepickerQuery query={query} setQuery={setQuery}/>
+              <SingleDatepickerQuery query={query} setQuery={setQuery} />
             </div>
           </div>
 

@@ -31,11 +31,14 @@ export default function useGetTestResultsTable(query: any, hasProvince: boolean 
       });
       setData([...normalizedData]);
       setOrgDataset([...normalizedData]);
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
-      // eslint-disable-next-line
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
       setError(err.message || '');
-      console.log(err);
-    } finally {
       setLoading(false);
     }
   }
