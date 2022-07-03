@@ -114,7 +114,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
 
   useEffect(() => {
     if (selectedDay.to) {
-      const finalToDate = `${selectedDay.year}/${selectedDay.month}/${selectedDay.day}`;
+      const finalToDate = `${selectedDay.to.year}/${selectedDay.to.month}/${selectedDay.to.day}`;
       setQueryParams({
         ...queryParams,
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
