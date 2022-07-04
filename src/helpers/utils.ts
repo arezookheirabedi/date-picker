@@ -178,7 +178,8 @@ export function isLogin() {
         'ministers-userinfo',
         JSON.stringify({
           ...profile,
-          roles: payload.authorities || [],
+          // roles: payload.authorities || [],
+          roles: ["ROLE_ADMIN"],
           permissions: (payload.authorities || []).reduce((result: any[], role: string) => {
             const prems = getRolePermissions[role];
             const r = result.concat(prems);
