@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
-import DatePickerModal from 'src/components/SingleDatePickerModal';
-import Calendar from 'src/components/Calendar/SingleCalendar';
 import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import hcsService from 'src/services/hcs.service';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
+import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -94,13 +91,12 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
   const history = useHistory();
   const [chartData, setChartData] = useState<any>();
   const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [queryParams, setQueryParams] = useState({
     to: null,
   });
-  const [selectedDay, setSelectedDay] = useState({to: null, clear: false}) as any;
+
   const cancelToken = cancelTokenSource();
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
@@ -186,8 +182,6 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       }
     } catch (error: any) {
       setErrorMessage(error.message || 'خطایی در عملیات');
-      // eslint-disable-next-line
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -206,32 +200,14 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
       history.go(-1);
     }
     return () => {
-      if (existsCity) {
         cancelRequest();
-
         setChartData({});
-      }
     };
-  }, [queryParams, location.search, shouldUpdate]);
+  }, [queryParams,location.search, shouldUpdate]);
 
-  useEffect(() => {
-    if (selectedDay.to) {
-      const finalToDate = `${selectedDay.to.year}/${selectedDay.to.month}/${selectedDay.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    } else {
-      setQueryParams({
-        ...queryParams,
-        to: null,
-      });
-    }
-  }, [selectedDay]);
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
+
+;
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -242,20 +218,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDay={setSelectedDay}
-                  selectedDay={selectedDay}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-
-              <Calendar
-                action={focusFromDate}
-                to={selectedDay.to}
-                setSelectedDay={setSelectedDay}
-              />
+            <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams} />
             </div>
           </div>
 
