@@ -16,16 +16,17 @@ const initialNumber = {
     numberOfDoneInspections: 0,
     numberOfEnableBakery: 0,
     numberOfInspectionNeed: 0,
-    numberOfNotValidGuildCode: 0,
     numberOfRegisterPos: 0,
     numberOfSamt: 0,
     numberOfShareFlour: 0,
     numberOfTotalBakery: 0,
-    numberOfValidGuildCode: 0,
     posActiveTime: 0,
     province: "تهران",
     transactionAmout: 0,
-    unsualTransaction: 0
+    unsualTransaction: 0,
+    numberOfConformityGuildCode : 0,
+    numberOfNonConformityGuildCode: 0,
+    numberOfGuildCodeDoesNotExit : 0
   };
 
 export default function useOverviewOfBakeryProvince(city:any) {
