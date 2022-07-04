@@ -9,7 +9,7 @@ import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import NavyVaccine from 'src/assets/images/icons/navy-vaccine-lg.svg';
 import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import greenVaccineBlackVirus from 'src/assets/images/icons/green-vaccine-black-virus.svg';
-import {IInitialVacinatelInfo} from '../../public/constant';
+import {IInitialVacinatelInfo} from 'src/hooks/apis/useGetNumberOf';
 
 interface IVaccineStatus {
   loading: boolean;
@@ -89,7 +89,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           infoText="درصد  افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           icon={personGrayVaccine}
           text="درصد افراد واکسینه نشده"
-          count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
+          count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
           loading={loading}
         />
         <Statistic

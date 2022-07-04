@@ -159,7 +159,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsPerProvinceProps> = ({cityT
         getLinearOverview({...queryParams, tag: 'guild', province: provinceName});
       }, 500);
     } else {
-      history.push('/dashboard/guild/province');
+      history.go(-1);
     }
 
     return () => {

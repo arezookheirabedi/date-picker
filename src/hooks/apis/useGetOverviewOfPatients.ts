@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
-import {sideCities} from "../../helpers/utils";
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {sideCities} from '../../helpers/utils';
 
-export default function useGetOverviewOfPatients(query: any,hasProvince : boolean = false) {
+export default function useGetOverviewOfPatients(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line
   const [error, setError] = useState<any>(false);
@@ -20,13 +20,13 @@ export default function useGetOverviewOfPatients(query: any,hasProvince : boolea
         cancelToken: source.token,
       });
       setData(result);
-      setError(false)
+      setError(false);
       setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
         return;
       }
-      setError('خطا در اتصال به سرور')
+      setError('خطا در اتصال به سرور');
       setLoading(false);
     }
   };
@@ -56,10 +56,9 @@ export default function useGetOverviewOfPatients(query: any,hasProvince : boolea
       return item.name === provinceName;
     });
     if (existsCity) {
-      getIt({...query, 'province': provinceName});
-
+      getIt({...query, province: provinceName});
     } else {
-      history.push('/dashboard/health/transport/province');
+      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {

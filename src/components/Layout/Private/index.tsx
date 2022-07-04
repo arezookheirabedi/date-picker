@@ -12,7 +12,9 @@ import {isLogin} from 'src/helpers/utils';
 import logo from 'src/assets/images/logos/logo.svg';
 // eslint-disable-next-line
 import sidebarBorder from 'src/assets/images/patterns/sidebar-border.svg';
-import Overview from 'src/containers/Overview/Overview';
+import useLocalStorage from 'src/hooks/useLocalStorage';
+import NotFound from 'src/containers/Errors/NotFound';
+import {IProfile} from 'src/models/authentication.model';
 import Logout from './components/Logout';
 import UserArea from './components/UserArea';
 import MenuItemWrapper from './components/MenuItemWrapper';
@@ -36,6 +38,18 @@ const PrivateLayout: React.FC<any> = () => {
   const [collapsed, setCollapsed] = useState(true);
   // const [filterCollapse, setFilterCollapse] = useState(true);
   const [collapsible, setCollapsible] = useState(false);
+  const [profile] = useLocalStorage<IProfile>('ministers-userinfo', {
+    birthday: '',
+    categoryId: '',
+    firstName: '',
+    guildCode: '',
+    id: '',
+    lastName: '',
+    nationalId: '',
+    qrCode: '',
+    roles: [],
+    permissions: [],
+  });
 
   const wrapperRef = useRef(null);
 
@@ -117,7 +131,7 @@ const PrivateLayout: React.FC<any> = () => {
         />
       </div>
       <div className="mr-0 xl:mr-72 relative min-h-screen overflow-hidden overflow-y-auto">
-        <div className="lg:pl-12 xl:pr-32 xl:pl-14 sm:px-12 sm:py-6 px-4 py-2 xl:py-0">
+        <div className="lg:pl-12 xl:pr-32 xl:pl-14 sm:px-12 sm:py-6 px-4 py-2 xl:py-0 min-h-screen flex flex-col">
           <div className="lg:py-4">
             {collapsible
               ? React.createElement(
@@ -160,49 +174,86 @@ const PrivateLayout: React.FC<any> = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white relative">
+          <div className="bg-white relative flex-grow">
             <Switch>
-              {routes.map((route, i) =>
-                !route.subMenu ? (
-                  // eslint-disable-next-line
-                  <Route path={route.link} exact={route.exact} key={i} component={route.main} />
-                ) : (
-                  route.subMenu.map((routeArg: any, ind: any) =>
-                    !routeArg.children ? (
-                      <Route
-                        path={routeArg.link}
-                        exact={routeArg.exact}
-                        // eslint-disable-next-line
-                        key={ind}
-                        component={routeArg.main}
-                      />
-                    ) : (
-                      routeArg.children.map((routeChildren: any, inc1: any) =>
-                        !routeChildren.children ? (
+              {routes.map((routeL1, i) =>
+                // eslint-disable-next-line no-nested-ternary
+                routeL1.roles &&
+                profile.roles &&
+                routeL1.roles.some((roleL1: string) => profile.roles.includes(roleL1)) ? (
+                  !routeL1.subMenu ? (
+                    // eslint-disable-next-line
+                    <Route
+                      path={routeL1.link}
+                      exact={routeL1.exact}
+                      key={i}
+                      component={routeL1.main}
+                    />
+                  ) : (
+                    routeL1.subMenu.map((routeL2: any, j: any) =>
+                      // eslint-disable-next-line no-nested-ternary
+                      routeL2.roles &&
+                      profile.roles &&
+                      routeL2.roles.some((roleL2: string) => profile.roles.includes(roleL2)) ? (
+                        !routeL2.children ? (
                           <Route
-                            path={routeChildren.link}
-                            exact={routeChildren.exact}
+                            path={routeL2.link}
+                            exact={routeL2.exact}
                             // eslint-disable-next-line
-                            key={inc1}
-                            component={routeChildren.main}
+                            key={j}
+                            component={routeL2.main}
                           />
                         ) : (
-                          routeChildren.children.map((routeChildren1: any, inc2: any) => (
-                            <Route
-                              path={routeChildren1.link}
-                              exact={routeChildren1.exact}
-                              // eslint-disable-next-line
-                              key={inc2}
-                              component={routeChildren1.main}
-                            />
-                          ))
+                          // eslint-disable-next-line no-nested-ternary
+                          routeL2.children.map((routeL3: any, k: any) =>
+                            // eslint-disable-next-line no-nested-ternary
+                            routeL3.roles &&
+                            profile.roles &&
+                            routeL3.roles.some((roleL3: string) =>
+                              profile.roles.includes(roleL3)
+                            ) ? (
+                              !routeL3.children ? (
+                                <Route
+                                  path={routeL3.link}
+                                  exact={routeL3.exact}
+                                  // eslint-disable-next-line
+                                  key={k}
+                                  component={routeL3.main}
+                                />
+                              ) : (
+                                routeL3.children.map((routeL4: any, m: any) =>
+                                  routeL4.roles &&
+                                  profile.roles &&
+                                  routeL4.roles.some((roleL4: string) =>
+                                    profile.roles.includes(roleL4)
+                                  ) ? (
+                                    <Route
+                                      path={routeL4.link}
+                                      exact={routeL4.exact}
+                                      // eslint-disable-next-line
+                                      key={m}
+                                      component={routeL4.main}
+                                    />
+                                  ) : (
+                                    ''
+                                  )
+                                )
+                              )
+                            ) : (
+                              ''
+                            )
+                          )
                         )
+                      ) : (
+                        ''
                       )
                     )
                   )
+                ) : (
+                  ''
                 )
               )}
-              <Route component={Overview} />
+              <Route component={NotFound} />
             </Switch>
           </div>
 

@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
-import {sideCities} from "../../helpers/utils";
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {sideCities} from '../../helpers/utils';
 
 export default function useGetOverviewOfVaccinationTable(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
@@ -16,10 +16,13 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
   const getIt = async (params: any) => {
     setLoading(true);
     try {
-      const {data: result} = await hcsService.getVaccinationOverview({
-        ...params,
-        lang: 'fa'
-      }, {cancelToken: source.token});
+      const {data: result} = await hcsService.getVaccinationOverview(
+        {
+          ...params,
+          lang: 'fa',
+        },
+        {cancelToken: source.token}
+      );
       const normalizedData: any[] = [];
       result.forEach((item: any, index: number) => {
         // eslint-disable-next-line
@@ -34,7 +37,7 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
           unknownInformation: 0,
           allDosesPercentage:
             item.gtDosesToTotalDosesPercentage[0] -
-            item.totalNonVaccinesCountToMembersCountPercentage || 0,
+              item.totalNonVaccinesCountToMembersCountPercentage || 0,
           allDoses: item.gtDoses['0'] || 0,
           noDose: item.totalNonVaccinesCountToMembersCountPercentage,
           // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
@@ -50,11 +53,15 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
 
       setData([...normalizedData]);
       setOrgDataset([...normalizedData]);
+      setError(false)
+      setLoading(false);
       // setFilterType({name: 'کمترین', enName: 'LOWEST'});
-    } catch (e: any) {
-      setError(e.message || '');
-      console.log(e);
-    } finally {
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || '');
       setLoading(false);
     }
   };
@@ -67,10 +74,9 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
     // eslint-disable-next-line consistent-return
     return () => {
       source.cancel('Operation canceled by the user.');
-      setData([])
+      setData([]);
     };
   }, [query]);
-
 
   const location = useLocation();
   const history = useHistory();
@@ -85,17 +91,16 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
       return item.name === provinceName;
     });
     if (existsCity) {
-      getIt({...query, 'province': provinceName});
+      getIt({...query, province: provinceName});
     } else {
-      history.push('/dashboard/health/transport/province');
+      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {
-      setData([])
+      setData([]);
       source.cancel('Operation canceled by the user.');
     };
   }, [location.search, query]);
 
   return {loading, error, data, setData, orgDataset};
 }
-

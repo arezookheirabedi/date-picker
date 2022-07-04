@@ -5,7 +5,7 @@ import Charts from 'src/components/Charts';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
-import {converters} from '../constant';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 
 const {HeadlessChart} = Charts;
 
