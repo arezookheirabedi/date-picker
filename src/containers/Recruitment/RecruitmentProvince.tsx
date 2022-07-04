@@ -43,6 +43,8 @@ const RecruitmentProvince = () => {
         destinationId="recruitment-overview"
         // selectDefault
       />
+
+
       <OverviewProvince cityTitle={cityTitle}/>
       <OverviewCategoriesProvince cityTitle={cityTitle}/>
       <OverviewPatientsProvince cityTitle={cityTitle}/>

@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React, {useEffect} from 'react';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
-import {useHistory, useLocation} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {addTotalStudentMembersAc} from 'src/store/action_creators';
-import {sideCities} from 'src/helpers/utils';
 import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import studentPositiveTest from 'src/assets/images/icons/student-positive-test.svg';
+import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
+import useGetTestResults from 'src/hooks/apis/useGetTestResults';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalStudent from '../../../assets/images/icons/graduation.svg';
 import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
@@ -15,95 +14,29 @@ import saveIcon from '../../../assets/images/icons/save-color.svg';
 import deadIcon from '../../../assets/images/icons/dead-color.svg';
 import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
 import testIcon from '../../../assets/images/icons/test-color.svg';
-import vaccineService from '../../../services/vaccine.service';
-import hcsService from '../../../services/hcs.service';
-import {
-  IInitialPcrInfo,
-  IInitialVacinatelInfo,
-  initialPcrInfo,
-  initialVacinatelInfo,
-} from '../public/constant';
 
 interface OverviewSchoolStudentsProps {
   cityTitle: any;
 }
 
 const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
-  const [loading, setLoading] = useState(false);
-  const [testResultLoading, setTestResultLoading] = useState(false);
-  const [numberOf, setNumberOf] = useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-  const [testResultInfo, setTestResultInfo] = useState<IInitialPcrInfo>(initialPcrInfo);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const location = useLocation();
-  const history = useHistory();
-
   const dispatch = useDispatch();
-
-  const getNumberOf = async (province: string) => {
-    setLoading(true);
-    try {
-      const {data} = await vaccineService.membersGeneral(
-        {tag: 'edu', category: 'type', categoryValue: 'STUDENT', province},
-        {cancelToken: source.token}
-      );
-      setNumberOf((prev: any) => {
-        return {
-          ...prev,
-          ...data,
-        };
-      });
-      dispatch(addTotalStudentMembersAc(data.totalPopulation || 0));
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getTestResults = async (province: any) => {
-    setTestResultLoading(true);
-    try {
-      const {data} = await hcsService.testResults(
-        {tag: 'edu', category: 'type', categoryValue: 'STUDENT', province},
-        {cancelToken: source.token}
-      );
-      setTestResultInfo((prev: any) => {
-        return {
-          ...prev,
-          ...data,
-        };
-      });
-      // setNumberOf({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTestResultLoading(false);
-    }
-  };
+  const {
+    data: numberOf,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error,
+  } = useGetNumberOf({tag: 'edu', category: 'type', categoryValue: 'STUDENT'}, true);
+  const {
+    data: testResultInfo,
+    loading: testResultLoading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error: errorTestResult,
+  } = useGetTestResults({tag: 'edu', category: 'type', categoryValue: 'STUDENT'}, true);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      getNumberOf(provinceName);
-      getTestResults(provinceName);
-    } else {
-      history.push('/dashboard/school/province');
-    }
-
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
-
+    dispatch(addTotalStudentMembersAc(numberOf.totalPopulation || 0));
+  }, [numberOf]);
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center" id="school-overview">
       <legend className="mx-auto px-3 text-black">

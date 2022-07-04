@@ -1,133 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import CategoryDonut from 'src/containers/Guild/components/CategoryDonut';
-import hcsService from 'src/services/hcs.service';
 import Table from 'src/components/TableScopeSort';
-import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
-import Calendar from 'src/components/Calendar';
-import DatePickerModal from 'src/components/DatePickerModal';
-// @ts-ignore
-import moment from 'moment-jalaali';
-import {useHistory, useLocation} from 'react-router-dom';
+import useGetOverviewOfVaccinationTable from 'src/hooks/apis/useGetOverviewOfVaccinationTable';
+import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 
 const OverviewOfVaccination: React.FC<{}> = () => {
-  const location = useLocation();
-  const history = useHistory();
-  const [dataset, setDataset] = useState<any>([]);
-  const [datasetLoading, setDatasetLoading] = useState<any>([]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-    clear: false,
-  }) as any;
   const [query, setQuery] = useState({
-    from: null,
+    tag: 'edu',
+    category: 'grade',
     to: null,
-    province: null,
   }) as any;
-  const cancelToken = cancelTokenSource();
 
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
+  const {
+    data: dataset,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error,
+  } = useGetOverviewOfVaccinationTable(query, true);
 
-  const getOverviewByVaccine = async (params: any) => {
-    setDatasetLoading(true);
-
-    try {
-      const {data} = await hcsService.getVaccinationOverview(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // eslint-disable-next-line
-
-        normalizedData.push({
-          id: `ovvac_${index}`,
-          name: item.categoryValue || 'نامشخص',
-          firstDosePercentage: item.dosesToMembersCountPercentage[1] || 0,
-          secondDosePercentage: item.dosesToMembersCountPercentage[2] || 0,
-          thirdDosePercentage: item.dosesToMembersCountPercentage[3] || 0,
-          otherDose: item.gtDosesToTotalDosesPercentage[3] || 0,
-          unknownInformation: 0,
-          allDoses: item.gtDoses['0'] || 0,
-          allDosesPercentage:
-            item.gtDosesToTotalDosesPercentage[0] -
-              item.totalNonVaccinesCountToMembersCountPercentage || 0,
-          noDose: item.totalNonVaccinesCountToMembersCountPercentage || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-    } catch (e: any) {
-      console.log(e);
-    } finally {
-      setDatasetLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQuery({
-        ...query,
-        category: 'grade',
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: null,
-        resultReceiptDateTo: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getOverviewByVaccine({...query, tag: 'edu', category: 'grade', province: provinceName});
-    } else {
-      history.push('/dashboard/school/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        setDataset([]);
-        cancelRequest();
-      }
-    };
-  }, [location.search, query]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
   return (
     <fieldset className="mb-16  p-4 text-center">
       <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
         <div className="align-center flex space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
-            {showDatePicker ? (
-              <DatePickerModal
-                setSelectedDayRange={setSelectedDayRange}
-                selectedDayRange={selectedDayRange}
-                setShowDatePicker={setShowDatePicker}
-                showDatePicker
-              />
-            ) : null}
-
-            <Calendar
-              action={focusFromDate}
-              from={selectedDayRange.from}
-              to={selectedDayRange.to}
-              setSelectedDayRange={setSelectedDayRange}
-            />
+            <SingleDatepickerQuery query={query} setQuery={setQuery} />
           </div>
         </div>
       </div>
@@ -135,7 +31,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           totalItems={dataset.length || 0}
-          loading={datasetLoading}
+          loading={loading}
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[

@@ -4,8 +4,8 @@ import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import useGetOverviewOfPationColumnChart from 'src/hooks/apis/useGetOverviewOfPationColumnChart';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Spinner from '../../Spinner';
-import {converters} from './constant';
 
 const {HeadlessChart} = Charts;
 

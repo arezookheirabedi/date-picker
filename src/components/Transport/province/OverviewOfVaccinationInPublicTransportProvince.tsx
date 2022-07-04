@@ -14,8 +14,7 @@ import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
 import Spinner from '../../Spinner';
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
-import DatepickerQuery from "../../DatepickerQuery";
-
+import SingleDatepickerQuery from "../../SingleDatepickerQuery";
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps {
   cityTitle: any;
@@ -191,7 +190,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
 
         <div className="flex align-center justify-start space-x-5 rtl:space-x-reverse mb-8">
           <div className="flex align-center justify-between">
-            <DatepickerQuery query={query} setQuery={setQuery}/>
+            <SingleDatepickerQuery query={query} setQuery={setQuery}/>
           </div>
         </div>
 

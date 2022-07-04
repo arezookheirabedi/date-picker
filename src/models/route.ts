@@ -10,6 +10,7 @@ export interface IRoute {
   exact?: boolean;
   disabled?: boolean;
   inMenu?: boolean;
+  roles: string[];
   showGuildList?: boolean;
   deleteable?: boolean;
   children?: IRoute[];

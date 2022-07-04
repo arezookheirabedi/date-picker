@@ -1,11 +1,10 @@
 import {useEffect, useState} from 'react';
-import {useHistory, useLocation} from "react-router-dom";
+import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
-import {sideCities} from "../../helpers/utils";
+import {sideCities} from '../../helpers/utils';
 
-
-interface IInitialTestResults {
+export interface IInitialTestResults {
   positiveMembersCount: number;
   recoveredMembersCount: number;
   testResultsCount: number;
@@ -15,7 +14,7 @@ interface IInitialTestResults {
   positiveMembersCountToTestResultsCountPercentage: number;
 }
 
-const initialTestResults = {
+export const initialTestResults = {
   positiveMembersCount: 0,
   positiveMembersCountToTestResultsCountPercentage: 0,
   positiveMembersCountToTotalPopulationPercentage: 0,
@@ -44,9 +43,14 @@ export default function useGetTestResults(query: any, hasProvince: boolean = fal
           ...result,
         };
       });
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
       setError(err.message || '');
-    } finally {
       setLoading(false);
     }
   };
@@ -76,9 +80,9 @@ export default function useGetTestResults(query: any, hasProvince: boolean = fal
       return item.name === provinceName;
     });
     if (existsCity) {
-      getTestResults({...query, 'province': provinceName});
+      getTestResults({...query, province: provinceName});
     } else {
-      history.push('/dashboard/health/transport/province');
+      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {
