@@ -89,7 +89,7 @@ const OverviewVaccinePercentage: React.FC<IVaccineStatus> = ({
           infoText="درصد  افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           icon={personGrayVaccine}
           text="درصد افراد واکسینه نشده"
-          count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
+          count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
           loading={loading}
         />
         <Statistic
