@@ -103,7 +103,7 @@ const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitl
           <Statistic
              icon={wheatIcon}
              text="مجموع پروانه کسب‌ های منطبق در صمت و سیما"
-             count={bakeries.numberOfValidGuildCode || 0}
+             count={bakeries.numberOfConformityGuildCode || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی موجود در سامانه سیما  دارای پروانه کسب معتبر صادر شده از وزارت صمت"
@@ -111,7 +111,7 @@ const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitl
            <Statistic
              icon={redWheatIcon}
              text="مجموع پروانه کسب‌ های نامنطبق در صمت و سیما"
-             count={bakeries.numberOfNotValidGuildCode || 0}
+             count={bakeries.numberOfNonConformityGuildCode || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه منطبق است و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
@@ -119,7 +119,7 @@ const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitl
            <Statistic
              icon={whiteWheatIocn}
              text="مجموع پروانه کسب‌ های ناموجود در صمت و سیما"
-             count={0}
+             count={bakeries.numberOfGuildCodeDoesNotExit || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه نامنطبق و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."

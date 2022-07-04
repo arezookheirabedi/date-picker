@@ -164,14 +164,14 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
                 render: (v: any) => <span>{v === "NULL" ? '-' : v}</span>,
               },
               {
-                name: 'شناسه پروانه سیما',
-                key: 'simaId',
-                render: (v: any) => <span>{v}</span>,
-              },
-              {
                 name: 'نام و نام‌خانوادگی',
                 key: 'fullName',
                 render: (v: any) => <span>{v || '-'}</span>,
+              },
+              {
+                name: 'شناسه پروانه سیما',
+                key: 'simaId',
+                render: (v: any) => <span>{v}</span>,
               },
               {
                 name: 'شماره ملی',
