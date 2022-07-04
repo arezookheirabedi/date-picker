@@ -87,27 +87,30 @@ const optionChart = {
   },
 };
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
+  const[query,setQuery]=useState({to:null})
   const location = useLocation();
   const history = useHistory();
-  const [chartData, setChartData] = useState<any>();
   const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<any>(null);
+
   const [loading, setLoading] = useState(false);
-  const [queryParams, setQueryParams] = useState({
-    to: null,
-  });
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [chartData, setChartData] = useState<any>();
+
 
   const cancelToken = cancelTokenSource();
+
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  // eslint-disable-next-line
-  const getLinearOverview = async (params: any) => {
-    setLoading(true);
+
+  const getIt = async (params: any = {}) => {
     setErrorMessage(null);
+    setLoading(true);
     try {
-      const {data} = await hcsService.numberOf(params, {CancelToken: cancelToken.token});
-      // const {data} = await hcsService.dosesTagBased(params);
+      const {data}= await hcsService.numberOf(params, {
+        cancelToken: cancelToken.token,
+      });
+
       const finalResponse: any = {...data};
       if (!isEmpty(finalResponse)) {
         const dataChart: any = {
@@ -180,12 +183,17 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
         setChartData({...newInitialData});
       }
-    } catch (error: any) {
-      setErrorMessage(error.message || 'خطایی در عملیات');
-    } finally {
+      setLoading(false);
+    } catch (errors: any) {
+      if (errors.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -193,21 +201,22 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
-
     if (existsCity) {
-      getLinearOverview({...queryParams, province: provinceName});
+      getIt({...query, province: provinceName});
     } else {
       history.go(-1);
     }
+    // eslint-disable-next-line consistent-return
     return () => {
-        cancelRequest();
-        setChartData({});
+      setErrorMessage(null)
+      cancelRequest();
+      setChartData({});
+
     };
-  }, [queryParams,location.search, shouldUpdate]);
+  }, [location.search, query,shouldUpdate]);
 
 
 
-;
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -218,7 +227,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-            <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams} />
+            <SingleDatepickerQuery query={query} setQuery={setQuery} />
             </div>
           </div>
 
