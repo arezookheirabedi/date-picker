@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
 
 // @ts-ignore
 // import moment from 'moment-jalaali';
@@ -9,7 +8,6 @@ import ButtonToggle from '../../Form/ButtonToggle';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
 
 import {sidesCities} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
@@ -26,19 +24,19 @@ import inactivityEnableIcon from '../../../assets/images/icons/inactivity-enable
 import unusualTransactionIcon from '../../../assets/images/icons/unusualTransaction.svg';
 import unusualTransactionEnableIcon from '../../../assets/images/icons/unusualTransaction-enable.svg';
 
+// hooks
+import useOverviewOfAudit from "../../../hooks/apis/bakery/useOverviewOfAudit";
+
 const OverviewAudit: React.FC<{}> = () => {
 
+  // call bakery hook
+  const {loading, list: dataset, count, setCount, filteredDataset, setFilteredDataset} = useOverviewOfAudit();
+
   // states
-  const [loading, setLoading] = useState(false);
   const [flourQuota, setFlourQuota] = useState<any>(false);
   const [isExtortion, setIsExtortion] = useState<any>(false);
   const [workTime, setworkTime] = useState<any>(false);
   const [serviceType, setServiceType] = useState(null) as any;
-  const [dataset, setDataset] = useState<any>([]);
-  const [filteredDataset, setFilteredDataset] = useState<any>([]);
-  const [count, setCount] = useState<any>(0);
-  const { CancelToken } = axios;
-  const source = CancelToken.source();
   const [query, setQuery] = useState<string>("");
   const [bakeryWithoutTransaction, setBakeryWithoutTransaction] = useState<any>(false);
   const [unusualTransaction, setUnusualTransaction] = useState<any>(false);
@@ -53,55 +51,7 @@ const OverviewAudit: React.FC<{}> = () => {
   //   resultReceiptDateTo: null,
   // }) as any;
 
-   // const [showDatePicker, setShowDatePicker] = useState(false);
-
-
-  // const overviewTestResults = async (from: any = null, to: any = null) => {
-  const overviewTestResults = async () => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "inspectionNeedDetail" },
-        { cancelToken: source.token }
-      );
-      // const {data} = await bakeryService.bakeryAudit({
-      //   lang: 'fa',
-      //   // from,
-      //   // to,
-      // });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          ...item,
-          flourQuota: item.flourQuota === "TRUE",
-          isExtortion: item.isExtortion === "TRUE",
-          workTime: item.workTime === "TRUE",
-          bakeryWithoutTransaction: item.bakeryWithoutTransaction === "TRUE",
-          unusualTransaction: item.UnusualTransaction === "TRUE"
-        });
-      });
-      setCount(normalizedData.length);
-      setDataset([...normalizedData]);
-      setFilteredDataset([...normalizedData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  useEffect(() => {
-    overviewTestResults();
-    // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, []);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);

@@ -1,8 +1,20 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {sideCities} from '../../helpers/utils';
 
-const initialTestResults = {
+export interface IInitialTestResults {
+  positiveMembersCount: number;
+  recoveredMembersCount: number;
+  testResultsCount: number;
+  totalPopulation: number;
+  positiveMembersCountToTotalPopulationPercentage: number;
+  recoveredMembersCountToTotalPopulationPercentage: number;
+  positiveMembersCountToTestResultsCountPercentage: number;
+}
+
+export const initialTestResults = {
   positiveMembersCount: 0,
   positiveMembersCountToTestResultsCountPercentage: 0,
   positiveMembersCountToTotalPopulationPercentage: 0,
@@ -12,15 +24,15 @@ const initialTestResults = {
   totalPopulation: 0,
 };
 
-export default function useGetTestResults(query : any) {
+export default function useGetTestResults(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [data, setData] = useState<any>(initialTestResults);
+  const [data, setData] = useState<IInitialTestResults>(initialTestResults);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getTestResults = async (params : any) => {
+  const getTestResults = async (params: any) => {
     setLoading(true);
     setError(false);
     try {
@@ -31,20 +43,53 @@ export default function useGetTestResults(query : any) {
           ...result,
         };
       });
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
-      setError(err.message || '')
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || '');
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (hasProvince) {
+      return;
+    }
     getTestResults(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       setData(initialTestResults);
       source.cancel('Operation canceled by the user.');
     };
   }, []);
+
+  const location = useLocation();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getTestResults({...query, province: provinceName});
+    } else {
+      history.go(-1);
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData(initialTestResults);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search]);
 
   return {loading, error, data};
 }

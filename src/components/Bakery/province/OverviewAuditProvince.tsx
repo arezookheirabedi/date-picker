@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
 
-import axios from 'axios';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -14,7 +13,6 @@ import {sidesCities} from '../../../helpers/utils';
 
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
 import chartBoxIcon from '../../../assets/images/icons/chart-box.svg';
 import chartBoxActiveIcon from '../../../assets/images/icons/chart-box-active.svg';
 import extortionIcon from '../../../assets/images/icons/extortion.svg';
@@ -24,72 +22,45 @@ import clockActiveIcon from '../../../assets/images/icons/clock-active.svg';
 import inactivityEnableIcon from '../../../assets/images/icons/inactivity-enable.svg';
 import unusualTransactionEnableIcon from '../../../assets/images/icons/unusualTransaction-enable.svg';
 
+// hooks
+import useOverviewOfAuditProvince from "../../../hooks/apis/bakery/useOverviewOfAuditProvince";
+
 interface OverviewAuditProvinceProps {
   cityTitle?: any;
 }
 
 const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}) => {
+
+  // call bakery hook
+  const {
+    loading, 
+    list: dataset, 
+    count, 
+    setCount, 
+    filteredDataset, 
+    setFilteredDataset,
+    setProvinceName
+  } = useOverviewOfAuditProvince();
+
+  // states
   const location = useLocation();
   const history = useHistory();
-  const [loading, setLoading] = useState<any>(false);
   const [flourQuota, setFlourQuota] = useState<any>(false);
   const [isExtortion, setIsExtortion] = useState<any>(false);
   const [workTime, setworkTime] = useState<any>(false);
   const [bakeryWithoutTransaction, setBakeryWithoutTransaction] = useState<any>(false);
   const [unusualTransaction, setUnusualTransaction] = useState<any>(false);
-  const [count, setCount] = useState<any>(0);
-
-  const [dataset, setDataset] = useState<any>([]);
-  const [filteredDataset, setFilteredDataset] = useState<any>([]);
   // const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  }) as any;
+  // const [selectedDayRange, setSelectedDayRange] = useState({
+  //   from: null,
+  //   to: null,
+  // }) as any;
   // const [query, setQuery] = useState({
   //   resultReceiptDateFrom: null,
   //   resultReceiptDateTo: null,
   //   province: null,
   // }) as any;
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  // const overviewTestResults = async (from: any = null, to: any = null, province: any) => {
-    const overviewTestResults = async (province : any) => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "inspectionNeedDetail" },
-        { cancelToken: source.token }
-      );
-      // console.log(data);
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          ...item,
-          flourQuota: item.flourQuota === "TRUE",
-          isExtortion: item.isExtortion === "TRUE",
-          workTime: item.workTime === "TRUE",
-          bakeryWithoutTransaction: item.bakeryWithoutTransaction === "TRUE",
-          unusualTransaction: item.UnusualTransaction === "TRUE"
-        });
-      });
-      const sortData = normalizedData.filter(item => {
-        return item.province.trim() === province
-      })
-      setCount(sortData.length)
-      setDataset([...sortData]);
-      setFilteredDataset([...sortData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
@@ -103,7 +74,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
     });
     if (existsCity) {
       // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      overviewTestResults(provinceName);
+      setProvinceName(provinceName);
       // getOverviewByCategory({
       //   resultStatus: 'POSITIVE',
       //   recoveredCount: true,
@@ -115,11 +86,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
     } else {
       history.push('/dashboard/bakery/province');
     }
-    return () => {
-      setDataset([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
+  }, [cityTitle]);
 
  
   // useEffect(() => {

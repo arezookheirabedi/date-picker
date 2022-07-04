@@ -1,33 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import Highcharts from "highcharts/highstock";
-// import vaccineService from 'src/services/vaccine.service';
-// import axios from 'axios';
 
 import Charts from '../../Charts';
-import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
-import hcsService from "../../../services/hcs.service";
-
 import Spinner from '../../Spinner';
+import useGetOverviewOfTheLatestVaccinationStatusColumnChart
+  from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatusColumnChart";
 
 const {HeadlessChart} = Charts;
-
-const initialData = {
-  categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-  series: [
-    {
-      name: 'واکسیناسیون',
-      data: [
-        {name: 'دوز اول', y: 0, color: '#F3BC06'},
-        {name: 'دوز دوم', y: 0, color: '#209F92'},
-        {name: 'دوز سوم', y: 0, color: '#004D65'},
-        {name: 'دوز چهارم', y: 0, color: '#BFDDE7'},
-        {name: 'دوز پنجم', y: 0, color: '#716DE3'},
-        {name: 'واکسن نزده ها', y: 0, color: '#FF0060'},
-      ],
-    },
-  ]
-} as any;
 
 const converters = {
   fa(number: any) {
@@ -122,71 +102,9 @@ const optionChart = {
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
 
-  // const history = useHistory();
-  // const [categories, setCategories] = useState<any[]>();
-  // eslint-disable-next-line
-  const [dataset, setDataset] = useState<any[]>(initialData);
-  const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getVaccinateInfo = async () => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.getPeopleVaccine(
-        {
-          tag: 'employee',
-        },
-        {cancelToken: cancelToken.token}
-      );
-
-      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-      const dosesToTotalPopulationPercentage = {...initialDoses, ...data.dosesToTotalPopulationPercentage}
-      const dataTemp = {
-        categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-        series: [
-          {
-            name: 'واکسیناسیون',
-            data: [
-              {name: 'دوز اول', y: dosesToTotalPopulationPercentage['1'], color: '#F3BC06'},
-              {name: 'دوز دوم', y: dosesToTotalPopulationPercentage['2'], color: '#209F92'},
-              {name: 'دوز سوم', y: dosesToTotalPopulationPercentage['3'], color: '#004D65'},
-              {name: 'دوز چهارم', y: dosesToTotalPopulationPercentage['4'], color: '#BFDDE7'},
-              {name: 'دوز پنجم', y: dosesToTotalPopulationPercentage['5'], color: '#716DE3'},
-              {
-                name: 'واکسن نزده ها',
-                y: data.totalNonVaccinesCountToTotalPopulationPercentage || 0,
-                color: '#FF0060'
-              },
-            ],
-          },
-        ]
-      } as any;
-
-      setDataset(dataTemp)
-    } catch (error) {
-      // eslint-disable-next-line
-      setErrorMessage(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getVaccinateInfo();
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setDataset(initialData)
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, []);
+  const {data: dataset, loading, error: errorMessage} = useGetOverviewOfTheLatestVaccinationStatusColumnChart({
+    tag: 'employee',
+  })
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

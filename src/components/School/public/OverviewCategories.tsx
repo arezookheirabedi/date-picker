@@ -1,172 +1,33 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-// @ts-ignore
-import moment from 'moment-jalaali';
+import React, {useState} from 'react';
+import DatepickerQuery from 'src/components/DatepickerQuery';
 import Table from 'src/components/TableScopeSort';
-import DatePickerModal from '../../DatePickerModal';
+import useGetOverviewOfCategories from 'src/hooks/apis/useGetOverviewOfCategories';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 
 const OverviewCategories: React.FC<{}> = () => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-
-  const [selectedDayRange, setSelectedDayRange] = useState({
+  const [query, setQuery] = useState({
     from: null,
     to: null,
-    clear: false,
-  }) as any;
-  const [query, setQuery] = useState({
-    resultReceiptDateFrom: null,
-    resultReceiptDateTo: null,
-  }) as any;
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const overviewTestResults = async (from: any = null, to: any = null) => {
-    try {
-      setLoading(true);
-      const {data} = await hcsService.tableOverviewTestResults('edu', 'grade', {
-        lang: 'fa',
-        from,
-        to,
-      });
-      // console.log(data);
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryValue,
-          employeesCount: item.membersCount || 0,
-          infectedCount: item.positiveMembersCount || 0,
-          infectedPercent: item.positiveMembersCountToMembersCountPercentage || 0,
-          saveCount: item.recoveredMembersCount || 0,
-          // deadCount: 120,
-        });
-        // }
-      });
-      setDataset([...normalizedData]);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // async function getOverviewByCategory(params: any) {
-  //   setLoading(true);
-  //   try {
-  //     const {data} = await hcsService.membersTagBased(params, {cancelToken: source.token});
-  //     const sortData: any = [];
-
-  //     schoolTypes.forEach(item => {
-  //       const tm = data.find((i: any) => i.tag === item);
-  //       sortData.push(tm);
-  //     });
-
-  //     // console.log(sortData);
-  //     // console.log(schoolTypes);
-
-  //     const normalizedData: any[] = [];
-  //     sortData.forEach((item: any, index: number) => {
-  //       if (item.total !== 0) {
-  //         normalizedData.push({
-  //           id: `ovca_${index}`,
-  //           name: item.tag || 'نامشخص',
-  //           employeesCount: item.total || 0,
-  //           infectedCount: item.positiveCount || 0,
-  //           infectedPercent: (((item.positiveCount || 0) * 100) / (item.total || 0)).toFixed(4),
-  //           saveCount: item.recoveredCount || 0,
-  //           // deadCount: 120,
-  //         });
-  //       }
-  //     });
-  //     setDataset([...normalizedData]);
-  //     setOrgDataset([...normalizedData]);
-  //   } catch (error) {
-  //     // eslint-disable-next-line
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  useEffect(() => {
-    // getOverviewByCategory(query);
-    overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, [query]);
-
-  // useEffect(() => {
-  //   getOverviewByCategory({
-  //     organization: 'education',
-  //     from: '',
-  //     to: '',
-  //     tagPattern: '^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$',
-  //     tags: ['^(((?=.*#grade#)(^(?!.*(_)).*$))|((?=.*#type#)(^(?!.*(_)).*$))).*$'].join(','),
-  //   });
-
-  //   return () => {
-  //     setDataset([]);
-  //     source.cancel('Operation canceled by the user.');
-  //   };
-  // }, []);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        resultReceiptDateTo: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        resultReceiptDateFrom: null,
-        resultReceiptDateTo: null,
-      });
-    }
-  }, [selectedDayRange]);
-
+    tag: 'edu',
+    category: 'grade',
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {
+    data: dataset,
+    loading,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    error,
+  } = useGetOverviewOfCategories(query);
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به آموزش و پرورش کشور</legend>
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">نگاه کلی به آموزش و پرورش کشور</legend>
 
-      <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center justify-start">
-          {showDatePicker ? (
-            <DatePickerModal
-              setSelectedDayRange={setSelectedDayRange}
-              selectedDayRange={selectedDayRange}
-              setShowDatePicker={setShowDatePicker}
-              showDatePicker
-            />
-          ) : null}
-          <Calendar
-            action={focusFromDate}
-            from={selectedDayRange.from}
-            to={selectedDayRange.to}
-            setSelectedDayRange={setSelectedDayRange}
-          />
+      <div className="mb-8 flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex justify-start">
+          <DatepickerQuery query={query} setQuery={setQuery} />
         </div>
       </div>
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={loading}
           dataSet={[...dataset]}

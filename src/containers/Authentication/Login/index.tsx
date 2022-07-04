@@ -143,7 +143,11 @@ export default function Login() {
             autoComplete="new-password"
             className={`${
               errors.password ? 'u-border-red u-color-red' : ''
+<<<<<<< HEAD
             } ltr placeholder-rtl py-5 px-2.5`}
+=======
+            }  ltr placeholder-rtl py-5 px-2.5`}
+>>>>>>> develop
             type={`${typeInputText ? 'text' : 'password'}`}
             {...register('password', loginValidation.password)}
             placeholder="رمز عبور"
@@ -169,8 +173,15 @@ export default function Login() {
             maxLength={7}
             autoComplete="off"
             type="text"
+<<<<<<< HEAD
             placeholder="کد امنیتی"
             className={`${errors.captcha ? 'u-border-red u-color-red' : ''} ltr placeholder-rtl`}
+=======
+            placeholder="  کد امنیتی"
+            className={`${
+              errors.captcha ? 'u-border-red u-color-red' : ''
+            }   ltr placeholder-rtl py-5 px-2.5 `}
+>>>>>>> develop
           />
           {errors.captcha && <span className="inputError">{errors.captcha.message}</span>}
         </div>

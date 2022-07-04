@@ -1,11 +1,8 @@
-import React, {useEffect, useState} from 'react';
-
-// api services
-import axios from 'axios';
-import bakeryService from '../../../services/bakery.service';
-
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
+
+// hooks
+import useOverviewOfBakery from "../../../hooks/apis/bakery/useOverviewOfBakery";
 
 // images
 import tpsIcon from '../../../assets/images/icons/tps.svg';
@@ -14,44 +11,10 @@ import activeTimeIcon from '../../../assets/images/icons/active-time.svg';
 import unusualTransactionIcon from '../../../assets/images/icons/unusual-Transaction.svg';
 import bakeryWithoutTransactionIcon from '../../../assets/images/icons/bakery-WithoutTransaction.svg';
 
-const initialBakeries = {0: 0, 1: 0, 2: 0};
-const initialNumber = {
-    bakery: {...initialBakeries}
-};
-
 const OverviewBakeryInspectionNeed = () => {
-  const [loading, setLoading] = useState(false);
-  const [bakeries, setBakeries] = useState<any>(initialNumber);
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const getBakeries = async () => {
-    setLoading(true);
-    try {
-      const {data} = await bakeryService.bakeryReport(
-        {reportName: 'inspectionNeed'},
-        {cancelToken: source.token}
-      );
-      const temp = [] as any;
-      data.map((res: any) => {
-        temp.push(res.value)
-        return temp;
-      });
-      setBakeries({bakery: {...temp}})
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getBakeries();
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
+  
+  // call bakery hook
+  const {loading, list: bakeries} = useOverviewOfBakery();
  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

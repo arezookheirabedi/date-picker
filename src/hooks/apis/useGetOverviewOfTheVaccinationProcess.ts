@@ -1,29 +1,39 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
-import {convertGregorianDateToJalaliDate} from "../../helpers/utils";
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {convertGregorianDateToJalaliDate, sideCities} from '../../helpers/utils';
 
 const initialData = {
   categories: [],
-  series: [{
-    name: 'دوز اول',
-    data: []
-  }, {
-    name: 'دوز دوم',
-    data: []
-  }, {
-    name: 'دوز سوم',
-    data: []
-  }, {
-    name: 'دوز چهارم',
-    data: []
-  }, {
-    name: 'دوز پنجم',
-    data: []
-  }]
+  series: [
+    {
+      name: 'دوز اول',
+      data: [],
+    },
+    {
+      name: 'دوز دوم',
+      data: [],
+    },
+    {
+      name: 'دوز سوم',
+      data: [],
+    },
+    {
+      name: 'دوز چهارم',
+      data: [],
+    },
+    {
+      name: 'دوز پنجم',
+      data: [],
+    },
+  ],
 } as any;
 
-export default function useGetOverviewOfTheVaccinationProcess(query: any) {
+export default function useGetOverviewOfTheVaccinationProcess(
+  query: any,
+  hasProvince: boolean = false
+) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false) as any;
   const [data, setData] = useState<any[]>(initialData) as any;
@@ -32,12 +42,12 @@ export default function useGetOverviewOfTheVaccinationProcess(query: any) {
   const source = CancelToken.source();
 
   // eslint-disable-next-line
-  const getAreaChartVaccination = async (params: any) => {
+  const getIt = async (params: any) => {
     setLoading(true);
     setError(null);
     try {
       const {data: result} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
-        cancelToken: source.token
+        cancelToken: source.token,
       });
 
       const categories: any[] = [];
@@ -109,24 +119,30 @@ export default function useGetOverviewOfTheVaccinationProcess(query: any) {
       setData(() => {
         return {
           categories,
-          series: [{
-            name: 'دوز اول',
-            data: [...firstDose]
-          }, {
-            name: 'دوز دوم',
-            data: [...secondDose]
-          }, {
-            name: 'دوز سوم',
-            data: [...thirdDose]
-          }, {
-            name: 'دوز چهارم',
-            data: [...forthDose]
-          }, {
-            name: 'دوز پنجم',
-            data: [...fifthDose]
-          }]
-        }
-      })
+          series: [
+            {
+              name: 'دوز اول',
+              data: [...firstDose],
+            },
+            {
+              name: 'دوز دوم',
+              data: [...secondDose],
+            },
+            {
+              name: 'دوز سوم',
+              data: [...thirdDose],
+            },
+            {
+              name: 'دوز چهارم',
+              data: [...forthDose],
+            },
+            {
+              name: 'دوز پنجم',
+              data: [...fifthDose],
+            },
+          ],
+        };
+      });
 
       // setDataset([
       //   {
@@ -166,12 +182,41 @@ export default function useGetOverviewOfTheVaccinationProcess(query: any) {
   };
 
   useEffect(() => {
-    getAreaChartVaccination(query);
+    if (hasProvince) {
+      return;
+    }
+    getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       source.cancel('Operation canceled by the user.');
       setData(initialData);
     };
   }, []);
+
+  const location = useLocation();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getIt({...query, province: provinceName});
+    } else {
+      history.go(-1);
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData(initialData);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search]);
 
   return {loading, error, data};
 }

@@ -7,10 +7,10 @@ import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
+import {IInitialVacinatelInfo} from 'src/hooks/apis/useGetNumberOf';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialNumberOfDoses} from '../../public/constant';
 
-const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitialNumberOfDoses}> = ({
+const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitialVacinatelInfo}> = ({
   loading,
   numberOf,
 }) => {

@@ -6,7 +6,7 @@ import axios from 'axios';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
+import bakeryService from '../../../services/bakery/custom/bakery.service';
 
 const OverviewCategories: React.FC<{}> = () => {
   

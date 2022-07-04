@@ -28,6 +28,7 @@ const Recruitment: React.FC<{}> = () => {
       <OverviewOfVaccination/>
       <OverviewVaccinePerProvince/>
       <TestStatus/>
+
     </div>
   );
 };

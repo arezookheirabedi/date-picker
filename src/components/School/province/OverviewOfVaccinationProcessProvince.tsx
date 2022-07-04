@@ -1,26 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
-// import Spinner from '../../Spinner';
-import {
-  cancelTokenSource,
-  convertGregorianDateToJalaliDate,
-  msgRequestCanceled,
-  sideCities,
-} from 'src/helpers/utils';
-import hcsService from 'src/services/hcs.service';
-import {useHistory, useLocation} from 'react-router-dom';
-import {isEmpty} from 'lodash';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
+import Spinner from 'src/components/Spinner';
+import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';
+
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
-
-const converters = {
-  fa(number: any) {
-    return number.toString().replace(/\d/g, (d: any) => {
-      return String.fromCharCode(d.charCodeAt(0) + 1728);
-    });
-  },
-};
 
 const optionChart = {
   chart: {
@@ -102,124 +88,11 @@ interface OverviewOfVaccinationProvinceProps {
 const OverviewOfVaccinationProcessProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
   cityTitle,
 }) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [dataset, setDataset] = useState<any>();
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-  // eslint-disable-next-line
-  const getAreaChartVaccination = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await hcsService.accumulativeVaccinesTimeBasedReport(params, {
-        cancelToken: cancelToken.token,
-      });
-      const date: any[] = [];
-      // eslint-disable-next-line
-      let firstDose: any[] = [];
-      // eslint-disable-next-line
-      let secondDose: any[] = [];
-      // eslint-disable-next-line
-      let fourthDose: any[] = [];
-      // eslint-disable-next-line
-      let thirdDose: any[] = [];
-      // eslint-disable-next-line
-      let fifthDose: any[] = [];
-
-      data.forEach((item: any, index: number) => {
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries(item.doses)) {
-          if (Number(key) === 1) {
-            firstDose.push(Number(value));
-          }
-
-          if (Number(key) === 2) {
-            secondDose.push(Number(value));
-          }
-
-          if (Number(key) === 3) {
-            thirdDose.push(Number(value));
-          }
-          if (Number(key) === 4) {
-            fourthDose.push(Number(value));
-          }
-          if (Number(key) === 5) {
-            fifthDose.push(Number(value));
-          }
-        }
-
-        if (firstDose.length < index + 1) firstDose.push(0);
-        if (secondDose.length < index + 1) secondDose.push(0);
-        if (thirdDose.length < index + 1) thirdDose.push(0);
-        if (fourthDose.length < index + 1) fourthDose.push(0);
-        if (fifthDose.length < index + 1) fifthDose.push(0);
-        date.push(convertGregorianDateToJalaliDate(item.date));
-      });
-
-      const newData = {
-        categories: [...date],
-        series: [
-          {
-            name: 'دوز اول',
-            data: [...firstDose],
-          },
-          {
-            name: 'دوز دوم',
-            data: [...secondDose],
-          },
-          {
-            name: 'دوز سوم',
-            data: [...thirdDose],
-          },
-          {
-            name: 'دوز چهارم',
-            data: [...fourthDose],
-          },
-          {
-            name: 'دوز پنجم',
-            data: [...fifthDose],
-          },
-        ],
-      };
-      setDataset({...newData});
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getAreaChartVaccination({tag: 'edu', province: provinceName});
-      }, 500);
-    } else {
-      history.push('/dashboard/school/province');
-    }
-
-    return () => {
-      clearTimeout(idSetTimeOut);
-      cancelRequest();
-      setDataset({});
-    };
-  }, [location.search]);
+  const {
+    data: dataset,
+    loading,
+    error: errorMessage,
+  } = useOverviewOfTheVaccinationProcess({tag: 'edu'}, true);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -256,16 +129,17 @@ const OverviewOfVaccinationProcessProvince: React.FC<OverviewOfVaccinationProvin
           </div>
         </div>
 
-        {errorMessage ? (
-          <div className="p-40 text-red-500">{errorMessage}</div>
-        ) : (
-          <>
-            <HeadlessChart data={dataset} optionsProp={optionChart} />
-
-            {isEmpty(dataset) && !loading && !errorMessage && (
-              <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-            )}
-          </>
+        {loading && (
+          <div className="p-40">
+            <Spinner />
+          </div>
+        )}
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {!loading && dataset.categories.length > 0 && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
+        )}
+        {dataset.categories.length === 0 && !loading && !errorMessage && (
+          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
     </fieldset>

@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import React from "react";
 
 import Statistic from "../../../containers/Guild/components/Statistic";
 import YellowVaccine from "../../../assets/images/icons/big-yellow-vaccine.svg";
@@ -8,10 +7,8 @@ import PurpleVaccine from "../../../assets/images/icons/big-purpule-vaccine.svg"
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
 import VaccineIcon from "../../../assets/images/icons/vaccine-color.svg";
 import GreyVaccine from "../../../assets/images/icons/big-gray-vaccine.svg";
-import {IInitialNumberOfDoses, initialNumberOfDoses} from "../../Passengers/public/constant";
-import {cancelTokenSource, msgRequestCanceled, sideCities} from "../../../helpers/utils";
 // import passengerService from "../../../services/passenger.service";
-import hcsService from "../../../services/hcs.service";
+import useGetOverviewOfTheLatestVaccinationStatus from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatus";
 
 
 interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvinceProps {
@@ -19,65 +16,14 @@ interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvincePro
 }
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React.FC<OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvinceProps> = ({cityTitle}) => {
+
   // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [numberOf, setNumberOf] = useState<IInitialNumberOfDoses>(initialNumberOfDoses);
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getVaccinateInfo = async (province: any) => {
-    setLoading(true);
-    try {
-      const res = await hcsService.getPeopleVaccine(
-        {
-          tag: 'employee',
-          province
-        },
-        {cancelToken: cancelToken.token}
-      );
-      console.log('res => ', res);
-      if (res.status === 200) {
-        const newData = {...initialNumberOfDoses, ...res.data};
-        setNumberOf(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const location = useLocation();
-  const history = useHistory();
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getVaccinateInfo(provinceName);
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
-
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setNumberOf(initialNumberOfDoses);
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [location.search]);
+  const {data: numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus({
+    tag: 'employee',
+  },true)
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت در استان &nbsp;
         {cityTitle}
@@ -169,6 +115,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
             text="درصد افراد با دوز اول"
             count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -177,6 +124,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
             text="درصد افراد با دوز دوم"
             count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -185,6 +133,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
             text="درصد افراد با دوز سوم"
             count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
             loading={loading}
+            isPercentage
           />
           <Statistic
             hasInfo
@@ -193,6 +142,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
             text="درصد افراد با دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             loading={loading}
+            isPercentage
           />
         </div>
 
@@ -208,6 +158,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
               text="درصد افراد با دوز پنجم"
               count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
               loading={loading}
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -218,6 +169,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
               text="درصد افراد واکسینه شده"
               count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
               loading={loading}
+              isPercentage
             />
           </div>
           <div className="w-1/4">
@@ -228,6 +180,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React
               text="درصد افراد واکسینه نشده"
               count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
               loading={loading}
+              isPercentage
             />
           </div>
         </div>

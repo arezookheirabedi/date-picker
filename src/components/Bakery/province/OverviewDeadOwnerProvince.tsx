@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 // import moment from 'moment-jalaali';
@@ -7,9 +6,11 @@ import {useHistory, useLocation} from 'react-router-dom';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
 
 import {sidesCities} from '../../../helpers/utils';
+
+// hooks
+import useOverviewOfRegisteredProvince from "../../../hooks/apis/bakery/useOverviewOfRegisteredProvince";
 
 interface OverviewCategoriesProvinceProps {
     cityTitle?: any;
@@ -19,11 +20,6 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
 
   const location = useLocation();
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  const [count, setCount] = useState<any>(0);
-  const { CancelToken } = axios;
-  const source = CancelToken.source();
 //   const [query, setQuery] = useState<string>("");
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -38,42 +34,13 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
 
    // const [showDatePicker, setShowDatePicker] = useState(false);
 
-
-  // const overviewTestResults = async (from: any = null, to: any = null) => {
-  const overviewTestResults = async (province:any) => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "deadOwnerdetail" },
-        { cancelToken: source.token }
-      );
-      // const {data} = await bakeryService.bakeryAudit({
-      //   lang: 'fa',
-      //   // from,
-      //   // to,
-      // });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          ...item
-        });
-      });
-      const sortData = normalizedData.filter(item => {
-        return item.province.trim() === province
-      })
-      setCount(sortData.length);
-      setDataset([...sortData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
+   const {
+    loading, 
+    list: dataset, 
+    count,
+    setProvinceName
+  } = useOverviewOfRegisteredProvince({reportName: "deadOwnerdetail"});
+  
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -82,7 +49,7 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
     });
     if (existsCity) {
       // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      overviewTestResults(provinceName);
+      setProvinceName(provinceName);
       // getOverviewByCategory({
       //   resultStatus: 'POSITIVE',
       //   recoveredCount: true,
@@ -94,11 +61,8 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
     } else {
       history.push('/dashboard/bakery/province');
     }
-    return () => {
-      setDataset([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
+    
+  }, [cityTitle]);
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);

@@ -1,21 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {useHistory, useLocation} from 'react-router-dom';
-// @ts-ignore
-import moment from 'moment-jalaali';
-// import {Menu} from '@headlessui/react';
-// import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
-import DatePickerModal from '../../DatePickerModal';
+import React, {useState} from 'react';
 // import calendar from '../../../assets/images/icons/calendar.svg';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-import {sideCities} from '../../../helpers/utils';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
-import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import SearchableSingleSelect from "../../SearchableSingleSelect";
+import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
+import DatepickerQuery from "../../DatepickerQuery";
 
 const {Line} = Charts;
 
@@ -24,26 +15,14 @@ interface OverviewPublicPatientsProvinceProps {
 }
 
 const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvinceProps> = ({
-  cityTitle,
-}) => {
-  const [data, setData] = useState([]);
-  // const [serviceType, setServiceType] = useState(null) as any;
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null) as any;
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-
+                                                                                         cityTitle,
+                                                                                       }) => {
   // eslint-disable-next-line
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
+    clear: false
   }) as any;
-
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const location = useLocation();
-  const history = useHistory();
 
   const [query, setQuery] = useState({
     // status: 'POSITIVE',
@@ -55,124 +34,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     tag: 'transport',
   });
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
-  const getColumnChartTestResult = async (params: any, province: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await hcsService.columnChartTestResultService(
-        {...params, province},
-        {
-          cancelToken: source.token,
-        }
-      );
-      setData(response.data);
-    } catch (error: any) {
-      // setErrorMessage(error.message);
-      setErrorMessage('خطا در اتصال به سرور')
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getColumnChartTestResult(query, provinceName);
-      }, 500);
-    } else {
-      history.push('/dashboard/transport/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        clearTimeout(idSetTimeOut);
-      }
-    };
-  }, [query, location.search]);
-
-  useEffect(() => {
-    return () => {
-      setData([]);
-    };
-  }, [history]);
-
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQuery({
-        ...query,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    } else {
-      setQuery({
-        ...query,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  // useEffect(() => {
-  //   if (selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-
-  //     const tmp: any[] = [];
-  //     let lastState = 'ANNUAL';
-
-  //     const start = moment(finalFromDate, 'jYYYY/jM/jD');
-  //     const end = moment(finalToDate, 'jYYYY/jM/jD');
-
-  //     const duration = moment.duration(end.diff(start));
-
-  //     if (!duration.years()) {
-  //       tmp.push(3);
-  //       lastState = 'MONTHLY';
-  //     }
-
-  //     if (!duration.months() && !duration.years()) {
-  //       tmp.push(2);
-  //       lastState = 'WEEKLY';
-  //     }
-
-  //     if (!duration.weeks() && !duration.months() && !duration.years()) {
-  //       tmp.push(1);
-  //       lastState = 'DAILY';
-  //     }
-
-  //     setQueryParams({
-  //       ...queryParams,
-  //       type: lastState,
-  //       fromDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       toDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //     });
-  //   } else {
-  //     setQueryParams({
-  //       ...queryParams,
-  //       type: 'MONTHLY',
-  //       fromDate: null,
-  //       toDate: null,
-  //     });
-  //   }
-  // }, [selectedDayRange]);
+  const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query, true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -184,7 +46,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
         <div className="flex items-center justify-between mb-10 mt-6">
           <div className="flex align-center justify-start flex-grow px-8">
             <SearchableSingleSelect
-              objectKey="serviceType"
+              objectKey="categoryValue"
               placeholder="کل حمل و نقل"
               tag="transport"
               category="serviceType"
@@ -236,20 +98,7 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
             {/*  </Menu.Items> */}
             {/* </Menu> */}
             <div className="flex align-center justify-between mr-8">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={query} setQuery={setQuery}/>
             </div>
           </div>
 
@@ -267,11 +116,11 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
         </div>
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}

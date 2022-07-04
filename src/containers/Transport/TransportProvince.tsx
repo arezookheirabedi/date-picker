@@ -12,7 +12,7 @@ import OverviewPublicPatientsProvince from '../../components/Transport/province/
 import OverviewCategoriesProvince from '../../components/Transport/province/OverviewCategoriesProvince';
 import OverviewOfVaccinationInPublicTransportProvince
   from '../../components/Transport/province/OverviewOfVaccinationInPublicTransportProvince';
-
+//
 import OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince
   from "../../components/Transport/province/OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince";
 import OverviewOfTheLatestPublicTransportVaccinationStatusProvince
@@ -61,6 +61,8 @@ const TransportProvince = () => {
         destinationId="province-overview"
         selectDefault
       />
+
+
       <OverviewDriversProvince cityTitle={cityTitle}/>
       <OverviewSamasProvince cityTitle={cityTitle}/>
       <OverviewCategoriesProvince cityTitle={cityTitle}/>
@@ -70,6 +72,8 @@ const TransportProvince = () => {
       <OverviewOfTheLatestPublicTransportVaccinationStatusProvince cityTitle={cityTitle}/>
       <OverviewOfVaccinationInPublicTransportProvince cityTitle={cityTitle}/>
       <TableOfTestsInTransportProvince cityTitle={cityTitle}/>
+
+      {/* deprecate component */}
       {/* <TestsInTransportProvince cityTitle={cityTitle} /> */}
     </div>
   );

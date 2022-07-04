@@ -1,34 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {useHistory, useLocation} from "react-router-dom";
+import React from 'react';
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 
 import Charts from '../../Charts';
-import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
-import hcsService from "../../../services/hcs.service";
 
 import Spinner from '../../Spinner';
+import useGetOverviewOfTheLatestVaccinationStatusColumnChart
+  from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatusColumnChart";
 
 
 const {HeadlessChart} = Charts;
-
-const initialData = {
-  categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-  series: [
-    {
-      name: 'واکسیناسیون',
-      data: [
-        {name: 'دوز اول', y: 0, color: '#F3BC06'},
-        {name: 'دوز دوم', y: 0, color: '#209F92'},
-        {name: 'دوز سوم', y: 0, color: '#004D65'},
-        {name: 'دوز چهارم', y: 0, color: '#BFDDE7'},
-        {name: 'دوز پنجم', y: 0, color: '#716DE3'},
-        {name: 'واکسن نزده ها', y: 0, color: '#FF0060'},
-      ],
-    },
-  ]
-} as any;
 
 const converters = {
   fa(number: any) {
@@ -127,93 +109,9 @@ interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvinceProps {
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince: React.FC<OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvinceProps> = ({cityTitle}) => {
 
-  // const history = useHistory();
-  // const [categories, setCategories] = useState<any[]>();
-  // eslint-disable-next-line
-  const [dataset, setDataset] = useState<any[]>(initialData);
-  const [errorMessage, setErrorMessage] = useState(null) as any;
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  // eslint-disable-next-line consistent-return
-  const getVaccinateInfo = async (province: any) => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.getPeopleVaccine(
-        {
-          tag: 'employee',
-          province
-        },
-        {cancelToken: cancelToken.token}
-      );
-
-      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-      const dosesToTotalPopulationPercentage = {...initialDoses, ...data.dosesToTotalPopulationPercentage}
-      const dataTemp = {
-        categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-        series: [
-          {
-            name: 'واکسیناسیون',
-            data: [
-              {name: 'دوز اول', y: dosesToTotalPopulationPercentage['1'], color: '#F3BC06'},
-              {name: 'دوز دوم', y: dosesToTotalPopulationPercentage['2'], color: '#209F92'},
-              {name: 'دوز سوم', y: dosesToTotalPopulationPercentage['3'], color: '#004D65'},
-              {name: 'دوز چهارم', y: dosesToTotalPopulationPercentage['4'], color: '#BFDDE7'},
-              {name: 'دوز پنجم', y: dosesToTotalPopulationPercentage['5'], color: '#716DE3'},
-              {
-                name: 'واکسن نزده ها',
-                y: data.totalNonVaccinesCountToTotalPopulationPercentage || 0,
-                color: '#FF0060'
-              },
-            ],
-          },
-        ]
-      } as any;
-
-      setDataset(dataTemp)
-    } catch (error) {
-      console.log(error)
-      if(error.status >=500){
-        setErrorMessage('خطا در اتصال به سرور');
-        return null;
-      }
-      return error.message !== 'cancel' && setErrorMessage(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const location = useLocation();
-  const history = useHistory();
-
-  useEffect(() => {
-
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      getVaccinateInfo(provinceName);
-    } else {
-      history.push('/dashboard/recruitment/province');
-    }
-
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setDataset(initialData)
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [location.search]);
+  const {data: dataset, loading, error: errorMessage} = useGetOverviewOfTheLatestVaccinationStatusColumnChart({
+    tag: 'employee',
+  }, true)
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -264,7 +162,7 @@ const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince: React.FC<
           </div>
         )}
 
-        {errorMessage &&  <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
