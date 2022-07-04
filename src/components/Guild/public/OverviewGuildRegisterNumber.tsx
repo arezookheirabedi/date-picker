@@ -6,12 +6,11 @@ import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import DatePickerModal from '../../DatePickerModal';
 import Calendar from '../../Calendar';
-import {converters} from './constant';
-// import SearchableDropBoxForRegister from './SearchableDropBoxForRegister';
 
 const {HeadlessChart} = Charts;
 
@@ -45,22 +44,22 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       const {data} = await guildService.numberOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
+      const sortData = data.sort((a: any, b: any) => (a.allCount > b.allCount ? 1 : -1));
       const province: any[] = [];
       const registered: any[] = [];
       const allCount: any[] = [];
-      data.forEach((item: any) => {
+      sortData.forEach((item: any) => {
         province.push(item.province);
         allCount.push(item.allCount);
         registered.push(item.registeredCount);
       });
-      const sortAllCount = allCount.sort((a, b) => (a > b ? 1 : -1));
       const newData = [
         {
           name: 'کل',
           dataLabels: {
             // enabled: true,
           },
-          data: [...sortAllCount],
+          data: [...allCount],
         },
         {
           name: 'ثبت نام شده',

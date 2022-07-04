@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import vaccineService from 'src/services/vaccine.service';
 import {useHistory, useLocation} from 'react-router-dom';
-import Calendar from 'src/components/Calendar';
-import DatePickerModal from 'src/components/DatePickerModal';
+import DatePickerModal from 'src/components/SingleDatePickerModal';
+import Calendar from 'src/components/Calendar/SingleCalendar';
 import Highcharts from 'highcharts';
-import {converters} from 'src/components/Guild/public/constant';
 import {isEmpty} from 'lodash';
+import hcsService from 'src/services/hcs.service';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -51,6 +51,8 @@ const optionChart = {
     },
   },
   yAxis: {
+    min: 0,
+    max: 100,
     gridLineDashStyle: 'dash',
     lineDashStyle: 'dash',
     lineColor: '#000000',
@@ -89,23 +91,14 @@ const optionChart = {
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
-  // const [categories, setCategories] = useState<any[]>([]);
-  // const [dataset, setDataset] = useState<any[]>([]);
   const [chartData, setChartData] = useState<any>();
-
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [queryParams, setQueryParams] = useState({
-    from: null,
     to: null,
-    province: cityTitle,
   });
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-    clear: false,
-  }) as any;
+  const [selectedDay, setSelectedDay] = useState({to: null, clear: false}) as any;
   const cancelToken = cancelTokenSource();
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
@@ -115,7 +108,7 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     setLoading(true);
     setErrorMessage(null);
     try {
-      const {data} = await vaccineService.membersGeneral(params, {CancelToken: cancelToken.token});
+      const {data} = await hcsService.numberOf(params, {CancelToken: cancelToken.token});
       // const {data} = await hcsService.dosesTagBased(params);
       const finalResponse: any = {...data};
       if (!isEmpty(finalResponse)) {
@@ -201,49 +194,38 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
-
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
 
-    let idSetTimeOut: any;
     if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getLinearOverview({...queryParams, province: provinceName});
-      }, 500);
+      getLinearOverview({...queryParams, province: provinceName});
     } else {
-      history.push('/dashboard/vaccination/province');
+      history.go(-1);
     }
-
     return () => {
       if (existsCity) {
         cancelRequest();
-        clearTimeout(idSetTimeOut);
+
         setChartData({});
       }
     };
   }, [queryParams, location.search]);
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
+    if (selectedDay.to) {
+      const finalToDate = `${selectedDay.to.year}/${selectedDay.to.month}/${selectedDay.to.day}`;
       setQueryParams({
         ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        province: cityTitle,
       });
-    }
-    if (selectedDayRange.clear) {
+    } else {
       setQueryParams({
         ...queryParams,
-        province: cityTitle,
-        from: null,
         to: null,
       });
     }
-  }, [selectedDayRange]);
+  }, [selectedDay]);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -260,8 +242,8 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
             <div className="align-center flex justify-between">
               {showDatePicker ? (
                 <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
+                  setSelectedDay={setSelectedDay}
+                  selectedDay={selectedDay}
                   setShowDatePicker={setShowDatePicker}
                   showDatePicker
                 />
@@ -269,9 +251,8 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
               <Calendar
                 action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
+                to={selectedDay.to}
+                setSelectedDay={setSelectedDay}
               />
             </div>
           </div>

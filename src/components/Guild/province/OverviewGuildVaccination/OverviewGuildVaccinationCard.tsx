@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
 import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
@@ -9,62 +9,17 @@ import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import BlueVaccine from 'src/assets/images/icons/blue_white_vaccinate.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
-import vaccineService from 'src/services/vaccine.service';
-import {useHistory, useLocation} from 'react-router-dom';
+import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
 import Statistic from '../../../../containers/Guild/components/Statistic';
-import {IInitialVacinatelInfo, initialVacinatelInfo} from '../../public/constant';
 
-const OverviewOfStatusCard: React.FC<{cityTitle:string}> = ({cityTitle}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [guildVacinateInfo, setGuildVacinateInfo] =
-    useState<IInitialVacinatelInfo>(initialVacinatelInfo);
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
-  const getGuildVacinateInfo = async (params: any) => {
-    setLoading(true);
-    try {
-      const res = await vaccineService.membersGeneral(params, {cancelToken: cancelToken.token});
-      if (res.status === 200) {
-        const newData = {...guildVacinateInfo, ...res.data};
-        setGuildVacinateInfo(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getGuildVacinateInfo({province: provinceName, tag: 'guild'});
-    } else {
-      history.push('/dashboard/guild/province');
-    }
-
-    return () => {
-      cancelRequest();
-      setGuildVacinateInfo(initialVacinatelInfo);
-    };
-  }, [location.search]);
+const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {data: guildVacinateInfo, loading, error} = useGetNumberOf({tag: 'guild'}, true);
 
   return (
     <>
-      <div className="flex  border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="mt-7  flex flex-col justify-between space-y-8 border-solid border-gray-100 py-5">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="مجموع کارفرمایان صنفی که در اصناف فعالیت دارند."
@@ -104,7 +59,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle:string}> = ({cityTitle}) => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             text="تعداد واکسیناسیون دوز سوم"
             hasInfo
@@ -132,7 +87,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle:string}> = ({cityTitle}) => {
             loading={loading}
           />
 
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
           {/* <div className="w-1/4 ">
@@ -161,9 +116,9 @@ const OverviewOfStatusCard: React.FC<{cityTitle:string}> = ({cityTitle}) => {
           </div>
         </div> */}
       </div>
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="mt-7 flex flex-col justify-between space-y-8 border-t-4 border-solid border-gray-100 py-5">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             text={` درصد واکسیناسیون استان ${cityTitle}`}
             hasInfo
@@ -205,7 +160,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle:string}> = ({cityTitle}) => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
             icon={DarkgreenVaccine}
@@ -236,7 +191,7 @@ const OverviewOfStatusCard: React.FC<{cityTitle:string}> = ({cityTitle}) => {
             isPercentage
           />
 
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
         </div>

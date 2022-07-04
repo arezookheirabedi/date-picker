@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
-
-// api services
-import axios from 'axios';
-import bakeryService from '../../../services/bakery.service';
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
 import {sideCities} from '../../../helpers/utils';
+
+// hooks
+import useOverviewOfBakeryProvince from "../../../hooks/apis/bakery/useOverviewOfBakeryProvince";
 
 // images
 import breadIcon from '../../../assets/images/icons/bread.svg';
@@ -21,8 +20,8 @@ import posDeactiveIcon from '../../../assets/images/icons/pos-deactive.svg';
 import ovenDeactiveIcon from '../../../assets/images/icons/oven-deactive.svg';
 import activePosIcon from '../../../assets/images/icons/activePos.svg';
 import cinderIcon from '../../../assets/images/icons/cinder.svg';
-import whitewheatIocn from '../../../assets/images/icons/whitewheat.svg';
-import redwheatIcon from '../../../assets/images/icons/redwheat.svg';
+import whiteWheatIocn from '../../../assets/images/icons/whitewheat.svg';
+import redWheatIcon from '../../../assets/images/icons/redwheat.svg';
 import flourWhiteIcon from '../../../assets/images/icons/flourWhite.svg';
 import registeredPos from '../../../assets/images/icons/registeredPos.svg';
 
@@ -30,74 +29,13 @@ interface OverviewBakeryProvinceProps {
   cityTitle: any;
 }
 
-const initialNumberOf = {
-  ProvinceCode: 0,
-  bakeryWithoutTransaction: 0,
-  dailyTransactionAverage: 0,
-  numberOfActivePos: 0,
-  numberOfBakeryWithoutPos: 0,
-  numberOfBakeryWithtPos: 0,
-  numberOfDeadOwnerBakery: 0,
-  numberOfDisableBakery: 0,
-  numberOfDoneInspections: 0,
-  numberOfEnableBakery: 0,
-  numberOfInspectionNeed: 0,
-  numberOfNotValidGuildCode: 0,
-  numberOfRegisterPos: 0,
-  numberOfSamt: 0,
-  numberOfShareFlour: 0,
-  numberOfTotalBakery: 0,
-  numberOfValidGuildCode: 0,
-  posActiveTime: 0,
-  province: "تهران",
-  transactionAmout: 0,
-  unsualTransaction: 0
-};
-
 const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitle}) => {
-  const [loading, setLoading] = useState(false);
-  const [bakeries, setBakeries] = useState<any>(initialNumberOf);
-  const [count, setCount] = useState<any>(0);
+
   const location = useLocation();
   const history = useHistory();
 
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-  
-  // get count of inspections
-  const getCount = async () => {
-    setLoading(true);
-    try {
-      const {data} = await bakeryService.bakeryCount(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
-      setCount(data)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const getBakeries = async (province: any) => {
-    setLoading(true);
-    try {
-      const {data} = await bakeryService.bakeryReport(
-        {reportName: "generalProvince", province},
-        {cancelToken: source.token}
-      );
-      const result = data.find((x: any) => {
-        return x.province === cityTitle
-      })
-      setBakeries({...result});
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // call bakery hook
+  const {loading, list: bakeries, count, setProvinceName} = useOverviewOfBakeryProvince(cityTitle);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -106,8 +44,7 @@ const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitl
       return item.name === provinceName;
     });
     if (existsCity) {
-      getBakeries(provinceName);
-      getCount()
+      setProvinceName(provinceName);
     } else {
       history.push('/dashboard/bakery/province');
     }
@@ -172,7 +109,7 @@ const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitl
              infoText="مجموع نانوایی موجود در سامانه سیما  دارای پروانه کسب معتبر صادر شده از وزارت صمت"
            />
            <Statistic
-             icon={redwheatIcon}
+             icon={redWheatIcon}
              text="مجموع پروانه کسب‌ های نامنطبق در صمت و سیما"
              count={bakeries.numberOfNotValidGuildCode || 0}
              loading={loading}
@@ -180,7 +117,7 @@ const OverviewBakeryProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitl
              infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه منطبق است و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
            />
            <Statistic
-             icon={whitewheatIocn}
+             icon={whiteWheatIocn}
              text="مجموع پروانه کسب‌ های ناموجود در صمت و سیما"
              count={0}
              loading={loading}

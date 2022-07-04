@@ -7,6 +7,7 @@ import Calendar from 'src/components/Calendar/SingleCalendar';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
+import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -20,7 +21,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(null) as any;
+  const [selectedDay, setSelectedDay] = useState({to: null, clear: false}) as any;
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -51,7 +52,13 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
       // eslint-disable-next-line
       let vaccinesPercentage: any[] = [];
 
-      data.forEach((item: any) => {
+      const sortData = data.sort((a: any, b: any) =>
+        a.nonVaccinesCountToMembersCountPercentage > b.nonVaccinesCountToMembersCountPercentage
+          ? 1
+          : -1
+      );
+
+      sortData.forEach((item: any) => {
         vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
         nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
 
@@ -106,26 +113,21 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
   }, [queryParams]);
 
   useEffect(() => {
-    if (selectedDay) {
-      const finalToDate = `${selectedDay.year}/${selectedDay.month}/${selectedDay.day}`;
+    if (selectedDay.to) {
+      const finalToDate = `${selectedDay.to.year}/${selectedDay.to.month}/${selectedDay.to.day}`;
       setQueryParams({
         ...queryParams,
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDay.clear) {
       setQueryParams({
         ...queryParams,
         to: null,
       });
     }
   }, [selectedDay]);
-  const converters = {
-    fa(number: any) {
-      return number.toString().replace(/\d/g, (d: any) => {
-        return String.fromCharCode(d.charCodeAt(0) + 1728);
-      });
-    },
-  };
+
   const optionChart = {
     chart: {
       renderTo: 'container',
@@ -245,7 +247,11 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
                   showDatePicker
                 />
               ) : null}
-              <Calendar action={focusFromDate} to={selectedDay} setSelectedDay={setSelectedDay} />
+              <Calendar
+                action={focusFromDate}
+                to={selectedDay.to}
+                setSelectedDay={setSelectedDay}
+              />
             </div>
           </div>
           <div className="w-2/4">

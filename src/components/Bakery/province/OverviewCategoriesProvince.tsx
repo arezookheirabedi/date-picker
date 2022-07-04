@@ -8,7 +8,7 @@ import Table from '../../TableScope';
 import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
+import bakeryService from '../../../services/bakery/mock/bakery.service';
 
 interface OverviewCategoriesProvinceProps {
   cityTitle?: any;

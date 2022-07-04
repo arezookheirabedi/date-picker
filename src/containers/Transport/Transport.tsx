@@ -14,7 +14,7 @@ import OverviewOfThePublicTransportVaccinationStatusInCountry
 import OverviewOfVaccinationInPublicTransport
   from '../../components/Transport/public/OverviewOfVaccinationInPublicTransport';
 import TableOfTestsInTransport from "../../components/Transport/public/TableOfTestsInTransport";
-// // import TestsInTransport from '../../components/Transport/public/TestsInTransport';
+// import TestsInTransport from '../../components/Transport/public/TestsInTransport';
 import OverviewDrivers from '../../components/Transport/public/OverviewDrivers';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
@@ -36,6 +36,7 @@ const Transport = () => {
           style={{backgroundImage: `url(${AlertPattern})`}}
         />
       </div>
+
       <OverviewDrivers/>
       <OverviewSamas/>
       <OverviewCategories/>
@@ -46,6 +47,9 @@ const Transport = () => {
       <OverviewOfVaccinationInPublicTransport/>
       <OverviewOfThePublicTransportVaccinationStatusInCountry/>
       <TableOfTestsInTransport/>
+
+
+      {/* deprecated code */}
       {/* <TestsInTransport/> */}
     </div>
   );

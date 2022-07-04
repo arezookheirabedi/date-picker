@@ -1,11 +1,14 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {sideCities} from '../../helpers/utils';
 
-export default function useGetOverviewOfCategories(query: any) {
+export default function useGetOverviewOfCategories(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState<any>([]);
+  const [orgDataset, setOrgDataset] = useState<any>([]);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -15,10 +18,13 @@ export default function useGetOverviewOfCategories(query: any) {
     setError(false);
     try {
       setLoading(true);
-      const {data: result} = await hcsService.getTableOverviewTestResults({
-        ...params,
-        lang: 'fa',
-      }, {cancelToken: source.token});
+      const {data: result} = await hcsService.getTableOverviewTestResults(
+        {
+          ...params,
+          lang: 'fa',
+        },
+        {cancelToken: source.token}
+      );
 
       const normalizedData: any[] = [];
       result.forEach((item: any, index: number) => {
@@ -32,10 +38,9 @@ export default function useGetOverviewOfCategories(query: any) {
           saveCount: item.recoveredMembersCount || 0,
           // deadCount: 120,
         });
-
       });
       setData([...normalizedData]);
-      // setOrgDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
       // setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
     } catch (e) {
       console.log(e);
@@ -44,13 +49,41 @@ export default function useGetOverviewOfCategories(query: any) {
     }
   };
 
+  const location = useLocation();
+  const history = useHistory();
+
   useEffect(() => {
+    if (hasProvince) {
+      return;
+    }
     getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
       source.cancel('Operation canceled by the user.');
       setData([]);
     };
   }, [query]);
 
-  return {loading, error, data};
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      getIt({...query, province: provinceName});
+    } else {
+      history.go(-1);
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setData([]);
+    };
+  }, [location.search, query]);
+
+  return {loading, error, data, setData, orgDataset};
 }

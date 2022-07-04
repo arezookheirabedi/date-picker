@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 // import moment from 'moment-jalaali';
@@ -7,8 +6,10 @@ import {useHistory, useLocation} from 'react-router-dom';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery.service';
 import {sidesCities} from '../../../helpers/utils';
+
+// hooks
+import useOverviewOfRegisteredProvince from "../../../hooks/apis/bakery/useOverviewOfRegisteredProvince";
 
 interface OverviewCategoriesProvinceProps {
     cityTitle?: any;
@@ -18,11 +19,15 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
 
   const location = useLocation();
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  const [count, setCount] = useState<any>(0);
-  const { CancelToken } = axios;
-  const source = CancelToken.source();
+
+  // call bakery hook
+  const {
+    loading, 
+    list: dataset, 
+    count,
+    setProvinceName
+  } = useOverviewOfRegisteredProvince({reportName: "invalidGuildCodeDetail"});
+
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
@@ -35,36 +40,6 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
   // }) as any;
 
    // const [showDatePicker, setShowDatePicker] = useState(false);
-
-
-  // const overviewTestResults = async (from: any = null, to: any = null) => {
-  const overviewTestResults = async (province : any) => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "invalidGuildCodeDetail" },
-        { cancelToken: source.token }
-      );
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          ...item
-        });
-      });
-      const sortData = normalizedData.filter(item => {
-        return item.province.trim() === province
-      })
-      setCount(sortData.length);
-      setDataset([...sortData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
@@ -99,7 +74,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
     });
     if (existsCity) {
       // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      overviewTestResults(provinceName);
+      setProvinceName(provinceName);
       // getOverviewByCategory({
       //   resultStatus: 'POSITIVE',
       //   recoveredCount: true,
@@ -111,11 +86,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
     } else {
       history.push('/dashboard/bakery/province');
     }
-    return () => {
-      setDataset([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
+  }, [cityTitle]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

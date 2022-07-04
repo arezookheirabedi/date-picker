@@ -127,7 +127,7 @@
       border-radius: 0.8rem;
       max-height: 100%;
       font-family: inherit;
-      &::placeholder{
+      &::placeholder {
         font-size: 1.5rem !important;
       }
       /* ----------- iPhone 6+, 7+ and 8+ ----------- */
@@ -177,7 +177,6 @@
       @media screen and (min-device-width: 1601px) {
         font-size: 1.8rem;
       }
-
 
       &::-webkit-input-placeholder {
         font-weight: normal;
@@ -238,12 +237,10 @@
         /* ----------- Retina Screens ----------- */
         @media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi) {
           font-size: 1.8rem;
-
         }
         /* ----------- extera Screens ----------- */
         @media screen and (min-device-width: 1601px) {
           font-size: 1.8rem;
-
         }
       }
 
@@ -310,19 +307,16 @@
       /* Portrait */
       @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1) {
         width: 100%;
-
       }
       /* ----------- iPad 3, 4 and Pro 9.7" ----------- */
       /* Portrait */
       @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
         width: 100%;
-
       }
       /* ----------- iPad Pro 10.5" ----------- */
       /* Portrait */
       @media only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
         width: 100%;
-
       }
 
       /* ----------- iPad Pro 12.9" ----------- */
@@ -330,7 +324,6 @@
 
       @media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
         width: 100%;
-
       }
       position: relative;
 
@@ -339,27 +332,22 @@
       /* Portrait */
       @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
         width: 100%;
-
       }
       /* Landscape */
       @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
         width: 100%;
-
       }
 
       /* ----------- Non-Retina Screens ----------- */
       @media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
         font-size: 2rem;
         padding-bottom: 4rem;
-
-
       }
 
       /* ----------- Retina Screens ----------- */
       @media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi) {
         font-size: 2rem;
         padding-bottom: 4rem;
-
       }
       /* ----------- extera Screens ----------- */
       @media screen and (min-device-width: 1601px) {

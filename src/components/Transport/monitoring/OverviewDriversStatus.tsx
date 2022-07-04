@@ -24,80 +24,6 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  // eslint-disable-next-line
-  // const [selectedDayRange, setSelectedDayRange] = useState({
-  //   from: null,
-  //   to: null,
-  // }) as any;
-
-  // useEffect(() => {
-  //   const qst = new URLSearchParams(search);
-  //   setLoading(true);
-  //   getOverviewTransportReport({
-  //     healthStatusSet: 'POSITIVE',
-  //     pageNumber: qst.get('page') || 1,
-  //     pageSize: 20,
-  //     sort: 'ASC',
-  //     from: qst.get('from'),
-  //     to: qst.get('to'),
-  //   });
-  //   // return () => {
-  //   //   source.cancel('Operation canceled by the user.');
-  //   // }
-  // }, []);
-
-  // useEffect(() => {
-  //   let latestQuery: any = {};
-
-  //   if (search && search.length > 1) {
-  //     latestQuery = JSON.parse(
-  //       // eslint-disable-next-line
-  //       '{"' +
-  //         decodeURI((search || ' ').substring(1))
-  //           .replace(/"/g, '\\"')
-  //           .replace(/&/g, '","')
-  //           .replace(/=/g, '":"') +
-  //         '"}'
-  //     );
-  //   }
-
-  //   if (!loading && selectedDayRange.from && selectedDayRange.to) {
-  //     const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-  //     const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-  //     history.push(
-  //       `/dashboard/transport/monitoring?${qs.stringify({
-  //         ...latestQuery,
-  //         page: 1,
-  //         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-  //       })}`
-  //     );
-  //   } else {
-  //     history.push(
-  //       `/dashboard/transport/monitoring?${qs.stringify({
-  //         ...latestQuery,
-  //         page: 1,
-  //         from: null,
-  //         to: null,
-  //       })}`
-  //     );
-  //   }
-  // }, [selectedDayRange]);
-
-  // useEffect(() => {
-  //   setSelectedDayRange({
-  //     from: null,
-  //     to: null,
-  //   });
-  // }, [cityTitle]);
-
-  // const clearSelectedDayRange = (e: any) => {
-  //   e.stopPropagation();
-  //   setSelectedDayRange({
-  //     from: null,
-  //     to: null,
-  //   });
-  // };
 
   const cancelToken = cancelTokenSource();
 
@@ -146,8 +72,6 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
       reportType: 'GENERAL',
       province,
       healthStatusSet: [].join(','),
-      // healthStatusSet: 'POSITIVE',
-      // healthStatusSet: ['POSITIVE', 'NEGATIVE', 'UNKNOWN'].join(','),
     };
     getOverviewTransportReport(params);
     return () => {

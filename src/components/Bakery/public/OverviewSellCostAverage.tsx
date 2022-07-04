@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-import bakeryService from 'src/services/bakery.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import DatePickerModal from '../../DatePickerModal';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
@@ -11,7 +9,8 @@ import Spinner from '../../Spinner';
 import HeadlessChart from '../HeadlessChart';
 // import hcsService from '../../../services/hcs.service';
 
-// eslint-disable-next-line
+// hooks
+import useOverviewOfSellCostAverage from "../../../hooks/apis/bakery/useOverviewOfSellCostAverage";
 
 const optionChart = {
   chart: {
@@ -100,12 +99,12 @@ const optionChart = {
 };
 
 const OverviewSellCostAverage: React.FC<{}> = () => {
-  const [dataset, setDataSet] = useState({});
+
+  // call bakery hook
+  const { loading, list: dataset, error: errorMessage } = useOverviewOfSellCostAverage();
+
   // const [serviceType, setServiceType] = useState(null) as any;
   // const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: {
@@ -120,12 +119,6 @@ const OverviewSellCostAverage: React.FC<{}> = () => {
   //   },
   // }) as any;
 
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
   // };
@@ -134,97 +127,6 @@ const OverviewSellCostAverage: React.FC<{}> = () => {
   //   from: null,
   //   to: null,
   // });
-
-  // const getColumnChartTestResult = async (params: any) => {
-  const getColumnChartTestResult = async () => {
-    setLoading(true);
-    setErrorMessage(null);
-
-    try {
-      // const response = await bakeryService.bakeryActiveTime(params, {
-      //   cancelToken: cancelToken.token,
-      // });
-      const {data} = await bakeryService.bakeryReport(
-        { reportName: "salesValue" },
-        { cancelToken: cancelToken.token }
-      );
-      const province: any[] = [];
-      const todaysAverage: any[] = [];
-      const similarDayAverageInMonth: any[] = [];
-
-      data.forEach((item: any) => {
-        province.push(item.province);
-        todaysAverage.push(Number(item.todaysAverage));
-        similarDayAverageInMonth.push(Number(item.similarDayAverageInMonth));
-      });
-      // setCategories([...province]);
-      const newData = [
-        {
-          name: 'میانگین تراکنش',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: true,
-          data: [...todaysAverage],
-        },
-        {
-          name: 'میانگین تراکنش روزهای مشابه در سه ماه گذشته',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: true,
-          data: [...similarDayAverageInMonth],
-        },
-        // {
-        //   name: 'متوسط فعالیت',
-        //   color: {
-        //     linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-        //     stops: [
-        //       [0, '#7DA6B8'], // start
-        //       [1, '#175A76'], // end
-        //     ],
-        //   },
-        //   dataLabels: {
-        //     // enabled: true,
-        //   },
-        //   showInLegend: false,
-        //   data: [...hour],
-        //   linearGradient: {
-        //     x1: 0,
-        //     x2: 0,
-        //     y1: 0,
-        //     y2: 1,
-        //   },
-        //   stops: [
-        //     [0, '#5F5B97'],
-        //     [1, '#DDDCE9'],
-        //   ],
-        // },
-      ];
-      // setDataset([...newData]);
-      setDataSet({categories: [...province], series: [...newData]});
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      // getColumnChartTestResult(query);
-      getColumnChartTestResult();
-    }, 500);
-
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-      clearTimeout(idSetTimeOut);
-    };
-  }, []);
-  // }, [query]);
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {
