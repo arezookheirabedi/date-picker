@@ -13,13 +13,14 @@ const {HeadlessChart} = Charts;
 const OverviewVaccinationStatusChart: React.FC<{}> = () => {
   const [query, setQuery] = useState<any>({
     to: null,
+    retry: false
   });
-  const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
+
   const {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetOverviewOfVaccinationStackChart(query, shouldUpdate);
+  } = useGetOverviewOfVaccinationStackChart(query);
 
   const optionChart = {
     chart: {
@@ -125,35 +126,37 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              <SingleDatepickerQuery query={query} setQuery={setQuery} />
+              <SingleDatepickerQuery query={query} setQuery={setQuery}/>
             </div>
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+            <div
+              className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div
+                className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}}/>
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}}/>
                   <span>دوز پنجم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}}/>
                   <span>دوز چهارم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}}/>
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}}/>
                   <span>دوز دوم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}}/>
                   <span>دوز اول</span>
                 </div>
               </div>
@@ -163,17 +166,17 @@ const OverviewVaccinationStatusChart: React.FC<{}> = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
-            <RetryButton shouldUpdate={shouldUpdate} setShouldUpdate={setShouldUpdate} />
+            <RetryButton setQuery={setQuery}/>
           </div>
         )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
         {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
