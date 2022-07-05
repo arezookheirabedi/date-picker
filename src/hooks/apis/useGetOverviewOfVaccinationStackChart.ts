@@ -38,7 +38,7 @@ const initialData = {
   ],
 } as any;
 
-export default function useGetOverviewOfVaccinationStackChart(query: any, shouldUpdate?: boolean) {
+export default function useGetOverviewOfVaccinationStackChart(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null) as any;
   const [data, setData] = useState<any>(initialData);
@@ -46,13 +46,14 @@ export default function useGetOverviewOfVaccinationStackChart(query: any, should
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
+
     setLoading(true);
     setError(null);
     try {
       const {data: result} = await hcsService.getVaccinesGroupedByProvinceReport(
         {
-          ...params,
+          ...params
         },
         {cancelToken: source.token}
       );
@@ -157,7 +158,7 @@ export default function useGetOverviewOfVaccinationStackChart(query: any, should
       setError(null);
       source.cancel('Operation canceled by the user.');
     };
-  }, [query, shouldUpdate]);
+  }, [query]);
 
   return {loading, error, data};
 }

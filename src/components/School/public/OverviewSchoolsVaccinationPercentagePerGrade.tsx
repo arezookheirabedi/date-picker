@@ -11,15 +11,17 @@ import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
 
-interface OverviewPerProvinceProps {}
+interface OverviewPerProvinceProps {
+}
 
 const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvinceProps> = () => {
   const [dataset, setDataset] = useState<any>();
-  const [shouldUpdate, setShouldUpdate] = useState<boolean>(false);
+
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [queryParams, setQueryParams] = useState({
     to: null,
+    retry: false
   });
 
   const cancelToken = cancelTokenSource();
@@ -28,7 +30,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getLinearOverview = async (params: any) => { 
+  const getLinearOverview = async ({retry, ...params}: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -71,31 +73,30 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
       setDataset({categories: [...grade], series: [...newData]});
       setLoading(false)
     } catch (error: any) {
-      if(error.message==='cancel'){
+      if (error.message === 'cancel') {
         setLoading(true);
         return
       }
       setErrorMessage(error.message);
       setLoading(false);
-    } 
+    }
     // finally {
     //   setLoading(false);
     // }
   };
 // settimeout can fix bug for cleanDate amd camcel request
   useEffect(() => {
-      getLinearOverview({
-        ...queryParams,
-        tag: 'edu',
-        category: 'grade',
-      });
+    getLinearOverview({
+      ...queryParams,
+      tag: 'edu',
+      category: 'grade',
+    });
     return () => {
       cancelRequest();
       setDataset({});
       setErrorMessage(null)
     };
-  }, [queryParams,shouldUpdate]);
-
+  }, [queryParams]);
 
 
   const optionChart = {
@@ -193,19 +194,21 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-            <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams} />
+              <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams}/>
             </div>
           </div>
           <div className="w-2/4">
-            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+            <div
+              className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div
+                className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}}/>
                   <span>واکسن نزده</span>
                 </div>
 
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}}/>
                   <span>واکسن زده </span>
                 </div>
               </div>
@@ -215,17 +218,17 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && !loading&&(
+        {errorMessage && !loading && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
-            <RetryButton shouldUpdate={shouldUpdate} setShouldUpdate={setShouldUpdate} />
+            <RetryButton setQuery={setQueryParams}/>
           </div>
         )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
         {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
