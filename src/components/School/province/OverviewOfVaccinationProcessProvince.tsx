@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
+import RetryButton from 'src/components/RetryButton';
 import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';
-
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
@@ -88,11 +88,12 @@ interface OverviewOfVaccinationProvinceProps {
 const OverviewOfVaccinationProcessProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
   cityTitle,
 }) => {
+  const [query, setQuery] = useState<any>({tag: 'edu', retry: false});
   const {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useOverviewOfTheVaccinationProcess({tag: 'edu'}, true);
+  } = useOverviewOfTheVaccinationProcess(query, true);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -128,13 +129,17 @@ const OverviewOfVaccinationProcessProvince: React.FC<OverviewOfVaccinationProvin
             </div>
           </div>
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && dataset.categories.length > 0 && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}

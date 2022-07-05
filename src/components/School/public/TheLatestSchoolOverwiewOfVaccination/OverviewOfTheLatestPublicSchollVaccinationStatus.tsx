@@ -6,6 +6,7 @@ import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
+import RetryButton from 'src/components/RetryButton';
 
 const {HeadlessChart} = Charts;
 
@@ -17,8 +18,6 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
 
   loading: boolean;
 }> = ({setQueryParams, queryParams, numberOf, errorMessage, loading}) => {
-  // eslint-disable-next-line
-
   const optionChart = {
     chart: {
       renderTo: 'container',
@@ -27,12 +26,6 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
         // eslint-disable-next-line prefer-rest-params
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
-      },
-      events: {
-        redraw: () => {
-          // eslint-disable-next-line
-          // console.log('redraw');
-        },
       },
     },
     title: {
@@ -136,7 +129,13 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams} />
+          </div>
+        )}
         {!loading && !isEmpty(numberOf) && !errorMessage && (
           <HeadlessChart data={numberOf} optionsProp={optionChart} />
         )}

@@ -3,7 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {convertGregorianDateToJalaliDate, sideCities} from '../../helpers/utils';
-import {EERRORS} from "../../constants/errors.enum";
+import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
   categories: [],
@@ -221,7 +221,7 @@ export default function useGetOverviewOfTheVaccinationProcess(
       setData(initialData);
       source.cancel('Operation canceled by the user.');
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
   return {loading, error, data};
 }

@@ -5,23 +5,20 @@ import Highcharts from 'highcharts';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import RetryButton from 'src/components/RetryButton';
+import {EERRORS} from 'src/constants/errors.enum';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
 
-interface OverviewPerProvinceProps {
-}
-
-const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvinceProps> = () => {
+const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>();
-
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [queryParams, setQueryParams] = useState({
     to: null,
-    retry: false
+    retry: false,
   });
 
   const cancelToken = cancelTokenSource();
@@ -71,20 +68,16 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         },
       ];
       setDataset({categories: [...grade], series: [...newData]});
-      setLoading(false)
+      setLoading(false);
     } catch (error: any) {
       if (error.message === 'cancel') {
         setLoading(true);
-        return
+        return;
       }
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || EERRORS.ERROR_500);
       setLoading(false);
     }
-    // finally {
-    //   setLoading(false);
-    // }
   };
-// settimeout can fix bug for cleanDate amd camcel request
   useEffect(() => {
     getLinearOverview({
       ...queryParams,
@@ -94,10 +87,9 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
     return () => {
       cancelRequest();
       setDataset({});
-      setErrorMessage(null)
+      setErrorMessage(null);
     };
   }, [queryParams]);
-
 
   const optionChart = {
     chart: {
@@ -194,21 +186,19 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams}/>
+              <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams} />
             </div>
           </div>
           <div className="w-2/4">
-            <div
-              className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div
-                className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}} />
                   <span>واکسن نزده</span>
                 </div>
 
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}} />
                   <span>واکسن زده </span>
                 </div>
               </div>
@@ -218,19 +208,19 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<OverviewPerProvince
 
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
-        {errorMessage && !loading && (
+        {errorMessage && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQueryParams}/>
+            <RetryButton setQuery={setQueryParams} />
           </div>
         )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart}/>
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
+        {dataset && dataset.series && dataset.series.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
