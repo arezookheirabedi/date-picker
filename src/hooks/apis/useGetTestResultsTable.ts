@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {sideCities} from '../../helpers/utils';
 import hcsService from '../../services/hcs.service';
+import {EERRORS} from "../../constants/errors.enum";
 
 export default function useGetTestResultsTable(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function useGetTestResultsTable(query: any, hasProvince: boolean 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  async function getIt(params: any) {
+  async function getIt({retry , ...params}: any) {
     setLoading(true);
     try {
       const {data: result} = await hcsService.testResultByCategory(params, {
@@ -38,7 +39,7 @@ export default function useGetTestResultsTable(query: any, hasProvince: boolean 
         setLoading(true);
         return;
       }
-      setError(err.message || '');
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   }

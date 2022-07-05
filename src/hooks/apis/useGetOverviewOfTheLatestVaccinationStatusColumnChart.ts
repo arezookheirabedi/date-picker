@@ -3,6 +3,7 @@ import {useHistory, useLocation} from "react-router-dom";
 import axios from "axios";
 import hcsService from "../../services/hcs.service";
 import {sideCities} from "../../helpers/utils";
+import {EERRORS} from "../../constants/errors.enum";
 
 const initialData = {
   categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
@@ -29,7 +30,7 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
 
     try {
       setLoading(true);
@@ -62,17 +63,15 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
       } as any;
 
       setData(dataTemp)
-      setError(null);
+      setError(false);
       setLoading(false);
     } catch (err: any) {
-      setLoading(false);
       if (err.message === 'cancel') {
         setLoading(true);
         return;
       }
-      // eslint-disable-next-line
-      console.log(err);
-      setError(err.message || '')
+      setError(err.message || EERRORS.ERROR_500);
+      setLoading(false);
     }
   };
 
@@ -86,7 +85,7 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
       setData(initialData);
       source.cancel('Operation canceled by the user.');
     };
-  }, []);
+  }, [query]);
 
   const location = useLocation();
   const history = useHistory();
