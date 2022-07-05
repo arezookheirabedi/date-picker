@@ -5,6 +5,8 @@ import Table from '../../TableScopeSort';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import DatepickerQuery from "../../DatepickerQuery";
 import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
+import RetryButton from "../../RetryButton";
+import Spinner from "../../Spinner";
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
 
 // const order = {
@@ -22,6 +24,7 @@ const TableOfTestsInTransport = () => {
     category: 'serviceType',
     from: null,
     to: null,
+    retry: false
   })
 
 // eslint-disable-next-line
@@ -78,125 +81,136 @@ const TableOfTestsInTransport = () => {
       </div>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        <Table
-          // handlePageChange={handlePageChange}
-          // orderMain={order}
-          loading={loading}
-          dataSet={[...dataset]}
-          pagination={{pageSize: 10, maxPages: 3}}
-          columns={[
-            {
-              name: 'وضعیت',
-              key: '',
-              render: (v: any, record) => (
-                <CategoryDonut
-                  data={[
-                    {
-                      name: 'unknownCount',
-                      title: 'نامشخص',
-                      y: record.unknownCount || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#6E6E6E'], // start
-                          [1, '#393939'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'negativeCountPercentage',
-                      title: 'منفی',
+        {loading && (<div className="p-40"><Spinner/></div>)}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
 
-                      y: record.negativeCountPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
-                        ],
+        {!loading && !errorMessage && (
+          <Table
+            // handlePageChange={handlePageChange}
+            // orderMain={order}
+            loading={loading}
+            dataSet={[...dataset]}
+            pagination={{pageSize: 10, maxPages: 3}}
+            columns={[
+              {
+                name: 'وضعیت',
+                key: '',
+                render: (v: any, record) => (
+                  <CategoryDonut
+                    data={[
+                      {
+                        name: 'unknownCount',
+                        title: 'نامشخص',
+                        y: record.unknownCount || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#6E6E6E'], // start
+                            [1, '#393939'], // end
+                          ],
+                        },
                       },
-                    },
-                    {
-                      name: 'positiveCountPercentage',
-                      title: 'مثبت',
+                      {
+                        name: 'negativeCountPercentage',
+                        title: 'منفی',
 
-                      y: record.positiveCountPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#FE2D2F'], // start
-                          [1, '#CC0002'], // end
-                        ],
+                        y: record.negativeCountPercentage || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#05D8A4'], // start
+                            [1, '#039572'], // end
+                          ],
+                        },
                       },
-                    },
-                  ]}
-                />
-              ),
-              className: 'flex justify-center w-full',
-            },
-            {
-              name: 'دسته',
-              key: 'name',
+                      {
+                        name: 'positiveCountPercentage',
+                        title: 'مثبت',
 
-              render: (v: any, record, index: number, page: number) => (
-                <div className="flex">
-                  {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
-                </div>
-              ),
-            },
-            {
-              name: 'تعداد آزمایش‌های انجام شده',
-              key: 'total',
-              sortable: true,
-              render: (v: any) => (
-                <span>
+                        y: record.positiveCountPercentage || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#FE2D2F'], // start
+                            [1, '#CC0002'], // end
+                          ],
+                        },
+                      },
+                    ]}
+                  />
+                ),
+                className: 'flex justify-center w-full',
+              },
+              {
+                name: 'دسته',
+                key: 'name',
+
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                  </div>
+                ),
+              },
+              {
+                name: 'تعداد آزمایش‌های انجام شده',
+                key: 'total',
+                sortable: true,
+                render: (v: any) => (
+                  <span>
                   {Number(v || 0)
                     .commaSeprator()
                     .toPersianDigits()}
                 </span>
-              ),
-            },
-            {
-              name: 'درصد تست‌های مثبت',
-              key: 'positiveCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
+                ),
+              },
+              {
+                name: 'درصد تست‌های مثبت',
+                key: 'positiveCountPercentage',
+                sortable: true,
+                render: (v: any) => (
+                  <span>
                   {Number(v || 0).toLocaleString('fa', {
                     minimumFractionDigits: 4,
                   })}
-                  %
+                    %
                 </span>
-              ),
-            },
-            {
-              name: 'درصد تست‌های منفی',
-              key: 'negativeCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
+                ),
+              },
+              {
+                name: 'درصد تست‌های منفی',
+                key: 'negativeCountPercentage',
+                sortable: true,
+                render: (v: any) => (
+                  <span>
                   {Number(v || 0).toLocaleString('fa', {
                     minimumFractionDigits: 4,
                   })}
-                  %
+                    %
                 </span>
-              ),
-            },
-            // {
-            //   name: 'درصد تست‌های نامشخص',
-            //   key: 'unknownCount',
-            //   render: (v: any, record: any) => (
-            //     <span>
-            //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
-            //         .toFixed(4)
-            //         .toPersianDigits()}
-            //       %
-            //     </span>
-            //   ),
-            // },
-          ]}
-          totalItems={(dataset || []).length}
-        />
+                ),
+              },
+              // {
+              //   name: 'درصد تست‌های نامشخص',
+              //   key: 'unknownCount',
+              //   render: (v: any, record: any) => (
+              //     <span>
+              //       {((Number(v || 0) * 100) / Number(record.total || 0) || 0)
+              //         .toFixed(4)
+              //         .toPersianDigits()}
+              //       %
+              //     </span>
+              //   ),
+              // },
+            ]}
+            totalItems={(dataset || []).length}
+          />
+        )
+        }
       </div>
     </fieldset>
   );

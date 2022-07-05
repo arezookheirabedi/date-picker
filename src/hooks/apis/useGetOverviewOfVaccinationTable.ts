@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {sideCities} from '../../helpers/utils';
+import {EERRORS} from "../../constants/errors.enum";
 
 export default function useGetOverviewOfVaccinationTable(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
@@ -13,8 +14,9 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
+    setError(false);
     try {
       const {data: result} = await hcsService.getVaccinationOverview(
         {
@@ -61,7 +63,7 @@ export default function useGetOverviewOfVaccinationTable(query: any, hasProvince
         setLoading(true);
         return;
       }
-      setError(err.message || '');
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
