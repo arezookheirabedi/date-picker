@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {sideCities} from '../../helpers/utils';
+import {EERRORS} from "../../constants/errors.enum";
 
 export default function useGetOverviewOfPatients(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ export default function useGetOverviewOfPatients(query: any, hasProvince: boolea
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
     try {
       const {data: result} = await hcsService.columnChartTestResultService(params, {
@@ -24,9 +25,10 @@ export default function useGetOverviewOfPatients(query: any, hasProvince: boolea
       setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
+        setLoading(true);
         return;
       }
-      setError('خطا در اتصال به سرور');
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };

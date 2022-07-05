@@ -5,6 +5,7 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
 import DatepickerQuery from "../../DatepickerQuery";
 import useGetOverviewOfCategories from "../../../hooks/apis/useGetOverviewOfCategories";
+import RetryButton from "../../RetryButton";
 
 const OverviewCategories: React.FC<{}> = () => {
 
@@ -13,6 +14,7 @@ const OverviewCategories: React.FC<{}> = () => {
     category: 'serviceType',
     from: null,
     to: null,
+    retry: false
   }) as any;
 
 // eslint-disable-next-line
@@ -27,11 +29,16 @@ const OverviewCategories: React.FC<{}> = () => {
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner/>
+
+        {loading && (<div className="p-40"><Spinner/></div>)}
+        {error && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{error}</div>
+            <RetryButton setQuery={setQuery}/>
           </div>
-        ) : (
+        )}
+
+        {!error && !loading && (
           <Table
             dataSet={[...dataset]}
             pagination={{pageSize: 20, maxPages: 3}}
