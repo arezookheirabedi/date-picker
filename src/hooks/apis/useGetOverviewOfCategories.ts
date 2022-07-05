@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {sideCities} from '../../helpers/utils';
+import {EERRORS} from "../../constants/errors.enum";
 
 export default function useGetOverviewOfCategories(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function useGetOverviewOfCategories(query: any, hasProvince: bool
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
     setError(false);
     try {
@@ -41,10 +42,15 @@ export default function useGetOverviewOfCategories(query: any, hasProvince: bool
       });
       setData([...normalizedData]);
       setOrgDataset([...normalizedData]);
+      setError(false);
+      setLoading(false);
       // setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-    } catch (e) {
-      console.log(e);
-    } finally {
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };

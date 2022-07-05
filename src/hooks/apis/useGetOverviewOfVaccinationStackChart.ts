@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
+import {EERRORS} from "../../constants/errors.enum";
 
 const initialData = {
   categories: [],
@@ -140,14 +141,15 @@ export default function useGetOverviewOfVaccinationStackChart(query: any) {
           ],
         };
       });
+
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
+        setLoading(true);
         return;
       }
-      setError('خطا در اتصال به سرویس');
-      // eslint-disable-next-line
-      console.log(err);
-    } finally {
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
