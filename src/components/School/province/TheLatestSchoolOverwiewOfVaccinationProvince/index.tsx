@@ -11,6 +11,7 @@ const TheLatestOverwiewOfVaccination: React.FC<OverviewCategoriesProvinceProps> 
   const [queryParams, setQueryParams] = useState({
     to: null,
     tag: 'edu',
+    retry: false,
   });
   const {
     chartData,

@@ -3,6 +3,7 @@ import hcsService from 'src/services/hcs.service';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import {isEmpty} from 'lodash';
 import {useHistory, useLocation} from 'react-router-dom';
+import {EERRORS} from 'src/constants/errors.enum';
 import {IInitialVacinatelInfo, initialVacinatelInfo} from './useGetNumberOf';
 
 export default function useGetNumberOf(query?: any, hasProvince: boolean = false) {
@@ -106,9 +107,8 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
         setLoading(true);
         return;
       }
-      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
+      setErrorMessage(errors.message || EERRORS.ERROR_500);
       setLoading(false);
-      // eslint-disable-next-line
     }
   };
   useEffect(() => {
