@@ -4,17 +4,17 @@ import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
 import Charts from 'src/components/Charts';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
+import RetryButton from 'src/components/RetryButton';
 import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
 
-interface OverviewPerProvinceProps {}
-
-const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
+const OverViewToVaccinationStatus: React.FC<{}> = () => {
   const [query, setQuery] = useState<any>({
     to: null,
     tag: 'edu',
+    retry: false,
   });
   const {
     data: dataset,
@@ -150,13 +150,20 @@ const OverViewToVaccinationStatus: React.FC<OverviewPerProvinceProps> = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {dataset &&
+          dataset.categories &&
+          dataset.categories.length === 0 &&
+          !loading &&
+          !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   );
