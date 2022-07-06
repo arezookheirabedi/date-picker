@@ -11,6 +11,7 @@ import Spinner from '../../Spinner';
 import SearchableSingleSelect from "../../SearchableSingleSelect";
 import DatepickerQuery from "../../DatepickerQuery";
 import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
+import RetryButton from "../../RetryButton";
 
 const {Line} = Charts;
 
@@ -30,6 +31,7 @@ const OverviewPublicPatients = () => {
     category: 'serviceType',
     categoryValue: null,
     tag: 'transport',
+    retry : false
   });
 
   const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
@@ -114,7 +116,12 @@ const OverviewPublicPatients = () => {
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
         {!loading && data.length > 0 && !errorMessage && <Line data={data} showInLegends={false}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>

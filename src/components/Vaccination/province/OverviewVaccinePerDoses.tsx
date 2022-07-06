@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
-import DatePickerModal from 'src/components/SingleDatePickerModal';
-import Calendar from 'src/components/Calendar/SingleCalendar';
 import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
+import RetryButton from 'src/components/RetryButton';
 import hcsService from 'src/services/hcs.service';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
+import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
@@ -17,6 +15,7 @@ const {HeadlessChart} = Charts;
 interface OverviewVaccinePerDosesProps {
   cityTitle: string;
 }
+
 const optionChart = {
   chart: {
     renderTo: 'container',
@@ -89,27 +88,29 @@ const optionChart = {
   },
 };
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
+  const [query, setQuery] = useState({to: null, retry: false})
   const location = useLocation();
   const history = useHistory();
-  const [chartData, setChartData] = useState<any>();
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+
   const [loading, setLoading] = useState(false);
-  const [queryParams, setQueryParams] = useState({
-    to: null,
-  });
-  const [selectedDay, setSelectedDay] = useState({to: null, clear: false}) as any;
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [chartData, setChartData] = useState<any>();
+
+
   const cancelToken = cancelTokenSource();
+
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  // eslint-disable-next-line
-  const getLinearOverview = async (params: any) => {
-    setLoading(true);
+
+  const getIt = async ({retry, ...params}: any = {}) => {
     setErrorMessage(null);
+    setLoading(true);
     try {
-      const {data} = await hcsService.numberOf(params, {CancelToken: cancelToken.token});
-      // const {data} = await hcsService.dosesTagBased(params);
+      const {data} = await hcsService.numberOf(params, {
+        cancelToken: cancelToken.token,
+      });
+
       const finalResponse: any = {...data};
       if (!isEmpty(finalResponse)) {
         const dataChart: any = {
@@ -182,14 +183,17 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
         setChartData({...newInitialData});
       }
-    } catch (error: any) {
-      setErrorMessage(error.message || 'خطایی در عملیات');
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      setLoading(false);
+    } catch (errors: any) {
+      if (errors.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(errors.message || 'موردی برای نمایش وجود ندارد.');
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -197,39 +201,20 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
-
     if (existsCity) {
-      getLinearOverview({...queryParams, province: provinceName});
+      getIt({...query, province: provinceName});
     } else {
       history.go(-1);
     }
+    // eslint-disable-next-line consistent-return
     return () => {
-      if (existsCity) {
-        cancelRequest();
+      setErrorMessage(null)
+      cancelRequest();
+      setChartData({});
 
-        setChartData({});
-      }
     };
-  }, [queryParams, location.search]);
+  }, [location.search, query]);
 
-  useEffect(() => {
-    if (selectedDay.to) {
-      const finalToDate = `${selectedDay.to.year}/${selectedDay.to.month}/${selectedDay.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    } else {
-      setQueryParams({
-        ...queryParams,
-        to: null,
-      });
-    }
-  }, [selectedDay]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -240,48 +225,37 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDay={setSelectedDay}
-                  selectedDay={selectedDay}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-
-              <Calendar
-                action={focusFromDate}
-                to={selectedDay.to}
-                setSelectedDay={setSelectedDay}
-              />
+              <SingleDatepickerQuery query={query} setQuery={setQuery}/>
             </div>
           </div>
 
           <div className="w-2/4">
-            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+            <div
+              className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div
+                className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}}/>
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}}/>
                   <span>دوز پنجم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}}/>
                   <span>دوز چهارم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}}/>
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}}/>
                   <span>دوز دوم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}}/>
                   <span>دوز اول</span>
                 </div>
               </div>
@@ -291,12 +265,17 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
         {!loading && !isEmpty(chartData) && !errorMessage && (
-          <HeadlessChart data={chartData} optionsProp={optionChart} />
+          <HeadlessChart data={chartData} optionsProp={optionChart}/>
         )}
         {isEmpty(chartData) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
