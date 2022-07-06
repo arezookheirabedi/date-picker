@@ -7,6 +7,7 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
   const [queryParams, setQueryParams] = useState({
     to: null,
     tag: 'edu',
+    retry: false,
   });
   const {
     chartData,

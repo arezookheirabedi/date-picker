@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import RetryButton from 'src/components/RetryButton';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';

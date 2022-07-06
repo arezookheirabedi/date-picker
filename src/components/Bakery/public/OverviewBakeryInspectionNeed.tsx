@@ -2,7 +2,7 @@
 import Statistic from '../../../containers/Guild/components/Statistic';
 
 // hooks
-import useOverviewOfBakery from "../../../hooks/apis/bakery/useOverviewOfBakery";
+import useOverviewOfInspectionNeed from "../../../hooks/apis/bakery/useOverviewOfInspectionNeed";
 
 // images
 import tpsIcon from '../../../assets/images/icons/tps.svg';
@@ -14,7 +14,7 @@ import bakeryWithoutTransactionIcon from '../../../assets/images/icons/bakery-Wi
 const OverviewBakeryInspectionNeed = () => {
   
   // call bakery hook
-  const {loading, list: bakeries} = useOverviewOfBakery();
+  const {loading, list: bakeries} = useOverviewOfInspectionNeed();
  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

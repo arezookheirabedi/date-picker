@@ -109,7 +109,6 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
       }
       setErrorMessage(errors.message || EERRORS.ERROR_500);
       setLoading(false);
-      // eslint-disable-next-line
     }
   };
   useEffect(() => {

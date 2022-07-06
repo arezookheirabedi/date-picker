@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
 import RetryButton from 'src/components/RetryButton';
 import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';

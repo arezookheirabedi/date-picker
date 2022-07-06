@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import RetryButton from 'src/components/RetryButton';
 import useGetOverviewOfVaccinationStackChart from '../../../hooks/apis/useGetOverviewOfVaccinationStackChart';
 import Charts from '../../Charts';
