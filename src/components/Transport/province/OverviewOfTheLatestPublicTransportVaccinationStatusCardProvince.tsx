@@ -21,7 +21,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCardProvince: React.FC<
   },true)
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آخرین وضعیت واکسیناسیون حمل و نقل عمومی در استان &nbsp;
         {cityTitle}

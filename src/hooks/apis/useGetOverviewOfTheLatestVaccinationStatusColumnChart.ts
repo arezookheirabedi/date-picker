@@ -109,7 +109,7 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
       setData(initialData);
       source.cancel('Operation canceled by the user.');
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
   return {loading, error, data};
 }
