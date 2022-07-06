@@ -3,8 +3,9 @@ import Highcharts from 'highcharts/highstock';
 import Charts from 'src/components/Charts';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 
 const {HeadlessChart} = Charts;
 
@@ -135,7 +136,12 @@ const OverviewOfTheLatestPublicSchoolVaccinationStatus: React.FC<{
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams} />
+          </div>
+        )}
         {!loading && !isEmpty(numberOf) && !errorMessage && (
           <HeadlessChart data={numberOf} optionsProp={optionChart} />
         )}

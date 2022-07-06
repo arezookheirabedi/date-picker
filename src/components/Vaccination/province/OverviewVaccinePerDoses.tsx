@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import hcsService from 'src/services/hcs.service';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
@@ -88,14 +88,13 @@ const optionChart = {
   },
 };
 const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTitle}) => {
-  const [query, setQuery] = useState({to: null, retry: false})
+  const [query, setQuery] = useState({to: null, retry: false});
   const location = useLocation();
   const history = useHistory();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [chartData, setChartData] = useState<any>();
-
 
   const cancelToken = cancelTokenSource();
 
@@ -194,7 +193,6 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     }
   };
 
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
@@ -208,13 +206,11 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
     }
     // eslint-disable-next-line consistent-return
     return () => {
-      setErrorMessage(null)
+      setErrorMessage(null);
       cancelRequest();
       setChartData({});
-
     };
   }, [location.search, query]);
-
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -225,37 +221,35 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              <SingleDatepickerQuery query={query} setQuery={setQuery}/>
+              <SingleDatepickerQuery query={query} setQuery={setQuery} />
             </div>
           </div>
 
           <div className="w-2/4">
-            <div
-              className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div
-                className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#FF0060'}} />
                   <span>واکسن نزده</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#716DE3'}} />
                   <span>دوز پنجم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>دوز چهارم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}}/>
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
               </div>
@@ -265,17 +259,17 @@ const OverviewVaccinePerDoses: React.FC<OverviewVaccinePerDosesProps> = ({cityTi
 
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
+            <RetryButton setQuery={setQuery} />
           </div>
         )}
         {!loading && !isEmpty(chartData) && !errorMessage && (
-          <HeadlessChart data={chartData} optionsProp={optionChart}/>
+          <HeadlessChart data={chartData} optionsProp={optionChart} />
         )}
         {isEmpty(chartData) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>

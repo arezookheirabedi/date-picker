@@ -54,7 +54,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
     <>
       <div className="flex flex-col justify-between space-y-8">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={GreenTotlaPassenger}
             text="مجموع مسافران کل کشور"
@@ -89,7 +89,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             hasInfo
             infoText="تعداد افرادی که سه دوز واکسن دریافت کرده‌اند."
@@ -110,8 +110,8 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             hasInfo
             infoText="تعداد افرادی که پنج   دوز واکسن دریافت کرده‌اند."
             icon={VaccineIcon}
-            text="تعداد واکسیناسیون دوز پنجم"
-            count={numberOf.doses[5] || 0}
+            text="تعداد واکسیناسیون دوز پنجم و بیشتر"
+            count={numberOf.gtDoses[4] || 0}
             loading={loading}
           />
           <Statistic
@@ -126,7 +126,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
 
         {/* third card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="تعداد افرادی که برای دریافت واکسن مراجعه نکرده اند."
             hasInfo
@@ -135,21 +135,21 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             count={numberOf.totalNonVaccinesCount || 0}
             loading={loading}
           />
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
         </div>
       </div>
 
-      <div className="flex border-t-4 border-solid mt-7 py-5 border-gray-100 flex-col justify-between space-y-8">
+      <div className="mt-7 flex flex-col justify-between space-y-8 border-t-4 border-solid border-gray-100 py-5">
         {/* first card row */}
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="مجموع تعداد افراد واکسینه شده سطح کشور"
             hasInfo
@@ -190,7 +190,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
 
         {/* second card row */}
 
-        <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             infoText="مجموع درصد افرادی که دوز چهارم واکسن را در سطح کشور دریافت نموده اند."
             icon={DarkgreenVaccine}
@@ -210,10 +210,10 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             loading={loading}
             isPercentage
           />
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
-          <div className="flex-col align-center justify-center w-full hidden md:flex  p-4 relative">
+          <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
           </div>
         </div>
