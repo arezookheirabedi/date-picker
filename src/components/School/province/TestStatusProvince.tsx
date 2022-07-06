@@ -33,7 +33,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
         </div>
       </div>
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
-        {error ? (
+        {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
             <RetryButton setQuery={setQuery} />
