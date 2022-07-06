@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import Statistic from 'src/containers/Overview/components/Statistic';
 import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
@@ -15,15 +15,17 @@ import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
 import useGetTestResults from 'src/hooks/apis/useGetTestResults';
 
 const OverviewGuilds: React.FC<{}> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query, setQuery] = useState<any>({tag: 'guild'});
   // eslint-disable-next-line
-  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'guild'});
+  const {data: numberOf, loading, error} = useGetNumberOf(query);
   // eslint-disable-next-line
   const {
     data: testResultInfo,
     loading: testResultLoading,
     // eslint-disable-next-line
     error: testResultError,
-  } = useGetTestResults({tag: 'guild'});
+  } = useGetTestResults(query);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">

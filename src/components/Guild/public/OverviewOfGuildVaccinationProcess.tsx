@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
+import RetryButton from 'src/components/RetryButton';
 import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';
 import Charts from '../../Charts';
 
@@ -65,13 +66,11 @@ const optionChart = {
 };
 
 const OverviewOfGuildVaccinationProcess = () => {
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useOverviewOfTheVaccinationProcess({
+  const [query, setQuery] = useState<any>({
     tag: 'guild',
+    retry: false,
   });
+  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess(query);
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">نگاه کلی به روند واکسیناسیون اصناف </legend>
@@ -110,7 +109,12 @@ const OverviewOfGuildVaccinationProcess = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && dataset.categories.length > 0 && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}

@@ -1,44 +1,27 @@
 import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
-// import axios from 'axios';
-// import DatePickerModal from '../../DatePickerModal';
-// import calendar from '../../../assets/images/icons/calendar.svg';
-
 import Charts from 'src/components/Charts';
-
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
-import {
-  cancelTokenSource,
-  msgRequestCanceled,
-  //  toPersianDigit
-} from '../../../helpers/utils';
+import RetryButton from 'src/components/RetryButton';
+import DatepickerQuery from 'src/components/DatepickerQuery';
+import {EERRORS} from 'src/constants/errors.enum';
+import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
+
 import Spinner from '../../Spinner';
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
-// import SerchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
-interface IOverviewGuildPositivePcrPercentage {}
 
-const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPercentage> = () => {
+const OverviewGuildPositivePcrPercentage: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>({});
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-    clear: null,
-  }) as any;
-
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
+    retry: false,
   });
 
   const cancelToken = cancelTokenSource();
@@ -47,17 +30,14 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartPositivePcrPercentage = async (params: any) => {
+  const getColumnChartPositivePcrPercentage = async ({retry, ...params}: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
       const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
-        // const {data} = await guildService.percentageOfRegisteredGuilds(params, {
         cancelToken: cancelToken.token,
       });
-
       const province: any[] = [];
-
       const positiveMembersCountToTotalMembersPercentag: any[] = [];
       data.forEach((item: any) => {
         province.push(item.province);
@@ -65,7 +45,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           item.positiveMembersCountToTotalMembersPercentage
         );
       });
-
       const sortPositiveMembersCountToTotalMembersPercentag =
         positiveMembersCountToTotalMembersPercentag.sort((a, b) => (a > b ? 1 : -1));
       const newData = [
@@ -78,49 +57,24 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       if (data.length > 0) {
         setDataset({categories: [...province], series: [...newData]});
       }
+      setLoading(false);
     } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      if (error.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(error.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartPositivePcrPercentage({...queryParams, tag: 'guild', category: 'categoryDesc'});
-    }, 500);
-    // normalizeData(mockRegisterPercentage);
+    getColumnChartPositivePcrPercentage({...queryParams, tag: 'guild', category: 'categoryDesc'});
     return () => {
-      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset({});
     };
   }, [queryParams]);
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
   const optionChart = {
     chart: {
@@ -146,13 +100,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
           states: {
             hover: {
               enabled: true,
-              fillColor: {
-                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-                // stops: [
-                //   [0, "#FFCC00"], // start
-                //   [1, "#FF9400"] // end
-                // ]
-              },
               lineColor: '#fff',
               lineWidth: 3,
             },
@@ -161,7 +108,6 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
         lineWidth: 2,
         threshold: null,
         borderRadius: 2,
-        // pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
@@ -224,9 +170,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
       {
         lineWidth: 4,
         showInLegend: false,
-        dataLabels: {
-          // enabled: true,
-        },
+        dataLabels: {},
       },
     ],
   };
@@ -248,21 +192,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
               />
             </div>
             <div className="flex items-center">
-              {' '}
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={queryParams} setQuery={setQueryParams} />
             </div>
           </div>
         </div>
@@ -272,13 +202,20 @@ const OverviewGuildPositivePcrPercentage: React.FC<IOverviewGuildPositivePcrPerc
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams} />
+          </div>
+        )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {dataset &&
+          dataset.categories &&
+          dataset.categories.lenght === 0 &&
+          !loading &&
+          !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   );

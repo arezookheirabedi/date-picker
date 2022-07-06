@@ -1,34 +1,28 @@
 import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
 import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {EERRORS} from 'src/constants/errors.enum';
+import DatepickerQuery from 'src/components/DatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
 
 const {HeadlessChart} = Charts;
 
 const OverviewGuildRegisterNumber: React.FC<{}> = () => {
   const [dataset, setDataset] = useState<any>({});
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-    clear: false,
-  }) as any;
 
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
     categoryId: null,
+    retry: false,
   });
 
   const cancelToken = cancelTokenSource();
@@ -37,7 +31,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartRegisterNumber = async (params: any) => {
+  const getColumnChartRegisterNumber = async ({retry, ...params}: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -59,6 +53,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           dataLabels: {
             // enabled: true,
           },
+          pointWidth: 8,
           data: [...allCount],
         },
         {
@@ -66,6 +61,8 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           dataLabels: {
             // enabled: true,
           },
+          pointWidth: 8,
+
           data: [...registered],
           linearGradient: {
             x1: 0,
@@ -82,49 +79,24 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
       if (data.length > 0) {
         setDataset({categories: [...province], series: [...newData]});
       }
+      setLoading(false);
     } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      if (error.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(error.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartRegisterNumber(queryParams);
-    }, 500);
+    getColumnChartRegisterNumber(queryParams);
     return () => {
-      clearTimeout(idSetTimeOut);
-
       cancelRequest();
       setDataset({});
     };
   }, [queryParams]);
-
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
   const optionChart = {
     chart: {
@@ -150,13 +122,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           states: {
             hover: {
               enabled: true,
-              fillColor: {
-                // linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 }
-                // stops: [
-                //   [0, "#FFCC00"], // start
-                //   [1, "#FF9400"] // end
-                // ]
-              },
               lineColor: '#fff',
               lineWidth: 3,
             },
@@ -165,7 +130,6 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         lineWidth: 2,
         threshold: null,
         borderRadius: 2,
-        // pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
@@ -203,9 +167,8 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         trackBorderRadius: 4,
         showFull: false,
       },
-
-      min: 0,
-      max: 30,
+      // min: 0,
+      // max: 30,
 
       lineDashStyle: 'dash',
       lineColor: '#000000',
@@ -223,12 +186,11 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
         textAlign: 'right',
         fontFamily: 'inherit',
       },
-
-      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
     series: [
       {
         lineWidth: 4,
+        // pointWidth: 16,
       },
     ],
   };
@@ -251,21 +213,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
               />
             </div>
             <div className="flex items-center">
-              {' '}
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={queryParams} setQuery={setQueryParams} />
             </div>
           </div>
         </div>
@@ -275,7 +223,12 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams} />
+          </div>
+        )}
 
         {!loading &&
           !errorMessage &&
