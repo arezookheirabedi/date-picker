@@ -7,6 +7,7 @@ import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import SearchableSingleSelect from "../../SearchableSingleSelect";
 import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
 import DatepickerQuery from "../../DatepickerQuery";
+import RetryButton from "../../RetryButton";
 
 const {Line} = Charts;
 
@@ -32,12 +33,13 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
     category: 'serviceType',
     categoryValue: null,
     tag: 'transport',
+    retry : false
   });
 
   const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query, true);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
+    <fieldset className="text-center border rounded-xl p-4 mb-16"  >
       <legend className="text-black mx-auto px-3">
         نگاه کلی مبتلایان حمل و نقل عمومی در &nbsp;
         {cityTitle}
@@ -119,7 +121,12 @@ const OverviewPublicPatientsProvince: React.FC<OverviewPublicPatientsProvincePro
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
         {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
