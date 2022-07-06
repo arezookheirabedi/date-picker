@@ -207,6 +207,16 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                 render: (v: any) => <span>{v}</span>,
               },
               {
+                name: 'شناسه پروانه کسبی صمت',
+                key: 'guildCode',
+                render: (v: any) => <span>{v}</span>,
+              },
+              {
+                name: 'وضعیت عدم انطباق',
+                key: 'buyerAsnafStatus',
+                render: (v: any) => <span>{v}</span>,
+              },
+              {
                 name: 'شماره ملی',
                 key: 'nationalId',
                 render: (v: any) => <span>{v}</span>,

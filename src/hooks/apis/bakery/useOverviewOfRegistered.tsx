@@ -32,7 +32,12 @@ export default function useOverviewOfRegistered(reportName:any) {
         // if (item.total !== 0) {
         normalizedData.push({
           id: `ovca_${index}`,
-          ...item
+          province: item.province,
+          city: item.city,
+          simaId : item.simaId,
+          fullName: item.fullName.match(/\D/g).join(''),
+          nationalId: item.nationalId,
+          address : item.address
         });
       });
       setCount(normalizedData.length);

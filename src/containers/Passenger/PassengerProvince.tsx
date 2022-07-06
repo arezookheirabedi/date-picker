@@ -29,7 +29,7 @@ const PassengerProvince = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
-    // console.log(provinceName)
+
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });

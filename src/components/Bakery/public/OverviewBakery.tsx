@@ -62,7 +62,7 @@ const OverviewBakery = () => {
            <Statistic
              icon={flourIcon}
              text="مجموع سهمیه دریافتی در ماه (واحد هزار تن)"
-             count={Math.floor(bakeries.bakery[7]) || 0}
+             count={Math.floor(bakeries.bakery[3]) || 0}
              loading={loading}
              hasInfo
              infoText="مجموع سهمیه دریافتی خبازی ها در ماه (واحد هزار تن)"
@@ -72,7 +72,7 @@ const OverviewBakery = () => {
             <Statistic
                 icon={frenchBreadIcon}
                 text="تعداد نانوایی های دارای مجوز معتبر در صمت"
-                count={bakeries.bakery[3] || 0}
+                count={bakeries.bakery[4] || 0}
                 loading={loading}
                 hasInfo
                 infoText="مجموع نانوایی های ثبت شده در سامانه وزارت صمت"
@@ -80,7 +80,7 @@ const OverviewBakery = () => {
             <Statistic
              icon={wheatIcon}
              text="مجموع پروانه کسب‌ های منطبق در صمت و سیما"
-             count={bakeries.bakery[4] || 0}
+             count={bakeries.bakery[5] || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی موجود در سامانه سیما  دارای پروانه کسب معتبر صادر شده از وزارت صمت"
@@ -88,7 +88,7 @@ const OverviewBakery = () => {
            <Statistic
              icon={redwheatIcon}
              text="مجموع پروانه کسب‌ های نامنطبق در صمت و سیما"
-             count={bakeries.bakery[5] || 0}
+             count={bakeries.bakery[6] || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه منطبق است و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
@@ -96,7 +96,7 @@ const OverviewBakery = () => {
            <Statistic
              icon={whitewheatIocn}
              text="مجموع پروانه کسب‌ های ناموجود در صمت و سیما"
-             count={0}
+             count={bakeries.bakery[7] || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی موجود در سامانه سیما که کدملی خبازان آن در دو سامانه نامنطبق و  فاقد پروانه کسب معتبر صادر شده از وزارت صمت است."
@@ -156,7 +156,7 @@ const OverviewBakery = () => {
            <Statistic
              icon={flourWhiteIcon}
              text="مجموع نانوایی‌های سیما با مالک فوتی"
-             count={bakeries.bakery[6] || 0}
+             count={bakeries.bakery[14] || 0}
              loading={loading}
              hasInfo
              infoText="مجموع نانوایی ها موجود در سامانه سیما که مالک واحد فوت کرده است."

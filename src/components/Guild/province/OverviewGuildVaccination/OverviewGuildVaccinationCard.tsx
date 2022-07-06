@@ -82,8 +82,8 @@ const OverviewOfStatusCard: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             infoText="تعداد افرادی  که دوز پنجم واکسن را دریافت کرده‌اند "
             hasInfo
             icon={BlueVaccine}
-            text="تعداد واکسیناسیون دوز پنجم"
-            count={guildVacinateInfo.doses[5]}
+            text="تعداد واکسیناسیون دوز پنجم و بیشتر"
+            count={guildVacinateInfo.gtDoses[4]}
             loading={loading}
           />
 

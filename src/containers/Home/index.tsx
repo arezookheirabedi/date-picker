@@ -11,7 +11,7 @@ import Faq from "../../components/Home/Faq";
 const Home: React.FC<any> = () => {
   // eslint-disable-next-line
   const progressBar = (progressVal: any, totalPercentageVal = 100, id: any) => {
-    // console.log(window.screen.width)
+
     const r = window.screen.width > 415 ? 377 : 282;
     const strokeVal = (progressVal * r) / 100;
     const x: any = document.querySelector(`.progress-bar__circle--${id} .progress-bar__circle-prog`);

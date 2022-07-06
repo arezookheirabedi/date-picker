@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {convertGregorianDateToJalaliDate, sideCities} from '../../helpers/utils';
+import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
   categories: [],
@@ -42,7 +43,7 @@ export default function useGetOverviewOfTheVaccinationProcess(
   const source = CancelToken.source();
 
   // eslint-disable-next-line
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
     setError(null);
     try {
@@ -144,6 +145,9 @@ export default function useGetOverviewOfTheVaccinationProcess(
         };
       });
 
+      setError(false);
+      setLoading(false);
+
       // setDataset([
       //   {
       //     name: 'واکسن نزده',
@@ -173,10 +177,11 @@ export default function useGetOverviewOfTheVaccinationProcess(
       // ]);
       // setCategories([...provinces]);
     } catch (err: any) {
-      setError(err.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -191,7 +196,7 @@ export default function useGetOverviewOfTheVaccinationProcess(
       source.cancel('Operation canceled by the user.');
       setData(initialData);
     };
-  }, []);
+  }, [query]);
 
   const location = useLocation();
   const history = useHistory();
@@ -216,7 +221,7 @@ export default function useGetOverviewOfTheVaccinationProcess(
       setData(initialData);
       source.cancel('Operation canceled by the user.');
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
   return {loading, error, data};
 }
