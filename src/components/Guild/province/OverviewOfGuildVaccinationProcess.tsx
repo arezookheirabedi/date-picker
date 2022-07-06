@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
@@ -70,16 +70,13 @@ interface IOverviewOfGuildVaccinationProcess {
 const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationProcess> = ({
   cityTitle,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query, setQuery] = useState<any>({tag: 'guild'});
   const {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useOverviewOfTheVaccinationProcess(
-    {
-      tag: 'guild',
-    },
-    true
-  );
+  } = useOverviewOfTheVaccinationProcess(query, true);
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">

@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-import {isEmpty} from 'lodash';
 import DatepickerQuery from 'src/components/DatepickerQuery';
-// import calendar from '../../../assets/images/icons/calendar.svg';
+import RetryButton from 'src/components/RetryButton';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import useGetOverviewOfPatients from '../../../hooks/apis/useGetOverviewOfPatients';
 
@@ -25,6 +23,7 @@ const OverviewPositivePcr = () => {
     categoryValue: null,
     tag: 'guild',
     category: 'categoryDesc',
+    retry: false,
   });
   const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
 
@@ -64,10 +63,14 @@ const OverviewPositivePcr = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        {!loading && !isEmpty(data) && !errorMessage && <Line data={data} />}
-        {isEmpty(data) && !loading && !errorMessage && (
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>

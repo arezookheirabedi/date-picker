@@ -20,7 +20,7 @@ export default function useGetNumberOf(query?: any, hasProvince: boolean = false
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getIt = async (params: any = {}) => {
+  const getIt = async ({retry, ...params}: any = {}) => {
     setErrorMessage(null);
     setLoading(true);
     try {
