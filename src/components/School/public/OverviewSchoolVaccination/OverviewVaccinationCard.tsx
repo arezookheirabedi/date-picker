@@ -52,7 +52,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             infoText="تعداد کل دوز های تزریقی"
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={numberOf.totalVaccinesCount}
+            count={numberOf.gtDoses[0]}
             loading={loading}
           />
         </div>
@@ -94,40 +94,15 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             hasInfo
             loading={loading}
           />
-
-          {/* <div className="w-1/4 ">
-            <Statistic
-              infoText="تعداد افرادی که اطلاعات آنها به درستی در سامانه ثبت نشده است"
-              icon={GrayVaccine}
-              text=" تعداد اطلاعات مخدوش"
-              count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-              hasInfo
-              loading={loading}
-              isPercentage
-            />
-          </div> */}
         </div>
-        {/* <div className="flex  flex-col  md:flex-row justify-start  space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <div className="w-1/4 ">
-            <Statistic
-              text=" تعداد واکسیناسیون انجام نشده"
-              hasInfo
-              infoText=" تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
-              icon={GrayVaccine}
-              count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-              loading={loading}
-              isPercentage
-            />
-          </div>
-        </div> */}
       </div>
       <div className="flex  flex-col  justify-start space-y-5  space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
         <Statistic
           infoText="تعداد افرادی  که دوز پنجم واکسن را دریافت کرده‌اند "
           hasInfo
           icon={BlueVaccine}
-          text="تعداد واکسیناسیون دوز پنجم"
-          count={numberOf.doses[5]}
+          text="تعداد واکسیناسیون دوز پنجم و بیشتر"
+          count={numberOf.gtDoses[4]}
           loading={loading}
         />
 

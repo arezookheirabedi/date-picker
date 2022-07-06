@@ -4,7 +4,8 @@ import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import useGetOverviewOfPationColumnChart from 'src/hooks/apis/useGetOverviewOfPationColumnChart';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
+import RetryButton from 'src/components/RetryButton';
 import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
@@ -15,6 +16,7 @@ const OverviewGuildPositivePcrPercentage: React.FC<{}> = () => {
     to: null,
     tag: 'edu',
     category: 'grade',
+    retry: false,
   });
   const {dataset, loading, error: errorMessage} = useGetOverviewOfPationColumnChart(query);
 
@@ -115,13 +117,20 @@ const OverviewGuildPositivePcrPercentage: React.FC<{}> = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {dataset &&
+          dataset.categories &&
+          dataset.categories.length === 0 &&
+          !loading &&
+          !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   );
