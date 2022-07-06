@@ -35,7 +35,7 @@ export default function useOverviewOfBakeryProvince(city:any) {
   const [list, setList] = useState<any>(initialNumber);
   const [error, setError] = useState(false);
   const [count, setCount] = useState<any>(0);
-  const [provinceName, setProvinceName] = useState();
+  const [provinceName, setProvinceName] = useState<any>();
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
