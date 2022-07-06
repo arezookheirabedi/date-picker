@@ -8,7 +8,7 @@ import RetryButton from 'src/components/RetryButton';
 import {EERRORS} from 'src/constants/errors.enum';
 import Charts from '../../Charts';
 import {
-  chartNumberconverters as converters,
+  chartNumberConverters as converters,
   cancelTokenSource,
   msgRequestCanceled,
   sideCities,

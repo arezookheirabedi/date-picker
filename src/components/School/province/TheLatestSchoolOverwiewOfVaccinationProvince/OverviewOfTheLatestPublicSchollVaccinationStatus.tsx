@@ -3,7 +3,7 @@ import Highcharts from 'highcharts/highstock';
 import Charts from 'src/components/Charts';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import RetryButton from 'src/components/RetryButton';
 

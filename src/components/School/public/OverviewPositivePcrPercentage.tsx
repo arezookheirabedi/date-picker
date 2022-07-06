@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import useGetOverviewOfPationColumnChart from 'src/hooks/apis/useGetOverviewOfPationColumnChart';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import RetryButton from 'src/components/RetryButton';
 import Spinner from '../../Spinner';
 
