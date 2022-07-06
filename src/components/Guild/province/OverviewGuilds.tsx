@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Statistic from 'src/containers/Guild/components/Statistic';
 import saveIcon from 'src/assets/images/icons/save-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
@@ -18,8 +18,10 @@ interface OverviewGuildsProvinceProps {
 }
 
 const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitle}) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query, setQuery] = useState<any>({tag: 'guild'});
   // eslint-disable-next-line
-  const {data: guildVacinateInfo, loading, error} = useGetNumberOf({tag: 'guild'}, true);
+  const {data: guildVacinateInfo, loading, error} = useGetNumberOf(query, true);
   // eslint-disable-next-line
   const {
     data: guildPcrInfo,
