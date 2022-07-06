@@ -5,7 +5,7 @@ import Charts from 'src/components/Charts';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import RetryButton from 'src/components/RetryButton';
 
 const {HeadlessChart} = Charts;

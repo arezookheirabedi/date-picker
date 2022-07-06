@@ -11,7 +11,7 @@ import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import {
   cancelTokenSource,
   msgRequestCanceled,

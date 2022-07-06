@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
-import {chartNumberconverters as converters} from 'src/helpers/utils';
+import {chartNumberConverters as converters} from 'src/helpers/utils';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import RetryButton from 'src/components/RetryButton';
 import {EERRORS} from 'src/constants/errors.enum';

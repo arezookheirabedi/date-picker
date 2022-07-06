@@ -5,7 +5,7 @@ import {isEmpty} from 'lodash';
 import useGetOverviewOfPationColumnChart from 'src/hooks/apis/useGetOverviewOfPationColumnChart';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import RetryButton from 'src/components/RetryButton';
-import {chartNumberconverters as converters} from '../../../helpers/utils';
+import {chartNumberConverters as converters} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
