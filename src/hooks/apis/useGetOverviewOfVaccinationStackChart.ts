@@ -1,6 +1,7 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
-import hcsService from "../../services/hcs.service";
+import {useEffect, useState} from 'react';
+import axios from 'axios';
+import hcsService from '../../services/hcs.service';
+import {EERRORS} from "../../constants/errors.enum";
 
 const initialData = {
   categories: [],
@@ -35,26 +36,28 @@ const initialData = {
       color: '#716DE3',
       data: [],
     },
-  ]
+  ],
 } as any;
 
-export default function useGetOverviewOfVaccinationStackChart(query : any) {
+export default function useGetOverviewOfVaccinationStackChart(query: any) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false) as any;
+  const [error, setError] = useState(null) as any;
   const [data, setData] = useState<any>(initialData);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
+
     setLoading(true);
     setError(null);
     try {
-      const {data : result} = await hcsService.getVaccinesGroupedByProvinceReport({
-        ...params
-      }, {cancelToken: source.token});
-
-      console.log(data);
+      const {data: result} = await hcsService.getVaccinesGroupedByProvinceReport(
+        {
+          ...params
+        },
+        {cancelToken: source.token}
+      );
 
       const provinces: any[] = [];
 
@@ -74,7 +77,6 @@ export default function useGetOverviewOfVaccinationStackChart(query : any) {
       let noDose: any[] = [];
 
       result.forEach((item: any) => {
-
         // eslint-disable-next-line
         for (const [key, value] of Object.entries({...initialDoses, ...item.doses})) {
           if (Number(key) === 1) {
@@ -114,35 +116,40 @@ export default function useGetOverviewOfVaccinationStackChart(query : any) {
             {
               name: 'دوز اول',
               color: '#F3BC06',
-              data: [...firstDose]
-            }, {
+              data: [...firstDose],
+            },
+            {
               name: 'دوز دوم',
               color: '#209F92',
-              data: [...secondDose]
-            }, {
+              data: [...secondDose],
+            },
+            {
               name: 'دوز سوم',
               color: '#004D65',
-              data: [...thirdDose]
-            }, {
+              data: [...thirdDose],
+            },
+            {
               name: 'دوز چهارم',
               color: '#BFDDE7',
-              data: [...forthDose]
-            }, {
+              data: [...forthDose],
+            },
+            {
               name: 'دوز پنجم',
               color: '#716DE3',
-              data: [...fifthDose]
-            }]
-        }
-      })
+              data: [...fifthDose],
+            },
+          ],
+        };
+      });
 
+      setError(false)
+      setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
+        setLoading(true);
         return;
       }
-      setError('خطا در اتصال به سرویس');
-      // eslint-disable-next-line
-      console.log(err);
-    } finally {
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -150,7 +157,7 @@ export default function useGetOverviewOfVaccinationStackChart(query : any) {
     getIt(query);
     return () => {
       setData(initialData);
-      setError(null)
+      setError(null);
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);

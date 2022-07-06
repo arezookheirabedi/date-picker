@@ -16,6 +16,7 @@ import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg
 import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
 import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
 import SingleDatepickerQuery from "../../SingleDatepickerQuery";
+import RetryButton from "../../RetryButton";
 
 const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
   const [query, setQuery] = useState({
@@ -23,6 +24,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     category: 'serviceType',
     from: null,
     to: null,
+    retry: false
   });
   // eslint-disable-next-line
   const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'});
@@ -33,6 +35,7 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
     // eslint-disable-next-line
     error: errorMessage,
   } = useGetOverviewOfVaccinationTable(query);
+
 
   // const [counts, setCounts] = useState<any>({
   //   numberOfDrivers: null,
@@ -413,11 +416,20 @@ const OverviewOfVaccinationInPublicTransport: React.FC<{}> = () => {
         <SingleDatepickerQuery query={query} setQuery={setQuery}/>
       </div>
 
-      {datasetLoading ? (
+      {errorMessage && (
+        <div className="p-40">
+          <div className="text-red-500">{errorMessage}</div>
+          <RetryButton setQuery={setQuery}/>
+        </div>
+      )}
+
+      {datasetLoading && (
         <div className="p-20">
           <Spinner/>
         </div>
-      ) : (
+      )}
+
+      {!datasetLoading && !errorMessage && (
         <>
           <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
             <Table

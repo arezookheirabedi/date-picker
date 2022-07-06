@@ -1,14 +1,10 @@
 import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
-
 import hcsService from 'src/services/hcs.service';
-import DatePickerModal from 'src/components/SingleDatePickerModal';
-import Calendar from 'src/components/Calendar/SingleCalendar';
-// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {useHistory, useLocation} from 'react-router-dom';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
+import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 import Charts from '../../Charts';
 import {
   chartNumberconverters as converters,
@@ -25,26 +21,17 @@ interface OverviewPerProvinceProps {
 }
 
 const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPerProvinceProps> = ({
-  cityTitle,
-}) => {
+                                                                                                    cityTitle,
+                                                                                                  }) => {
   const location = useLocation();
   const history = useHistory();
   const [dataset, setDataset] = useState<any>({});
-  // eslint-disable-next-line
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  // eslint-disable-next-line
-  const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line
+  const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [selectedDay, setSelectedDay] = useState({to: null, clear: false}) as any;
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
   const [queryParams, setQueryParams] = useState({
     to: null,
+    retry: false
   });
 
   const cancelToken = cancelTokenSource();
@@ -53,7 +40,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getLinearOverview = async (params: any) => {
+  const getLinearOverview = async ({retry, ...params}: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -93,11 +80,13 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         },
       ];
       setDataset({categories: [...grade], series: [...newData]});
+      setLoading(false);
     } catch (error: any) {
+      if (error.message === 'cancel') {
+        setLoading(true);
+        return
+      }
       setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
       setLoading(false);
     }
   };
@@ -111,15 +100,6 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
       },
-
-      events: {
-        redraw: () => {
-          // eslint-disable-next-line
-          // console.log('redraw');
-        },
-      },
-      // zoomType: 'x'
-      // styledMode: true
     },
     title: {
       text: '',
@@ -143,12 +123,9 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     credits: {
       enabled: false,
     },
-    // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
     plotOptions: {
       series: {
-        // stacking: 'percent',
         stacking: 'percent',
-        // borderRadius: 5,
         pointWidth: 15,
       },
       column: {
@@ -183,9 +160,6 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
       labels: {
         rotation: 45,
       },
-      // lineDashStyle: 'dash',
-      // lineColor: '#000000',
-      // lineWidth: 1
     },
     tooltip: {
       shared: true,
@@ -198,7 +172,6 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         fontSize: 10,
       },
       borderWidth: 0,
-      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
 
     series: [],
@@ -210,36 +183,20 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
-    const idSetTimeOut = setTimeout(() => {
-      if (existsCity) {
-        getLinearOverview({...queryParams, tag: 'edu', category: 'grade', province: provinceName});
-      } else {
-        history.push('/dashboard/school/province');
-      }
-    }, 500);
+
+    if (existsCity) {
+      getLinearOverview({...queryParams, tag: 'edu', category: 'grade', province: provinceName});
+    } else {
+      history.push('/dashboard/school/province');
+    }
+
 
     return () => {
-      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset({});
     };
   }, [queryParams, location.search]);
 
-  useEffect(() => {
-    if (selectedDay.to) {
-      const finalToDate = `${selectedDay.to.year}/${selectedDay.to.month}/${selectedDay.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDay.clear) {
-      setQueryParams({
-        ...queryParams,
-        to: null,
-      });
-    }
-  }, [selectedDay]);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -250,31 +207,21 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         <div className="mb-10 mt-6 flex items-center justify-between px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDay={setSelectedDay}
-                  selectedDay={selectedDay}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                to={selectedDay.to}
-                setSelectedDay={setSelectedDay}
-              />
+              <SingleDatepickerQuery query={queryParams} setQuery={setQueryParams}/>
             </div>
           </div>
           <div className="w-2/4">
-            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+            <div
+              className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+              <div
+                className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#e21416'}}/>
                   <span>واکسن نزده</span>
                 </div>
 
                 <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}} />
+                  <div className="h-2 w-20 rounded" style={{backgroundColor: '#04b086'}}/>
                   <span>واکسن زده </span>
                 </div>
               </div>
@@ -283,12 +230,18 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
         </div>
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams}/>
+          </div>
+        )}
+
         {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
         {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
