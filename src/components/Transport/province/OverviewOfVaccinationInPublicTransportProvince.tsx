@@ -15,6 +15,7 @@ import Spinner from '../../Spinner';
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
 import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
 import SingleDatepickerQuery from "../../SingleDatepickerQuery";
+import RetryButton from "../../RetryButton";
 
 interface OverviewOfVaccinationInPublicTransportProvinceProps {
   cityTitle: any;
@@ -26,7 +27,8 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
       tag: 'transport',
       category: 'serviceType',
       from: null,
-      to: null
+      to: null,
+      retry : false
     })
     // eslint-disable-next-line
     const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'}, true);
@@ -34,7 +36,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
     const {data: dataset, loading: datasetLoading, error: errorMessage} = useGetOverviewOfVaccinationTable(query, true)
 
     return (
-      <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
           نگاه کلی واکسیناسیون در حمل و نقل عمومی در استان &nbsp;
           {cityTitle}
@@ -194,11 +196,20 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           </div>
         </div>
 
-        {datasetLoading ? (
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
+
+        {datasetLoading && (
           <div className="p-20">
             <Spinner/>
           </div>
-        ) : (
+        )}
+
+        {!datasetLoading && !errorMessage && (
           <>
             <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
               <Table
