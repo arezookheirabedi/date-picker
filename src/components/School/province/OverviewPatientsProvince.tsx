@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import useGetOverviewOfPatients from 'src/hooks/apis/useGetOverviewOfPatients';
 import DatepickerQuery from 'src/components/DatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
@@ -26,6 +27,7 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
     categoryValue: null,
     tag: 'edu',
     category: 'grade',
+    retry: false,
   });
   const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query, true);
   return (
@@ -67,7 +69,12 @@ const OverviewPatientsProvince: React.FC<OverviewPatientsProvinceProps> = ({city
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
