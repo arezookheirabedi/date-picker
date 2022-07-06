@@ -13,7 +13,7 @@ import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
 import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
 import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
 import LocalTableSearch from '../../LocalTableSearch';
-import SingleDatepickerQuery from "../../SingleDatepickerQuery";
+import SingleDatepickerQuery from '../../SingleDatepickerQuery';
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [query, setQuery] = useState({
@@ -59,7 +59,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={numberOf.totalVaccinesCount || 0}
+            count={numberOf.gtDoses[0] || 0}
             loading={loading}
             hasInfo
             infoText="تعداد کل دوز های تزریق شده در حمل‌ونقل عمومی"
@@ -100,8 +100,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           />
           <Statistic
             icon={NavyVaccineMd}
-            text="تعداد واکسیناسیون دوز پنجم"
-            count={numberOf.doses[5] || 0}
+            text="تعداد واکسیناسیون دوز پنجم و بیشتر"
+            count={numberOf.gtDoses[4] || 0}
             loading={loading}
             hasInfo
             infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."

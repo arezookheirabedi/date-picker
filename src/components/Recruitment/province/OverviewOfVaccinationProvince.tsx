@@ -5,24 +5,24 @@ import totalEmployee from '../../../assets/images/icons/people-dark-green.svg';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
 import Table from '../../TableScopeSort';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-import YellowVaccineMd from "../../../assets/images/icons/yellow-vaccine-lg.svg";
-import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
-import PurppleVaccineMd from "../../../assets/images/icons/purpple-vaccine-lg.svg";
-import DarkgreenVaccine from "../../../assets/images/icons/darkgreen-vaccine.svg";
-import NavyVaccineMd from "../../../assets/images/icons/navy-vaccine-lg.svg";
-import GrayVaccine2 from "../../../assets/images/icons/gray-vaccine-2.svg";
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
-import SingleDatepickerQuery from "../../SingleDatepickerQuery";
-import LocalTableSearch from "../../LocalTableSearch";
-
+import YellowVaccineMd from '../../../assets/images/icons/yellow-vaccine-lg.svg';
+import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
+import PurppleVaccineMd from '../../../assets/images/icons/purpple-vaccine-lg.svg';
+import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
+import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
+import GrayVaccine2 from '../../../assets/images/icons/gray-vaccine-2.svg';
+import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
+import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
+import SingleDatepickerQuery from '../../SingleDatepickerQuery';
+import LocalTableSearch from '../../LocalTableSearch';
 
 interface OverviewOfVaccinationProvinceProps {
-  cityTitle: any
+  cityTitle: any;
 }
 
-const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({cityTitle}) => {
-
+const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps> = ({
+  cityTitle,
+}) => {
   const [query, setQuery] = useState({
     tag: 'employee',
     category: 'heName',
@@ -35,10 +35,13 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     loading,
     // eslint-disable-next-line
     error,
-  } = useGetNumberOf({
-    tag: 'employee',
-    category: 'heName',
-  },true);
+  } = useGetNumberOf(
+    {
+      tag: 'employee',
+      category: 'heName',
+    },
+    true
+  );
   // eslint-disable-next-line
   const {
     data: dataset,
@@ -47,18 +50,17 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     error: errorMessage,
     orgDataset,
     setData,
-  } = useGetOverviewOfVaccinationTable(query,true);
+  } = useGetOverviewOfVaccinationTable(query, true);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به واکسیناسیون کارکنان دولت در استان &nbsp;
         {cityTitle}
       </legend>
 
-      <div className="flex flex-col justify-between space-y-8 mb-8 mt-12">
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+      <div className="mb-8 mt-12 flex flex-col justify-between space-y-8">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={totalEmployee}
             text="مجموع کارکنان دولت"
@@ -70,7 +72,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={numberOf.totalVaccinesCount || 0}
+            count={numberOf.gtDoses[0] || 0}
             loading={loading}
             hasInfo
             infoText="تعداد کل دوز های تزریق شده در حمل‌ونقل عمومی"
@@ -92,8 +94,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12 border-b-2 border-slate-400 pb-8">
+        <div className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={PurppleVaccineMd}
             text="تعداد واکسیناسیون دوز سوم"
@@ -112,8 +113,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           />
           <Statistic
             icon={NavyVaccineMd}
-            text="تعداد واکسیناسیون دوز پنجم"
-            count={numberOf.doses[5] || 0}
+            text="تعداد واکسیناسیون دوز پنجم و بیشتر"
+            count={numberOf.gtDoses[4] || 0}
             loading={loading}
             hasInfo
             infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
@@ -127,8 +128,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون"
@@ -165,10 +165,8 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
             isPercentage
           />
-
         </div>
-        <div
-          className="flex flex-col md:flex-row justify-start space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse mb-8 mt-12">
+        <div className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <div className="w-1/4">
             <Statistic
               icon={DarkgreenVaccine}
@@ -206,18 +204,18 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
         </div>
       </div>
 
-      <div className="flex align-center justify-between space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center justify-between">
+      <div className="align-center mb-8 flex justify-between space-x-5 rtl:space-x-reverse">
+        <div className="align-center flex justify-between">
           <SingleDatepickerQuery query={query} setQuery={setQuery} />
         </div>
-        <div className="flex align-center">
+        <div className="align-center flex">
           <div className="align-center relative inline-flex leading-3">
             <LocalTableSearch orgDataset={orgDataset} setData={setData} query={query} />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         <Table
           loading={datasetLoading}
           dataSet={[...dataset]}
