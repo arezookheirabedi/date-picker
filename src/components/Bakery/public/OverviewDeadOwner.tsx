@@ -234,14 +234,14 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                 render: (v: any) => <span>{v === "NULL" ? '-' : v}</span>,
               },
               {
+                name: 'نام و نام‌ خانوادگی',
+                key: 'fullName',
+                render: (v: any) => <span>{v || '-'}</span>,
+              },
+              {
                 name: 'شناسه پروانه سیما',
                 key: 'simaId',
                 render: (v: any) => <span>{v}</span>,
-              },
-              {
-                name: 'نام و نام‌خانوادگی',
-                key: 'fullName',
-                render: (v: any) => <span>{v || '-'}</span>,
               },
               {
                 name: 'شماره ملی',

@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useHistory, useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
+import {EERRORS} from 'src/constants/errors.enum';
 import hcsService from '../../services/hcs.service';
 
 export default function useGetOverviewOfVaccinationStackChart(
@@ -10,12 +11,12 @@ export default function useGetOverviewOfVaccinationStackChart(
 ) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false) as any;
-  const [dataset, setDataset] = useState<any>({});
+  const [dataset, setDataset] = useState<any>();
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
+  const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
     setError(null);
     try {
@@ -47,11 +48,13 @@ export default function useGetOverviewOfVaccinationStackChart(
         },
       ];
       setDataset({categories: [...categoryValue], series: [...newData]});
+      setLoading(false);
     } catch (errors: any) {
-      setError(errors.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      if (errors.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(errors.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };

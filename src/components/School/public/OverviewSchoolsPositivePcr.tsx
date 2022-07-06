@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-// import calendar from '../../../assets/images/icons/calendar.svg';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import useGetOverviewOfPatients from 'src/hooks/apis/useGetOverviewOfPatients';
+import RetryButton from 'src/components/RetryButton';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 
 const {Line} = Charts;
@@ -25,6 +23,7 @@ const OverviewSchoolsPositivePcr = () => {
     categoryValue: null,
     tag: 'edu',
     category: 'grade',
+    retry: false,
   });
   const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
 
@@ -64,9 +63,14 @@ const OverviewSchoolsPositivePcr = () => {
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
-        {data.length === 0 && !loading && !errorMessage && (
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
+        {!loading && data && data.length > 0 && !errorMessage && <Line data={data} />}
+        {data && data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}
       </div>
