@@ -3,6 +3,7 @@ import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
+import RetryButton from 'src/components/RetryButton';
 import useGetOverviewOfVaccinationStackChart from '../../../hooks/apis/useGetOverviewOfVaccinationStackChart';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
@@ -15,6 +16,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
   const [query, setQuery] = useState<any>({
     to: null,
     tag: 'guild',
+    retry: false,
   });
   const {
     data: dataset,
@@ -30,15 +32,6 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
       },
-
-      events: {
-        redraw: () => {
-          // eslint-disable-next-line
-          // console.log('redraw');
-        },
-      },
-      // zoomType: 'x'
-      // styledMode: true
     },
     title: {
       text: '',
@@ -62,13 +55,9 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
     credits: {
       enabled: false,
     },
-    // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
     plotOptions: {
       series: {
-        // stacking: 'percent',
-        // stacking: `${notPercent?'normal':'percent'}`,
         stacking: 'percent',
-        // borderRadius: 5,
         pointWidth: 15,
       },
       column: {
@@ -97,9 +86,6 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
       labels: {
         rotation: 45,
       },
-      // lineDashStyle: 'dash',
-      // lineColor: '#000000',
-      // lineWidth: 1
     },
     tooltip: {
       shared: true,
@@ -112,9 +98,7 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
         fontSize: 10,
       },
       borderWidth: 0,
-      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
-
     series: [],
   };
   return (
@@ -165,13 +149,20 @@ const OverviewGuildsPerProvince: React.FC<OverviewGuildsPerProvinceProps> = () =
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {dataset &&
+          dataset.categories &&
+          dataset.categories.lenght === 0 &&
+          !loading &&
+          !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   );

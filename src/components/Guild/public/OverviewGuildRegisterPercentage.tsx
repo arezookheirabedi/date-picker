@@ -1,35 +1,26 @@
 import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import moment from 'moment-jalaali';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
+import DatepickerQuery from 'src/components/DatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
 
 const {HeadlessChart} = Charts;
 
 interface IOverviewGuildRegisterPercentage {}
-
 const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage> = () => {
   const [dataset, setDataset] = useState<any>({});
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-    clear: false,
-  }) as any;
-
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
+    retry: false,
   });
 
   const cancelToken = cancelTokenSource();
@@ -38,7 +29,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartRegisterPercentage = async (params: any) => {
+  const getColumnChartRegisterPercentage = async ({retry, ...params}: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -67,57 +58,29 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         },
       ];
 
-      // if (data.length > 0) {
       setDataset({categories: [...province], series: [...newData]});
-
-      // }
+      setLoading(false);
     } catch (error: any) {
+      if (error.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
       setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartRegisterPercentage(queryParams);
-    }, 500);
+    getColumnChartRegisterPercentage(queryParams);
     return () => {
-      clearTimeout(idSetTimeOut);
       cancelRequest();
       setDataset({});
     };
   }, [queryParams]);
 
-  useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQueryParams({
-        ...queryParams,
-        from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQueryParams({
-        ...queryParams,
-        from: null,
-        to: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
-
   const optionChart = {
     chart: {
       scrollablePlotArea: {
-        // minWidth: 700,
         scrollPositionX: 1,
       },
       type: 'column',
@@ -134,7 +97,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     credits: {
       enabled: false,
     },
-    // colors: ['#175A76'],
     plotOptions: {
       column: {
         marker: {
@@ -157,7 +119,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         lineWidth: 2,
         threshold: null,
         borderRadius: 2,
-        // pointWidth: pointWidth || 0,
         states: {
           hover: {
             lineWidth: 1,
@@ -199,8 +160,8 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
         trackBorderRadius: 4,
         showFull: false,
       },
-      min: 0,
-      max: 30,
+      // min: 0,
+      // max: 30,
       lineDashStyle: 'dash',
       lineColor: '#000000',
       lineWidth: 1,
@@ -219,6 +180,7 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
     },
     series: [
       {
+        pointWidth: 16,
         lineWidth: 4,
         dataLabels: {
           // enabled: true,
@@ -232,10 +194,6 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
       <legend className="mx-auto px-3 text-black">
         نگاه کلی به درصد اصناف ثبت نامی در هر استان
       </legend>
-
-      {/* {JSON.stringify(data1, null, 2)} */}
-      {/* {JSON.stringify(dataset, null, 2)} */}
-
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
           <div className="align-center flex space-x-5 rtl:space-x-reverse">
@@ -249,39 +207,29 @@ const OverviewGuildRegisterPercentage: React.FC<IOverviewGuildRegisterPercentage
               />
             </div>
             <div className="flex items-center">
-              {' '}
-              {showDatePicker ? (
-                <DatePickerModal
-                  setSelectedDayRange={setSelectedDayRange}
-                  selectedDayRange={selectedDayRange}
-                  setShowDatePicker={setShowDatePicker}
-                  showDatePicker
-                />
-              ) : null}
-              <Calendar
-                action={focusFromDate}
-                from={selectedDayRange.from}
-                to={selectedDayRange.to}
-                setSelectedDayRange={setSelectedDayRange}
-              />
+              <DatepickerQuery query={queryParams} setQuery={setQueryParams} />
             </div>
           </div>
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-
-        {!loading &&
-          !errorMessage &&
-          (isEmpty(dataset) ? (
-            <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-          ) : (
-            <HeadlessChart data={dataset} optionsProp={optionChart} />
-          ))}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams} />
+          </div>
+        )}
+        {!loading && !isEmpty(dataset) && !errorMessage && (
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
+        )}
+        {dataset &&
+          dataset.categories &&
+          dataset.categories.lenght === 0 &&
+          !loading &&
+          !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
 import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
@@ -14,7 +14,9 @@ import Statistic from '../../../../containers/Guild/components/Statistic';
 
 const OverviewOfStatusCard: React.FC<{}> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {data: guildVacinateInfo, loading, error} = useGetNumberOf({tag: 'guild'});
+  const [query, setQuery] = useState<any>({tag: 'guild'});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {data: guildVacinateInfo, loading, error} = useGetNumberOf(query);
 
   return (
     <>

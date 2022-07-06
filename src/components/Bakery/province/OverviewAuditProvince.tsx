@@ -267,11 +267,6 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
                 render: (v: any) => <span>{v}</span>,
               },
               {
-                name: 'شناسه POS بانکی',
-                key: 'posId',
-                render: (v: any) => <span>{v || '-'}</span>,
-              },
-              {
                 name: 'شماره ملی',
                 key: 'nationalId',
                 render: (v: any) => <span>{v}</span>,
