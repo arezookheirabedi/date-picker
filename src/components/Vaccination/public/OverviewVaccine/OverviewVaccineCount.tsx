@@ -68,8 +68,8 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={NavyVaccine}
           hasInfo
           infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
-          text="تعداد واکسیناسیون دوز پنجم"
-          count={numberOf.doses[5] || 0}
+          text="تعداد واکسیناسیون دوز پنجم و بیشتر"
+          count={numberOf.gtDoses[4] || 0}
           loading={loading}
         />
         <Statistic

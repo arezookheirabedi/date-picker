@@ -18,7 +18,7 @@ export default function useOverviewOfInspectionNeedProvince(city:any) {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>(initialNumber);
   const [error, setError] = useState(false);
-  const [provinceName, setProvinceName] = useState(false);
+  const [provinceName, setProvinceName] = useState<any>();
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
