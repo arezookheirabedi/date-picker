@@ -9,7 +9,7 @@ const initialNumber = {
     bakery: {...initialBakeries}
 };
 
-export default function useOverviewOfBakery() {
+export default function useOverviewOfInspectionNeed() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>(initialNumber);
   const [error, setError] = useState(false);
