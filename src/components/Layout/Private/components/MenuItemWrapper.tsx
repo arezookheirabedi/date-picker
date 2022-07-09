@@ -23,7 +23,8 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
     nationalId: '',
     qrCode: '',
     roles: [],
-    permissions: []
+    resources: [],
+    permissions: [],
   });
 
   // eslint-disable-next-line
