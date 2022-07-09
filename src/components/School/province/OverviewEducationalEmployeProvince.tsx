@@ -82,7 +82,7 @@ const OverviewEducationalEmployeProvince: React.FC<OverviewSchoolEmployeProps> =
   //   if (existsCity) {
   //     getNumberOf(provinceName);
   //   } else {
-  //     history.push('/dashboard/school/province');
+  //        history.go(-1);
   //   }
 
   //   return () => {

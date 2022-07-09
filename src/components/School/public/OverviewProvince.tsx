@@ -76,19 +76,19 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
     if (existsCity) {
       getNumberOf(provinceName);
     } else {
-      history.push('/dashboard/school/province');
+      history.push('/dashboard/health/school/province');
     }
   }, [location.search]);
 
   return (
-    <fieldset className="text-center border rounded-xl px-4 pt-4 pb-8 mb-16">
-      <legend className="text-black mx-auto px-3">
+    <fieldset className="mb-16 rounded-xl border px-4 pt-4 pb-8 text-center">
+      <legend className="mx-auto px-3 text-black">
         نگاه کلی به پرسنل آموزشی آموزش و پرورش در استان &nbsp;
         {cityTitle}
       </legend>
 
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={totalRecritment}
             text="مجموع کارمندان آموزش پرورش"
@@ -109,7 +109,7 @@ const OverviewProvince: React.FC<OverviewProvinceProps> = ({cityTitle}) => {
           />
           <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} />
         </div>
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
