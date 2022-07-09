@@ -16,7 +16,7 @@ const ResetPassWordModal: React.FC<IProps> = ({resetIsOpen, setResetIsOpen}) => 
     oldPassword: Yup.string().required('وارد کردن پسورد قبلی الزامی است.'),
     password: Yup.string()
       .required('وارد کردن پسورد الزامی است.')
-      .min(8, 'حداقل کلمه عبور ۸ کارکتر می باشد.'),
+      .matches(AppRegex.password, 'حداقل کلمه عبور ۸ کارکتر می باشد.'),
     confirmPassword: Yup.string()
       .required('تکرار کلمه عبور الزامی است.')
       .oneOf([Yup.ref('password')], 'تکرار کلمه عبور اشتیاه است.'),

@@ -1,5 +1,5 @@
 const regex = {
-  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d){3,}$/,
+  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-z\d]{8,}$/,
   mobileIran: /^09[0-9]{9}$/i,
   mobilePersian: /^[\u06F0][\u06F0-\u06F9]{3}[\u06F0-\u06F9]{3}[\u06F0-\u06F9]{4}/,
   nationalId: /^[0-9]{10}$/g,
