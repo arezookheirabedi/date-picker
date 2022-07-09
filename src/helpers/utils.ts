@@ -179,6 +179,7 @@ export function isLogin() {
         JSON.stringify({
           ...profile,
           roles: payload.authorities || [],
+          resources: payload.resources,
           permissions: (payload.authorities || []).reduce((result: any[], role: string) => {
             const prems = getRolePermissions[role];
             const r = result.concat(prems);
