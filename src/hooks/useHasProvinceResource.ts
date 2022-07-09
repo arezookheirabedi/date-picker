@@ -42,7 +42,7 @@ const useHasProvinceResource = () => {
     }
   }, [location.search]);
 
-  return [hasProvinceResources];
+  return [hasProvinceResources, resources];
 };
 
 export default useHasProvinceResource;
