@@ -187,7 +187,7 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     if (existsCity) {
       getLinearOverview({...queryParams, tag: 'edu', category: 'grade', province: provinceName});
     } else {
-      history.push('/dashboard/school/province');
+      history.go(-1);
     }
 
     return () => {
