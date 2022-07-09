@@ -66,7 +66,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
         verificationCode: data,
       });
       if (response.status === 200) {
-        history.push('/dashboard/reports/requested');
+        history.push('/dashboard/health/reports/requested');
       } else {
         throw new Error('خطایی در عملیات');
       }
@@ -90,14 +90,14 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
       <button
         type="button"
         onClick={openModal}
-        className="button button--primary px-5 flex space-x-2 rtl:space-x-reverse"
+        className="button button--primary flex space-x-2 px-5 rtl:space-x-reverse"
       >
         <img src={download} alt="" className="h-4" />
         <span>دانلود اطلاعات</span>
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className=" fixed inset-0 overflow-y-auto z-50" onClose={closeModal}>
+        <Dialog as="div" className=" fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as="div"
@@ -108,7 +108,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90" />
+              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -124,14 +124,14 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-xl p-10 my-8 overflow-hidden align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
-                <Dialog.Title as="h3" className="font-bold leading-6 text-gray-900 my-4">
+              <div className="relative my-8 inline-block w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
+                <Dialog.Title as="h3" className="my-4 font-bold leading-6 text-gray-900">
                   برای دریافت اطلاعات کد فعالسازی را وارد نمایید
                 </Dialog.Title>
 
                 <button
                   type="button"
-                  className="absolute top-3 left-4 text-gray-300 cursor-pointer"
+                  className="absolute top-3 left-4 cursor-pointer text-gray-300"
                   onClick={closeModal}
                 >
                   <svg
@@ -150,9 +150,9 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
                   </svg>
                 </button>
 
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col items-center justify-center">
                   <div className="mt-4 w-4 max-w-xs">
-                    <div className="flex items-center justify-center space-x-4 rtl:space-x-reverse text-sm otp">
+                    <div className="otp flex items-center justify-center space-x-4 text-sm rtl:space-x-reverse">
                       <OtpInput value={otp} onChange={handleOtpChange} numInputs={6} isInputNum />
                     </div>
                   </div>
@@ -161,7 +161,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
                     type="button"
                     disabled={submitted || fetchCode}
                     onClick={requestExport}
-                    className="flex items-center justify-center text-xs text-primary-500 border-b border-primary-500 mt-4"
+                    className="mt-4 flex items-center justify-center border-b border-primary-500 text-xs text-primary-500"
                   >
                     <span>ارسال مجدد کد</span>
                   </button>
@@ -171,7 +171,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
                       type="button"
                       onClick={handleSubmit}
                       disabled={submitted || fetchCode}
-                      className="button button--primary px-14 w-52"
+                      className="button button--primary w-52 px-14"
                     >
                       <span>{!submitted && !fetchCode ? 'ثبت' : <DotLoading />}</span>
                     </button>
