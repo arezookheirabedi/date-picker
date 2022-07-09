@@ -30,6 +30,9 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
   // eslint-disable-next-line
   const [close, setClose] = useState<any>(true);
   const location = useLocation();
+  const checkProvinceResources = profile.resources?.find(
+    (item: any) => item.name === 'province'
+  ) as {name: string; value: string[]} | undefined;
 
   const handleDisabled: (message: string) => void = message => {
     toast.info(<Info message={message} />, {
@@ -134,7 +137,14 @@ const MenuItemWrapper: React.FC<IProps> = ({route}) => {
                                                   className="text-gray-400"
                                                 >
                                                   <NavLink
-                                                    to={routeL3.link}
+                                                    to={`${routeL3.link}${
+                                                      routeL3?.enTitle === 'province' &&
+                                                      profile.resources &&
+                                                      checkProvinceResources &&
+                                                      checkProvinceResources?.value[0] !== '*'
+                                                        ? `/?provinceName=${checkProvinceResources?.value[0]}`
+                                                        : ''
+                                                    }`}
                                                     className="flex items-center pt-3 text-xs font-normal"
                                                     isActive={(match: any, loc: any) => {
                                                       return checkMenuIsActive(routeL3, loc);
