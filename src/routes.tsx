@@ -167,6 +167,7 @@ const routes: IRoute[] = [
           {
             keyIndex: '52',
             title: 'استانی',
+            enTitle: 'province',
             link: '/dashboard/health/transport/province',
             icon: active => <IconWrapperStyle name="sub-transport" active={active} />,
             roles: [
