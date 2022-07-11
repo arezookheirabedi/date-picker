@@ -620,3 +620,9 @@ export const chartNumberConverters = {
     });
   },
 };
+
+export const getProvinceParam = () => {
+  const params = new URLSearchParams(window.location.search);
+  const provinceName = params.get('provinceName') || ('تهران' as any);
+  return sideCities.some((item: any) => item.name === provinceName) ? provinceName : false;
+}
