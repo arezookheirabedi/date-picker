@@ -179,6 +179,7 @@ export function isLogin() {
         JSON.stringify({
           ...profile,
           roles: payload.authorities || [],
+          resources: payload.resources,
           permissions: (payload.authorities || []).reduce((result: any[], role: string) => {
             const prems = getRolePermissions[role];
             const r = result.concat(prems);
@@ -619,3 +620,9 @@ export const chartNumberConverters = {
     });
   },
 };
+
+export const getProvinceParam = () => {
+  const params = new URLSearchParams(window.location.search);
+  const provinceName = params.get('provinceName') || ('تهران' as any);
+  return sideCities.some((item: any) => item.name === provinceName) ? provinceName : false;
+}
