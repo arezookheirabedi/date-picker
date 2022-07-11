@@ -5,9 +5,11 @@
 .d-block {
   display: block !important;
 }
+
 .u-fade-in-1 {
   animation: fadeIn1 2s ease 1;
 }
+
 .anchor-underline {
   border-bottom: 2px solid $color-black;
   padding-bottom: 0.2rem;
@@ -37,6 +39,10 @@
 
 .direction-ltr {
   direction: ltr !important;
+}
+
+.direction-initial {
+  direction: initial;
 }
 
 .u-margin-top-negative {
@@ -75,73 +81,81 @@
   margin-top: 10rem !important;
 }
 
-.text-primary-color{
-  color : #21384F;
+.text-primary-color {
+  color: #21384F;
 }
 
-.sub-menu-open{
+.sub-menu-open {
   // max-height: 150px;
   overflow: unset;
   transition: .3s max-height ease-in-out;
 }
 
-.sub-menu-close{
+.sub-menu-close {
   max-height: 0;
   overflow: hidden;
   transition: .3s max-height ease-in-out;
 }
 
-.shadow{
+.shadow {
   box-shadow: 0 6px 20px #0000001A !important;
 }
 
-.dash-separator{
+.dash-separator {
   width: 12px;
   height: 1px;
   background: #606060;
   display: inline-block;
 }
 
-.shadow-custom{
+.shadow-custom {
   box-shadow: 0 6px 10px #0000001A;
 }
 
-.color-primary{
+.color-primary {
   color: #57687a;
 }
 
-.u-color-red{
+.u-color-red {
   color: red !important;
 }
 
-.u-border-red{
+.u-border-red {
   border: 1px solid red !important;
 }
 
 .ltr {
   direction: ltr;
 }
+
 .text-right {
   text-align: right;
 }
+
 .text-center {
   text-align: center;
 }
+
 .text-left {
   text-align: left;
 }
+
 .text-small {
   font-size: 0.8em;
 }
+
 .text-xsmall {
   font-size: 0.6em;
 }
+
 .text-large {
   font-size: 1.2em;
 }
+
 .text-xlarge {
   font-size: 1.4em;
 }
+
 .text-underline {
   text-decoration: underline;
 }
@@ -149,32 +163,39 @@
 .text-thin {
   font-weight: 100;
 }
+
 .text-UltraLight {
   font-weight: 200;
 }
+
 .text-light {
   font-weight: 300;
 }
+
 .text-regular {
   font-weight: normal;
 }
+
 .text-medium {
   font-weight: 500;
 }
+
 .text-demibold {
   font-weight: 600;
 }
+
 .text-bold {
   font-weight: bold;
 }
 
-.bg-gray-1{
+.bg-gray-1 {
   background-color: #E5E5E559;
 }
 
 .text-extrabold {
   font-weight: 800;
 }
+
 .text-black {
   font-weight: 900;
 }
@@ -192,16 +213,19 @@ blockquote {
       direction: rtl;
       text-align: right;
     }
+
     &::-moz-placeholder {
       /* Firefox 19+ */
       direction: rtl;
       text-align: right;
     }
+
     &:-ms-input-placeholder {
       /* IE 10+ */
       direction: rtl;
       text-align: right;
     }
+
     &:-moz-placeholder {
       /* Firefox 18- */
       direction: rtl;
@@ -212,8 +236,8 @@ blockquote {
 
 // responsive utilities
 
-.u-d-mobile-none{
-  @include respond(r415){
+.u-d-mobile-none {
+  @include respond(r415) {
     display: none !important;
   }
 
