@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from "highcharts/highstock";
 import useOverviewOfTheVaccinationProcess from "../../../hooks/apis/useGetOverviewOfTheVaccinationProcess";
 import Spinner from '../../Spinner';
@@ -94,14 +94,17 @@ interface OverviewOfDriverVaccinationProcessProvinceProps {
 }
 
 const OverviewOfDriverVaccinationProcessProvince: React.FC<OverviewOfDriverVaccinationProcessProvinceProps> = ({cityTitle}) => {
-  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess({
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query] = useState({
     tag: 'transport'
-  }, true)
+  });
+  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess(query, true)
 
   console.log(dataset, 'dataset')
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به روند واکسیناسیون رانندگان در استان &nbsp;
         {cityTitle}

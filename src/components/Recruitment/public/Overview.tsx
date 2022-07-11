@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalRecruitment from '../../../assets/images/icons/people-navy.svg';
 import sufferingIcon from '../../../assets/images/icons/suffering-color.svg';
@@ -15,14 +15,17 @@ import useGetTestResults from "../../../hooks/apis/useGetTestResults";
 
 
 const OverviewRecruitment: React.FC<{}> = () => {
+
+  const [query] = useState({tag: 'employee'})
+
   // eslint-disable-next-line
-  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'employee'});
+  const {data: numberOf, loading, error} = useGetNumberOf(query);
   const {
     data: testResultInfo,
     loading: testResultLoading,
     // eslint-disable-next-line
     error: testResultError
-  } = useGetTestResults({tag: 'employee'});
+  } = useGetTestResults(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -55,7 +58,8 @@ const OverviewRecruitment: React.FC<{}> = () => {
             hasInfo
             infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} hasInfo infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند." />
+          <Statistic icon={deadIcon} text="مجموع فوت‌ شدگان" count="-" loading={false} hasInfo
+                     infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."/>
         </div>
         <div
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">

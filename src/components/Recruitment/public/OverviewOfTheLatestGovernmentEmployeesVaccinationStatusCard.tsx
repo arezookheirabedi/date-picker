@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Statistic from "../../../containers/Guild/components/Statistic";
 import YellowVaccine from "../../../assets/images/icons/big-yellow-vaccine.svg";
 import OrangeVaccine from "../../../assets/images/icons/orange-vaccine.svg";
@@ -11,10 +11,11 @@ import useGetOverviewOfTheLatestVaccinationStatus from "../../../hooks/apis/useG
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCard = () => {
 
-  // eslint-disable-next-line
-  const {data: numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus({
+  const [query] = useState({
     tag: 'employee',
   })
+  // eslint-disable-next-line
+  const {data: numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus(query)
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
