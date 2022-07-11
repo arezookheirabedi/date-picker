@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import Statistic from "../../../containers/Guild/components/Statistic";
 import YellowVaccine from "../../../assets/images/icons/big-yellow-vaccine.svg";
@@ -17,13 +17,15 @@ interface OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvincePro
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince: React.FC<OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvinceProps> = ({cityTitle}) => {
 
-  // eslint-disable-next-line
-  const {data: numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus({
+  const [query] = useState({
     tag: 'employee',
-  },true)
+  })
+
+  // eslint-disable-next-line
+  const {data: numberOf, loading, error} = useGetOverviewOfTheLatestVaccinationStatus(query, true)
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آخرین وضعیت واکسیناسیون کارکنان دولت در استان &nbsp;
         {cityTitle}

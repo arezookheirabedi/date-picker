@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from "highcharts/highstock";
 
 import Spinner from '../../Spinner';
@@ -114,9 +114,12 @@ const optionChart = {
 
 const OverviewOfGovernmentEmployeesVaccinationProcess = () => {
 
-  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess({
+
+  const [query] = useState({
     tag: 'employee'
   })
+
+  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess(query)
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به روند واکسیناسیون کارکنان دولت</legend>
