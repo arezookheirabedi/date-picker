@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {getProvinceParam} from '../../helpers/utils';
@@ -70,13 +70,10 @@ export default function useGetTestResults(query: any, hasProvince: boolean = fal
   // province logics
 
   const location = useLocation();
-  const history = useHistory();
 
   function doProvinceActions() {
     if (getProvinceParam()) {
       getTestResults({...query, province: getProvinceParam()})
-    } else {
-      history.go(-1)
     }
   }
 
