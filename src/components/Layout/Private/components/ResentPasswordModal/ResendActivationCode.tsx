@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 interface IProps {
-  mobileNumber: any;
+  formData: any;
 }
 
 function checkValue(val: any) {
@@ -29,7 +29,7 @@ const defaultWaitTime = () => {
   }
   return 0;
 };
-const SendActivationCode: React.FC<IProps> = ({mobileNumber}) => {
+const ResendActivationCode: React.FC<IProps> = ({formData}) => {
   const [disabled, setDisabled] = useState(false);
   const [waitTime, setWaitTime] = useState(defaultWaitTime());
 
@@ -100,13 +100,13 @@ const SendActivationCode: React.FC<IProps> = ({mobileNumber}) => {
     localStorage.setItem('waiting-sms', new Date().toString());
     setWaitTime(2000 * 60);
     setDisabled(true);
-    console.log(mobileNumber);
+    console.log(formData);
   };
 
   return (
     <div>
       {' '}
-      <div className="mt-6 flex items-baseline justify-between">
+      <div className="mt-6 flex flex-col ">
         <button
           type="button"
           onClick={handleClick}
@@ -114,16 +114,16 @@ const SendActivationCode: React.FC<IProps> = ({mobileNumber}) => {
           disabled={disabled}
           className="flex items-center justify-center rounded border border-gray-300 bg-white px-12 py-2 text-sm text-gray-900  hover:bg-gray-100   disabled:border-gray-100 disabled:bg-gray-50  "
         >
-          <span>ارسال کد فعالسازی</span>
+          <span>ارسال مجدد کد فعالسازی</span>
         </button>
 
         {waitTime > 0 && (
-          <span>
+          <div className="mt-1 flex items-center justify-center">
             {min}:{sec} :پیامک ارسال شده
-          </span>
+          </div>
         )}
       </div>
     </div>
   );
 };
-export default SendActivationCode;
+export default ResendActivationCode;

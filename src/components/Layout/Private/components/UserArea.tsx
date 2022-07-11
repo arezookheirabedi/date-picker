@@ -7,7 +7,7 @@ import IconWrapper from 'src/components/IconWrapper';
 import authenticateService from 'src/services/authentication.service';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import {IProfile} from 'src/models/authentication.model';
-import ResetPassWordModal from './ResetPassWordModal';
+import ResetPasswordModal from './ResentPasswordModal';
 
 const UserArea: React.FC<any> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -180,7 +180,7 @@ const UserArea: React.FC<any> = () => {
           </div>
         </Dialog>
       </Transition>
-      <ResetPassWordModal resetIsOpen={resetIsOpen} setResetIsOpen={setResetIsOpen} />
+      <ResetPasswordModal resetIsOpen={resetIsOpen} setResetIsOpen={setResetIsOpen} />
     </>
   );
 };
