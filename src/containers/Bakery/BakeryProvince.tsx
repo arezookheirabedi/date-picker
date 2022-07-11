@@ -10,10 +10,14 @@ import OverviewInvalidGuildCodeProvince from 'src/components/Bakery/province/Ove
 import OverviewPermissionProvince from 'src/components/Bakery/province/OverviewPermissionProvince';
 
 import {sideCities} from 'src/helpers/utils';
+import AccessDenied from "../../components/Access/AccessDenied";
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
 
 const BakeryProvince = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -35,12 +39,19 @@ const BakeryProvince = () => {
         sideCityStatus={sideCities}
         selectDefault
       />
-      <OverviewBakeryProvince cityTitle={cityTitle} />
-      <OverviewBakeryInspectionProvince cityTitle={cityTitle} />
-      <OverviewAuditProvince cityTitle={cityTitle} />
-      <OverviewInvalidGuildCodeProvince cityTitle={cityTitle} />
-      <OverviewDeadOwnerProvince cityTitle={cityTitle} />
-      <OverviewPermissionProvince cityTitle={cityTitle} />
+
+      {!hasProvinceResources && <AccessDenied id="bakery-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewBakeryProvince cityTitle={cityTitle}/>
+          <OverviewBakeryInspectionProvince cityTitle={cityTitle}/>
+          <OverviewAuditProvince cityTitle={cityTitle}/>
+          <OverviewInvalidGuildCodeProvince cityTitle={cityTitle}/>
+          <OverviewDeadOwnerProvince cityTitle={cityTitle}/>
+          <OverviewPermissionProvince cityTitle={cityTitle}/>
+        </>
+      )}
+
       {/* <OverviewCategoriesProvince cityTitle={cityTitle} /> */}
     </div>
   );
