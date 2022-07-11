@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
-import {sideCities} from '../../helpers/utils';
+import {getProvinceParam} from '../../helpers/utils';
 
 export interface IInitialTestResults {
   positiveMembersCount: number;
@@ -67,23 +67,24 @@ export default function useGetTestResults(query: any, hasProvince: boolean = fal
     };
   }, []);
 
+  // province logics
+
   const location = useLocation();
   const history = useHistory();
 
-  useEffect(() => {
-    if (!hasProvince) {
-      return;
-    }
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getTestResults({...query, province: provinceName});
+  function doProvinceActions() {
+    if (getProvinceParam()) {
+      getTestResults({...query, province: getProvinceParam()})
     } else {
-      history.go(-1);
+      history.go(-1)
     }
+  }
+
+  useEffect(() => {
+    if (!hasProvince) return;
+
+    doProvinceActions();
+
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialTestResults);
