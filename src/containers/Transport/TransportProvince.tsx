@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import useHasProvinceResource from 'src/hooks/useHasProvinceResource';
 
 import AccessDenied from '../../components/Access/AccessDenied';
@@ -16,24 +16,20 @@ import OverviewOfTheLatestPublicTransportVaccinationStatusProvince from '../../c
 import TableOfTestsInTransportProvince from '../../components/Transport/province/TableOfTestsInTransportProvince';
 import Information from '../../assets/images/icons/information.svg';
 import AlertPattern from '../../assets/images/patterns/alert-white.svg';
-import {sideCities} from '../../helpers/utils';
+import {getProvinceParam, sideCities} from '../../helpers/utils';
 
 const TransportProvince = () => {
   const location = useLocation();
-  const [cityTitle, setCityTitle] = useState('تهران');
+  const history = useHistory()
+  const [cityTitle, setCityTitle] = useState();
 
   const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName: string = params.get('provinceName') || 'تهران';
-
-    const existsCity = sideCities.some((item: {name: string; color: string}) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      setCityTitle(provinceName);
+    if (getProvinceParam()) {
+      setCityTitle(getProvinceParam());
+    } else {
+      history.push('/dashboard/health/transport/province')
     }
   }, [location.search]);
 

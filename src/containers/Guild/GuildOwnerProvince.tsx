@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import OverviewMap from 'src/components/Guild/province/OverviewMap';
 import OverviewGuilds from 'src/components/Guild/province/OverviewGuilds';
@@ -10,10 +10,14 @@ import OverviewOfGuildVaccinationProcess from 'src/components/Guild/province/Ove
 import TheLatestOverwiewOfVaccination from 'src/components/Guild/province/TheLatestOverwiewOfVaccination';
 import OverviewVaccination from 'src/components/Guild/province/OverviewGuildVaccination';
 import RegisterGuild from 'src/components/Guild/province/RegisterGuild';
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
+import AccessDenied from "../../components/Access/AccessDenied";
 
 const GuildOwnerProvince: React.FC<any> = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -35,14 +39,21 @@ const GuildOwnerProvince: React.FC<any> = () => {
         destinationId="guild-overview"
         selectDefault
       />
-      <OverviewGuilds cityTitle={cityTitle} />
-      <OverviewGuildsPerCategory cityTitle={cityTitle} />
-      <OverviewGuildPositivePcr cityTitle={cityTitle} />
-      <OverviewOfGuildVaccinationProcess cityTitle={cityTitle} />
-      <TheLatestOverwiewOfVaccination cityTitle={cityTitle} />
-      <OverviewVaccination cityTitle={cityTitle} />
-      <TestStatus cityTitle={cityTitle} />
-      <RegisterGuild cityTitle={cityTitle} />
+
+      {!hasProvinceResources && <AccessDenied id="guild-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewGuilds cityTitle={cityTitle}/>
+          <OverviewGuildsPerCategory cityTitle={cityTitle}/>
+          <OverviewGuildPositivePcr cityTitle={cityTitle}/>
+          <OverviewOfGuildVaccinationProcess cityTitle={cityTitle}/>
+          <TheLatestOverwiewOfVaccination cityTitle={cityTitle}/>
+          <OverviewVaccination cityTitle={cityTitle}/>
+          <TestStatus cityTitle={cityTitle}/>
+          <RegisterGuild cityTitle={cityTitle}/>
+        </>
+      )}
+
     </div>
   );
 };
