@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
 import OverviewEducationalEmployeProvince from 'src/components/School/province/OverviewEducationalEmployeProvince';
@@ -7,16 +7,23 @@ import OverviewSchoolEmployeProvince from 'src/components/School/province/Overvi
 import OverviewSchoolStudentProvince from 'src/components/School/province/OverviewSchoolStudentProvince';
 import OverviewPatientsProvince from 'src/components/School/province/OverviewPatientsProvince';
 import OverviewOfVaccinationProcessProvince from 'src/components/School/province/OverviewOfVaccinationProcessProvince';
-import TheLatestSchoolOverwiewOfVaccinationProvince from 'src/components/School/province/TheLatestSchoolOverwiewOfVaccinationProvince';
-import OverviewPositivePcrPercentageProvince from 'src/components/School/province/OverviewPositivePcrPercentageProvince';
-import OverviewSchoolsVaccinationPercentagePerGradeProvince from 'src/components/School/province/OverviewSchoolsVaccinationPercentagePerGradeProvince';
+import TheLatestSchoolOverwiewOfVaccinationProvince
+  from 'src/components/School/province/TheLatestSchoolOverwiewOfVaccinationProvince';
+import OverviewPositivePcrPercentageProvince
+  from 'src/components/School/province/OverviewPositivePcrPercentageProvince';
+import OverviewSchoolsVaccinationPercentagePerGradeProvince
+  from 'src/components/School/province/OverviewSchoolsVaccinationPercentagePerGradeProvince';
 import OverviewSchoolVaccinationProvince from 'src/components/School/province/OverviewSchoolVaccinationProvince';
 import TestsStatusProvince from '../../components/School/province/TestStatusProvince';
 import OverviewCategoriesProvince from '../../components/School/province/OverviewCategoriesProvince';
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
+import AccessDenied from "../../components/Access/AccessDenied";
 
 const SchoolProvince = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -40,17 +47,22 @@ const SchoolProvince = () => {
         selectDefault
       />
 
-      <OverviewEducationalEmployeProvince cityTitle={cityTitle} />
-      <OverviewSchoolEmployeProvince cityTitle={cityTitle} />
-      <OverviewSchoolStudentProvince cityTitle={cityTitle} />
-      <OverviewCategoriesProvince cityTitle={cityTitle} />
-      <OverviewPatientsProvince cityTitle={cityTitle} />
-      <OverviewOfVaccinationProcessProvince cityTitle={cityTitle} />
-      <TheLatestSchoolOverwiewOfVaccinationProvince cityTitle={cityTitle} />
-      <OverviewPositivePcrPercentageProvince cityTitle={cityTitle} />
-      <OverviewSchoolsVaccinationPercentagePerGradeProvince cityTitle={cityTitle} />
-      <OverviewSchoolVaccinationProvince cityTitle={cityTitle} />
-      <TestsStatusProvince cityTitle={cityTitle} />
+      {!hasProvinceResources && <AccessDenied id="school-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewEducationalEmployeProvince cityTitle={cityTitle}/>
+          <OverviewSchoolEmployeProvince cityTitle={cityTitle}/>
+          <OverviewSchoolStudentProvince cityTitle={cityTitle}/>
+          <OverviewCategoriesProvince cityTitle={cityTitle}/>
+          <OverviewPatientsProvince cityTitle={cityTitle}/>
+          <OverviewOfVaccinationProcessProvince cityTitle={cityTitle}/>
+          <TheLatestSchoolOverwiewOfVaccinationProvince cityTitle={cityTitle}/>
+          <OverviewPositivePcrPercentageProvince cityTitle={cityTitle}/>
+          <OverviewSchoolsVaccinationPercentagePerGradeProvince cityTitle={cityTitle}/>
+          <OverviewSchoolVaccinationProvince cityTitle={cityTitle}/>
+          <TestsStatusProvince cityTitle={cityTitle}/>
+        </>
+      )}
     </div>
   );
 };

@@ -20,5 +20,6 @@ export interface IProfile {
   nationalId: string;
   qrCode: string;
   roles: string[];
+  resources: string[];
   permissions: string[];
 }
