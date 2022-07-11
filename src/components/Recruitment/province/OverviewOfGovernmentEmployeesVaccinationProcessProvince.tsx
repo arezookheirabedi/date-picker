@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from "highcharts/highstock";
 
 import Spinner from '../../Spinner';
@@ -97,12 +97,15 @@ interface OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps {
 
 const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps> = ({cityTitle}) => {
 
-  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess({
+
+  const [query] = useState({
     tag: 'employee'
-  }, true)
+  });
+
+  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess(query, true)
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
         نگاه کلی به روند واکسیناسیون کارکنان دولت در استان&nbsp;
         {cityTitle}

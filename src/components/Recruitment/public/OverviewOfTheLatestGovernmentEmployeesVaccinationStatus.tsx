@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import Highcharts from "highcharts/highstock";
 
@@ -102,9 +102,11 @@ const optionChart = {
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
 
-  const {data: dataset, loading, error: errorMessage} = useGetOverviewOfTheLatestVaccinationStatusColumnChart({
+  const [query] = useState({
     tag: 'employee',
-  })
+  });
+
+  const {data: dataset, loading, error: errorMessage} = useGetOverviewOfTheLatestVaccinationStatusColumnChart(query)
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
