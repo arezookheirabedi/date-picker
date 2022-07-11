@@ -10,6 +10,7 @@ const TheLatestOverwiewOfVaccination: React.FC<ITheLatestOverwiewOfVaccination> 
   const [queryParams, setQueryParams] = useState({
     to: null,
     tag: 'guild',
+    retry: false,
   });
   const {
     chartData,
