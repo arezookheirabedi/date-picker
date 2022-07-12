@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 
 // @ts-ignore
 // import moment from 'moment-jalaali';
+import {isEmpty} from 'lodash';
 import {Menu} from '@headlessui/react';
 // import DatePickerModal from '../../DatePickerModal';
 import Table from '../../TableScope';
@@ -10,6 +11,7 @@ import Spinner from '../../Spinner';
 
 import {sidesCities} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import ExportFile from '../ExportFile'
 
 // hooks
 import useOverviewOfRegistered from "../../../hooks/apis/bakery/useOverviewOfRegistered";
@@ -19,6 +21,8 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
   // states
   const [serviceType, setServiceType] = useState(null) as any;
   const [query, setQuery] = useState<string>("");
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
+
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
@@ -39,7 +43,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
     setCount,
     filteredDataset,
     setFilteredDataset
-  } = useOverviewOfRegistered({reportName: "deadOwnerdetail"});
+  } = useOverviewOfRegistered();
 
   // const overviewTestResults = async (from: any = null, to: any = null) => {
   // const overviewTestResults = async () => {
@@ -116,6 +120,25 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
       filteredList();
   },[filteredList]);
 
+  useEffect(()=> {
+    if(isEmpty(filteredDataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[filteredDataset])
+
+  const mapFilteredData = () => {
+    return filteredDataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "شهر": data.city === "NULL" ? "" : data.city,
+        "نام و نام‌ خانوادگی" : data.fullName,
+        "شناسه پروانه سیما" : data.simaId,
+        "شماره ملی" : data.nationalId,
+        "آدرس" : data.address
+      };
+    });
+  };
+  const finalData = mapFilteredData();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -167,6 +190,12 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                   </div>
                 </Menu.Items>
               </Menu>
+              <ExportFile 
+                fileName="dead-owner-list"
+                data={finalData}
+                loading={loading}
+                isDisabled={isOnPrint}
+              />
         </div>
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
           {/* {showDatePicker ? (
