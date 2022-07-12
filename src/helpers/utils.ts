@@ -621,7 +621,6 @@ export const chartNumberConverters = {
   },
 };
 
-<<<<<<< HEAD
 export const changeDigitToEnglish = (event: any, setValue: any) => {
   if (/([\u06F0-\u06F9]|[\u0660-\u0669])/.test(event.key)) {
     // eslint-disable-next-line
@@ -650,10 +649,8 @@ export const changeDigitToEnglish = (event: any, setValue: any) => {
     event.preventDefault();
   }
 };
-=======
 export const getProvinceParam = () => {
   const params = new URLSearchParams(window.location.search);
   const provinceName = params.get('provinceName') || ('تهران' as any);
   return sideCities.some((item: any) => item.name === provinceName) ? provinceName : false;
-}
->>>>>>> develop
+};
