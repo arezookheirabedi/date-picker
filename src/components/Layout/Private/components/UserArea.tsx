@@ -24,6 +24,7 @@ const UserArea: React.FC<any> = () => {
     nationalId: '',
     qrCode: '',
     roles: [],
+    resources: [],
     permissions: [],
   });
 
@@ -52,7 +53,7 @@ const UserArea: React.FC<any> = () => {
           <Menu.Button className="focus:outline-none inline-flex w-full items-center justify-center py-2 text-sm font-medium focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
             <img src={avatar} alt={profile.nationalId} className="h-5 w-5" />
-            <span className="mx-3 truncate whitespace-nowrap">
+            <span className="direction-initial mx-3 truncate whitespace-nowrap">
               {window.localStorage.getItem('ministers-username') || ''}
             </span>
             <DownIcon className="mr-2 h-2 w-2.5" />
