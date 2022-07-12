@@ -23,6 +23,7 @@ import recruitmentActiveIcon from '../assets/images/icons/recruitment-active.svg
 import reportsRequestedIcon from '../assets/images/icons/reports-requested.svg';
 import reportsRequestedActiveIcon from '../assets/images/icons/reports-requested-active.svg';
 import reportsFlourIcon from '../assets/images/icons/reports-flour.svg';
+import passwordResetIcon from '../assets/images/icons/password-reset-active.svg';
 import reportsFlourActiveIcon from '../assets/images/icons/reports-flour-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';
@@ -94,6 +95,12 @@ const icons = [
     icon: reportsFlourIcon,
     disableIcon: reportsFlourIcon,
     activeIcon: reportsFlourActiveIcon,
+  },
+  {
+    name: 'reset-password',
+    icon: passwordResetIcon,
+    disableIcon: passwordResetIcon,
+    activeIcon: passwordResetIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
 ];
