@@ -33,7 +33,12 @@ export default function useOverviewOfAudit() {
         // if (item.total !== 0) {
         normalizedData.push({
           id: `ovca_${index}`,
-          ...item,
+          province : item.province,
+          city : item.city,
+          simaId: item.simaId,
+          nationalId: item.nationalId,
+          inspectionNeedCount : "",
+          address: item.address,
           flourQuota: item.flourQuota === "TRUE",
           isExtortion: item.isExtortion === "TRUE",
           workTime: item.workTime === "TRUE",

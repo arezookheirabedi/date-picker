@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import axios from "axios";
 import bakeryService from '../../../services/bakery/custom/bakery.service';
 
-export default function useOverviewOfRegistered() {
+export default function useOverviewOfInvalidGuildCodeDetail() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>([]);
   const [filteredDataset, setFilteredDataset] = useState<any>([]);
@@ -20,7 +20,7 @@ export default function useOverviewOfRegistered() {
       setLoading(true);
       setError(false);
       const { data } = await bakeryService.bakeryReport(
-        { reportName: "deadOwnerdetail" },
+        { reportName: "invalidGuildCodeDetail" },
         { cancelToken: source.token }
       );
       // const {data} = await bakeryService.bakeryAudit({
@@ -28,17 +28,20 @@ export default function useOverviewOfRegistered() {
       //   // from,
       //   // to,
       // });
+
       const normalizedData: any[] = [];
       data.forEach((item: any, index: number) => {
+       
         // if (item.total !== 0) {
         normalizedData.push({
           id: `ovca_${index}`,
           province: item.province,
           city: item.city,
           simaId : item.simaId,
-          fullName: item.fullName.match(/\D/g).join(''),
-          nationalId: item.nationalId,
-          address : item.address
+          guildCode: item.guildCode,
+          buyerAsnafStatus: item.buyerAsnafStatus,
+          nationalId : item.nationalId,
+          address: item.address
         });
       });
       setCount(normalizedData.length);
