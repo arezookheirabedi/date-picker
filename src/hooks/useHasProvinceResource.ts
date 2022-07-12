@@ -5,6 +5,7 @@ import useLocalStorage from './useLocalStorage';
 
 const useHasProvinceResource = () => {
   const [hasProvinceResources, setHasProvinceResources] = useState(false);
+  const [provinceResource, setProvinceResource] = useState<any>([]);
 
   const [profile] = useLocalStorage<IProfile>('ministers-userinfo', {
     birthday: '',
@@ -27,7 +28,7 @@ const useHasProvinceResource = () => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
     const checkProvinceResources = resources?.find((item: any) => item.name === 'province') as
-      | {name: string; value: string[]}
+      | { name: string; value: string[] }
       | undefined;
 
     if (
@@ -36,13 +37,15 @@ const useHasProvinceResource = () => {
         checkProvinceResources?.value.includes(provinceName)) ||
       checkProvinceResources?.value[0] === '*'
     ) {
+      setProvinceResource(checkProvinceResources?.value)
       setHasProvinceResources(true);
     } else {
       setHasProvinceResources(false);
     }
   }, [location.search]);
 
-  return [hasProvinceResources, resources];
+
+  return [hasProvinceResources, resources , provinceResource];
 };
 
 export default useHasProvinceResource;
