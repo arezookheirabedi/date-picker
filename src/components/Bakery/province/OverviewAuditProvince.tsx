@@ -3,9 +3,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {useHistory, useLocation} from 'react-router-dom';
+import {isEmpty} from 'lodash';
 import ButtonToggle from '../../Form/ButtonToggle';
 import inactivityIcon from '../../../assets/images/icons/inactivity.svg';
 import unusualTransactionIcon from '../../../assets/images/icons/unusualTransaction.svg';
+import ExportFile from '../ExportFile'
 
 // import DatePickerModal from '../../DatePickerModal';
 import Table from '../../TableScope';
@@ -50,6 +52,8 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
   const [workTime, setworkTime] = useState<any>(false);
   const [bakeryWithoutTransaction, setBakeryWithoutTransaction] = useState<any>(false);
   const [unusualTransaction, setUnusualTransaction] = useState<any>(false);
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
+
   // const [showDatePicker, setShowDatePicker] = useState(false);
   // eslint-disable-next-line
   // const [selectedDayRange, setSelectedDayRange] = useState({
@@ -133,6 +137,32 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
       filteredList();
   },[filteredList]);
 
+  useEffect(()=> {
+    if(isEmpty(filteredDataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[filteredDataset])
+
+  const mapFilteredData = () => {
+    return filteredDataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "شهر": data.city === "NULL" ? "" : data.city,
+        "شناسه پروانه سیما" : data.simaId,
+        "شماره ملی" : data.nationalId,
+        "دفعات نیاز بازرسی" : "",
+        "مشکوک به تخلف از ساعت فعالیت" : data.workTime ? "بله" : "خیر",
+        "مشکوک به عدم استفاده‌ مجاز از سهمیه آرد" : data.flourQuota ? "بله" : "خیر",
+        "مشکوک به گران فروشی" : data.isExtortion ? "بله" : "خیر",
+        "مشکوک به عدم فعالیت" : data.bakeryWithoutTransaction ? "بله" : "خیر",
+        "مشکوک به تراکنش‌های غیر عادی": data.UnusualTransaction ? "بله" : "خیر",
+        "آدرس" : data.address
+      };
+    });
+  };
+
+  const finalData = mapFilteredData();
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -195,8 +225,14 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
       </div>
 
       {/* <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8"> */}
-      <div className="flex flex-grow items-center justify-end space-x-5 rtl:space-x-reverse mb-8">
+      <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
+          <ExportFile 
+              fileName="audit-province-list"
+              data={finalData}
+              loading={loading}
+              isDisabled={isOnPrint}
+          />
           {/* {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -211,8 +247,9 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
             to={selectedDayRange.to}
             setSelectedDayRange={setSelectedDayRange}
           /> */}
-          
-          {/* <div className='inline-flex justify-center'> */}
+        </div>
+        <div className="flex align-center space-x-4 rtl:space-x-reverse">
+            {/* <div className='inline-flex justify-center'> */}
             <div className='relative z-20 inline-block text-left px-5 py-1 shadow rounded'>
               <div className="inline-flex justify-center items-center w-full text-sm font-medium">
                 <span className="mx-3 whitespace-nowrap truncate">
@@ -231,7 +268,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
                 </span>
               </div>
             </div>
-          </div>
+        </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
