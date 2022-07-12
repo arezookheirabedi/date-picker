@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
 import {useForm} from 'react-hook-form';
@@ -7,9 +6,10 @@ import * as Yup from 'yup';
 import toast from 'cogo-toast';
 import {changeDigitToEnglish} from 'src/helpers/utils';
 import AppRegex from 'src/helpers/regex';
-import guildService from 'src/services/guild.service';
+import authenticateService from 'src/services/authentication.service';
 import DotLoading from 'src/components/DotLoading';
 import eyes from 'src/assets/images/icons/eye_icon.svg';
+import {EERRORS} from 'src/constants/errors.enum';
 
 interface IProps {
   resetIsOpen: boolean;
@@ -17,7 +17,8 @@ interface IProps {
   setConfirmOtpModal: (data: boolean) => void;
   setFormData: (data: any) => void;
 }
-const GetOtpForm: React.FC<IProps> = ({
+
+const RequestOtpForm: React.FC<IProps> = ({
   resetIsOpen,
   setResetIsOpen,
   setConfirmOtpModal,
@@ -52,29 +53,31 @@ const GetOtpForm: React.FC<IProps> = ({
     reset();
   };
 
-  // const sendOtpRequest = async (e: IFoemReset) => {
-  //   setLoading(true);
-  //   try {
-  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //     const res = await guildService.requestOtpReport({...e});
-  //     toast.success('کد به شماره همراه ارسال شد');
-  // localStorage.setItem('waiting-sms', new Date().toString());
-  //     setConfirmOtpModal(true);
-  //     setFormData({...e});
-  //   } catch (error: any) {
-  //     toast.error(error.message || 'خطایی در عملیات');
-  //   } finally {
-  //     setLoading(false);
-  //     reset();
-  //     closeModal();
-  //   }
-  // };
-  const onSubmit: (e: any) => void = e => {
-    // sendOtpRequest(e);
-    console.log(e);
-    setConfirmOtpModal(true);
-    setFormData({...e});
-    localStorage.setItem('waiting-sms', new Date().toString());
+  const sendOtpRequest = async ({confirmPassword, ...data}: any = {}) => {
+    setLoading(true);
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const res = await authenticateService.resetPassword(data);
+      console.log(res, 'res');
+      toast.success('کد به شماره همراه ارسال شد');
+      localStorage.setItem('waiting-sms', new Date().toString());
+      setConfirmOtpModal(true);
+      setFormData(data);
+    } catch (error: any) {
+      toast.error(error.message || EERRORS.ERROR_500);
+    } finally {
+      setLoading(false);
+      reset();
+      closeModal();
+    }
+  };
+  const onSubmit = (e: any) => {
+    sendOtpRequest(e);
+    // console.log(e);
+    // setConfirmOtpModal(true);
+    // setFormData({...e});
+    // localStorage.setItem('waiting-sms', new Date().toString());
   };
 
   return (
@@ -110,7 +113,11 @@ const GetOtpForm: React.FC<IProps> = ({
             >
               <div className="relative my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
                 <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
-                  <form className="p-5 text-base" onSubmit={handleSubmit(onSubmit)}>
+                  <form
+                    className="p-5 text-base"
+                    onSubmit={handleSubmit(onSubmit)}
+                    autoComplete="off"
+                  >
                     <h1 className="text-3xl font-black">تغییر کلمه عبور</h1>
 
                     <div className="mt-10 flex flex-col">
@@ -301,4 +308,4 @@ const GetOtpForm: React.FC<IProps> = ({
     </div>
   );
 };
-export default GetOtpForm;
+export default RequestOtpForm;
