@@ -2,8 +2,10 @@ import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
 import OtpInput from 'react-otp-input';
 import toast from 'cogo-toast';
-import guildService from 'src/services/guild.service';
+import authenticateService from 'src/services/authentication.service';
 import DotLoading from 'src/components/DotLoading';
+import {EERRORS} from 'src/constants/errors.enum';
+import {useHistory} from 'react-router-dom';
 import ResendActivationCode from './ResendActivationCode';
 
 interface IProps {
@@ -12,6 +14,7 @@ interface IProps {
   formData: any;
 }
 const ConfirmOtp: React.FC<IProps> = ({confirmOtpModal, setConfirmOtpModal, formData}) => {
+  const history = useHistory();
   const [otp, setOtp] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const closeModal: () => void = () => {
@@ -23,23 +26,23 @@ const ConfirmOtp: React.FC<IProps> = ({confirmOtpModal, setConfirmOtpModal, form
   async function handelConfirm(data: string) {
     setLoading(true);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const response = await guildService.confirmOtpReport({
-        data,
+      const res = await authenticateService.confirmPassword({
+        confirmationCode: data,
       });
-      if (response.status === 200) {
+      if (res.status === 204) {
         setOtp('');
         closeModal();
+        toast.success('تغییر کلمه عبور با موفقیت انجام شد.');
+        // history.push("/login")
+        authenticateService.logout(history);
       } else {
         throw new Error('خطایی در عملیات');
       }
     } catch (error: any) {
-      // eslint-disable-next-line
-      toast.error(error.message || 'خطایی در عملیات');
+      toast.error(error.message || EERRORS.ERROR_500);
     } finally {
       setLoading(false);
       setOtp('');
-      // closeModal();
     }
   }
   const handleSubmit: (e: React.MouseEvent<HTMLElement>) => void = e => {
@@ -110,7 +113,7 @@ const ConfirmOtp: React.FC<IProps> = ({confirmOtpModal, setConfirmOtpModal, form
                     </div>
                   </div>
 
-                  <ResendActivationCode formData={formData} />
+                  <ResendActivationCode setOtp={setOtp} formData={formData} />
 
                   <div className="mt-16 flex justify-center">
                     <button

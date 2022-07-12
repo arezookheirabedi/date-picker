@@ -34,7 +34,10 @@ const RequestOtpForm: React.FC<IProps> = ({
     confirmPassword: Yup.string()
       .required('تکرار کلمه عبور الزامی است.')
       .oneOf([Yup.ref('newPassword')], 'تکرار کلمه عبور اشتیاه است.'),
-    mobileNumber: Yup.string().matches(AppRegex.mobile, 'موبایل خود را با فرمت صحیح وارد نمایید'),
+    mobileNumber: Yup.string().matches(
+      AppRegex.mobileIran,
+      'موبایل خود را با فرمت صحیح وارد نمایید'
+    ),
   });
   const {
     register,
@@ -42,6 +45,7 @@ const RequestOtpForm: React.FC<IProps> = ({
     reset,
     formState: {errors},
     setValue,
+    setError,
   } = useForm<any>({
     mode: 'onChange',
     // @ts-ignore
@@ -53,31 +57,37 @@ const RequestOtpForm: React.FC<IProps> = ({
     reset();
   };
 
-  const sendOtpRequest = async ({confirmPassword, ...data}: any = {}) => {
+  // eslint-disable-next-line consistent-return
+  const sendOtpRequest = async ({confirmPassword, ...e}: any = {}) => {
     setLoading(true);
-
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const res = await authenticateService.resetPassword(data);
-      console.log(res, 'res');
+      const res = await authenticateService.resetPassword(e);
       toast.success('کد به شماره همراه ارسال شد');
       localStorage.setItem('waiting-sms', new Date().toString());
       setConfirmOtpModal(true);
-      setFormData(data);
-    } catch (error: any) {
-      toast.error(error.message || EERRORS.ERROR_500);
-    } finally {
+      setFormData(e);
       setLoading(false);
-      reset();
       closeModal();
+    } catch (error: any) {
+      const {message} = error;
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const {errors} = error;
+      if (message) {
+        toast.error(message || EERRORS.ERROR_500);
+      }
+      if (errors && errors.length) {
+        errors.map((item: any) => {
+          return setError(item.field, {
+            message: item.message,
+          });
+        });
+      }
+      setLoading(false);
     }
   };
   const onSubmit = (e: any) => {
     sendOtpRequest(e);
-    // console.log(e);
-    // setConfirmOtpModal(true);
-    // setFormData({...e});
-    // localStorage.setItem('waiting-sms', new Date().toString());
   };
 
   return (

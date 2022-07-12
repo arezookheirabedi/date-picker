@@ -1,20 +1,19 @@
 import React, {useState} from 'react';
 import ConfirmOtp from './ConfirmOtp';
 
-import GetOtpForm from './GetOtpForm';
+import RequestOtpForm from './RequestOtpForm';
 
 interface IProps {
   resetIsOpen: boolean;
   setResetIsOpen: (data: boolean) => void;
 }
 const ResendPasswordModal: React.FC<IProps> = ({resetIsOpen, setResetIsOpen}) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [confirmOtpModal, setConfirmOtpModal] = useState<boolean>(false);
-  const [formData, setFormData] = useState<any>();
+  const [formData, setFormData] = useState<any>({});
 
   return (
     <>
-      <GetOtpForm
+      <RequestOtpForm
         resetIsOpen={resetIsOpen}
         setResetIsOpen={setResetIsOpen}
         setConfirmOtpModal={setConfirmOtpModal}
