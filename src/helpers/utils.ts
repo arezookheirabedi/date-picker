@@ -179,6 +179,7 @@ export function isLogin() {
         JSON.stringify({
           ...profile,
           roles: payload.authorities || [],
+          resources: payload.resources,
           permissions: (payload.authorities || []).reduce((result: any[], role: string) => {
             const prems = getRolePermissions[role];
             const r = result.concat(prems);
@@ -618,4 +619,38 @@ export const chartNumberConverters = {
       return String.fromCharCode(d.charCodeAt(0) + 1728);
     });
   },
+};
+
+export const changeDigitToEnglish = (event: any, setValue: any) => {
+  if (/([\u06F0-\u06F9]|[\u0660-\u0669])/.test(event.key)) {
+    // eslint-disable-next-line
+    let e = {...event};
+
+    // eslint-disable-next-line
+    let ch = String.fromCharCode(e.charCode);
+    // let ch = String.fromCharCode(e.charCode ||‌ e.keyCode || e.which);
+
+    const start = event.target.selectionStart;
+    const end = event.target.selectionEnd;
+
+    // replace point and change input value
+    const oldVal = event.target.value;
+    const d = fixNumbers({
+      value: oldVal.slice(0, start) + ch + oldVal.slice(end),
+    });
+    // eslint-disable-next-line no-param-reassign
+    setValue(event.target.name, d, {shouldValidate: true});
+
+    // eslint-disable-next-line
+    event.target.selectionStart = event.target.selectionEnd = start + 1;
+
+    event.preventDefault();
+  } else if (!/[0-9]/.test(event.key)) {
+    event.preventDefault();
+  }
+};
+export const getProvinceParam = () => {
+  const params = new URLSearchParams(window.location.search);
+  const provinceName = params.get('provinceName') || ('تهران' as any);
+  return sideCities.some((item: any) => item.name === provinceName) ? provinceName : false;
 };

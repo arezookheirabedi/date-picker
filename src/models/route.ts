@@ -4,6 +4,7 @@ export interface IRoute {
   keyIndex: string;
   icon?: (active: boolean, disabled?: boolean) => ReactElement;
   title: string;
+  enTitle?: string;
   link?: string;
   simLink?: string;
   keyString?: string;
