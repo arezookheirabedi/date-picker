@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import authenticateService from 'src/services/authentication.service';
+import toast from 'cogo-toast';
+import {EERRORS} from 'src/constants/errors.enum';
 
 interface IProps {
   formData: any;
+  setOtp: (data: string) => void;
 }
 
 function checkValue(val: any) {
@@ -29,7 +33,7 @@ const defaultWaitTime = () => {
   }
   return 0;
 };
-const ResendActivationCode: React.FC<IProps> = ({formData}) => {
+const ResendActivationCode: React.FC<IProps> = ({formData, setOtp}) => {
   const [disabled, setDisabled] = useState(false);
   const [waitTime, setWaitTime] = useState(defaultWaitTime());
 
@@ -40,6 +44,7 @@ const ResendActivationCode: React.FC<IProps> = ({formData}) => {
   };
 
   useEffect(() => {
+    setOtp('');
     const wt = localStorage.getItem('waiting-sms');
     if (checkValue(wt)) {
       const difference = new Date().getTime() - new Date(wt!).getTime();
@@ -68,39 +73,20 @@ const ResendActivationCode: React.FC<IProps> = ({formData}) => {
   }, [waitTime]);
   const {min, sec} = getDifferentTime(waitTime);
 
-  //   const handleClick = async (params: {
-  //     email: string;
-  //     mobileNumber?: string;
-  //     captchaKey: string;
-  //     captchaValue: string;
-  //   }) => {
-  //     try {
-  //       const res = await authenticateService.resendActivationCode({
-  //         ...params,
-  //         registerType: params.mobileNumber && params.mobileNumber.length ? 'SMS' : 'EMAIL',
-  //       });
-  //       if (res.data.status === 1) {
-  //         message.success(res.data.msg || t('alert__success'));
-  //         localStorage.setItem('waiting-sms', new Date().toString());
-  //         setWaitTime(2000 * 60);
-  //         setDisabled(true);
-  //       } else {
-  //         // eslint-disable-next-line
-  //         throw {message: res.data.msg || t('alert__error')};
-  //       }
-  //     } catch (error: any) {
-  //       message.error(error.message || t('alert__error'));
-  //     } finally {
-  //       if (refreshCaptcha) {
-  //         refreshCaptcha();
-  //       }
-  //     }
-  //   };
-  const handleClick = () => {
-    localStorage.setItem('waiting-sms', new Date().toString());
-    setWaitTime(2000 * 60);
-    setDisabled(true);
-    console.log(formData);
+  const handleClick = async () => {
+    try {
+      const res = await authenticateService.resetPassword(formData);
+      if (res.status === 204) {
+        toast.success('کد به شماره همراه ارسال شد');
+        localStorage.setItem('waiting-sms', new Date().toString());
+        setWaitTime(2000 * 60);
+        setDisabled(true);
+      } else {
+        throw new Error('خطایی در عملیات');
+      }
+    } catch (error: any) {
+      toast.error(error.message || EERRORS.ERROR_500);
+    }
   };
 
   return (
