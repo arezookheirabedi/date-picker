@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
-// import {useLocation} from "react-router-dom";
-import {sideCities} from 'src/helpers/utils';
+import {useHistory, useLocation} from 'react-router-dom';
+
+import {getProvinceParam, sideCities} from 'src/helpers/utils';
 import OverviewMap from '../../components/Recruitment/province/OverviewMap';
 import OverviewProvince from '../../components/Recruitment/province/OverviewProvince';
 // import OverviewOfVaccination from "../../components/Recruitment/public/OverviewOfVaccination";
@@ -17,21 +17,21 @@ import OverviewCategoriesProvince from '../../components/Recruitment/province/Ov
 import OverviewOfVaccinationProvince from '../../components/Recruitment/province/OverviewOfVaccinationProvince';
 import OverviewOfGovernmentEmployeesVaccinationProcessProvince
   from '../../components/Recruitment/province/OverviewOfGovernmentEmployeesVaccinationProcessProvince';
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
+import AccessDenied from "../../components/Access/AccessDenied";
 
 const RecruitmentProvince = () => {
   const location = useLocation();
-  const [cityTitle, setCityTitle] = useState('تهران');
+  const history = useHistory()
+  const [cityTitle, setCityTitle] = useState();
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      setCityTitle(provinceName);
+    if (getProvinceParam()) {
+      setCityTitle(getProvinceParam());
+    } else {
+      history.push('/dashboard/health/recruitment/province')
     }
   }, [location.search]);
 
@@ -41,18 +41,22 @@ const RecruitmentProvince = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="recruitment-overview"
-        // selectDefault
+        selectDefault
       />
 
-
-      <OverviewProvince cityTitle={cityTitle}/>
-      <OverviewCategoriesProvince cityTitle={cityTitle}/>
-      <OverviewPatientsProvince cityTitle={cityTitle}/>
-      <OverviewOfGovernmentEmployeesVaccinationProcessProvince cityTitle={cityTitle}/>
-      <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince cityTitle={cityTitle}/>
-      <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince cityTitle={cityTitle}/>
-      <OverviewOfVaccinationProvince cityTitle={cityTitle}/>
-      <TestStatusProvince cityTitle={cityTitle}/>
+      {!hasProvinceResources && <AccessDenied id="recruitment-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewProvince cityTitle={cityTitle}/>
+          <OverviewCategoriesProvince cityTitle={cityTitle}/>
+          <OverviewPatientsProvince cityTitle={cityTitle}/>
+          <OverviewOfGovernmentEmployeesVaccinationProcessProvince cityTitle={cityTitle}/>
+          <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusCardProvince cityTitle={cityTitle}/>
+          <OverviewOfTheLatestGovernmentEmployeesVaccinationStatusProvince cityTitle={cityTitle}/>
+          <OverviewOfVaccinationProvince cityTitle={cityTitle}/>
+          <TestStatusProvince cityTitle={cityTitle}/>
+        </>
+      )}
 
       {/* deprecated */}
       {/* <OverviewOfVaccinationProvince cityTitle={cityTitle}/> */}

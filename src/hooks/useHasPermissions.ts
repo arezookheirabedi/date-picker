@@ -12,6 +12,7 @@ const useHasPermissions: (PermissionNames: any[]) => boolean = permissionNames =
     nationalId: '',
     qrCode: '',
     roles: [],
+    resources: [],
     permissions: [],
   });
   const {permissions} = currentUser;
