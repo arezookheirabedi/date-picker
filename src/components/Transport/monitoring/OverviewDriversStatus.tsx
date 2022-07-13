@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import transportService from 'src/services/transport.service';
 import dayjs from 'dayjs';
 import RetryButton from 'src/components/RetryButton';
+import {EERRORS} from 'src/constants/errors.enum';
 import Table from '../../TableXHR';
 import {
   toPersianDigit,
@@ -31,7 +32,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     sort: 'ASC',
     reportType: 'GENERAL',
     province: cityTitle,
-    healthStatusSet: [].join(','),
+    // healthStatusSet: [].join(','),
     retry: false,
   });
   const cancelToken = cancelTokenSource();
@@ -63,11 +64,13 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
       setDataSet([...normalizedData]);
 
       setTotalItems(data.totalElements);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      setLoading(false);
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
