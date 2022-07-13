@@ -5,6 +5,7 @@ import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 import useGetOverviewOfVaccinationStackChart from "../../../hooks/apis/useGetOverviewOfVaccinationStackChart";
 import SingleDatepickerQuery from "../../SingleDatepickerQuery";
+import RetryButton from "../../RetryButton";
 
 const {HeadlessChart} = Charts;
 
@@ -120,6 +121,7 @@ const OverviewVaccinePerProvince = () => {
     from: null,
     to: null,
     tag: 'employee',
+    retry : false
   }) as any;
 
   const {data: dataset, loading, error: errorMessage} = useGetOverviewOfVaccinationStackChart(query);
@@ -181,7 +183,12 @@ const OverviewVaccinePerProvince = () => {
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
