@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 
 // @ts-ignore
 // import moment from 'moment-jalaali';
+import {isEmpty} from 'lodash';
 import {Menu} from '@headlessui/react';
 import ButtonToggle from '../../Form/ButtonToggle';
 // import DatePickerModal from '../../DatePickerModal';
@@ -11,6 +12,7 @@ import Spinner from '../../Spinner';
 
 import {sidesCities} from '../../../helpers/utils';
 import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
+import ExportFile from '../ExportFile'
 
 // images
 import chartBoxIcon from '../../../assets/images/icons/chart-box.svg';
@@ -40,6 +42,8 @@ const OverviewAudit: React.FC<{}> = () => {
   const [query, setQuery] = useState<string>("");
   const [bakeryWithoutTransaction, setBakeryWithoutTransaction] = useState<any>(false);
   const [unusualTransaction, setUnusualTransaction] = useState<any>(false);
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
+
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
@@ -103,6 +107,32 @@ const OverviewAudit: React.FC<{}> = () => {
       filteredList();
   },[filteredList]);
   
+  useEffect(()=> {
+    if(isEmpty(filteredDataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[filteredDataset])
+
+  const mapFilteredData = () => {
+    return filteredDataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "شهر": data.city === "NULL" ? "" : data.city,
+        "شناسه پروانه سیما" : data.simaId,
+        "شماره ملی" : data.nationalId,
+        "دفعات نیاز بازرسی" : "",
+        "مشکوک به تخلف از ساعت فعالیت" : data.workTime ? "بله" : "خیر",
+        "مشکوک به عدم استفاده‌ مجاز از سهمیه آرد" : data.flourQuota ? "بله" : "خیر",
+        "مشکوک به گران فروشی" : data.isExtortion ? "بله" : "خیر",
+        "مشکوک به عدم فعالیت" : data.bakeryWithoutTransaction ? "بله" : "خیر",
+        "مشکوک به تراکنش‌های غیر عادی": data.UnusualTransaction ? "بله" : "خیر",
+        "آدرس" : data.address
+      };
+    });
+  };
+
+  const finalData = mapFilteredData();
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -208,6 +238,12 @@ const OverviewAudit: React.FC<{}> = () => {
                   </div>
                 </Menu.Items>
               </Menu>
+              <ExportFile 
+                fileName="audit-list"
+                data={finalData}
+                loading={loading}
+                isDisabled={isOnPrint}
+              />
         </div>
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
           {/* {showDatePicker ? (

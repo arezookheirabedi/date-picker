@@ -48,6 +48,7 @@ const PassengerProvince = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="passenger-overview"
+        selectDefault
       />
 
       {!hasProvinceResources && <AccessDenied id="passenger-overview"/>}

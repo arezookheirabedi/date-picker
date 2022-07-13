@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 // import DatePickerModal from '../../DatePickerModal';
+import {isEmpty} from 'lodash';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
 import {sidesCities} from '../../../helpers/utils';
+import ExportFile from '../ExportFile'
 
 // hooks
 import useOverviewOfPermissionProvince from "../../../hooks/apis/bakery/useOverviewOfPermissionProvince";
@@ -27,6 +29,7 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   
   const location = useLocation();
   const history = useHistory();
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
 
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -88,6 +91,24 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   //   }
   // }, [selectedDayRange]);
 
+  useEffect(()=> {
+    if(isEmpty(dataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[dataset])
+
+  const mapData = () => {
+    return dataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "خریداران مشترک سیما و صمت": data.joint,
+        "خریداران فعال صمت": data.samt,
+        "خریداران فعال سیما" : data.sima
+      };
+    });
+  };
+  
+  const finalData = mapData();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -98,6 +119,12 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       {/* <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8"> */}
       <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
+            <ExportFile 
+                fileName="licenses-province-list"
+                data={finalData}
+                loading={loading}
+                isDisabled={isOnPrint}
+              />
           {/* {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -140,7 +167,7 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
               },
               {
                 name: 'خریداران مشترک سیما و صمت',
-                key: 'share',
+                key: 'joint',
                 render: (v: any) => <span>{v || '-'}</span>,
               },
               {
