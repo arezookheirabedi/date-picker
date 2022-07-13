@@ -7,6 +7,7 @@ import Spinner from '../../Spinner';
 import SearchableSingleSelect from '../../SearchableSingleSelect';
 import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
 import DatepickerQuery from "../../DatepickerQuery";
+import RetryButton from "../../RetryButton";
 
 const {Line} = Charts;
 
@@ -16,6 +17,7 @@ interface IParams {
   timeBoxType?: string;
   from?: any;
   to?: any;
+  retry : boolean
 }
 
 const OverviewPatients: React.FC<{}> = () => {
@@ -33,6 +35,7 @@ const OverviewPatients: React.FC<{}> = () => {
     to: null,
     tag: 'employee',
     category: 'heName',
+    retry : false
   }) as any;
 
   const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
@@ -119,10 +122,16 @@ const OverviewPatients: React.FC<{}> = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
+
         {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>

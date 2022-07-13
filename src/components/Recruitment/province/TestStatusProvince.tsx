@@ -5,6 +5,8 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
 import DatepickerQuery from "../../DatepickerQuery";
 import LocalTableSearch from "../../LocalTableSearch";
+import Spinner from "../../Spinner";
+import RetryButton from "../../RetryButton";
 
 interface TestStatusProvinceProps {
   cityTitle: any
@@ -17,6 +19,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
     category: 'heName',
     from: null,
     to: null,
+    retry : false
   })
 
 // eslint-disable-next-line
@@ -44,6 +47,16 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
       </div>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+
+        {loading && (<div className="p-40"><Spinner/></div>)}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
+
+        {!loading && !errorMessage && (
         <Table
           loading={loading}
           dataSet={[...dataset]}
@@ -163,6 +176,8 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           ]}
           totalItems={(dataset || []).length}
         />
+        )
+        }
       </div>
     </fieldset>
   );
