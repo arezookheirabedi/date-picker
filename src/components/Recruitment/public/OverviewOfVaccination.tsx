@@ -14,6 +14,8 @@ import useGetNumberOf from '../../../hooks/apis/useGetNumberOf';
 import useGetOverviewOfVaccinationTable from '../../../hooks/apis/useGetOverviewOfVaccinationTable';
 import LocalTableSearch from '../../LocalTableSearch';
 import SingleDatepickerQuery from '../../SingleDatepickerQuery';
+import RetryButton from "../../RetryButton";
+import Spinner from "../../Spinner";
 
 const OverviewOfVaccination: React.FC<{}> = () => {
   const [query, setQuery] = useState({
@@ -21,6 +23,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
     category: 'heName',
     from: null,
     to: null,
+    retry: false
   });
 
   const {
@@ -47,7 +50,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
       <legend className="mx-auto px-3 text-black">نگاه کلی به واکسیناسیون کارکنان دولت</legend>
 
       <div className="mb-8 mt-12 flex flex-col justify-between space-y-8">
-        <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+        <div
+          className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={totalEmployee}
             text="مجموع کارکنان دولت"
@@ -81,7 +85,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           />
         </div>
-        <div className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+        <div
+          className="border-slate-400 mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 border-b-2 pb-8 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={PurppleVaccineMd}
             text="تعداد واکسیناسیون دوز سوم"
@@ -115,7 +120,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
         </div>
-        <div className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+        <div
+          className="mb-8 mt-12 flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
@@ -153,7 +159,8 @@ const OverviewOfVaccination: React.FC<{}> = () => {
             isPercentage
           />
         </div>
-        <div className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
+        <div
+          className="mb-8 mt-12 flex flex-col justify-start space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
           <div className="w-1/4">
             <Statistic
               icon={DarkgreenVaccine}
@@ -193,115 +200,132 @@ const OverviewOfVaccination: React.FC<{}> = () => {
 
       <div className="align-center mb-8 flex justify-between space-x-5 rtl:space-x-reverse">
         <div className="align-center flex justify-between">
-          <SingleDatepickerQuery query={query} setQuery={setQuery} />
+          <SingleDatepickerQuery query={query} setQuery={setQuery}/>
         </div>
         <div className="align-center flex">
           <div className="align-center relative inline-flex leading-3">
-            <LocalTableSearch orgDataset={orgDataset} setData={setData} query={query} />
+            <LocalTableSearch orgDataset={orgDataset} setData={setData} query={query}/>
           </div>
         </div>
       </div>
 
-      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
-        <Table
-          loading={datasetLoading}
-          dataSet={[...dataset]}
-          pagination={{pageSize: 10, maxPages: 3}}
-          columns={[
-            {
-              name: 'وضعیت کلی',
-              key: '',
-              render: (v: any, record) => (
-                <CategoryDonut
-                  data={[
-                    {
-                      name: 'allDosesPercentage',
-                      title: 'دوز کل',
-                      y: record.allDosesPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
-                        ],
-                      },
-                    },
-                    {
-                      name: 'noDose',
-                      title: 'واکسن نزده',
-                      y: record.noDose || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#FE2D2F'], // start
-                          [1, '#CC0002'], // end
-                        ],
-                      },
-                    },
-                  ]}
-                />
-              ),
-              className: 'flex justify-center w-full',
-            },
-            {
-              name: 'سازمان',
-              key: 'name',
-              render: (v: any, record, index: number, page: number) => (
-                <div className="flex">
-                  {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
-                </div>
-              ),
-            },
-            {
-              name: 'تعداد کارکنان',
-              key: 'employeesCount',
-              render: () => <span>-</span>,
-            },
-            {
-              name: 'دوز اول',
-              key: 'firstDosePercentage',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'دوز دوم',
-              key: 'secondDosePercentage',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'دوز سوم',
-              key: 'thirdDosePercentage',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'سایر دوزها',
-              key: 'otherDose',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'واکسن نزده',
-              key: 'noDose',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
-            },
-            {
-              name: 'اطلاعات مخدوش',
-              key: 'unknownInformation',
-              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-            },
-            {
-              name: 'کل دوزها',
-              key: 'allDoses',
-              sortable: true,
-              render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
-            },
-          ]}
-          totalItems={dataset.length || 0}
-        />
-      </div>
+      {errorMessage && (
+        <div className="p-40">
+          <div className="text-red-500">{errorMessage}</div>
+          <RetryButton setQuery={setQuery}/>
+        </div>
+      )}
+
+      {datasetLoading && (
+        <div className="p-20">
+          <Spinner/>
+        </div>
+      )}
+
+      {!datasetLoading && !errorMessage && (
+        <>
+          <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
+            <Table
+              loading={datasetLoading}
+              dataSet={[...dataset]}
+              pagination={{pageSize: 10, maxPages: 3}}
+              columns={[
+                {
+                  name: 'وضعیت کلی',
+                  key: '',
+                  render: (v: any, record) => (
+                    <CategoryDonut
+                      data={[
+                        {
+                          name: 'allDosesPercentage',
+                          title: 'دوز کل',
+                          y: record.allDosesPercentage || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#05D8A4'], // start
+                              [1, '#039572'], // end
+                            ],
+                          },
+                        },
+                        {
+                          name: 'noDose',
+                          title: 'واکسن نزده',
+                          y: record.noDose || 0,
+                          color: {
+                            linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                            stops: [
+                              [0, '#FE2D2F'], // start
+                              [1, '#CC0002'], // end
+                            ],
+                          },
+                        },
+                      ]}
+                    />
+                  ),
+                  className: 'flex justify-center w-full',
+                },
+                {
+                  name: 'سازمان',
+                  key: 'name',
+                  render: (v: any, record, index: number, page: number) => (
+                    <div className="flex">
+                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.{v}
+                    </div>
+                  ),
+                },
+                {
+                  name: 'تعداد کارکنان',
+                  key: 'employeesCount',
+                  render: () => <span>-</span>,
+                },
+                {
+                  name: 'دوز اول',
+                  key: 'firstDosePercentage',
+                  sortable: true,
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'دوز دوم',
+                  key: 'secondDosePercentage',
+                  sortable: true,
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'دوز سوم',
+                  key: 'thirdDosePercentage',
+                  sortable: true,
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'سایر دوزها',
+                  key: 'otherDose',
+                  sortable: true,
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'واکسن نزده',
+                  key: 'noDose',
+                  sortable: true,
+                  render: (v: any) => <span>{Number(v).toLocaleString('fa')}%</span>,
+                },
+                {
+                  name: 'اطلاعات مخدوش',
+                  key: 'unknownInformation',
+                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+                },
+                {
+                  name: 'کل دوزها',
+                  key: 'allDoses',
+                  sortable: true,
+                  render: (v: any) => <span>{Number(v).commaSeprator().toPersianDigits()}</span>,
+                },
+              ]}
+              totalItems={dataset.length || 0}
+            />
+          </div>
+        </>
+      )}
     </fieldset>
   );
 };

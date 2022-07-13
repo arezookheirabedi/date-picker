@@ -4,6 +4,8 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import DatepickerQuery from "../../DatepickerQuery";
 import LocalTableSearch from "../../LocalTableSearch";
 import useGetOverviewOfCategories from "../../../hooks/apis/useGetOverviewOfCategories";
+import Spinner from "../../Spinner";
+import RetryButton from "../../RetryButton";
 
 
 interface OverviewCategoriesProvinceProps {
@@ -17,6 +19,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     category: 'heName',
     from: null,
     to: null,
+    retry : false
   }) as any;
 
   // eslint-disable-next-line
@@ -41,6 +44,16 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+
+        {loading && (<div className="p-40"><Spinner/></div>)}
+        {error && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{error}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
+
+        {!error && !loading && (
         <Table
           loading={loading}
           dataSet={[...dataset]}
@@ -145,6 +158,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           ]}
           totalItems={(dataset || []).length}
         />
+        )}
       </div>
     </fieldset>
   );
