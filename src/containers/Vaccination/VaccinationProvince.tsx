@@ -1,15 +1,21 @@
+import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import {useEffect, useState} from 'react';
+
 import {sideCities} from 'src/helpers/utils';
 import OverviewMap from 'src/components/Vaccination/province/OverviewMap';
 import OverviewExistVaccineCount from 'src/components/Vaccination/province/OverviewExistVaccineCount';
 import OverviewVaccine from 'src/components/Vaccination/province/OverviewVaccine';
 import OverviewExistVaccinePercentage from 'src/components/Vaccination/province/OverviewExistVaccinePercentage';
 import OverviewVaccinePerDoses from 'src/components/Vaccination/province/OverviewVaccinePerDoses';
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
+import AccessDenied from "../../components/Access/AccessDenied";
+
 
 const Vaccination: React.FC<{}> = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -33,11 +39,17 @@ const Vaccination: React.FC<{}> = () => {
         selectDefault
       />
 
-      <OverviewVaccine cityTitle={cityTitle} />
-      {/* <OverviewVaccinationStatus cityTitle={cityTitle} /> */}
-      <OverviewExistVaccineCount cityTitle={cityTitle} />
-      <OverviewExistVaccinePercentage cityTitle={cityTitle} />
-      <OverviewVaccinePerDoses cityTitle={cityTitle}/>
+      {!hasProvinceResources && <AccessDenied id="vaccination-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewVaccine cityTitle={cityTitle}/>
+          {/* <OverviewVaccinationStatus cityTitle={cityTitle} /> */}
+          <OverviewExistVaccineCount cityTitle={cityTitle}/>
+          <OverviewExistVaccinePercentage cityTitle={cityTitle}/>
+          <OverviewVaccinePerDoses cityTitle={cityTitle}/>
+        </>
+      )}
+
     </div>
   );
 };

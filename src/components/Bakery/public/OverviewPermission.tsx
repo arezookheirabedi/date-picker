@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 // @ts-ignore
 // import moment from 'moment-jalaali';
 // import DatePickerModal from '../../DatePickerModal';
+import {isEmpty} from 'lodash';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
+import ExportFile from '../ExportFile'
 
 // hooks
 import useOverviewOfPermission from "../../../hooks/apis/bakery/useOverviewOfPermission";
@@ -15,7 +17,9 @@ const OverviewPermission: React.FC<{}> = () => {
 
   // call bakery hook
   const { loading, list: dataset } = useOverviewOfPermission();
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
 
+  // const tableRef = useRef<any>();
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
   //   to: null,
@@ -54,7 +58,25 @@ const OverviewPermission: React.FC<{}> = () => {
   //   }
   // }, [selectedDayRange]);
 
+  useEffect(()=> {
+    if(isEmpty(dataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[dataset])
 
+  const mapData = () => {
+    return dataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "خریداران مشترک سیما و صمت": data.joint,
+        "خریداران فعال صمت": data.samt,
+        "خریداران فعال سیما" : data.sima
+      };
+    });
+  };
+  
+  const finalData = mapData();
+ 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -64,6 +86,12 @@ const OverviewPermission: React.FC<{}> = () => {
       {/* <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8"> */}
       <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
+           <ExportFile 
+              fileName="licenses-country-list"
+              data={finalData}
+              loading={loading}
+              isDisabled={isOnPrint}
+           />
           {/* {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -106,7 +134,7 @@ const OverviewPermission: React.FC<{}> = () => {
               },
               {
                 name: 'خریداران مشترک سیما و صمت',
-                key: 'share',
+                key: 'joint',
                 render: (v: any) => <span>{v || '-'}</span>,
               },
               {

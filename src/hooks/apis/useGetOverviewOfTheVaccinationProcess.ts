@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import hcsService from '../../services/hcs.service';
 import {convertGregorianDateToJalaliDate, sideCities} from '../../helpers/utils';
@@ -199,7 +199,7 @@ export default function useGetOverviewOfTheVaccinationProcess(
   }, [query]);
 
   const location = useLocation();
-  const history = useHistory();
+
 
   useEffect(() => {
     if (!hasProvince) {
@@ -213,8 +213,6 @@ export default function useGetOverviewOfTheVaccinationProcess(
 
     if (existsCity) {
       getIt({...query, province: provinceName});
-    } else {
-      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {
