@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 // import DatePickerModal from '../../DatePickerModal';
+import {isEmpty} from 'lodash';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
 import {sidesCities} from '../../../helpers/utils';
+import ExportFile from '../ExportFile'
 
 // hooks
-import useOverviewOfRegisteredProvince from "../../../hooks/apis/bakery/useOverviewOfRegisteredProvince";
+import useOverviewOfInvalidGuildCodeDetailProvince from "../../../hooks/apis/bakery/useOverviewOfInvalidGuildCodeDetailProvince";
 
 interface OverviewCategoriesProvinceProps {
     cityTitle?: any;
@@ -19,6 +21,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
 
   const location = useLocation();
   const history = useHistory();
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
 
   // call bakery hook
   const {
@@ -26,7 +29,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
     list: dataset, 
     count,
     setProvinceName
-  } = useOverviewOfRegisteredProvince({reportName: "invalidGuildCodeDetail"});
+  } = useOverviewOfInvalidGuildCodeDetailProvince();
 
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -88,6 +91,28 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
     }
   }, [cityTitle]);
 
+  useEffect(()=> {
+    if(isEmpty(dataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[dataset])
+
+  const mapFilteredData = () => {
+    return dataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "شهر": data.city === "NULL" ? "" : data.city,
+        "شناسه پروانه سیما": data.simaId,
+        "شناسه پروانه کسبی صمت": data.guildCode,
+        "وضعیت عدم انطباق": data.buyerAsnafStatus,
+        "شماره ملی": data.nationalId,
+        "آدرس": data.address,
+      };
+    });
+  };
+
+  const finalData = mapFilteredData();
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -95,9 +120,14 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
       </legend>
 
       {/* <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8"> */}
-      <div className="flex flex-grow items-center justify-end space-x-5 rtl:space-x-reverse mb-8">
-        
+      <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
+          <ExportFile 
+              fileName="invalid-guildcode-province-list"
+              data={finalData}
+              loading={loading}
+              isDisabled={isOnPrint}
+          />
           {/* {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -112,8 +142,9 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
             to={selectedDayRange.to}
             setSelectedDayRange={setSelectedDayRange}
           /> */}
-          
-          {/* <div className='inline-flex justify-center'> */}
+        </div>
+        <div className="flex align-center space-x-4 rtl:space-x-reverse">
+              {/* <div className='inline-flex justify-center'> */}
             <div className='relative z-20 inline-block text-left px-5 py-1 shadow rounded'>
               <div className="inline-flex justify-center items-center w-full text-sm font-medium">
                 <span className="mx-3 whitespace-nowrap truncate">
@@ -132,7 +163,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
                 </span>
               </div>
             </div>
-          </div>
+        </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (

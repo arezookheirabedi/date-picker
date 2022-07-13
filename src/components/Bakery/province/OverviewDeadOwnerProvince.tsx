@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 // import DatePickerModal from '../../DatePickerModal';
+import {isEmpty} from 'lodash';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
+import ExportFile from '../ExportFile'
 
 import {sidesCities} from '../../../helpers/utils';
 
@@ -20,6 +22,8 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
 
   const location = useLocation();
   const history = useHistory();
+  const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
+
 //   const [query, setQuery] = useState<string>("");
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -39,7 +43,8 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
     list: dataset, 
     count,
     setProvinceName
-  } = useOverviewOfRegisteredProvince({reportName: "deadOwnerdetail"});
+   } = useOverviewOfRegisteredProvince();
+  // } = useOverviewOfRegisteredProvince({reportName: "deadOwnerdetail"});
   
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -89,6 +94,25 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
   //   }
   // }, [selectedDayRange]);
 
+  useEffect(()=> {
+    if(isEmpty(dataset)) setIsOnPrint(false)
+    else setIsOnPrint(true)
+  },[dataset])
+
+  const mapFilteredData = () => {
+    return dataset.map((data:any, index:any) => {
+      return {
+        "شناسه": index + 1,
+        "استان": data.province,
+        "شهر": data.city === "NULL" ? "" : data.city,
+        "نام و نام‌ خانوادگی" : data.fullName,
+        "شناسه پروانه سیما" : data.simaId,
+        "شماره ملی" : data.nationalId,
+        "آدرس" : data.address
+      };
+    });
+  };
+  const finalData = mapFilteredData();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -97,8 +121,14 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
       </legend>
 
       {/* <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8"> */}
-      <div className="flex flex-grow items-center justify-end space-x-5 rtl:space-x-reverse mb-8">
+      <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
+            <ExportFile 
+                fileName="dead-owner-province-list"
+                data={finalData}
+                loading={loading}
+                isDisabled={isOnPrint}
+              />
           {/* {showDatePicker ? (
             <DatePickerModal
               setSelectedDayRange={setSelectedDayRange}
@@ -115,25 +145,28 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
           /> */}
           
           {/* <div className='inline-flex justify-center'> */}
-            <div className='relative z-20 inline-block text-left px-5 py-1 shadow rounded'>
-              <div className="inline-flex justify-center items-center w-full text-sm font-medium">
-                <span className="mx-3 whitespace-nowrap truncate">
-                  <span className="text-gray-500">
-                    تعداد ردیف :
-                  </span> {count}
-                </span>
-              </div>
-            </div>
-            <div className='relative z-20 inline-block text-left shadow rounded px-5 py-1'>
-              <div className="inline-flex justify-center items-center w-full text-sm font-medium">
-                <span className="mx-3 whitespace-nowrap truncate">
-                  <span className="text-gray-500">
-                    منبع :
-                  </span> سامانه سیما
-                </span>
-              </div>
-            </div>
           </div>
+          <div className="flex align-center space-x-4 rtl:space-x-reverse">
+            <div className='relative z-20 inline-block text-left px-5 py-1 shadow rounded'>
+                <div className="inline-flex justify-center items-center w-full text-sm font-medium">
+                  <span className="mx-3 whitespace-nowrap truncate">
+                    <span className="text-gray-500">
+                      تعداد ردیف :
+                    </span> {count}
+                  </span>
+                </div>
+              </div>
+              <div className='relative z-20 inline-block text-left shadow rounded px-5 py-1'>
+                <div className="inline-flex justify-center items-center w-full text-sm font-medium">
+                  <span className="mx-3 whitespace-nowrap truncate">
+                    <span className="text-gray-500">
+                      منبع :
+                    </span> سامانه سیما
+                  </span>
+                </div>
+              </div>
+            </div>
+          
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading ? (
