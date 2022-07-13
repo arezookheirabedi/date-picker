@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
+import RetryButton from 'src/components/RetryButton';
 import Charts from '../../Charts';
 import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';
 
@@ -70,8 +71,7 @@ interface IOverviewOfGuildVaccinationProcess {
 const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationProcess> = ({
   cityTitle,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [query, setQuery] = useState<any>({tag: 'guild'});
+  const [query, setQuery] = useState<any>({tag: 'guild', retry: false});
   const {
     data: dataset,
     loading,
@@ -111,13 +111,17 @@ const OverviewOfGuildVaccinationProcess: React.FC<IOverviewOfGuildVaccinationPro
             </div>
           </div>
         </div>
-
         {loading && (
           <div className="p-40">
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && dataset.categories.length > 0 && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
