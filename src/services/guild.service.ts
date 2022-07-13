@@ -127,7 +127,7 @@ function guildInquiry({...params}: any = {}, config?: any) {
     .get(`/api/v1/guilds/visit-histories/general/count`, params, {...config});
 }
 
-function guildOverview(
+function guildMonitoringReport(
   {reportType, ...params}: any = {},
   config?: any
 ): Promise<AxiosResponse<any>> {
@@ -225,7 +225,7 @@ export default {
   guildMessageSeen,
   dosesTagBased,
   guildInquiry,
-  guildOverview,
+  guildMonitoringReport,
   guildReportoverviewStatus,
   requestOtpReport,
   reportDownload,
