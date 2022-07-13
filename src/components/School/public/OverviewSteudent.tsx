@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {addTotalStudentMembersAc} from 'src/store/action_creators';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
@@ -16,19 +16,21 @@ import useGetNumberOf from 'src/hooks/apis/useGetNumberOf';
 import useGetTestResults from 'src/hooks/apis/useGetTestResults';
 
 const OverviewSteudent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query, setQuery] = useState<any>({tag: 'edu', category: 'type', categoryValue: 'STUDENT'});
   const dispatch = useDispatch();
   const {
     data: numberOf,
     loading,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error,
-  } = useGetNumberOf({tag: 'edu', category: 'type', categoryValue: 'STUDENT'});
+  } = useGetNumberOf(query);
   const {
     data: testResultInfo,
     loading: testResultLoading,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error: errorTestResult,
-  } = useGetTestResults({tag: 'edu', category: 'type', categoryValue: 'STUDENT'});
+  } = useGetTestResults(query);
 
   useEffect(() => {
     dispatch(addTotalStudentMembersAc(numberOf.totalPopulation || 0));

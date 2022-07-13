@@ -5,7 +5,7 @@ import {sideCities} from 'src/helpers/utils';
 import {EERRORS} from 'src/constants/errors.enum';
 import hcsService from '../../services/hcs.service';
 
-export default function useGetOverviewOfVaccinationStackChart(
+export default function useGetOverviewOfPationColumnChart(
   query: any,
   hasProvince: boolean = false
 ) {
