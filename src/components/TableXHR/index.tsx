@@ -1,6 +1,5 @@
 import React, {Fragment, ReactNode, useEffect, useState} from 'react';
-// import qs from 'qs';
-// import {useLocation} from 'react-router-dom';
+import Loading from '../Loading';
 import Empty from '../Empty';
 import Pagination from '../PaginationScope';
 import TableRow from './TableRow';
@@ -50,10 +49,19 @@ interface IProps {
     rowExpandable: (record: any) => boolean;
     expandedRowRender: (record: any) => any;
   };
+  loading?: boolean;
 }
 
 const Table: React.FC<IProps> = (props: IProps) => {
-  const {dataSet, expandable, pagination, columns, totalItems = 0, handlePageChange} = props;
+  const {
+    dataSet,
+    expandable,
+    pagination,
+    columns,
+    totalItems = 0,
+    handlePageChange,
+    loading = false,
+  } = props;
 
   // eslint-disable-next-line
   const [page, setPage] = useState<number>(pagination?.currentPage || 1);
@@ -65,7 +73,7 @@ const Table: React.FC<IProps> = (props: IProps) => {
 
   return (
     <>
-      <div className="relative pl-3 -ml-3 h-full w-full overflow-hidden overflow-x-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
+      <div className="relative -ml-3 h-full w-full overflow-hidden overflow-x-scroll pl-3 scrollbar-thin scrollbar-track-gray-300 scrollbar-thumb-gray-400">
         <table className="w-full table-auto">
           <thead className="">
             <tr className="border-b border-gray-100">
@@ -75,34 +83,47 @@ const Table: React.FC<IProps> = (props: IProps) => {
                   // scope="col"
                   // eslint-disable-next-line
                   key={i}
-                  className="px-3 pb-4 py-1 text-xs font-medium tracking-wider text-gray-500 uppercase whitespace-nowrap"
+                  className="whitespace-nowrap px-3 py-1 pb-4 text-xs font-medium uppercase tracking-wider text-gray-500"
                 >
                   {column.name}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-900 max-h-screen overflow-hidden overflow-y-scroll">
-            {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
-              dataSet.map((data, i) => (
-                <Fragment key={i}>
-                  <TableRow
-                    data={data}
-                    columns={columns}
-                    expandable={expandable}
-                    index={i}
-                    key={i}
-                  />
-                </Fragment>
-              ))
-            ) : (
+          <tbody className="max-h-screen overflow-hidden overflow-y-scroll bg-white dark:bg-gray-900">
+            {loading ? (
               <tr>
                 <td colSpan={columns.length + 1}>
-                  <div className="px-4 py-10 flex justify-center items-center">
-                    <Empty />
+                  <div className="flex items-center justify-center px-4 py-10">
+                    <Loading />
                   </div>
                 </td>
               </tr>
+            ) : (
+              <>
+                {' '}
+                {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
+                  dataSet.map((data, i) => (
+                    <Fragment key={i}>
+                      <TableRow
+                        data={data}
+                        columns={columns}
+                        expandable={expandable}
+                        index={i}
+                        key={i}
+                      />
+                    </Fragment>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={columns.length + 1}>
+                      <div className="flex items-center justify-center px-4 py-10">
+                        <Empty />
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </>
             )}
           </tbody>
         </table>
