@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import OverviewPassengerStatusCardProvince
   from 'src/components/Passengers/province/OverviewPassengersStatusCardProvince';
@@ -21,10 +21,14 @@ import OverviewOfTripsMadeByPassengersByVehicleProvince
   from "../../components/Passengers/province/OverviewOfTripsMadeByPassengersByVehicleProvince";
 import OverviewOfAffectedAfterTravelingInCountryProvince
   from "../../components/Passengers/province/OverviewOfAffectedAfterTravelingInCountryProvince";
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
+import AccessDenied from "../../components/Access/AccessDenied";
 
 const PassengerProvince = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -44,19 +48,26 @@ const PassengerProvince = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="passenger-overview"
+        selectDefault
       />
-      <OverviewPassengerStatusCardProvince cityTitle={cityTitle}/>
-      <OverviewAirPassengerStatusCardProvince cityTitle={cityTitle}/>
-      <OverviewLandPassengerStatusCardProvince cityTitle={cityTitle}/>
-      <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle}/>
-      <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle}/>
-      <OverviewPassengersVaccinateComponentProvince cityTitle={cityTitle}/>
-      <OverviewPassengersVaccinePerDosesProvince cityTitle={cityTitle}/>
-      {/* comment */}
-      {/* <OverviewPatientsPassengersProvince cityTitle={cityTitle}/> */}
-      {/* comment */}
-      <OverviewOfAffectedAfterTravelingInCountryProvince cityTitle={cityTitle}/>
-      <OverviewOfTripsMadeByPassengersByVehicleProvince cityTitle={cityTitle}/>
+
+      {!hasProvinceResources && <AccessDenied id="passenger-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewPassengerStatusCardProvince cityTitle={cityTitle}/>
+          <OverviewAirPassengerStatusCardProvince cityTitle={cityTitle}/>
+          <OverviewLandPassengerStatusCardProvince cityTitle={cityTitle}/>
+          <OverviewRailPassengerStatusCardProvince cityTitle={cityTitle}/>
+          <OverviewSeaPassengerStatusCardProvince cityTitle={cityTitle}/>
+          <OverviewPassengersVaccinateComponentProvince cityTitle={cityTitle}/>
+          <OverviewPassengersVaccinePerDosesProvince cityTitle={cityTitle}/>
+          {/* comment */}
+          {/* <OverviewPatientsPassengersProvince cityTitle={cityTitle}/> */}
+          {/* comment */}
+          <OverviewOfAffectedAfterTravelingInCountryProvince cityTitle={cityTitle}/>
+          <OverviewOfTripsMadeByPassengersByVehicleProvince cityTitle={cityTitle}/>
+        </>
+      )}
 
     </div>
   );

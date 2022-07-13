@@ -5,6 +5,7 @@ import Charts from '../../Charts';
 import map from '../../Charts/ir-all.geo.json';
 import mapData from '../../Charts/mapData.json';
 import {sideCities} from '../../../helpers/utils';
+import useHasProvinceResource from "../../../hooks/useHasProvinceResource";
 
 const {Map} = Charts;
 
@@ -16,47 +17,15 @@ interface OverviewMapProps {
 }
 
 const OverviewMap: React.FC<OverviewMapProps> = ({
-  sideCityStatus,
-  selectDefault,
-  destinationId,
-}) => {
+                                                   sideCityStatus,
+                                                   selectDefault,
+                                                   destinationId,
+                                                 }) => {
   const chartRef = useRef<any>(null);
   const {search, ...location} = useLocation();
-
-  const query = new URLSearchParams(search);
-
-  useEffect(() => {
-    try {
-      const selectedPoints = chartRef?.current?.chart.getSelectedPoints();
-
-      selectedPoints.forEach((item: any) => {
-        item.select();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
-    const data = chartRef?.current?.chart.get('covid').data;
-    const params = new URLSearchParams(search);
-    const provinceName = params.get('provinceName') || '';
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      const city = data.find((x: any) => x.properties['fa-name'] === provinceName);
-      if (!city.selected) {
-        city?.select();
-      }
-    } else if (selectDefault) {
-      const city = data.find((x: any) => x.properties['fa-name'] === 'تهران');
-      if (!city.selected) {
-        city?.select();
-      }
-    }
-  }, [search]);
-
   const history = useHistory();
-  const [options] = useState({
+  const [detectResource, setDetectResource] = useState(false);
+  const [options, setOptions] = useState({
     chart: {
       map,
       height: '70%',
@@ -226,6 +195,119 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
     ],
   });
 
+  const query = new URLSearchParams(search);
+
+  useEffect(() => {
+
+
+    //
+    // try {
+    //   const selectedPoints = chartRef?.current?.chart.getSelectedPoints();
+    //
+    //   selectedPoints.forEach((item: any) => {
+    //     item.select();
+    //   });
+    // } catch (error) {
+    //   // eslint-disable-next-line
+    //   console.log(error);
+    // }
+
+    if (detectResource) {
+      const data = chartRef?.current?.chart.get('covid').data;
+      const params = new URLSearchParams(search);
+      const provinceName = params.get('provinceName') || '';
+      const existsCity = sideCities.some((item: any) => {
+        return item.name === provinceName;
+      });
+      if (existsCity) {
+        const city = data.find((x: any) => x.properties['fa-name'] === provinceName);
+        if (!city.selected) {
+          city?.select();
+        }
+      } else if (selectDefault) {
+        const city = data.find((x: any) => x.properties['fa-name'] === 'تهران');
+        if (!city.selected) {
+          city?.select();
+        }
+      }
+    } else {
+      const data = chartRef?.current?.chart.get('covid').data;
+      const params = new URLSearchParams(search);
+      const provinceName = params.get('provinceName') || '';
+      const existsCity = sideCities.some((item: any) => {
+        return item.name === provinceName;
+      });
+      if (existsCity) {
+        const city = data.find((x: any) => x.properties['fa-name'] === provinceName);
+        if (!city.selected) {
+          city?.select();
+        }
+      } else if (selectDefault) {
+        const city = data.find((x: any) => x.properties['fa-name'] === 'تهران');
+        if (!city.selected) {
+          city?.select();
+        }
+      }
+    }
+
+  }, [search, detectResource]);
+
+  const [hasProvinceResources, resources, provinceResource] = useHasProvinceResource() as any;
+
+  useEffect(() => {
+    const provincesThatHaveResources: any = [];
+    if (hasProvinceResources) {
+      const checkProvinceResources = resources?.find((item: any) => item.name === 'province');
+      if (checkProvinceResources) {
+        checkProvinceResources.value.forEach((item: any) => {
+          sideCities.forEach((province: any) => {
+            if (item === province.name) {
+              provincesThatHaveResources.push(province.mapId)
+            }
+          })
+        })
+
+        if (provincesThatHaveResources.length) {
+          setOptions((prev: any) => {
+            return {
+              ...prev,
+              series: [
+                {
+                  data: [...provincesThatHaveResources],
+                  id: 'covid',
+                  keys: ['hasc', 'value'],
+                  joinBy: 'hasc',
+                  name: 'کوید',
+                  borderColor: '#fff',
+                  borderWidth: 1,
+                  dataLabels: {
+                    enabled: true,
+                    format: '{point.properties.fa-name}',
+                    style: {
+                      fontWeight: '400',
+                      color: '#ffffff',
+                      fontFamily: 'inherit',
+                      backgroundColor: 'transparent',
+                    },
+                  },
+                  states: {
+                    select: {
+                      color: '#3b3b3b',
+                    },
+                  },
+                  allowPointSelect: true,
+                }
+              ],
+            }
+          });
+          setDetectResource(true)
+        }
+      }
+    }
+
+
+  }, [hasProvinceResources])
+
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
@@ -233,11 +315,15 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
-        <Link to={location.pathname} className="absolute right-20 top-8 z-40">
-          <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
-        </Link>
+        {
+          provinceResource.length && provinceResource[0] === '*' && (
+            <Link to={location.pathname} className="absolute right-20 top-8 z-40">
+              <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
+            </Link>
+          )
+        }
         <div className="w-5/6 map-wrapper">
-          <Map options={options} ref={chartRef} />
+          <Map options={options} ref={chartRef}/>
         </div>
         <ul className="w-1/6">
           {sideCityStatus.map((item: any, index: any) => {

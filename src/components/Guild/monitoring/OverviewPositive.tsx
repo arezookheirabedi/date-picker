@@ -1,91 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import guildService from 'src/services/guild.service';
+import RetryButton from 'src/components/RetryButton';
+import useGetGuildMonitoring from 'src/hooks/apis/useGetGuildMonitoring';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
-import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
-import Spinner from '../../Spinner';
+import {toPersianDigit} from '../../../helpers/utils';
 import HiddenMobileNumber from './HiddenMobileNumber';
 
 interface OverviewPositiveProps {
   cityTitle?: string;
 }
-
+const pageSize = 10;
 const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
-  const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
-  const [totalItems, setTotalItems] = useState(0);
-  // eslint-disable-next-line
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [dataSet, setDataSet] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [selectedDayRange, setSelectedDayRange] = useState({
-  //   from: null,
-  //   to: null,
-  // }) as any;
+  const [query, setQuery] = useState({
+    currentPage: 1,
+    retry: false,
+    pageSize,
+    sort: 'ASC',
+    reportType: 'POSITIVE_CHAIN',
+    province: cityTitle,
+  });
+  const {dataSet, loading, error: errorMessage, totalItems} = useGetGuildMonitoring(query);
 
-  const {CancelToken} = axios;
-  // eslint-disable-next-line
-  const source = CancelToken.source();
-
-  const pageSize = 10;
-
-  const cancelToken = cancelTokenSource();
-
-  function cancelRequest() {
-    cancelToken.cancel(msgRequestCanceled);
-  }
-  const getOverviewPositive = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await guildService.guildOverview(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          categoryCode: item.categoryCode || 'نامشخص',
-          guildCode: item.guildCode || 'نامشخص',
-          ownerMobileNumber: item.ownerMobileNumber,
-          ownerNationalId: item.ownerNationalId || 'نامشخص',
-          categoryName: item.categoryName || 'نامشخص',
-          address: item.address || 'نامشخص',
-        });
-      });
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
-    setCurrentPage(1);
+    setQuery({...query, currentPage: 1, province: cityTitle});
   }, [cityTitle]);
 
-  useEffect(() => {
-    const params: any = {
-      pageNumber: Number(currentPage) - 1,
-      pageSize,
-      sort: 'ASC',
-      reportType: 'POSITIVE_CHAIN',
-      province: cityTitle,
-      guildType: null,
-    };
-    getOverviewPositive(params);
-    return () => {
-      cancelRequest();
-      setDataSet([]);
-    };
-  }, [cityTitle, currentPage]);
-
   function handlePageChange(page: number = 1) {
-    setCurrentPage(page);
+    setQuery({...query, currentPage: page});
   }
 
   return (
@@ -98,18 +39,6 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
         <div className="inline-flex">
           <ExportButton
             params={{
-              // from: selectedDayRange.from
-              //   ? moment(
-              //       `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`,
-              //       'jYYYY/jM/jD'
-              //     ).format('YYYY-MM-DD')
-              //   : null,
-              // to: selectedDayRange.to
-              //   ? moment(
-              //       `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`,
-              //       'jYYYY/jM/jD'
-              //     ).format('YYYY-MM-DD')
-              //   : null,
               reportType: 'POSITIVE_CHAIN',
               province: cityTitle,
               reportName: ` واحد‌های صنفی ${
@@ -120,76 +49,81 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
         </div>
       </div>
 
-      {loading && dataSet.length === 0 ? (
-        <div className="p-20">
-          <Spinner />
-        </div>
-      ) : (
-        <>
-          <div className="flex w-full flex-col items-center justify-center rounded-xl bg-white p-4 shadow">
-            <Table
-              handlePageChange={handlePageChange}
-              dataSet={[...dataSet]}
-              pagination={{pageSize, currentPage}}
-              columns={[
-                {
-                  name: 'ردیف',
-                  key: '',
-                  render: (v: any, record, index: number) => (
-                    <div className="flex w-full justify-center">
-                      {toPersianDigit(((currentPage - 1) * pageSize + (index + 1)).toString())}.
-                    </div>
-                  ),
-                },
-
-                {
-                  name: 'شماره پروانه',
-                  key: 'guildCode',
-                  render: (v: any, record: any) => (
-                    <span className="text-gray-500">{toPersianDigit(record.guildCode)}</span>
-                  ),
-                },
-                {
-                  name: 'کد ISIC',
-                  key: 'categoryCode',
-                  render: (v: any, record: any) => (
-                    <span className="text-gray-500">{toPersianDigit(record.categoryCode)}</span>
-                  ),
-                },
-                {
-                  name: 'کد ملی مالک',
-                  key: 'ownerNationalId',
-                  render: (v: any, record: any) => (
-                    <span className="text-gray-500">{toPersianDigit(record.ownerNationalId)}</span>
-                  ),
-                },
-                {
-                  name: 'رسته',
-                  key: 'categoryName',
-                },
-                {
-                  name: 'آدرس',
-                  key: 'address',
-                },
-                {
-                  name: 'شماره موبایل',
-                  key: 'ownerMobileNumber',
-                  render: (v: any, record: any) => (
-                    <span className="text-gray-500">
-                      {record.ownerMobileNumber ? (
-                        <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber)} />
-                      ) : (
-                        'نامشخص'
-                      )}
-                    </span>
-                  ),
-                },
-              ]}
-              totalItems={totalItems}
-            />
+      <div className="flex w-full flex-col items-center justify-center rounded-xl bg-white p-4 shadow">
+        {errorMessage && !loading ? (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
           </div>
-        </>
-      )}
+        ) : (
+          <Table
+            loading={loading}
+            totalItems={totalItems}
+            handlePageChange={handlePageChange}
+            dataSet={[...dataSet]}
+            pagination={{pageSize, currentPage: query.currentPage}}
+            columns={[
+              {
+                name: 'ردیف',
+                key: '',
+                render: (v: any, record, index: number) => (
+                  <div className="flex w-full justify-center">
+                    {toPersianDigit(
+                      ((query.currentPage - 1) * pageSize + (index + 1)).toString() || ''
+                    )}
+                    .
+                  </div>
+                ),
+              },
+
+              {
+                name: 'شماره پروانه',
+                key: 'guildCode',
+                render: (v: any, record: any) => (
+                  <span className="text-gray-500">{toPersianDigit(record.guildCode) || ''}</span>
+                ),
+              },
+              {
+                name: 'کد ISIC',
+                key: 'categoryCode',
+                render: (v: any, record: any) => (
+                  <span className="text-gray-500">{toPersianDigit(record.categoryCode) || ''}</span>
+                ),
+              },
+              {
+                name: 'کد ملی مالک',
+                key: 'ownerNationalId',
+                render: (v: any, record: any) => (
+                  <span className="text-gray-500">
+                    {toPersianDigit(record.ownerNationalId) || ''}
+                  </span>
+                ),
+              },
+              {
+                name: 'رسته',
+                key: 'categoryName',
+              },
+              {
+                name: 'آدرس',
+                key: 'address',
+              },
+              {
+                name: 'شماره موبایل',
+                key: 'ownerMobileNumber',
+                render: (v: any, record: any) => (
+                  <span className="text-gray-500">
+                    {record.ownerMobileNumber ? (
+                      <HiddenMobileNumber value={toPersianDigit(record.ownerMobileNumber) || ''} />
+                    ) : (
+                      'نامشخص'
+                    )}
+                  </span>
+                ),
+              },
+            ]}
+          />
+        )}
+      </div>
     </fieldset>
   );
 };

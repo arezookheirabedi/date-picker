@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import axios from "axios";
 import bakeryService from '../../../services/bakery/custom/bakery.service';
 
-export default function useOverviewOfRegisteredProvince() {
+export default function useOverviewOfInvalidGuildCodeDetailProvince() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>([]);
   const [error, setError] = useState(false);
@@ -19,7 +19,7 @@ export default function useOverviewOfRegisteredProvince() {
     setError(false);
     try {
         const { data } = await bakeryService.bakeryReport(
-            { reportName: "deadOwnerdetail" },
+            { reportName: "invalidGuildCodeDetail" },
             { cancelToken: source.token }
           );
           // const {data} = await bakeryService.bakeryAudit({
@@ -28,15 +28,17 @@ export default function useOverviewOfRegisteredProvince() {
           //   // to,
           // });
           const normalizedData: any[] = [];
+          
           data.forEach((item: any, index: number) => {
             normalizedData.push({
-              id: `ovca_${index}`,
-              province: item.province,
-              city: item.city,
-              simaId : item.simaId,
-              fullName: item.fullName.match(/\D/g).join(''),
-              nationalId: item.nationalId,
-              address : item.address
+                id: `ovca_${index}`,
+                province: item.province,
+                city: item.city,
+                simaId : item.simaId,
+                guildCode: item.guildCode,
+                buyerAsnafStatus: item.buyerAsnafStatus,
+                nationalId : item.nationalId,
+                address: item.address
             });
           });
           const sortData = normalizedData.filter(item => {

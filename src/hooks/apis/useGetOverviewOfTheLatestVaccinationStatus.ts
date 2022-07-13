@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import axios from "axios";
 import {IInitialNumberOfDoses, initialNumberOfDoses} from "../../components/Passengers/public/constant";
 import hcsService from "../../services/hcs.service";
@@ -34,7 +34,6 @@ export default function useGetOverviewOfTheLatestVaccinationStatus(query: any, h
   };
 
   const location = useLocation();
-  const history = useHistory();
 
   useEffect(() => {
     if (hasProvince) {
@@ -60,9 +59,6 @@ export default function useGetOverviewOfTheLatestVaccinationStatus(query: any, h
     });
     if (existsCity) {
       getIt({...query, 'province': provinceName});
-
-    } else {
-      history.push('/dashboard/health/transport/province');
     }
     // getPcrResult();
     // eslint-disable-next-line consistent-return
