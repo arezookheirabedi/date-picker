@@ -113,3 +113,31 @@ export const pilgrimsCountries = [
 
 
 ]
+
+
+
+export const pilgrimsList= [
+  {
+    pilgrimName: 'نگین آساده',
+    pilgrimNationalId:'25366588996',
+    exitBorder:'مرز مهران',
+    dateOfDispatch:'2022.11.12',
+    returnDate:'2022.11.12',
+    SendingProvince:'تهران',
+    pilgrimMobileNumber:'02356987566',
+
+    
+  },
+
+  {
+    pilgrimName: 'نگین آساده',
+    pilgrimNationalId:'25366588996',
+    exitBorder:'مرز مهران',
+    dateOfDispatch:'2022.11.12',
+    returnDate:'2022.11.12',
+    SendingProvince:'تهران',
+    pilgrimMobileNumber:'02356987566',
+
+    
+  },
+]
