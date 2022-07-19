@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const ArboreanProvince = () => {
+const ArbaeenProvince = () => {
     
     return (
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -10,4 +10,4 @@ const ArboreanProvince = () => {
     );
   };
 
-export default ArboreanProvince;
+export default ArbaeenProvince;
