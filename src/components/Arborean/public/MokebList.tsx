@@ -68,7 +68,7 @@ useEffect(() => {
                 name: 'ظرفیت موکب',
                 key: 'capacity',
                 render: (v: any, record: any) => (
-                  <span className="text-gray-500">
+                  <span className=" ">
                     {toPersianDigit(record.capacity) || ''}
                   </span>
                 ),
@@ -79,7 +79,14 @@ useEffect(() => {
                 key: 'owner' },
                 {
                   name: 'نام و نام خانوادگی مسئول موکب',
-                  key: 'managerName' },
+                  key: 'managerName' ,
+                  render: (v: any, record: any) => (
+                    <span className="text-sky-500">
+                      {record.managerName}
+                    </span>
+                  ),
+                
+                },
             ]}
            
           />
