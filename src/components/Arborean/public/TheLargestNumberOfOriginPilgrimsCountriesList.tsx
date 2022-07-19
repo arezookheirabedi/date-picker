@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import RetryButton from "src/components/RetryButton";
 import Table from "src/components/TableScopeSort";
-import { toPersianDigit } from "src/helpers/utils";
-import { redHelalList } from "./constant";
+import {toPersianDigit } from "src/helpers/utils";
+import {pilgrimsCountries} from "./constant";
 
 
-const RedHalalBasesList: React.FC<{}>=()=>{
+const TheLargestNumberOfOriginPilgrimsCountriesList: React.FC<{}>=()=>{
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [error, setError] = useState<any>(null);
@@ -15,15 +15,16 @@ const RedHalalBasesList: React.FC<{}>=()=>{
   });
 useEffect(() => {
   const normalizedData: any[] = [];
-  redHelalList.forEach((item: any, index: number) => {
+  pilgrimsCountries.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.name||'نامشخص',
-          location: item.location||'نامشخص',
-          baseCode:item.baseCode,
-          managerName: item.managerName||'نامشخص',
-          capacity:item.capacity,
-          providedServicesCount:item.providedServicesCount,
+          country: item.country||'نامشخص',
+          pilgrimsCount:item.pilgrimsCount,
+          pilgrimsTototalPercentage: item.pilgrimsTototalPercentage||'نامشخص',
+          womenPercentage:item.womenPercentage,
+          menPercentage:item.menPercentage,
+          
+      
 
 
         
@@ -34,7 +35,7 @@ useEffect(() => {
 
 },[])
   return(   <fieldset className="mb-16 rounded-xl border p-4 text-center">
-  <legend className="mx-auto px-3 text-black">لیست پایگاه های حلال احمر</legend>
+  <legend className="mx-auto px-3 text-black">لیست بیشترین کشور های مبدا اتباع خارجی زائرین</legend>
 
   <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
@@ -50,8 +51,8 @@ useEffect(() => {
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
-                name: 'اسم پایگاه',
-                key: 'name',
+                name: 'کشور',
+                key: 'country',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex justify-center">
                     {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
@@ -59,39 +60,42 @@ useEffect(() => {
                 ),
               },
               {
-                name: 'کد پایگاه',
-                key: 'baseCode',
+                name: 'تعداد زائرین',
+                key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                    {toPersianDigit(record.baseCode) || ''}
+                  <span className="">
+                    {toPersianDigit(record.pilgrimsCount) || ''}
                   </span>
                 ),
               },
               {
-                name: 'ظرفیت پایگاه',
-                key: 'capacity',
+                name: 'درصد زنان زائر',
+                key: 'womenPercentage',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                    {toPersianDigit(record.capacity) || ''}
+                  <span className="">
+                    {toPersianDigit(record.womenPercentage) || ''}٪
                   </span>
                 ),
               },
               {
-                name: 'تعداد خدمات ارائه شده',
-                key: 'providedServicesCount',
+                name: 'درصد مردان زائر',
+                key: 'menPercentage',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                    {toPersianDigit(record.providedServicesCount) || ''}
+                  <span className="">
+                    {toPersianDigit(record.menPercentage) || ''}٪
                   </span>
                 ),
               },
+           
               {
-                name: 'موقعیت پایگاه',
-                key: 'location',
-              },
-                {
-                  name: 'مسئول پایگاه',
-                  key: 'managerName' },
+                name: 'درصد از کل زائرین',
+                key: 'pilgrimsTototalPercentage',
+                render: (v: any, record: any) => (
+                  <span className="">
+                    {toPersianDigit(record.pilgrimsTototalPercentage) || ''}٪
+                  </span>
+                ),
+              }
             ]}
            
           />
@@ -101,7 +105,7 @@ useEffect(() => {
 
   </fieldset>)
 }
-export default RedHalalBasesList
+export default TheLargestNumberOfOriginPilgrimsCountriesList
 
 
 
