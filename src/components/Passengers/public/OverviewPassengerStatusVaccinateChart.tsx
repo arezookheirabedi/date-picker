@@ -174,8 +174,6 @@ const OverViewPassengerStatusVaccinateChart = () => {
     try {
       const {data} = await hcsService.getVaccinesTripGroupedByProvinceReport({}, {cancelToken: source.token});
 
-      console.log(data);
-
       const provinces: any[] = [];
 
       // eslint-disable-next-line

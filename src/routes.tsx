@@ -25,6 +25,8 @@ import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
+import Arborean from './containers/Arborean/Arborean';
+import ArboreanProvince from './containers/Arborean/ArboreanProvince';
 
 const routes: IRoute[] = [
   {
@@ -597,13 +599,55 @@ const routes: IRoute[] = [
   {
     keyIndex: '3',
     // icon: active => <IconWrapperStyle name="dashboard" active={active} />,
-    link: '/dashboard/zaerin',
+    link: '/dashboard/arborean/public',
     exact: true,
     inMenu: true,
-    title: 'زائرین اربعین',
-    disabled: true,
+    title: 'اربعین',
+    // disabled: true,
     roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-    main: () => <></>,
+    subMenu: [
+      {
+        keyIndex: '12',
+        // icon: (active, disabled) => (
+        //   <IconWrapperStyle name="bakery" className="w-5 h-5" active={active} disabled={disabled}/>
+        // ),
+        link: '/dashboard/arborean/public',
+        simLink: '/dashboard/arborean',
+        exact: true,
+        inMenu: true,
+        title: 'داشبورد زائرین اربعین',
+        children: [
+          {
+            keyIndex: '1',
+            title: 'عمومی',
+            link: '/dashboard/arborean/public',
+            // icon: active => <IconWrapperStyle name="sub-bakery" active={active}/>,
+            roles: [
+              'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER_ZAERIN'
+            ],
+            main: Arborean,
+          },
+          {
+            keyIndex: '2',
+            title: 'استانی',
+            enTitle: 'province',
+            link: '/dashboard/arborean/province',
+            // icon: active => <IconWrapperStyle name="sub-bakery" active={active}/>,
+            roles: [
+              'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER_ZAERIN'
+            ],
+            main: ArboreanProvince,
+          },
+        ],
+        roles: [
+          'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER_ZAERIN'
+        ],
+        main: Arborean,
+      },
+    ],
   },
   {
     keyIndex: '0',
