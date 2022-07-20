@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
-import LocalTableSearch from "src/components/LocalTableSearch";
-import RetryButton from "src/components/RetryButton";
-import SearchableSingleSelect from "src/components/SearchableSingleSelect";
-import Table from "src/components/TableScopeSort";
-import { toPersianDigit } from "src/helpers/utils";
-import guildService from "src/services/guild.service";
-import {pilgrimsList } from "../public/constant";
+import dayjs from 'dayjs';
+import React, {useEffect, useState} from 'react';
+import LocalTableSearch from 'src/components/LocalTableSearch';
+import RetryButton from 'src/components/RetryButton';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import Table from 'src/components/TableScopeSort';
+import {toPersianDigit} from 'src/helpers/utils';
+import guildService from 'src/services/guild.service';
+import {pilgrimsList} from '../public/constant';
 
-
-
-const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle})=>{
+const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [error, setError] = useState<any>(null);
@@ -20,35 +18,30 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle})=>{
     retry: false,
     categoryValue: null,
   });
-useEffect(() => {
-  const normalizedData: any[] = [];
-  pilgrimsList.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          pilgrimName: item.pilgrimName||'نامشخص',
-          pilgrimNationalId:item.pilgrimNationalId,
-          exitBorder:item.exitBorder||'نامشخص',
-          dateOfDispatch:item.dateOfDispatch,
-          returnDate:item.returnDate,
-          SendingProvince:item.SendingProvince||'نامشخص',
-          pilgrimMobileNumber:item.pilgrimMobileNumber,
-      
-
-
-        
-        });
+  useEffect(() => {
+    const normalizedData: any[] = [];
+    pilgrimsList.forEach((item: any, index: number) => {
+      normalizedData.push({
+        id: `ovca_${index}`,
+        pilgrimName: item.pilgrimName || 'نامشخص',
+        pilgrimNationalId: item.pilgrimNationalId,
+        exitBorder: item.exitBorder || 'نامشخص',
+        dateOfDispatch: item.dateOfDispatch,
+        returnDate: item.returnDate,
+        SendingProvince: item.SendingProvince || 'نامشخص',
+        pilgrimMobileNumber: item.pilgrimMobileNumber,
       });
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-
-
-},[])
-  return(   <fieldset className="mb-16 rounded-xl border p-4 text-center" id="arborean-overview">
-  <legend className="mx-auto px-3 text-black">لیست زائران</legend>
-  <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
+    });
+    setDataset([...normalizedData]);
+    setOrgDataset([...normalizedData]);
+  }, []);
+  return (
+    <fieldset className="mb-16 rounded-xl border p-4 text-center" id="arborean-overview">
+      <legend className="mx-auto px-3 text-black">لیست زائران</legend>
+      <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
         <div className="align-center flex space-x-5 rtl:space-x-reverse">
           <div className="flex items-center">
-          <SearchableSingleSelect
+            <SearchableSingleSelect
               endPoint={guildService.getRegisterList}
               placeholder="مرز خروج "
               objectKey="categoryId"
@@ -69,7 +62,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-  <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
@@ -77,7 +70,7 @@ useEffect(() => {
           </div>
         ) : (
           <Table
-          totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length}
             loading={loading}
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
@@ -96,15 +89,13 @@ useEffect(() => {
                 key: 'pilgrimNationalId',
                 render: (v: any, record: any) => (
                   <span className="">
-                   { Number(record.pilgrimNationalId||0).toPersianDigits()}
-
+                    {Number(record.pilgrimNationalId || 0).toPersianDigits()}
                   </span>
                 ),
               },
               {
                 name: 'مرز خروج',
                 key: 'exitBorder',
-              
               },
               {
                 name: 'تاریخ اعزام',
@@ -113,19 +104,17 @@ useEffect(() => {
                   <>
                     <div className="flex w-full justify-center">
                       <span className="text-gray-500 whitespace-normal ">
-                      {record.dateOfDispatch ? (
+                        {record.dateOfDispatch ? (
                           toPersianDigit(
                             dayjs(record.dateOfDispatch).calendar('jalali').format('YYYY/MM/DD')
                           )
                         ) : (
                           <>-</>
                         )}
-                      
                       </span>
                     </div>
                   </>
                 ),
-              
               },
               {
                 name: 'تاریخ بازگشت',
@@ -134,41 +123,37 @@ useEffect(() => {
                   <>
                     <div className="flex w-full justify-center">
                       <span className="text-gray-500 whitespace-normal ">
-
-                        {record.returnDate?(toPersianDigit(
-                          dayjs(record.returnDate).calendar('jalali').format('YYYY/MM/DD')
-                        )):<>-</>}
+                        {record.returnDate ? (
+                          toPersianDigit(
+                            dayjs(record.returnDate).calendar('jalali').format('YYYY/MM/DD')
+                          )
+                        ) : (
+                          <>-</>
+                        )}
                       </span>
                     </div>
                   </>
                 ),
-              
               },
-        
+
               {
                 name: 'استان اعزام',
                 key: 'SendingProvince',
-              
               },
               {
                 name: 'شماره موبایل زائر',
                 key: 'pilgrimMobileNumber',
                 render: (v: any, record: any) => (
                   <span className="">
-                      { Number(record.pilgrimMobileNumber||0).toPersianDigits()}
+                    {Number(record.pilgrimMobileNumber || 0).toPersianDigits()}
                   </span>
                 ),
               },
             ]}
-           
           />
         )}
       </div>
-
-
-  </fieldset>)
-}
-export default PilgrimsList
-
-
-
+    </fieldset>
+  );
+};
+export default PilgrimsList;

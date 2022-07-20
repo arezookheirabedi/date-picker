@@ -20,6 +20,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
                                                    sideCityStatus,
                                                    selectDefault,
                                                    destinationId,
+                                                   cityTitle,
                                                  }) => {
   const chartRef = useRef<any>(null);
   const {search, ...location} = useLocation();
@@ -195,7 +196,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
     ],
   });
 
-  const query = new URLSearchParams(search);
+  // const query = new URLSearchParams(search);
 
   useEffect(() => {
 
@@ -312,7 +313,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
       نگاه کلی به لیست زائران{' '}
-        {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
+        {cityTitle ? ` استان‌ ${cityTitle}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
 
