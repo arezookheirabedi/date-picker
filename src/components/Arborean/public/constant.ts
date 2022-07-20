@@ -1,11 +1,11 @@
 export const mokebList = [
   {
-    name: 'پایگاه کمیل',
-    location: 'مرز مهران',
-    capacity: '35',
-    type: 'اسکان و تغذیه',
-    owner: 'وزارت کشور',
-    managerName: 'نگین آساده',
+    name: null,
+    location:null,
+    capacity: null,
+    type:null,
+    owner:null,
+    managerName: null,
   },
   {
     name: 'پایگاه کمیل',
@@ -26,12 +26,12 @@ export const mokebList = [
 ];
 export const redHelalList = [
   {
-    name: 'پایگاه کمیل',
-    baseCode: '3456',
-    capacity: '35',
-    providedServicesCount:"5444",
-    location: 'درمانگاه مسیر نجف به کربلا',
-    managerName: 'محمد علی مدنی',
+    name: null,
+    baseCode:null,
+    capacity:null,
+    providedServicesCount:null,
+    location: null,
+    managerName:null,
     
   },
 
@@ -54,13 +54,13 @@ export const redHelalList = [
 ]
 export const pilgrimsCity = [
   {
-    city: 'تهران',
-    pilgrimsCount: '3456',
-    womenPercentage: '35',
-    menPercentage: '65',
-    visasIssuedCount:"9878",
-    vaccinePercentage:"20",
-    firestDosesPercentage:"56"
+    city: null,
+    pilgrimsCount: null,
+    womenPercentage:null,
+    menPercentage: null,
+    visasIssuedCount:null,
+    vaccinePercentage:null,
+    firestDosesPercentage:null
     
   },
   {
@@ -87,11 +87,11 @@ export const pilgrimsCity = [
 ]
 export const pilgrimsCountries = [
   {
-    country: 'پاکستان',
-    pilgrimsCount: '3456',
-    womenPercentage: '35',
-    menPercentage: '65',
-    pilgrimsTototalPercentage:"20",
+    country:null,
+    pilgrimsCount:null,
+    womenPercentage: null,
+    menPercentage: null,
+    pilgrimsTototalPercentage:null,
     
   },
   {
@@ -118,13 +118,13 @@ export const pilgrimsCountries = [
 
 export const pilgrimsList= [
   {
-    pilgrimName: 'نگین آساده',
-    pilgrimNationalId:'25366588996',
-    exitBorder:'مرز مهران',
-    dateOfDispatch:'2022.11.12',
-    returnDate:'2022.11.12',
-    SendingProvince:'تهران',
-    pilgrimMobileNumber:'02356987566',
+    pilgrimName:null,
+    pilgrimNationalId:null,
+    exitBorder:null,
+    dateOfDispatch:null,
+    returnDate:null,
+    SendingProvince:null,
+    pilgrimMobileNumber:null,
 
     
   },

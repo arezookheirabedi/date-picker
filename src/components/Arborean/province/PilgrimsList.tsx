@@ -96,7 +96,8 @@ useEffect(() => {
                 key: 'pilgrimNationalId',
                 render: (v: any, record: any) => (
                   <span className="">
-                    {toPersianDigit(record.pilgrimNationalId || '')}
+                   { Number(record.pilgrimNationalId||0).toPersianDigits()}
+
                   </span>
                 ),
               },
@@ -112,9 +113,14 @@ useEffect(() => {
                   <>
                     <div className="flex w-full justify-center">
                       <span className="text-gray-500 whitespace-normal ">
-                        {toPersianDigit(
-                          dayjs(record.dateOfDispatch).calendar('jalali').format('YYYY/MM/DD')
+                      {record.dateOfDispatch ? (
+                          toPersianDigit(
+                            dayjs(record.dateOfDispatch).calendar('jalali').format('YYYY/MM/DD')
+                          )
+                        ) : (
+                          <>-</>
                         )}
+                      
                       </span>
                     </div>
                   </>
@@ -128,9 +134,10 @@ useEffect(() => {
                   <>
                     <div className="flex w-full justify-center">
                       <span className="text-gray-500 whitespace-normal ">
-                        {toPersianDigit(
+
+                        {record.returnDate?(toPersianDigit(
                           dayjs(record.returnDate).calendar('jalali').format('YYYY/MM/DD')
-                        )}
+                        )):<>-</>}
                       </span>
                     </div>
                   </>
@@ -148,7 +155,7 @@ useEffect(() => {
                 key: 'pilgrimMobileNumber',
                 render: (v: any, record: any) => (
                   <span className="">
-                    {toPersianDigit(record.pilgrimMobileNumber|| '')}
+                      { Number(record.pilgrimMobileNumber||0).toPersianDigits()}
                   </span>
                 ),
               },

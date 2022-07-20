@@ -311,7 +311,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت اصناف{' '}
+      نگاه کلی به لیست زائران{' '}
         {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">

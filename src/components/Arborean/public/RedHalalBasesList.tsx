@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import RetryButton from "src/components/RetryButton";
 import Table from "src/components/TableScopeSort";
-import { toPersianDigit } from "src/helpers/utils";
 import { redHelalList } from "./constant";
 
 
@@ -63,7 +62,8 @@ useEffect(() => {
                 key: 'baseCode',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.baseCode) || ''}
+                   { Number(record.baseCode||0).toPersianDigits()}
+                   
                   </span>
                 ),
               },
@@ -72,7 +72,8 @@ useEffect(() => {
                 key: 'capacity',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.capacity) || ''}
+                   { Number(record.capacity||0).toPersianDigits()}
+
                   </span>
                 ),
               },
@@ -81,7 +82,8 @@ useEffect(() => {
                 key: 'providedServicesCount',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.providedServicesCount) || ''}
+                   { Number(record.providedServicesCount||0).toPersianDigits()}
+
                   </span>
                 ),
               },

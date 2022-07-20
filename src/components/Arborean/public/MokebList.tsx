@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import RetryButton from "src/components/RetryButton";
 import Table from "src/components/TableScopeSort";
-import { toPersianDigit } from "src/helpers/utils";
 import { mokebList } from "./constant";
 
 
@@ -69,7 +68,7 @@ useEffect(() => {
                 key: 'capacity',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.capacity) || ''}
+                    {Number(record.capacity||0).toPersianDigits()}
                   </span>
                 ),
               },
