@@ -16,7 +16,7 @@ const converters = {
       return String.fromCharCode(d.charCodeAt(0) + 1728);
     });
   },
-};
+} as any;
 
 const optionChart = {
   chart: {
@@ -65,6 +65,16 @@ const optionChart = {
       grouping: false,
       shadow: false,
       borderWidth: 0,
+      dataLabels: {
+        enabled: true,
+        // eslint-disable-next-line no-useless-concat
+        format: '<h1 style="font-family: IRANSans">%{y}</h1>',
+        style: {
+          fontSize: '10px',
+          fontFamily: 'IRANSans',
+        },
+        useHTML: true,
+      }
     },
   },
   yAxis: {
