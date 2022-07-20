@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27.802" height="29.122" viewBox="0 0 27.802 29.122">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#4ac7ff"/>
+      <stop offset="1" stop-color="#0093d4"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_46782" data-name="Group 46782" transform="translate(1 1)">
+    <path id="Oval" d="M9.641,4.506a6.742,6.742,0,1,0,1.823,10.9" fill="none" stroke="#0093d4" stroke-width="2" fill-rule="evenodd"/>
+    <path id="Oval-2" data-name="Oval" d="M9.97,13.543a8.666,8.666,0,1,0-1.3-6.729" fill="none" stroke="#0093d4" stroke-linecap="round" stroke-width="2" fill-rule="evenodd"/>
+    <path id="Rectangle-4" d="M14.241,23.741l.31,2.06a1.823,1.823,0,0,0,1.8,1.552,1.5,1.5,0,0,0,1.5-1.5,1.823,1.823,0,0,0-1.552-1.8Z" transform="translate(22.718 -3.845) rotate(45)" fill-rule="evenodd" fill="url(#linear-gradient)"/>
+    <path id="Rectangle-3" d="M6.241,23.741l.309,2.06a1.823,1.823,0,0,0,1.8,1.552,1.5,1.5,0,0,0,1.5-1.5,1.823,1.823,0,0,0-1.552-1.8Z" transform="translate(20.374 1.812) rotate(45)" fill-rule="evenodd" fill="url(#linear-gradient)"/>
+    <path id="Rectangle-2" d="M10.241,19.741l.31,2.06a1.823,1.823,0,0,0,1.8,1.552,1.5,1.5,0,0,0,1.5-1.5,1.823,1.823,0,0,0-1.552-1.8Z" transform="translate(18.718 -2.188) rotate(45)" fill-rule="evenodd" fill="url(#linear-gradient)"/>
+  </g>
+</svg>
