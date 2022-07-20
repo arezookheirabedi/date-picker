@@ -47,7 +47,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             <SearchableSingleSelect
               endPoint={guildService.getRegisterList}
               placeholder="مرز خروج "
-              objectKey="categoryId"
+              objectKey="categoryValue"
               setQueryParams={setQuery}
               queryParams={query}
             />
@@ -60,7 +60,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
               orgDataset={orgDataset}
               setData={setDataset}
               query={query}
-              placeholder="جستجو"
+              placeholder="جستجوی سازمان"
             />
           </div>
         </div>
