@@ -31,7 +31,7 @@ const ArboreanProvince = () => {
         cityTitle={cityTitle}
         sideCityStatus={sideCities}
         destinationId="arborean-overview"
-        selectDefault={hasProvinceResources}
+        selectDefault
       />
 
       {!hasProvinceResources && <AccessDenied id="arborean-overview"/>}
