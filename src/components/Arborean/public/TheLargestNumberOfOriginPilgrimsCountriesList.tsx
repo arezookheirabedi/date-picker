@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import RetryButton from "src/components/RetryButton";
 import Table from "src/components/TableScopeSort";
-import {toPersianDigit } from "src/helpers/utils";
 import {pilgrimsCountries} from "./constant";
 
 
@@ -20,14 +19,9 @@ useEffect(() => {
           id: `ovca_${index}`,
           country: item.country||'نامشخص',
           pilgrimsCount:item.pilgrimsCount,
-          pilgrimsTototalPercentage: item.pilgrimsTototalPercentage||'نامشخص',
+          pilgrimsTototalPercentage: item.pilgrimsTototalPercentage,
           womenPercentage:item.womenPercentage,
           menPercentage:item.menPercentage,
-          
-      
-
-
-        
         });
       });
       setDataset([...normalizedData]);
@@ -64,7 +58,8 @@ useEffect(() => {
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
                   <span className="">
-                    {toPersianDigit(record.pilgrimsCount) || ''}
+                   { Number(record.pilgrimsCount||0).toPersianDigits()}
+
                   </span>
                 ),
               },
@@ -73,7 +68,8 @@ useEffect(() => {
                 key: 'womenPercentage',
                 render: (v: any, record: any) => (
                   <span className="">
-                    {toPersianDigit(record.womenPercentage) || ''}٪
+                   { Number(record.womenPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -82,7 +78,8 @@ useEffect(() => {
                 key: 'menPercentage',
                 render: (v: any, record: any) => (
                   <span className="">
-                    {toPersianDigit(record.menPercentage) || ''}٪
+                   { Number(record.menPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -92,7 +89,7 @@ useEffect(() => {
                 key: 'pilgrimsTototalPercentage',
                 render: (v: any, record: any) => (
                   <span className="">
-                    {toPersianDigit(record.pilgrimsTototalPercentage) || ''}٪
+                   { Number(record.pilgrimsTototalPercentage||0).toPersianDigits()}٪
                   </span>
                 ),
               }

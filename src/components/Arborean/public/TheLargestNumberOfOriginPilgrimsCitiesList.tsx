@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import RetryButton from "src/components/RetryButton";
 import Table from "src/components/TableScopeSort";
-import { toPersianDigit } from "src/helpers/utils";
 import { pilgrimsCity} from "./constant";
 
 
@@ -65,7 +64,8 @@ useEffect(() => {
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.pilgrimsCount) || ''}
+                   { Number(record.pilgrimsCount||0).toPersianDigits()}
+
                   </span>
                 ),
               },
@@ -74,7 +74,8 @@ useEffect(() => {
                 key: 'womenPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.womenPercentage) || ''}٪
+                   { Number(record.womenPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -83,7 +84,8 @@ useEffect(() => {
                 key: 'menPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.menPercentage) || ''}٪
+                   { Number(record.menPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -93,7 +95,8 @@ useEffect(() => {
                 key: 'visasIssuedCount',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.visasIssuedCount) || ''}
+                   { Number(record.visasIssuedCount||0).toPersianDigits()}
+
                   </span>
                 ),
               },
@@ -102,7 +105,8 @@ useEffect(() => {
                 key: 'vaccinePercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.vaccinePercentage) || ''}٪
+                   { Number(record.vaccinePercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -111,7 +115,8 @@ useEffect(() => {
                 key: 'firestDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.firestDosesPercentage) || ''}٪
+                   { Number(record.firestDosesPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -120,7 +125,8 @@ useEffect(() => {
                 key: 'firestDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.firestDosesPercentage) || ''}٪
+                   { Number(record.firestDosesPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
@@ -129,7 +135,8 @@ useEffect(() => {
                 key: 'firestDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {toPersianDigit(record.firestDosesPercentage) || ''}٪
+                   { Number(record.firestDosesPercentage||0).toPersianDigits()}٪
+
                   </span>
                 ),
               },
