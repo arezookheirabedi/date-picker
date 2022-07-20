@@ -7,7 +7,10 @@ import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import Table from 'src/components/TableScopeSort';
 import {toPersianDigit} from 'src/helpers/utils';
 import guildService from 'src/services/guild.service';
+import Irancell from 'src/assets/images/logos/irancell-logo.svg';
+import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 import {pilgrimsList} from '../public/constant';
+
 
 const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
@@ -36,7 +39,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     setOrgDataset([...normalizedData]);
   }, []);
   return (
-    <fieldset className="mb-16 rounded-xl border p-4 text-center" id="arborean-overview">
+  <>  <fieldset className="mb-2 rounded-xl border p-4 text-center" id="arborean-overview">
       <legend className="mx-auto px-3 text-black">لیست زائران</legend>
       <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
         <div className="align-center flex space-x-5 rtl:space-x-reverse">
@@ -154,6 +157,14 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
         )}
       </div>
     </fieldset>
+    <fieldset className=" rounded-xl border py-2 px-4 text-center">
+        <div className=" flex justify-between">
+          <div className="flex items-center justify-start"><img src={Irancell} className="inline"alt="irancell-logo"/><span className="px-2">باهمکاری ایرانسل</span></div>
+          <div><img src={Vasl} className="inline "  alt="vasl-logo"/></div>
+        </div>
+      </fieldset>
+    
+    </>
   );
 };
 export default PilgrimsList;
