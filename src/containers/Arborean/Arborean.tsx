@@ -7,6 +7,12 @@ import OverviewOfThePercentageOfEntryAndExitOfPilgrims
   from 'src/components/Arborean/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
 import GeneralLookAtTransportationAxesAndExitBordersOfCountry
   from 'src/components/Arborean/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry'
+import ListOfTheBusiestBorderCrossings from "../../components/Arborean/public/ListOfTheBusiestBorderCrossings";
+import ListOfTransportationAxesStatus from "../../components/Arborean/public/ListOfTransportationAxesStatus";
+import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims
+  from "../../components/Arborean/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims";
+import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases
+  from "../../components/Arborean/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases";
 
 const Arborean = () => {
 
@@ -17,6 +23,10 @@ const Arborean = () => {
       <OverviewOfTheEntryAndExitOfPilgrims/>
       <OverviewOfThePercentageOfEntryAndExitOfPilgrims/>
       <GeneralLookAtTransportationAxesAndExitBordersOfCountry/>
+      <ListOfTheBusiestBorderCrossings />
+      <ListOfTransportationAxesStatus />
+      <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
+      <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases />
     </div>
   );
 };
