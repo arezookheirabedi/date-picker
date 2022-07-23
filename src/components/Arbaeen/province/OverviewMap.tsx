@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {Link, useHistory, useLocation} from 'react-router-dom';
 
 import Charts from '../../Charts';
@@ -23,6 +24,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
   cityTitle,
 }) => {
   const chartRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {search, ...location} = useLocation();
   const history = useHistory();
   const [detectResource, setDetectResource] = useState(false);
@@ -242,6 +244,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
     }
   }, [search, detectResource]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hasProvinceResources, resources, provinceResource] = useHasProvinceResource() as any;
 
   useEffect(() => {
@@ -301,11 +304,11 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         نگاه کلی به لیست زائران {cityTitle ? ` استان‌ ${cityTitle}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
-        {!!provinceResource.length && provinceResource[0] === '*' && (
+        {/* {!!provinceResource.length && provinceResource[0] === '*' && (
           <Link to={location.pathname} className="absolute right-20 top-8 z-40">
             <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
           </Link>
-        )}
+        )} */}
 
         <div className="w-5/6 map-wrapper">
           <Map options={options} ref={chartRef} />
