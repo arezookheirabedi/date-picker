@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import AccessDenied from 'src/components/Access/AccessDenied';
-import OverviewMap from 'src/components/Arborean/province/OverviewMap';
-import PilgrimsList from 'src/components/Arborean/province/PilgrimsList';
-import { sideCities } from 'src/helpers/utils';
+import OverviewMap from 'src/components/Arbaeen/province/OverviewMap';
+import PilgrimsList from 'src/components/Arbaeen/province/PilgrimsList';
+import {sideCities} from 'src/helpers/utils';
 import useHasProvinceResource from 'src/hooks/useHasProvinceResource';
 
-
-const ArboreanProvince = () => {
+const ArbaeenProvince = () => {
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
 
@@ -20,7 +19,6 @@ const ArboreanProvince = () => {
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
-
     if (existsCity) {
       setCityTitle(provinceName);
     }
@@ -34,14 +32,14 @@ const ArboreanProvince = () => {
         selectDefault
       />
 
-      {!hasProvinceResources && <AccessDenied id="arborean-overview"/>}
+      {!hasProvinceResources && <AccessDenied id="arborean-overview" />}
       {hasProvinceResources && (
         <>
-           <PilgrimsList cityTitle={cityTitle}/> 
-          </>
+          <PilgrimsList cityTitle={cityTitle} />
+        </>
       )}
+    </div>
+  );
+};
 
-    </div>)
-  };
-
-export default ArboreanProvince;
+export default ArbaeenProvince;
