@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import GreenVaccine from 'src/assets/images/icons/big-green-vaccine.svg';
 // import GrayVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
@@ -16,7 +16,9 @@ import Statistic from '../../../../containers/Guild/components/Statistic';
 
 const OverviewOfStatusCard: React.FC<{}> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {data: numberOf, loading, error} = useGetNumberOf({tag: 'edu'});
+  const [query, setQuery] = useState<any>({tag: 'edu'});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {data: numberOf, loading, error} = useGetNumberOf(query);
   const {total: totalMembers, employe: totalEmploye} = useSelector(state => state.studentMembers);
 
   return (

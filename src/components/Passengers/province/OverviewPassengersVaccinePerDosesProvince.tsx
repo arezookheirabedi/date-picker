@@ -10,6 +10,8 @@ import {sideCities} from '../../../helpers/utils';
 // import Calendar from '../../Calendar';
 import Spinner from '../../Spinner';
 import hcsService from '../../../services/hcs.service';
+import {EERRORS} from "../../../constants/errors.enum";
+import RetryButton from "../../RetryButton";
 
 const {Stacked} = Charts;
 
@@ -26,7 +28,7 @@ const OverviewPassengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
     const [categories, setCategories] = useState<any[]>([]);
     const [dataset, setDataset] = useState<any[]>([]);
     // const [showDatePicker, setShowDatePicker] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(false);
     const [loading, setLoading] = useState(false);
     // const [selectedDayRange, setSelectedDayRange] = useState({
     //   from: null,
@@ -41,13 +43,13 @@ const OverviewPassengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
     const [query, setQuery] = useState({
       from: null,
       to: null,
-      province: cityTitle,
+      retry : false
     });
 
     // eslint-disable-next-line
-    const getLinearOverview = async (params: any) => {
+    const getLinearOverview = async ({retry , ...params}: any) => {
       setLoading(true);
-      setErrorMessage(null);
+      setErrorMessage(false);
       try {
         const {data} = await hcsService.tripVaccinationGeneral(params, {CancelToken: source.token});
         console.log(data);
@@ -119,11 +121,14 @@ const OverviewPassengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
         ]);
 
         setCategories(['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده']);
-      } catch (error: any) {
-        setErrorMessage(error.message);
-        // eslint-disable-next-line
-        console.log(error);
-      } finally {
+        setErrorMessage(false);
+        setLoading(false);
+      } catch (err: any) {
+        if (err.message === 'cancel') {
+          setLoading(true);
+          return;
+        }
+        setErrorMessage(err.message || EERRORS.ERROR_500);
         setLoading(false);
       }
     };
@@ -237,10 +242,15 @@ const OverviewPassengersVaccinePerDosesProvince: React.FC<OverviewPaasengersVacc
 
           {loading && (
             <div className="p-40">
-              <Spinner />
+              <Spinner/>
             </div>
           )}
-          {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+          {errorMessage && !loading &&(
+            <div className="p-40">
+              <div className="text-red-500">{errorMessage}</div>
+              <RetryButton setQuery={setQuery}/>
+            </div>
+          )}
           {!loading && dataset.length > 0 && !errorMessage && (
             <Stacked data={dataset} categories={categories} notPercent />
           )}

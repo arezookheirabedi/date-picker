@@ -116,7 +116,7 @@ const OverviewPublicPatients = () => {
             <Spinner/>
           </div>
         )}
-        {errorMessage && (
+        {errorMessage && !loading &&(
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
             <RetryButton setQuery={setQuery}/>

@@ -5,6 +5,7 @@ import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import SingleDatepickerQuery from 'src/components/SingleDatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 
 const {HeadlessChart} = Charts;
 
@@ -133,13 +134,20 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
             <Spinner />
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams} />
+          </div>
+        )}
         {!loading && !isEmpty(numberOf) && !errorMessage && (
           <HeadlessChart data={numberOf} optionsProp={optionChart} />
         )}
-        {isEmpty(numberOf) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        {numberOf &&
+          numberOf.categories &&
+          numberOf.categories.length === 0 &&
+          !loading &&
+          !errorMessage && <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>}
       </div>
     </fieldset>
   );
