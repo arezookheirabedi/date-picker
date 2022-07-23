@@ -39,6 +39,21 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     setOrgDataset([...normalizedData]);
   }, []);
 
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const provinceName = params.get('provinceName') || ('تهران' as any);
+  //   const existsCity = sideCities.some((item: any) => {
+  //     return item.name === provinceName;
+  //   });
+  //   if (existsCity) {
+  //     getIt({...query, province: provinceName});
+  //   }
+  //   // eslint-disable-next-line consistent-return
+  //   return () => {
+  //     source.cancel('Operation canceled by the user.');
+  //     setData([]);
+  //   };
+  // }, [location.search, query]);
   return (
     <>
       <fieldset className="mb-2 rounded-xl border p-4 text-center" id="arborean-overview">
