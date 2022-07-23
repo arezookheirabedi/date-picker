@@ -47,16 +47,15 @@ const initialPilgrimss = {
   numberOfPositiveTests: 0,
   numberOfQueries: 0,
   numberOfVaccinatedPilgrims: 0,
-  numberOfPilgrimsNotVaccinated : 0,
-  totalNumberOfPeoplewithFirstDose : 0,
+  numberOfPilgrimsNotVaccinated: 0,
+  totalNumberOfPeoplewithFirstDose: 0,
   totalNumberOfPeoplewithSecondDose: 0,
   totalNumberOfPeoplewithThirdDose: 0,
   totalNumberOfPeoplewithFourthDose: 0,
-  totalNumberOfPeoplewithFifthDose: 0
+  totalNumberOfPeoplewithFifthDose: 0,
 };
 
 const OverviewArbaeen = () => {
-
   const [loading, setLoading] = useState(false);
   const [pilgrims, setPilgrims] = useState<any>(initialPilgrimss);
   const {CancelToken} = axios;
@@ -69,13 +68,13 @@ const OverviewArbaeen = () => {
         {tag: 'transparent'},
         {cancelToken: source.token}
       );
-      setPilgrims(data)
+      setPilgrims(data);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getAllPilgrims();
@@ -86,68 +85,70 @@ const OverviewArbaeen = () => {
 
   return (
     <>
-    <fieldset className="text-center border rounded-xl p-4 mb-16">
-       <legend className="text-black mx-auto px-3">نگاه کلی به زائران اربعین در کل کشور</legend>
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
+        <legend className="text-black mx-auto px-3">نگاه کلی به زائران اربعین در کل کشور</legend>
 
-       <div className="flex flex-col justify-between space-y-8">
-         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-           <Statistic
-             icon={groupIcon}
-             text="تعداد کل ثبت نام شدگان"
-             count={pilgrims.totalNumberOfRegistrants || 0}
-             loading={loading}
-           />
-           <Statistic
-             icon={blueEventIcon}
-             text="مجموع درخواست برای رویداد"
-             count={pilgrims.totalOfRequestForEvent || 0}
-             loading={loading}
-           />
-           <Statistic
-             icon={greenEventIcon}
-             text="تعداد کل رویداد صادر شده"
-             count={pilgrims.totalNumberOfEvent || 0}
-             loading={loading}
-           />
-           <Statistic
-             icon={groupWithFlagIcon}
-             text="تعداد کل زائران"
-             count={pilgrims.totalNumberOfPilgrims || 0}
-             loading={loading}
-           />
-         </div>
-         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div className="flex flex-col justify-between space-y-8">
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+            <Statistic
+              icon={groupIcon}
+              text="تعداد کل ثبت نام شدگان"
+              count={pilgrims.totalNumberOfRegistrants || 0}
+              loading={loading}
+            />
+            <Statistic
+              icon={blueEventIcon}
+              text="مجموع درخواست برای رویداد"
+              count={pilgrims.totalOfRequestForEvent || 0}
+              loading={loading}
+            />
+            <Statistic
+              icon={greenEventIcon}
+              text="تعداد کل رویداد صادر شده"
+              count={pilgrims.totalNumberOfEvent || 0}
+              loading={loading}
+            />
+            <Statistic
+              icon={groupWithFlagIcon}
+              text="تعداد کل زائران"
+              count={pilgrims.totalNumberOfPilgrims || 0}
+              loading={loading}
+            />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={groupWithMapIcon}
               text="تعداد زائران اتباع خارجی"
               count={pilgrims.numberOfForeignPilgrims || 0}
               loading={loading}
-              />
+            />
             <Statistic
-             icon={groupWithMapIcon}
-             text="درصد زائران اتباع خارجی"
-             count={pilgrims.percentOfForeignPilgrims || 0}
-             isPercentage
-             loading={loading}
-           />
-           <Statistic
-             icon={redEventIcon}
-             text="تعداد رد درخواست رویداد به دلیل عدم واکسیناسیون"
-             count={pilgrims.numberOfRequestRejections || 0}
-             loading={loading}
-           />
-           <Statistic
-             icon={redCrescentIcon}
-             text="مجموع خدمات ارائه شده توسط هلال احمر"
-             count={pilgrims.totalServicesProvided || 0}
-             loading={loading}
-           />
-         </div>
-       </div>
-     </fieldset>
-  
-     <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">نگاه کلی به زائران اربعین براساس نوع سفر</legend>
+              icon={groupWithMapIcon}
+              text="درصد زائران اتباع خارجی"
+              count={pilgrims.percentOfForeignPilgrims || 0}
+              isPercentage
+              loading={loading}
+            />
+            <Statistic
+              icon={redEventIcon}
+              text="تعداد رد درخواست رویداد به دلیل عدم واکسیناسیون"
+              count={pilgrims.numberOfRequestRejections || 0}
+              loading={loading}
+            />
+            <Statistic
+              icon={redCrescentIcon}
+              text="مجموع خدمات ارائه شده توسط هلال احمر"
+              count={pilgrims.totalServicesProvided || 0}
+              loading={loading}
+            />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
+        <legend className="text-black mx-auto px-3">
+          نگاه کلی به زائران اربعین براساس نوع سفر
+        </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
@@ -176,9 +177,9 @@ const OverviewArbaeen = () => {
             />
           </div>
         </div>
-     </fieldset>
+      </fieldset>
 
-     <fieldset className="text-center border rounded-xl p-4 mb-16">
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت سلامت زائران</legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -209,9 +210,9 @@ const OverviewArbaeen = () => {
             />
           </div>
         </div>
-     </fieldset>
+      </fieldset>
 
-     <fieldset className="text-center border rounded-xl p-4 mb-16">
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">نگاه کلی به وضعیت واکسیناسیون زائران</legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -259,11 +260,11 @@ const OverviewArbaeen = () => {
               count={pilgrims.totalNumberOfPeoplewithFifthDose || 0}
               loading={loading}
             />
-           <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
           </div>
         </div>
-     </fieldset>
-     </>
+      </fieldset>
+    </>
   );
 };
 
