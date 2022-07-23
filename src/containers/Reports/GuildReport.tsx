@@ -1,45 +1,45 @@
 import React, {useEffect, useState} from 'react';
-// import {useLocation} from 'react-router-dom';
-// @ts-ignore
-import moment from 'moment-jalaali';
 import guildService from 'src/services/guild.service';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
-import DatePickerModal from '../../components/DatePickerModal';
-import Calendar from '../../components/Calendar';
+import DatepickerQuery from 'src/components/DatepickerQuery';
+import {EERRORS} from 'src/constants/errors.enum';
+import RetryButton from 'src/components/RetryButton';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../helpers/utils';
-import Spinner from '../../components/Spinner';
-
 import ExportButton from './ExportButton';
 
+const pageSize = 10;
 const GuildReport: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [totalItems, setTotalItems] = useState(0);
-
+  const [errorMessage, setErrorMessage] = useState(null);
   const [refresh, shouldRefresh] = useState<boolean>(false);
-
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDayRange, setSelectedDayRange] = useState({
+  const [query, setQuery] = useState({
     from: null,
     to: null,
-  }) as any;
-  const [query, setQuery] = useState({
-    fromReportDate: null,
-    toReportDate: null,
     currentPage: 1,
+    retry: false,
+    sort: 'DESC',
+    sortKey: ['reportStatus'].join(','),
+    pageSize,
   });
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  const pageSize = 10;
 
-  async function fetchReports(params: any) {
+  async function fetchReports({retry, from, to, ...params}: any) {
+    const newData = {
+      ...params,
+      pageNumber: Number(query.currentPage) - 1,
+      fromReportDate: query.from,
+      toReportDate: query.to,
+    };
     setLoading(true);
     try {
-      const {data} = await guildService.guildReportoverviewStatus(params, {
+      const {data} = await guildService.guildReportoverviewStatus(newData, {
         cancelToken: cancelToken.token,
       });
       const normalizedData: any[] = [];
@@ -56,52 +56,24 @@ const GuildReport: React.FC<{}> = () => {
 
       setDataSet([...normalizedData]);
       setTotalItems(data.totalElements);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      setLoading(false);
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    if (selectedDayRange.from && selectedDayRange.to) {
-      const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
-      const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      setQuery({
-        ...query,
-        currentPage: 1,
-        fromReportDate: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-        toReportDate: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
-      });
-    }
-    if (selectedDayRange.clear) {
-      setQuery({
-        ...query,
-        fromReportDate: null,
-        toReportDate: null,
-      });
-    }
-  }, [selectedDayRange]);
-
-  useEffect(() => {
-    fetchReports({
-      sort: 'DESC',
-      sortKey: ['reportStatus'].join(','),
-      fromReportDate: query.fromReportDate,
-      toReportDate: query.toReportDate,
-      pageNumber: query.currentPage - 1,
-      pageSize,
-    });
+    fetchReports({...query});
     return () => {
       setDataSet([]);
       cancelRequest();
     };
   }, [query, refresh]);
-
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  };
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -115,32 +87,21 @@ const GuildReport: React.FC<{}> = () => {
           <div className="flex items-center justify-between">
             <div className="flex align-center justify-between flex-grow">
               <div className="flex align-center justify-between">
-                {showDatePicker ? (
-                  <DatePickerModal
-                    setSelectedDayRange={setSelectedDayRange}
-                    selectedDayRange={selectedDayRange}
-                    setShowDatePicker={setShowDatePicker}
-                    showDatePicker
-                  />
-                ) : null}
-                <Calendar
-                  action={focusFromDate}
-                  from={selectedDayRange.from}
-                  to={selectedDayRange.to}
-                  setSelectedDayRange={setSelectedDayRange}
-                />
+                <DatepickerQuery query={query} setQuery={setQuery} />
               </div>
             </div>
           </div>
         </div>
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-          {loading ? (
-            <div className="p-20">
-              <Spinner />
+          {errorMessage && !loading ? (
+            <div className="p-40">
+              <div className="text-red-500">{errorMessage}</div>
+              <RetryButton setQuery={setQuery} />
             </div>
           ) : (
             <Table
               handlePageChange={handlePageChange}
+              loading={loading}
               dataSet={[...dataSet]}
               pagination={{pageSize, currentPage: query.currentPage}}
               totalItems={totalItems}
