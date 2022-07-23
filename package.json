@@ -39,6 +39,7 @@
     "jalaliday": "^2.3.0",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
+    "mapbox-gl": "^2.9.2",
     "moment-jalaali": "^0.9.4",
     "qrcode.react": "^1.0.1",
     "qs": "^6.10.1",

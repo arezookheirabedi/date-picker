@@ -33,7 +33,7 @@ const Statistic: React.FC<IStatistic> = ({
       <legend className="text-black mx-auto px-3 transform transition duration-500 hover:scale-150">
         <img src={icon} alt=""/>
       </legend>
-      <div className="flex text-black text-lg mx-auto ">
+      <div className="flex text-black text-xl mx-auto font-black pb-3">
         {(loading || count === null) && (
           <span
             className="skeleton-box"
@@ -51,7 +51,7 @@ const Statistic: React.FC<IStatistic> = ({
         count > 0 &&
         `${(count || 'بدون داده') % 1 === 0 ? count?.commaSeprator().toPersianDigits() : count?.toPersianDigits()}${isPercentage ? '%' : ''}`}
       </div>
-      <div className="flex text-gray-500 text-sm  mx-auto">{text || ''}</div>
+      <div className="flex text-gray-500 text-sm  mx-auto pb-3">{text || ''}</div>
     </fieldset>
   );
 };
