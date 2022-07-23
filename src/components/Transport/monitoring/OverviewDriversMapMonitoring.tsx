@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useHistory, useLocation} from 'react-router-dom';
-
 import Charts from '../../Charts';
 import map from '../../Charts/ir-all.geo.json';
 import mapData from '../../Charts/mapData.json';
@@ -9,13 +8,17 @@ import useHasProvinceResource from '../../../hooks/useHasProvinceResource';
 
 const {Map} = Charts;
 
-interface OverviewMapProps {
+interface OverviewDriversMapProps {
   sideCityStatus?: any;
   cityTitle: any;
   destinationId: any;
 }
 
-const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, destinationId}) => {
+const OverviewDriversMap: React.FC<OverviewDriversMapProps> = ({
+  sideCityStatus,
+  cityTitle,
+  destinationId,
+}) => {
   const chartRef = useRef<any>(null);
   const {search, ...location} = useLocation();
   const history = useHistory();
@@ -188,9 +191,7 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, destinationId}
         allowPointSelect: true,
       },
     ],
-  });
-
-  const query = new URLSearchParams(search);
+  }) as any;
 
   useEffect(() => {
     //
@@ -301,15 +302,15 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, destinationId}
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به وضعیت اصناف{' '}
-        {query.get('provinceName') ? ` استان‌ ${query.get('provinceName')}` : ''}
+        نگاه کلی به وضعیت حمل و نقل عمومی {cityTitle ? ` استان‌ ${cityTitle}` : ''}
       </legend>
-      <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
-        {!!provinceResource.length && provinceResource[0] === '*' && (
+      <div className="flex w-full rounded-xl bg-white pb-8 pt-8  shadow relative">
+        {provinceResource.length && provinceResource[0] === '*' && (
           <Link to={location.pathname} className="absolute right-20 top-8 z-40">
             <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
           </Link>
         )}
+
         <div className="w-5/6 map-wrapper">
           <Map options={options} ref={chartRef} />
         </div>
@@ -336,4 +337,4 @@ const OverviewMap: React.FC<OverviewMapProps> = ({sideCityStatus, destinationId}
   );
 };
 
-export default OverviewMap;
+export default OverviewDriversMap;
