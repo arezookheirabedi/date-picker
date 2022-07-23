@@ -21,12 +21,9 @@ const pageSize = 10;
 const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) => {
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
-  // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState({
-    // pageNumber: Number(currentPage) - 1,
     currentPage: 1,
     pageSize,
     sort: 'ASC',
@@ -36,9 +33,11 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     retry: false,
   });
   const cancelToken = cancelTokenSource();
+
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
+
   const getOverviewTransportReport = async ({retry, currentPage, ...params}: any = {}) => {
     const newData = {...params, pageNumber: Number(query.currentPage) - 1};
     setErrorMessage(null);
@@ -82,12 +81,15 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
       setDataSet([]);
     };
   }, [query]);
+
   useEffect(() => {
     setQuery({...query, currentPage: 1, province: cityTitle});
   }, [cityTitle]);
+
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
   }
+
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center" id="drivers-overview">
       <legend className="mx-auto px-3 text-black">
