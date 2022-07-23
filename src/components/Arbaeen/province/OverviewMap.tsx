@@ -5,7 +5,7 @@ import Charts from '../../Charts';
 import map from '../../Charts/ir-all.geo.json';
 import mapData from '../../Charts/mapData.json';
 import {sideCities} from '../../../helpers/utils';
-import useHasProvinceResource from "../../../hooks/useHasProvinceResource";
+import useHasProvinceResource from '../../../hooks/useHasProvinceResource';
 
 const {Map} = Charts;
 
@@ -17,24 +17,22 @@ interface OverviewMapProps {
 }
 
 const OverviewMap: React.FC<OverviewMapProps> = ({
-                                                   sideCityStatus,
-                                                   selectDefault,
-                                                   destinationId,
-                                                   cityTitle,
-                                                 }) => {
+  sideCityStatus,
+  selectDefault,
+  destinationId,
+  cityTitle,
+}) => {
   const chartRef = useRef<any>(null);
   const {search, ...location} = useLocation();
   const history = useHistory();
-  const [detectResource, setDetectResource] = useState(false)
+  const [detectResource, setDetectResource] = useState(false);
   const [options, setOptions] = useState({
     chart: {
       map,
       height: '70%',
       className: 'guild-map-chart',
-      // backgroundColor: '#F3F5F9',
       margin: [0, 0, 50, 0],
     },
-
     title: {
       text: '',
     },
@@ -96,42 +94,36 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         {
           from: 500,
           to: 1000,
-          // color: '#AB0A0A',
           color: '#9e9e9e',
           name: 'بیشتر از ۵۰٪',
         },
         {
           from: 400,
           to: 500,
-          // color: '#CF0D0D',
           color: '#9e9e9e',
           name: '%۲۰ الی ۵۰%',
         },
         {
           from: 300,
           to: 400,
-          // color: '#FF9114',
           color: '#9e9e9e',
           name: '%۱۰ الی ۲۰%',
         },
         {
           from: 200,
           to: 300,
-          // color: '#FFC700',
           color: '#9e9e9e',
           name: '%۵ الی ۱۰%',
         },
         {
           from: 100,
           to: 200,
-          // color: '#F8D354',
           color: '#9e9e9e',
           name: '%۲ الی ۵%',
         },
         {
           from: 1,
           to: 100,
-          // color: '#FBE186',
           color: '#9e9e9e',
           name: 'کمتر از ۲%',
         },
@@ -199,8 +191,6 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
   // const query = new URLSearchParams(search);
 
   useEffect(() => {
-
-
     //
     // try {
     //   const selectedPoints = chartRef?.current?.chart.getSelectedPoints();
@@ -250,7 +240,6 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         }
       }
     }
-
   }, [search, detectResource]);
 
   const [hasProvinceResources, resources, provinceResource] = useHasProvinceResource() as any;
@@ -263,11 +252,10 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
         checkProvinceResources.value.forEach((item: any) => {
           sideCities.forEach((province: any) => {
             if (item === province.name) {
-              provincesThatHaveResources.push(province.mapId)
+              provincesThatHaveResources.push(province.mapId);
             }
-          })
-        })
-
+          });
+        });
         if (provincesThatHaveResources.length) {
           setOptions((prev: any) => {
             return {
@@ -297,36 +285,30 @@ const OverviewMap: React.FC<OverviewMapProps> = ({
                     },
                   },
                   allowPointSelect: true,
-                }
+                },
               ],
-            }
+            };
           });
-          setDetectResource(true)
+          setDetectResource(true);
         }
       }
     }
-
-
-  }, [hasProvinceResources])
+  }, [hasProvinceResources]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4">
       <legend className="text-black mx-auto px-3">
-      نگاه کلی به لیست زائران{' '}
-        {cityTitle ? ` استان‌ ${cityTitle}` : ''}
+        نگاه کلی به لیست زائران {cityTitle ? ` استان‌ ${cityTitle}` : ''}
       </legend>
       <div className="flex w-full rounded-xl bg-white pb-8 pt-8 shadow relative">
+        {!!provinceResource.length && provinceResource[0] === '*' && (
+          <Link to={location.pathname} className="absolute right-20 top-8 z-40">
+            <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
+          </Link>
+        )}
 
-        {
-          !!provinceResource.length && provinceResource[0] === '*' && (
-            <Link to={location.pathname} className="absolute right-20 top-8 z-40">
-              <div className="button button--primary px-5">نمایش وضعیت کل کشور</div>
-            </Link>
-          )
-        }
-        
         <div className="w-5/6 map-wrapper">
-          <Map options={options} ref={chartRef}/>
+          <Map options={options} ref={chartRef} />
         </div>
         <ul className="w-1/6">
           {sideCityStatus.map((item: any, index: any) => {
