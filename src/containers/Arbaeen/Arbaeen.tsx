@@ -5,6 +5,10 @@ import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbae
 import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
 import OverviewOfThePercentageOfEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
 import GeneralLookAtTransportationAxesAndExitBordersOfCountry from 'src/components/Arbaeen/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry';
+import MokebList from 'src/components/Arbaeen/public/MokebList';
+import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCitiesList';
+import TheLargestNumberOfOriginPilgrimsCountriesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCountriesList';
+import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
 import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
@@ -22,6 +26,10 @@ const Arbaeen = () => {
       <ListOfTransportationAxesStatus />
       <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
       <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases />
+      <MokebList />
+      <RedHalalBasesList />
+      <TheLargestNumberOfOriginPilgrimsCitiesList />
+      <TheLargestNumberOfOriginPilgrimsCountriesList />
     </div>
   );
 };
