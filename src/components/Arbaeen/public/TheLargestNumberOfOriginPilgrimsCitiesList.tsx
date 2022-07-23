@@ -1,43 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react";
-import RetryButton from "src/components/RetryButton";
-import Table from "src/components/TableScopeSort";
-import { pilgrimsCity} from "./constant";
+import React, {useEffect, useState} from 'react';
+import RetryButton from 'src/components/RetryButton';
+import Table from 'src/components/TableScopeSort';
+import {pilgrimsCity} from './constant';
 
-
-const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}>=()=>{
+const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [dataset, setDataset] = useState<any>([]);
   const [error, setError] = useState<any>(null);
   const [queryParams, setQueryParams] = useState({
     retry: false,
   });
-useEffect(() => {
-  const normalizedData: any[] = [];
-  pilgrimsCity.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          city: item.city||'نامشخص',
-          pilgrimsCount:item.pilgrimsCount,
-          womenPercentage:item.womenPercentage,
-          menPercentage:item.menPercentage,
-          visasIssuedCount:item.visasIssuedCount,
-          vaccinePercentage:item.vaccinePercentage,
-          firestDosesPercentage:item.firestDosesPercentage,
-      
-
-
-        
-        });
+  useEffect(() => {
+    const normalizedData: any[] = [];
+    pilgrimsCity.forEach((item: any, index: number) => {
+      normalizedData.push({
+        id: `ovca_${index}`,
+        city: item.city || 'نامشخص',
+        pilgrimsCount: item.pilgrimsCount,
+        womenPercentage: item.womenPercentage,
+        menPercentage: item.menPercentage,
+        visasIssuedCount: item.visasIssuedCount,
+        vaccinePercentage: item.vaccinePercentage,
+        firestDosesPercentage: item.firestDosesPercentage,
       });
-      setDataset([...normalizedData]);
+    });
+    setDataset([...normalizedData]);
+  }, []);
+  return (
+    <fieldset className="mb-16 rounded-xl border p-4 text-center">
+      <legend className="mx-auto px-3 text-black">لیست بیشترین شهرهای مبدا زائرین </legend>
 
-
-},[])
-  return(   <fieldset className="mb-16 rounded-xl border p-4 text-center">
-  <legend className="mx-auto px-3 text-black">لیست بیشترین شهرهای مبدا زائرین </legend>
-
-  <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
@@ -45,7 +39,7 @@ useEffect(() => {
           </div>
         ) : (
           <Table
-          totalItems={(dataset || []).length}
+            totalItems={(dataset || []).length}
             loading={loading}
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
@@ -63,10 +57,7 @@ useEffect(() => {
                 name: 'تعداد زائرین',
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                   { Number(record.pilgrimsCount||0).toPersianDigits()}
-
-                  </span>
+                  <span className=" ">{Number(record.pilgrimsCount || 0).toPersianDigits()}</span>
                 ),
               },
               {
@@ -74,8 +65,7 @@ useEffect(() => {
                 key: 'womenPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                   { Number(record.womenPercentage||0).toPersianDigits()}٪
-
+                    {Number(record.womenPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -83,20 +73,16 @@ useEffect(() => {
                 name: 'درصد مردان زائر',
                 key: 'menPercentage',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                   { Number(record.menPercentage||0).toPersianDigits()}٪
-
-                  </span>
+                  <span className=" ">{Number(record.menPercentage || 0).toPersianDigits()}٪</span>
                 ),
               },
-           
+
               {
                 name: 'تعداد روادید صادر شده',
                 key: 'visasIssuedCount',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                   { Number(record.visasIssuedCount||0).toPersianDigits()}
-
+                    {Number(record.visasIssuedCount || 0).toPersianDigits()}
                   </span>
                 ),
               },
@@ -105,8 +91,7 @@ useEffect(() => {
                 key: 'vaccinePercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                   { Number(record.vaccinePercentage||0).toPersianDigits()}٪
-
+                    {Number(record.vaccinePercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -115,8 +100,7 @@ useEffect(() => {
                 key: 'firestDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                   { Number(record.firestDosesPercentage||0).toPersianDigits()}٪
-
+                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -125,8 +109,7 @@ useEffect(() => {
                 key: 'firestDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                   { Number(record.firestDosesPercentage||0).toPersianDigits()}٪
-
+                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -135,22 +118,15 @@ useEffect(() => {
                 key: 'firestDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                   { Number(record.firestDosesPercentage||0).toPersianDigits()}٪
-
+                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
-            
             ]}
-           
           />
         )}
       </div>
-
-
-  </fieldset>)
-}
-export default TheLargestNumberOfOriginPilgrimsCitiesList
-
-
-
+    </fieldset>
+  );
+};
+export default TheLargestNumberOfOriginPilgrimsCitiesList;
