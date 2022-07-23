@@ -1,11 +1,11 @@
 import {instanceMockAdapter} from '../helpers/requestUtil';
 
-instanceMockAdapter.onGet(/\/api\/v1\/arborean\/all/g)
+instanceMockAdapter.onGet(/\/api\/v1\/arbaeen\/all/g)
   .reply(async () => {
     let res: any = [];
       res = {
         totalNumberOfRegistrants: 12097,
-        totalOfRequest: 11166,
+        totalOfRequestForEvent: 11166,
         totalNumberOfEvent: 11084,
         totalNumberOfPilgrims: 12097,
         numberOfForeignPilgrims: 12097,

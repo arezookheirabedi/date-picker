@@ -2,22 +2,25 @@ import React, {useState, useEffect} from 'react';
 
 // api services
 import axios from 'axios';
-import arboreanService from '../../../services/arborean.service';
+import arbaeenService from '../../../services/arbaeen.service';
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
 
 // images
 import groupIcon from '../../../assets/images/icons/all-group.svg';
-import pilgrimRequestIcon from '../../../assets/images/icons/pilgrim-request.svg';
-import pilgrimEventIcon from '../../../assets/images/icons/pilgrim-event.svg';
-import pilgrimIcon from '../../../assets/images/icons/pilgrim.svg';
-import pilgrimForeignIcon from '../../../assets/images/icons/pilgrim-foreign.svg';
+import blueEventIcon from '../../../assets/images/icons/blue-event.svg';
+import greenEventIcon from '../../../assets/images/icons/green-event.svg';
+import groupWithFlagIcon from '../../../assets/images/icons/group-with-flag.svg';
+import groupWithMapIcon from '../../../assets/images/icons/group-with-map.svg';
+import redEventIcon from '../../../assets/images/icons/red-event.svg';
 import redCrescentIcon from '../../../assets/images/icons/red-crescent.svg';
-import airPilgrimIcon from '../../../assets/images/icons/air-pilgrim.svg';
-import positiveTripIcon from '../../../assets/images/icons/positive-trip.svg';
-import earthlyPilgrimstIcon from '../../../assets/images/icons/earthly-pilgrim.svg';
-import railPilgrimstIcon from '../../../assets/images/icons/rail-pilgrim.svg';
+import airplanIcon from '../../../assets/images/icons/airplan.svg';
+import testIcon from '../../../assets/images/icons/test-color.svg';
+import passengerNegativeTestIcon from '../../../assets/images/icons/passenger-negative-test.svg';
+import passengerPositiveTest from '../../../assets/images/icons/passenger-positive-test.svg';
+import carIcon from '../../../assets/images/icons/car.svg';
+import railIcon from '../../../assets/images/icons/rail.svg';
 import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
 import personGrayVaccine from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import YellowVaccine from '../../../assets/images/icons/big-yellow-vaccine.svg';
@@ -25,13 +28,11 @@ import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
 import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg';
 import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
 import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
-import testIcon from '../../../assets/images/icons/test-color.svg';
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
-import passengerPositiveTest from '../../../assets/images/icons/passenger-positive-test.svg';
 
 const initialPilgrimss = {
   totalNumberOfRegistrants: 0,
-  totalOfRequest: 0,
+  totalOfRequestForEvent: 0,
   totalNumberOfEvent: 0,
   totalNumberOfPilgrims: 0,
   numberOfForeignPilgrims: 0,
@@ -39,17 +40,22 @@ const initialPilgrimss = {
   numberOfRequestRejections: 0,
   totalServicesProvided: 0,
   totalNumberOfAirPilgrims: 0,
+  totalNumberOfEarthlyPilgrims: 0,
+  totalNumberOfRailPilgrims: 0,
   numberOfPositiveThings: 0,
+  numberOfInfectionPercent: 0,
   numberOfPositiveTests: 0,
+  numberOfQueries: 0,
   numberOfVaccinatedPilgrims: 0,
   numberOfPilgrimsNotVaccinated : 0,
   totalNumberOfPeoplewithFirstDose : 0,
   totalNumberOfPeoplewithSecondDose: 0,
   totalNumberOfPeoplewithThirdDose: 0,
-  totalNumberOfPeoplewithFourthDose: 0
+  totalNumberOfPeoplewithFourthDose: 0,
+  totalNumberOfPeoplewithFifthDose: 0
 };
 
-const OverviewArborean = () => {
+const OverviewArbaeen = () => {
 
   const [loading, setLoading] = useState(false);
   const [pilgrims, setPilgrims] = useState<any>(initialPilgrimss);
@@ -59,7 +65,7 @@ const OverviewArborean = () => {
   const getAllPilgrims = async () => {
     setLoading(true);
     try {
-      const {data} = await arboreanService.arboreanGetAll(
+      const {data} = await arbaeenService.arbaeenGetAll(
         {tag: 'transparent'},
         {cancelToken: source.token}
       );
@@ -78,7 +84,6 @@ const OverviewArborean = () => {
     };
   }, []);
 
-
   return (
     <>
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -93,19 +98,19 @@ const OverviewArborean = () => {
              loading={loading}
            />
            <Statistic
-             icon={pilgrimRequestIcon}
+             icon={blueEventIcon}
              text="مجموع درخواست برای رویداد"
-             count={pilgrims.totalOfRequest || 0}
+             count={pilgrims.totalOfRequestForEvent || 0}
              loading={loading}
            />
            <Statistic
-             icon={pilgrimEventIcon}
+             icon={greenEventIcon}
              text="تعداد کل رویداد صادر شده"
              count={pilgrims.totalNumberOfEvent || 0}
              loading={loading}
            />
            <Statistic
-             icon={pilgrimIcon}
+             icon={groupWithFlagIcon}
              text="تعداد کل زائران"
              count={pilgrims.totalNumberOfPilgrims || 0}
              loading={loading}
@@ -113,20 +118,20 @@ const OverviewArborean = () => {
          </div>
          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
-              icon={pilgrimForeignIcon}
+              icon={groupWithMapIcon}
               text="تعداد زائران اتباع خارجی"
               count={pilgrims.numberOfForeignPilgrims || 0}
               loading={loading}
               />
             <Statistic
-             icon={pilgrimForeignIcon}
+             icon={groupWithMapIcon}
              text="درصد زائران اتباع خارجی"
              count={pilgrims.percentOfForeignPilgrims || 0}
              isPercentage
              loading={loading}
            />
            <Statistic
-             icon={redCrescentIcon}
+             icon={redEventIcon}
              text="تعداد رد درخواست رویداد به دلیل عدم واکسیناسیون"
              count={pilgrims.numberOfRequestRejections || 0}
              loading={loading}
@@ -146,25 +151,25 @@ const OverviewArborean = () => {
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
-              icon={pilgrimIcon}
+              icon={groupWithFlagIcon}
               text="تعداد کل زائران"
               count={pilgrims.totalNumberOfPilgrims || 0}
               loading={loading}
             />
             <Statistic
-              icon={airPilgrimIcon}
+              icon={airplanIcon}
               text="تعداد کل زائران هوایی"
               count={pilgrims.totalNumberOfAirPilgrims || 0}
               loading={loading}
             />
             <Statistic
-              icon={earthlyPilgrimstIcon}
+              icon={carIcon}
               text="تعداد کل زائران زمینی"
               count={pilgrims.totalNumberOfEarthlyPilgrims || 0}
               loading={loading}
             />
             <Statistic
-              icon={railPilgrimstIcon}
+              icon={railIcon}
               text="تعداد کل زائران ریلی"
               count={pilgrims.totalNumberOfRailPilgrims || 0}
               loading={loading}
@@ -190,7 +195,7 @@ const OverviewArborean = () => {
               loading={loading}
             />
             <Statistic
-              icon={positiveTripIcon}
+              icon={passengerNegativeTestIcon}
               text="موارد مثبت بعد از سفر"
               count={pilgrims.numberOfPositiveThings || 0}
               loading={loading}
@@ -262,4 +267,4 @@ const OverviewArborean = () => {
   );
 };
 
-export default OverviewArborean;
+export default OverviewArbaeen;
