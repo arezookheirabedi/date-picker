@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import {useDispatch} from 'react-redux';
 import {addTotalStudentMembersAc} from 'src/store/action_creators';
@@ -20,19 +20,21 @@ interface OverviewSchoolStudentsProps {
 }
 
 const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitle}) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [query, setQuery] = useState<any>({tag: 'edu', category: 'type', categoryValue: 'STUDENT'});
   const dispatch = useDispatch();
   const {
     data: numberOf,
     loading,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error,
-  } = useGetNumberOf({tag: 'edu', category: 'type', categoryValue: 'STUDENT'}, true);
+  } = useGetNumberOf(query, true);
   const {
     data: testResultInfo,
     loading: testResultLoading,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error: errorTestResult,
-  } = useGetTestResults({tag: 'edu', category: 'type', categoryValue: 'STUDENT'}, true);
+  } = useGetTestResults(query, true);
 
   useEffect(() => {
     dispatch(addTotalStudentMembersAc(numberOf.totalPopulation || 0));

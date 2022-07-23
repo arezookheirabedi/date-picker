@@ -27,6 +27,7 @@ import passwordResetIcon from '../assets/images/icons/password-reset-active.svg'
 import reportsFlourActiveIcon from '../assets/images/icons/reports-flour-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';
+import flagIcon from '../assets/images/icons/flag.svg';
 
 const icons = [
   {
@@ -103,6 +104,8 @@ const icons = [
     activeIcon: passwordResetIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
+  {name: 'flag', icon: flagIcon, disableIcon: flagIcon, activeIcon: flagIcon,
+  },
 ];
 
 interface IProps {

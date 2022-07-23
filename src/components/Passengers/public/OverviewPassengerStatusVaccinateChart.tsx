@@ -7,6 +7,8 @@ import Highcharts from "highcharts/highstock";
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 import hcsService from "../../../services/hcs.service";
+import {EERRORS} from "../../../constants/errors.enum";
+import RetryButton from "../../RetryButton";
 
 
 const {HeadlessChart} = Charts;
@@ -168,11 +170,9 @@ const OverViewPassengerStatusVaccinateChart = () => {
   // eslint-disable-next-line
   const getVaccinesGroupedByProvinceReport = async () => {
     setLoading(true);
-    setErrorMessage(null);
+    setErrorMessage(false);
     try {
       const {data} = await hcsService.getVaccinesTripGroupedByProvinceReport({}, {cancelToken: source.token});
-
-      console.log(data);
 
       const provinces: any[] = [];
 
@@ -252,15 +252,21 @@ const OverViewPassengerStatusVaccinateChart = () => {
             }]
         }
       })
+      setErrorMessage(false);
+      setLoading(false);
 
-    } catch (error: any) {
-      setErrorMessage('خطا در اتصال به سرویس');
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
-  };
+  }
+
+
+  const [query, setQuery] = useState(false);
 
   useEffect(() => {
     const idSetTimeOut = setTimeout(() => {
@@ -272,7 +278,7 @@ const OverViewPassengerStatusVaccinateChart = () => {
       source.cancel('Operation canceled by the user.');
       setDataset([]);
     };
-  }, []);
+  }, [query]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -321,7 +327,12 @@ const OverViewPassengerStatusVaccinateChart = () => {
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading &&(
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
