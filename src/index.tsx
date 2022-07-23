@@ -6,6 +6,7 @@ import {store} from './store/index';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
 import './mocks';
 
