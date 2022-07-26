@@ -25,8 +25,8 @@ import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
-import Arbaeen from './containers/Arbaeen/Arbaeen';
-import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
+// import Arbaeen from './containers/Arbaeen/Arbaeen';
+// import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
 
 const routes: IRoute[] = [
   {
@@ -598,55 +598,68 @@ const routes: IRoute[] = [
   },
   {
     keyIndex: '3',
-    link: '/dashboard/arbaeen/public',
-    simLink: '/dashboard/arbaeen',
+    link: '/dashboard/zaerin',
     exact: true,
     inMenu: true,
     title: 'اربعین',
-    // disabled: true,
+    disabled: true,
+    main: () => <></>,
     roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-    subMenu: [
-      {
-        keyIndex: '12',
-        icon: (active, disabled) => (
-          <IconWrapperStyle name="flag" className="w-5 h-5" active={active} disabled={disabled}/>
-        ),
-        link: '/dashboard/arbaeen/public',
-        simLink: '/dashboard/arbaeen',
-        exact: true,
-        inMenu: true,
-        title: 'داشبورد زائرین اربعین',
-        children: [
-          {
-            keyIndex: '1',
-            title: 'عمومی',
-            link: '/dashboard/arbaeen/public',
-            roles: [
-              'ROLE_ADMIN',
-              'ROLE_REPORT_VIEWER_ZAERIN'
-            ],
-            main: Arbaeen,
-          },
-          {
-            keyIndex: '2',
-            title: 'استانی',
-            enTitle: 'province',
-            link: '/dashboard/arbaeen/province',
-            roles: [
-              'ROLE_ADMIN',
-              'ROLE_REPORT_VIEWER_ZAERIN'
-            ],
-            main: ArbaeenProvince,
-          },
-        ],
-        roles: [
-          'ROLE_ADMIN',
-          'ROLE_REPORT_VIEWER_ZAERIN'
-        ],
-        main: Arbaeen,
-      },
-    ],
   },
+
+
+
+  // {
+  //   keyIndex: '3',
+  //   link: '/dashboard/arbaeen/public',
+  //   simLink: '/dashboard/arbaeen',
+  //   exact: true,
+  //   inMenu: true,
+  //   title: 'اربعین',
+  //   // disabled: true,
+  //   roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
+  //   subMenu: [
+  //     {
+  //       keyIndex: '12',
+  //       icon: (active, disabled) => (
+  //         <IconWrapperStyle name="flag" className="w-5 h-5" active={active} disabled={disabled}/>
+  //       ),
+  //       link: '/dashboard/arbaeen/public',
+  //       simLink: '/dashboard/arbaeen',
+  //       exact: true,
+  //       inMenu: true,
+  //       title: 'داشبورد زائرین اربعین',
+  //       children: [
+  //         {
+  //           keyIndex: '1',
+  //           title: 'عمومی',
+  //           link: '/dashboard/arbaeen/public',
+  //           roles: [
+  //             'ROLE_ADMIN',
+  //             'ROLE_REPORT_VIEWER_ZAERIN'
+  //           ],
+  //           main: Arbaeen,
+  //         },
+  //         {
+  //           keyIndex: '2',
+  //           title: 'استانی',
+  //           enTitle: 'province',
+  //           link: '/dashboard/arbaeen/province',
+  //           roles: [
+  //             'ROLE_ADMIN',
+  //             'ROLE_REPORT_VIEWER_ZAERIN'
+  //           ],
+  //           main: ArbaeenProvince,
+  //         },
+  //       ],
+  //       roles: [
+  //         'ROLE_ADMIN',
+  //         'ROLE_REPORT_VIEWER_ZAERIN'
+  //       ],
+  //       main: Arbaeen,
+  //     },
+  //   ],
+  // },
   {
     keyIndex: '0',
     icon: active => <IconWrapperStyle name="dashboard" active={active}/>,
