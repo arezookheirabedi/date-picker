@@ -24,20 +24,27 @@ instanceMockAdapter
         });
     } else {
       res = {
-        numberOfTotalBakery: 108759,
-        numberOfEnableBakery: 80665,
-        numberOfDisableBakery: 1076,
+        numberOfTotalBakery:  109169,
+        numberOfEnableBakery: 80554,
+        numberOfDisableBakery: 28615,
         numberOfBakeryBanned: 27018,
         numberOfSamt: 75751,
-        numberOfSima: 108759,
-        numberOfActivePos: 82067,
-        numberOfAvgSupplyFlour: 23594882.23,
-        numberOfBakeryWithoutPos: 21803,
-        numberOfAudit: 19478,
+        numberOfValidLicence: 29090,
+        numberOfInvalidLicence: 51464,
+        numberOfWithDead: 1979,
+        numberOfAvgSupplyFlour: 732.265889,
+        numberOfActivePos: 0,
+        numberOfSubmittedPos: 85744,
+        numberOfBakeryWithoutPos: 19077,
+        numberOfBakeryWithPos: 61477,
+        numberOfIncludeAudit: 23996,
+        numberOfAudit: 0,
 
-        numberOfTransactionPerDay: 12390,
-        numberOfTransaction: 17814,
-        numberOfPosActiveTime: 11505,
+        numberOfTransactionPerDay: 12097,
+        numberOfTransaction: 11166,
+        numberOfPosActiveTime: 11084,
+        numberOfPosUnnormal: 65,
+        numberOfPosWithoutTransaction: 1017,
       };
     }
 
