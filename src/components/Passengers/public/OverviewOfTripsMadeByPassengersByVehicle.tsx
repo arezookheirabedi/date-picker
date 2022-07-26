@@ -11,6 +11,8 @@ import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
 import hcsService from "../../../services/hcs.service";
 import Spinner from "../../Spinner";
+import {EERRORS} from "../../../constants/errors.enum";
+import RetryButton from "../../RetryButton";
 // import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
 
@@ -138,7 +140,7 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
   // eslint-disable-next-line
   const [dataset, setDataset] = useState<any[]>(initialData) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const cancelToken = cancelTokenSource();
 
@@ -207,15 +209,16 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
     setSelectedDayRange({
       from: null,
       to: null,
+      retry :false
     });
   };
 
 
-  const getTripsCountCategoryBased = async () => {
+  const getTripsCountCategoryBased = async ({retry , ...params} : any) => {
     setLoading(true);
     try {
       const {data} = await hcsService.getTripsCountCategoryBased(
-        {},
+        params,
         {cancelToken: cancelToken.token}
       );
 
@@ -246,23 +249,28 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
           },
         ]
       })
-    } catch (error) {
-      // eslint-disable-next-line
-      setErrorMessage(error.message);
-    } finally {
+      setErrorMessage(false);
+      setLoading(false);
+    } catch (err : any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
+
   }
 
   useEffect(() => {
-    getTripsCountCategoryBased();
+    getTripsCountCategoryBased(queryParams);
     // getPcrResult();
     return () => {
       cancelRequest();
       setDataset(initialData)
       // setGuildPcrInfo(initialPcrInfo);
     };
-  }, []);
+  }, [queryParams]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -355,10 +363,15 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading &&(
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams}/>
+          </div>
+        )}
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}

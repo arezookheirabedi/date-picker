@@ -5,6 +5,7 @@ import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
 import useGetOverviewOfCategories from "../../../hooks/apis/useGetOverviewOfCategories";
 import DatepickerQuery from "../../DatepickerQuery";
+import RetryButton from "../../RetryButton";
 
 
 interface OverviewCategoriesProvinceProps {
@@ -23,7 +24,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   const {data: dataset, loading, error} = useGetOverviewOfCategories(query, true);
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" >
+    <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
       <legend className="text-black mx-auto px-3">
         نگاه کلی رسته‌های حمل و نقل در استان &nbsp;
         {cityTitle}
@@ -34,11 +35,16 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner/>
+
+        {loading && (<div className="p-40"><Spinner/></div>)}
+        {error && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{error}</div>
+            <RetryButton setQuery={setQuery}/>
           </div>
-        ) : (
+        )}
+
+        {!error && !loading && (
           <Table
             dataSet={[...dataset]}
             pagination={{pageSize: 20, maxPages: 3}}

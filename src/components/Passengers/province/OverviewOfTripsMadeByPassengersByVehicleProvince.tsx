@@ -12,6 +12,8 @@ import Charts from '../../Charts';
 import {cancelTokenSource, sideCities, toPersianDigit} from '../../../helpers/utils';
 import hcsService from "../../../services/hcs.service";
 import Spinner from "../../Spinner";
+import {EERRORS} from "../../../constants/errors.enum";
+import RetryButton from "../../RetryButton";
 
 // import Spinner from '../../Spinner';
 const {HeadlessChart} = Charts;
@@ -181,6 +183,7 @@ const OverviewOfTripsMadeByPassengersByVehicleProvince: React.FC<OverviewOfTrips
   const [queryParams, setQueryParams] = useState({
     from: null,
     to: null,
+    retry : false
   });
 
 
@@ -194,7 +197,7 @@ const OverviewOfTripsMadeByPassengersByVehicleProvince: React.FC<OverviewOfTrips
   };
 
 
-  const getTripsCountCategoryBased = async (params: any, province: any) => {
+  const getTripsCountCategoryBased = async ({retry , ...params}: any, province: any) => {
     setLoading(true);
     try {
       const {data} = await hcsService.getTripsCountCategoryBased(
@@ -232,10 +235,15 @@ const OverviewOfTripsMadeByPassengersByVehicleProvince: React.FC<OverviewOfTrips
           },
         ]
       })
-    } catch (error) {
-      // eslint-disable-next-line
-      setErrorMessage('خطا در اتصال به سرور');
-    } finally {
+
+      setErrorMessage(false);
+      setLoading(false);
+    } catch (err : any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   }
@@ -378,7 +386,12 @@ const OverviewOfTripsMadeByPassengersByVehicleProvince: React.FC<OverviewOfTrips
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading &&(
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams}/>
+          </div>
+        )}
         {!loading && dataset.categories.length > 0 && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}

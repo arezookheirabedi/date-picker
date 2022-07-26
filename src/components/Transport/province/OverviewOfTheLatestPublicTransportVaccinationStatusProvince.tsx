@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from "highcharts/highstock";
 // import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
@@ -8,6 +8,7 @@ import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 import useGetOverviewOfTheLatestVaccinationStatusColumnChart
   from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatusColumnChart";
+import RetryButton from "../../RetryButton";
 
 
 const {HeadlessChart} = Charts;
@@ -109,13 +110,19 @@ interface OverviewOfTheLatestPublicTransportVaccinationStatusProvinceProps {
 
 const OverviewOfTheLatestPublicTransportVaccinationStatusProvince: React.FC<OverviewOfTheLatestPublicTransportVaccinationStatusProvinceProps> = ({cityTitle}) => {
 
-  const {data: dataset, loading, error: errorMessage} = useGetOverviewOfTheLatestVaccinationStatusColumnChart({
+  const [query, setQuery] = useState({
     tag: 'transport',
-  }, true)
+    retry: false
+  })
 
+  const {
+    data: dataset,
+    loading,
+    error: errorMessage
+  } = useGetOverviewOfTheLatestVaccinationStatusColumnChart(query, true)
 
   return (
-    <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
+    <fieldset className="text-center border rounded-xl p-4 mb-16" >
       <legend className="text-black mx-auto px-3">
         نگاه کلی به آخرین وضعیت واکسیناسیون حمل و نقل عمومی در استان&nbsp;
         {cityTitle}
@@ -163,7 +170,14 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusProvince: React.FC<Over
           </div>
         )}
 
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
+
+
         {!loading && !errorMessage && (
           <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}

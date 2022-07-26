@@ -7,9 +7,12 @@ import IconWrapper from 'src/components/IconWrapper';
 import authenticateService from 'src/services/authentication.service';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import {IProfile} from 'src/models/authentication.model';
+import ResetPasswordModal from './ResentPasswordModal';
 
 const UserArea: React.FC<any> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [resetIsOpen, setResetIsOpen] = useState<boolean>(false);
   const history = useHistory();
   const [profile] = useLocalStorage<IProfile>('ministers-userinfo', {
     birthday: '',
@@ -21,6 +24,7 @@ const UserArea: React.FC<any> = () => {
     nationalId: '',
     qrCode: '',
     roles: [],
+    resources: [],
     permissions: [],
   });
 
@@ -31,7 +35,9 @@ const UserArea: React.FC<any> = () => {
   const openModal: () => void = () => {
     setIsOpen(true);
   };
-
+  const openResetModal: () => void = () => {
+    setResetIsOpen(true);
+  };
   const handleLogout: (e: React.MouseEvent<HTMLElement>) => void = e => {
     e.stopPropagation();
     authenticateService.logout(history);
@@ -41,16 +47,16 @@ const UserArea: React.FC<any> = () => {
     <>
       <Menu
         as="div"
-        className="relative z-20 inline-block text-left shadow-xl rounded-full px-5 py-1"
+        className="relative z-20 inline-block rounded-full px-5 py-1 text-left shadow-xl"
       >
         <div>
-          <Menu.Button className="inline-flex justify-center items-center w-full py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          <Menu.Button className="focus:outline-none inline-flex w-full items-center justify-center py-2 text-sm font-medium focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {/* <div className="flex items-center flex-row-reverse xl:flex-row"> */}
-            <img src={avatar} alt={profile.nationalId} className="w-5 h-5" />
-            <span className="mx-3 whitespace-nowrap truncate">
+            <img src={avatar} alt={profile.nationalId} className="h-5 w-5" />
+            <span className="direction-initial mx-3 truncate whitespace-nowrap">
               {window.localStorage.getItem('ministers-username') || ''}
             </span>
-            <DownIcon className="h-2 w-2.5 mr-2" />
+            <DownIcon className="mr-2 h-2 w-2.5" />
           </Menu.Button>
         </div>
         <Transition
@@ -62,7 +68,7 @@ const UserArea: React.FC<any> = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="z-40 absolute left-0 xl:right-0 w-40 max-w-xs mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="focus:outline-none absolute left-0 z-40 mt-2 w-40 max-w-xs origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 xl:right-0">
             <div className="px-1 py-1 ">
               <Menu.Item>
                 {({active}) => (
@@ -71,10 +77,24 @@ const UserArea: React.FC<any> = () => {
                     onClick={openModal}
                     className={`${
                       active ? 'bg-gray-100' : ''
-                    } text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900`}
                   >
-                    <IconWrapper className="w-4 h-4 ml-3" name="exit" />
+                    <IconWrapper className="ml-3 h-4 w-4" name="exit" />
                     خروج
+                  </button>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({active}) => (
+                  <button
+                    type="button"
+                    onClick={openResetModal}
+                    className={`${
+                      active ? 'bg-gray-100' : ''
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900`}
+                  >
+                    <IconWrapper className="ml-3  h-5 w-5" name="reset-password" />
+                    تغییر کلمه عبور
                   </button>
                 )}
               </Menu.Item>
@@ -84,7 +104,7 @@ const UserArea: React.FC<any> = () => {
       </Menu>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 overflow-y-auto z-50" onClose={closeModal}>
+        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as="div"
@@ -95,7 +115,7 @@ const UserArea: React.FC<any> = () => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-90" />
+              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -111,14 +131,14 @@ const UserArea: React.FC<any> = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-lg p-10 my-8 overflow-hidden align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
-                <Dialog.Title as="h3" className="font-bold leading-6 text-gray-900 my-8">
+              <div className="relative my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
+                <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
                   آیا می‌خواهید از پنل مدیریت واحد‌های صنفی خود خارج شوید؟
                 </Dialog.Title>
 
                 <button
                   type="button"
-                  className="absolute top-3 left-4 text-gray-300 cursor-pointer"
+                  className="absolute top-3 left-4 cursor-pointer text-gray-300"
                   onClick={closeModal}
                 >
                   <svg
@@ -137,12 +157,12 @@ const UserArea: React.FC<any> = () => {
                   </svg>
                 </button>
 
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col items-center justify-center">
                   <div className="mb-6 flex justify-center space-x-2 rtl:space-x-reverse">
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="flex items-center justify-center bg-gray-900 shadow-xl rounded px-12 text-sm py-2 text-white"
+                      className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
                     >
                       <span>بله</span>
                     </button>
@@ -150,7 +170,7 @@ const UserArea: React.FC<any> = () => {
                     <button
                       type="button"
                       onClick={closeModal}
-                      className="flex items-center justify-center rounded px-12 text-sm py-2 bg-white border border-gray-900 text-gray-900"
+                      className="flex items-center justify-center rounded border border-gray-900 bg-white px-12 py-2 text-sm text-gray-900"
                     >
                       <span>خیر</span>
                     </button>
@@ -161,6 +181,7 @@ const UserArea: React.FC<any> = () => {
           </div>
         </Dialog>
       </Transition>
+      <ResetPasswordModal resetIsOpen={resetIsOpen} setResetIsOpen={setResetIsOpen} />
     </>
   );
 };

@@ -15,6 +15,8 @@ import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import hcsService from '../../../services/hcs.service';
 import {sideCities} from "../../../helpers/utils";
+import {EERRORS} from "../../../constants/errors.enum";
+import RetryButton from "../../RetryButton";
 
 
 const {Line} = Charts;
@@ -27,7 +29,7 @@ const OverviewOfAffectedAfterTravelingInCountryProvince: React.FC<OverviewOfAffe
   const [data, setData] = useState([]);
   // const [serviceType, setServiceType] = useState(null) as any;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(false);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line
@@ -48,21 +50,25 @@ const OverviewOfAffectedAfterTravelingInCountryProvince: React.FC<OverviewOfAffe
     timeBoxType: 'DAILY',
     from: null,
     to: null,
+    retry : false
   });
 
-  const getColumnChartTestResult = async (params: any) => {
+  const getColumnChartTestResult = async ({retry , ...params}: any) => {
     setLoading(true);
-    setErrorMessage(null);
+    setErrorMessage(false);
     try {
       const response = await hcsService.patientsAfterTrip(params, {
         cancelToken: source.token,
       });
       setData(response.data);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
+      setErrorMessage(false);
+      setLoading(false);
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -259,12 +265,18 @@ const OverviewOfAffectedAfterTravelingInCountryProvince: React.FC<OverviewOfAffe
             wrapperClassName="w-1/4"
           />
         </div>
+
         {loading && (
           <div className="p-40">
             <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading &&(
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery}/>
+          </div>
+        )}
         {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>

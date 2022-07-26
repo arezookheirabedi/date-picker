@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import axios from "axios";
 import bakeryService from '../../../services/bakery/custom/bakery.service';
 
-export default function useOverviewOfRegistered(reportName:any) {
+export default function useOverviewOfRegistered() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>([]);
   const [filteredDataset, setFilteredDataset] = useState<any>([]);
@@ -14,12 +14,13 @@ export default function useOverviewOfRegistered(reportName:any) {
   const source = CancelToken.source();
 
   // const overviewOfResults = async (from: any = null, to: any = null, province: any) => {
-  const overviewOfResults = async (report: any) => {
+  const overviewOfResults = async () => {
+    
     try {
       setLoading(true);
       setError(false);
       const { data } = await bakeryService.bakeryReport(
-        { reportName: report.reportName },
+        { reportName: "deadOwnerdetail" },
         { cancelToken: source.token }
       );
       // const {data} = await bakeryService.bakeryAudit({
@@ -52,7 +53,7 @@ export default function useOverviewOfRegistered(reportName:any) {
 
   useEffect(() => {
     // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    overviewOfResults(reportName);
+    overviewOfResults();
     return () => {
       source.cancel('Operation canceled by the user.');
       setList([]);
