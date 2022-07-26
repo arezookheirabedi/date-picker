@@ -101,6 +101,7 @@ const optionChart = {
 };
 
 const OverviewOfTheLatestGovernmentEmployeesVaccinationStatus = () => {
+
   const [query, setQuery] = useState({
     tag: 'employee',
     retry: false,

@@ -82,27 +82,27 @@ const ListOfServices = () => {
     setLoading(true);
     try {
       const {data} = await dataExchangePortService.getServicesStatistic();
-        const normalizedData: any[] = [];
-        data.forEach((item: any, index: number) => {
-          normalizedData.push({
-            id: `ovca_${index}`,
-            name: item.endPoint || 'نامشخص',
-            receivingDevice: item.consumer || 0,
-            serviceGroup: item.gateway || 0,
-            launchDate: item.startDate || 0,
-            provider: item.provider || 0,
-            numberOfCalls: item.totalCalls || 0,
-            successfulCalling: item.successCalls || 0,
-            failedCall: item.failCalls || 0
-          });
+      const normalizedData: any[] = [];
+      data.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name: item.endPoint || 'نامشخص',
+          receivingDevice: item.consumer || 0,
+          serviceGroup: item.gateway || 0,
+          launchDate: item.startDate || 0,
+          provider: item.provider || 0,
+          numberOfCalls: item.totalCalls || 0,
+          successfulCalling: item.successCalls || 0,
+          failedCall: item.failCalls || 0
         });
+      });
 
-        setDataset([...normalizedData]);
-        setOrgDataset([...normalizedData]);
-        setFilterType({
-          name: 'براساس بیشترین فراخوانی',
-          enName: 'HIGHEST',
-        });
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+      setFilterType({
+        name: 'براساس بیشترین فراخوانی',
+        enName: 'HIGHEST',
+      });
       // setServicesTotalStatistic({...data})
       // setProfileNumber(data.count);
     } catch (error) {
