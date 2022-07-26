@@ -28,7 +28,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
     loading: pcrLoading,
     // eslint-disable-next-line
     error: testResultError,
-  } = useGetTestResults({tag: 'guild'}, true);
+  } = useGetTestResults(query, true);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center" id="guild-overview">

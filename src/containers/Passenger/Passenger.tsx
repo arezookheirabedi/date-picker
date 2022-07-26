@@ -26,8 +26,8 @@ const Passenger = () => {
       <OverviewShipPassengersStatusCard/>
       <OverviewPassengersVaccinate/>
       <OverViewPassengerStatusVaccinateChart/>
-       <OverviewOfAffectedAfterTravelingInCountry/>
-       <OverviewOfLatestPassengersVaccinationStatus/>
+      <OverviewOfAffectedAfterTravelingInCountry/>
+      <OverviewOfLatestPassengersVaccinationStatus/>
       <OverviewOfTripsMadeByPassengersByVehicle/>
 
       {/* out of data */}

@@ -9,6 +9,7 @@ import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 // import TagsSelect from '../../TagsSelect';
 import SearchableSingleSelect from '../../SearchableSingleSelect';
+import RetryButton from "../../RetryButton";
 
 const {Line} = Charts;
 
@@ -18,6 +19,7 @@ interface IParams {
   type?: string;
   from?: any;
   to?: any;
+  retry?: boolean
 }
 
 const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
@@ -42,9 +44,10 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
     type: 'DAILY',
     from: '',
     to: '',
+    retry: false
   }) as any;
 
-  const getLinearOverview = async (params: any) => {
+  const getLinearOverview = async ({retry, ...params}: any) => {
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -175,11 +178,16 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} />}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQueryParams}/>
+          </div>
+        )}
+        {!loading && data.length > 0 && !errorMessage && <Line data={data}/>}
         {data.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
         )}

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import useGetTestResultsTable from 'src/hooks/apis/useGetTestResultsTable';
 import LocalTableSearch from 'src/components/LocalTableSearch';
 import DatepickerQuery from 'src/components/DatepickerQuery';
+import RetryButton from 'src/components/RetryButton';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Table from '../../TableScopeSort';
 
@@ -14,16 +15,10 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
     to: null,
     tag: 'guild',
     category: 'categoryDesc',
+    retry: false,
   });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {
-    data: dataset,
-    loading,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    error,
-    orgDataset,
-    setData,
-  } = useGetTestResultsTable(query, true);
+  const {data: dataset, loading, error, orgDataset, setData} = useGetTestResultsTable(query, true);
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">آزمایش در اصناف استان {cityTitle}</legend>
@@ -47,99 +42,106 @@ const TestStatus: React.FC<ITestStatusProps> = ({cityTitle}) => {
       </div>
 
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
-        <Table
-          loading={loading}
-          dataSet={[...dataset]}
-          pagination={{pageSize: 10, maxPages: 3}}
-          columns={[
-            {
-              name: 'وضعیت',
-              key: '',
-              render: (v: any, record) => (
-                <CategoryDonut
-                  data={[
-                    {
-                      name: 'negativeCountPercentage',
-                      title: 'منفی',
+        {error && !loading ? (
+          <div className="p-40">
+            <div className="text-red-500">{error}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        ) : (
+          <Table
+            loading={loading}
+            dataSet={[...dataset]}
+            pagination={{pageSize: 10, maxPages: 3}}
+            columns={[
+              {
+                name: 'وضعیت',
+                key: '',
+                render: (v: any, record) => (
+                  <CategoryDonut
+                    data={[
+                      {
+                        name: 'negativeCountPercentage',
+                        title: 'منفی',
 
-                      y: record.negativeCountPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#05D8A4'], // start
-                          [1, '#039572'], // end
-                        ],
+                        y: record.negativeCountPercentage || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#05D8A4'], // start
+                            [1, '#039572'], // end
+                          ],
+                        },
                       },
-                    },
-                    {
-                      name: 'positiveCountPercentage',
-                      title: 'مثبت',
+                      {
+                        name: 'positiveCountPercentage',
+                        title: 'مثبت',
 
-                      y: record.positiveCountPercentage || 0,
-                      color: {
-                        linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-                        stops: [
-                          [0, '#FE2D2F'], // start
-                          [1, '#CC0002'], // end
-                        ],
+                        y: record.positiveCountPercentage || 0,
+                        color: {
+                          linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                          stops: [
+                            [0, '#FE2D2F'], // start
+                            [1, '#CC0002'], // end
+                          ],
+                        },
                       },
-                    },
-                  ]}
-                />
-              ),
-              className: 'flex justify-center w-full',
-            },
-            {
-              name: 'نام رسته',
-              key: 'name',
+                    ]}
+                  />
+                ),
+                className: 'flex justify-center w-full',
+              },
+              {
+                name: 'نام رسته',
+                key: 'name',
 
-              render: (v: any, record, index: number, page: number) => (
-                <div className="flex">
-                  {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
-                </div>
-              ),
-            },
-            {
-              name: 'تعداد آزمایش‌های انجام شده',
-              key: 'total',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0)
-                    .commaSeprator()
-                    .toPersianDigits()}
-                </span>
-              ),
-            },
-            {
-              name: 'درصد تست‌های مثبت',
-              key: 'positiveCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
-            },
-            {
-              name: 'درصد تست‌های منفی',
-              key: 'negativeCountPercentage',
-              sortable: true,
-              render: (v: any) => (
-                <span>
-                  {Number(v || 0).toLocaleString('fa', {
-                    minimumFractionDigits: 4,
-                  })}
-                  %
-                </span>
-              ),
-            },
-          ]}
-          totalItems={(dataset || []).length}
-        />
+                render: (v: any, record, index: number, page: number) => (
+                  <div className="flex">
+                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                  </div>
+                ),
+              },
+              {
+                name: 'تعداد آزمایش‌های انجام شده',
+                key: 'total',
+                sortable: true,
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0)
+                      .commaSeprator()
+                      .toPersianDigits()}
+                  </span>
+                ),
+              },
+              {
+                name: 'درصد تست‌های مثبت',
+                key: 'positiveCountPercentage',
+                sortable: true,
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0).toLocaleString('fa', {
+                      minimumFractionDigits: 4,
+                    })}
+                    %
+                  </span>
+                ),
+              },
+              {
+                name: 'درصد تست‌های منفی',
+                key: 'negativeCountPercentage',
+                sortable: true,
+                render: (v: any) => (
+                  <span>
+                    {Number(v || 0).toLocaleString('fa', {
+                      minimumFractionDigits: 4,
+                    })}
+                    %
+                  </span>
+                ),
+              },
+            ]}
+            totalItems={(dataset || []).length}
+          />
+        )}
       </div>
     </fieldset>
   );

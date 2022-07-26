@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_6138" data-name="Rectangle 6138" width="60" height="60" transform="translate(-7292 -11126)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_44737" data-name="Mask Group 44737" transform="translate(7292 11126)" clip-path="url(#clip-path)">
+    <g id="_211779_moon_icon" data-name="211779_moon_icon" transform="translate(-7287.512 -11123.165)">
+      <g id="Group_47356" data-name="Group 47356" transform="translate(0 0)">
+        <path id="Path_94563" data-name="Path 94563" d="M193.934,181.95c-.425.024-.827.024-1.252.024A25.7,25.7,0,0,1,172.06,140.8a27.285,27.285,0,1,0,23.811,44.787,26.653,26.653,0,0,0,3.024-4.37A24.644,24.644,0,0,1,193.934,181.95Z" transform="translate(-147.8 -140.8)" fill="#c20a0c"/>
+      </g>
+    </g>
+  </g>
+</svg>

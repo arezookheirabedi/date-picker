@@ -1,15 +1,19 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import OverviewNotScaned from 'src/components/Guild/monitoring/OverviewNotScaned';
 import OverviewPositive from 'src/components/Guild/monitoring/OverviewPositive';
 import OverviewUnVaccinated from 'src/components/Guild/monitoring/OverviewUnVaccinated';
 import OverviewMap from 'src/components/Guild/monitoring/OverviewMap';
 import {sideCities} from 'src/helpers/utils';
+import AccessDenied from "../../components/Access/AccessDenied";
+import useHasProvinceResource from "../../hooks/useHasProvinceResource";
 
 const GuildMonitoring = () => {
   const location = useLocation();
 
   const [cityTitle, setCityTitle] = useState<string | undefined>();
+
+  const [hasProvinceResources] = useHasProvinceResource();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -32,9 +36,16 @@ const GuildMonitoring = () => {
         sideCityStatus={sideCities}
         destinationId="guild-overview"
       />
-      <OverviewNotScaned cityTitle={cityTitle} />
-      <OverviewPositive cityTitle={cityTitle} />
-      <OverviewUnVaccinated cityTitle={cityTitle} />
+
+      {!hasProvinceResources && <AccessDenied id="guild-overview"/>}
+      {hasProvinceResources && (
+        <>
+          <OverviewNotScaned cityTitle={cityTitle}/>
+          <OverviewPositive cityTitle={cityTitle}/>
+          <OverviewUnVaccinated cityTitle={cityTitle}/>
+        </>
+      )}
+
     </div>
   );
 };

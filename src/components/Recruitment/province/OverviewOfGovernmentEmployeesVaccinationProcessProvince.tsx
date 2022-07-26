@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import Highcharts from "highcharts/highstock";
+import Highcharts from 'highcharts/highstock';
 
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
-import useOverviewOfTheVaccinationProcess from "../../../hooks/apis/useGetOverviewOfTheVaccinationProcess";
-
+import useOverviewOfTheVaccinationProcess from '../../../hooks/apis/useGetOverviewOfTheVaccinationProcess';
+import RetryButton from '../../RetryButton';
 
 const {HeadlessChart} = Charts;
 
@@ -26,7 +26,6 @@ const optionChart = {
       return converters.fa(ret);
     },
 
-
     events: {
       redraw: () => {
         // eslint-disable-next-line
@@ -42,12 +41,12 @@ const optionChart = {
   xAxis: {
     tickmarkPlacement: 'off',
     title: {
-      enabled: false
-    }
+      enabled: false,
+    },
   },
   yAxis: {
     title: {
-      text: ''
+      text: '',
     },
     opposite: true,
   },
@@ -59,8 +58,8 @@ const optionChart = {
     series: {
       fillOpacity: 1,
       marker: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
     area: {
       stacking: 'normal',
@@ -70,7 +69,7 @@ const optionChart = {
       //   lineWidth: 1,
       //   lineColor: '#666666'
       // }
-    }
+    },
   },
   legend: {
     enabled: false,
@@ -88,21 +87,26 @@ const optionChart = {
     borderWidth: 0,
     // headerFormat: `<div style="min-width:220px">{point.x}</div>`
   },
-
-}
+};
 
 interface OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps {
-  cityTitle: any
+  cityTitle: any;
 }
 
-const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps> = ({cityTitle}) => {
-
-
-  const [query] = useState({
-    tag: 'employee'
+const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<
+  OverviewOfGovernmentEmployeesVaccinationProcessProvinceProps
+> = ({cityTitle}) => {
+  // eslint-disable-next-line
+  const [query, setQuery] = useState({
+    tag: 'employee',
+    retry: false,
   });
 
-  const {data: dataset, loading, error: errorMessage} = useOverviewOfTheVaccinationProcess(query, true)
+  const {
+    data: dataset,
+    loading,
+    error: errorMessage,
+  } = useOverviewOfTheVaccinationProcess(query, true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -113,28 +117,26 @@ const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<Overview
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
-            <div
-              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div
-                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
+            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#716DE3'}}/>
+                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
                   <span>دوز پنجم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#BFDDE7'}}/>
+                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
                   <span>دوز چهارم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#004D65'}}/>
+                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#004D65'}} />
                   <span>دوز سوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#209F92'}}/>
+                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#209F92'}} />
                   <span>دوز دوم</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#F3BC06'}}/>
+                  <div className="w-24 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
                   <span>دوز اول</span>
                 </div>
               </div>
@@ -144,12 +146,17 @@ const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<Overview
 
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
-        {errorMessage && dataset.categories.length === 0 && <div className="p-40 text-red-500">{errorMessage}</div>}
+        {errorMessage && !loading && (
+          <div className="p-40">
+            <div className="text-red-500">{errorMessage}</div>
+            <RetryButton setQuery={setQuery} />
+          </div>
+        )}
         {!loading && dataset.categories.length > 0 && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart}/>
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
         {dataset.categories.length === 0 && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
@@ -159,7 +166,7 @@ const OverviewOfGovernmentEmployeesVaccinationProcessProvince: React.FC<Overview
         </div> */}
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
 export default OverviewOfGovernmentEmployeesVaccinationProcessProvince;

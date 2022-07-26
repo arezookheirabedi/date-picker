@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import axios from "axios";
 import hcsService from "../../services/hcs.service";
 import {sideCities} from "../../helpers/utils";
@@ -88,7 +88,7 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
   }, [query]);
 
   const location = useLocation();
-  const history = useHistory();
+
 
   useEffect(() => {
     if (!hasProvince) {
@@ -101,15 +101,13 @@ export default function useGetOverviewOfTheLatestVaccinationStatusColumnChart(qu
     });
     if (existsCity) {
       getIt({...query, 'province': provinceName});
-    } else {
-      history.push('/dashboard/health/transport/province');
     }
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialData);
       source.cancel('Operation canceled by the user.');
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
   return {loading, error, data};
 }

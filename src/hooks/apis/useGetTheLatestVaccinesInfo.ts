@@ -6,7 +6,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {EERRORS} from 'src/constants/errors.enum';
 import {IInitialVacinatelInfo, initialVacinatelInfo} from './useGetNumberOf';
 
-export default function useGetNumberOf(query?: any, hasProvince: boolean = false) {
+export default function useGetTheLatestVaccinesInfo(query?: any, hasProvince: boolean = false) {
   const location = useLocation();
   const history = useHistory();
   const [loading, setLoading] = useState(false);

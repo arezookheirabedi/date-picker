@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import axios from "axios";
 import bakeryService from '../../../services/bakery/custom/bakery.service';
 
-export default function useOverviewOfRegisteredProvince(reportName:any) {
+export default function useOverviewOfRegisteredProvince() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>([]);
   const [error, setError] = useState(false);
@@ -14,12 +14,12 @@ export default function useOverviewOfRegisteredProvince(reportName:any) {
   const source = CancelToken.source();
 
   // const overviewOfResults = async (from: any = null, to: any = null, province: any) => {
-  const overviewOfResults = async (province : any, report: any) => {
+  const overviewOfResults = async (province : any) => {
     setLoading(true);
     setError(false);
     try {
         const { data } = await bakeryService.bakeryReport(
-            { reportName: report.reportName},
+            { reportName: "deadOwnerdetail" },
             { cancelToken: source.token }
           );
           // const {data} = await bakeryService.bakeryAudit({
@@ -62,7 +62,7 @@ export default function useOverviewOfRegisteredProvince(reportName:any) {
 
   useEffect(() => {
     setList([])
-    overviewOfResults(provinceName, reportName);
+    overviewOfResults(provinceName);
   },[provinceName])
   
   return {

@@ -1,8 +1,10 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import OverviewDriversMap from 'src/components/Transport/province/OverviewDriversMap';
+import OverviewDriversMap from 'src/components/Transport/monitoring/OverviewDriversMapMonitoring';
 import OverviewDriverStatus from 'src/components/Transport/monitoring/OverviewDriversStatus';
 import {sideCities} from '../../helpers/utils';
+import useHasProvinceResource from '../../hooks/useHasProvinceResource';
+import AccessDenied from '../../components/Access/AccessDenied';
 
 // eslint-disable-next-line
 const mockDate = [
@@ -61,6 +63,8 @@ const TransportProvince = () => {
 
   const [cityTitle, setCityTitle] = useState<string | undefined>();
 
+  const [hasProvinceResources] = useHasProvinceResource();
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') as any;
@@ -82,7 +86,13 @@ const TransportProvince = () => {
         sideCityStatus={sideCities}
         destinationId="drivers-overview"
       />
-      <OverviewDriverStatus cityTitle={cityTitle} />
+
+      {!hasProvinceResources && <AccessDenied id="drivers-overview" />}
+      {hasProvinceResources && (
+        <>
+          <OverviewDriverStatus cityTitle={cityTitle} />
+        </>
+      )}
     </div>
   );
 };
