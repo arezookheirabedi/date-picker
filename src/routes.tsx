@@ -39,6 +39,7 @@ const routes: IRoute[] = [
     title: 'سلامت',
     roles: [
       'ROLE_ADMIN',
+      'ROLE_REPORT_VIEWER',
       'ROLE_REPORT_VIEWER_HEALTH',
       'ROLE_REPORT_VIEWER_HEALTH_SERVICEPORT',
       'ROLE_REPORT_VIEWER_HEALTH_VACCINATION',
@@ -83,7 +84,7 @@ const routes: IRoute[] = [
         exact: true,
         inMenu: true,
         title: 'درگاه تبادل داده و خدمات',
-        roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_HEALTH', 'ROLE_REPORT_VIEWER_HEALTH_SERVICEPORT'],
+        roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER', 'ROLE_REPORT_VIEWER_HEALTH', 'ROLE_REPORT_VIEWER_HEALTH_SERVICEPORT'],
         main: ServicePort,
       },
       {
@@ -103,6 +104,7 @@ const routes: IRoute[] = [
         title: 'واکسیناسیون',
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_HEALTH',
           'ROLE_REPORT_VIEWER_HEALTH_VACCINATION',
           'ROLE_REPORT_VIEWER_HEALTH_VACCINATION_GENERAL',
@@ -116,6 +118,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_VACCINATION',
               'ROLE_REPORT_VIEWER_HEALTH_VACCINATION_GENERAL',
@@ -130,6 +133,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_VACCINATION',
               'ROLE_REPORT_VIEWER_HEALTH_VACCINATION_PROVINCE',
@@ -161,6 +165,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT',
               'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT_GENERAL',
@@ -175,6 +180,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT',
               'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT_PROVINCE',
@@ -189,6 +195,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT',
               'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT_AUDIT',
@@ -199,6 +206,7 @@ const routes: IRoute[] = [
         // disabled: true,
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_HEALTH',
           'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT',
           'ROLE_REPORT_VIEWER_HEALTH_TRANSPORT_GENERAL',
@@ -220,6 +228,7 @@ const routes: IRoute[] = [
         // disabled: true,
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_HEALTH',
           'ROLE_REPORT_VIEWER_HEALTH_GUILD',
           'ROLE_REPORT_VIEWER_HEALTH_GUILD_OWNER',
@@ -239,6 +248,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_GUILD',
               'ROLE_REPORT_VIEWER_HEALTH_GUILD_OWNER',
@@ -253,6 +263,7 @@ const routes: IRoute[] = [
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
                 roles: [
                   'ROLE_ADMIN',
+                  'ROLE_REPORT_VIEWER',
                   'ROLE_REPORT_VIEWER_HEALTH',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD_OWNER',
@@ -268,6 +279,7 @@ const routes: IRoute[] = [
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
                 roles: [
                   'ROLE_ADMIN',
+                  'ROLE_REPORT_VIEWER',
                   'ROLE_REPORT_VIEWER_HEALTH',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD_OWNER',
@@ -285,6 +297,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_GUILD',
               'ROLE_REPORT_VIEWER_HEALTH_GUILD_EMPLOYEE',
@@ -299,6 +312,7 @@ const routes: IRoute[] = [
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
                 roles: [
                   'ROLE_ADMIN',
+                  'ROLE_REPORT_VIEWER',
                   'ROLE_REPORT_VIEWER_HEALTH',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD_EMPLOYEE',
@@ -314,6 +328,7 @@ const routes: IRoute[] = [
                 icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
                 roles: [
                   'ROLE_ADMIN',
+                  'ROLE_REPORT_VIEWER',
                   'ROLE_REPORT_VIEWER_HEALTH',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD',
                   'ROLE_REPORT_VIEWER_HEALTH_GUILD_EMPLOYEE',
@@ -331,6 +346,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_GUILD',
               'ROLE_REPORT_VIEWER_HEALTH_GUILD_AUDIT',
@@ -356,6 +372,7 @@ const routes: IRoute[] = [
         title: 'مسافران',
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_HEALTH',
           'ROLE_REPORT_VIEWER_HEALTH_PASSENGER',
           'ROLE_REPORT_VIEWER_HEALTH_PASSENGER_GENERAL',
@@ -369,6 +386,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_PASSENGER',
               'ROLE_REPORT_VIEWER_HEALTH_PASSENGER_GENERAL',
@@ -383,6 +401,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-vaccination" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_PASSENGER',
               'ROLE_REPORT_VIEWER_HEALTH_PASSENGER_PROVINCE',
@@ -411,6 +430,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-school" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_SCHOOL',
               'ROLE_REPORT_VIEWER_HEALTH_SCHOOL_GENERAL',
@@ -425,6 +445,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-school" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_SCHOOL',
               'ROLE_REPORT_VIEWER_HEALTH_SCHOOL_PROVINCE',
@@ -434,6 +455,7 @@ const routes: IRoute[] = [
         ],
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_HEALTH',
           'ROLE_REPORT_VIEWER_HEALTH_SCHOOL',
           'ROLE_REPORT_VIEWER_HEALTH_SCHOOL_GENERAL',
@@ -464,6 +486,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-recruitment" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_RECRUITMENT',
               'ROLE_REPORT_VIEWER_HEALTH_RECRUITMENT_GENERAL',
@@ -478,6 +501,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-recruitment" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_HEALTH',
               'ROLE_REPORT_VIEWER_HEALTH_RECRUITMENT',
               'ROLE_REPORT_VIEWER_HEALTH_RECRUITMENT_PROVINCE',
@@ -487,6 +511,7 @@ const routes: IRoute[] = [
         ],
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_HEALTH',
           'ROLE_REPORT_VIEWER_HEALTH_RECRUITMENT',
           'ROLE_REPORT_VIEWER_HEALTH_RECRUITMENT_GENERAL',
@@ -509,7 +534,7 @@ const routes: IRoute[] = [
         exact: true,
         inMenu: true,
         title: 'لیست درخواست گزارش',
-        roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_HEALTH', 'ROLE_REPORT_VIEWER_HEALTH_REPORTS'],
+        roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER', 'ROLE_REPORT_VIEWER_HEALTH', 'ROLE_REPORT_VIEWER_HEALTH_REPORTS'],
         main: ReportsRequested,
       },
     ],
@@ -524,6 +549,7 @@ const routes: IRoute[] = [
     title: 'اصناف',
     roles: [
       'ROLE_ADMIN',
+      'ROLE_REPORT_VIEWER',
       'ROLE_REPORT_VIEWER_GUILD',
       'ROLE_REPORT_VIEWER_GUILD_BAKERY',
       'ROLE_REPORT_VIEWER_GUILD_BAKERY_GENERAL',
@@ -549,6 +575,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-bakery" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_GUILD',
               'ROLE_REPORT_VIEWER_GUILD_BAKERY',
               'ROLE_REPORT_VIEWER_GUILD_BAKERY_GENERAL',
@@ -563,6 +590,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-bakery" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_GUILD',
               'ROLE_REPORT_VIEWER_GUILD_BAKERY',
               'ROLE_REPORT_VIEWER_GUILD_BAKERY_PROVINCE',
@@ -576,6 +604,7 @@ const routes: IRoute[] = [
             icon: active => <IconWrapperStyle name="sub-bakery" active={active}/>,
             roles: [
               'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
               'ROLE_REPORT_VIEWER_GUILD',
               'ROLE_REPORT_VIEWER_GUILD_BAKERY',
               'ROLE_REPORT_VIEWER_GUILD_BAKERY_AUDIT',
@@ -586,6 +615,7 @@ const routes: IRoute[] = [
         // disabled: true,
         roles: [
           'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
           'ROLE_REPORT_VIEWER_GUILD',
           'ROLE_REPORT_VIEWER_GUILD_BAKERY',
           'ROLE_REPORT_VIEWER_GUILD_BAKERY_GENERAL',
@@ -604,9 +634,8 @@ const routes: IRoute[] = [
     title: 'اربعین',
     disabled: true,
     main: () => <></>,
-    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
+    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER', 'ROLE_REPORT_VIEWER_ZAERIN'],
   },
-
 
 
   // {
@@ -668,7 +697,7 @@ const routes: IRoute[] = [
     inMenu: false,
     title: 'جامع',
     disabled: true,
-    roles: ['ROLE_ADMIN'],
+    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER'],
     main: Overview,
   },
   {
@@ -679,7 +708,7 @@ const routes: IRoute[] = [
     inMenu: false,
     title: 'شهروندان',
     disabled: true,
-    roles: ['ROLE_ADMIN'],
+    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER'],
     main: Citizens,
   },
 ];
