@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import dayjs from 'dayjs';
 import {Day} from '@hassanmojab/react-modern-calendar-datepicker';
 import calendar from 'src/assets/images/icons/calendar.svg';
-import SingleDatePickerModal from '../SingleDatePickerModal';
+import SingleDatePickerModal from '../SingleDatePickerModalForm';
 
 interface IProps extends React.HTMLProps<HTMLInputElement> {
   selected?: any;
