@@ -113,13 +113,6 @@ function guildMessageSeen(
     .post(`/api/v1/guilds/${params.guildCode}/published-messages/seen/${params.messageId}?lang=fa`);
 }
 
-function dosesTagBased({tag, category, ...params}: any = {}, config?: any) {
-  return request
-    .withHeaders({'Content-Type': 'application/json;utf-8'})
-    .build()
-    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
-}
-
 function guildInquiry({...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -223,7 +216,6 @@ export default {
   updateEmployeHealthStatus,
   guildMessages,
   guildMessageSeen,
-  dosesTagBased,
   guildInquiry,
   guildMonitoringReport,
   guildReportoverviewStatus,

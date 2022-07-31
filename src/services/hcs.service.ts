@@ -6,42 +6,44 @@ function membersGeneral({organization, tag, ...params}: any = {}, config?: any) 
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/members/general?lang=fa`, params, {
+      ...config,
+    });
 }
 
 function tripVaccinationGeneral({...params}: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/trips/vaccines/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/vaccines/general?lang=fa`, params, {...config});
 }
 
 function tripTestResultsGeneral({...params}: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/trips/test-results/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/test-results/general?lang=fa`, params, {...config});
 }
 
 function tripVaccinationOverview(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/trips/vaccines/category-based`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/vaccines/category-based?lang=fa`, params, {...config});
 }
 
 function tripsCount(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/trips/count`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/count?lang=fa`, params, {...config});
 }
 
 function patientsAfterTrip(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/trips/test-results/unwell/after-trip/time-based`, params, {
+    .get(`/api/v1/hcs-reporter/trips/test-results/unwell/after-trip/time-based?lang=fa`, params, {
       ...config,
     });
 }
@@ -146,28 +148,34 @@ function doses({organization, ...params}: {organization: string; params: any}, c
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses`, params, {...config});
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/vaccines/doses?lang=fa`, params, {
+      ...config,
+    });
 }
 
 function tags({organization, ...params}: {organization: string; params?: any}, {...config}) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/organizations/${organization}/tags`, params, {...config});
+    .get(`/api/v1/hcs-reporter/organizations/${organization}/tags?lang=fa`, params, {...config});
 }
 
 function vaccinationOverview(tag: string, category: string, params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
+    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}?lang=fa`, params, {
+      ...config,
+    });
 }
 
 function getVaccinationOverview({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}`, params, {...config});
+    .get(`/api/v1/hcs-reporter/vaccines/tags/${tag}/categories/${category}?lang=fa`, params, {
+      ...config,
+    });
 }
 
 function peopleVaccinationOverview(
@@ -177,48 +185,60 @@ function peopleVaccinationOverview(
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/people/vaccines/tags/${tag}/categories/${category}`, params, {
-      ...config,
-    });
+    .get(
+      `/api/v1/hcs-reporter/people/vaccines/tags/${tag}/categories/${category}?lang=fa`,
+      params,
+      {
+        ...config,
+      }
+    );
 }
 
 function peopleLatestVaccinationOverview(params: any, config?: any): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/people/vaccines/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/people/vaccines/general?lang=fa`, params, {...config});
 }
 
 function testResults(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/test-results/general?lang=fa`, params, {...config});
 }
 
 function tableOverviewTestResults(tag: string, category: string, params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {
-      ...config,
-    });
+    .get(
+      `/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}?lang=fa`,
+      params,
+      {
+        ...config,
+      }
+    );
 }
 
 function getTableOverviewTestResults({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}`, params, {
-      ...config,
-    });
+    .get(
+      `/api/v1/hcs-reporter/test-results/overview/tags/${tag}/categories/${category}?lang=fa`,
+      params,
+      {
+        ...config,
+      }
+    );
 }
 
 function testResultsCategory(tag: string, category: string, params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}`, params, {
+    .get(`/api/v1/hcs-reporter/test-results/tags/${tag}/categories/${category}?lang=fa`, params, {
       ...config,
     });
 }
@@ -227,7 +247,7 @@ function columnChartTestResultService(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/overview/time-based`, params, {
+    .get(`/api/v1/hcs-reporter/test-results/overview/time-based?lang=fa`, params, {
       ...config,
     });
 }
@@ -236,7 +256,7 @@ function getPeopleVaccine(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/people/vaccines/general`, params, {
+    .get(`/api/v1/hcs-reporter/people/vaccines/general?lang=fa`, params, {
       ...config,
     });
 }
@@ -248,7 +268,7 @@ function accumulativeVaccinesTimeBasedReport(
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/vaccines/time-based/accumulative`, params, {
+    .get(`/api/v1/hcs-reporter/vaccines/time-based/accumulative?lang=fa`, params, {
       ...config,
     });
 }
@@ -260,7 +280,7 @@ function positivePcrPercentageProvinceBased(
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/test-results/overview/province-based`, params, {...config});
+    .get(`/api/v1/hcs-reporter/test-results/overview/province-based?lang=fa`, params, {...config});
 }
 
 function getVaccinesGroupedByProvinceReport(
@@ -270,35 +290,33 @@ function getVaccinesGroupedByProvinceReport(
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/vaccines/provinces`, params, {...config});
+    .get(`/api/v1/hcs-reporter/vaccines/provinces?lang=fa`, params, {...config});
 }
 
 function getVaccinesTripGroupedByProvinceReport(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get('/api/v1/hcs-reporter/trips/vaccines/provinces', params, {...config});
+    .get('/api/v1/hcs-reporter/trips/vaccines/provinces?lang=fa', params, {...config});
 }
 
 function getPeopleVaccinesTripGeneralReport(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get('/api/v1/hcs-reporter/trips/people/vaccines/general', params, {...config});
+    .get('/api/v1/hcs-reporter/trips/people/vaccines/general?lang=fa', params, {...config});
 }
-
 function getPassengerPermissionsCount(params: any, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get('/api/v1/trip/passengers/permissions/count', params, {...config});
 }
-
 function numberOf({...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/vaccines/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/vaccines/general?lang=fa`, params, {...config});
 }
 function testResultByCategory({tag, category, ...params}: any = {}, config?: any) {
   return request
