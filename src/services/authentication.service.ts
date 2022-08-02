@@ -1,5 +1,5 @@
 import qs from 'qs';
-import {AxiosResponse} from 'axios';
+import {AxiosRequestConfig, AxiosResponse} from 'axios';
 import request from 'src/helpers/request';
 import {removeToken} from 'src/helpers/utils';
 import {History} from 'history';
@@ -52,6 +52,12 @@ const logout: (history?: History) => void = () => {
     window.location.href = '/';
   }
 };
+function rolePermision(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/fs/rol-permissions`, params, {...config});
+}
 
 export default {
   captcha,
@@ -60,4 +66,5 @@ export default {
   token,
   resetPassword,
   confirmPassword,
+  rolePermision,
 };
