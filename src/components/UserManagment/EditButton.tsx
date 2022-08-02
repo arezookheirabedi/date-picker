@@ -12,7 +12,7 @@ import eyes from 'src/assets/images/icons/eye_icon.svg';
 import DotLoading from '../Loading/DotLoading';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CreateButton: React.FC<{}> = () => {
+const EditButton: React.FC<{userData: {reportStatus: string}}> = ({userData}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,7 +63,7 @@ const CreateButton: React.FC<{}> = () => {
         onClick={openModal}
         className="button button--primary flex space-x-2 px-5 rtl:space-x-reverse"
       >
-        <span> افزودن کاربر جدید</span>
+        <span> ویرایش اطلاعات کاربر</span>
       </button>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
@@ -112,6 +112,7 @@ const CreateButton: React.FC<{}> = () => {
                         </label>
                         <div className="mt-1">
                           <input
+                            defaultValue={userData ? userData.reportStatus : ''}
                             autoComplete="off"
                             type="text"
                             id="oldPassword"
@@ -290,4 +291,4 @@ const CreateButton: React.FC<{}> = () => {
     </>
   );
 };
-export default CreateButton;
+export default EditButton;

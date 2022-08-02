@@ -1,5 +1,5 @@
 import React from 'react';
-import User from 'src/components/UserManagment';
+import User from 'src/components/UserManagment/User';
 
 const UserManagment: React.FC<{}> = () => {
   return (
