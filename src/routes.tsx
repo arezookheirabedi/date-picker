@@ -27,6 +27,8 @@ import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
 // import Arbaeen from './containers/Arbaeen/Arbaeen';
 // import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
+import BakeryInspections from './containers/BakeryInspections/BakeryInspections';
+import BakeryInspectionsProvince from './containers/BakeryInspections/BakeryInspectionsProvince';
 
 const routes: IRoute[] = [
   {
@@ -563,7 +565,7 @@ const routes: IRoute[] = [
           <IconWrapperStyle name="bakery" className="w-5 h-5" active={active} disabled={disabled}/>
         ),
         link: '/dashboard/guilds/bakery/public',
-        simLink: '/dashboard/guilds',
+        simLink: '/dashboard/guilds/bakery',
         exact: true,
         inMenu: true,
         title: 'داشبورد آرد و نان',
@@ -623,6 +625,51 @@ const routes: IRoute[] = [
           'ROLE_REPORT_VIEWER_GUILD_BAKERY_AUDIT',
         ],
         main: Bakery,
+      },
+
+      {
+        keyIndex: '13',
+        icon: (active, disabled) => (
+          <IconWrapperStyle
+            name="inspection"
+            className="w-5 h-5"
+            active={active}
+            disabled={disabled}
+          />
+        ),
+        link: '/dashboard/guilds/inspection/public',
+        simLink: '/dashboard/guilds/inspection',
+        exact: true,
+        inMenu: true,
+        title: 'داشبورد بازرسی آرد و نان',
+        children: [
+          {
+            keyIndex: '131',
+            title: 'عمومی',
+            link: '/dashboard/guilds/inspection/public',
+            icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
+            roles: [
+              'ROLE_ADMIN',
+            ],
+            main: BakeryInspections,
+          },
+          {
+            keyIndex: '132',
+            title: 'استانی',
+            enTitle: 'province',
+            link: '/dashboard/guilds/inspection/province',
+            icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
+            roles: [
+              'ROLE_ADMIN',
+            ],
+            main: BakeryInspectionsProvince,
+          },
+        ],
+        // disabled: true,
+        roles: [
+          'ROLE_ADMIN'
+        ],
+        main: BakeryInspections,
       },
     ],
   },
