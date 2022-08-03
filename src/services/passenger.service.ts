@@ -5,7 +5,7 @@ function passengerTestResult({...params}: any = {}, config?: any): Promise<Axios
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/hcs-reporter/trips/test-results/general`, params, {...config});
+    .get(`/api/v1/hcs-reporter/trips/test-results/general?lang=fa`, params, {...config});
 }
 
 function getDoses(params: any = {}, config?: any) {
@@ -47,6 +47,13 @@ function columnChartTestResultService(params: any = {}, config?: any) {
     });
 }
 
+function getPassengerPermissionsCount(params: any, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get('/api/v1/trip/passengers/permissions/count', params, {...config});
+}
+
 export default {
   passengerTestResult,
   getDoses,
@@ -54,4 +61,5 @@ export default {
   passengerOverViewByCategory,
   passengerTestResultByCategory,
   columnChartTestResultService,
+  getPassengerPermissionsCount,
 };
