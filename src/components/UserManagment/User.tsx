@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {EERRORS} from 'src/constants/errors.enum';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
 import authenticationService from 'src/services/authentication.service';
@@ -10,6 +10,8 @@ import SearchableMultiSelect from '../SearchableMultiSelect.tsx';
 import Table from '../TableXHR';
 import CreateButton from './CreateButton';
 import EditButton from './EditButton';
+import Options from './Options';
+import Action from "./Actions"
 
 const pageSize = 10;
 
@@ -19,6 +21,7 @@ export default function index() {
   const [totalItems, setTotalItems] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
   const [refresh, shouldRefresh] = useState<boolean>(false);
+  const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
     from: null,
     to: null,
@@ -99,6 +102,9 @@ export default function index() {
               <RetryButton setQuery={setQuery} />
             </div>
           ) : (
+            <div
+            ref={wrapperRef}
+          >
             <Table
               handlePageChange={handlePageChange}
               loading={loading}
@@ -146,13 +152,14 @@ export default function index() {
                   name: 'وضعیت',
                   key: 'reportStatus',
                   render: (v: any, record: any) => (
-                    <div className="flex w-full justify-center">
-                      <EditButton userData={record} />
-                    </div>
+                    <div className="flex items-center justify-end">
+                    <Action item={record} wrapperRef={wrapperRef} />
+                  </div>
                   ),
                 },
               ]}
             />
+            </div>
           )}
         </div>
       </fieldset>
