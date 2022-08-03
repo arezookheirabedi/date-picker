@@ -12,8 +12,11 @@ import eyes from 'src/assets/images/icons/eye_icon.svg';
 import DotLoading from '../Loading/DotLoading';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const EditButton: React.FC<{userData: {reportStatus: string}}> = ({userData}) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const EditButton: React.FC<{
+  isOpen: boolean;
+  setIsOpen: (data:boolean) => void;
+  userData: {reportStatus: string};
+}> = ({userData, isOpen, setIsOpen}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [typeInputText, setTypeInputText] = useState(false);
@@ -44,9 +47,7 @@ const EditButton: React.FC<{userData: {reportStatus: string}}> = ({userData}) =>
     // @ts-ignore
     resolver: yupResolver(validationSchema),
   });
-  const openModal: () => void = () => {
-    setIsOpen(true);
-  };
+
   const closeModal: () => void = () => {
     setIsOpen(false);
     reset();
@@ -58,13 +59,6 @@ const EditButton: React.FC<{userData: {reportStatus: string}}> = ({userData}) =>
 
   return (
     <>
-      <button
-        type="button"
-        onClick={openModal}
-        className="button button--primary flex space-x-2 px-5 rtl:space-x-reverse"
-      >
-        <span> ویرایش اطلاعات کاربر</span>
-      </button>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
           <div className="min-h-screen px-4 text-center">
