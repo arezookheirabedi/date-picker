@@ -27,8 +27,8 @@ import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
 // import Arbaeen from './containers/Arbaeen/Arbaeen';
 // import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
-import BakeryInspections from './containers/BakeryInspections/BakeryInspections';
-import BakeryInspectionsProvince from './containers/BakeryInspections/BakeryInspectionsProvince';
+import Inspection from './containers/Inspection/Inspection';
+import InspectionProvince from './containers/Inspection/InspectionProvince';
 
 const routes: IRoute[] = [
   {
@@ -651,7 +651,7 @@ const routes: IRoute[] = [
             roles: [
               'ROLE_ADMIN',
             ],
-            main: BakeryInspections,
+            main: Inspection,
           },
           {
             keyIndex: '132',
@@ -662,14 +662,14 @@ const routes: IRoute[] = [
             roles: [
               'ROLE_ADMIN',
             ],
-            main: BakeryInspectionsProvince,
+            main: InspectionProvince,
           },
         ],
         // disabled: true,
         roles: [
           'ROLE_ADMIN'
         ],
-        main: BakeryInspections,
+        main: Inspection,
       },
     ],
   },
