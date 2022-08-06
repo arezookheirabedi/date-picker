@@ -32,7 +32,7 @@ import UserManagment from './containers/UserManagment/UserManagment';
 const routes: IRoute[] = [
   {
     keyIndex: '0',
-    // icon: active => <IconWrapperStyle name="dashboard" active={active} />,
+    icon: active => <IconWrapperStyle name="userManagment" active={active} />,
     link: '/dashboard/overview/userManagment',
     exact: true,
     inMenu: true,
