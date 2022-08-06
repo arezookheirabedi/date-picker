@@ -1,5 +1,5 @@
-import React, {Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
+import React, {Fragment, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -9,14 +9,15 @@ import AppRegex from 'src/helpers/regex';
 // import authenticateService from 'src/services/authentication.service';
 import eyes from 'src/assets/images/icons/eye_icon.svg';
 // import {EERRORS} from 'src/constants/errors.enum';
-import DotLoading from '../Loading/DotLoading';
+import DotLoading from '../../Loading/DotLoading';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const EditButton: React.FC<{
+interface IProps {
+  userData: any;
   isOpen: boolean;
-  setIsOpen: (data:boolean) => void;
-  userData: {reportStatus: string};
-}> = ({userData, isOpen, setIsOpen}) => {
+  closeModal: () => void;
+}
+
+const Delete: React.FC<IProps> = ({userData, isOpen, closeModal}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [typeInputText, setTypeInputText] = useState(false);
@@ -47,20 +48,16 @@ const EditButton: React.FC<{
     // @ts-ignore
     resolver: yupResolver(validationSchema),
   });
-
-  const closeModal: () => void = () => {
-    setIsOpen(false);
+  const setEditModalClose: () => void = () => {
+    closeModal();
     reset();
   };
-
-  const onSubmit = (e: any) => {
-    console.log(e);
-  };
+  const onSubmit = async () => {};
 
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
+        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={setEditModalClose}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as="div"
@@ -71,7 +68,7 @@ const EditButton: React.FC<{
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
+              <Dialog.Overlay className="fixed inset-0 bg-gray-500/50" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -285,4 +282,5 @@ const EditButton: React.FC<{
     </>
   );
 };
-export default EditButton;
+
+export default Delete;

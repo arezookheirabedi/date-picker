@@ -1,0 +1,5 @@
+export enum EACTIONTABLE {
+  DELETE = 'DELETE',
+  EDIT = 'EDIT',
+  RESET_PASS = 'RESET_PASS',
+}
