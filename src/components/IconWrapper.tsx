@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
+import userManagment from 'src/assets/images/logos/avatar.svg';
 import dashboardIcon from '../assets/images/icons/dashboard.svg';
 import dashboardActiveIcon from '../assets/images/icons/dashboard-active.svg';
 import citizenshipIcon from '../assets/images/icons/citizenship.svg';
@@ -35,6 +36,12 @@ const icons = [
     icon: dashboardIcon,
     disableIcon: dashboardIcon,
     activeIcon: dashboardActiveIcon,
+  },
+  {
+    name: 'userManagment',
+    icon: userManagment,
+    disableIcon: userManagment,
+    activeIcon: userManagment,
   },
   {
     name: 'citizenship',
@@ -104,8 +111,7 @@ const icons = [
     activeIcon: passwordResetIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
-  {name: 'flag', icon: flagIcon, disableIcon: flagIcon, activeIcon: flagIcon,
-  },
+  {name: 'flag', icon: flagIcon, disableIcon: flagIcon, activeIcon: flagIcon},
 ];
 
 interface IProps {
