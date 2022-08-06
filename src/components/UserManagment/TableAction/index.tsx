@@ -6,6 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import ActionIcon from 'src/assets/images/icons/table-action.svg';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
 import {toPersianDigit} from 'src/helpers/utils';
+import ResetPasswordModal from 'src/components/Layout/Private/components/ResetPasswordModal';
 import ActionButton from './ActionButton';
 import Delete from './Delete';
 import {ActionList, IActionList} from './ActionList';
@@ -134,6 +135,10 @@ const Actions: React.FC<IProps> = ({item}) => {
         closeModal={() => closeModal(EACTIONTABLE.DELETE)}
       />
       <Edit userData={item} isOpen={modals.EDIT} closeModal={() => closeModal(EACTIONTABLE.EDIT)} />
+      <ResetPasswordModal
+        resetIsOpen={modals.RESET_PASS}
+        setResetIsOpen={() => closeModal(EACTIONTABLE.RESET_PASS)}
+      />
     </>
   );
 };
