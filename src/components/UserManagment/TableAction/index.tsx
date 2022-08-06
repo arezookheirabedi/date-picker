@@ -1,8 +1,15 @@
-import React, { useState } from "react";
-import { Popover, Transition } from "@headlessui/react";
-import { usePopper } from "react-popper";
-import { Portal } from "react-portal";
-import Delete from "./Delete"
+import React, {useState} from 'react';
+import {Popover, Transition} from '@headlessui/react';
+import {usePopper} from 'react-popper';
+import {Portal} from 'react-portal';
+import {v4 as uuidv4} from 'uuid';
+import ActionIcon from 'src/assets/images/icons/table-action.svg';
+import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
+import {toPersianDigit} from 'src/helpers/utils';
+import ActionButton from './ActionButton';
+import Delete from './Delete';
+import {ActionList, IActionList} from './ActionList';
+import Edit from './Edit';
 
 interface IProps {
   item: any;
@@ -12,21 +19,21 @@ interface IModals {
   [name: string]: boolean;
 }
 
-const Actions: React.FC<IProps> = ({ item}) => {
+const Actions: React.FC<IProps> = ({item}) => {
   const popperElRef = React.useRef<any>(null);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const [modals, setModals] = useState<IModals>({
-    delete: false,
+    DELETE: false,
+    EDIT: false,
+    RESET_PASS: false,
   });
-  const element = document.querySelector("body");
+  const element = document.querySelector('body');
 
-
-
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+  const {styles, attributes} = usePopper(referenceElement, popperElement, {
     modifiers: [
       {
-        name: "preventOverflow",
+        name: 'preventOverflow',
         options: {
           // @ts-ignore
           boundary: element,
@@ -37,7 +44,7 @@ const Actions: React.FC<IProps> = ({ item}) => {
   });
 
   const openModal = (type: string) => {
-    let modalsModified: IModals = { ...modals };
+    let modalsModified: IModals = {...modals};
     Object.keys(modalsModified).forEach(
       // eslint-disable-next-line
       (key: string) => {
@@ -52,7 +59,7 @@ const Actions: React.FC<IProps> = ({ item}) => {
   };
 
   const closeModal = (type: string) => {
-    let modalsModified: IModals = { ...modals };
+    let modalsModified: IModals = {...modals};
     Object.keys(modalsModified).forEach(
       // eslint-disable-next-line
       (key: string) => {
@@ -74,20 +81,7 @@ const Actions: React.FC<IProps> = ({ item}) => {
           ref={setReferenceElement}
           className="inline-flex items-center justify-center text-xs font-medium focus:outline-none"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-            />
-          </svg>
+          <img alt="moreAction" src={ActionIcon} className="h-4 w-4" />
         </Popover.Button>
 
         <Portal>
@@ -109,7 +103,16 @@ const Actions: React.FC<IProps> = ({ item}) => {
               >
                 <div className="py-1">
                   <div>
-                    <Delete.Button onClick={() => openModal("delete")} />
+                    {ActionList.map((list: IActionList) => {
+                      return (
+                        <ActionButton
+                          key={uuidv4()}
+                          icon={list.icon}
+                          title={list.title}
+                          onClick={() => openModal(list.type)}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </Popover.Panel>
@@ -118,12 +121,19 @@ const Actions: React.FC<IProps> = ({ item}) => {
         </Portal>
       </Popover>
 
-      <Delete.Modal
-        id={item.id}
-        name={item.name}
-        isOpen={modals.delete}
-        closeModal={() => closeModal("delete")}
+      <Delete
+        content={
+          <>
+            <span>آیا از حذف کار بر با کد ملی</span>
+            <span className="text-cyan-400"> &nbsp;{`${toPersianDigit(item.id || '-')}`}</span>
+            &nbsp;
+            <span>مطمئن هستید؟</span>
+          </>
+        }
+        isOpen={modals.DELETE}
+        closeModal={() => closeModal(EACTIONTABLE.DELETE)}
       />
+      <Edit userData={item} isOpen={modals.EDIT} closeModal={() => closeModal(EACTIONTABLE.EDIT)} />
     </>
   );
 };
