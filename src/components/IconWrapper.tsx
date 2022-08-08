@@ -25,6 +25,7 @@ import reportsRequestedIcon from '../assets/images/icons/reports-requested.svg';
 import reportsRequestedActiveIcon from '../assets/images/icons/reports-requested-active.svg';
 import reportsFlourIcon from '../assets/images/icons/reports-flour.svg';
 import passwordResetIcon from '../assets/images/icons/password-reset-active.svg';
+// import passwordResetIcon from '../assets/images/icons/reset-pass.svg';
 import reportsFlourActiveIcon from '../assets/images/icons/reports-flour-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';

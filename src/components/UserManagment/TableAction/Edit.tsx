@@ -17,7 +17,7 @@ interface IProps {
   closeModal: () => void;
 }
 
-const Delete: React.FC<IProps> = ({userData, isOpen, closeModal}) => {
+const Edit: React.FC<IProps> = ({userData, isOpen, closeModal}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [typeInputText, setTypeInputText] = useState(false);
@@ -68,7 +68,7 @@ const Delete: React.FC<IProps> = ({userData, isOpen, closeModal}) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-500/50" />
+              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -283,4 +283,4 @@ const Delete: React.FC<IProps> = ({userData, isOpen, closeModal}) => {
   );
 };
 
-export default Delete;
+export default Edit;

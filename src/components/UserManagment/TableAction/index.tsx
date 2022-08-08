@@ -8,7 +8,7 @@ import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
 import {toPersianDigit} from 'src/helpers/utils';
 import ResetPasswordModal from 'src/components/Layout/Private/components/ResetPasswordModal';
 import ActionButton from './ActionButton';
-import Delete from './Delete';
+import Delete from '../../Modal/DeleteModal';
 import {ActionList, IActionList} from './ActionList';
 import Edit from './Edit';
 
@@ -133,6 +133,7 @@ const Actions: React.FC<IProps> = ({item}) => {
         }
         isOpen={modals.DELETE}
         closeModal={() => closeModal(EACTIONTABLE.DELETE)}
+        endPoint={() => console.log('helooo')}
       />
       <Edit userData={item} isOpen={modals.EDIT} closeModal={() => closeModal(EACTIONTABLE.EDIT)} />
       <ResetPasswordModal
