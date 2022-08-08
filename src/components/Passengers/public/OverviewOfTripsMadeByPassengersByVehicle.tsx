@@ -188,14 +188,13 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQueryParams({
         ...queryParams,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
         to: moment(finalToDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
       });
-    } else {
+    }
+    if (selectedDayRange.clear) {
       setQueryParams({
         ...queryParams,
         from: null,
@@ -209,12 +208,12 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
     setSelectedDayRange({
       from: null,
       to: null,
-      retry :false
+      clear: true
     });
   };
 
 
-  const getTripsCountCategoryBased = async ({retry , ...params} : any) => {
+  const getTripsCountCategoryBased = async ({retry, ...params}: any) => {
     setLoading(true);
     try {
       const {data} = await hcsService.getTripsCountCategoryBased(
@@ -251,7 +250,7 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
       })
       setErrorMessage(false);
       setLoading(false);
-    } catch (err : any) {
+    } catch (err: any) {
       if (err.message === 'cancel') {
         setLoading(true);
         return;
@@ -366,7 +365,7 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
             <Spinner/>
           </div>
         )}
-        {errorMessage && !loading &&(
+        {errorMessage && !loading && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
             <RetryButton setQuery={setQueryParams}/>
