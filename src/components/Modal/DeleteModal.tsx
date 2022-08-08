@@ -1,17 +1,30 @@
 import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
+// import toast from 'cogo-toast';
 
 interface IProps {
   isOpen: boolean;
   closeModal: () => void;
   content: JSX.Element;
+  endPoint: () => void;
 }
 
-const Delete: React.FC<IProps> = ({isOpen, content, closeModal}) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Delete: React.FC<IProps> = ({isOpen, content, closeModal, endPoint}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleLogout = async () => {};
+  // const handelSubmit=async () =>{try {
+  // //   setLoading(true);
+  // //   const res=await endPoint()
+
+  // // } catch (error) {
+  // //        toast.error('خطایی در عملیات');
+
+  // // }finally{
+  // //   setLoading(false);
+  // // }
+  // }
 
   return (
     <>
@@ -73,7 +86,7 @@ const Delete: React.FC<IProps> = ({isOpen, content, closeModal}) => {
                   <div className="mb-6 flex justify-center space-x-2 rtl:space-x-reverse">
                     <button
                       type="button"
-                      onClick={handleLogout}
+                      // onClick={handelSubmit}
                       className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
                     >
                       <span>بله</span>
