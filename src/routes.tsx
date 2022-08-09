@@ -25,7 +25,10 @@ import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
+
+import InspectorManagement from './containers/InspectorsManagement'
 import UserManagment from './containers/UserManagment/UserManagment';
+
 // import Arbaeen from './containers/Arbaeen/Arbaeen';
 // import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
 
@@ -579,12 +582,30 @@ const routes: IRoute[] = [
     ],
     subMenu: [
       {
+        keyIndex: '11',
+        icon: (active, disabled) => (
+          <IconWrapperStyle
+            name="inspector"
+            className="w-5 h-5"
+            active={active}
+            disabled={disabled}
+          />
+        ),
+        link: '/dashboard/guilds/inspectors/management',
+        simLink: '/dashboard/guilds/inspectors/management',
+        exact: true,
+        inMenu: true,
+        title: 'مدیریت بازرسان',
+        roles: ['ROLE_ADMIN'],
+        main: InspectorManagement,
+      },
+      {
         keyIndex: '10',
         icon: (active, disabled) => (
           <IconWrapperStyle name="bakery" className="w-5 h-5" active={active} disabled={disabled} />
         ),
         link: '/dashboard/guilds/bakery/public',
-        simLink: '/dashboard/guilds',
+        simLink: '/dashboard/guilds/bakery',
         exact: true,
         inMenu: true,
         title: 'داشبورد آرد و نان',

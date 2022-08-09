@@ -3,6 +3,8 @@ import React from 'react';
 import userManagment from 'src/assets/images/logos/avatar.svg';
 import dashboardIcon from '../assets/images/icons/dashboard.svg';
 import dashboardActiveIcon from '../assets/images/icons/dashboard-active.svg';
+import inspector from '../assets/images/icons/inspectors.svg';
+import inspectorActiveIcon from '../assets/images/icons/inspectors-active.svg';
 import citizenshipIcon from '../assets/images/icons/citizenship.svg';
 import citizenshipActiveIcon from '../assets/images/icons/citizenship-active.svg';
 import servicePortIcon from '../assets/images/icons/service-port.svg';
@@ -64,6 +66,12 @@ const icons = [
     activeIcon: transportActiveIcon,
   },
   {
+    name: 'inspector',
+    icon: inspector,
+    disableIcon: inspector,
+    activeIcon: inspectorActiveIcon,
+  },
+  {
     name: 'bakery',
     icon: bakeryIcon,
     disableIcon: bakeryIcon,
@@ -112,7 +120,12 @@ const icons = [
     activeIcon: passwordResetIcon,
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
-  {name: 'flag', icon: flagIcon, disableIcon: flagIcon, activeIcon: flagIcon},
+  {
+    name: 'flag',
+    icon: flagIcon,
+    disableIcon: flagIcon,
+    activeIcon: flagIcon,
+  },
 ];
 
 interface IProps {
