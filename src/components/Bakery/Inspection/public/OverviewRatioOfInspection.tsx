@@ -5,11 +5,11 @@ import {isEmpty} from 'lodash';
 //
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import Highcharts from 'highcharts';
-import DatePickerModal from '../../DatePickerModal';
-import Spinner from '../../Spinner';
-import Calendar from '../../Calendar';
+import DatePickerModal from '../../../DatePickerModal';
+import Spinner from '../../../Spinner';
+import Calendar from '../../../Calendar';
 import HeadlessChart from '../HeadlessChart';
-import useGetRatioOfInspection from '../../../hooks/apis/useGetRatioOfInspection';
+import useGetRatioOfInspection from '../../../../hooks/apis/useGetRatioOfInspection';
 
 const OverviewRatioOfInspection: React.FC<{}> = () => {
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -94,7 +94,7 @@ const OverviewRatioOfInspection: React.FC<{}> = () => {
             threshold: null,
             grouping: false,
             shadow: false,
-            borderWidth: 0,
+            borderWidth: 0
           },
         },
         yAxis: {
@@ -134,9 +134,7 @@ const OverviewRatioOfInspection: React.FC<{}> = () => {
             fontSize: 10,
           },
           borderWidth: 0,
-        },
-    
-        series: [],
+        }
       };
 
     return (
@@ -146,39 +144,39 @@ const OverviewRatioOfInspection: React.FC<{}> = () => {
           </legend>
           <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
             <div className="mb-10 mt-6 flex items-center justify-between px-8">
-            <div className="align-center flex w-3/4 justify-between">
-                <div className="align-center flex justify-between">
-                    {showDatePicker ? (
-                        <DatePickerModal
-                        setSelectedDayRange={setSelectedDayRange}
-                        selectedDayRange={selectedDayRange}
-                        setShowDatePicker={setShowDatePicker}
-                        showDatePicker
-                        />
-                    ) : null}
-                    <Calendar
-                        action={focusFromDate}
-                        from={selectedDayRange.from}
-                        to={selectedDayRange.to}
-                        setSelectedDayRange={setSelectedDayRange}
-                    />
-                </div>
-            </div>
-            <div className="w-2/4">
-                <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-                <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
-                    <div className="inline-flex flex-col items-center justify-center space-y-2">
-                    <div className="h-2 w-20 rounded" style={{backgroundColor: '#07816C'}} />
-                    <span>بازرسی‌های انجام شده</span>
-                    </div>
+              <div className="align-center flex w-3/4 justify-between">
+                  <div className="align-center flex justify-between">
+                      {showDatePicker ? (
+                          <DatePickerModal
+                          setSelectedDayRange={setSelectedDayRange}
+                          selectedDayRange={selectedDayRange}
+                          setShowDatePicker={setShowDatePicker}
+                          showDatePicker
+                          />
+                      ) : null}
+                      <Calendar
+                          action={focusFromDate}
+                          from={selectedDayRange.from}
+                          to={selectedDayRange.to}
+                          setSelectedDayRange={setSelectedDayRange}
+                      />
+                  </div>
+              </div>
+              <div className="w-2/4">
+                  <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
+                  <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
+                      <div className="inline-flex flex-col items-center justify-center space-y-2">
+                      <div className="h-2 w-20 rounded" style={{backgroundColor: '#07816C'}} />
+                      <span>بازرسی‌های انجام شده</span>
+                      </div>
 
-                    <div className="inline-flex flex-col items-center justify-center space-y-2">
-                    <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
-                    <span>نیاز به بازرسی</span>
-                    </div>
-                </div>
-                </div>
-            </div>
+                      <div className="inline-flex flex-col items-center justify-center space-y-2">
+                      <div className="h-2 w-20 rounded" style={{backgroundColor: '#F3BC06'}} />
+                      <span>نیاز به بازرسی</span>
+                      </div>
+                  </div>
+                  </div>
+              </div>
             </div>
     
             {loading && (

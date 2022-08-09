@@ -88,4 +88,28 @@ instanceMockAdapter.onGet(/\/api\/v1\/inspection\/status/g)
 
     return [200, [...res]];
   });
+
+  instanceMockAdapter
+  // eslint-disable-next-line
+  .onGet(/\/api\/v1\/inspection\/done/g, {})
+  .reply(async () => {
+    let res: any[] = [];
+      await fetch(`${process.env.PUBLIC_URL}/assets/inspection-done.data.json`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then((response: any) => {
+          return response.json();
+        })
+        .then((data: any[]) => {
+          res = data;
+        })
+        .catch((err: any) => {
+          return [500, {error: err}];
+        });
+
+    return [200, [...res]];
+  });
   

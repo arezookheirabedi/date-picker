@@ -3,11 +3,11 @@ import React, {useEffect, useState} from 'react';
 import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
 //
-import DatePickerModal from '../../DatePickerModal';
-import Spinner from '../../Spinner';
-import Calendar from '../../Calendar';
-import HeadlessChart from '../HeadlessChart';
-import useGetOverviewAverageFlourOfInspectedUnits from '../../../hooks/apis/useGetOverviewAverageFlourOfInspectedUnits';
+import DatePickerModal from '../../../DatePickerModal';
+import Spinner from '../../../Spinner';
+import Calendar from '../../../Calendar';
+import HeadlessChart from '../../HeadlessChart';
+import useGetOverviewAverageFlourOfInspectedUnits from '../../../../hooks/apis/useGetOverviewAverageFlourOfInspectedUnits';
 
 const optionChart = {
   chart: {
@@ -29,13 +29,13 @@ const optionChart = {
           hover: {
             enabled: true,
             lineColor: '#fff',
-            lineWidth: 3,
+            lineWidth: 3
           },
         },
       },
       lineWidth: 2,
       threshold: null,
-      borderRadius: 2,
+      borderRadius: 4,
       states: {
         hover: {
           lineWidth: 1,
@@ -67,16 +67,8 @@ const optionChart = {
       fontFamily: 'inherit',
       fontSize: 10,
     },
-    borderWidth: 0,
-  },
-  series: [
-    {
-      lineWidth: 4,
-      dataLabels: {
-        // enabled: true,
-      },
-    },
-  ],
+    borderWidth: 0
+  }
 };
 
 const OverviewAverageFlourOfInspectedUnits: React.FC<{}> = () => {

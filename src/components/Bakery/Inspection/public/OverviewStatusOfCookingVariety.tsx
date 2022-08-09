@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
-import DatePickerModal from '../../DatePickerModal';
-import Calendar from '../../Calendar';
-import Charts from '../../Charts';
+import DatePickerModal from '../../../DatePickerModal';
+import Calendar from '../../../Calendar';
+import Charts from '../../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -40,12 +40,6 @@ const OverviewStatusOfCookingVariety = () => {
             // eslint-disable-next-line prefer-rest-params
             const ret = Highcharts.numberFormat.apply(0, arguments as any);
             return converters.fa(ret);
-          },
-          events: {
-            redraw: () => {
-              // eslint-disable-next-line
-              // console.log('redraw');
-            },
           },
         },
         title: {
@@ -99,9 +93,9 @@ const OverviewStatusOfCookingVariety = () => {
           title: {
             enabled: false,
           },
-        },
-        legend: {
-          enabled: false,
+          labels: {
+            format: '٪{text}',
+          },
         },
         xAxis: {
           categories: [],
@@ -121,7 +115,10 @@ const OverviewStatusOfCookingVariety = () => {
             fontSize: 10,
           },
           borderWidth: 0,
-        }
+        },
+        legend: {
+          enabled: false,
+        },
       }
 
       const dataset = {

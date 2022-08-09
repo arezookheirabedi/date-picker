@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import inspectionService from 'src/services/inspection.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
-export default function useGetRatioOfInspection(query: any) {
+export default function useGetOverviewOfInspectionsDone(query: any) {
     const [error, setError] = useState(null) as any;
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({});
@@ -17,31 +17,30 @@ export default function useGetRatioOfInspection(query: any) {
         setLoading(true);
         setError(null);
         try {
-          const response = await inspectionService.ratioOfInspection(params, {
+          const response = await inspectionService.inspectionDone(params, {
             cancelToken: cancelToken.token,
           });
-          const needToInspection: any[] = [];
+          
+          const date: any[] = [];
           const inspectionDone: any[] = [];
-          const grade: any[] = [];
           response.data.forEach((item: any) => {
-            needToInspection.push(item.needToInspection);
+            date.push(item.date);
             inspectionDone.push(item.inspectionDone);
-
-            grade.push(item.province);
           });
           const newData = [
             {
               name: 'بازرسی‌های انجام شده',
               data: [...inspectionDone],
-              color: '#07816C',
-            },
-            {
-              name: 'نیاز به بازرسی',
-              data: [...needToInspection],
-              color: '#F3BC06',
-            },
+              color: {
+                linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
+                stops: [
+                  [0, '#041E39'],
+                  [1, '#57687A'],
+                ],
+              },
+            }
           ];
-          setData({categories: [...grade], series: [...newData]});
+          setData({categories: [...date], series: [...newData]});
         } catch (err: any) {
             setError(err.message);
             console.log(err);
