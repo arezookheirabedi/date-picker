@@ -31,7 +31,6 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
         {cancelToken: cancelTokenendPoint.token}
       );
       const newData = res.data.content.map((roule: any) => ({key: roule.id, value: roule.name}));
-      debugger;
       setTags([...newData]);
     } catch (error: any) {
       console.log(error);
@@ -65,7 +64,10 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
       <div className="relative w-72">
         <Combobox value={selected} onChange={setSelected} multiple>
           <div className=" single-select">
-            <div className="focus:outline-none relative flex w-full cursor-default items-center overflow-hidden rounded-lg bg-white py-2 pl-2 pr-10 text-left shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm">
+            <div
+              className="focus:outline-none relative flex w-full cursor-default items-center overflow-hidden rounded-lg bg-white py-2 pl-2 pr-10 text-left
+             shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm"
+            >
               {selected && selected.length ? (
                 <ul>
                   {selected.map(tag => {
@@ -80,7 +82,7 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
                           type="button"
                           onClick={() => handleDeselectItem(tag)}
                         >
-                       <svg
+                          <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-5 w-5 transform rotate-45"
                             viewBox="0 0 20 20"
