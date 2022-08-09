@@ -10,7 +10,7 @@ const HiddenMobileNumber: React.FC<IProps> = ({value}) => {
 
   return (
     <>
-      <div className="flex justify-start items-center">
+      <div className="flex justify-center items-center">
         <input
           className="focus:outline-none"
           value={value}
