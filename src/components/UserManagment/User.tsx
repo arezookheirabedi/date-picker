@@ -253,6 +253,7 @@ export default function index() {
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">لیست کاربران</legend>
+        <SearchableMultiSelect endPoint={authenticationService.rolePermision} />
         <div className="mb-10 mt-6 flex items-center justify-between">
           <div className="align-center flex flex-grow justify-start px-8">
             <div className="relative inline-flex align-center leading-3 h-10 ml-4">
