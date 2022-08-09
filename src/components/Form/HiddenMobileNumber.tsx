@@ -12,7 +12,7 @@ const HiddenMobileNumber: React.FC<IProps> = ({value}) => {
     <>
       <div className="flex justify-center items-center">
         <input
-          className="focus:outline-none"
+          className={`${typeInputText ? 'text-cyan-400' : ''}focus:outline-none`}
           value={value}
           type={`${typeInputText ? 'text' : 'password'}`}
           readOnly
