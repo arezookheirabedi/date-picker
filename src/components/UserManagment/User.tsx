@@ -6,6 +6,7 @@ import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers
 import authenticationService from 'src/services/authentication.service';
 import guildService from 'src/services/guild.service';
 import HiddenMobileNumber from '../Form/HiddenMobileNumber';
+import SwitchToggleButton from '../Form/SwitchToggleButton';
 import RetryButton from '../RetryButton';
 import SearchableMultiSelect from '../SearchableMultiSelect.tsx';
 import Table from '../TableXHR';
@@ -43,7 +44,7 @@ export default function index() {
       fromReportDate: query.from,
       toReportDate: query.to,
     };
-    setLoading(true);
+    // setLoading(true);
     const Data = [
       {
         name: 'گین آساده',
@@ -54,6 +55,7 @@ export default function index() {
         accestance: 'مدیریت بازرسی و نظارت',
         role: 'بسیج',
         mobileNumber: '095746535',
+        activateStatus: true,
       },
     ];
     setDataSet([...Data]);
@@ -75,14 +77,14 @@ export default function index() {
 
       // setDataSet([...normalizedData]);
       // setTotalItems(data.totalElements);
-      setLoading(false);
+      // setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
-        setLoading(true);
+        // setLoading(true);
         return;
       }
       setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
+      // setLoading(false);
     }
   }
 
@@ -177,6 +179,15 @@ export default function index() {
                           'نامشخص'
                         )}
                       </span>
+                    ),
+                  },
+                  {
+                    name: 'وضعیت فعالیت',
+                    key: 'activateStatus',
+                    render: (v: any, record: any) => (
+                      // <div className="flex items-center justify-end">
+                      <SwitchToggleButton status={(record && record.activateStatus) || false} />
+                      // </div>
                     ),
                   },
                   {
