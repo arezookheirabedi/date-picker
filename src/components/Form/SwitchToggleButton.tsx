@@ -19,7 +19,11 @@ const SwitchToggleButton: React.FC<IProps> = ({status}) => {
       <Switch
         checked={enabled}
         onChange={deactiveUser}
-        className={` relative inline-flex h-8 w-20 items-center rounded-full  shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300    `}
+        className={`${
+          enabled
+            ? 'shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300  '
+            : ' bg-gray-100'
+        } relative inline-flex h-8 w-20 items-center rounded-full     `}
       >
         <span
           className={`${
@@ -28,7 +32,7 @@ const SwitchToggleButton: React.FC<IProps> = ({status}) => {
         />
         <span
           className={`${
-            enabled ? '-translate-x-1' : '-translate-x-2'
+            enabled ? '-translate-x-1 text-gray-900' : '-translate-x-2 text-gray-400'
           } inline-block h-4 w-8 transform sm:text-sm `}
         >
           {enabled ? 'فعال' : 'غیرفعال'}
