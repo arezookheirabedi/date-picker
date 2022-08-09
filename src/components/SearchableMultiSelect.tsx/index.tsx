@@ -4,6 +4,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+// import Add from 'src/assets/images/icons/loading.svg';
 // import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 interface ITag {
   key: number | string | null;
@@ -30,6 +31,7 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
         {pageNumber: 0, pageSize: 1000},
         {cancelToken: cancelTokenendPoint.token}
       );
+      /* should add role.title */
       const newData = res.data.content.map((roule: any) => ({key: roule.id, value: roule.name}));
       setTags([...newData]);
     } catch (error: any) {
@@ -52,6 +54,7 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
           return tag.value.toLowerCase().includes(query.toLowerCase());
         });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDeselectItem = (tag: ITag) => {
     const personIndex = selected.findIndex(i => i.key === tag.key);
     const newList: Array<ITag> = selected.filter(p => {
@@ -68,7 +71,21 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
               className="focus:outline-none relative flex w-full cursor-default items-center overflow-hidden rounded-lg bg-white py-2 pl-2 pr-10 text-left
              shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm"
             >
-              {selected && selected.length ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              {/* {selected && selected.length ? (
                 <ul>
                   {selected.map(tag => {
                     return (
@@ -114,7 +131,7 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                   />
                 </svg>
-              )}
+              )} */}
               <Combobox.Input
                 placeholder={selected && selected.length > 0 ? '' : 'انتخاب کنید'}
                 className="focus:outline-none inline-block border-none pr-1 text-sm leading-5 text-gray-900 focus:ring-0"
@@ -177,6 +194,38 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
             </Transition>
           </div>
         </Combobox>
+      </div>
+      <div className="flex flex-col items-center  rounded-lg w-full py-2 shadow rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm ">
+        <ul>
+          {selected.map(tag => {
+            return (
+              <li
+                className="bg-gray-200 text-gray-500 rounded text-xs border border-gray-300 flex items-center space-x-1 divide-x divide-gray-300"
+                key={tag.key}
+              >
+                <span className="py-0.5 px-1">{tag.key}</span>
+                <button
+                  className="p-0.5 hover:bg-red-100"
+                  type="button"
+                  onClick={() => handleDeselectItem(tag)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 transform rotate-45"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );
