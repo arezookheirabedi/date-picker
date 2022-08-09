@@ -2,20 +2,20 @@ import React, {useState, useEffect} from 'react';
 
 // api services
 import axios from 'axios';
-import inspectionService from '../../../services/inspection.service';
+import inspectionService from '../../../../services/inspection.service';
 
 // components
-import Statistic from '../../../containers/Guild/components/Statistic';
+import Statistic from '../../../../containers/Guild/components/Statistic';
 
 // images
-import flourInspectionIcon from '../../../assets/images/icons/flour-inspection.svg';
-import groupIcon from '../../../assets/images/icons/all-group.svg';
-import ovenIcon from '../../../assets/images/icons/oven.svg';
-import ovenDeactiveIcon from '../../../assets/images/icons/oven-deactive.svg';
-import bakeryWorkerIcon from '../../../assets/images/icons/bakery-worker.svg';
-import wheatIcon from '../../../assets/images/icons/wheat.svg';
-import breadIcon from '../../../assets/images/icons/bread.svg';
-import ovenInspectionIcon from '../../../assets/images/icons/oven-inspection.svg';
+import flourInspectionIcon from '../../../../assets/images/icons/flour-inspection.svg';
+import groupIcon from '../../../../assets/images/icons/all-group.svg';
+import ovenIcon from '../../../../assets/images/icons/oven.svg';
+import ovenDeactiveIcon from '../../../../assets/images/icons/oven-deactive.svg';
+import bakeryWorkerIcon from '../../../../assets/images/icons/bakery-worker.svg';
+import wheatIcon from '../../../../assets/images/icons/wheat.svg';
+import breadIcon from '../../../../assets/images/icons/bread.svg';
+import ovenInspectionIcon from '../../../../assets/images/icons/oven-inspection.svg';
 
 const initialinspections = {
   totalNumberOfInspectionsPerformed : 0,

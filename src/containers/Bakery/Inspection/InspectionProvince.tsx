@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OverviewInspectionProvince from 'src/components/Inspection/province/OverviewInspectionProvince';
+import OverviewInspectionProvince from 'src/components/Bakery/Inspection/province/OverviewInspectionProvince';
 
 const InspectionProvince = () => {
   return (
