@@ -7,7 +7,7 @@ interface IProps {
   resetIsOpen: boolean;
   setResetIsOpen: (data: boolean) => void;
 }
-const ResendPasswordModal: React.FC<IProps> = ({resetIsOpen, setResetIsOpen}) => {
+const ResetPasswordModal: React.FC<IProps> = ({resetIsOpen, setResetIsOpen}) => {
   const [confirmOtpModal, setConfirmOtpModal] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>({});
 
@@ -27,4 +27,4 @@ const ResendPasswordModal: React.FC<IProps> = ({resetIsOpen, setResetIsOpen}) =>
     </>
   );
 };
-export default ResendPasswordModal;
+export default ResetPasswordModal;
