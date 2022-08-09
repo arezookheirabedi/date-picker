@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
+import userManagment from 'src/assets/images/logos/avatar.svg';
 import dashboardIcon from '../assets/images/icons/dashboard.svg';
 import dashboardActiveIcon from '../assets/images/icons/dashboard-active.svg';
 import inspector from '../assets/images/icons/inspectors.svg';
@@ -26,6 +27,7 @@ import reportsRequestedIcon from '../assets/images/icons/reports-requested.svg';
 import reportsRequestedActiveIcon from '../assets/images/icons/reports-requested-active.svg';
 import reportsFlourIcon from '../assets/images/icons/reports-flour.svg';
 import passwordResetIcon from '../assets/images/icons/password-reset-active.svg';
+// import passwordResetIcon from '../assets/images/icons/reset-pass.svg';
 import reportsFlourActiveIcon from '../assets/images/icons/reports-flour-active.svg';
 import exitIcon from '../assets/images/icons/exit.svg';
 import exitActiveIcon from '../assets/images/icons/exit-active.svg';
@@ -37,6 +39,12 @@ const icons = [
     icon: dashboardIcon,
     disableIcon: dashboardIcon,
     activeIcon: dashboardActiveIcon,
+  },
+  {
+    name: 'userManagment',
+    icon: userManagment,
+    disableIcon: userManagment,
+    activeIcon: userManagment,
   },
   {
     name: 'citizenship',
@@ -113,7 +121,10 @@ const icons = [
   },
   {name: 'exit', icon: exitIcon, disableIcon: exitIcon, activeIcon: exitActiveIcon},
   {
-    name: 'flag', icon: flagIcon, disableIcon: flagIcon, activeIcon: flagIcon,
+    name: 'flag',
+    icon: flagIcon,
+    disableIcon: flagIcon,
+    activeIcon: flagIcon,
   },
 ];
 
@@ -140,7 +151,7 @@ const IconWrapper: React.FC<IProps> = props => {
   else if (active) icon = item.activeIcon;
 
   // @ts-ignore
-  return <img {...rest} className={className} src={icon} alt=""/>;
+  return <img {...rest} className={className} src={icon} alt="" />;
 };
 
 export default IconWrapper;
