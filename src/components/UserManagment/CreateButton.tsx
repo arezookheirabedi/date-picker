@@ -3,40 +3,158 @@ import {Dialog, Transition} from '@headlessui/react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-// import toast from 'cogo-toast';
-import {changeDigitToEnglish} from 'src/helpers/utils';
-import AppRegex from 'src/helpers/regex';
-// import authenticateService from 'src/services/authentication.service';
-import eyes from 'src/assets/images/icons/eye_icon.svg';
-// import {EERRORS} from 'src/constants/errors.enum';
-import DotLoading from '../Loading/DotLoading';
 
+// import toast from 'cogo-toast';
+// import authenticateService from 'src/services/authentication.service';
+import plusIcon from '../../assets/images/icons/plus.svg';
+// import {EERRORS} from 'src/constants/errors.enum';
+// import DotLoading from '../Loading/DotLoading';
+import SingleSelectInModal from '../Select2/SingleSelectInModal';
+
+const provinceOptions = [
+  {
+    value: 'آذربایجان شرقی',
+    title: 'آذربایجان شرقی',
+  },
+  {
+    value: 'آذربایجان غربی',
+    title: 'آذربایجان غربی',
+  },
+  {
+    value: 'اردبیل',
+    title: 'اردبیل',
+  },
+  {
+    value: 'اصفهان',
+    title: 'اصفهان',
+  },
+  {
+    value: 'البرز',
+    title: 'البرز',
+  },
+  {
+    value: 'ایلام',
+    title: 'ایلام',
+  },
+  {
+    value: 'بوشهر',
+    title: 'بوشهر',
+  },
+  {
+    value: 'تهران',
+    title: 'تهران',
+  },
+  {
+    value: 'خراسان جنوبی',
+    title: 'خراسان جنوبی',
+  },
+  {
+    value: 'خراسان رضوی',
+    title: 'خراسان رضوی',
+  },
+  {
+    value: 'خراسان شمالی',
+    title: 'خراسان شمالی',
+  },
+  {
+    value: 'خوزستان',
+    title: 'خوزستان',
+  },
+  {
+    value: 'زنجان',
+    title: 'زنجان',
+  },
+  {
+    value: 'سمنان',
+    title: 'سمنان',
+  },
+  {
+    value: 'سیستان و بلوچستان',
+    title: 'سیستان و بلوچستان',
+  },
+  {
+    value: 'فارس',
+    title: 'فارس',
+  },
+  {
+    value: 'قزوین',
+    title: 'قزوین',
+  },
+  {
+    value: 'قم',
+    title: 'قم',
+  },
+  {
+    value: 'کردستان',
+    title: 'کردستان',
+  },
+  {
+    value: 'کرمان',
+    title: 'کرمان',
+  },
+  {
+    value: 'کرمانشاه',
+    title: 'کرمانشاه',
+  },
+  {
+    value: 'کهگیلویه وبویراحمد',
+    title: 'کهگیلویه وبویراحمد',
+  },
+  {
+    value: 'گلستان',
+    title: 'گلستان',
+  },
+  {
+    value: 'گیلان',
+    title: 'گیلان',
+  },
+  {
+    value: 'لرستان',
+    title: 'لرستان',
+  },
+  {
+    value: 'مازندران',
+    title: 'مازندران',
+  },
+  {
+    value: 'مرکزی',
+    title: 'مرکزی',
+  },
+  {
+    value: 'هرمزگان',
+    title: 'هرمزگان',
+  },
+  {
+    value: 'همدان',
+    title: 'همدان',
+  },
+  {
+    value: 'یزد',
+    title: 'یزد',
+  },
+  {
+    value: 'چهارمحال و بختیاری',
+    title: 'چهارمحال و بختیاری',
+  },
+];
+
+interface IProps {
+  actionType?: any;
+}
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CreateButton: React.FC<{}> = () => {
+const CreateButton: React.FC<IProps> = ({actionType}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
-  const [typeInputText, setTypeInputText] = useState(false);
 
-  const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string().required('وارد کردن پسورد قبلی الزامی است.'),
-    newPassword: Yup.string()
-      .required('وارد کردن پسورد الزامی است.')
-      .matches(AppRegex.password, 'حداقل کلمه عبور ۸ کارکتر می باشد.'),
-    confirmPassword: Yup.string()
-      .required('تکرار کلمه عبور الزامی است.')
-      .oneOf([Yup.ref('newPassword')], 'تکرار کلمه عبور اشتیاه است.'),
-    mobileNumber: Yup.string().matches(
-      AppRegex.mobileIran,
-      'موبایل خود را با فرمت صحیح وارد نمایید'
-    ),
-  });
+  const validationSchema = Yup.object().shape({});
   const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     register,
     handleSubmit,
     reset,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formState: {errors},
-    setValue,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setError,
   } = useForm<any>({
@@ -63,7 +181,8 @@ const CreateButton: React.FC<{}> = () => {
         onClick={openModal}
         className="button button--primary flex space-x-2 px-5 rtl:space-x-reverse"
       >
-        <span> افزودن کاربر جدید</span>
+        <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
+        اضافه کردن بازرس جدید
       </button>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
@@ -95,172 +214,132 @@ const CreateButton: React.FC<{}> = () => {
             >
               <div className="relative my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
                 <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
+                  <h5 className="text-3xl font-black">
+                    {actionType === 'add' && ' افزودن کاربر جدید'}
+                    {actionType === 'update' && 'ویرایش اطلاعات'}
+                  </h5>
+                </Dialog.Title>
+                {/* form start */}
+                <div>
                   <form
                     className="p-5 text-base"
                     onSubmit={handleSubmit(onSubmit)}
                     autoComplete="off"
                   >
-                    <h1 className="text-3xl font-black"> افزودن کاربر جدید</h1>
-
-                    <div className="mt-10 flex flex-col">
-                      <div>
+                    <div className="w-full flex px-8 mb-6">
+                      <div className="u-width-47">
                         <label
-                          htmlFor="oldPassword"
-                          className="ltr   block font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']"
+                          htmlFor="full-name"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
                         >
-                          کلمه عبور قبلی
+                          نام و نام خانوادگی
                         </label>
-                        <div className="mt-1">
-                          <input
-                            autoComplete="off"
-                            type="text"
-                            id="oldPassword"
-                            aria-invalid={!!errors.oldPassword}
-                            placeholder="کلمه عبور قبلی"
-                            {...register('oldPassword')}
-                            className={`ltr  placeholder-rtl focus:outline-none block w-full rounded-md border border-gray-300 bg-white  px-3 py-2 placeholder-gray-400 shadow-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm ${
-                              errors.oldPassword
-                                ? 'border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500'
-                                : ''
-                            } disabled:shadow-none`}
-                          />
-                        </div>
-                        <p
-                          className={`mt-2 ${
-                            errors.oldPassword ? 'visible' : 'invisible'
-                          } text-xs text-red-600`}
-                        >
-                          {errors.oldPassword?.message}
-                        </p>
+                        <input
+                          id="full-name"
+                          type="text"
+                          className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"
+                        />
                       </div>
-                      <div className="mt-6">
+                      <div className="u-width-47 mr-auto">
                         <label
-                          htmlFor="newPassword"
-                          className="ltr block font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']"
+                          htmlFor="national-code"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
                         >
-                          کلمه عبور جدید
+                          کدملی
                         </label>
-                        <div className="relative mt-1">
-                          <input
-                            type={`${typeInputText ? 'text' : 'password'}`}
-                            autoComplete="off"
-                            id="newPassword"
-                            aria-invalid={!!errors.newPassword}
-                            {...register('newPassword')}
-                            className={`ltr  placeholder-rtl  focus:outline-none block w-full rounded-md border border-gray-300 bg-white  px-3 py-2 placeholder-gray-400 shadow-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm ${
-                              errors.newPassword
-                                ? 'border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500'
-                                : ''
-                            } disabled:shadow-none`}
-                          />
-                          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-                          <img
-                            style={{
-                              position: 'absolute',
-                              width: '20px',
-                              right: '9px',
-                              bottom: '3px',
-                              height: '38px',
-                              display: 'flex',
-                              justifyContent: 'space-evenly',
-                              alignItems: 'center',
-                            }}
-                            src={eyes}
-                            alt=""
-                            onClick={() => setTypeInputText(!typeInputText)}
-                          />
-                        </div>
-                        <p
-                          className={`mt-2 ${
-                            errors.newPassword ? 'visible' : 'invisible'
-                          } text-xs text-red-600`}
-                        >
-                          {errors.newPassword?.message}
-                        </p>
-                      </div>
-                      <div className="mt-6">
-                        <label
-                          htmlFor="confirmPassword"
-                          className="block font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']"
-                        >
-                          تکرار کلمه عبور جدید
-                        </label>
-                        <div className="mt-1">
-                          <input
-                            autoComplete="off"
-                            type="password"
-                            id="confirmPassword"
-                            aria-invalid={!!errors.confirmPassword}
-                            {...register('confirmPassword')}
-                            className={`ltr placeholder-rtl  focus:outline-none block w-full rounded-md border border-gray-300 bg-white  px-3 py-2 placeholder-gray-400 shadow-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm ${
-                              errors.confirmPassword
-                                ? 'border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500'
-                                : ''
-                            } disabled:shadow-none`}
-                          />
-                        </div>
-                        <p
-                          className={`mt-2 ${
-                            errors.confirmPassword ? 'visible' : 'invisible'
-                          } text-xs text-red-600`}
-                        >
-                          {errors.confirmPassword?.message}
-                        </p>
-                      </div>
-                      <div className="mt-6">
-                        <label
-                          htmlFor="mobileNumber"
-                          className="block font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']"
-                        >
-                          شماره تلفن همراه
-                        </label>
-                        <div className="mt-1">
-                          <input
-                            autoComplete="off"
-                            onKeyPress={event => changeDigitToEnglish(event, setValue)}
-                            type="text"
-                            id="mobileNumber"
-                            placeholder="0مثال: 9377070000"
-                            {...register('mobileNumber')}
-                            aria-invalid={!!errors.mobileNumber}
-                            className={`ltr placeholder-rtl focus:outline-none block w-full rounded-md border border-gray-300 bg-white px-3 py-2 placeholder-gray-400 shadow-sm focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm ${
-                              errors.mobileNumber
-                                ? 'border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500'
-                                : ''
-                            } focus-visible disabled:shadow-none`}
-                          />
-                        </div>
-                        <p
-                          className={`mt-2 ${
-                            errors.mobileNumber ? 'visible' : 'invisible'
-                          } text-xs text-red-600`}
-                        >
-                          {errors.mobileNumber?.message}
-                        </p>
+                        <input
+                          id="national-code"
+                          className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"
+                          type="text"
+                        />
                       </div>
                     </div>
-                    <div className="mt-6">
-                      <div className="flex flex-col items-center justify-center">
-                        <div className="mb-6 flex justify-center space-x-2 rtl:space-x-reverse">
-                          <button
-                            type="submit"
-                            className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
-                          >
-                            <span>{!loading ? 'تایید' : <DotLoading />}</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={closeModal}
-                            className="flex items-center justify-center rounded border border-gray-900 bg-white px-12 py-2 text-sm text-gray-900"
-                          >
-                            <span>انصراف</span>
-                          </button>
-                        </div>
+                    <div className="w-full flex px-8 mb-6">
+                      <div className="u-width-47">
+                        <label
+                          htmlFor="full-name"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          شماره موبایل
+                        </label>
+                        <input
+                          id="full-name"
+                          type="text"
+                          className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"
+                        />
+                      </div>
+                      <div className="u-width-47 mr-auto">
+                        <label
+                          htmlFor="national-code"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          کدپرسنلی
+                        </label>
+                        <input
+                          id="national-code"
+                          className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full flex px-8 mb-6">
+                      <div className="u-width-47">
+                        <label
+                          htmlFor="full-name"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          پست سازمانی
+                        </label>
+                        {/* <SimpleSelect options={provinceOptions} defaultOption='تهران'/> */}
+                        <SingleSelectInModal options={provinceOptions} />
+                        {/* <input id="full-name" type="text" */}
+                        {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
+                      </div>
+                      <div className="u-width-47 mr-auto">
+                        <label
+                          htmlFor="national-code"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          سازمان محل خدمت
+                        </label>
+                        <SingleSelectInModal options={provinceOptions} />
+                        {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
+                        {/*       type="text"/> */}
+                      </div>
+                    </div>
+                    <div className="w-full flex px-8 mb-12">
+                      <div className="u-width-47">
+                        <label
+                          htmlFor="full-name"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          استان
+                        </label>
+                        <SingleSelectInModal options={provinceOptions} />
+                        {/* <input id="full-name" type="text" */}
+                        {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
+                      </div>
+                      <div className="u-width-47 mr-auto">
+                        <label
+                          htmlFor="national-code"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          شهر
+                        </label>
+                        <SingleSelectInModal options={provinceOptions} />
+                        {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
+                        {/*       type="text"/> */}
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      <div className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52">
+                        {actionType === 'add' && 'ثبت بازرس'}
+                        {actionType === 'update' && 'ثبت اطلاعات'}
                       </div>
                     </div>
                   </form>
-                </Dialog.Title>
+                </div>
+                {/* form end */}
 
                 <button
                   type="button"
