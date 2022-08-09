@@ -21,7 +21,7 @@ const SwitchToggleButton: React.FC<IProps> = ({status}) => {
         onChange={deactiveUser}
         className={`${
           enabled
-            ? 'shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300  '
+            ? 'shadow focus-visible:ring-2 focus-visible:ring-gray focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300  '
             : ' bg-gray-100'
         } relative inline-flex h-8 w-20 items-center rounded-full     `}
       >
