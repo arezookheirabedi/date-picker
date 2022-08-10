@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import axios from "axios";
 import inspectionService from '../../services/inspection.service';
 
-export default function useOverviewListOfInspections() {
+export default function useGetOverviewListOfInspections() {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any>([]);
   const [filteredDataset, setFilteredDataset] = useState<any>([]);

@@ -8,12 +8,17 @@ import Spinner from '../../../Spinner';
 import {sidesCities} from '../../../../helpers/utils';
 //
 import nonActivityIcon from '../../../../assets/images/icons/non-activity.svg';
+import activityIcon from '../../../../assets/images/icons/activity.svg';
+import listPriceDeactiveIcon from '../../../../assets/images/icons/list-price-deactive.svg';
 import listPriceIcon from '../../../../assets/images/icons/list-price.svg';
+import businessLicenseDeactiveIcon from '../../../../assets/images/icons/business-license-deactive.svg';
 import businessLicenseIcon from '../../../../assets/images/icons/business-license.svg';
+import posDeviceDeactiveIcon from '../../../../assets/images/icons/pos-device-deactive.svg';
 import posDeviceIcon from '../../../../assets/images/icons/pos-device.svg';
+import unapprovedPriceDeactiveIcon from '../../../../assets/images/icons/unapproved-price-deactive.svg';
 import unapprovedPriceIcon from '../../../../assets/images/icons/unapproved-price.svg';
 //
-import useOverviewListOfInspections from "../../../../hooks/apis/useOverviewListOfInspections";
+import useGetOverviewListOfInspections from "../../../../hooks/apis/useGetOverviewListOfInspections";
 
 const OverviewListOfInspections: React.FC<{}> = () => {
     const [inactivity, setInactivity] = useState<any>(false);
@@ -24,7 +29,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
     const [query, setQuery] = useState<string>("");
     const [serviceType, setServiceType] = useState(null) as any;
 
-    const {loading, list: dataset, count, setCount, filteredDataset, setFilteredDataset} = useOverviewListOfInspections();
+    const {loading, list: dataset, count, setCount, filteredDataset, setFilteredDataset} = useGetOverviewListOfInspections();
 
       const filteredList = useCallback(() => {
         let temp = [...dataset];
@@ -65,7 +70,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                     disabled={loading}
                     onChange={setInactivity}
                     defaultIcon={nonActivityIcon}
-                    activeIcon={nonActivityIcon}
+                    activeIcon={activityIcon}
                     showCheckedIcon
                 />
                 <ButtonToggle
@@ -74,7 +79,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                     selected={listPrice}
                     disabled={loading}
                     onChange={setListPrice}
-                    defaultIcon={listPriceIcon}
+                    defaultIcon={listPriceDeactiveIcon}
                     activeIcon={listPriceIcon}
                     showCheckedIcon
                 />
@@ -84,7 +89,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                     selected={businessLicense}
                     disabled={loading}
                     onChange={setBusinessLicense}
-                    defaultIcon={businessLicenseIcon}
+                    defaultIcon={businessLicenseDeactiveIcon}
                     activeIcon={businessLicenseIcon}
                     showCheckedIcon
                 />
@@ -96,7 +101,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                     title="عدم استفاده از کارتخوان ثبت شده در سامانه"
                     selected={registeredPosDevice}
                     onChange={setRegisteredPosDevice}
-                    defaultIcon={posDeviceIcon}
+                    defaultIcon={posDeviceDeactiveIcon}
                     activeIcon={posDeviceIcon}
                     showCheckedIcon
                 />
@@ -105,7 +110,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                     title="عرضه نان به قیمت غیر مصوب"
                     selected={unapprovedPrice}
                     onChange={setUnapprovedPrice}
-                    defaultIcon={unapprovedPriceIcon}
+                    defaultIcon={unapprovedPriceDeactiveIcon}
                     activeIcon={unapprovedPriceIcon}
                     showCheckedIcon
                 />
@@ -224,7 +229,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                                     {record.listPrice ? (
                                     <div className="w-4 h-4">
                                         <img className="w-4 h-4" 
-                                        src={listPriceIcon} 
+                                        src={listPriceDeactiveIcon} 
                                         alt="عدم نصب نرخ نامه" />
                                     </div>
                                     ) : (
@@ -234,7 +239,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                                     <div className="w-4 h-4">
                                         <img
                                             className="w-4 h-4"
-                                            src={businessLicenseIcon}
+                                            src={businessLicenseDeactiveIcon}
                                             alt="عدم نصب پروانه کسب"
                                         />
                                     </div>
@@ -245,7 +250,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                                     <div className="w-4 h-4">
                                         <img
                                             className="w-4 h-4"
-                                            src={posDeviceIcon}
+                                            src={posDeviceDeactiveIcon}
                                             alt="عدم استفاده از کارتخوان ثبت شده در سامانه"
                                         />
                                     </div>
@@ -256,7 +261,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                                     <div className="w-4 h-4">
                                         <img
                                             className="w-4 h-4"
-                                            src={unapprovedPriceIcon}
+                                            src={unapprovedPriceDeactiveIcon}
                                             alt="عرضه نان به قیمت غیر مصوب"
                                         />
                                     </div>
