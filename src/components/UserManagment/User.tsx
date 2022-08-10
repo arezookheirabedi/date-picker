@@ -1,21 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useRef, useState} from 'react';
 import {EERRORS} from 'src/constants/errors.enum';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
 // import authenticationService from 'src/services/authentication.service';
 import guildService from 'src/services/guild.service';
+import authenticationService from 'src/services/authentication.service';
 import HiddenMobileNumber from '../Form/HiddenMobileNumber';
 import SwitchToggleButton from '../Form/SwitchToggleButton';
 import RetryButton from '../RetryButton';
 // import SearchableMultiSelect from '../SearchableMultiSelect.tsx';
 import Table from '../TableXHR';
 import plusIcon from '../../assets/images/icons/plus.svg';
-
 import Actions from './TableAction';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
 import PendingIcon from '../../assets/images/icons/pending.svg';
 import SimpleSelect from '../Select2/SimpleSelect';
-
 import EditOrAddUser from './TableAction/EditOrAddComponent';
 
 const pageSize = 10;
@@ -158,69 +158,65 @@ export default function User() {
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
-    from: null,
-    to: null,
+    province: null,
     currentPage: 1,
     retry: false,
     sort: 'DESC',
     sortKey: ['reportStatus'].join(','),
     pageSize,
   });
+
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, from, to, ...params}: any) {
+  async function fetchReports({retry, ...params}: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
-      fromReportDate: query.from,
-      toReportDate: query.to,
     };
-    // setLoading(true);
-    const Data = [
-      {
-        name: 'گین آساده',
-        province: 'تهران',
-        city: 'تهران',
-        nationalId: '۰۰۱۶۶۱۹۶۰۹',
-        userName: '۸۰۴۵۰',
-        accestance: 'مدیریت بازرسی و نظارت',
-        role: 'بسیج',
-        mobileNumber: '095746535',
-        activateStatus: true,
-      },
-    ];
-    setDataSet([...Data]);
+    setLoading(true);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await guildService.guildReportoverviewStatus(newData, {
+      const {data} = await authenticationService.users(newData, {
         cancelToken: cancelToken.token,
       });
-      // const normalizedData: any[] = [];
-      // Data.forEach((item: any) => {
-      //   normalizedData.push({
-      //     id: item.id,
-      //     reportName: item.reportName,
-      //     requestDateTime: item.requestDateTime,
-      //     lastModifiedDate: item.lastModifiedDate,
-      //     trackingCode: item.trackingCode,
-      //     reportStatus: item.reportStatus,
-      //   });
-      // });
 
-      // setDataSet([...normalizedData]);
-      // setTotalItems(data.totalElements);
-      // setLoading(false);
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any) => {
+        normalizedData.push({
+          name: 'گین آساده',
+          province: 'تهران',
+          city: 'تهران',
+          nationalId: '۰۰۱۶۶۱۹۶۰۹',
+          userName: '۸۰۴۵۰',
+          accestance: 'مدیریت بازرسی و نظارت',
+          role: 'بسیج',
+          mobileNumber: '095746535',
+          activateStatus: true,
+
+          // id: item.id,
+          // name: (item.firstName || '-') + (item.lastName || '-'),
+          // province: item.province || '-',
+          // accestance: item.roles[0],
+          // mobileNumber: item.mobileSet,
+          // activateStatus: item.loked,
+          // city: item.city,
+          // username: item.userName,
+        });
+      });
+
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+      setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
-        // setLoading(true);
+        setLoading(true);
         return;
       }
       setErrorMessage(err.message || EERRORS.ERROR_500);
-      // setLoading(false);
+      setLoading(false);
     }
   }
 
@@ -282,9 +278,19 @@ export default function User() {
                 className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom"
               />
             </div>
-
-            <SimpleSelect options={provinceOptions} defaultOption="تهران" />
-            <SimpleSelect options={statusOption} />
+            <SimpleSelect
+              setQueryParams={setQuery}
+              queryParams={query}
+              objectKey="province"
+              options={provinceOptions}
+              defaultOption="تهران"
+            />
+            <SimpleSelect
+              queryParams={query}
+              options={statusOption}
+              setQueryParams={setQuery}
+              objectKey="province"
+            />
           </div>
           <div className="w-1/4">
             <div
@@ -298,7 +304,7 @@ export default function User() {
         </div>
       </div>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">لیست کاربران</legend>
+        <legend className="text-black mx-auto px-3">لیست کاربران پنل وزارت کشور</legend>
 
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
           {errorMessage && !loading ? (
@@ -355,10 +361,6 @@ export default function User() {
                   {
                     name: 'سطوح دسترسی کاربری',
                     key: 'accestance',
-                  },
-                  {
-                    name: 'نقش کاربر',
-                    key: 'role',
                   },
 
                   {

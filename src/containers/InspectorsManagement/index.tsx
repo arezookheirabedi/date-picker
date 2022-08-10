@@ -8,7 +8,7 @@ import {EERRORS} from 'src/constants/errors.enum';
 import guildService from 'src/services/guild.service';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
 import plusIcon from '../../assets/images/icons/plus.svg';
-import SimpleSelect from '../../components/Select2/SimpleSelect';
+// import SimpleSelect from '../../components/Select2/SimpleSelect';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
 import PendingIcon from '../../assets/images/icons/pending.svg';
@@ -331,9 +331,9 @@ export default function Inspectors() {
                 className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom"
               />
             </div>
-
+            {/* 
             <SimpleSelect options={provinceOptions} defaultOption="تهران" />
-            <SimpleSelect options={statusOption} />
+            <SimpleSelect options={statusOption} /> */}
           </div>
           <div className="w-1/4">
             <div
