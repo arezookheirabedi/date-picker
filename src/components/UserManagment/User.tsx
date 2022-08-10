@@ -251,11 +251,10 @@ export default function index() {
     <>
       {/* <SearchableMultiSelect endPoint={authenticationService.rolePermision} /> */}
 
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">لیست کاربران</legend>
-        <SearchableMultiSelect endPoint={authenticationService.rolePermision} />
-        <div className="mb-10 mt-6 flex items-center justify-between">
-          <div className="align-center flex flex-grow justify-start px-8">
+      <>
+        {/* <SearchableMultiSelect endPoint={authenticationService.rolePermision} /> */}
+        <div className="mb-8 mt-6 flex items-center justify-between">
+          <div className="align-center flex flex-grow justify-start">
             <div className="relative inline-flex align-center leading-3 h-10 ml-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +273,7 @@ export default function index() {
               <input
                 type="text"
                 placeholder="جستجوی کدملی، موبایل"
-                className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom"
+                className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom ml-4"
               />
 
               <SimpleSelect options={provinceOptions} defaultOption="تهران" />
@@ -285,6 +284,10 @@ export default function index() {
             <CreateButton actionType="add" />
           </div>
         </div>
+      </>
+      <fieldset className="text-center border rounded-xl p-4 mb-16">
+        <legend className="text-black mx-auto px-3">لیست کاربران</legend>
+
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
           {errorMessage && !loading ? (
             <div className="p-40">
