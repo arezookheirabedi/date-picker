@@ -10,7 +10,7 @@ import ResetPasswordModal from 'src/components/Layout/Private/components/ResetPa
 import ActionButton from './ActionButton';
 import Delete from '../../Modal/DeleteModal';
 import {ActionList, IActionList} from './ActionList';
-import Edit from './Edit';
+import EditOrAddUser from './EditOrAddComponent';
 
 interface IProps {
   item: any;
@@ -135,7 +135,13 @@ const Actions: React.FC<IProps> = ({item}) => {
         closeModal={() => closeModal(EACTIONTABLE.DELETE)}
         endPoint={() => console.log('helooo')}
       />
-      <Edit userData={item} isOpen={modals.EDIT} closeModal={() => closeModal(EACTIONTABLE.EDIT)} />
+      <EditOrAddUser
+        userData={item}
+        isOpen={modals.EDIT}
+        closeModal={() => closeModal(EACTIONTABLE.EDIT)}
+        actionType="update"
+        actionTitle="کاربر"
+      />
       <ResetPasswordModal
         resetIsOpen={modals.RESET_PASS}
         setResetIsOpen={() => closeModal(EACTIONTABLE.RESET_PASS)}

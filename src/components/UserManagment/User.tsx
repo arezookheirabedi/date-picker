@@ -8,12 +8,15 @@ import SwitchToggleButton from '../Form/SwitchToggleButton';
 import RetryButton from '../RetryButton';
 // import SearchableMultiSelect from '../SearchableMultiSelect.tsx';
 import Table from '../TableXHR';
-import CreateButton from './CreateButton';
+import plusIcon from '../../assets/images/icons/plus.svg';
+
 import Actions from './TableAction';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
 import PendingIcon from '../../assets/images/icons/pending.svg';
 import SimpleSelect from '../Select2/SimpleSelect';
+
+import EditOrAddUser from './TableAction/EditOrAddComponent';
 
 const pageSize = 10;
 const provinceOptions = [
@@ -146,6 +149,7 @@ const provinceOptions = [
 export default function User() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
@@ -249,10 +253,12 @@ export default function User() {
       icon: <img src={PendingIcon} alt="confirm" />,
     },
   ];
+  const openModal: () => void = () => {
+    setShowModal(true);
+  };
   return (
     <>
       {/* <SearchableMultiSelect endPoint={authenticationService.rolePermision} /> */}
-
       <>
         {/* <SearchableMultiSelect endPoint={authenticationService.rolePermision} /> */}
         <div className="mb-8 mt-6 flex items-center justify-between">
@@ -283,7 +289,13 @@ export default function User() {
             </div>
           </div>
           <div className="w-1/5">
-            <CreateButton actionType="add" />
+            <div
+              className="button button--primary px-5 justify-start sm:w-full sm:text-xs sm:px-0 sm:justify-center md:text-sm 2xl:w-4/6 xl:w-full mx-auto"
+              onClick={() => openModal()}
+            >
+              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
+              اضافه کردن کاربر جدید
+            </div>
           </div>
         </div>
       </>
@@ -388,6 +400,12 @@ export default function User() {
           )}
         </div>
       </fieldset>
+      <EditOrAddUser
+        isOpen={showModal}
+        closeModal={() => setShowModal(false)}
+        actionType="add"
+        actionTitle="کاربر"
+      />
     </>
   );
 }

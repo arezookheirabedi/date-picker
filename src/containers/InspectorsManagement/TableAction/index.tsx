@@ -11,7 +11,7 @@ import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
 import ActionButton from './ActionButton';
 import Confirm from '../../../components/Modal/DeleteModal';
 import {ActionList, IActionList} from './ActionList';
-import Edit from './Edit';
+import AddOrUpdateInseptor from '../../../components/UserManagment/TableAction/EditOrAddComponent';
 
 interface IProps {
   item: any;
@@ -146,7 +146,13 @@ const Actions: React.FC<IProps> = ({item}) => {
         // eslint-disable-next-line no-console
         endPoint={() => console.log('helooo')}
       />
-      <Edit userData={item} isOpen={modals.EDIT} closeModal={() => closeModal(EACTIONTABLE.EDIT)} />
+      <AddOrUpdateInseptor
+        userData={item}
+        isOpen={modals.EDIT}
+        closeModal={() => closeModal(EACTIONTABLE.EDIT)}
+        actionType="update"
+        actionTitle="بازرس"
+      />
       <Confirm
         content={
           <>
