@@ -8,157 +8,157 @@ import {EERRORS} from 'src/constants/errors.enum';
 import guildService from 'src/services/guild.service';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
 import plusIcon from '../../assets/images/icons/plus.svg';
-import SimpleSelect from '../../components/Select2/SimpleSelect';
+// import SimpleSelect from '../../components/Select2/SimpleSelect';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
 import PendingIcon from '../../assets/images/icons/pending.svg';
 import Actions from './TableAction';
 import AddOrUpdateInseptor from '../../components/UserManagment/TableAction/EditOrAddComponent';
 
-const provinceOptions = [
-  {
-    value: 'آذربایجان شرقی',
-    title: 'آذربایجان شرقی',
-  },
-  {
-    value: 'آذربایجان غربی',
-    title: 'آذربایجان غربی',
-  },
-  {
-    value: 'اردبیل',
-    title: 'اردبیل',
-  },
-  {
-    value: 'اصفهان',
-    title: 'اصفهان',
-  },
-  {
-    value: 'البرز',
-    title: 'البرز',
-  },
-  {
-    value: 'ایلام',
-    title: 'ایلام',
-  },
-  {
-    value: 'بوشهر',
-    title: 'بوشهر',
-  },
-  {
-    value: 'تهران',
-    title: 'تهران',
-  },
-  {
-    value: 'خراسان جنوبی',
-    title: 'خراسان جنوبی',
-  },
-  {
-    value: 'خراسان رضوی',
-    title: 'خراسان رضوی',
-  },
-  {
-    value: 'خراسان شمالی',
-    title: 'خراسان شمالی',
-  },
-  {
-    value: 'خوزستان',
-    title: 'خوزستان',
-  },
-  {
-    value: 'زنجان',
-    title: 'زنجان',
-  },
-  {
-    value: 'سمنان',
-    title: 'سمنان',
-  },
-  {
-    value: 'سیستان و بلوچستان',
-    title: 'سیستان و بلوچستان',
-  },
-  {
-    value: 'فارس',
-    title: 'فارس',
-  },
-  {
-    value: 'قزوین',
-    title: 'قزوین',
-  },
-  {
-    value: 'قم',
-    title: 'قم',
-  },
-  {
-    value: 'کردستان',
-    title: 'کردستان',
-  },
-  {
-    value: 'کرمان',
-    title: 'کرمان',
-  },
-  {
-    value: 'کرمانشاه',
-    title: 'کرمانشاه',
-  },
-  {
-    value: 'کهگیلویه وبویراحمد',
-    title: 'کهگیلویه وبویراحمد',
-  },
-  {
-    value: 'گلستان',
-    title: 'گلستان',
-  },
-  {
-    value: 'گیلان',
-    title: 'گیلان',
-  },
-  {
-    value: 'لرستان',
-    title: 'لرستان',
-  },
-  {
-    value: 'مازندران',
-    title: 'مازندران',
-  },
-  {
-    value: 'مرکزی',
-    title: 'مرکزی',
-  },
-  {
-    value: 'هرمزگان',
-    title: 'هرمزگان',
-  },
-  {
-    value: 'همدان',
-    title: 'همدان',
-  },
-  {
-    value: 'یزد',
-    title: 'یزد',
-  },
-  {
-    value: 'چهارمحال و بختیاری',
-    title: 'چهارمحال و بختیاری',
-  },
-];
+// const provinceOptions = [
+//   {
+//     value: 'آذربایجان شرقی',
+//     title: 'آذربایجان شرقی',
+//   },
+//   {
+//     value: 'آذربایجان غربی',
+//     title: 'آذربایجان غربی',
+//   },
+//   {
+//     value: 'اردبیل',
+//     title: 'اردبیل',
+//   },
+//   {
+//     value: 'اصفهان',
+//     title: 'اصفهان',
+//   },
+//   {
+//     value: 'البرز',
+//     title: 'البرز',
+//   },
+//   {
+//     value: 'ایلام',
+//     title: 'ایلام',
+//   },
+//   {
+//     value: 'بوشهر',
+//     title: 'بوشهر',
+//   },
+//   {
+//     value: 'تهران',
+//     title: 'تهران',
+//   },
+//   {
+//     value: 'خراسان جنوبی',
+//     title: 'خراسان جنوبی',
+//   },
+//   {
+//     value: 'خراسان رضوی',
+//     title: 'خراسان رضوی',
+//   },
+//   {
+//     value: 'خراسان شمالی',
+//     title: 'خراسان شمالی',
+//   },
+//   {
+//     value: 'خوزستان',
+//     title: 'خوزستان',
+//   },
+//   {
+//     value: 'زنجان',
+//     title: 'زنجان',
+//   },
+//   {
+//     value: 'سمنان',
+//     title: 'سمنان',
+//   },
+//   {
+//     value: 'سیستان و بلوچستان',
+//     title: 'سیستان و بلوچستان',
+//   },
+//   {
+//     value: 'فارس',
+//     title: 'فارس',
+//   },
+//   {
+//     value: 'قزوین',
+//     title: 'قزوین',
+//   },
+//   {
+//     value: 'قم',
+//     title: 'قم',
+//   },
+//   {
+//     value: 'کردستان',
+//     title: 'کردستان',
+//   },
+//   {
+//     value: 'کرمان',
+//     title: 'کرمان',
+//   },
+//   {
+//     value: 'کرمانشاه',
+//     title: 'کرمانشاه',
+//   },
+//   {
+//     value: 'کهگیلویه وبویراحمد',
+//     title: 'کهگیلویه وبویراحمد',
+//   },
+//   {
+//     value: 'گلستان',
+//     title: 'گلستان',
+//   },
+//   {
+//     value: 'گیلان',
+//     title: 'گیلان',
+//   },
+//   {
+//     value: 'لرستان',
+//     title: 'لرستان',
+//   },
+//   {
+//     value: 'مازندران',
+//     title: 'مازندران',
+//   },
+//   {
+//     value: 'مرکزی',
+//     title: 'مرکزی',
+//   },
+//   {
+//     value: 'هرمزگان',
+//     title: 'هرمزگان',
+//   },
+//   {
+//     value: 'همدان',
+//     title: 'همدان',
+//   },
+//   {
+//     value: 'یزد',
+//     title: 'یزد',
+//   },
+//   {
+//     value: 'چهارمحال و بختیاری',
+//     title: 'چهارمحال و بختیاری',
+//   },
+// ];
 
-const statusOption = [
-  {
-    value: 'تایید شده',
-    title: 'تایید شده',
-    icon: <img src={ConfirmIcon} alt="confirm" />,
-  },
-  {
-    value: 'رد شده',
-    title: 'رد شده',
-    icon: <img src={RejectIcon} alt="confirm" />,
-  },
-  {
-    value: 'در انتظار تایید',
-    title: 'در انتظار تایید',
-    icon: <img src={PendingIcon} alt="confirm" />,
-  },
-];
+// const statusOption = [
+//   {
+//     value: 'تایید شده',
+//     title: 'تایید شده',
+//     icon: <img src={ConfirmIcon} alt="confirm" />,
+//   },
+//   {
+//     value: 'رد شده',
+//     title: 'رد شده',
+//     icon: <img src={RejectIcon} alt="confirm" />,
+//   },
+//   {
+//     value: 'در انتظار تایید',
+//     title: 'در انتظار تایید',
+//     icon: <img src={PendingIcon} alt="confirm" />,
+//   },
+// ];
 
 const getInspectorStatus = (data: EINSPECTORSTATUS) => {
   switch (data) {
@@ -331,9 +331,9 @@ export default function Inspectors() {
                 className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom"
               />
             </div>
-
+            {/* 
             <SimpleSelect options={provinceOptions} defaultOption="تهران" />
-            <SimpleSelect options={statusOption} />
+            <SimpleSelect options={statusOption} /> */}
           </div>
           <div className="w-1/4">
             <div
