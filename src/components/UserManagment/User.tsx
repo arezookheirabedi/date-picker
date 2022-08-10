@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useRef, useState} from 'react';
 import {EERRORS} from 'src/constants/errors.enum';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
@@ -145,11 +143,14 @@ const provinceOptions = [
   },
 ];
 
-export default function index() {
+export default function User() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
@@ -190,6 +191,7 @@ export default function index() {
     ];
     setDataSet([...Data]);
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {data} = await guildService.guildReportoverviewStatus(newData, {
         cancelToken: cancelToken.token,
       });
@@ -325,6 +327,7 @@ export default function index() {
                     key: 'city',
                     render: (v: any, record: any) => <span> {record.city}</span>,
                   },
+
                   {
                     name: 'کد ملی ',
                     key: 'nationalId',
@@ -347,6 +350,16 @@ export default function index() {
                     name: 'نقش کاربر',
                     key: 'role',
                   },
+
+                  {
+                    name: 'وضعیت فعالیت',
+                    key: 'activateStatus',
+                    render: (v: any, record: any) => (
+                      // <div className="flex items-center justify-end">
+                      <SwitchToggleButton status={(record && record.activateStatus) || false} />
+                      // </div>
+                    ),
+                  },
                   {
                     name: 'شماره موبایل',
                     key: 'mobileNumber',
@@ -358,15 +371,6 @@ export default function index() {
                           'نامشخص'
                         )}
                       </span>
-                    ),
-                  },
-                  {
-                    name: 'وضعیت فعالیت',
-                    key: 'activateStatus',
-                    render: (v: any, record: any) => (
-                      // <div className="flex items-center justify-end">
-                      <SwitchToggleButton status={(record && record.activateStatus) || false} />
-                      // </div>
                     ),
                   },
                   {

@@ -3,29 +3,25 @@ import React, {Fragment, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import toast from 'cogo-toast';
+// import toast from 'cogo-toast';
 import {changeDigitToEnglish} from 'src/helpers/utils';
 import AppRegex from 'src/helpers/regex';
-import authenticateService from 'src/services/authentication.service';
-import DotLoading from 'src/components/DotLoading';
+// import authenticateService from 'src/services/authentication.service';
 import eyes from 'src/assets/images/icons/eye_icon.svg';
-import {EERRORS} from 'src/constants/errors.enum';
+// import {EERRORS} from 'src/constants/errors.enum';
+import DotLoading from '../../../components/Loading/DotLoading';
 
 interface IProps {
-  resetIsOpen: boolean;
-  setResetIsOpen: (data: boolean) => void;
-  setConfirmOtpModal: (data: boolean) => void;
-  setFormData: (data: any) => void;
+  userData: any;
+  isOpen: boolean;
+  closeModal: () => void;
 }
 
-const RequestOtpForm: React.FC<IProps> = ({
-  resetIsOpen,
-  setResetIsOpen,
-  setConfirmOtpModal,
-  setFormData,
-}) => {
+const Edit: React.FC<IProps> = ({userData, isOpen, closeModal}) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [typeInputText, setTypeInputText] = useState(false);
+
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required('وارد کردن پسورد قبلی الزامی است.'),
     newPassword: Yup.string()
@@ -45,56 +41,23 @@ const RequestOtpForm: React.FC<IProps> = ({
     reset,
     formState: {errors},
     setValue,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setError,
   } = useForm<any>({
     mode: 'onChange',
     // @ts-ignore
     resolver: yupResolver(validationSchema),
   });
-
-  const closeModal: () => void = () => {
-    setResetIsOpen(false);
+  const setEditModalClose: () => void = () => {
+    closeModal();
     reset();
   };
-
-  // eslint-disable-next-line consistent-return
-  const sendOtpRequest = async ({confirmPassword, ...e}: any = {}) => {
-    setLoading(true);
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const res = await authenticateService.resetPassword(e);
-      toast.success('کد به شماره همراه ارسال شد');
-      localStorage.setItem('waiting-sms', new Date().toString());
-      setConfirmOtpModal(true);
-      setFormData(e);
-      setLoading(false);
-      closeModal();
-    } catch (error: any) {
-      const {message} = error;
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const {errors} = error;
-      if (message) {
-        toast.error(message || EERRORS.ERROR_500);
-      }
-      if (errors && errors.length) {
-        errors.map((item: any) => {
-          return setError(item.field, {
-            message: item.message,
-          });
-        });
-      }
-      setLoading(false);
-    }
-  };
-  const onSubmit = (e: any) => {
-    sendOtpRequest(e);
-  };
+  const onSubmit = async () => {};
 
   return (
-    <div>
-      {' '}
-      <Transition appear show={resetIsOpen} as={Fragment}>
-        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={closeModal}>
+    <>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={setEditModalClose}>
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as="div"
@@ -121,14 +84,14 @@ const RequestOtpForm: React.FC<IProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
+              <div className="relative my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
                 <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
                   <form
                     className="p-5 text-base"
                     onSubmit={handleSubmit(onSubmit)}
                     autoComplete="off"
                   >
-                    <h1 className="text-3xl font-black">تغییر کلمه عبور</h1>
+                    <h1 className="text-3xl font-black"> افزودن کاربر جدید</h1>
 
                     <div className="mt-10 flex flex-col">
                       <div>
@@ -140,6 +103,7 @@ const RequestOtpForm: React.FC<IProps> = ({
                         </label>
                         <div className="mt-1">
                           <input
+                            defaultValue={userData ? userData.reportStatus : ''}
                             autoComplete="off"
                             type="text"
                             id="oldPassword"
@@ -274,7 +238,7 @@ const RequestOtpForm: React.FC<IProps> = ({
                             type="submit"
                             className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
                           >
-                            <span>{!loading ? 'ارسال کد فعالسازی' : <DotLoading />}</span>
+                            <span>{!loading ? 'تایید' : <DotLoading />}</span>
                           </button>
 
                           <button
@@ -315,7 +279,8 @@ const RequestOtpForm: React.FC<IProps> = ({
           </div>
         </Dialog>
       </Transition>
-    </div>
+    </>
   );
 };
-export default RequestOtpForm;
+
+export default Edit;
