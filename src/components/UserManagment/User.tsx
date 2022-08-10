@@ -258,11 +258,9 @@ export default function User() {
   };
   return (
     <>
-      {/* <SearchableMultiSelect endPoint={authenticationService.rolePermision} /> */}
-      <>
-        {/* <SearchableMultiSelect endPoint={authenticationService.rolePermision} /> */}
-        <div className="mb-8 mt-6 flex items-center justify-between">
-          <div className="align-center flex flex-grow justify-start">
+      <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8 mt-4">
+        <div className="flex flex-grow align-center justify-start">
+          <div className="w-3/4 flex">
             <div className="relative inline-flex align-center leading-3 h-10 ml-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -281,14 +279,14 @@ export default function User() {
               <input
                 type="text"
                 placeholder="جستجوی کدملی، موبایل"
-                className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom ml-4"
+                className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom"
               />
-
-              <SimpleSelect options={provinceOptions} defaultOption="تهران" />
-              <SimpleSelect options={statusOption} />
             </div>
+
+            <SimpleSelect options={provinceOptions} defaultOption="تهران" />
+            <SimpleSelect options={statusOption} />
           </div>
-          <div className="w-1/5">
+          <div className="w-1/4">
             <div
               className="button button--primary px-5 justify-start sm:w-full sm:text-xs sm:px-0 sm:justify-center md:text-sm 2xl:w-4/6 xl:w-full mx-auto"
               onClick={() => openModal()}
@@ -298,7 +296,7 @@ export default function User() {
             </div>
           </div>
         </div>
-      </>
+      </div>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">لیست کاربران</legend>
 
