@@ -4,14 +4,14 @@ interface IProps {
   icon: ReactElement;
   title: string;
   onClick: any;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const ActionButton: React.FC<IProps> = ({onClick: handleClick, title, icon, disabled}) => {
   return (
     <>
       <button
-        disabled={disabled}
+        disabled={disabled || false}
         type="button"
         onClick={handleClick}
         className="group flex w-full text-slate-800  items-center px-2 py-2 text-sm hover:bg-gray-100 "
