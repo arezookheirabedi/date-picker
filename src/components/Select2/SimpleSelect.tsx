@@ -4,9 +4,18 @@ import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 interface ISimpleSelect {
   options: any;
   defaultOption?: any;
+  queryParams: any;
+  objectKey: string;
+  setQueryParams: (v: any) => void;
 }
 
-const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
+const SimpleSelect: React.FC<ISimpleSelect> = ({
+  options,
+  defaultOption,
+  queryParams,
+  objectKey,
+  setQueryParams,
+}) => {
   const [showOptions, setshowOptions] = useState(false);
   const [selected, setSelected] = useState(defaultOption || options[0].title);
 
@@ -22,17 +31,23 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
     selectedRef.current?.scrollIntoView();
     const conditions = (event: any) => {
       if (wholeSelectRef.current?.contains(event.target)) return;
-      if (showOptions) setshowOptions(false)
-    }
-    document.body.addEventListener('click', conditions)
-    return () => document.body.removeEventListener('click', conditions)
-
+      if (showOptions) setshowOptions(false);
+    };
+    document.body.addEventListener('click', conditions);
+    return () => document.body.removeEventListener('click', conditions);
   }, [showOptions]);
 
   const changeOption = (value: any) => {
     setSelected(value);
   };
 
+  useEffect(() => {
+    let params = {...queryParams};
+    if (selected) {
+      params = {...queryParams, [`${objectKey}`]: selected.key};
+      setQueryParams(params);
+    }
+  }, [selected]);
   return (
     <div
       className="simple-select flex items-center shadow-custom rounded-lg px-4 cursor-pointer relative ml-4"
@@ -55,7 +70,7 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
           );
         })}
         <span className="w-20 truncate">{selected}</span>
-        <DownIcon className="mr-2 h-2 w-2.5"/>
+        <DownIcon className="mr-2 h-2 w-2.5" />
       </span>
       <ul className={`${showOptions ? 'block' : 'hidden'} transition ease-in-out delay-150`}>
         {options.map((item: any, index: any) => {
@@ -71,7 +86,7 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
               defaultValue={selected}
             >
               <span className="circle-select  ml-2">
-                <span className={selected === item.title ? 'circle-select--selected' : ''}/>
+                <span className={selected === item.title ? 'circle-select--selected' : ''} />
               </span>
               {item.icon && <i className="ml-2">{item.icon}</i>}
               {item.title}

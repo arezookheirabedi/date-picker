@@ -42,6 +42,7 @@ function confirmPassword(params: any): Promise<AxiosResponse<any>> {
     .build()
     .post(`/api/v1/fs/users/reset-password/confirm/self?lang=fa`, params);
 }
+
 const logout: (history?: History) => void = () => {
   try {
     removeToken();
@@ -52,6 +53,7 @@ const logout: (history?: History) => void = () => {
     window.location.href = '/';
   }
 };
+
 function rolePermision(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -59,6 +61,12 @@ function rolePermision(params: any, config?: AxiosRequestConfig): Promise<AxiosR
     .get(`/api/v1/fs/rol-permissions`, params, {...config});
 }
 
+function users(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/fs/users`, params, {...config});
+}
 export default {
   captcha,
   logout,
@@ -67,4 +75,5 @@ export default {
   resetPassword,
   confirmPassword,
   rolePermision,
+  users,
 };
