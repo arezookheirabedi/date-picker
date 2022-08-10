@@ -10,6 +10,7 @@ import plusIcon from '../../assets/images/icons/plus.svg';
 // import {EERRORS} from 'src/constants/errors.enum';
 // import DotLoading from '../Loading/DotLoading';
 import SingleSelectInModal from '../Select2/SingleSelectInModal';
+import MultiSelectInModal from "../Select2/MultiSelectInModal";
 
 const provinceOptions = [
   {
@@ -141,6 +142,7 @@ const provinceOptions = [
 interface IProps {
   actionType?: any;
 }
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CreateButton: React.FC<IProps> = ({actionType}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -181,7 +183,7 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
         onClick={openModal}
         className="button button--primary flex space-x-2 px-5 rtl:space-x-reverse"
       >
-        <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
+        <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden"/>
         اضافه کردن بازرس جدید
       </button>
       <Transition appear show={isOpen} as={Fragment}>
@@ -196,7 +198,7 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
+              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter"/>
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -212,21 +214,22 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
-                <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
-                  <h5 className="text-3xl font-black">
-                    {actionType === 'add' && ' افزودن کاربر جدید'}
-                    {actionType === 'update' && 'ویرایش اطلاعات'}
-                  </h5>
+              <div
+                className="relative my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white align-middle shadow-2xl transition-all"
+                id="modal">
+                <Dialog.Title as="h5"
+                              className="my-8 font-bold leading-6 text-gray-900 pt-4 text-lg font-black text-right px-12">
+                  {actionType === 'add' && 'ثبت اطلاعات کاربر'}
+                  {actionType === 'update' && 'ویرایش اطلاعات کاربر'}
                 </Dialog.Title>
                 {/* form start */}
                 <div>
                   <form
-                    className="p-5 text-base"
+                    className="text-base"
                     onSubmit={handleSubmit(onSubmit)}
                     autoComplete="off"
                   >
-                    <div className="w-full flex px-8 mb-6">
+                    <div className="w-full flex px-12 mb-6">
                       <div className="u-width-47">
                         <label
                           htmlFor="full-name"
@@ -254,7 +257,7 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
                         />
                       </div>
                     </div>
-                    <div className="w-full flex px-8 mb-6">
+                    <div className="w-full flex px-12 mb-6">
                       <div className="u-width-47">
                         <label
                           htmlFor="full-name"
@@ -273,7 +276,7 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
                           htmlFor="national-code"
                           className="text-xs text-gray-400 flex justify-start mb-1"
                         >
-                          کدپرسنلی
+                          نام کاربری
                         </label>
                         <input
                           id="national-code"
@@ -282,32 +285,8 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
                         />
                       </div>
                     </div>
-                    <div className="w-full flex px-8 mb-6">
-                      <div className="u-width-47">
-                        <label
-                          htmlFor="full-name"
-                          className="text-xs text-gray-400 flex justify-start mb-1"
-                        >
-                          پست سازمانی
-                        </label>
-                        {/* <SimpleSelect options={provinceOptions} defaultOption='تهران'/> */}
-                        <SingleSelectInModal options={provinceOptions} />
-                        {/* <input id="full-name" type="text" */}
-                        {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
-                      </div>
-                      <div className="u-width-47 mr-auto">
-                        <label
-                          htmlFor="national-code"
-                          className="text-xs text-gray-400 flex justify-start mb-1"
-                        >
-                          سازمان محل خدمت
-                        </label>
-                        <SingleSelectInModal options={provinceOptions} />
-                        {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
-                        {/*       type="text"/> */}
-                      </div>
-                    </div>
-                    <div className="w-full flex px-8 mb-12">
+
+                    <div className="w-full flex px-12 mb-6">
                       <div className="u-width-47">
                         <label
                           htmlFor="full-name"
@@ -315,7 +294,7 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
                         >
                           استان
                         </label>
-                        <SingleSelectInModal options={provinceOptions} />
+                        <SingleSelectInModal options={provinceOptions}/>
                         {/* <input id="full-name" type="text" */}
                         {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
                       </div>
@@ -326,24 +305,67 @@ const CreateButton: React.FC<IProps> = ({actionType}) => {
                         >
                           شهر
                         </label>
-                        <SingleSelectInModal options={provinceOptions} />
+                        <SingleSelectInModal options={provinceOptions}/>
                         {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
                         {/*       type="text"/> */}
                       </div>
                     </div>
-                    <div className="w-full">
-                      <div className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52">
-                        {actionType === 'add' && 'ثبت بازرس'}
-                        {actionType === 'update' && 'ثبت اطلاعات'}
+
+                    <div className="w-full flex px-12 mb-12">
+                      <div className="u-width-47">
+                        <label
+                          htmlFor="full-name"
+                          className="text-xs text-gray-400 flex justify-start mb-1"
+                        >
+                          پست الکترونیک
+                        </label>
+                        {/* <SimpleSelect options={provinceOptions} defaultOption='تهران'/> */}
+                        {/* <SingleSelectInModal options={provinceOptions} /> */}
+                        <input id="full-name" type="text"
+                               className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/>
+                      </div>
+                      <div className="u-width-47 mr-auto">
+                        {/* <label */}
+                        {/*  htmlFor="national-code" */}
+                        {/*  className="text-xs text-gray-400 flex justify-start mb-1" */}
+                        {/* > */}
+                        {/*  سازمان محل خدمت */}
+                        {/* </label> */}
+                        {/* <SingleSelectInModal options={provinceOptions} /> */}
+                        {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
+                        {/*       type="text"/> */}
                       </div>
                     </div>
+
+
+                    <h5 className="text-lg font-black text-right px-12 mb-8">
+                      سطح دسترسی کاربر
+                    </h5>
+                    <div className="mb-4">
+                      <MultiSelectInModal options={provinceOptions}/>
+                    </div>
+                    <div className="mb-4">
+                      <MultiSelectInModal options={provinceOptions}/>
+                    </div>
+                    <div className="mb-8">
+                      <MultiSelectInModal options={provinceOptions}/>
+                    </div>
+                    <div className="w-full">
+                      <div
+                        className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52 mb-12">
+                        {actionType === 'add' && 'ثبت کاربر'}
+                        {actionType === 'update' && 'ویرایش کاربر'}
+                      </div>
+                    </div>
+
+
                   </form>
                 </div>
                 {/* form end */}
 
                 <button
                   type="button"
-                  className="absolute top-3 left-4 cursor-pointer text-gray-300"
+                  className="absolute top-3 left-4 cursor-pointer text-gray-300 pt-4 pl-4"
                   onClick={closeModal}
                 >
                   <svg
