@@ -12,9 +12,8 @@ import SimpleSelect from '../../components/Select2/SimpleSelect';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
 import PendingIcon from '../../assets/images/icons/pending.svg';
-import Modal from '../../components/Modal';
-import AddOrUpdateInspector from '../../components/Inspector/AddOrUpdateInspector';
 import Actions from './TableAction';
+import AddOrUpdateInseptor from '../../components/UserManagment/TableAction/EditOrAddComponent';
 
 const provinceOptions = [
   {
@@ -455,9 +454,12 @@ export default function Inspectors() {
         </div>
       </fieldset>
 
-      <Modal showModal={showModal} setShowModal={setShowModal}>
-        <AddOrUpdateInspector actionType="add" />
-      </Modal>
+      <AddOrUpdateInseptor
+        isOpen={showModal}
+        closeModal={() => setShowModal(false)}
+        actionType="add"
+        actionTitle="بازرس"
+      />
     </>
   );
 }
