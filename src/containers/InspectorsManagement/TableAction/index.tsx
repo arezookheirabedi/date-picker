@@ -111,12 +111,16 @@ const Actions: React.FC<IProps> = ({item}) => {
                           key={uuidv4()}
                           icon={
                             list.type === EACTIONTABLE.CONFIRM_INSPECTOR &&
-                            item.inspectorStatus === EINSPECTORSTATUS.ACCEPT
+                            item.inspectorStatus === EINSPECTORSTATUS.REJECT
                               ? list.changIcon!
                               : list.icon
                           }
                           title={list.title}
                           onClick={() => openModal(list.type)}
+                          disabled={
+                            list.type === EACTIONTABLE.CONFIRM_INSPECTOR &&
+                            item.inspectorStatus !== EINSPECTORSTATUS.REJECT
+                          }
                         />
                       );
                     })}
