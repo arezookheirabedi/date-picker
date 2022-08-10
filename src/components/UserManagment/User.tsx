@@ -16,8 +16,8 @@ import Actions from './TableAction';
 // import RejectIcon from '../../assets/images/icons/reject.svg';
 // import PendingIcon from '../../assets/images/icons/pending.svg';
 
-import fsServices from "../../services/fs.service";
-import SimpleSelect from "../Select2/SimpleSelect";
+import fsServices from '../../services/fs.service';
+import SimpleSelect from '../Select2/SimpleSelect';
 
 import EditOrAddUser from './TableAction/EditOrAddComponent';
 
@@ -25,10 +25,12 @@ const pageSize = 10;
 
 export default function User() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [provinceOptions, setProvinceOptions] = useState([{
-    title: 'انتخاب استان',
-    value: null
-  }]);
+  const [provinceOptions, setProvinceOptions] = useState([
+    {
+      title: 'انتخاب استان',
+      value: null,
+    },
+  ]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -48,29 +50,23 @@ export default function User() {
     pageSize,
   });
 
-
   const getProvince = async () => {
-
     const normalizedData: any[] = [];
-    const {data} = await fsServices.getProvince() as any;
+    const {data} = (await fsServices.getProvince()) as any;
     data.forEach((item: any) => {
       normalizedData.push({
         title: item.province,
-        value: item.provinceCode
-      })
-    })
+        value: item.provinceCode,
+      });
+    });
     setProvinceOptions((prev: any) => {
-      return [
-        ...prev,
-        ...normalizedData
-      ]
-    })
-  }
+      return [...prev, ...normalizedData];
+    });
+  };
 
   useEffect(() => {
     getProvince();
-  }, [])
-
+  }, []);
 
   const cancelToken = cancelTokenSource();
 
@@ -92,24 +88,15 @@ export default function User() {
       const normalizedData: any[] = [];
       data.content.forEach((item: any) => {
         normalizedData.push({
-          name: 'گین آساده',
-          province: 'تهران',
-          city: 'تهران',
-          nationalId: '۰۰۱۶۶۱۹۶۰۹',
-          userName: '۸۰۴۵۰',
-          accestance: 'مدیریت بازرسی و نظارت',
-          role: 'بسیج',
-          mobileNumber: '095746535',
-          activateStatus: true,
-
-          // id: item.id,
-          // name: (item.firstName || '-') + (item.lastName || '-'),
-          // province: item.province || '-',
-          // accestance: item.roles[0],
-          // mobileNumber: item.mobileSet,
-          // activateStatus: item.loked,
-          // city: item.city,
-          // username: item.userName,
+          id: item.id,
+          name: (item.firstName || '-') + (item.lastName || '-'),
+          province: item.province || '-',
+          accestance: item.roles[0],
+          nationalId: item.nationalId,
+          mobileNumber: item.mobileSet,
+          activateStatus: item.loked,
+          city: item.city,
+          username: item.username,
         });
       });
 
@@ -182,16 +169,15 @@ export default function User() {
               />
             </div>
 
-            <SimpleSelect options={provinceOptions}/>
-            <SimpleSelect options={statusOption}/>
-
+            <SimpleSelect options={provinceOptions} />
+            <SimpleSelect options={statusOption} />
           </div>
           <div className="w-1/4">
             <div
               className="button button--primary px-5 justify-start sm:w-full sm:text-xs sm:px-0 sm:justify-center md:text-sm 2xl:w-4/6 xl:w-full mx-auto"
               onClick={() => openModal()}
             >
-              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden"/>
+              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
               اضافه کردن کاربر جدید
             </div>
           </div>
@@ -204,7 +190,7 @@ export default function User() {
           {errorMessage && !loading ? (
             <div className="p-40">
               <div className="text-red-500">{errorMessage}</div>
-              <RetryButton setQuery={setQuery}/>
+              <RetryButton setQuery={setQuery} />
             </div>
           ) : (
             <div ref={wrapperRef}>
@@ -241,15 +227,18 @@ export default function User() {
                   {
                     name: 'کد ملی ',
                     key: 'nationalId',
-                    render: (v: any, record: any) => (
-                      <span className="text-gray-500">{toPersianDigit(record.nationalId)}</span>
-                    ),
+                    render: (v: any, record: any) =>
+                      record.nationalId ? (
+                        <span className="text-gray-500">{toPersianDigit(record.nationalId)}</span>
+                      ) : (
+                        '-'
+                      ),
                   },
                   {
                     name: 'نام کاربری',
                     key: 'userName',
                     render: (v: any, record: any) => (
-                      <span className="text-gray-500">{toPersianDigit(record.userName)}</span>
+                      <span className="text-gray-500">{record.userName}</span>
                     ),
                   },
                   {
@@ -261,9 +250,7 @@ export default function User() {
                     name: 'وضعیت فعالیت',
                     key: 'activateStatus',
                     render: (v: any, record: any) => (
-                      // <div className="flex items-center justify-end">
-                      <SwitchToggleButton status={(record && record.activateStatus) || false}/>
-                      // </div>
+                      <SwitchToggleButton status={(record && record.activateStatus) || false} />
                     ),
                   },
                   {
@@ -272,9 +259,9 @@ export default function User() {
                     render: (v: any, record: any) => (
                       <span className="text-gray-500">
                         {record.mobileNumber ? (
-                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''}/>
+                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''} />
                         ) : (
-                          'نامشخص'
+                          '-'
                         )}
                       </span>
                     ),
@@ -284,7 +271,7 @@ export default function User() {
                     key: '',
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-end">
-                        <Actions item={record} wrapperRef={wrapperRef}/>
+                        <Actions item={record} wrapperRef={wrapperRef} />
                       </div>
                     ),
                   },
