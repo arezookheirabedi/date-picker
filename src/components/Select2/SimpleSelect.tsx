@@ -22,7 +22,7 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
   useEffect(() => {
     selectedRef.current?.scrollIntoView();
     const conditions = (event: any) => {
-      if (wholeSelectRef.current.contains(event.target)) return;
+      if (wholeSelectRef.current?.contains(event.target)) return;
       if (showOptions) setshowOptions(false)
     }
     document.body.addEventListener('click', conditions)
