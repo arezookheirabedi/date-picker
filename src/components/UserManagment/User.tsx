@@ -11,142 +11,22 @@ import Table from '../TableXHR';
 import plusIcon from '../../assets/images/icons/plus.svg';
 
 import Actions from './TableAction';
-import ConfirmIcon from '../../assets/images/icons/confirm.svg';
-import RejectIcon from '../../assets/images/icons/reject.svg';
-import PendingIcon from '../../assets/images/icons/pending.svg';
+// import ConfirmIcon from '../../assets/images/icons/confirm.svg';
+// import RejectIcon from '../../assets/images/icons/reject.svg';
+// import PendingIcon from '../../assets/images/icons/pending.svg';
 import SimpleSelect from '../Select2/SimpleSelect';
+import fsServices from '../../services/fs.service';
 
 import EditOrAddUser from './TableAction/EditOrAddComponent';
 
 const pageSize = 10;
-const provinceOptions = [
-  {
-    value: 'آذربایجان شرقی',
-    title: 'آذربایجان شرقی',
-  },
-  {
-    value: 'آذربایجان غربی',
-    title: 'آذربایجان غربی',
-  },
-  {
-    value: 'اردبیل',
-    title: 'اردبیل',
-  },
-  {
-    value: 'اصفهان',
-    title: 'اصفهان',
-  },
-  {
-    value: 'البرز',
-    title: 'البرز',
-  },
-  {
-    value: 'ایلام',
-    title: 'ایلام',
-  },
-  {
-    value: 'بوشهر',
-    title: 'بوشهر',
-  },
-  {
-    value: 'تهران',
-    title: 'تهران',
-  },
-  {
-    value: 'خراسان جنوبی',
-    title: 'خراسان جنوبی',
-  },
-  {
-    value: 'خراسان رضوی',
-    title: 'خراسان رضوی',
-  },
-  {
-    value: 'خراسان شمالی',
-    title: 'خراسان شمالی',
-  },
-  {
-    value: 'خوزستان',
-    title: 'خوزستان',
-  },
-  {
-    value: 'زنجان',
-    title: 'زنجان',
-  },
-  {
-    value: 'سمنان',
-    title: 'سمنان',
-  },
-  {
-    value: 'سیستان و بلوچستان',
-    title: 'سیستان و بلوچستان',
-  },
-  {
-    value: 'فارس',
-    title: 'فارس',
-  },
-  {
-    value: 'قزوین',
-    title: 'قزوین',
-  },
-  {
-    value: 'قم',
-    title: 'قم',
-  },
-  {
-    value: 'کردستان',
-    title: 'کردستان',
-  },
-  {
-    value: 'کرمان',
-    title: 'کرمان',
-  },
-  {
-    value: 'کرمانشاه',
-    title: 'کرمانشاه',
-  },
-  {
-    value: 'کهگیلویه وبویراحمد',
-    title: 'کهگیلویه وبویراحمد',
-  },
-  {
-    value: 'گلستان',
-    title: 'گلستان',
-  },
-  {
-    value: 'گیلان',
-    title: 'گیلان',
-  },
-  {
-    value: 'لرستان',
-    title: 'لرستان',
-  },
-  {
-    value: 'مازندران',
-    title: 'مازندران',
-  },
-  {
-    value: 'مرکزی',
-    title: 'مرکزی',
-  },
-  {
-    value: 'هرمزگان',
-    title: 'هرمزگان',
-  },
-  {
-    value: 'همدان',
-    title: 'همدان',
-  },
-  {
-    value: 'یزد',
-    title: 'یزد',
-  },
-  {
-    value: 'چهارمحال و بختیاری',
-    title: 'چهارمحال و بختیاری',
-  },
-];
 
 export default function User() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [provinceOptions, setProvinceOptions] = useState([{
+    title: 'انتخاب استان',
+    value: null
+  }]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -166,6 +46,29 @@ export default function User() {
     sortKey: ['reportStatus'].join(','),
     pageSize,
   });
+
+  const getProvince = async () => {
+
+    const normalizedData: any[] = [];
+    const {data} = await fsServices.getProvince() as any;
+    data.forEach((item: any) => {
+      normalizedData.push({
+        title: item.province,
+        value: item.provinceCode
+      })
+    })
+    setProvinceOptions((prev: any) => {
+      return [
+        ...prev,
+        ...normalizedData
+      ]
+    })
+  }
+
+  useEffect(() => {
+    getProvince();
+  }, [])
+
   const cancelToken = cancelTokenSource();
 
   function cancelRequest() {
@@ -238,20 +141,17 @@ export default function User() {
 
   const statusOption = [
     {
-      value: 'تایید شده',
-      title: 'تایید شده',
-      icon: <img src={ConfirmIcon} alt="confirm" />,
+      value: 'فعال',
+      title: 'فعال',
     },
     {
-      value: 'رد شده',
-      title: 'رد شده',
-      icon: <img src={RejectIcon} alt="confirm" />,
+      value: 'غیر فعال',
+      title: 'غیر فعال',
     },
-    {
-      value: 'در انتظار تایید',
-      title: 'در انتظار تایید',
-      icon: <img src={PendingIcon} alt="confirm" />,
-    },
+    // {
+    //   value: 'در انتظار تایید',
+    //   title: 'در انتظار تایید',
+    // },
   ];
   const openModal: () => void = () => {
     setShowModal(true);
@@ -283,15 +183,15 @@ export default function User() {
               />
             </div>
 
-            <SimpleSelect options={provinceOptions} defaultOption="تهران" />
-            <SimpleSelect options={statusOption} />
+            <SimpleSelect options={provinceOptions}/>
+            <SimpleSelect options={statusOption}/>
           </div>
           <div className="w-1/4">
             <div
               className="button button--primary px-5 justify-start sm:w-full sm:text-xs sm:px-0 sm:justify-center md:text-sm 2xl:w-4/6 xl:w-full mx-auto"
               onClick={() => openModal()}
             >
-              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
+              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden"/>
               اضافه کردن کاربر جدید
             </div>
           </div>
@@ -304,7 +204,7 @@ export default function User() {
           {errorMessage && !loading ? (
             <div className="p-40">
               <div className="text-red-500">{errorMessage}</div>
-              <RetryButton setQuery={setQuery} />
+              <RetryButton setQuery={setQuery}/>
             </div>
           ) : (
             <div ref={wrapperRef}>
@@ -366,7 +266,7 @@ export default function User() {
                     key: 'activateStatus',
                     render: (v: any, record: any) => (
                       // <div className="flex items-center justify-end">
-                      <SwitchToggleButton status={(record && record.activateStatus) || false} />
+                      <SwitchToggleButton status={(record && record.activateStatus) || false}/>
                       // </div>
                     ),
                   },
@@ -376,7 +276,7 @@ export default function User() {
                     render: (v: any, record: any) => (
                       <span className="text-gray-500">
                         {record.mobileNumber ? (
-                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''} />
+                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''}/>
                         ) : (
                           'نامشخص'
                         )}
@@ -388,7 +288,7 @@ export default function User() {
                     key: '',
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-end">
-                        <Actions item={record} wrapperRef={wrapperRef} />
+                        <Actions item={record} wrapperRef={wrapperRef}/>
                       </div>
                     ),
                   },
