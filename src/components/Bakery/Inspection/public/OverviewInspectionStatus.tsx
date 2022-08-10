@@ -28,7 +28,7 @@ const initialinspections = {
   totalUnitsSubjectToInspection : 0
 };
 
-const OverviewBakeryInspections = () => {
+const OverviewInspectionStatus = () => {
   const [loading, setLoading] = useState(false);
   const [inspections, setInspections] = useState<any>(initialinspections);
   const {CancelToken} = axios;
@@ -134,4 +134,4 @@ const OverviewBakeryInspections = () => {
   );
 };
 
-export default OverviewBakeryInspections;
+export default OverviewInspectionStatus;

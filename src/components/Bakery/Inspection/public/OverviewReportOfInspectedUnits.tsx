@@ -27,22 +27,6 @@ const OverviewReportOfInspectedUnits = () => {
         title: {
           text: '',
         },
-        scrollbar: {
-          enabled: true,
-          barBackgroundColor: '#656565',
-          barBorderColor: '#eee',
-          barBorderRadius: 4,
-          barBorderWidth: 0,
-          height: 6,
-          buttonArrowColor: '#eee',
-          rifleColor: '#656565',
-          buttonBackgroundColor: 'transparent',
-          buttonBorderWidth: 0,
-          buttonBorderRadius: 0,
-          trackBackgroundColor: '#eee',
-          trackBorderWidth: 0,
-          trackBorderRadius: 4,
-        },
         credits: {
           enabled: false,
         },
