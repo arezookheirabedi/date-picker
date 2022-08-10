@@ -349,7 +349,7 @@ export default function Inspectors() {
       </div>
 
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">لیست کاربران</legend>
+        <legend className="text-black mx-auto px-3">لیست بازرسان کل کشور</legend>
 
         <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
           {errorMessage && !loading ? (
