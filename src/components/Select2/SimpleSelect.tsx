@@ -7,6 +7,7 @@ interface ISimpleSelect {
 }
 
 const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
+
   const [showOptions, setshowOptions] = useState(false);
   const [selected, setSelected] = useState(defaultOption || options[0].title);
 
@@ -67,7 +68,7 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({options, defaultOption}) => {
               ref={selected === item.title ? selectedRef : badRef}
               className="text-xs"
               // style={{backgroundColor: selected === item.title ? '#CCCCCCDF' : ''}}
-              onClick={() => changeOption(item.value)}
+              onClick={() => changeOption(item.title)}
               defaultValue={selected}
             >
               <span className="circle-select  ml-2">
