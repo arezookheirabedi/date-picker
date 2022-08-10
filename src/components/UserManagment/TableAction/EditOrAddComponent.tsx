@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from '../../Modal';
 import AddOrUpdateUser from './AddOrEditUserForm';
+import AddOrUpdateInspector from '../../Inspector/AddOrUpdateInspector';
 
 interface IProps {
   userData?: any;
@@ -13,7 +14,11 @@ interface IProps {
 const Edit: React.FC<IProps> = ({actionType, actionTitle, isOpen, closeModal}) => {
   return (
     <Modal showModal={isOpen} setShowModal={closeModal}>
-      <AddOrUpdateUser actionType={actionType} actionTitle={actionTitle} />
+      {actionTitle === 'کاربر' ? (
+        <AddOrUpdateUser actionType={actionType} actionTitle={actionTitle} />
+      ) : (
+        <AddOrUpdateInspector actionType={actionType} />
+      )}
     </Modal>
   );
 };
