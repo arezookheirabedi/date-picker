@@ -61,6 +61,13 @@ function rolePermision(params: any, config?: AxiosRequestConfig): Promise<AxiosR
     .get(`/api/v1/fs/rol-permissions`, params, {...config});
 }
 
+function getResources(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/fs/resource-views`, params, {...config});
+}
+
 function users(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -75,5 +82,6 @@ export default {
   resetPassword,
   confirmPassword,
   rolePermision,
+  getResources,
   users,
 };

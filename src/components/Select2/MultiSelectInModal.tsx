@@ -1,13 +1,14 @@
-import React, {useEffect, useRef, useState} from "react";
-import plusIconGray from "../../assets/images/icons/plusGray.svg";
-import {ReactComponent as DownIcon} from "../../assets/images/icons/down.svg";
+import React, {useEffect, useRef, useState} from 'react';
+import plusIconGray from '../../assets/images/icons/plusGray.svg';
+import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
 interface IMultiSelectInModal {
-  options: any,
+  options: any;
+  title?: string;
+  getValues?: any;
 }
 
-const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options}) => {
-
+const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getValues}) => {
   const [showOptions, setShowOptions] = useState(false);
 
   const wholeSelectRef = useRef<any>();
@@ -17,77 +18,76 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options}) => {
 
   const openSelectBox = () => {
     setShowOptions(true);
-  }
+  };
 
   useEffect(() => {
     selectedRef.current?.scrollIntoView();
     const conditions = (event: any) => {
       if (wholeSelectRef.current.contains(event.target)) return;
-      if (showOptions) setShowOptions(false)
-    }
-    document.getElementById('modal')?.addEventListener('click', conditions)
-    return () => document.getElementById('modal')?.removeEventListener('click', conditions)
+      if (showOptions) setShowOptions(false);
+    };
+    document.getElementById('modal')?.addEventListener('click', conditions);
+    return () => document.getElementById('modal')?.removeEventListener('click', conditions);
   }, [showOptions]);
-
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedItem, setSelectedItem] = useState<any>([]);
 
-  const changeOption = (value: any) => {
+  useEffect(() => {
+    if (getValues && selectedItem.length) {
+      getValues(selectedItem);
+    }
+  }, [selectedItem]);
+
+  const changeOption = (item: any) => {
     const newItem = {
-      id: value,
-      title: value
+      id: item.value,
+      title: item.title,
     };
 
-
-    const findSelectedItem = selectedItem.findIndex((item: any) => item.title === value);
+    const findSelectedItem = selectedItem.findIndex((entity: any) => entity.id === item.value);
 
     if (findSelectedItem === -1) {
       setSelectedItem((prev: any) => {
-        return [
-          ...prev,
-          newItem
-        ]
-      })
+        return [...prev, newItem];
+      });
     } else {
-      const tmp = [...selectedItem]
-      tmp.splice(findSelectedItem, 1)
-      setSelectedItem(tmp)
+      const tmp = [...selectedItem];
+      tmp.splice(findSelectedItem, 1);
+      setSelectedItem(tmp);
     }
-  }
-
-  // useEffect(() => {
-  //   console.log(selectedItem);
-  // }, [selectedItem])
-
+  };
 
   const removeItem = (id: any) => {
     const indexOfObject = selectedItem.findIndex((obj: any) => {
-      return obj.id === id
+      return obj.id === id;
     });
-    selectedItem.splice(indexOfObject, 1)
+    selectedItem.splice(indexOfObject, 1);
     setSelectedItem(() => {
-      return [...selectedItem]
-    })
-
-  }
+      return [...selectedItem];
+    });
+  };
 
   return (
     <>
       <div>
         <div className="selected-item py-4 flex u-width-85 mx-auto flex-wrap">
-          {
-            selectedItem.map((item: any) => {
-              return (
-                <div className="bg-cyan-900 rounded px-3 py-1 flex justify-between items-center ml-2 mt-2 "
-                     key={item.id}>
-                  <span className="text-xs pl-2 text-white">{item.title}</span>
-                  <span className="text-white relative top-px text-xl cursor-pointer"
-                        onClick={() => removeItem(item.id)}>&times;</span>
-                </div>
-              )
-            })
-          }
+          {selectedItem.map((item: any) => {
+            return (
+              <div
+                className="bg-cyan-900 rounded px-3 py-1 flex justify-between items-center ml-2 mt-2 "
+                key={item.id}
+              >
+                <span className="text-xs pl-2 text-white">{item.title}</span>
+                <span
+                  className="text-white relative top-px text-xl cursor-pointer"
+                  onClick={() => removeItem(item.id)}
+                >
+                  &times;
+                </span>
+              </div>
+            );
+          })}
 
           {/* <div className="bg-cyan-900 rounded px-3 py-1 flex justify-between items-center "> */}
           {/*  <span className="text-xs pl-2 text-white">آرد و نان</span> */}
@@ -97,56 +97,79 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options}) => {
       </div>
       <div className="bg-gray-100 flex items-center">
         <div className="u-width-85 mx-auto py-4">
-          <label htmlFor="tag" className="flex text-xs text-gray-400 mb-2">برچسب</label>
+          <label htmlFor="tag" className="flex text-xs text-gray-400 mb-2">
+            {title && title}
+          </label>
           <div
             className="multi-select-in-modal  cursor-pointer relative border-solid border border-gray-400 rounded py-1 h-9 bg-white"
             onClick={openSelectBox}
             ref={wholeSelectRef}
           >
             <span className="text-xs  flex items-center">
-              {
-                options.map((item: any) => {
-                  return (
-                    // eslint-disable-next-line no-nested-ternary
-                    item.icon ? item.title === selectedItem ? <span className="ml-2">{item.icon}</span> : '' : ''
+              {options.map((item: any) => {
+                return (
+                  // eslint-disable-next-line no-nested-ternary
+                  item.icon ? (
+                    item.title === selectedItem ? (
+                      <span className="ml-2">{item.icon}</span>
+                    ) : (
+                      ''
+                    )
+                  ) : (
+                    ''
                   )
-                })
-              }
+                );
+              })}
               <span className="w-20 truncate flex justify-start pr-8 w-full">
-               انتخاب کنید
+                انتخاب &nbsp;
+                {title}
               </span>
-            <DownIcon className="mr-2 h-2 w-2.5"/>
+              <DownIcon className="mr-2 h-2 w-2.5" />
             </span>
-            <ul className={`${showOptions ? 'block' : 'hidden'} transition ease-in-out delay-150`}
-                ref={ulRef}
+            <ul
+              className={`${showOptions ? 'block' : 'hidden'} transition ease-in-out delay-150`}
+              ref={ulRef}
             >
               {options.map((item: any, index: any) => {
                 return (
                   // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-                  <li value={item.value} key={index} ref={selectedItem === item.title ? selectedRef : badRef}
-                      className="text-xs"
+                  <li
+                    value={item.value}
+                    key={index}
+                    ref={selectedItem === item.title ? selectedRef : badRef}
+                    className="text-xs"
                     // style={{backgroundColor: selected === item.title ? '#CCCCCCDF' : ''}}
-                      onClick={() => changeOption(item.value)}
-                      defaultValue={selectedItem}>
-              <span className="circle-select  ml-2">
-                <span
-                  className={selectedItem.find((term: any) => term.title === item.title) ? 'circle-select--selected' : ''}/>
-              </span>
+                    onClick={() => changeOption(item)}
+                    defaultValue={selectedItem}
+                  >
+                    <span className="circle-select  ml-2">
+                      <span
+                        className={
+                          selectedItem.find((term: any) => term.title === item.title)
+                            ? 'circle-select--selected'
+                            : ''
+                        }
+                      />
+                    </span>
                     {item.icon && <i className="ml-2">{item.icon}</i>}
                     {item.title}
                   </li>
-                )
+                );
               })}
             </ul>
-            <img src={plusIconGray} alt="+" className="absolute right-0 top-2 bg-white mr-4 xl:block sm:hidden"
-                 width={18} height={18}/>
+            <img
+              src={plusIconGray}
+              alt="+"
+              className="absolute right-0 top-2 bg-white mr-4 xl:block sm:hidden"
+              width={18}
+              height={18}
+            />
             {/* <input type="text" id="tag" className="w-full pr-12 text-xs"/> */}
           </div>
         </div>
       </div>
-
     </>
-  )
-}
+  );
+};
 
 export default MultiSelectInModal;
