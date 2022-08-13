@@ -4,21 +4,18 @@ import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 interface ISimpleSelect {
   options: any;
   defaultOption?: any;
-  // queryParams: any;
-  // objectKey: string;
-  // setQueryParams: (v: any) => void;
+  queryParams: any;
+  objectKey: string;
+  setQueryParams: (v: any) => void;
 }
-
-
-    // queryParams,
-    // objectKey,
-    // setQueryParams,
 
 const SimpleSelect: React.FC<ISimpleSelect> = ({
   options,
   defaultOption,
+  setQueryParams,
+  objectKey,
+  queryParams,
 }) => {
-
   const [showOptions, setshowOptions] = useState(false);
   const [selected, setSelected] = useState(defaultOption || options[0].title);
 
@@ -44,13 +41,13 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({
     setSelected(value);
   };
 
-  // useEffect(() => {
-  //   let params = {...queryParams};
-  //   if (selected) {
-  //     params = {...queryParams, [`${objectKey}`]: selected.key};
-  //     setQueryParams(params);
-  //   }
-  // }, [selected]);
+  useEffect(() => {
+    let params = {...queryParams};
+    if (selected) {
+      params = {...queryParams, [`${objectKey}`]: selected};
+      setQueryParams(params);
+    }
+  }, [selected]);
   return (
     <div
       className="simple-select flex items-center shadow-custom rounded-lg px-4 cursor-pointer relative ml-4"
