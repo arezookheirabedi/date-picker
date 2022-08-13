@@ -13,28 +13,26 @@ import inspectorServices from 'src/services/inspector.service';
 import SimpleSelect from 'src/components/Select2/SimpleSelect';
 import LocalSearchNationalId from 'src/components/UserManagment/LocalSearchNationalId';
 import fsServices from 'src/services/fs.service';
+import Filter from 'src/components/UserManagment/Filter';
 import plusIcon from '../../assets/images/icons/plus.svg';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
-// import PendingIcon from '../../assets/images/icons/pending.svg';
 import Actions from './TableAction';
 import AddOrUpdateInseptor from '../../components/UserManagment/TableAction/EditOrAddComponent';
 
 const statusOption = [
   {
     value: null,
-    title: 'همه',
-    icon: <></>,
+    label: 'همه',
+    // icon: <></>,
   },
   {
-    value: 'تایید شده',
-    title: 'تایید شده',
-    icon: <img src={ConfirmIcon} alt="confirm" />,
+    value: 'CONFIRM',
+    label: 'تایید شده',
   },
   {
-    value: 'تایید نشده',
-    title: 'تایید نشده',
-    icon: <img src={RejectIcon} alt="confirm" />,
+    value: 'UNCONFIRM',
+    label: 'تایید نشده',
   },
 ];
 
@@ -63,28 +61,24 @@ const pageSize = 10;
 export default function Inspectors() {
   const [provinceOptions, setProvinceOptions] = useState([
     {
-      title: 'انتخاب استان',
-      value: 'انتخاب استان',
+      label: 'همه استان ها',
+      value: null,
     },
   ]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
-    provinceTilte: null,
+    province: null,
     nationalIdOrMobileNumber: null,
-    activationStatusPersian: null,
+    loked: null,
     currentPage: 1,
     retry: false,
     deleted: false,
-    // sort: 'DESC',
-    // sortKey: ['reportStatus'].join(','),
+
     pageSize,
   });
 
@@ -94,7 +88,7 @@ export default function Inspectors() {
     data.forEach((item: any) => {
       normalizedData.push({
         title: item.province,
-        value: item.provinceCode,
+        value: item.province,
       });
     });
     setProvinceOptions((prev: any) => {
@@ -132,16 +126,14 @@ export default function Inspectors() {
   async function fetchReports({
     retry,
     currentPage,
-    activationStatusPersian,
-    provinceTilte,
+    activationStatus,
+
     ...params
   }: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
-      activityStatus: getActivityStatus(query.activationStatusPersian || ''),
-      province:
-        query.provinceTilte && query.provinceTilte === 'انتخاب استان' ? null : query.provinceTilte,
+      activityStatus: query.loked,
     };
     setLoading(true);
     setErrorMessage(null);
@@ -194,22 +186,11 @@ export default function Inspectors() {
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8 mt-4">
         <div className="flex flex-grow align-center justify-start">
           <div className="w-3/4 flex">
-            <LocalSearchNationalId
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="nationalIdOrMobileNumber"
-            />
-            <SimpleSelect
-              options={provinceOptions}
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="provinceTilte"
-            />
-            <SimpleSelect
-              options={statusOption}
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="activationStatusPersian"
+            <Filter
+              provinceOption={provinceOptions}
+              sattusOption={statusOption}
+              query={query}
+              setQuery={setQuery}
             />
           </div>
           <div className="w-1/4">
