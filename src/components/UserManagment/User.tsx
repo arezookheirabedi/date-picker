@@ -78,7 +78,7 @@ export default function User() {
     retry,
     currentPage,
     activationStatus,
-    provinceTitle,
+    provinceTilte,
     ...params
   }: any) {
     const newData = {
