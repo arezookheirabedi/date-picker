@@ -31,7 +31,7 @@ export default function User() {
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
-    province: null,
+    provinceTilte: null,
     nationalIdOrMobileNumber: null,
     activationStatus: null,
     currentPage: 1,
@@ -74,13 +74,21 @@ export default function User() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, currentPage, activationStatus, ...params}: any) {
+  async function fetchReports({
+    retry,
+    currentPage,
+    activationStatus,
+    provinceTitle,
+    ...params
+  }: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
       locked: getLocked(query.activationStatus || ''),
+      province:
+        query.provinceTilte && query.provinceTilte === 'انتخاب استان' ? null : query.provinceTilte,
     };
-
+    setErrorMessage(null);
     setLoading(true);
     try {
       const {data} = await authenticationService.users(newData, {
@@ -97,21 +105,19 @@ export default function User() {
           nationalId: item.nationalId,
           mobileNumber: item.mobileSet,
           activateStatus: !item.loked,
-          city: item.city,
+          city: item.city || '-',
           username: item.username,
         });
       });
-      debugger;
+
       setDataSet([...normalizedData]);
       setTotalItems(data.totalElements);
       setLoading(false);
     } catch (err: any) {
-      debugger;
       if (err.message === 'cancel') {
         setLoading(true);
         return;
       }
-      debugger;
       setErrorMessage(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
@@ -142,10 +148,6 @@ export default function User() {
       value: 'غیر فعال',
       title: 'غیر فعال',
     },
-    // {
-    //   value: 'در انتظار تایید',
-    //   title: 'در انتظار تایید',
-    // },
   ];
   const openModal: () => void = () => {
     setShowModal(true);
@@ -164,7 +166,7 @@ export default function User() {
               options={provinceOptions}
               setQueryParams={setQuery}
               queryParams={query}
-              objectKey="province"
+              objectKey="provinceTilte"
             />
             <SimpleSelect
               options={statusOption}
@@ -270,10 +272,10 @@ export default function User() {
                     ),
                   },
                   {
-                    name: 'تغییرات',
+                    name: 'عملیات',
                     key: '',
                     render: (v: any, record: any) => (
-                      <div className="flex items-center justify-end">
+                      <div className="flex items-center justify-center">
                         <Actions item={record} wrapperRef={wrapperRef} />
                       </div>
                     ),
