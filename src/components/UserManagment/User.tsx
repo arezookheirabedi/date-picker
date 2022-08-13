@@ -9,9 +9,7 @@ import Table from '../TableXHR';
 import plusIcon from '../../assets/images/icons/plus.svg';
 import Actions from './TableAction';
 import fsServices from '../../services/fs.service';
-// import SimpleSelect from '../Select2/SimpleSelect';
 import EditOrAddUser from './TableAction/EditOrAddComponent';
-// import LocalSearchNationalId from './LocalSearchNationalId';
 import Filter from './Filter';
 
 const pageSize = 10;
@@ -33,31 +31,18 @@ export default function User() {
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
     province: null,
-    nationalId: null,
+    nationalIdOrMobileNumber: null,
     loked: null,
     currentPage: 1,
     retry: false,
-    // sort: 'DESC',
-    // sortKey: ['reportStatus'].join(','),
     pageSize,
   });
-  // const getLocked = (data: string) => {
-  //   switch (data) {
-  //     case 'فعال':
-  //       return false;
-  //     case 'غیر فعال':
-  //       return true;
-  //     default:
-  //       return null;
-  //   }
-  // };
   const getProvince = async () => {
     const normalizedData: any[] = [];
     const {data} = (await fsServices.getProvince()) as any;
     data.forEach((item: any) => {
       normalizedData.push({
         label: item.province,
-        // value: item.provinceCode,
         value: item.province,
       });
     });
@@ -76,19 +61,10 @@ export default function User() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({
-    retry,
-    currentPage,
-    // activationStatus,
-    // provinceTilte,
-    ...params
-  }: any) {
+  async function fetchReports({retry, currentPage, ...params}: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
-      // locked: getLocked(query.activationStatus || ''),
-      // province:
-      //   query.provinceTilte && query.provinceTilte === 'انتخاب استان' ? null : query.provinceTilte,
     };
     setErrorMessage(null);
     setLoading(true);
