@@ -39,11 +39,14 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
 
   const onSubmit = (values: any) => {
     setQuery(() => {
+      debugger;
       return {
         ...query,
         province: values.province,
         loked: values.loked,
-        nationalId: values.nationalId ? values.nationalId : null,
+        nationalIdOrMobileNumber: values.nationalIdOrMobileNumber
+          ? values.nationalIdOrMobileNumber
+          : null,
         currentPage: 1,
       };
     });
@@ -57,7 +60,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
             <input
               type="text"
               {...register('nationalIdOrMobileNumber')}
-              placeholder="کد ملی یا شماره موبایل"
+              placeholder="کد ملی یا موبایل"
               className="rtl  relative block w-full rounded-full  bg-white px-5 py-2 placeholder-gray-400 shadow-lg focus:outline-none disabled:bg-gray-50 sm:text-sm  focus-visible disabled:shadow-none"
             />
           </div>
