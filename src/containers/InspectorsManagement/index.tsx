@@ -59,7 +59,7 @@ const getInspectorStatus = (data: EINSPECTORSTATUS) => {
       return '-';
   }
 };
-const pageSize = 2;
+const pageSize = 10;
 export default function Inspectors() {
   const [provinceOptions, setProvinceOptions] = useState([
     {
