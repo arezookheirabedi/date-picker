@@ -1,17 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useRef, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableXHR';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import HiddenMobileNumber from 'src/components/Form/HiddenMobileNumber';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import SwitchToggleButton from 'src/components/Form/SwitchToggleButton';
 import {EERRORS} from 'src/constants/errors.enum';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
 import inspectorServices from 'src/services/inspector.service';
-import SimpleSelect from 'src/components/Select2/SimpleSelect';
-import LocalSearchNationalId from 'src/components/UserManagment/LocalSearchNationalId';
 import fsServices from 'src/services/fs.service';
 import Filter from 'src/components/UserManagment/Filter';
 import plusIcon from '../../assets/images/icons/plus.svg';
@@ -24,7 +18,6 @@ const statusOption = [
   {
     value: null,
     label: 'همه',
-    // icon: <></>,
   },
   {
     value: 'CONFIRM',
@@ -69,6 +62,7 @@ export default function Inspectors() {
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
@@ -87,7 +81,7 @@ export default function Inspectors() {
     const {data} = (await fsServices.getProvince()) as any;
     data.forEach((item: any) => {
       normalizedData.push({
-        title: item.province,
+        label: item.province,
         value: item.province,
       });
     });
@@ -112,24 +106,8 @@ export default function Inspectors() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getActivityStatus = (data: string) => {
-    switch (data) {
-      case 'تایید شده':
-        return 'CONFIRMED';
-      case 'تایید نشده':
-        return 'UNCONFIRMED';
-      default:
-        return null;
-    }
-  };
-
-  async function fetchReports({
-    retry,
-    currentPage,
-    activationStatus,
-
-    ...params
-  }: any) {
+  async function fetchReports({retry, currentPage, loked, ...params}: any) {
+    debugger;
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
