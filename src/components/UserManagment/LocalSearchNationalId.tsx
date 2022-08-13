@@ -11,7 +11,7 @@ const LocalSearchNationalId: React.FC<LocalTableSearchProps> = ({
   objectKey,
   queryParams,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
 
   function handleSearch(e: any) {
     const {value} = e.target;
@@ -21,17 +21,21 @@ const LocalSearchNationalId: React.FC<LocalTableSearchProps> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (searchQuery) {
-      const NewValue = searchQuery.toEnglishDigits();
-      params = {...queryParams, currentPage: 1, [`${objectKey}`]: NewValue};
-      setQueryParams(params);
+      setTimeout(() => {
+        const NewValue = searchQuery.toEnglishDigits();
+        params = {...queryParams, currentPage: 1, [`${objectKey}`]: NewValue};
+        setQueryParams(params);
+      }, 5000);
     }
   }, [searchQuery]);
 
   const handleDeselectItem = () => {
     setSearchQuery('');
-    let params = {...queryParams};
-    params = {...queryParams, currentPage: 1, [`${objectKey}`]: null};
-    setQueryParams(params);
+    setTimeout(() => {
+      let params = {...queryParams};
+      params = {...queryParams, currentPage: 1, [`${objectKey}`]: null};
+      setQueryParams(params);
+    }, 5000);
   };
   return (
     <div className="relative inline-flex align-center leading-3 h-10 ml-4">
@@ -54,15 +58,15 @@ const LocalSearchNationalId: React.FC<LocalTableSearchProps> = ({
         placeholder="جستجوی کدملی، موبایل"
         className="py-2 px-4 pr-10 text-sm border-none rounded-lg focus:outline-none shadow-custom"
         onChange={handleSearch}
-        value={searchQuery}
+        value={searchQuery!}
       />
       <svg
         onClick={() => handleDeselectItem()}
         xmlns="http://www.w3.org/2000/svg"
         className={`${
-          searchQuery === ''
-            ? 'hidden'
-            : 'w-4 h-4 absolute top-1/2 transform rotate-45  -translate-y-1/2 left-4'
+          searchQuery && searchQuery.length > 0
+            ? 'w-4 h-4 absolute top-1/2 transform rotate-45  -translate-y-1/2 left-4'
+            : 'hidden'
         }`}
         viewBox="0 0 20 20"
         fill="currentColor"
