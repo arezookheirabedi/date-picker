@@ -13,7 +13,7 @@ interface Iprops {
 }
 
 interface ISavedVisite {
-  nationalId: any;
+  nationalIdOrMobileNumber: any;
   province: any;
   loked: any;
 }
@@ -39,7 +39,6 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
 
   const onSubmit = (values: any) => {
     setQuery(() => {
-      console.log(values.loked);
       return {
         ...query,
         province: values.province,
@@ -57,8 +56,8 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
           <div className="w-full">
             <input
               type="text"
-              {...register('nationalId')}
-              placeholder="کد ملی مد نظر"
+              {...register('nationalIdOrMobileNumber')}
+              placeholder="کد ملی یا شماره موبایل"
               className="rtl  relative block w-full rounded-full  bg-white px-5 py-2 placeholder-gray-400 shadow-lg focus:outline-none disabled:bg-gray-50 sm:text-sm  focus-visible disabled:shadow-none"
             />
           </div>
@@ -118,7 +117,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
               type="button"
               onClick={() => {
                 reset({
-                  nationalId: null,
+                  nationalIdOrMobileNumber: null,
                   loked: null,
                   province: null,
                 });
