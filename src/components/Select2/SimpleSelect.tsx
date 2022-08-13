@@ -44,7 +44,7 @@ const SimpleSelect: React.FC<ISimpleSelect> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (selected) {
-      params = {...queryParams, [`${objectKey}`]: selected};
+      params = {...queryParams, currentPage: 1, [`${objectKey}`]: selected};
       setQueryParams(params);
     }
   }, [selected]);
