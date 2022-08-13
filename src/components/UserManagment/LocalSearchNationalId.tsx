@@ -21,21 +21,17 @@ const LocalSearchNationalId: React.FC<LocalTableSearchProps> = ({
   useEffect(() => {
     let params = {...queryParams};
     if (searchQuery) {
-      setTimeout(() => {
-        const NewValue = searchQuery.toEnglishDigits();
-        params = {...queryParams, currentPage: 1, [`${objectKey}`]: NewValue};
-        setQueryParams(params);
-      }, 5000);
+      const NewValue = searchQuery.toEnglishDigits();
+      params = {...queryParams, currentPage: 1, [`${objectKey}`]: NewValue};
+      setQueryParams(params);
     }
   }, [searchQuery]);
 
   const handleDeselectItem = () => {
     setSearchQuery('');
-    setTimeout(() => {
-      let params = {...queryParams};
-      params = {...queryParams, currentPage: 1, [`${objectKey}`]: null};
-      setQueryParams(params);
-    }, 5000);
+    let params = {...queryParams};
+    params = {...queryParams, currentPage: 1, [`${objectKey}`]: null};
+    setQueryParams(params);
   };
   return (
     <div className="relative inline-flex align-center leading-3 h-10 ml-4">
