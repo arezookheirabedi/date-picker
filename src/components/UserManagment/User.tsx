@@ -9,16 +9,17 @@ import Table from '../TableXHR';
 import plusIcon from '../../assets/images/icons/plus.svg';
 import Actions from './TableAction';
 import fsServices from '../../services/fs.service';
-import SimpleSelect from '../Select2/SimpleSelect';
+// import SimpleSelect from '../Select2/SimpleSelect';
 import EditOrAddUser from './TableAction/EditOrAddComponent';
-import LocalSearchNationalId from './LocalSearchNationalId';
+// import LocalSearchNationalId from './LocalSearchNationalId';
+import Filter from './Filter';
 
 const pageSize = 10;
 
 export default function User() {
   const [provinceOptions, setProvinceOptions] = useState([
     {
-      title: 'انتخاب استان',
+      label: 'همه استان ها',
       value: null,
     },
   ]);
@@ -31,32 +32,33 @@ export default function User() {
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
-    provinceTilte: null,
-    nationalIdOrMobileNumber: null,
-    activationStatus: null,
+    province: null,
+    nationalId: null,
+    loked: null,
     currentPage: 1,
     retry: false,
     // sort: 'DESC',
     // sortKey: ['reportStatus'].join(','),
     pageSize,
   });
-  const getLocked = (data: string) => {
-    switch (data) {
-      case 'فعال':
-        return false;
-      case 'غیر فعال':
-        return true;
-      default:
-        return null;
-    }
-  };
+  // const getLocked = (data: string) => {
+  //   switch (data) {
+  //     case 'فعال':
+  //       return false;
+  //     case 'غیر فعال':
+  //       return true;
+  //     default:
+  //       return null;
+  //   }
+  // };
   const getProvince = async () => {
     const normalizedData: any[] = [];
     const {data} = (await fsServices.getProvince()) as any;
     data.forEach((item: any) => {
       normalizedData.push({
-        title: item.province,
-        value: item.provinceCode,
+        label: item.province,
+        // value: item.provinceCode,
+        value: item.province,
       });
     });
     setProvinceOptions((prev: any) => {
@@ -77,16 +79,16 @@ export default function User() {
   async function fetchReports({
     retry,
     currentPage,
-    activationStatus,
-    provinceTilte,
+    // activationStatus,
+    // provinceTilte,
     ...params
   }: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
-      locked: getLocked(query.activationStatus || ''),
-      province:
-        query.provinceTilte && query.provinceTilte === 'انتخاب استان' ? null : query.provinceTilte,
+      // locked: getLocked(query.activationStatus || ''),
+      // province:
+      //   query.provinceTilte && query.provinceTilte === 'انتخاب استان' ? null : query.provinceTilte,
     };
     setErrorMessage(null);
     setLoading(true);
@@ -138,15 +140,15 @@ export default function User() {
   const statusOption = [
     {
       value: null,
-      title: 'همه',
+      label: 'همه',
     },
     {
-      value: 'فعال',
-      title: 'فعال',
+      value: 'false',
+      label: 'فعال',
     },
     {
-      value: 'غیر فعال',
-      title: 'غیر فعال',
+      value: 'true',
+      label: 'غیر فعال',
     },
   ];
   const openModal: () => void = () => {
@@ -157,22 +159,11 @@ export default function User() {
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8 mt-4">
         <div className="flex flex-grow align-center justify-start">
           <div className="w-3/4 flex">
-            <LocalSearchNationalId
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="nationalIdOrMobileNumber"
-            />
-            <SimpleSelect
-              options={provinceOptions}
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="provinceTilte"
-            />
-            <SimpleSelect
-              options={statusOption}
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="activationStatus"
+            <Filter
+              provinceOption={provinceOptions}
+              sattusOption={statusOption}
+              query={query}
+              setQuery={setQuery}
             />
           </div>
           <div className="w-1/4">
