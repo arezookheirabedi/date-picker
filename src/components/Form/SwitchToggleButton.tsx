@@ -1,19 +1,54 @@
 import {useEffect, useState} from 'react';
 import {Switch} from '@headlessui/react';
+import fsServices from 'src/services/fs.service';
+import {EERRORS} from 'src/constants/errors.enum';
+import toast from 'cogo-toast';
 
 interface IProps {
   status: boolean;
+  record: any;
+  // shouldRefresh: (data: boolean) => void;
+  // refresh: boolean;
 }
 
-const SwitchToggleButton: React.FC<IProps> = ({status}) => {
+const SwitchToggleButton: React.FC<IProps> = ({
+  status,
+  record,
+  //  shouldRefresh, refresh
+}) => {
   const [enabled, setEnabled] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [error, setError] = useState<any>(null);
 
+  const update = async (formData: any) => {
+    setLoading(true);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const res = await fsServices.updateUser(formData);
+      // shouldRefresh(!refresh);
+      setError(null);
+      setLoading(false);
+      toast.success('عملیات با موفقیت انجام شد.');
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      toast.error(err.message || EERRORS.ERROR_500);
+      setLoading(false);
+      setEnabled(enabled);
+    }
+  };
   useEffect(() => {
     setEnabled(status);
   }, [status]);
   const deactiveUser = () => {
     setEnabled(!enabled);
+    update({...record, locked: enabled});
   };
+
   return (
     <>
       <Switch

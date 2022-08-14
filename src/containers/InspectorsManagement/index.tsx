@@ -56,6 +56,7 @@ export default function Inspectors() {
     {
       label: 'همه استان ها',
       value: null,
+      id: 'null',
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -83,6 +84,7 @@ export default function Inspectors() {
       normalizedData.push({
         label: item.province,
         value: item.province,
+        id: item.provinceCode,
       });
     });
     setProvinceOptions((prev: any) => {

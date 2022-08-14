@@ -11,6 +11,7 @@ const Icon = styled.span``;
 interface IOption {
   label: string | number | any;
   value: any;
+  id: any;
 }
 
 interface IProps extends React.HTMLProps<HTMLSelectElement> {
@@ -73,7 +74,7 @@ const Select: React.FC<IProps> = props => {
       <select className="hidden" value={selectedObject?.value || ''} ref={ref} {...rest}>
         {options?.map(option => (
           // eslint-disable-next-line jsx-a11y/control-has-associated-label
-          <option key={option.value} value={option.value} />
+          <option key={option.id} value={option.value} />
         ))}
       </select>
       <Listbox value={selectedObject} onChange={setSelectedObject} disabled={rest.disabled}>
