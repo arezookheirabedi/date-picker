@@ -111,7 +111,7 @@ const Actions: React.FC<IProps> = ({item}) => {
                           key={uuidv4()}
                           icon={
                             list.type === EACTIONTABLE.CONFIRM_INSPECTOR &&
-                            item.inspectorStatus === EINSPECTORSTATUS.REJECT
+                            item.activityStatus === EINSPECTORSTATUS.UNCONFIRMED
                               ? list.changIcon!
                               : list.icon
                           }
@@ -119,7 +119,7 @@ const Actions: React.FC<IProps> = ({item}) => {
                           onClick={() => openModal(list.type)}
                           disabled={
                             list.type === EACTIONTABLE.CONFIRM_INSPECTOR &&
-                            item.inspectorStatus !== EINSPECTORSTATUS.REJECT
+                            item.activityStatus !== EINSPECTORSTATUS.UNCONFIRMED
                           }
                         />
                       );
@@ -156,7 +156,7 @@ const Actions: React.FC<IProps> = ({item}) => {
       <Confirm
         content={
           <>
-            {item.inspectorStatus === EINSPECTORSTATUS.ACCEPT ? (
+            {item.activityStatus === EINSPECTORSTATUS.CONFIRMED ? (
               <span>آیا از رد بازرس</span>
             ) : (
               <span>آیا از تایید بازرس</span>
