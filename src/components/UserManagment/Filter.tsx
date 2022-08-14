@@ -15,7 +15,7 @@ interface Iprops {
 interface ISavedVisite {
   nationalIdOrMobileNumber: any;
   province: any;
-  loked: any;
+  locked: any;
 }
 
 const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, query, setQuery}) => {
@@ -42,7 +42,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
       return {
         ...query,
         province: values.province,
-        loked: values.loked,
+        locked: values.locked,
         nationalIdOrMobileNumber: values.nationalIdOrMobileNumber
           ? values.nationalIdOrMobileNumber
           : null,
@@ -92,7 +92,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
           <div className="w-full ">
             <Controller
               control={control}
-              name="loked"
+              name="locked"
               render={({field: {onChange, onBlur, value, name}}) => (
                 <Select
                   onChange={onChange}
@@ -120,7 +120,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
               onClick={() => {
                 reset({
                   nationalIdOrMobileNumber: null,
-                  loked: null,
+                  locked: null,
                   province: null,
                 });
               }}
