@@ -15,12 +15,14 @@ import EditOrAddUser from './EditOrAddComponent';
 interface IProps {
   item: any;
   wrapperRef: any;
+  shouldRefresh:(data:boolean)=>void
+
 }
 interface IModals {
   [name: string]: boolean;
 }
 
-const Actions: React.FC<IProps> = ({item}) => {
+const Actions: React.FC<IProps> = ({item,shouldRefresh}) => {
   const popperElRef = React.useRef<any>(null);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -136,6 +138,7 @@ const Actions: React.FC<IProps> = ({item}) => {
         endPoint={() => console.log('helooo')}
       />
       <EditOrAddUser
+        shouldRefresh={shouldRefresh}
         userData={item}
         isOpen={modals.EDIT}
         closeModal={() => closeModal(EACTIONTABLE.EDIT)}
@@ -148,6 +151,6 @@ const Actions: React.FC<IProps> = ({item}) => {
       />
     </>
   );
-};
+}
 
 export default Actions;

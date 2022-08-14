@@ -17,6 +17,7 @@ interface IAddOrUpdateUser {
   actionType?: string;
   actionTitle?: string;
   setShowModal?: any;
+  shouldRefresh: (data: boolean) => void;
 }
 
 const initialCityOptions = [
@@ -61,7 +62,7 @@ const initialًCityResourceOptions = [
   },
 ];
 
-const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, setShowModal}) => {
+const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, setShowModal, shouldRefresh}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [provinceOptions, setProvinceOptions] = useState<any>(initialProvinceOptions);
@@ -188,10 +189,20 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       const {data} = await fsServices.addUser(finalData);
       cogoToast.success('عملیات با موفقیت انجام شد!');
       setShowModal(false);
+      shouldRefresh(true);
       // handleUpdateVisitList((prev: any) => !prev)
     } catch (error: any) {
       if (error.message) {
         cogoToast.error(error.message);
+        if (error.errors && error.errors.length) {
+          cogoToast.error("خطا در ارسال اطلاعات");
+          error.errors.map((item: any) => {
+            setError(item.field, {
+              message: item.message,
+            });
+          });
+          return;
+        }
         // setError("appointmentDate", {
         //   message: error.message
         // });

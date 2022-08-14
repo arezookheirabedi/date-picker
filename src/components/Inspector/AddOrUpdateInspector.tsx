@@ -20,7 +20,8 @@ import {
 
 interface IAddOrUpdateInspector {
   actionType?: any;
-  setShowModal?: any
+  setShowModal?: any;
+  shouldRefresh: (data: boolean) => void;
 }
 
 const initialCityOptions = [
@@ -49,7 +50,7 @@ const activityStatus = [
 
 ];
 
-const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setShowModal}) => {
+const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setShowModal, shouldRefresh}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [provinceOptions, setProvinceOptions] = useState<any>(initialProvinceOptions);
@@ -190,9 +191,9 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
       const {data} = await fsServices.addInspector(finalData);
       cogoToast.success('عملیات با موفقیت انجام شد!');
       setShowModal(false);
+      shouldRefresh(true)
       // handleUpdateVisitList((prev: any) => !prev)
     } catch (error: any) {
-      console.log(error);
       if (error.errors && error.errors.length) {
         cogoToast.error("خطا در ارسال اطلاعات");
         error.errors.map((item: any) => {

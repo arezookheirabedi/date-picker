@@ -322,7 +322,7 @@ export default function Inspectors() {
                     key: '',
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-center">
-                        <Actions item={record} wrapperRef={wrapperRef} />
+                        <Actions item={record} wrapperRef={wrapperRef} shouldRefresh={shouldRefresh} />
                       </div>
                     ),
                   },
@@ -334,6 +334,7 @@ export default function Inspectors() {
       </fieldset>
 
       <AddOrUpdateInseptor
+        shouldRefresh={shouldRefresh}
         isOpen={showModal}
         closeModal={() => setShowModal(false)}
         actionType="add"
