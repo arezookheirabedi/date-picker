@@ -120,6 +120,15 @@ export const convertGregorianDateToJalaliDate = (date: any) => {
   });
 };
 
+export function unixToDateObject(unix: number) {
+  const date = dayjs(unix).calendar("jalali");
+  return {
+    year: Number(date.format("YYYY")),
+    month: Number(date.format("MM")),
+    day: Number(date.format("DD")),
+  };
+}
+
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
   let mainKey = event.key;
   const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -156,6 +165,8 @@ export const toPersianDigit = (str: any) => {
   const id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return str.replace(/[0-9]/g, (w: any) => id[+w]);
 };
+
+
 
 export function isLogin() {
   const profileStr = localStorage.getItem('ministers-userinfo');
