@@ -39,7 +39,6 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
 
   const onSubmit = (values: any) => {
     setQuery(() => {
-      debugger;
       return {
         ...query,
         province: values.province,
