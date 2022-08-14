@@ -72,7 +72,7 @@ function users(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/fs/users`, params, {...config});
+    .get(`/api/v1/fs/report-viewers/users`, params, {...config});
 }
 export default {
   captcha,

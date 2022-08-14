@@ -1,6 +1,6 @@
 import {ReactElement} from 'react';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
-import Delete from '../../../assets/images/icons/user-delete.svg';
+// import Delete from '../../../assets/images/icons/user-delete.svg';
 import Edit from '../../../assets/images/icons/user-edit.svg';
 import ResetPass from '../../../assets/images/icons/reset-pass.svg';
 
@@ -22,9 +22,9 @@ export const ActionList: Array<IActionList> = [
     type: EACTIONTABLE.EDIT,
   },
 
-  {
-    icon: <img alt="delete" src={Delete} className="h-4 w-4" />,
-    title: 'حذف بازرس',
-    type: EACTIONTABLE.DELETE,
-  },
+  // {
+  //   icon: <img alt="delete" src={Delete} className="h-4 w-4" />,
+  //   title: 'حذف بازرس',
+  //   type: EACTIONTABLE.DELETE,
+  // },
 ];
