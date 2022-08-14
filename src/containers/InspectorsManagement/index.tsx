@@ -68,7 +68,7 @@ export default function Inspectors() {
   const [query, setQuery] = useState({
     province: null,
     nationalIdOrMobileNumber: null,
-    loked: null,
+    locked: null,
     currentPage: 1,
     retry: false,
     deleted: false,
@@ -106,11 +106,11 @@ export default function Inspectors() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, currentPage, loked, ...params}: any) {
+  async function fetchReports({retry, currentPage, locked, ...params}: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
-      activityStatus: query.loked,
+      activityStatus: query.locked,
     };
 
     setLoading(true);

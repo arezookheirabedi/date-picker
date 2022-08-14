@@ -32,7 +32,7 @@ export default function User() {
   const [query, setQuery] = useState({
     province: null,
     nationalIdOrMobileNumber: null,
-    loked: null,
+    locked: null,
     currentPage: 1,
     retry: false,
     pageSize,
@@ -82,7 +82,7 @@ export default function User() {
           accestance: item.roles[0],
           nationalId: item.nationalId,
           mobileNumber: item.mobileSet,
-          activateStatus: !item.loked,
+          activateStatus: !item.locked,
           city: item.city || '-',
           username: item.username,
         });
@@ -220,7 +220,7 @@ export default function User() {
                     name: 'وضعیت فعالیت',
                     key: 'activateStatus',
                     render: (v: any, record: any) => (
-                      <SwitchToggleButton status={(record && record.activateStatus) || false} />
+                      <SwitchToggleButton status={record && record.activateStatus} />
                     ),
                   },
                   {
