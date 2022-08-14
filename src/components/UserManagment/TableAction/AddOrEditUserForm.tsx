@@ -92,7 +92,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       email: null,
       firstName: null,
       lastName: null,
-      locked: true,
+      locked: false,
       mobileSet: [],
       nationalId: null,
       password: null,
@@ -103,16 +103,18 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
   const [valuesOfRole, setValuesOfRoles] = useState([]);
   const [tagResources, setTagResources] = useState<any>(null);
   const [provinceResources, setProvinceResources] = useState<any>(null);
+  const [cityResources, setCityResources] = useState<any>(null);
 
   const getValuesOfRoles = (values: any) => {
+
     const temp: any = [];
-    values.forEach((item: any) => temp.push(item.id));
+    values.forEach((item: any) => temp.push(item.title));
     setValuesOfRoles(temp);
   };
 
   const getValuesOfTag = (values: any) => {
     let temp: any = [];
-    values.forEach((item: any) => temp.push(item.title));
+    values.forEach((item: any) => temp.push(item.id));
 
     setTagResources((prev: any) => {
       return {
@@ -124,7 +126,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
 
   const getValuesOfProvinceResource = (values: any) => {
     const temp: any = [];
-    values.forEach((item: any) => temp.push(item.title));
+    values.forEach((item: any) => temp.push(item.id));
 
     setProvinceResources(() => {
       return {
@@ -133,6 +135,18 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       };
     });
   };
+
+  const getValuesOfCityResource = (values: any) => {
+    const temp: any = [];
+    values.forEach((item: any) => temp.push(item.id));
+
+    setCityResources(() => {
+      return {
+        name: 'city',
+        value: temp,
+      };
+    });
+  }
 
   const onSubmit = async (values: any) => {
     if (!valuesOfRole.length) {
@@ -161,7 +175,8 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       city: cityTitleInput,
       mobileSet: [values.mobileSet],
       roles: valuesOfRole,
-      resources: [tagResources, provinceResources],
+      resources: [tagResources, provinceResources, cityResources],
+      nationalId: values.nationalId ? values.nationalId : null
     };
     const finalData = {
       ...values,
@@ -425,7 +440,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
               <label htmlFor="city" className="text-xs text-gray-400 flex justify-start mb-1">
                 شهر
               </label>
-              <SingleSelectInModal options={cityOptions} setTitle={setCityTitleInput} />
+              <SingleSelectInModal options={cityOptions} setTitle={setCityTitleInput}/>
               {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
               {/*       type="text"/> */}
             </div>
@@ -517,10 +532,10 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
 
           <h5 className="text-lg font-black text-right px-12 mb-8">سطح دسترسی کاربر</h5>
           <div className="mb-4">
-            <MultiSelectInModal options={ruleOptions} title="نقش ها" getValues={getValuesOfRoles} />
+            <MultiSelectInModal options={ruleOptions} title="نقش ها" getValues={getValuesOfRoles}/>
           </div>
           <div className="mb-4">
-            <MultiSelectInModal options={tagOptions} title="برچسب ها" getValues={getValuesOfTag} />
+            <MultiSelectInModal options={tagOptions} title="برچسب ها" getValues={getValuesOfTag}/>
           </div>
           <div className="mb-4">
             <MultiSelectInModal
@@ -530,7 +545,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
             />
           </div>
           <div className="mb-8">
-            <MultiSelectInModal options={cityResourceOptions} title="شهر" />
+            <MultiSelectInModal options={cityResourceOptions} title="شهر" getValues={getValuesOfCityResource}/>
           </div>
           <div className="w-full">
             <button
@@ -538,7 +553,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
               className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52 mb-12"
             >
               {actionType === 'add' && (
-                <span>{!isLoading ? `ثبت ${actionTitle}` : <DotLoading />}</span>
+                <span>{!isLoading ? `ثبت ${actionTitle}` : <DotLoading/>}</span>
               )}
               {actionType === 'update' && ` ویرایش ${actionTitle}`}
             </button>
