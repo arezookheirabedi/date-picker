@@ -58,7 +58,7 @@ function rolePermision(params: any, config?: AxiosRequestConfig): Promise<AxiosR
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .get(`/api/v1/fs/rol-permissions`, params, {...config});
+    .get(`/api/v1/fs/report-viewers/role-permissions`, params, {...config});
 }
 
 function getResources(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {

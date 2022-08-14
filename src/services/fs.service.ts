@@ -18,7 +18,7 @@ function addUser(params: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
-    .post(`/api/v1/fs/users?lang=fa`, params);
+    .post(`/api/v1/fs/report-viewers/users?lang=fa`, params);
 }
 
 function addInspector(params: any) {
