@@ -76,9 +76,9 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
   // eslint-disable-next-line
   const [cityOptions, setCityOptions] = useState<any>(initialCityOptions);
 
-  const [valueOption, setValueOption] = useState(null);
-  const [provinceTitleInput, setProvinceTitleInput] = useState(null);
-  const [cityTitleInput, setCityTitleInput] = useState(null);
+  // const [valueOption, setValueOption] = useState(null);
+  const [provinceTitleInput, setProvinceTitleInput] = useState<any>(null);
+  const [cityTitleInput, setCityTitleInput] = useState<any>(null);
 
   const {
     register,
@@ -172,8 +172,8 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       return;
     }
     const extraData = {
-      province: provinceTitleInput,
-      city: cityTitleInput,
+      province: provinceTitleInput ? provinceTitleInput.title : null,
+      city: cityTitleInput ? cityTitleInput.title : null,
       mobileSet: [values.mobileSet],
       roles: valuesOfRole,
       resources: [tagResources, provinceResources, cityResources],
@@ -192,17 +192,20 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       shouldRefresh(true);
       // handleUpdateVisitList((prev: any) => !prev)
     } catch (error: any) {
+
+      if (error.errors && error.errors.length) {
+        // cogoToast.error("خطا در ارسال اطلاعات");
+        error.errors.map((item: any) => {
+          setError(item.field, {
+            message: item.message,
+          });
+        });
+        return;
+      }
+
       if (error.message) {
         cogoToast.error(error.message);
-        if (error.errors && error.errors.length) {
-          cogoToast.error("خطا در ارسال اطلاعات");
-          error.errors.map((item: any) => {
-            setError(item.field, {
-              message: item.message,
-            });
-          });
-          return;
-        }
+
         // setError("appointmentDate", {
         //   message: error.message
         // });
@@ -257,7 +260,13 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
       });
     });
     setCityOptions(() => {
-      return [...normalizedData];
+      return [
+        {
+          title: 'انتخاب شهر',
+          value: null,
+        },
+        ...normalizedData
+      ];
     });
   };
 
@@ -328,12 +337,13 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
   };
 
   useEffect(() => {
-    if (valueOption) {
-      getCities(valueOption);
+    if (provinceTitleInput && provinceTitleInput.value) {
+      getCities(provinceTitleInput?.value);
     } else {
       setCityOptions(initialCityOptions);
+      setCityTitleInput(null)
     }
-  }, [valueOption]);
+  }, [provinceTitleInput]);
 
   useEffect(() => {
     getProvince();
@@ -441,8 +451,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
               </label>
               <SingleSelectInModal
                 options={provinceOptions}
-                setValueOption={setValueOption}
-                setTitle={setProvinceTitleInput}
+                setValueOption={setProvinceTitleInput}
               />
               {/* <input id="full-name" type="text" */}
               {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
@@ -451,7 +460,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
               <label htmlFor="city" className="text-xs text-gray-400 flex justify-start mb-1">
                 شهر
               </label>
-              <SingleSelectInModal options={cityOptions} setTitle={setCityTitleInput}/>
+              <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput}/>
               {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
               {/*       type="text"/> */}
             </div>
@@ -500,7 +509,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({actionType, actionTitle, s
 
           <div className="w-full flex px-12 mb-12">
             <div className="u-width-47">
-              <label htmlFor="email" className="text-xs text-gray-400 flex justify-start mb-1">
+              <label htmlFor="password" className="text-xs text-gray-400 flex justify-start mb-1">
                 رمز عبور
               </label>
               {/* <SimpleSelect options={provinceOptions} defaultOption='تهران'/> */}
