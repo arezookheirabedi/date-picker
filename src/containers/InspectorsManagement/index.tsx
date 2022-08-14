@@ -20,11 +20,11 @@ const statusOption = [
     label: 'همه',
   },
   {
-    value: 'CONFIRM',
+    value: 'CONFIRMED',
     label: 'تایید شده',
   },
   {
-    value: 'UNCONFIRM',
+    value: 'UNCONFIRMED',
     label: 'تایید نشده',
   },
 ];
@@ -107,12 +107,12 @@ export default function Inspectors() {
   }
 
   async function fetchReports({retry, currentPage, loked, ...params}: any) {
-    debugger;
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
       activityStatus: query.loked,
     };
+
     setLoading(true);
     setErrorMessage(null);
     try {
