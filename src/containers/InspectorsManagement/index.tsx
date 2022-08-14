@@ -1,40 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useRef, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableXHR';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import HiddenMobileNumber from 'src/components/Form/HiddenMobileNumber';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import SwitchToggleButton from 'src/components/Form/SwitchToggleButton';
 import {EERRORS} from 'src/constants/errors.enum';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
 import inspectorServices from 'src/services/inspector.service';
-import SimpleSelect from 'src/components/Select2/SimpleSelect';
-import LocalSearchNationalId from 'src/components/UserManagment/LocalSearchNationalId';
 import fsServices from 'src/services/fs.service';
+import Filter from 'src/components/UserManagment/Filter';
 import plusIcon from '../../assets/images/icons/plus.svg';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
 import RejectIcon from '../../assets/images/icons/reject.svg';
-// import PendingIcon from '../../assets/images/icons/pending.svg';
 import Actions from './TableAction';
 import AddOrUpdateInseptor from '../../components/UserManagment/TableAction/EditOrAddComponent';
 
 const statusOption = [
   {
     value: null,
-    title: 'همه',
-    icon: <></>,
+    label: 'همه',
   },
   {
-    value: 'تایید شده',
-    title: 'تایید شده',
-    icon: <img src={ConfirmIcon} alt="confirm" />,
+    value: 'CONFIRMED',
+    label: 'تایید شده',
   },
   {
-    value: 'تایید نشده',
-    title: 'تایید نشده',
-    icon: <img src={RejectIcon} alt="confirm" />,
+    value: 'UNCONFIRMED',
+    label: 'تایید نشده',
   },
 ];
 
@@ -63,28 +54,25 @@ const pageSize = 10;
 export default function Inspectors() {
   const [provinceOptions, setProvinceOptions] = useState([
     {
-      title: 'انتخاب استان',
-      value: 'انتخاب استان',
+      label: 'همه استان ها',
+      value: null,
     },
   ]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
-    provinceTilte: null,
+    province: null,
     nationalIdOrMobileNumber: null,
-    activationStatusPersian: null,
+    locked: null,
     currentPage: 1,
     retry: false,
     deleted: false,
-    // sort: 'DESC',
-    // sortKey: ['reportStatus'].join(','),
+
     pageSize,
   });
 
@@ -93,8 +81,8 @@ export default function Inspectors() {
     const {data} = (await fsServices.getProvince()) as any;
     data.forEach((item: any) => {
       normalizedData.push({
-        title: item.province,
-        value: item.provinceCode,
+        label: item.province,
+        value: item.province,
       });
     });
     setProvinceOptions((prev: any) => {
@@ -118,31 +106,13 @@ export default function Inspectors() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getActivityStatus = (data: string) => {
-    switch (data) {
-      case 'تایید شده':
-        return 'CONFIRMED';
-      case 'تایید نشده':
-        return 'UNCONFIRMED';
-      default:
-        return null;
-    }
-  };
-
-  async function fetchReports({
-    retry,
-    currentPage,
-    activationStatusPersian,
-    provinceTilte,
-    ...params
-  }: any) {
+  async function fetchReports({retry, currentPage, locked, ...params}: any) {
     const newData = {
       ...params,
       pageNumber: Number(query.currentPage) - 1,
-      activityStatus: getActivityStatus(query.activationStatusPersian || ''),
-      province:
-        query.provinceTilte && query.provinceTilte === 'انتخاب استان' ? null : query.provinceTilte,
+      activityStatus: query.locked,
     };
+
     setLoading(true);
     setErrorMessage(null);
     try {
@@ -194,22 +164,11 @@ export default function Inspectors() {
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8 mt-4">
         <div className="flex flex-grow align-center justify-start">
           <div className="w-3/4 flex">
-            <LocalSearchNationalId
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="nationalIdOrMobileNumber"
-            />
-            <SimpleSelect
-              options={provinceOptions}
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="provinceTilte"
-            />
-            <SimpleSelect
-              options={statusOption}
-              setQueryParams={setQuery}
-              queryParams={query}
-              objectKey="activationStatusPersian"
+            <Filter
+              provinceOption={provinceOptions}
+              sattusOption={statusOption}
+              query={query}
+              setQuery={setQuery}
             />
           </div>
           <div className="w-1/4">
