@@ -16,12 +16,14 @@ import AddOrUpdateInseptor from '../../../components/UserManagment/TableAction/E
 interface IProps {
   item: any;
   wrapperRef: any;
+  shouldRefresh: (data: boolean) => void
 }
+
 interface IModals {
   [name: string]: boolean;
 }
 
-const Actions: React.FC<IProps> = ({item}) => {
+const Actions: React.FC<IProps> = ({item, shouldRefresh}) => {
   const popperElRef = React.useRef<any>(null);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -83,7 +85,7 @@ const Actions: React.FC<IProps> = ({item}) => {
           ref={setReferenceElement}
           className="inline-flex items-center justify-center text-xs font-medium focus:outline-none"
         >
-          <img alt="moreAction" src={ActionIcon} className="h-4 w-4" />
+          <img alt="moreAction" src={ActionIcon} className="h-4 w-4"/>
         </Popover.Button>
 
         <Portal>
@@ -136,7 +138,7 @@ const Actions: React.FC<IProps> = ({item}) => {
         content={
           <>
             <span>آیا از حذف کار بر با کد ملی</span>
-            <span className="text-cyan-400"> &nbsp;{toPersianDigit(item.nationalId)}</span>
+            <span className="text-cyan-400"> &nbsp;{item.nationalId && toPersianDigit(item.nationalId)}</span>
             &nbsp;
             <span>مطمئن هستید؟</span>
           </>
@@ -147,6 +149,7 @@ const Actions: React.FC<IProps> = ({item}) => {
         endPoint={() => console.log('helooo')}
       />
       <AddOrUpdateInseptor
+        shouldRefresh={shouldRefresh}
         userData={item}
         isOpen={modals.EDIT}
         closeModal={() => closeModal(EACTIONTABLE.EDIT)}
@@ -163,7 +166,7 @@ const Actions: React.FC<IProps> = ({item}) => {
             )}
             <span className="text-cyan-400">
               {' '}
-              با کد ملی &nbsp;{toPersianDigit(item.nationalId)}
+              با کد ملی &nbsp;{item.nationalId && toPersianDigit(item.nationalId)}
             </span>
             &nbsp;
             <span>مطمئن هستید؟ &nbsp;</span>

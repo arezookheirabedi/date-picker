@@ -9,15 +9,16 @@ interface IProps {
   closeModal: () => void;
   actionType: string;
   actionTitle?: string;
+  shouldRefresh: (data: boolean) => void;
 }
 
-const Edit: React.FC<IProps> = ({actionType, actionTitle, isOpen, closeModal}) => {
+const Edit: React.FC<IProps> = ({actionType, actionTitle, isOpen, closeModal, shouldRefresh}) => {
   return (
     <Modal showModal={isOpen} setShowModal={closeModal}>
       {actionTitle === 'کاربر' ? (
-        <AddOrUpdateUser actionType={actionType} actionTitle={actionTitle} setShowModal={closeModal} />
+        <AddOrUpdateUser actionType={actionType} actionTitle={actionTitle} setShowModal={closeModal} shouldRefresh={shouldRefresh}/>
       ) : (
-        <AddOrUpdateInspector actionType={actionType} setShowModal={closeModal} />
+        <AddOrUpdateInspector actionType={actionType} setShowModal={closeModal} shouldRefresh={shouldRefresh} />
       )}
     </Modal>
   );

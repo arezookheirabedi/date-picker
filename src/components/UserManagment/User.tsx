@@ -276,7 +276,8 @@ export default function User() {
                     key: '',
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-center">
-                        <Actions item={record} wrapperRef={wrapperRef} />
+                        <Actions item={record} wrapperRef={wrapperRef}          shouldRefresh={shouldRefresh}
+                        />
                       </div>
                     ),
                   },
@@ -291,6 +292,7 @@ export default function User() {
         closeModal={() => setShowModal(false)}
         actionType="add"
         actionTitle="کاربر"
+        shouldRefresh={shouldRefresh}
       />
     </>
   );
