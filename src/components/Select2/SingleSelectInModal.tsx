@@ -9,13 +9,13 @@ interface ISimpleSelect {
 }
 
 const SingleSelectInModal: React.FC<ISimpleSelect> = ({
-  options,
-  defaultOption,
-  setValueOption,
-  setTitle,
-}) => {
+                                                        options,
+                                                        defaultOption,
+                                                        setValueOption,
+                                                        setTitle,
+                                                      }) => {
   const [showOptions, setShowOptions] = useState(false);
-  const [selected, setSelected] = useState(defaultOption || options[0].title);
+  const [selected, setSelected] = useState(defaultOption || options[0]);
 
   const wholeSelectRef = useRef<any>();
   const selectedRef = useRef<any>();
@@ -36,7 +36,7 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
   }, [showOptions]);
 
   const changeOption = (item: any) => {
-    setSelected(item.title);
+    setSelected(item);
     if (setTitle) {
       setTitle(item.title);
     }
@@ -44,6 +44,16 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
       setValueOption(item.value);
     }
   };
+
+  useEffect(() => {
+    if (selected && selected.value && setValueOption) {
+      setValueOption(selected)
+    }
+  }, [selected])
+
+  useEffect(() => {
+    setSelected(options[0])
+  }, [options])
 
   return (
     <div
@@ -56,7 +66,7 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
           return (
             // eslint-disable-next-line no-nested-ternary
             item.icon ? (
-              item.title === selected ? (
+              item.title === selected.title ? (
                 <span className="ml-2">{item.icon}</span>
               ) : (
                 ''
@@ -67,9 +77,9 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
           );
         })}
         <span className="w-20 truncate flex justify-start pr-2 w-full">
-          {options.length === 1 ? options[0].title : selected}
+          {options.length === 1 ? options[0].title : selected.title}
         </span>
-        <DownIcon className="mr-2 h-2 w-2.5" />
+        <DownIcon className="mr-2 h-2 w-2.5"/>
       </span>
       <ul className={`${showOptions ? 'block' : 'hidden'} transition ease-in-out delay-150`}>
         {options.map((item: any, index: any) => {
@@ -78,14 +88,14 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
             <li
               value={item.value}
               key={index}
-              ref={selected === item.title ? selectedRef : badRef}
+              ref={selected.title === item.title ? selectedRef : badRef}
               className="text-xs"
               // style={{backgroundColor: selected === item.title ? '#CCCCCCDF' : ''}}
               onClick={() => changeOption(item)}
-              defaultValue={selected}
+              defaultValue={selected.value}
             >
               <span className="circle-select  ml-2">
-                <span className={selected === item.title ? 'circle-select--selected' : ''} />
+                <span className={selected.title === item.title ? 'circle-select--selected' : ''}/>
               </span>
               {item.icon && <i className="ml-2">{item.icon}</i>}
               {item.title}
