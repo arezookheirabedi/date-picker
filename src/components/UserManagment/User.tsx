@@ -19,6 +19,7 @@ export default function User() {
     {
       label: 'همه استان ها',
       value: null,
+      id: 'null',
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,7 @@ export default function User() {
       normalizedData.push({
         label: item.province,
         value: item.province,
+        id: item.provinceCode,
       });
     });
     setProvinceOptions((prev: any) => {
@@ -82,9 +84,10 @@ export default function User() {
           accestance: item.roles[0],
           nationalId: item.nationalId,
           mobileNumber: item.mobileSet,
-          activateStatus: !item.locked,
+          locked: !item.locked,
           city: item.city || '-',
           username: item.username,
+          totalData: item,
         });
       });
 
@@ -218,9 +221,14 @@ export default function User() {
 
                   {
                     name: 'وضعیت فعالیت',
-                    key: 'activateStatus',
+                    key: 'locked',
                     render: (v: any, record: any) => (
-                      <SwitchToggleButton status={record && record.activateStatus} />
+                      <SwitchToggleButton
+                        // shouldRefresh={shouldRefresh}
+                        status={record && record.locked}
+                        record={record.totalData}
+                        // refresh={refresh}
+                      />
                     ),
                   },
                   {
