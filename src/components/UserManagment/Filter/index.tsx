@@ -3,7 +3,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import Select from './Select';
-import DotLoading from '../DotLoading';
+import DotLoading from '../../DotLoading';
 
 interface Iprops {
   provinceOption: Array<any>;
