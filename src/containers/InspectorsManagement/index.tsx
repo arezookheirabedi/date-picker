@@ -243,8 +243,8 @@ export default function Inspectors() {
                 totalItems={totalItems}
                 columns={[
                   {
-                    name: 'ردیف',
-                    key: '',
+                    name: 'نام و نام خانوادگی',
+                    key: 'name',
                     render: (v: any, record, index: number) => (
                       <div className="flex w-full justify-center">
                         {toPersianDigit(
@@ -322,7 +322,11 @@ export default function Inspectors() {
                     key: '',
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-center">
-                        <Actions item={record} wrapperRef={wrapperRef} shouldRefresh={shouldRefresh} />
+                        <Actions
+                          item={record}
+                          wrapperRef={wrapperRef}
+                          shouldRefresh={shouldRefresh}
+                        />
                       </div>
                     ),
                   },
