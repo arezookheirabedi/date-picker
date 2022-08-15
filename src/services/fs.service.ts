@@ -28,11 +28,19 @@ function addInspector(params: any) {
     .post(`/api/v1/inspection/inspectors/bakeries?lang=fa`, params);
 }
 
+function updateInspector(params: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .patch(`/api/v1/inspection/inspectors/bakeries/${params.id}?lang=fa`, params);
+}
+
 const fsServices = {
   getProvince,
   getCities,
   addUser,
   addInspector,
+  updateInspector
 };
 
 export default fsServices;
