@@ -7,7 +7,7 @@ import ActionIcon from 'src/assets/images/icons/table-action.svg';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
 // import {toPersianDigit} from 'src/helpers/utils';
 import ActionButton from './ActionButton';
-import Confirm from '../../Modal/DeleteModal';
+import Confirm from '../../Modal/ConfirmModal';
 import {ActionList, IActionList} from './ActionList';
 import EditOrAddUser from './EditOrAddComponent';
 import RestePassModal from './RestePassModal';

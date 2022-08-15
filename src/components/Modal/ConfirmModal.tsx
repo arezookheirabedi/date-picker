@@ -15,7 +15,7 @@ interface IProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Delete: React.FC<IProps> = ({
+const Confirm: React.FC<IProps> = ({
   isOpen,
   content,
   item,
@@ -127,4 +127,4 @@ const Delete: React.FC<IProps> = ({
   );
 };
 
-export default Delete;
+export default Confirm;

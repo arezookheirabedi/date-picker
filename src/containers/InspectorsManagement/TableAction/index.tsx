@@ -9,7 +9,7 @@ import {toPersianDigit} from 'src/helpers/utils';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
 import fsServices from 'src/services/fs.service';
 import ActionButton from './ActionButton';
-import Confirm from '../../../components/Modal/DeleteModal';
+import Confirm from '../../../components/Modal/ConfirmModal';
 import {ActionList, IActionList} from './ActionList';
 import AddOrUpdateInseptor from '../../../components/UserManagment/TableAction/EditOrAddComponent';
 
