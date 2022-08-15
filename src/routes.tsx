@@ -26,7 +26,7 @@ import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
 
-import InspectorManagement from './containers/InspectorsManagement'
+import InspectorManagement from './containers/InspectorsManagement';
 import UserManagment from './containers/UserManagment/UserManagment';
 
 // import Arbaeen from './containers/Arbaeen/Arbaeen';
@@ -40,7 +40,7 @@ const routes: IRoute[] = [
     exact: true,
     inMenu: true,
     title: 'مدیریت کاربران',
-    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER'],
+    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER', 'ROLE_REPORT_VIEWER_USER_MANAGEMENT'],
     main: UserManagment,
   },
   {
@@ -596,7 +596,12 @@ const routes: IRoute[] = [
         exact: true,
         inMenu: true,
         title: 'مدیریت بازرسان',
-        roles: ['ROLE_ADMIN'],
+        roles: [
+          'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
+          'ROLE_REPORT_VIEWER_GUILD',
+          'ROLE_REPORT_VIEWER_INSPECTOR_USER_MANAGEMENT',
+        ],
         main: InspectorManagement,
       },
       {
