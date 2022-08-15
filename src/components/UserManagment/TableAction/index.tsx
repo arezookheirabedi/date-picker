@@ -5,24 +5,24 @@ import {Portal} from 'react-portal';
 import {v4 as uuidv4} from 'uuid';
 import ActionIcon from 'src/assets/images/icons/table-action.svg';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
-import {toPersianDigit} from 'src/helpers/utils';
-import ResetPasswordModal from 'src/components/Layout/Private/components/ResetPasswordModal';
+// import {toPersianDigit} from 'src/helpers/utils';
 import ActionButton from './ActionButton';
 import Delete from '../../Modal/DeleteModal';
 import {ActionList, IActionList} from './ActionList';
 import EditOrAddUser from './EditOrAddComponent';
+import RestePassModal from './RestePassModal';
 
 interface IProps {
   item: any;
   wrapperRef: any;
-  shouldRefresh:(data:boolean)=>void
-
+  shouldRefresh: (data: boolean) => void;
+  refresh: boolean;
 }
 interface IModals {
   [name: string]: boolean;
 }
 
-const Actions: React.FC<IProps> = ({item,shouldRefresh}) => {
+const Actions: React.FC<IProps> = ({item, shouldRefresh, refresh}) => {
   const popperElRef = React.useRef<any>(null);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -63,16 +63,13 @@ const Actions: React.FC<IProps> = ({item,shouldRefresh}) => {
 
   const closeModal = (type: string) => {
     let modalsModified: IModals = {...modals};
-    Object.keys(modalsModified).forEach(
-      // eslint-disable-next-line
-      (key: string) => {
-        const value = modalsModified[key];
-        modalsModified = {
-          ...modalsModified,
-          [key]: key === type ? !value : value,
-        };
-      }
-    );
+    Object.keys(modalsModified).forEach((key: string) => {
+      const value = modalsModified[key];
+      modalsModified = {
+        ...modalsModified,
+        [key]: key === type ? !value : value,
+      };
+    });
     setModals(modalsModified);
   };
 
@@ -128,7 +125,7 @@ const Actions: React.FC<IProps> = ({item,shouldRefresh}) => {
         content={
           <>
             <span>آیا از حذف کار بر با کد ملی</span>
-            <span className="text-cyan-400"> &nbsp;{`${toPersianDigit(item.id || '-')}`}</span>
+            {/* <span className="text-cyan-400"> &nbsp;{`${toPersianDigit(item.id || '-')}`}</span> */}
             &nbsp;
             <span>مطمئن هستید؟</span>
           </>
@@ -145,12 +142,15 @@ const Actions: React.FC<IProps> = ({item,shouldRefresh}) => {
         actionType="update"
         actionTitle="کاربر"
       />
-      <ResetPasswordModal
-        resetIsOpen={modals.RESET_PASS}
-        setResetIsOpen={() => closeModal(EACTIONTABLE.RESET_PASS)}
+      <RestePassModal
+        item={item}
+        isOpen={modals.RESET_PASS}
+        closeModal={() => closeModal(EACTIONTABLE.RESET_PASS)}
+        shouldRefresh={shouldRefresh}
+        refresh={refresh}
       />
     </>
   );
-}
+};
 
 export default Actions;
