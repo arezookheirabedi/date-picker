@@ -34,14 +34,14 @@ const getInspectorStatus = (data: EINSPECTORSTATUS) => {
     case EINSPECTORSTATUS.CONFIRMED:
       return (
         <div className="flex justify-center">
-          <img src={ConfirmIcon} alt="confirm" className="pl-2" />
+          <img src={ConfirmIcon} alt="confirm" className="pl-2"/>
           تایید شده
         </div>
       );
     case EINSPECTORSTATUS.UNCONFIRMED:
       return (
         <div className="flex">
-          <img src={RejectIcon} alt="confirm" className="pl-2" />
+          <img src={RejectIcon} alt="confirm" className="pl-2"/>
           تایید نشده
         </div>
       );
@@ -134,6 +134,7 @@ export default function Inspectors() {
           username: item.username,
           organization: item.organization,
           inspectorStatus: item.inspectorStatus,
+          totalData : item,
         });
       });
       setDataSet([...normalizedData]);
@@ -156,9 +157,11 @@ export default function Inspectors() {
       cancelRequest();
     };
   }, [query, refresh]);
+
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
   }
+
   return (
     <>
       <div className="flex align-center justify-spacebetween space-x-5 rtl:space-x-reverse mb-8 mt-4">
@@ -176,7 +179,7 @@ export default function Inspectors() {
               className="button button--primary px-5 justify-start sm:w-full sm:text-xs sm:px-0 sm:justify-center md:text-sm 2xl:w-4/6 xl:w-full mx-auto"
               onClick={() => openModal()}
             >
-              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
+              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden"/>
               اضافه کردن بازرس جدید
             </div>
           </div>
@@ -190,7 +193,7 @@ export default function Inspectors() {
           {errorMessage && !loading ? (
             <div className="p-40">
               <div className="text-red-500">{errorMessage}</div>
-              <RetryButton setQuery={setQuery} />
+              <RetryButton setQuery={setQuery}/>
             </div>
           ) : (
             <div ref={wrapperRef}>
@@ -258,7 +261,7 @@ export default function Inspectors() {
                     render: (v: any, record: any) => (
                       <span className="text-gray-500">
                         {record.mobileNumber ? (
-                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''} />
+                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''}/>
                         ) : (
                           'نامشخص'
                         )}
@@ -282,7 +285,7 @@ export default function Inspectors() {
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-center">
                         <Actions
-                          item={record}
+                          item={record.totalData}
                           wrapperRef={wrapperRef}
                           shouldRefresh={shouldRefresh}
                         />
