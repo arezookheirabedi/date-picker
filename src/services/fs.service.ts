@@ -27,7 +27,12 @@ function addInspector(params: any) {
     .build()
     .post(`/api/v1/inspection/inspectors/bakeries?lang=fa`, params);
 }
-
+function updateUser(params: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .patch(`/api/v1/fs/report-viewers/users/username/${params.username}?lang=fa`, params);
+}
 function updateInspector(params: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -40,7 +45,8 @@ const fsServices = {
   getCities,
   addUser,
   addInspector,
-  updateInspector
+  updateUser,
+  updateInspector,
 };
 
 export default fsServices;

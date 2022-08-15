@@ -56,6 +56,7 @@ export default function Inspectors() {
     {
       label: 'همه استان ها',
       value: null,
+      id: 'null',
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -83,6 +84,7 @@ export default function Inspectors() {
       normalizedData.push({
         label: item.province,
         value: item.province,
+        id: item.provinceCode,
       });
     });
     setProvinceOptions((prev: any) => {
@@ -123,10 +125,9 @@ export default function Inspectors() {
       data.content.forEach((item: any) => {
         normalizedData.push({
           id: item.id,
-          inspectorId: item.inspectorId,
           name: (item.firstName || '-') + (item.lastName || '-'),
           province: item.province || '-',
-          role: item.roles ? item.roles[0] : '-',
+          role: item.role || '-',
           nationalId: item.nationalId,
           mobileNumber: item.mobileNumber,
           activityStatus: item.activityStatus,
@@ -134,7 +135,8 @@ export default function Inspectors() {
           username: item.username,
           organization: item.organization,
           inspectorStatus: item.inspectorStatus,
-          totalData : item,
+          inspectorId: item.inspectorId || '-',
+          totalData: item,
         });
       });
       setDataSet([...normalizedData]);
@@ -238,13 +240,10 @@ export default function Inspectors() {
                   },
                   {
                     name: 'کد پرسنلی',
-                    key: 'userName',
-                    render: (v: any, record: any) =>
-                      record.userName ? (
-                        <span className="text-gray-500">{toPersianDigit(record.userName)}</span>
-                      ) : (
-                        '-'
-                      ),
+                    key: 'inspectorId',
+                    render: (v: any, record: any) => (
+                      <span className="text-gray-500">{record.inspectorId}</span>
+                    ),
                   },
                   {
                     name: 'پست سازمانی',
@@ -288,6 +287,7 @@ export default function Inspectors() {
                           item={record.totalData}
                           wrapperRef={wrapperRef}
                           shouldRefresh={shouldRefresh}
+                          refresh={refresh}
                         />
                       </div>
                     ),

@@ -1,30 +1,47 @@
 import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
-// import toast from 'cogo-toast';
+import toast from 'cogo-toast';
+import {EERRORS} from 'src/constants/errors.enum';
+import DotLoading from 'src/components/DotLoading';
 
 interface IProps {
+  item: any;
   isOpen: boolean;
   closeModal: () => void;
   content: JSX.Element;
-  endPoint: () => void;
+  endPoint: (data: any) => void;
+  shouldRefresh: (data: boolean) => void;
+  refresh: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Delete: React.FC<IProps> = ({isOpen, content, closeModal, endPoint}) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Confirm: React.FC<IProps> = ({
+  isOpen,
+  content,
+  item,
+  closeModal,
+  endPoint,
+  refresh,
+  shouldRefresh,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  // const handelSubmit=async () =>{try {
-  // //   setLoading(true);
-  // //   const res=await endPoint()
+  const handelSubmit = async () => {
+    setLoading(true);
 
-  // // } catch (error) {
-  // //        toast.error('خطایی در عملیات');
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const res = await endPoint(item);
 
-  // // }finally{
-  // //   setLoading(false);
-  // // }
-  // }
+      toast.success('عملیات با موفقیت انجام شد.');
+      shouldRefresh(!refresh);
+    } catch (err: any) {
+      toast.error(err.message || EERRORS.ERROR_500);
+    } finally {
+      setLoading(false);
+      closeModal();
+    }
+  };
 
   return (
     <>
@@ -86,10 +103,10 @@ const Delete: React.FC<IProps> = ({isOpen, content, closeModal, endPoint}) => {
                   <div className="mb-6 flex justify-center space-x-2 rtl:space-x-reverse">
                     <button
                       type="button"
-                      // onClick={handelSubmit}
+                      onClick={handelSubmit}
                       className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
                     >
-                      <span>بله</span>
+                      <span>{!loading ? 'بله ' : <DotLoading />}</span>
                     </button>
 
                     <button
@@ -110,4 +127,4 @@ const Delete: React.FC<IProps> = ({isOpen, content, closeModal, endPoint}) => {
   );
 };
 
-export default Delete;
+export default Confirm;

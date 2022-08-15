@@ -19,6 +19,7 @@ export default function User() {
     {
       label: 'همه استان ها',
       value: null,
+      id: 'null',
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,7 @@ export default function User() {
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
+  const [rolesOption, setRuleOptions] = useState<Array<{name: string; title: string}>>([]);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
     province: null,
@@ -44,6 +46,7 @@ export default function User() {
       normalizedData.push({
         label: item.province,
         value: item.province,
+        id: item.provinceCode,
       });
     });
     setProvinceOptions((prev: any) => {
@@ -82,9 +85,10 @@ export default function User() {
           accestance: item.roles[0],
           nationalId: item.nationalId,
           mobileNumber: item.mobileSet,
-          activateStatus: !item.locked,
+          locked: !item.locked,
           city: item.city || '-',
           username: item.username,
+          totalData: item,
         });
       });
 
@@ -100,6 +104,25 @@ export default function User() {
       setLoading(false);
     }
   }
+
+  const getRolesOption = async () => {
+    const normalizedData: Array<{name: string; title: string}> = [];
+    const {data} = (await authenticationService.rolePermision(
+      {pageNumber: 0, pageSize: 1000},
+      {cancelToken: cancelToken.token}
+    )) as any;
+    data.content.forEach((item: any) => {
+      normalizedData.push({
+        name: item.name,
+        title: item.title,
+      });
+    });
+    setRuleOptions([...normalizedData]);
+  };
+
+  useEffect(() => {
+    getRolesOption();
+  }, []);
 
   useEffect(() => {
     fetchReports({...query});
@@ -129,6 +152,11 @@ export default function User() {
   ];
   const openModal: () => void = () => {
     setShowModal(true);
+  };
+
+  const getAccestance = (data: string) => {
+    const select = rolesOption.find((role: any) => role.name === data);
+    return select ? select.title : '-';
   };
   return (
     <>
@@ -214,13 +242,17 @@ export default function User() {
                   {
                     name: 'سطوح دسترسی کاربری',
                     key: 'accestance',
+                    render: (v: any, record: any) => getAccestance(record.accestance),
                   },
 
                   {
                     name: 'وضعیت فعالیت',
-                    key: 'activateStatus',
+                    key: 'locked',
                     render: (v: any, record: any) => (
-                      <SwitchToggleButton status={record && record.activateStatus} />
+                      <SwitchToggleButton
+                        status={record && record.locked}
+                        record={record.totalData}
+                      />
                     ),
                   },
                   {
@@ -244,9 +276,10 @@ export default function User() {
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-center">
                         <Actions
-                          item={record}
+                          item={record.totalData}
                           wrapperRef={wrapperRef}
                           shouldRefresh={shouldRefresh}
+                          refresh={refresh}
                         />
                       </div>
                     ),
