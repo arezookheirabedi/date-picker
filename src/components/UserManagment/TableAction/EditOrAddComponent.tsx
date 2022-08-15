@@ -16,7 +16,7 @@ const Edit: React.FC<IProps> = ({actionType, actionTitle, isOpen, closeModal, sh
   return (
     <Modal showModal={isOpen} setShowModal={closeModal}>
       {actionTitle === 'کاربر' ? (
-        <AddOrUpdateUser actionType={actionType} actionTitle={actionTitle} setShowModal={closeModal} shouldRefresh={shouldRefresh}/>
+        <AddOrUpdateUser actionType={actionType} actionTitle={actionTitle} setShowModal={closeModal} shouldRefresh={shouldRefresh} userData={userData} />
       ) : (
         <AddOrUpdateInspector actionType={actionType} setShowModal={closeModal} shouldRefresh={shouldRefresh} userData={userData} />
       )}
