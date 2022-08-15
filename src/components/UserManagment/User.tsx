@@ -29,6 +29,7 @@ export default function User() {
   const [errorMessage, setErrorMessage] = useState(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
+  const [rolesOption, setRuleOptions] = useState<Array<{name: string; title: string}>>([]);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
     province: null,
@@ -104,6 +105,25 @@ export default function User() {
     }
   }
 
+  const getRolesOption = async () => {
+    const normalizedData: Array<{name: string; title: string}> = [];
+    const {data} = (await authenticationService.rolePermision(
+      {pageNumber: 0, pageSize: 1000},
+      {cancelToken: cancelToken.token}
+    )) as any;
+    data.content.forEach((item: any) => {
+      normalizedData.push({
+        name: item.name,
+        title: item.title,
+      });
+    });
+    setRuleOptions([...normalizedData]);
+  };
+
+  useEffect(() => {
+    getRolesOption();
+  }, []);
+
   useEffect(() => {
     fetchReports({...query});
     return () => {
@@ -132,6 +152,11 @@ export default function User() {
   ];
   const openModal: () => void = () => {
     setShowModal(true);
+  };
+
+  const getAccestance = (data: string) => {
+    const select = rolesOption.find((role: any) => role.name === data);
+    return select ? select.title : '-';
   };
   return (
     <>
@@ -217,6 +242,7 @@ export default function User() {
                   {
                     name: 'سطوح دسترسی کاربری',
                     key: 'accestance',
+                    render: (v: any, record: any) => getAccestance(record.accestance),
                   },
 
                   {
