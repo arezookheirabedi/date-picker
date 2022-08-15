@@ -7,15 +7,9 @@ import toast from 'cogo-toast';
 interface IProps {
   status: boolean;
   record: any;
-  // shouldRefresh: (data: boolean) => void;
-  // refresh: boolean;
 }
 
-const SwitchToggleButton: React.FC<IProps> = ({
-  status,
-  record,
-  //  shouldRefresh, refresh
-}) => {
+const SwitchToggleButton: React.FC<IProps> = ({status, record}) => {
   const [enabled, setEnabled] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(true);

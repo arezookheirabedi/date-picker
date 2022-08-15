@@ -224,10 +224,8 @@ export default function User() {
                     key: 'locked',
                     render: (v: any, record: any) => (
                       <SwitchToggleButton
-                        // shouldRefresh={shouldRefresh}
                         status={record && record.locked}
                         record={record.totalData}
-                        // refresh={refresh}
                       />
                     ),
                   },
@@ -252,9 +250,10 @@ export default function User() {
                     render: (v: any, record: any) => (
                       <div className="flex items-center justify-center">
                         <Actions
-                          item={record}
+                          item={record.totalData}
                           wrapperRef={wrapperRef}
                           shouldRefresh={shouldRefresh}
+                          refresh={refresh}
                         />
                       </div>
                     ),
