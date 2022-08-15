@@ -33,6 +33,12 @@ function updateUser(params: any) {
     .build()
     .patch(`/api/v1/fs/report-viewers/users/username/${params.username}?lang=fa`, params);
 }
+function updateInspector(params: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .patch(`/api/v1/inspection/inspectors/bakeries/${params.id}?lang=fa`, params);
+}
 
 const fsServices = {
   getProvince,
@@ -40,6 +46,7 @@ const fsServices = {
   addUser,
   addInspector,
   updateUser,
+  updateInspector,
 };
 
 export default fsServices;

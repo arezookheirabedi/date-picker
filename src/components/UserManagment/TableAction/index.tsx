@@ -7,7 +7,7 @@ import ActionIcon from 'src/assets/images/icons/table-action.svg';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
 // import {toPersianDigit} from 'src/helpers/utils';
 import ActionButton from './ActionButton';
-import Delete from '../../Modal/DeleteModal';
+import Confirm from '../../Modal/DeleteModal';
 import {ActionList, IActionList} from './ActionList';
 import EditOrAddUser from './EditOrAddComponent';
 import RestePassModal from './RestePassModal';
@@ -121,17 +121,20 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh, refresh}) => {
         </Portal>
       </Popover>
 
-      <Delete
+      <Confirm
+        shouldRefresh={shouldRefresh}
+        refresh={refresh}
+        item={{...item, deleted: 'CONFIRMED'}}
         content={
           <>
             <span>آیا از حذف کار بر با کد ملی</span>
-            {/* <span className="text-cyan-400"> &nbsp;{`${toPersianDigit(item.id || '-')}`}</span> */}
             &nbsp;
             <span>مطمئن هستید؟</span>
           </>
         }
         isOpen={modals.DELETE}
         closeModal={() => closeModal(EACTIONTABLE.DELETE)}
+        // eslint-disable-next-line no-console
         endPoint={() => console.log('helooo')}
       />
       <EditOrAddUser
