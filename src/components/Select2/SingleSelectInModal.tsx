@@ -6,6 +6,7 @@ interface ISimpleSelect {
   defaultOption?: any;
   setValueOption?: any;
   setTitle?: any;
+  selectedValue?: any
 }
 
 const SingleSelectInModal: React.FC<ISimpleSelect> = ({
@@ -13,6 +14,7 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
                                                         defaultOption,
                                                         setValueOption,
                                                         setTitle,
+                                                        selectedValue
                                                       }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [selected, setSelected] = useState(defaultOption || options[0]);
@@ -52,7 +54,15 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
   }, [selected])
 
   useEffect(() => {
-    setSelected(options[0])
+    if (selectedValue && options.length > 1) {
+      const defaultValue = options.find((item: any) => item.value === selectedValue)
+      if (defaultValue) {
+        setSelected(defaultValue)
+      }
+    } else {
+      setSelected(options[0])
+    }
+
   }, [options])
 
   return (
@@ -95,7 +105,8 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
               defaultValue={selected.value}
             >
               <span className="circle-select  ml-2">
-                <span className={selected.title === item.title ? 'circle-select--selected' : ''}/>
+                <span
+                  className={selected.title === item.title ? 'circle-select--selected' : ''}/>
               </span>
               {item.icon && <i className="ml-2">{item.icon}</i>}
               {item.title}
