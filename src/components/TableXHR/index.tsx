@@ -77,11 +77,9 @@ const Table: React.FC<IProps> = (props: IProps) => {
         <table className="w-full table-auto">
           <thead className="">
             <tr className="border-b border-gray-100">
-              {expandable ? <th>{}</th> : ''}
+              {expandable ? <th>{}</th> : null}
               {columns.map((column, i) => (
                 <th
-                  // scope="col"
-                  // eslint-disable-next-line
                   key={i}
                   className="whitespace-nowrap px-3 py-1 pb-4 text-xs font-medium uppercase tracking-wider text-gray-500"
                 >
@@ -101,7 +99,6 @@ const Table: React.FC<IProps> = (props: IProps) => {
               </tr>
             ) : (
               <>
-                {' '}
                 {dataSet && columns && dataSet.length > 0 && columns.length > 0 ? (
                   dataSet.map((data, i) => (
                     <Fragment key={i}>

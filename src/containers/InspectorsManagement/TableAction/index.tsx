@@ -6,24 +6,25 @@ import {v4 as uuidv4} from 'uuid';
 import ActionIcon from 'src/assets/images/icons/table-action.svg';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
 import {toPersianDigit} from 'src/helpers/utils';
-// import ResetPasswordModal from 'src/components/Layout/Private/components/ResetPasswordModal';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
+import fsServices from 'src/services/fs.service';
 import ActionButton from './ActionButton';
-import Confirm from '../../../components/Modal/DeleteModal';
+import Confirm from '../../../components/Modal/ConfirmModal';
 import {ActionList, IActionList} from './ActionList';
 import AddOrUpdateInseptor from '../../../components/UserManagment/TableAction/EditOrAddComponent';
 
 interface IProps {
+  refresh: boolean;
   item: any;
   wrapperRef: any;
-  shouldRefresh: (data: boolean) => void
+  shouldRefresh: (data: boolean) => void;
 }
 
 interface IModals {
   [name: string]: boolean;
 }
 
-const Actions: React.FC<IProps> = ({item, shouldRefresh}) => {
+const Actions: React.FC<IProps> = ({item, shouldRefresh, refresh}) => {
   const popperElRef = React.useRef<any>(null);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -85,7 +86,7 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh}) => {
           ref={setReferenceElement}
           className="inline-flex items-center justify-center text-xs font-medium focus:outline-none"
         >
-          <img alt="moreAction" src={ActionIcon} className="h-4 w-4"/>
+          <img alt="moreAction" src={ActionIcon} className="h-4 w-4" />
         </Popover.Button>
 
         <Portal>
@@ -135,18 +136,23 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh}) => {
       </Popover>
 
       <Confirm
+        item={{...item, deleted: true}}
         content={
           <>
-            <span>آیا از حذف کار بر با کد ملی</span>
-            <span className="text-cyan-400"> &nbsp;{item.nationalId && toPersianDigit(item.nationalId)}</span>
+            <span>آیا از حذف بازرس با کد ملی</span>
+            <span className="text-cyan-400">
+              {' '}
+              &nbsp;{item.nationalId && toPersianDigit(item.nationalId)}
+            </span>
             &nbsp;
             <span>مطمئن هستید؟</span>
           </>
         }
         isOpen={modals.DELETE}
         closeModal={() => closeModal(EACTIONTABLE.DELETE)}
-        // eslint-disable-next-line no-console
-        endPoint={() => console.log('helooo')}
+        endPoint={fsServices.updateInspector}
+        shouldRefresh={shouldRefresh}
+        refresh={refresh}
       />
       <AddOrUpdateInseptor
         shouldRefresh={shouldRefresh}
@@ -157,16 +163,13 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh}) => {
         actionTitle="بازرس"
       />
       <Confirm
+        shouldRefresh={shouldRefresh}
+        refresh={refresh}
         content={
           <>
-            {item.activityStatus === EINSPECTORSTATUS.CONFIRMED ? (
-              <span>آیا از رد بازرس</span>
-            ) : (
-              <span>آیا از تایید بازرس</span>
-            )}
+            <span>آیا از تایید بازرس با کد ملی</span>
             <span className="text-cyan-400">
-              {' '}
-              با کد ملی &nbsp;{item.nationalId && toPersianDigit(item.nationalId)}
+              &nbsp;{item.nationalId && toPersianDigit(item.nationalId)}
             </span>
             &nbsp;
             <span>مطمئن هستید؟ &nbsp;</span>
@@ -174,8 +177,8 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh}) => {
         }
         isOpen={modals.CONFIRM_INSPECTOR}
         closeModal={() => closeModal(EACTIONTABLE.CONFIRM_INSPECTOR)}
-        // eslint-disable-next-line no-console
-        endPoint={() => console.log('helooo')}
+        endPoint={fsServices.updateInspector}
+        item={{...item, activityStatus: 'CONFIRMED'}}
       />
     </>
   );
