@@ -1,5 +1,5 @@
 import qs from 'qs';
-import {AxiosResponse} from 'axios';
+import {AxiosRequestConfig, AxiosResponse} from 'axios';
 import request from 'src/helpers/request';
 import {removeToken} from 'src/helpers/utils';
 import {History} from 'history';
@@ -42,6 +42,7 @@ function confirmPassword(params: any): Promise<AxiosResponse<any>> {
     .build()
     .post(`/api/v1/fs/users/reset-password/confirm/self?lang=fa`, params);
 }
+
 const logout: (history?: History) => void = () => {
   try {
     removeToken();
@@ -53,6 +54,26 @@ const logout: (history?: History) => void = () => {
   }
 };
 
+function rolePermision(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/fs/report-viewers/role-permissions`, params, {...config});
+}
+
+function getResources(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/fs/resource-views`, params, {...config});
+}
+
+function users(params: any, config?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/fs/report-viewers/users`, params, {...config});
+}
 export default {
   captcha,
   logout,
@@ -60,4 +81,7 @@ export default {
   token,
   resetPassword,
   confirmPassword,
+  rolePermision,
+  getResources,
+  users,
 };
