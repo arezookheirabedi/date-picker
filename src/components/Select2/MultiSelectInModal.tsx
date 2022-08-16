@@ -6,9 +6,12 @@ interface IMultiSelectInModal {
   options: any;
   title?: string;
   getValues?: any;
+  selectedValue?: any
 }
 
-const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getValues}) => {
+const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getValues, selectedValue}) => {
+
+
   const [showOptions, setShowOptions] = useState(false);
 
   const wholeSelectRef = useRef<any>();
@@ -34,18 +37,18 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getV
   const [selectedItem, setSelectedItem] = useState<any>([]);
 
   useEffect(() => {
-    if (getValues && selectedItem.length) {
+    if (getValues) {
       getValues(selectedItem);
     }
   }, [selectedItem]);
 
   const changeOption = (item: any) => {
     const newItem = {
-      id: item.value,
+      value: item.value,
       title: item.title,
     };
 
-    const findSelectedItem = selectedItem.findIndex((entity: any) => entity.id === item.value);
+    const findSelectedItem = selectedItem.findIndex((entity: any) => entity.value === item.value);
 
     if (findSelectedItem === -1) {
       setSelectedItem((prev: any) => {
@@ -67,6 +70,30 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getV
       return [...selectedItem];
     });
   };
+
+  useEffect(() => {
+    if (selectedValue && options.length > 1) {
+      const defaultValue = options.filter((item: any) => {
+        return selectedValue.find((entity: any) => {
+          return item.value === entity
+        })
+      })
+
+      const normalizedData: any[] = [];
+      defaultValue.forEach((item: any) => {
+        normalizedData.push({
+          title: item.title,
+          value: item.value,
+        });
+      });
+      setSelectedItem(normalizedData);
+
+      // if (defaultValue) {
+      //   setSelectedItem(defaultValue)
+      // }
+    }
+
+  }, [options])
 
   return (
     <>
@@ -124,7 +151,7 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getV
                 انتخاب &nbsp;
                 {title}
               </span>
-              <DownIcon className="mr-2 h-2 w-2.5" />
+              <DownIcon className="mr-2 h-2 w-2.5"/>
             </span>
             <ul
               className={`${showOptions ? 'block' : 'hidden'} transition ease-in-out delay-150`}
