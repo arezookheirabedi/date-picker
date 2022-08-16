@@ -459,7 +459,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
                 id="username"
                 {...register('username', addUserValidation.username)}
                 type="text"
-                className={`w-full border-solid border  rounded pr-4 py-1 h-9 text-sm
+                className={`ltr w-full border-solid border  rounded px-4 py-1 h-9 text-sm
                 ${errors.username ? 'border-1 border-rose-600' : 'border-gray-400'}
                 `}
               />
