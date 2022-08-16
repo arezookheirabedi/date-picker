@@ -121,7 +121,7 @@ const RequestOtpForm: React.FC<IProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative my-8 inline-block w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
+              <div className="relative my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
                 <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
                   <form
                     className="p-5 text-base"
