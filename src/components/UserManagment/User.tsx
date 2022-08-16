@@ -80,7 +80,7 @@ export default function User() {
       data.content.forEach((item: any) => {
         normalizedData.push({
           id: item.id,
-          name: (item.firstName || '-') + (item.lastName || '-'),
+          name: `${item.firstName || '-'  } ${  item.lastName || '-'}`,
           province: item.province || '-',
           accestance: item.roles[0],
           nationalId: item.nationalId,
@@ -236,7 +236,7 @@ export default function User() {
                     name: 'نام کاربری',
                     key: 'userName',
                     render: (v: any, record: any) => (
-                      <span className="text-gray-500">{record.userName}</span>
+                      <span className="text-gray-500">{record.username}</span>
                     ),
                   },
                   {
