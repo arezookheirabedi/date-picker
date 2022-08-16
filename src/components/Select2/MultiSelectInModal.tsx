@@ -61,9 +61,9 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getV
     }
   };
 
-  const removeItem = (id: any) => {
+  const removeItem = (value: any) => {
     const indexOfObject = selectedItem.findIndex((obj: any) => {
-      return obj.id === id;
+      return obj.value === value;
     });
     selectedItem.splice(indexOfObject, 1);
     setSelectedItem(() => {
@@ -108,7 +108,7 @@ const MultiSelectInModal: React.FC<IMultiSelectInModal> = ({options, title, getV
                 <span className="text-xs pl-2 text-white">{item.title}</span>
                 <span
                   className="text-white relative top-px text-xl cursor-pointer"
-                  onClick={() => removeItem(item.id)}
+                  onClick={() => removeItem(item.value)}
                 >
                   &times;
                 </span>
