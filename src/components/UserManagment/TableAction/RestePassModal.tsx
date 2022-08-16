@@ -26,10 +26,10 @@ const RestePassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('وارد کردن پسورد الزامی است.')
-      .matches(AppRegex.password, 'کلمه فبور.حداقل کلمه عبور ۸ کارکتر می باشد.'),
+      .matches(AppRegex.password, 'حداقل کلمه عبور ۸ کاراکتر می باشد'),
     confirmPassword: Yup.string()
       .required('تکرار کلمه عبور الزامی است.')
-      .oneOf([Yup.ref('password')], 'تکرار کلمه عبور اشتیاه است.'),
+      .oneOf([Yup.ref('password')], 'تکرار کلمه عبور اشتباه است.'),
   });
   const {
     register,
