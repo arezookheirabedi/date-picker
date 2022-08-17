@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import Highcharts from "highcharts/highstock";
-import DatepickerQuery from "../../DatepickerQuery";
-import Charts from "../../Charts";
+import React, {useState} from 'react';
+import Highcharts from 'highcharts/highstock';
+import DatepickerQuery from '../../DatepickerQuery';
+import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -70,7 +70,7 @@ const optionChart = {
           fontFamily: 'IRANSans',
         },
         useHTML: true,
-      }
+      },
     },
   },
   yAxis: {
@@ -96,7 +96,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: ' درصد',
+    valueSuffix: 'تعداد',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -104,60 +104,64 @@ const optionChart = {
       fontSize: 10,
     },
     borderWidth: 0,
-  }
-}
+  },
+};
 
 const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
-
   const [query, setQuery] = useState();
   const dataset = {
-    categories: ['۱۴۰۱/۰۵/۰۱', '۱۴۰۱/۰۵/۰۲', '۱۴۰۱/۰۵/۰۳', '۱۴۰۱/۰۵/۰۴', '۱۴۰۱/۰۵/۰۵', '۱۴۰۱/۰۵/۰۶',
-      '۱۴۰۱/۰۵/۰۷', '۱۴۰۱/۰۵/۰۸', '۱۴۰۱/۰۵/۰۹', '۱۴۰۱/۰۵/۱۰', '۱۴۰۱/۰۵/۱۱', '۱۴۰۱/۰۵/۱۲' , '۱۴۰۱/۰۵/۱۳' , '۱۴۰۱/۰۵/۱۴'
+    categories: [
+      '۱۴۰۱/۰۵/۲۱',
+      '۱۴۰۱/۰۵/۲۲',
+      '۱۴۰۱/۰۵/۲۳',
+      '۱۴۰۱/۰۵/۲۴',
+      '۱۴۰۱/۰۵/۲۵',
+      '۱۴۰۱/۰۵/۲۶',
+      '۱۴۰۱/۰۵/۲۷',
+      '۱۴۰۱/۰۵/۲۸',
+      '۱۴۰۱/۰۵/۲۹',
     ],
-    series: [{
-      name : 'خروج',
-      marker: {
-        fillColor: 'transparent',
-        lineColor: 'red'
+    series: [
+      {
+        name: 'خروج',
+        marker: {
+          fillColor: 'transparent',
+          lineColor: 'red',
+        },
+        data: [20, 30, 40, 60, 70, 400, 500, 600, 700],
       },
-      data: [20, 40, 70, 105, 135, 165, 215, 255, 255, 255, 200, 155, 125, 85]
-    }, {
-      name : 'ورود',
-      marker: {
-        fillColor: 'transparent',
-        lineColor: 'green'
+      {
+        name: 'ورود',
+        marker: {
+          fillColor: 'transparent',
+          lineColor: 'green',
+        },
+        data: [800, 900, 1000, 400, 300, 200, 100, 90, 90],
       },
-      data: [15, 55, 85, 115, 145, 165, 195, 225, 225, 225, 200, 165, 135, 105]
-    }]
+    ],
   } as any;
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به روند ورود و خروج زائران
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به روند ورود و خروج زائران</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              <DatepickerQuery query={query} setQuery={setQuery}/>
+              <DatepickerQuery query={query} setQuery={setQuery} />
             </div>
           </div>
           <div className="w-full">
-            <div
-              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div
-                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-4 rtl:space-x-reverse">
-
+            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-4 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#d30010'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#d30010'}} />
                   <span>خروجی</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00836e'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#00836e'}} />
                   <span>وروی</span>
                 </div>
-
               </div>
             </div>
           </div>
@@ -179,13 +183,13 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
         {/*  <HeadlessChart data={dataset} optionsProp={optionChart}/> */}
         {/* )} */}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart}/>
+        <HeadlessChart data={dataset} optionsProp={optionChart} />
         {/* {!loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
 export default GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims;
