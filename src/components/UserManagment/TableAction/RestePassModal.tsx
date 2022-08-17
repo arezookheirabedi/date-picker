@@ -6,7 +6,7 @@ import toast from 'cogo-toast';
 import AppRegex from 'src/helpers/regex';
 import DotLoading from 'src/components/DotLoading';
 import eyes from 'src/assets/images/icons/eye_icon.svg';
-import {EERRORS} from 'src/constants/errors.enum';
+// import {EERRORS} from 'src/constants/errors.enum';
 import fsServices from 'src/services/fs.service';
 import Modal from '../../Modal';
 
@@ -26,7 +26,10 @@ const RestePassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .required('وارد کردن پسورد الزامی است.')
-      .matches(AppRegex.password, 'حداقل کلمه عبور ۸ کاراکتر می باشد'),
+      .matches(
+        AppRegex.password,
+        'فرمت رمز عبور اشتباه است۰ رمز عبور شامل یک حرف بزرگ،یک حرف کوچک و حداقل ۸ کاراکتر می باشد۰'
+      ),
     confirmPassword: Yup.string()
       .required('تکرار کلمه عبور الزامی است.')
       .oneOf([Yup.ref('password')], 'تکرار کلمه عبور اشتباه است.'),
@@ -36,6 +39,7 @@ const RestePassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
     handleSubmit,
     reset,
     formState: {errors},
+    setError,
     // setValue,
   } = useForm<any>({
     mode: 'onChange',
@@ -53,12 +57,21 @@ const RestePassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
       toast.success('عملیات با موفقیت انجام شد.');
       closeModal();
       reset();
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
+    } catch (error: any) {
+      if (error.errors && error.errors.length) {
+        toast.error('خطا در ارسال اطلاعات');
+        // eslint-disable-next-line array-callback-return
+        error.errors.map((err: any) => {
+          setError(err.field, {
+            message: err.message,
+          });
+        });
         return;
       }
-      toast.error(err.message || EERRORS.ERROR_500);
+      if (error.message) {
+        toast.error(error.message);
+      }
+    } finally {
       setLoading(false);
     }
   };

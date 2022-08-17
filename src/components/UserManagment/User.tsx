@@ -15,13 +15,9 @@ import Filter from './Filter';
 const pageSize = 10;
 
 export default function User() {
-  const [provinceOptions, setProvinceOptions] = useState([
-    {
-      label: 'همه استان ها',
-      value: null,
-      id: 'null',
-    },
-  ]);
+  const [provinceOptions, setProvinceOptions] = useState<
+    Array<{label: string; value: string; id: any}>
+  >([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
@@ -49,9 +45,7 @@ export default function User() {
         id: item.provinceCode,
       });
     });
-    setProvinceOptions((prev: any) => {
-      return [...prev, ...normalizedData];
-    });
+    setProvinceOptions([...normalizedData]);
   };
 
   useEffect(() => {
@@ -137,10 +131,6 @@ export default function User() {
   }
 
   const statusOption = [
-    {
-      value: null,
-      label: 'همه',
-    },
     {
       value: 'false',
       label: 'فعال',
