@@ -10,6 +10,7 @@ import rainy from '../../../assets/images/icons/rainy.svg';
 import sunny from '../../../assets/images/icons/sunny.svg';
 import thunder from '../../../assets/images/icons/thunder.svg';
 import windy from '../../../assets/images/icons/windy.svg';
+import {axisData} from './constant';
 
 const ListOfTransportationAxesStatus = () => {
   const [error, setError] = useState(null);
@@ -38,23 +39,7 @@ const ListOfTransportationAxesStatus = () => {
         {tag: 'transparent'},
         {cancelToken: source.token}
       );
-      const newData = [
-        {
-          name: 'cdfdf',
-          climate: 'dsbfshjd',
-          avaragePilgrim: 58,
-          trafficStatus: 5,
-          axisStatus: 55,
-        },
-        {
-          name: 'cdfdf',
-          climate: 'dsbfshjd',
-          avaragePilgrim: 58,
-          trafficStatus: 5,
-          axisStatus: 55,
-        },
-      ];
-      setDataSet(newData);
+      setDataSet(axisData);
     } catch (err: any) {
       console.log(err);
     } finally {
@@ -113,14 +98,7 @@ const ListOfTransportationAxesStatus = () => {
               {
                 name: 'متوسط زائران در محور',
                 key: 'avaragePilgrim',
-                render: (v: any) => (
-                  <span>
-                    {Number(v).toLocaleString('fa', {
-                      minimumFractionDigits: 4,
-                    })}
-                    %
-                  </span>
-                ),
+                render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
                 name: 'وضعیت ترافیک',

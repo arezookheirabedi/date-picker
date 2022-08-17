@@ -4,29 +4,57 @@ import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
+import arbaeenService from 'src/services/arbaeen.service';
+import axios from 'axios';
 import {pilgrimsCountries} from './constant';
 
 const TheLargestNumberOfOriginPilgrimsCountriesList: React.FC<{}> = () => {
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  const [error, setError] = useState<any>(null);
-  const [queryParams, setQueryParams] = useState({
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState({
     retry: false,
-  });
-  useEffect(() => {
-    const normalizedData: any[] = [];
-    pilgrimsCountries.forEach((item: any, index: number) => {
-      normalizedData.push({
-        id: `ovca_${index}`,
-        country: item.country || 'نامشخص',
-        pilgrimsCount: item.pilgrimsCount,
-        pilgrimsTototalPercentage: item.pilgrimsTototalPercentage,
-        womenPercentage: item.womenPercentage,
-        menPercentage: item.menPercentage,
+  }) as any;
+
+  const [loading, setLoading] = useState(false);
+  const [dataset, setDataSet] = useState<any>([]);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+  const fetcher = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {data} = await arbaeenService.arbaeenGetAll(
+        {tag: 'transparent'},
+        {cancelToken: source.token}
+      );
+      const normalizedData: any[] = [];
+      pilgrimsCountries.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          country: item.country || 'نامشخص',
+          pilgrimsCount: item.pilgrimsCount,
+          pilgrimsTototalPercentage: item.pilgrimsTototalPercentage,
+          womenPercentage: item.womenPercentage,
+          menPercentage: item.menPercentage,
+        });
       });
-    });
-    setDataset([...normalizedData]);
-  }, []);
+      setDataSet([...normalizedData]);
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetcher();
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [query]);
+
   return (
     <>
       {' '}
@@ -39,7 +67,7 @@ const TheLargestNumberOfOriginPilgrimsCountriesList: React.FC<{}> = () => {
           {error && !loading ? (
             <div className="p-40">
               <div className="text-red-500">{error}</div>
-              <RetryButton setQuery={setQueryParams} />
+              <RetryButton setQuery={setQuery} />
             </div>
           ) : (
             <Table

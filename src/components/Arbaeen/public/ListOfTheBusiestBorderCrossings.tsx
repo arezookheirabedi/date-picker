@@ -4,6 +4,7 @@ import axios from 'axios';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 import Table from '../../Table';
+import {abroadData} from './constant';
 
 const ListOfTheBusiestBorderCrossings = () => {
   const [error, setError] = useState(null);
@@ -32,27 +33,8 @@ const ListOfTheBusiestBorderCrossings = () => {
         {tag: 'transparent'},
         {cancelToken: source.token}
       );
-      const newData = [
-        {
-          bordearnName: 'fdgdg',
-          inportCount: 45,
-          exportCount: 5,
-          waitingVisaCheck: 56,
-          AverageDailyEntryRate: 45,
-          AverageDailyOutRate: 55,
-          PercentageShareEachBorderVisaFromPilgrims: 45,
-        },
-        {
-          bordearnName: 'wdsdfdf',
-          inportCount: 45,
-          exportCount: 5,
-          waitingVisaCheck: 56,
-          AverageDailyEntryRate: 45,
-          AverageDailyOutRate: 55,
-          PercentageShareEachBorderVisaFromPilgrims: 45,
-        },
-      ];
-      setDataSet(newData);
+
+      setDataSet(abroadData);
     } catch (err: any) {
       console.log(err);
     } finally {
@@ -66,6 +48,7 @@ const ListOfTheBusiestBorderCrossings = () => {
       source.cancel('Operation canceled by the user.');
     };
   }, []);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">لیست پرترددترین گذرگاه مرزی</legend>

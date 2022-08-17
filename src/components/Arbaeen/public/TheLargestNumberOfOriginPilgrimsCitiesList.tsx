@@ -1,32 +1,62 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
+import arbaeenService from 'src/services/arbaeen.service';
 import {pilgrimsCity} from './constant';
 
 const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
-  const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
-  const [error, setError] = useState<any>(null);
-  const [queryParams, setQueryParams] = useState({
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState({
     retry: false,
-  });
-  useEffect(() => {
-    const normalizedData: any[] = [];
-    pilgrimsCity.forEach((item: any, index: number) => {
-      normalizedData.push({
-        id: `ovca_${index}`,
-        city: item.city || 'نامشخص',
-        pilgrimsCount: item.pilgrimsCount,
-        womenPercentage: item.womenPercentage,
-        menPercentage: item.menPercentage,
-        visasIssuedCount: item.visasIssuedCount,
-        vaccinePercentage: item.vaccinePercentage,
-        firestDosesPercentage: item.firestDosesPercentage,
+  }) as any;
+
+  const [loading, setLoading] = useState(false);
+  const [dataset, setDataSet] = useState<any>([]);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+  const fetcher = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {data} = await arbaeenService.arbaeenGetAll(
+        {tag: 'transparent'},
+        {cancelToken: source.token}
+      );
+      const normalizedData: any[] = [];
+      pilgrimsCity.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          city: item.city || 'نامشخص',
+          pilgrimsCount: item.pilgrimsCount,
+          womenPercentage: item.womenPercentage,
+          menPercentage: item.menPercentage,
+          visasIssuedCount: item.visasIssuedCount,
+          vaccinePercentage: item.vaccinePercentage,
+          firestDosesPercentage: item.firestDosesPercentage,
+          secondDosesPercentage: item.secondDosesPercentage,
+          thirdDosesPercentage: item.thirdDosesPercentage,
+        });
       });
-    });
-    setDataset([...normalizedData]);
-  }, []);
+      setDataSet([...normalizedData]);
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetcher();
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [query]);
+
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">لیست بیشترین شهرهای مبدا زائرین </legend>
@@ -35,7 +65,7 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
-            <RetryButton setQuery={setQueryParams} />
+            <RetryButton setQuery={setQuery} />
           </div>
         ) : (
           <Table
@@ -48,7 +78,7 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
                 name: 'شهر',
                 key: 'city',
                 render: (v: any, record, index: number, page: number) => (
-                  <div className="flex justify-center">
+                  <div className="flex justify-start">
                     {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
                   </div>
                 ),
@@ -106,19 +136,19 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
               },
               {
                 name: 'درصد دوز دوم',
-                key: 'firestDosesPercentage',
+                key: 'secondDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.secondDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
               {
                 name: 'درصد دوز سوم',
-                key: 'firestDosesPercentage',
+                key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.thirdDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
