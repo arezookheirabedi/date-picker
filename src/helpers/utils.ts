@@ -121,14 +121,15 @@ export const convertGregorianDateToJalaliDate = (date: any) => {
 };
 
 export function unixToDateObject(unix: number) {
-  const date = dayjs(unix).calendar("jalali");
+  const date = dayjs(unix).calendar('jalali');
   return {
-    year: Number(date.format("YYYY")),
-    month: Number(date.format("MM")),
-    day: Number(date.format("DD")),
+    year: Number(date.format('YYYY')),
+    month: Number(date.format('MM')),
+    day: Number(date.format('DD')),
   };
 }
 
+// eslint-disable-next-line consistent-return
 export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
   let mainKey = event.key;
   const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -145,7 +146,6 @@ export const onPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     //   : mainKey;
     return mainKey;
   }
-  return false;
 };
 
 export const fixNumbers = (e: any) => {
@@ -165,8 +165,6 @@ export const toPersianDigit = (str: any) => {
   const id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return str.replace(/[0-9]/g, (w: any) => id[+w]);
 };
-
-
 
 export function isLogin() {
   const profileStr = localStorage.getItem('ministers-userinfo');
@@ -371,157 +369,157 @@ export const sideCities = [
   {
     name: 'تهران',
     color: '#FBE186',
-    mapId: ["IR.TH", 1000],
+    mapId: ['IR.TH', 1000],
   },
   {
     name: 'هرمزگان',
     color: '#FBE186',
-    mapId: ["IR.HG", 100],
+    mapId: ['IR.HG', 100],
   },
   {
     name: 'بوشهر',
     color: '#FBE186',
-    mapId: ["IR.BS", 100],
+    mapId: ['IR.BS', 100],
   },
   {
     name: 'کهگیلویه و بویراحمد',
     color: '#FBE186',
-    mapId: ["IR.KB", 100],
+    mapId: ['IR.KB', 100],
   },
   {
     name: 'فارس',
     color: '#FBE186',
-    mapId: ["IR.FA", 100],
+    mapId: ['IR.FA', 100],
   },
   {
     name: 'اصفهان',
     color: '#FBE186',
-    mapId: ["IR.ES", 600],
+    mapId: ['IR.ES', 600],
   },
   {
     name: 'سمنان',
     color: '#FBE186',
-    mapId: ["IR.SM", 333],
+    mapId: ['IR.SM', 333],
   },
   {
     name: 'گلستان',
     color: '#FBE186',
-    mapId: ["IR.GO", 100],
+    mapId: ['IR.GO', 100],
   },
   {
     name: 'مازندران',
     color: '#FBE186',
-    mapId: ["IR.MN", 200],
+    mapId: ['IR.MN', 200],
   },
   {
     name: 'مرکزی',
     color: '#FBE186',
-    mapId: ["IR.MK", 666]
+    mapId: ['IR.MK', 666],
   },
   {
     name: 'یزد',
     color: '#FBE186',
-    mapId: ["IR.YA", 50],
+    mapId: ['IR.YA', 50],
   },
   {
     name: 'چهارمحال و بختیاری',
     color: '#FBE186',
-    mapId: ["IR.CM", 50]
+    mapId: ['IR.CM', 50],
   },
   {
     name: 'خوزستان',
     color: '#FBE186',
-    mapId: ["IR.KZ", 50]
+    mapId: ['IR.KZ', 50],
   },
   {
     name: 'لرستان',
     color: '#FBE186',
-    mapId: ["IR.LO", 50],
+    mapId: ['IR.LO', 50],
   },
   {
     name: 'ایلام',
     color: '#FBE186',
-    mapId: ["IR.IL", 50],
+    mapId: ['IR.IL', 50],
   },
   {
     name: 'اردبیل',
     color: '#FBE186',
-    mapId: ["IR.AR", 400],
+    mapId: ['IR.AR', 400],
   },
   {
     name: 'قم',
     color: '#FBE186',
-    mapId: ["IR.QM", 200]
+    mapId: ['IR.QM', 200],
   },
   {
     name: 'همدان',
     color: '#FBE186',
-    mapId: ["IR.HD", 433],
+    mapId: ['IR.HD', 433],
   },
   {
     name: 'زنجان',
     color: '#FBE186',
-    mapId: ["IR.ZA", 300],
+    mapId: ['IR.ZA', 300],
   },
   {
     name: 'قزوین',
     color: '#FBE186',
-    mapId: ["IR.QZ", 24],
+    mapId: ['IR.QZ', 24],
   },
   {
     name: 'آذربایجان غربی',
     color: '#FBE186',
-    mapId: ["IR.WA", 124],
+    mapId: ['IR.WA', 124],
   },
   {
     name: 'آذربایجان شرقی',
     color: '#FBE186',
-    mapId: ["IR.EA", 123],
+    mapId: ['IR.EA', 123],
   },
   {
     name: 'کرمانشاه',
     color: '#FBE186',
-    mapId: ["IR.BK", 533],
+    mapId: ['IR.BK', 533],
   },
   {
     name: 'گیلان',
     color: '#FBE186',
-    mapId: ["IR.GI", 354],
+    mapId: ['IR.GI', 354],
   },
   {
     name: 'کردستان',
     color: '#FBE186',
-    mapId: ["IR.KD", 345],
+    mapId: ['IR.KD', 345],
   },
   {
     name: 'خراسان جنوبی',
     color: '#FBE186',
-    mapId: ["IR.KJ", 600],
+    mapId: ['IR.KJ', 600],
   },
   {
     name: 'خراسان رضوی',
     color: '#FBE186',
-    mapId: ["IR.KV", 324],
+    mapId: ['IR.KV', 324],
   },
   {
     name: 'خراسان شمالی',
     color: '#FBE186',
-    mapId: ["IR.KS", 444],
+    mapId: ['IR.KS', 444],
   },
   {
     name: 'سیستان و بلوچستان',
     color: '#FBE186',
-    mapId: ["IR.SB", 533],
+    mapId: ['IR.SB', 533],
   },
   {
     name: 'کرمان',
     color: '#FBE186',
-    mapId: ["IR.KE", 135],
+    mapId: ['IR.KE', 135],
   },
   {
     name: 'البرز',
     color: '#FBE186',
-    mapId: ["IR.AL", 555],
+    mapId: ['IR.AL', 555],
   },
 ];
 
