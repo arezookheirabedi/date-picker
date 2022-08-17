@@ -1,34 +1,85 @@
-import React, {useState} from "react";
-import Spinner from "../../Spinner";
-import RetryButton from "../../RetryButton";
-import Table from "../../Table";
-import useGetOverviewOfCategories from "../../../hooks/apis/useGetOverviewOfCategories";
-
+import React, {useEffect, useState} from 'react';
+import arbaeenService from 'src/services/arbaeen.service';
+import axios from 'axios';
+import Spinner from '../../Spinner';
+import RetryButton from '../../RetryButton';
+import Table from '../../Table';
 
 const ListOfTheBusiestBorderCrossings = () => {
+  const [error, setError] = useState(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [query, setQuery] = useState({
     tag: 'transport',
     category: 'serviceType',
     from: null,
     to: null,
-    retry: false
+    retry: false,
   }) as any;
 
-// eslint-disable-next-line
-  const {data: dataset, loading, error} = useGetOverviewOfCategories(query);
+  const [loading, setLoading] = useState(false);
+  const [dataset, setDataSet] = useState<any>([]);
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
+  const fetcher = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {data} = await arbaeenService.arbaeenGetAll(
+        {tag: 'transparent'},
+        {cancelToken: source.token}
+      );
+      const newData = [
+        {
+          bordearnName: 'fdgdg',
+          inportCount: 45,
+          exportCount: 5,
+          waitingVisaCheck: 56,
+          AverageDailyEntryRate: 45,
+          AverageDailyOutRate: 55,
+          PercentageShareEachBorderVisaFromPilgrims: 45,
+        },
+        {
+          bordearnName: 'wdsdfdf',
+          inportCount: 45,
+          exportCount: 5,
+          waitingVisaCheck: 56,
+          AverageDailyEntryRate: 45,
+          AverageDailyOutRate: 55,
+          PercentageShareEachBorderVisaFromPilgrims: 45,
+        },
+      ];
+      setDataSet(newData);
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetcher();
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    };
+  }, []);
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">لیست پرترددترین گذرگاه مرزی</legend>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-
-        {loading && (<div className="p-40"><Spinner/></div>)}
+        {loading && (
+          <div className="p-40">
+            <Spinner />
+          </div>
+        )}
         {error && !loading && (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
-            <RetryButton setQuery={setQuery}/>
+            <RetryButton setQuery={setQuery} />
           </div>
         )}
 
@@ -39,7 +90,7 @@ const ListOfTheBusiestBorderCrossings = () => {
             columns={[
               {
                 name: 'نام گذرگاه',
-                key: 'name',
+                key: 'bordearnName',
                 render: (v: any, record, index: number) => (
                   <span>
                     {(index + 1).toLocaleString('fa')}.{v}
@@ -48,12 +99,12 @@ const ListOfTheBusiestBorderCrossings = () => {
               },
               {
                 name: 'جمع ورودی',
-                key: 'employeesCount',
+                key: 'inportCount',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
                 name: 'جمع خروجی',
-                key: 'infectedPercent',
+                key: 'exportCount',
                 render: (v: any) => (
                   <span>
                     {Number(v).toLocaleString('fa', {
@@ -65,26 +116,26 @@ const ListOfTheBusiestBorderCrossings = () => {
               },
               {
                 name: 'در انتظار بررسی گذرنامه',
-                key: 'infectedCount',
+                key: 'waitingVisaCheck',
                 render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
                 name: 'متوسط نرخ روزانه ورودی',
-                key: 'saveCount',
+                key: 'AverageDailyEntryRate',
                 render: (v: any) => (
                   <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
                 ),
               },
               {
                 name: 'متوسط نرخ روزانه خروجی',
-                key: 'infectedCount',
+                key: 'AverageDailyOutRate',
                 render: (v: any) => (
                   <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
                 ),
               },
               {
                 name: 'درصد سهم هر گذرنامه مرزی از زائرین',
-                key: 'infectedCount',
+                key: 'PercentageShareEachBorderVisaFromPilgrims',
                 render: (v: any) => (
                   <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
                 ),
@@ -95,7 +146,7 @@ const ListOfTheBusiestBorderCrossings = () => {
         )}
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
 export default ListOfTheBusiestBorderCrossings;

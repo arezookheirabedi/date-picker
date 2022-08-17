@@ -1,12 +1,12 @@
-import React, {useState} from "react";
-import Highcharts from "highcharts/highstock";
+import React, {useState} from 'react';
+import Highcharts from 'highcharts/highstock';
 // import useGetOverviewOfTheLatestVaccinationStatusColumnChart
 //   from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatusColumnChart";
 // import Spinner from "../../Spinner";
 // import RetryButton from "../../RetryButton";
-import Charts from "../../Charts";
+import Charts from '../../Charts';
 // import SingleDatepickerQuery from "../../SingleDatepickerQuery";
-import DatepickerQuery from "../../DatepickerQuery";
+import DatepickerQuery from '../../DatepickerQuery';
 
 const {HeadlessChart} = Charts;
 
@@ -74,7 +74,7 @@ const optionChart = {
           fontFamily: 'IRANSans',
         },
         useHTML: true,
-      }
+      },
     },
   },
   yAxis: {
@@ -108,72 +108,74 @@ const optionChart = {
       fontSize: 10,
     },
     borderWidth: 0,
-  }
-}
+  },
+};
 
 const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
-
   const [query, setQuery] = useState();
   const dataset = {
-    categories: ['زمینی وارد شده', 'زمینی خارج شده', 'هوایی وارد شده', 'هوایی خارج شده', 'ریلی وارد شده', 'ریلی خارج شده'],
+    categories: [
+      'زمینی وارد شده',
+      'زمینی خارج شده',
+      'هوایی وارد شده',
+      'هوایی خارج شده',
+      'ریلی وارد شده',
+      'ریلی خارج شده',
+    ],
     series: [
       {
         name: 'درصد ورود یا خروج',
         data: [
-          {name: 'زمینی وارد شده', y: 33, color: '#ff4042'},
-          {name: 'زمینی خارج شده', y: 44, color: '#7dbf9e'},
-          {name: 'هوایی وارد شده', y: 55, color: '#c20a0c'},
-          {name: 'هوایی خارج شده', y: 66, color: '#07816c'},
-          {name: 'ریلی وارد شده', y: 77, color: '#850506'},
+          {name: 'زمینی وارد شده', y: 50, color: '#ff4042'},
+          {name: 'زمینی خارج شده', y: 43, color: '#7dbf9e'},
+          {name: 'هوایی وارد شده', y: 40, color: '#c20a0c'},
+          {name: 'هوایی خارج شده', y: 49, color: '#07816c'},
+          {name: 'ریلی وارد شده', y: 10, color: '#850506'},
           {
             name: 'ریلی خارج شده',
-            y: 90 || 0,
-            color: '#005852'
+            y: 8,
+            color: '#005852',
           },
         ],
       },
-    ]
+    ],
   } as any;
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به درصد ورود و خروج زائران
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به درصد ورود و خروج زائران</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-3/4 justify-between">
             <div className="align-center flex justify-between">
-              <DatepickerQuery query={query} setQuery={setQuery}/>
+              <DatepickerQuery query={query} setQuery={setQuery} />
             </div>
           </div>
           <div className="w-full">
-            <div
-              className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div
-                className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-4 rtl:space-x-reverse">
+            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
+              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-4 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#005852'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#005852'}} />
                   <span>ریلی خارج شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#850506'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#850506'}} />
                   <span>ریلی وارد شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#07816c'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#07816c'}} />
                   <span>هوایی خارج شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#c20a0c'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#c20a0c'}} />
                   <span>هوایی وارد شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#7dbf9e'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#7dbf9e'}} />
                   <span>زمینی خارج شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff4042'}}/>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff4042'}} />
                   <span>زمینی وارد شده</span>
                 </div>
               </div>
@@ -197,13 +199,13 @@ const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
         {/*  <HeadlessChart data={dataset} optionsProp={optionChart}/> */}
         {/* )} */}
 
-        <HeadlessChart data={dataset} optionsProp={optionChart}/>
+        <HeadlessChart data={dataset} optionsProp={optionChart} />
         {/* {!loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}
       </div>
     </fieldset>
-  )
-}
+  );
+};
 
-export default OverviewOfThePercentageOfEntryAndExitOfPilgrims
+export default OverviewOfThePercentageOfEntryAndExitOfPilgrims;
