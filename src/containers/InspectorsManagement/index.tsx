@@ -16,10 +16,6 @@ import AddOrUpdateInseptor from '../../components/UserManagment/TableAction/Edit
 
 const statusOption = [
   {
-    value: null,
-    label: 'همه',
-  },
-  {
     value: 'CONFIRMED',
     label: 'تایید شده',
   },
@@ -52,18 +48,13 @@ const getInspectorStatus = (data: EINSPECTORSTATUS) => {
 };
 const pageSize = 10;
 export default function Inspectors() {
-  const [provinceOptions, setProvinceOptions] = useState([
-    {
-      label: 'همه استان ها',
-      value: null,
-      id: 'null',
-    },
-  ]);
+  const [provinceOptions, setProvinceOptions] = useState<
+    Array<{label: string; value: string; id: any}>
+  >([]);
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, shouldRefresh] = useState<boolean>(false);
   const wrapperRef = useRef(null);
   const [query, setQuery] = useState({
