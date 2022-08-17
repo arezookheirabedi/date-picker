@@ -32,6 +32,7 @@ const Arbaeen = () => {
       <ListOfTransportationAxesStatus />
       <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
       <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases />
+
       <MokebList />
       <RedHalalBasesList />
       <TheLargestNumberOfOriginPilgrimsCitiesList />

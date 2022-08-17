@@ -9,6 +9,8 @@ import {toPersianDigit} from 'src/helpers/utils';
 import guildService from 'src/services/guild.service';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
+import arbaeenService from 'src/services/arbaeen.service';
+import axios from 'axios';
 import {pilgrimsList} from '../public/constant';
 
 const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
@@ -20,24 +22,47 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     retry: false,
     categoryValue: null,
   });
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+
+  const fetcher = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {data} = await arbaeenService.arbaeenGetAll(
+        {tag: 'transparent'},
+        {cancelToken: source.token}
+      );
+      const normalizedData: any[] = [];
+      pilgrimsList.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          pilgrimName: item.pilgrimName || 'نامشخص',
+          pilgrimNationalId: item.pilgrimNationalId,
+          exitBorder: item.exitBorder || 'نامشخص',
+          dateOfDispatch: item.dateOfDispatch,
+          returnDate: item.returnDate,
+          SendingProvince: item.SendingProvince || 'نامشخص',
+          pilgrimMobileNumber: item.pilgrimMobileNumber,
+        });
+      });
+      setDataset([...normalizedData]);
+      setOrgDataset([...normalizedData]);
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const normalizedData: any[] = [];
-    pilgrimsList.forEach((item: any, index: number) => {
-      normalizedData.push({
-        id: `ovca_${index}`,
-        pilgrimName: item.pilgrimName || 'نامشخص',
-        pilgrimNationalId: item.pilgrimNationalId,
-        exitBorder: item.exitBorder || 'نامشخص',
-        dateOfDispatch: item.dateOfDispatch,
-        returnDate: item.returnDate,
-        SendingProvince: item.SendingProvince || 'نامشخص',
-        pilgrimMobileNumber: item.pilgrimMobileNumber,
-      });
-    });
-    setDataset([...normalizedData]);
-    setOrgDataset([...normalizedData]);
-  }, []);
+    fetcher();
+    return () => {
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [query]);
 
   // useEffect(() => {
   //   const params = new URLSearchParams(location.search);
