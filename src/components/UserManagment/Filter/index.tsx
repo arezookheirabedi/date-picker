@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import {onPress} from 'src/helpers/utils';
 import Select from './Select';
 import DotLoading from '../../DotLoading';
 
@@ -38,25 +39,46 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
   });
 
   const onSubmit = (values: any) => {
+    const newNumber = values.nationalIdOrMobileNumber
+      ? values.nationalIdOrMobileNumber.toEnglishDigits()
+      : null;
+
     setQuery(() => {
       return {
         ...query,
         province: values.province,
         locked: values.locked,
-        nationalIdOrMobileNumber: values.nationalIdOrMobileNumber
-          ? values.nationalIdOrMobileNumber
-          : null,
+        nationalIdOrMobileNumber: newNumber,
         currentPage: 1,
       };
     });
   };
 
+  const handelRemoveFilter = () => {
+    reset({
+      nationalIdOrMobileNumber: null,
+      locked: null,
+      province: null,
+    });
+    setQuery(() => {
+      return {
+        ...query,
+        province: null,
+        locked: null,
+        nationalIdOrMobileNumber: null,
+        currentPage: 1,
+      };
+    });
+  };
   return (
     <>
       <form className="w-3/4 space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex space-x-3 rtl:space-x-reverse">
           <div className="w-full">
             <input
+              onKeyPress={onPress}
+              // onKeyPress={event => changeDigitToEnglish(event, setValue)}
+              // onKeyPress={event => changeDigitToEnglish(event, setValue)}
               type="text"
               {...register('nationalIdOrMobileNumber')}
               placeholder="کد ملی یا موبایل"
@@ -117,13 +139,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
           <div className="flex items-center space-x-2 rtl:space-x-reverse">
             <button
               type="button"
-              onClick={() => {
-                reset({
-                  nationalIdOrMobileNumber: null,
-                  locked: null,
-                  province: null,
-                });
-              }}
+              onClick={handelRemoveFilter}
               className="flex w-full items-center justify-center whitespace-nowrap rounded-full border bg-white px-4 py-1.5 text-sm rtl:space-x-reverse"
               style={{borderColor: '#175A76', color: '#175A76'}}
             >
