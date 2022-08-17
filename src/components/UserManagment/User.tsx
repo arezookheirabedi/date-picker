@@ -74,7 +74,7 @@ export default function User() {
       data.content.forEach((item: any) => {
         normalizedData.push({
           id: item.id,
-          name: `${item.firstName || '-'  } ${  item.lastName || '-'}`,
+          name: `${item.firstName || '-'} ${item.lastName || '-'}`,
           province: item.province || '-',
           accestance: item.roles[0],
           nationalId: item.nationalId,
@@ -193,7 +193,7 @@ export default function User() {
                     name: 'نام و نام خانوادگی',
                     key: 'name',
                     render: (v: any, record, index: number) => (
-                      <div className="flex w-full justify-center">
+                      <div className="flex w-full justify-start">
                         {toPersianDigit(
                           ((query.currentPage - 1) * pageSize + (index + 1)).toString()
                         )}
