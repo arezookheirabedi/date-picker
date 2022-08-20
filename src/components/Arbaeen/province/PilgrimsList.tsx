@@ -189,8 +189,8 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                   name: 'شماره موبایل زائر',
                   key: 'pilgrimMobileNumber',
                   render: (v: any, record: any) => (
-                    <span className="">
-                      {Number(record.pilgrimMobileNumber || 0).toPersianDigits()}
+                    <span className="text-cyan-400">
+                      {toPersianDigit(record.pilgrimMobileNumber) || ''}
                     </span>
                   ),
                 },

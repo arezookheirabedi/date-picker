@@ -32,7 +32,7 @@ export const mokebList = [
     managerName: 'مینا غلامی',
   },
   {
-    name: 'بیک یا ثارالله',
+    name: 'لبیک یا ثارالله',
     location: 'میدان پرچم',
     capacity: '46',
     type: 'تغذیه',
@@ -100,8 +100,8 @@ export const pilgrimsCity = [
     visasIssuedCount: '5100',
     vaccinePercentage: '90',
     firestDosesPercentage: '20',
-    secondDosesPercentage: '',
-    thirdDosesPercentage: '',
+    secondDosesPercentage: '30',
+    thirdDosesPercentage: '40',
   },
   {
     city: 'مشهد',
@@ -153,7 +153,7 @@ export const pilgrimsCountries = [
     country: 'پاکستان',
     pilgrimsCount: '500',
     womenPercentage: '45',
-    menPercentage: '45',
+    menPercentage: '55',
     pilgrimsTototalPercentage: '5',
   },
   {
@@ -173,23 +173,13 @@ export const pilgrimsCountries = [
 ];
 export const pilgrimsList = [
   {
-    pilgrimName: null,
-    pilgrimNationalId: null,
-    exitBorder: null,
-    dateOfDispatch: null,
-    returnDate: null,
-    SendingProvince: null,
-    pilgrimMobileNumber: null,
-  },
-
-  {
-    pilgrimName: 'نگین آساده',
-    pilgrimNationalId: '25366588996',
+    pilgrimName: 'هادی نعمتی',
+    pilgrimNationalId: '0016619609',
     exitBorder: 'مرز مهران',
-    dateOfDispatch: '2022.11.12',
+    dateOfDispatch: '2022.11.1',
     returnDate: '2022.11.12',
     SendingProvince: 'تهران',
-    pilgrimMobileNumber: '02356987566',
+    pilgrimMobileNumber: '0912536485',
   },
 ];
 
