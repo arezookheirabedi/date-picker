@@ -36,16 +36,20 @@ export default function User() {
     pageSize,
   });
   const getProvince = async () => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getProvince()) as any;
-    data.forEach((item: any) => {
-      normalizedData.push({
-        label: item.province,
-        value: item.province,
-        id: item.provinceCode,
+    try {
+      const normalizedData: any[] = [];
+      const {data} = (await fsServices.getProvince()) as any;
+      data.forEach((item: any) => {
+        normalizedData.push({
+          label: item.province,
+          value: item.province,
+          id: item.provinceCode,
+        });
       });
-    });
-    setProvinceOptions([...normalizedData]);
+      setProvinceOptions([...normalizedData]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
