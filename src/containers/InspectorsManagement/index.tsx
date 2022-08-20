@@ -69,18 +69,22 @@ export default function Inspectors() {
   });
 
   const getProvince = async () => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getProvince()) as any;
-    data.forEach((item: any) => {
-      normalizedData.push({
-        label: item.province,
-        value: item.province,
-        id: item.provinceCode,
+    try {
+      const normalizedData: any[] = [];
+      const {data} = (await fsServices.getProvince()) as any;
+      data.forEach((item: any) => {
+        normalizedData.push({
+          label: item.province,
+          value: item.province,
+          id: item.provinceCode,
+        });
       });
-    });
-    setProvinceOptions((prev: any) => {
-      return [...prev, ...normalizedData];
-    });
+      setProvinceOptions((prev: any) => {
+        return [...prev, ...normalizedData];
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
