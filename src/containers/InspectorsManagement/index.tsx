@@ -30,14 +30,14 @@ const getInspectorStatus = (data: EINSPECTORSTATUS) => {
     case EINSPECTORSTATUS.CONFIRMED:
       return (
         <div className="flex justify-center">
-          <img src={ConfirmIcon} alt="confirm" className="pl-2"/>
+          <img src={ConfirmIcon} alt="confirm" className="pl-2" />
           تایید شده
         </div>
       );
     case EINSPECTORSTATUS.UNCONFIRMED:
       return (
         <div className="flex">
-          <img src={RejectIcon} alt="confirm" className="pl-2"/>
+          <img src={RejectIcon} alt="confirm" className="pl-2" />
           تایید نشده
         </div>
       );
@@ -116,16 +116,16 @@ export default function Inspectors() {
       data.content.forEach((item: any) => {
         normalizedData.push({
           id: item.id,
-          name: (item.firstName || '-') + (item.lastName || '-'),
+          name: `${item.firstName || '-'} ${item.lastName || '-'}`,
           province: item.province || '-',
           role: item.role || '-',
-          nationalId: item.nationalId,
-          mobileNumber: item.mobileNumber,
-          activityStatus: item.activityStatus,
+          nationalId: item.nationalId || '-',
+          mobileNumber: item.mobileNumber || '-',
+          activityStatus: item.activityStatus || false,
           city: item.city || '-',
-          username: item.username,
-          organization: item.organization,
-          inspectorStatus: item.inspectorStatus,
+          username: item.username || '-',
+          organization: item.organization || '-',
+          inspectorStatus: item.inspectorStatus || '-',
           inspectorId: item.inspectorId || '-',
           totalData: item,
         });
@@ -172,7 +172,7 @@ export default function Inspectors() {
               className="button button--primary px-5 justify-start sm:w-full sm:text-xs sm:px-0 sm:justify-center md:text-sm 2xl:w-4/6 xl:w-full mx-auto"
               onClick={() => openModal()}
             >
-              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden"/>
+              <img src={plusIcon} alt="+" className="ml-2 xl:block sm:hidden" />
               اضافه کردن بازرس جدید
             </div>
           </div>
@@ -186,7 +186,7 @@ export default function Inspectors() {
           {errorMessage && !loading ? (
             <div className="p-40">
               <div className="text-red-500">{errorMessage}</div>
-              <RetryButton setQuery={setQuery}/>
+              <RetryButton setQuery={setQuery} />
             </div>
           ) : (
             <div ref={wrapperRef}>
@@ -251,7 +251,7 @@ export default function Inspectors() {
                     render: (v: any, record: any) => (
                       <span className="text-gray-500">
                         {record.mobileNumber ? (
-                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''}/>
+                          <HiddenMobileNumber value={toPersianDigit(record.mobileNumber) || ''} />
                         ) : (
                           'نامشخص'
                         )}
