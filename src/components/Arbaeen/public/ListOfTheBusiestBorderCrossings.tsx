@@ -88,14 +88,7 @@ const ListOfTheBusiestBorderCrossings = () => {
               {
                 name: 'جمع خروجی',
                 key: 'exportCount',
-                render: (v: any) => (
-                  <span>
-                    {Number(v).toLocaleString('fa', {
-                      minimumFractionDigits: 4,
-                    })}
-                    %
-                  </span>
-                ),
+                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
               },
               {
                 name: 'در انتظار بررسی گذرنامه',
@@ -120,7 +113,12 @@ const ListOfTheBusiestBorderCrossings = () => {
                 name: 'درصد سهم هر گذرنامه مرزی از زائرین',
                 key: 'PercentageShareEachBorderVisaFromPilgrims',
                 render: (v: any) => (
-                  <span>{v || v === 0 ? (v as number).toLocaleString('fa') : '-'}</span>
+                  <span>
+                    {Number(v).toLocaleString('fa', {
+                      minimumFractionDigits: 0,
+                    })}
+                    ٪
+                  </span>
                 ),
               },
             ]}
