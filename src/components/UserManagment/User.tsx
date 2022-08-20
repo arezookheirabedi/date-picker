@@ -74,14 +74,14 @@ export default function User() {
       data.content.forEach((item: any) => {
         normalizedData.push({
           id: item.id,
-          name: `${item.firstName || '-'  } ${  item.lastName || '-'}`,
+          name: `${item.firstName || '-'} ${item.lastName || '-'}`,
           province: item.province || '-',
           accestance: item.roles[0],
-          nationalId: item.nationalId,
-          mobileNumber: item.mobileSet,
-          locked: !item.locked,
+          nationalId: item.nationalId || '-',
+          mobileNumber: item.mobileSet || '-',
+          locked: !item.locked || false,
           city: item.city || '-',
-          username: item.username,
+          username: item.username || '-',
           totalData: item,
         });
       });
