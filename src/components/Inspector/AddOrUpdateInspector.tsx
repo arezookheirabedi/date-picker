@@ -3,7 +3,7 @@
 import React, {useState, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import cogoToast from 'cogo-toast';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 // import SimpleSelect from "../Select2/SimpleSelect";
 import SingleSelectInModal from '../Select2/SingleSelectInModal';
 // import {addInspectorValidation} from '../../../validations/index';
@@ -11,12 +11,14 @@ import DotLoading from '../../components/DotLoading';
 
 import fsServices from '../../services/fs.service';
 import {addInspectorValidation} from 'src/validations';
-import DatePicker from "../Form/DatePicker";
+import DatePicker from '../Form/DatePicker';
 import {
   convertGregorianDateToJalaliDate,
-  convertGregorianDateToObjectDate, fixNumbers, toPersianDigit,
-  unixToDateObject
-} from "../../helpers/utils";
+  convertGregorianDateToObjectDate,
+  fixNumbers,
+  toPersianDigit,
+  unixToDateObject,
+} from '../../helpers/utils';
 
 interface IAddOrUpdateInspector {
   actionType?: any;
@@ -48,11 +50,14 @@ const activityStatus = [
     title: 'تایید شده',
     value: 'CONFIRMED',
   },
-
 ];
 
-const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setShowModal, shouldRefresh, userData}) => {
-
+const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({
+  actionType,
+  setShowModal,
+  shouldRefresh,
+  userData,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [provinceOptions, setProvinceOptions] = useState<any>(initialProvinceOptions);
@@ -72,17 +77,17 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
   } = useForm<any>({
     // mode: "onChange",
     defaultValues: {
-      firstName: userData ? userData.firstName : null,
-      lastName: userData ? userData.lastName : null,
+      firstName: userData && userData.firstName ? userData.firstName : null,
+      lastName: userData && userData.lastName ? userData.lastName : null,
       activityStatus: null,
       city: null,
       province: null,
-      inspectorId: userData ? userData.inspectorId : null,
-      mobileNumber: userData ? userData.mobileNumber : null,
-      nationalId: userData ? userData.nationalId : null,
-      organization: userData ? userData.organization : null,
-      birthDate: userData ? userData.organization : null,
-      role: userData ? userData.role : null
+      inspectorId: userData && userData.inspectorId ? userData.inspectorId : null,
+      mobileNumber: userData && userData.mobileNumber ? userData.mobileNumber : null,
+      nationalId: userData && userData.nationalId ? userData.nationalId : null,
+      organization: userData && userData.organization ? userData.organization : null,
+      birthDate: userData && userData.organization ? userData.organization : null,
+      role: userData && userData.role ? userData.role : null,
     },
   });
 
@@ -115,7 +120,7 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
           title: 'انتخاب شهر',
           value: null,
         },
-        ...normalizedData
+        ...normalizedData,
       ];
     });
   };
@@ -124,14 +129,14 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
     if (userData && userData.provinceCode) {
       getCities(userData?.provinceCode);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (provinceTitleInput && provinceTitleInput.value) {
       getCities(provinceTitleInput?.value);
     } else {
       setCityOptions(initialCityOptions);
-      setCityTitleInput(null)
+      setCityTitleInput(null);
     }
   }, [provinceTitleInput]);
 
@@ -140,7 +145,6 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
   }, []);
 
   const validations = (values: any) => {
-
     if (!values.birthDate && !userData) {
       cogoToast.error('تاریخ تولد اجباری است.');
       return false;
@@ -155,22 +159,19 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
     }
 
     return true;
-
-  }
-
+  };
 
   const onSubmit = async (values: any) => {
-
-    console.log('province title inside => ', provinceTitleInput)
-    console.log('city title inside => ', cityTitleInput)
+    console.log('province title inside => ', provinceTitleInput);
+    console.log('city title inside => ', cityTitleInput);
 
     if (!validations(values)) return;
 
     let birthDate = values.birthDate && new Date(values.birthDate);
 
-    const jalaliDate = convertGregorianDateToJalaliDate(birthDate)
+    const jalaliDate = convertGregorianDateToJalaliDate(birthDate);
     const finalJalaliDate = fixNumbers({
-      value: jalaliDate?.replace(/\//g, '')
+      value: jalaliDate?.replace(/\//g, ''),
     });
 
     const extraData = {
@@ -203,11 +204,11 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
 
       cogoToast.success('عملیات با موفقیت انجام شد!');
       setShowModal(false);
-      shouldRefresh((prev: boolean) => !prev)
+      shouldRefresh((prev: boolean) => !prev);
       // handleUpdateVisitList((prev: any) => !prev)
     } catch (error: any) {
       if (error.errors && error.errors.length) {
-        cogoToast.error("خطا در ارسال اطلاعات");
+        cogoToast.error('خطا در ارسال اطلاعات');
         error.errors.map((item: any) => {
           setError(item.field, {
             message: item.message,
@@ -216,7 +217,7 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
         return;
       }
       if (error.hasOwnProperty('fingerPrint') && error.fingerPrint) {
-        cogoToast.error("خطا در سرور");
+        cogoToast.error('خطا در سرور');
       }
       if (error.message) {
         cogoToast.error(error.message);
@@ -240,8 +241,8 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
     // }
   };
   const addDash = (str: any) => {
-    return str.slice(0, 4) + "-" + str.slice(4, 6) + "-" + str.slice(6);
-  }
+    return str.slice(0, 4) + '-' + str.slice(4, 6) + '-' + str.slice(6);
+  };
 
   return (
     <div>
@@ -347,11 +348,7 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
                 ${errors.role ? 'border-1 border-rose-600' : 'border-gray-400'}
                 `}
             />
-            <p
-              className={`${
-                errors.role ? 'visible' : 'invisible'
-              } mt-1 text-xs text-red-600`}
-            >
+            <p className={`${errors.role ? 'visible' : 'invisible'} mt-1 text-xs text-red-600`}>
               {errors.role?.message}
             </p>
           </div>
@@ -362,14 +359,18 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
             >
               وضعیت بازرس
             </label>
-            {
-              userData && userData.activityStatus ? (
-                <SingleSelectInModal options={activityStatus} setValueOption={setActivityStatusValue}
-                                     selectedValue={userData.activityStatus}/>
-              ) : (
-                <SingleSelectInModal options={activityStatus} setValueOption={setActivityStatusValue}/>
-              )
-            }
+            {userData && userData.activityStatus ? (
+              <SingleSelectInModal
+                options={activityStatus}
+                setValueOption={setActivityStatusValue}
+                selectedValue={userData.activityStatus}
+              />
+            ) : (
+              <SingleSelectInModal
+                options={activityStatus}
+                setValueOption={setActivityStatusValue}
+              />
+            )}
 
             {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
             {/*       type="text"/> */}
@@ -380,20 +381,18 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
             <label htmlFor="full-name" className="text-xs text-gray-400 flex justify-start mb-1">
               استان
             </label>
-            {
-              userData && userData.provinceCode ? (
-                <SingleSelectInModal
-                  options={provinceOptions}
-                  setValueOption={setProvinceTitleInput}
-                  selectedValue={userData.provinceCode}
-                />
-              ) : (
-                <SingleSelectInModal
-                  options={provinceOptions}
-                  setValueOption={setProvinceTitleInput}
-                />
-              )
-            }
+            {userData && userData.provinceCode ? (
+              <SingleSelectInModal
+                options={provinceOptions}
+                setValueOption={setProvinceTitleInput}
+                selectedValue={userData.provinceCode}
+              />
+            ) : (
+              <SingleSelectInModal
+                options={provinceOptions}
+                setValueOption={setProvinceTitleInput}
+              />
+            )}
 
             {/* <input id="full-name" type="text" */}
             {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
@@ -405,14 +404,15 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
             >
               شهر
             </label>
-            {
-              userData && userData.cityCode ? (
-                <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput}
-                                     selectedValue={userData.cityCode}/>
-              ) : (
-                <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput}/>
-              )
-            }
+            {userData && userData.cityCode ? (
+              <SingleSelectInModal
+                options={cityOptions}
+                setValueOption={setCityTitleInput}
+                selectedValue={userData.cityCode}
+              />
+            ) : (
+              <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput} />
+            )}
             {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
             {/*       type="text"/> */}
           </div>
@@ -451,7 +451,9 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
               type="text"
             />
             <p
-              className={`${errors.organization ? 'visible' : 'invisible'} mt-1 text-xs text-red-600`}
+              className={`${
+                errors.organization ? 'visible' : 'invisible'
+              } mt-1 text-xs text-red-600`}
             >
               {errors.organization?.message}
             </p>
@@ -473,8 +475,14 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
                   onBlur={onBlur}
                   selected={value}
                   error={errors.birthDate}
-                  placeholder={userData ? addDash(toPersianDigit(userData.birthDate)) : 'تاریخ تولد'}
-                  iClass={`w-full border-solid border  rounded pr-4 py-1 h-9 text-sm border-gray-400 ${userData && userData.birthDate ? 'placeholder-black' : ''}`}
+                  placeholder={
+                    userData && userData.birthDate
+                      ? addDash(toPersianDigit(userData.birthDate))
+                      : 'تاریخ تولد'
+                  }
+                  iClass={`w-full border-solid border  rounded pr-4 py-1 h-9 text-sm border-gray-400 ${
+                    userData && userData.birthDate ? 'placeholder-black' : ''
+                  }`}
                   max={unixToDateObject(new Date().getTime())}
                   name={name}
                   aria-invalid={!!errors.birthDate}
@@ -482,14 +490,14 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
               )}
             />
 
-            <p className={`${errors.birthDate ? 'visible' : 'invisible'} mt-1 text-xs text-red-600`}>
+            <p
+              className={`${errors.birthDate ? 'visible' : 'invisible'} mt-1 text-xs text-red-600`}
+            >
               {errors.birthDate?.message}
             </p>
           </div>
 
-          <div className="u-width-47 mr-auto">
-
-          </div>
+          <div className="u-width-47 mr-auto"></div>
         </div>
 
         <div className="w-full">
@@ -497,7 +505,7 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({actionType, setS
             type="submit"
             className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52"
           >
-            {actionType === 'add' && <span>{!isLoading ? 'ثبت بازرس' : <DotLoading/>}</span>}
+            {actionType === 'add' && <span>{!isLoading ? 'ثبت بازرس' : <DotLoading />}</span>}
             {actionType === 'update' && 'ثبت اطلاعات'}
           </button>
         </div>

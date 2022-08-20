@@ -64,14 +64,12 @@ const initialًCityResourceOptions = [
 ];
 
 const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
-                                                       actionType,
-                                                       actionTitle,
-                                                       setShowModal,
-                                                       shouldRefresh,
-                                                       userData
-                                                     }) => {
-
-
+  actionType,
+  actionTitle,
+  setShowModal,
+  shouldRefresh,
+  userData,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [provinceOptions, setProvinceOptions] = useState<any>(initialProvinceOptions);
   const [ruleOptions, setRuleOptions] = useState<any>(initialًRuleOptions);
@@ -98,14 +96,14 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
   } = useForm<any>({
     // mode: "onChange",
     defaultValues: {
-      email: userData ? userData.email : null,
-      firstName: userData ? userData.firstName : null,
-      lastName: userData ? userData.lastName : null,
+      email: userData && userData.email ? userData.email : null,
+      firstName: userData && userData.firstName ? userData.firstName : null,
+      lastName: userData && userData.lastName ? userData.lastName : null,
       locked: false,
-      mobileSet: userData ? userData.mobileSet : null,
-      nationalId: userData ? userData.nationalId : null,
-      password: userData ? userData.password : null,
-      username: userData ? userData.username : null,
+      mobileSet: userData && userData.mobileSet ? userData.mobileSet : null,
+      nationalId: userData && userData.nationalId ? userData.nationalId : null,
+      password: userData && userData.password ? userData.password : null,
+      username: userData && userData.username ? userData.username : null,
     },
   });
 
@@ -115,7 +113,6 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
   const [cityResources, setCityResources] = useState<any>(null);
 
   const getValuesOfRoles = (values: any) => {
-
     const temp: any = [];
     values.forEach((item: any) => temp.push(item.value));
     setValuesOfRoles(temp);
@@ -123,7 +120,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
 
   const getValuesOfTag = (values: any) => {
     let temp: any = [];
-    console.log('values of tag => ', values)
+    console.log('values of tag => ', values);
     values.forEach((item: any) => temp.push(item.value));
 
     setTagResources((prev: any) => {
@@ -135,7 +132,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
   };
 
   const getValuesOfProvinceResource = (values: any) => {
-    console.log('values of province resource => ', values)
+    console.log('values of province resource => ', values);
     const temp: any = [];
     values.forEach((item: any) => temp.push(item.value));
 
@@ -157,7 +154,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
         value: temp,
       };
     });
-  }
+  };
 
   const onSubmit = async (values: any) => {
     if (!valuesOfRole.length) {
@@ -206,10 +203,9 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
 
       cogoToast.success('عملیات با موفقیت انجام شد!');
       setShowModal(false);
-      shouldRefresh((prev: boolean) => !prev)
+      shouldRefresh((prev: boolean) => !prev);
       // handleUpdateVisitList((prev: any) => !prev)
     } catch (error: any) {
-
       if (error.errors && error.errors.length) {
         // cogoToast.error("خطا در ارسال اطلاعات");
         error.errors.map((item: any) => {
@@ -221,7 +217,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
       }
 
       if (error.hasOwnProperty('fingerPrint') && error.fingerPrint) {
-        cogoToast.error("خطا در سرور");
+        cogoToast.error('خطا در سرور');
       }
 
       if (error.message) {
@@ -286,7 +282,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
           title: 'انتخاب شهر',
           value: null,
         },
-        ...normalizedData
+        ...normalizedData,
       ];
     });
   };
@@ -361,14 +357,14 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
     if (userData && userData.provinceCode) {
       getCities(userData?.provinceCode);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (provinceTitleInput && provinceTitleInput.value) {
       getCities(provinceTitleInput?.value);
     } else {
       setCityOptions(initialCityOptions);
-      setCityTitleInput(null)
+      setCityTitleInput(null);
     }
   }, [provinceTitleInput]);
 
@@ -476,20 +472,18 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
               <label htmlFor="province" className="text-xs text-gray-400 flex justify-start mb-1">
                 استان
               </label>
-              {
-                userData && userData.provinceCode ? (
-                  <SingleSelectInModal
-                    options={provinceOptions}
-                    setValueOption={setProvinceTitleInput}
-                    selectedValue={userData.provinceCode}
-                  />
-                ) : (
-                  <SingleSelectInModal
-                    options={provinceOptions}
-                    setValueOption={setProvinceTitleInput}
-                  />
-                )
-              }
+              {userData && userData.provinceCode ? (
+                <SingleSelectInModal
+                  options={provinceOptions}
+                  setValueOption={setProvinceTitleInput}
+                  selectedValue={userData.provinceCode}
+                />
+              ) : (
+                <SingleSelectInModal
+                  options={provinceOptions}
+                  setValueOption={setProvinceTitleInput}
+                />
+              )}
               {/* <input id="full-name" type="text" */}
               {/*       className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm"/> */}
             </div>
@@ -497,14 +491,15 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
               <label htmlFor="city" className="text-xs text-gray-400 flex justify-start mb-1">
                 شهر
               </label>
-              {
-                userData && userData.cityCode ? (
-                  <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput}
-                                       selectedValue={userData.cityCode}/>
-                ) : (
-                  <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput}/>
-                )
-              }
+              {userData && userData.cityCode ? (
+                <SingleSelectInModal
+                  options={cityOptions}
+                  setValueOption={setCityTitleInput}
+                  selectedValue={userData.cityCode}
+                />
+              ) : (
+                <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput} />
+              )}
               {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
               {/*       type="text"/> */}
             </div>
@@ -551,31 +546,32 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
             </div>
           </div>
 
-          {
-            actionType === 'add' && (
-              <div className="w-full flex px-12 mb-12">
-                <div className="u-width-47">
-                  <label htmlFor="password" className="text-xs text-gray-400 flex justify-start mb-1">
-                    رمز عبور
-                  </label>
-                  {/* <SimpleSelect options={provinceOptions} defaultOption='تهران'/> */}
-                  {/* <SingleSelectInModal options={provinceOptions} /> */}
-                  <input
-                    id="password"
-                    {...register('password', addUserValidation.password)}
-                    type="text"
-                    className={`w-full border-solid border  rounded pr-4 py-1 h-9 text-sm
+          {actionType === 'add' && (
+            <div className="w-full flex px-12 mb-12">
+              <div className="u-width-47">
+                <label htmlFor="password" className="text-xs text-gray-400 flex justify-start mb-1">
+                  رمز عبور
+                </label>
+                {/* <SimpleSelect options={provinceOptions} defaultOption='تهران'/> */}
+                {/* <SingleSelectInModal options={provinceOptions} /> */}
+                <input
+                  id="password"
+                  {...register('password', addUserValidation.password)}
+                  type="text"
+                  className={`w-full border-solid border  rounded pr-4 py-1 h-9 text-sm
                 ${errors.password ? 'border-1 border-rose-600' : 'border-gray-400'}
                 `}
-                  />
-                  <p
-                    className={`${errors.password ? 'visible' : 'invisible'} mt-1 text-xs text-red-600`}
-                  >
-                    {errors.password?.message}
-                  </p>
-                </div>
-                <div className="u-width-47 mr-auto">
-                  {/* <label htmlFor="nationalId" className="text-xs text-gray-400 flex justify-start mb-1">
+                />
+                <p
+                  className={`${
+                    errors.password ? 'visible' : 'invisible'
+                  } mt-1 text-xs text-red-600`}
+                >
+                  {errors.password?.message}
+                </p>
+              </div>
+              <div className="u-width-47 mr-auto">
+                {/* <label htmlFor="nationalId" className="text-xs text-gray-400 flex justify-start mb-1">
                 کدملی
               </label>
               <input
@@ -593,70 +589,76 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
               >
                 {errors.nationalId?.message}
               </p> */}
-                </div>
               </div>
-            )
-          }
-
+            </div>
+          )}
 
           <h5 className="text-lg font-black text-right px-12 mb-8">سطح دسترسی کاربر</h5>
           <div className="mb-4">
-
-            {
-              userData && userData.roles ? (
-                <MultiSelectInModal options={ruleOptions} title="نقش ها" getValues={getValuesOfRoles}
-                                    selectedValue={userData.roles}
-                />
-              ) : (
-                <MultiSelectInModal options={ruleOptions} title="نقش ها" getValues={getValuesOfRoles}/>
-              )
-            }
-
+            {userData && userData.roles ? (
+              <MultiSelectInModal
+                options={ruleOptions}
+                title="نقش ها"
+                getValues={getValuesOfRoles}
+                selectedValue={userData.roles}
+              />
+            ) : (
+              <MultiSelectInModal
+                options={ruleOptions}
+                title="نقش ها"
+                getValues={getValuesOfRoles}
+              />
+            )}
           </div>
           <div className="mb-4">
-            {
-              userData && userData.resources.find((item: any) => item?.name === 'tag') ? (
-                <MultiSelectInModal options={tagOptions} title="برچسب ها" getValues={getValuesOfTag}
-                                    selectedValue={userData.resources.find((item: any) => item?.name === 'tag').value}
-                />
-              ) : (
-                <MultiSelectInModal options={tagOptions} title="برچسب ها" getValues={getValuesOfTag}/>
-              )
-            }
-
+            {userData && userData.resources.find((item: any) => item?.name === 'tag') ? (
+              <MultiSelectInModal
+                options={tagOptions}
+                title="برچسب ها"
+                getValues={getValuesOfTag}
+                selectedValue={userData.resources.find((item: any) => item?.name === 'tag').value}
+              />
+            ) : (
+              <MultiSelectInModal
+                options={tagOptions}
+                title="برچسب ها"
+                getValues={getValuesOfTag}
+              />
+            )}
           </div>
           <div className="mb-4">
-
-            {
-              userData && userData.resources.find((item: any) => item?.name === 'province') ? (
-                <MultiSelectInModal
-                  options={provinceResourceOptions}
-                  title="استان"
-                  getValues={getValuesOfProvinceResource}
-                  selectedValue={userData.resources.find((item: any) => item?.name === 'province').value}
-                />
-              ) : (
-                <MultiSelectInModal
-                  options={provinceResourceOptions}
-                  title="استان"
-                  getValues={getValuesOfProvinceResource}
-                />
-              )
-            }
-
+            {userData && userData.resources.find((item: any) => item?.name === 'province') ? (
+              <MultiSelectInModal
+                options={provinceResourceOptions}
+                title="استان"
+                getValues={getValuesOfProvinceResource}
+                selectedValue={
+                  userData.resources.find((item: any) => item?.name === 'province').value
+                }
+              />
+            ) : (
+              <MultiSelectInModal
+                options={provinceResourceOptions}
+                title="استان"
+                getValues={getValuesOfProvinceResource}
+              />
+            )}
           </div>
           <div className="mb-8">
-
-            {
-              userData && userData.resources.find((item: any) => item?.name === 'city') ? (
-                <MultiSelectInModal options={cityResourceOptions} title="شهر" getValues={getValuesOfCityResource}
-                                    selectedValue={userData.resources.find((item: any) => item?.name === 'city').value}
-                />
-              ) : (
-                <MultiSelectInModal options={cityResourceOptions} title="شهر" getValues={getValuesOfCityResource}/>
-              )
-            }
-
+            {userData && userData.resources.find((item: any) => item?.name === 'city') ? (
+              <MultiSelectInModal
+                options={cityResourceOptions}
+                title="شهر"
+                getValues={getValuesOfCityResource}
+                selectedValue={userData.resources.find((item: any) => item?.name === 'city').value}
+              />
+            ) : (
+              <MultiSelectInModal
+                options={cityResourceOptions}
+                title="شهر"
+                getValues={getValuesOfCityResource}
+              />
+            )}
           </div>
           <div className="w-full">
             <button
@@ -664,7 +666,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
               className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52 mb-12"
             >
               {actionType === 'add' && (
-                <span>{!isLoading ? `ثبت ${actionTitle}` : <DotLoading/>}</span>
+                <span>{!isLoading ? `ثبت ${actionTitle}` : <DotLoading />}</span>
               )}
               {actionType === 'update' && ` ویرایش ${actionTitle}`}
             </button>
