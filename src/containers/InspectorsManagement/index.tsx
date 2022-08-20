@@ -69,18 +69,22 @@ export default function Inspectors() {
   });
 
   const getProvince = async () => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getProvince()) as any;
-    data.forEach((item: any) => {
-      normalizedData.push({
-        label: item.province,
-        value: item.province,
-        id: item.provinceCode,
+    try {
+      const normalizedData: any[] = [];
+      const {data} = (await fsServices.getProvince()) as any;
+      data.forEach((item: any) => {
+        normalizedData.push({
+          label: item.province,
+          value: item.province,
+          id: item.provinceCode,
+        });
       });
-    });
-    setProvinceOptions((prev: any) => {
-      return [...prev, ...normalizedData];
-    });
+      setProvinceOptions((prev: any) => {
+        return [...prev, ...normalizedData];
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -117,17 +121,15 @@ export default function Inspectors() {
         normalizedData.push({
           id: item.id,
           name: `${item.firstName || '-'} ${item.lastName || '-'}`,
-
-          // name: (item.firstName || '-') + (item.lastName || '-'),
           province: item.province || '-',
           role: item.role || '-',
-          nationalId: item.nationalId,
-          mobileNumber: item.mobileNumber,
-          activityStatus: item.activityStatus,
+          nationalId: item.nationalId || '-',
+          mobileNumber: item.mobileNumber || '-',
+          activityStatus: item.activityStatus || false,
           city: item.city || '-',
-          username: item.username,
-          organization: item.organization,
-          inspectorStatus: item.inspectorStatus,
+          username: item.username || '-',
+          organization: item.organization || '-',
+          inspectorStatus: item.inspectorStatus || '-',
           inspectorId: item.inspectorId || '-',
           totalData: item,
         });

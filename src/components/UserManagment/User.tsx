@@ -36,16 +36,20 @@ export default function User() {
     pageSize,
   });
   const getProvince = async () => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getProvince()) as any;
-    data.forEach((item: any) => {
-      normalizedData.push({
-        label: item.province,
-        value: item.province,
-        id: item.provinceCode,
+    try {
+      const normalizedData: any[] = [];
+      const {data} = (await fsServices.getProvince()) as any;
+      data.forEach((item: any) => {
+        normalizedData.push({
+          label: item.province,
+          value: item.province,
+          id: item.provinceCode,
+        });
       });
-    });
-    setProvinceOptions([...normalizedData]);
+      setProvinceOptions([...normalizedData]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -77,11 +81,11 @@ export default function User() {
           name: `${item.firstName || '-'} ${item.lastName || '-'}`,
           province: item.province || '-',
           accestance: item.roles[0],
-          nationalId: item.nationalId,
-          mobileNumber: item.mobileSet,
-          locked: !item.locked,
+          nationalId: item.nationalId || '-',
+          mobileNumber: item.mobileSet || '-',
+          locked: !item.locked || false,
           city: item.city || '-',
-          username: item.username,
+          username: item.username || '-',
           totalData: item,
         });
       });
