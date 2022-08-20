@@ -6,16 +6,16 @@ interface ISimpleSelect {
   defaultOption?: any;
   setValueOption?: any;
   setTitle?: any;
-  selectedValue?: any
+  selectedValue?: any;
 }
 
 const SingleSelectInModal: React.FC<ISimpleSelect> = ({
-                                                        options,
-                                                        defaultOption,
-                                                        setValueOption,
-                                                        setTitle,
-                                                        selectedValue
-                                                      }) => {
+  options,
+  defaultOption,
+  setValueOption,
+  setTitle,
+  selectedValue,
+}) => {
   const [showOptions, setShowOptions] = useState(false);
   const [selected, setSelected] = useState(defaultOption || options[0]);
 
@@ -28,7 +28,7 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
   };
 
   useEffect(() => {
-    selectedRef.current?.scrollIntoView();
+    // selectedRef.current?.scrollIntoView();
     const conditions = (event: any) => {
       if (wholeSelectRef.current.contains(event.target)) return;
       if (showOptions) setShowOptions(false);
@@ -49,21 +49,20 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
 
   useEffect(() => {
     if (selected && selected.value && setValueOption) {
-      setValueOption(selected)
+      setValueOption(selected);
     }
-  }, [selected])
+  }, [selected]);
 
   useEffect(() => {
     if (selectedValue && options.length > 1) {
-      const defaultValue = options.find((item: any) => item.value === selectedValue)
+      const defaultValue = options.find((item: any) => item.value === selectedValue);
       if (defaultValue) {
-        setSelected(defaultValue)
+        setSelected(defaultValue);
       }
     } else {
-      setSelected(options[0])
+      setSelected(options[0]);
     }
-
-  }, [options])
+  }, [options]);
 
   return (
     <div
@@ -89,7 +88,7 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
         <span className="w-20 truncate flex justify-start pr-2 w-full">
           {options.length === 1 ? options[0].title : selected.title}
         </span>
-        <DownIcon className="mr-2 h-2 w-2.5"/>
+        <DownIcon className="mr-2 h-2 w-2.5" />
       </span>
       <ul className={`${showOptions ? 'block' : 'hidden'} transition ease-in-out delay-150`}>
         {options.map((item: any, index: any) => {
@@ -105,8 +104,7 @@ const SingleSelectInModal: React.FC<ISimpleSelect> = ({
               defaultValue={selected.value}
             >
               <span className="circle-select  ml-2">
-                <span
-                  className={selected.title === item.title ? 'circle-select--selected' : ''}/>
+                <span className={selected.title === item.title ? 'circle-select--selected' : ''} />
               </span>
               {item.icon && <i className="ml-2">{item.icon}</i>}
               {item.title}
