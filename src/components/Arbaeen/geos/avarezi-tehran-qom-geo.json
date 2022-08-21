@@ -1,0 +1,61 @@
+{
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی قم"
+      },
+      "geometry": {
+        "coordinates": [
+          51.3539,
+          35.5419
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی قم"
+      },
+      "geometry": {
+        "coordinates": [
+          51.3538,
+          35.5419
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی قم"
+      },
+      "geometry": {
+        "coordinates": [
+          51.3538,
+          35.5420
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی قم"
+      },
+      "geometry": {
+        "coordinates": [
+          51.35381,
+          35.5418
+        ],
+        "type": "Point"
+      }
+    }
+  ],
+  "type": "FeatureCollection"
+}
