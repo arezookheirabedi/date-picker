@@ -21,6 +21,8 @@ const initialValue = {
   totalServicesProvided: 12452,
 };
 const OverviewPilgrim = () => {
+  const [totalLoading, setTotalLoding] = useState<boolean>(false);
+  const [totla, setTotal] = useState<number>(12000);
   const [loading, setLoading] = useState(false);
   const [pilgrims, setPilgrims] = useState<any>(initialValue);
   const {CancelToken} = axios;
@@ -52,9 +54,20 @@ const OverviewPilgrim = () => {
       setLoading(false);
     }
   };
-
+  const getIt = async (params: any) => {
+    setTotalLoding(true);
+    try {
+      const {data} = await arbaeenService.getPiligrimList(params, {cancelToken: source.token});
+      setTotal(data.totalElements);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTotalLoding(false);
+    }
+  };
   useEffect(() => {
     getAllPilgrims();
+    getIt({pageNumber: 0});
     return () => {
       source.cancel('Operation canceled by the user.');
     };
@@ -70,8 +83,8 @@ const OverviewPilgrim = () => {
             <Statistic
               icon={groupIcon}
               text="تعداد کل ثبت نام شدگان"
-              count={pilgrims.totalNumberOfRegistrants || 0}
-              loading={loading}
+              count={totla || 0}
+              loading={totalLoading}
             />
             <Statistic
               icon={blueEventIcon}
