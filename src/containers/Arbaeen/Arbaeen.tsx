@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OverviewArbaeen from 'src/components/Arbaeen/public/OverviewArbaeen';
+import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatus';
 import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
 import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
 import OverviewOfThePercentageOfEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
@@ -9,6 +9,9 @@ import MokebList from 'src/components/Arbaeen/public/MokebList';
 import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCitiesList';
 import TheLargestNumberOfOriginPilgrimsCountriesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCountriesList';
 import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
+import OverviewPilgrim from 'src/components/Arbaeen/public/OverviewPilgrim';
+import OverviewPligrimTripType from 'src/components/Arbaeen/public/OverviewPligrimTripType';
+import OverviewPilgrimHelthStatus from 'src/components/Arbaeen/public/OverviewPilgrimHelthStatus';
 import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
@@ -17,7 +20,10 @@ import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../comp
 const Arbaeen = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewArbaeen />
+      <OverviewPilgrim />
+      <OverviewPligrimTripType />
+      <OverviewPilgrimHelthStatus />
+      <OverviewPilgrimVaccineStatus />
       <OverviewOfTheLatestVaccinationStatusOfPilgrims />
       <OverviewOfTheEntryAndExitOfPilgrims />
       <OverviewOfThePercentageOfEntryAndExitOfPilgrims />

@@ -18,7 +18,7 @@ interface IProps {
   refresh: boolean;
 }
 
-const RestePassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
+const RestPassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
   const [typeInputText, setTypeInputText] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
@@ -177,4 +177,4 @@ const RestePassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
   );
 };
 
-export default RestePassModal;
+export default RestPassModal;
