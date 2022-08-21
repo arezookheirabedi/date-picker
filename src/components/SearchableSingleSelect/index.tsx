@@ -8,6 +8,7 @@ import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
 interface IProps {
+  hasPaginate?: boolean;
   tag?: string;
   category?: string;
   endPoint?: any;
@@ -25,6 +26,7 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   setQueryParams,
   queryParams,
   objectKey,
+  hasPaginate,
 }) => {
   const [selected, setSelected] = useState<{key: number | string | null; value: string}>();
   const [query, setQuery] = useState('');
@@ -94,6 +96,10 @@ const SearchableSingleSelect: React.FC<IProps> = ({
     let params = {...queryParams};
     if (selected) {
       params = {...queryParams, [`${objectKey}`]: selected.key};
+      if (hasPaginate) {
+        params = {...queryParams, currentPage: 1, [`${objectKey}`]: selected.key};
+      }
+
       setQueryParams(params);
     }
   }, [selected]);

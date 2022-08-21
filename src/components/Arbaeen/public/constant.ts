@@ -171,17 +171,6 @@ export const pilgrimsCountries = [
     pilgrimsTototalPercentage: '4',
   },
 ];
-export const pilgrimsList = [
-  {
-    pilgrimName: 'هادی نعمتی',
-    pilgrimNationalId: '0016619609',
-    exitBorder: 'مرز مهران',
-    dateOfDispatch: '2022.11.1',
-    returnDate: '2022.11.12',
-    SendingProvince: 'تهران',
-    pilgrimMobileNumber: '0912536485',
-  },
-];
 
 export const abroadData = [
   {
