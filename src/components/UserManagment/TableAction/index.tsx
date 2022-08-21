@@ -10,7 +10,7 @@ import ActionButton from './ActionButton';
 import Confirm from '../../Modal/ConfirmModal';
 import {ActionList, IActionList} from './ActionList';
 import EditOrAddUser from './EditOrAddComponent';
-import RestePassModal from './RestePassModal';
+import RestePassModal from './RestPassModal';
 
 interface IProps {
   item: any;
