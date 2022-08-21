@@ -577,7 +577,7 @@ const routes: IRoute[] = [
       'ROLE_REPORT_VIEWER_GUILD_BAKERY_GENERAL',
       'ROLE_REPORT_VIEWER_GUILD_BAKERY_PROVINCE',
       'ROLE_REPORT_VIEWER_GUILD_BAKERY_AUDIT',
-      'ROLE_REPORT_VIEWER_INSPECTOR_USER_MANAGEMENT'
+      'ROLE_REPORT_VIEWER_INSPECTOR_USER_MANAGEMENT',
     ],
     subMenu: [
       {
@@ -689,7 +689,7 @@ const routes: IRoute[] = [
     simLink: '/dashboard/arbaeen',
     exact: true,
     inMenu: true,
-    title: 'اربعین',
+    title: 'سجا (زائرین اربعین)',
     // disabled: true,
     roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
     subMenu: [
@@ -702,7 +702,7 @@ const routes: IRoute[] = [
         simLink: '/dashboard/arbaeen',
         exact: true,
         inMenu: true,
-        title: 'داشبورد زائرین اربعین',
+        title: 'داشبورد سجا (زائرین اربعین)  ',
         children: [
           {
             keyIndex: '1',
