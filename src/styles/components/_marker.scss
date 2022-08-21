@@ -1,5 +1,5 @@
 .marker {
-  background-image: url(./../../assets/images/red-person.svg);
+
   color: white;
   padding: 10px;
   text-align: center;
@@ -8,6 +8,18 @@
   font-size: 16px;
   margin: 4px 2px;
   border-radius: 50%;
+
+  &--native {
+    background-image: url(./../../assets/images/blue-person.svg);
+  }
+
+  &--normal {
+    background-image: url(./../../assets/images/red-person.svg);
+  }
+
+  &--parking {
+    background-image: url(./../../assets/images/parking-logo.svg);
+  }
 }
 
 //.marker {
