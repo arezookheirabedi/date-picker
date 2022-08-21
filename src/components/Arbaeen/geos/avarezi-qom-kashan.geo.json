@@ -1,0 +1,61 @@
+{
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی کاشان"
+      },
+      "geometry": {
+        "coordinates": [
+          50.9079,
+          34.6745
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی کاشان"
+      },
+      "geometry": {
+        "coordinates": [
+          50.9080,
+          34.67444
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی کاشان"
+      },
+      "geometry": {
+        "coordinates": [
+          50.90799,
+          34.67444
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "عوارضی کاشان"
+      },
+      "geometry": {
+        "coordinates": [
+          50.90795,
+          34.67446
+        ],
+        "type": "Point"
+      }
+    }
+  ],
+  "type": "FeatureCollection"
+}

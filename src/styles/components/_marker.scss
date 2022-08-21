@@ -1,0 +1,35 @@
+.marker {
+
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 50%;
+
+  &--native {
+    background-image: url(./../../assets/images/blue-person.svg);
+  }
+
+  &--normal {
+    background-image: url(./../../assets/images/red-person.svg);
+  }
+
+  &--parking {
+    background-image: url(./../../assets/images/parking-logo.svg);
+  }
+}
+
+//.marker {
+//  background-color: red;
+//  color: white;
+//  padding: 10px;
+//  text-align: center;
+//  text-decoration: none;
+//  display: inline-block;
+//  font-size: 16px;
+//  margin: 4px 2px;
+//  border-radius: 50%;
+//}
