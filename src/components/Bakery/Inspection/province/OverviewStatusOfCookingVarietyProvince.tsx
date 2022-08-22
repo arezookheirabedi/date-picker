@@ -8,7 +8,11 @@ import useGetOverviewStatusOfCookingVariety from "../../../../hooks/apis/inspect
 
 const {HeadlessChart} = Charts;
 
-const OverviewStatusOfCookingVariety = () => {
+interface OverviewStatusOfCookingVarietyProvinceProps {
+    cityTitle: any;
+  }
+  
+const OverviewStatusOfCookingVarietyProvince: React.FC<OverviewStatusOfCookingVarietyProvinceProps> = ({cityTitle}) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedDayRange, setSelectedDayRange] = useState({
         from: null,
@@ -43,12 +47,12 @@ const OverviewStatusOfCookingVariety = () => {
         }
       }, [selectedDayRange]);
 
-    const {list: dataset, optionChart : options} = useGetOverviewStatusOfCookingVariety();
+    const {list: dataset, optionChart : options} = useGetOverviewStatusOfCookingVariety(true);
 
     return (
         <fieldset className="text-center border rounded-xl p-4 mb-16">
             <legend className="text-black mx-auto px-3">
-            وضعیت تنوع پخت در واحد‌های بازرسی شده در کل کشور
+            وضعیت تنوع پخت در واحد‌های بازرسی شده در استان {cityTitle}
             </legend>
             <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
                 <div className="flex items-center justify-between mb-10 mt-6">
@@ -123,4 +127,4 @@ const OverviewStatusOfCookingVariety = () => {
   )
 }
 
-export default OverviewStatusOfCookingVariety;
+export default OverviewStatusOfCookingVarietyProvince;

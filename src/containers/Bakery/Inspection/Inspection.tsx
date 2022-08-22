@@ -2,7 +2,7 @@ import React from 'react';
 
 import OverviewInspectionStatus from 'src/components/Bakery/Inspection/public/OverviewInspectionStatus';
 import OverviewListOfInspections from 'src/components/Bakery/Inspection/public/OverviewListOfInspections';
-import OverviewReportOfInspectedUnits from 'src/components/Bakery/Inspection/public/OverviewReportOfInspectedUnits';
+import OverviewReportOfInspectedUnit from 'src/components/Bakery/Inspection/public/OverviewReportOfInspectedUnit';
 import OverviewReportOfInspectedUnitsInCountry from 'src/components/Bakery/Inspection/public/OverviewReportOfInspectedUnitsInCountry';
 import OverviewNumberOfInspectedUnits from 'src/components/Bakery/Inspection/public/OverviewNumberOfInspectedUnits';
 import OverviewInspectionsDone from 'src/components/Bakery/Inspection/public/OverviewInspectionsDone';
@@ -19,11 +19,11 @@ const Inspection = () => {
     <div className="space-y-16 mb-8">
       <OverviewInspectionStatus />
       <OverviewListOfInspections />
-      <OverviewReportOfInspectedUnits />
       <div className='flex w-full gap-x-6'>
         <OverviewReportOfInspectedUnitsInCountry />
         <OverviewNumberOfInspectedUnits />
       </div>
+      <OverviewReportOfInspectedUnit/>
       <OverviewInspectionsDone />
       <OverviewRatioOfInspection />
       <div className='flex w-full gap-x-6'>
