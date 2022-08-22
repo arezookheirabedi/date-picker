@@ -306,18 +306,14 @@ function getPeopleVaccinesTripGeneralReport(params: any, config?: any) {
     .build()
     .get('/api/v1/hcs-reporter/trips/people/vaccines/general?lang=fa', params, {...config});
 }
-function getPassengerPermissionsCount(params: any, config?: any) {
-  return request
-    .withHeaders({'Content-Type': 'application/json;utf-8'})
-    .build()
-    .get('/api/v1/trip/passengers/permissions/count', params, {...config});
-}
+
 function numberOf({...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/hcs-reporter/vaccines/general?lang=fa`, params, {...config});
 }
+
 function testResultByCategory({tag, category, ...params}: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -326,6 +322,8 @@ function testResultByCategory({tag, category, ...params}: any = {}, config?: any
       ...config,
     });
 }
+
+
 const hcsService = {
   membersGeneral,
   tripVaccinationGeneral,
@@ -353,7 +351,6 @@ const hcsService = {
   getVaccinesTripGroupedByProvinceReport,
   getPeopleVaccinesTripGeneralReport,
   getTripsCountCategoryBased,
-  getPassengerPermissionsCount,
   getTableOverviewTestResults,
   getVaccinationOverview,
   numberOf,
@@ -361,3 +358,4 @@ const hcsService = {
 };
 
 export default hcsService;
+

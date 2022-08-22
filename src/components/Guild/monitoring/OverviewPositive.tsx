@@ -4,7 +4,7 @@ import useGetGuildMonitoring from 'src/hooks/apis/useGetGuildMonitoring';
 import Table from '../../TableXHR';
 import ExportButton from './ExportButton';
 import {toPersianDigit} from '../../../helpers/utils';
-import HiddenMobileNumber from './HiddenMobileNumber';
+import HiddenMobileNumber from '../../Form/HiddenMobileNumber';
 
 interface OverviewPositiveProps {
   cityTitle?: string;
