@@ -14,6 +14,8 @@ import vaccineActiveIcon from '../assets/images/icons/vaccine-active.svg';
 import transportIcon from '../assets/images/icons/transport.svg';
 import transportActiveIcon from '../assets/images/icons/transport-active.svg';
 import bakeryIcon from '../assets/images/icons/bakery.svg';
+import inspectionActiveIcon from '../assets/images/icons/inspection-active.svg';
+import inspectionIcon from '../assets/images/icons/inspection.svg';
 import bakeryActiveIcon from '../assets/images/icons/bakery-active.svg';
 import passengerIcon from '../assets/images/icons/passenger.svg';
 import passengerActiveIcon from '../assets/images/icons/passenger-active.svg';
@@ -76,6 +78,12 @@ const icons = [
     icon: bakeryIcon,
     disableIcon: bakeryIcon,
     activeIcon: bakeryActiveIcon,
+  },
+  {
+    name: 'inspection',
+    icon: inspectionIcon,
+    disableIcon: inspectionIcon,
+    activeIcon: inspectionActiveIcon,
   },
   {
     name: 'guild',
