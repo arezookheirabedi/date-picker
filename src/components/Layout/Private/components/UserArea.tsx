@@ -7,7 +7,7 @@ import IconWrapper from 'src/components/IconWrapper';
 import authenticateService from 'src/services/authentication.service';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import {IProfile} from 'src/models/authentication.model';
-import ResetPasswordModal from './ResentPasswordModal';
+import ResetPasswordModal from './ResetPasswordModal';
 
 const UserArea: React.FC<any> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -1,0 +1,350 @@
+{
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3870
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3880
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3885
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3870
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3860
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3934
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4666,
+          34.3845
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4680,
+          34.3830
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4680,
+          34.3820
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4690,
+          34.3810
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4699,
+          34.3800
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          45.4710,
+          34.3790
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0457,
+          33.1070
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0450,
+          33.1060
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0445,
+          33.1045
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0440,
+          33.1030
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0430,
+          33.1015
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0425,
+          33.1000
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0525,
+          33.1200
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0529,
+          33.1215
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0529,
+          33.1230
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0529,
+          33.1245
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Lincoln Park",
+        "description": "A northside park that is home to the Lincoln Park Zoo",
+        "from": "native"
+      },
+      "geometry": {
+        "coordinates": [
+          46.0529,
+          33.1260
+        ],
+        "type": "Point"
+      }
+    }
+  ],
+  "type": "FeatureCollection"
+}
