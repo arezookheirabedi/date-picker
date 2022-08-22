@@ -1,8 +1,4 @@
-import React, {useState, useEffect} from 'react';
-
-// api services
-import axios from 'axios';
-import inspectionService from '../../../../services/inspection.service';
+import React from 'react';
 
 // components
 import Statistic from '../../../../containers/Guild/components/Statistic';
@@ -16,45 +12,11 @@ import bakeryWorkerIcon from '../../../../assets/images/icons/bakery-worker.svg'
 import wheatIcon from '../../../../assets/images/icons/wheat.svg';
 import breadIcon from '../../../../assets/images/icons/bread.svg';
 import ovenInspectionIcon from '../../../../assets/images/icons/oven-inspection.svg';
-
-const initialinspections = {
-  totalNumberOfInspectionsPerformed : 0,
-  totalNumberOfInspectors : 0,
-  numberOfInspectedUnitsWithBusinessLicense : 0,
-  numberOfInspectedUnitsWithoutBusinessLicense: 0,
-  totalNumberOfInspectedWorkers : 0,
-  averageObservedFlourOfInspectedUnits : 0,
-  totalNumberOfBakedBreadsOfInspectedUnits : 0,
-  totalUnitsSubjectToInspection : 0
-};
+import useGetOverviewInspectionStatus from '../../../../hooks/apis/inspection/useGetOverviewInspectionStatus'
 
 const OverviewInspectionStatus = () => {
-  const [loading, setLoading] = useState(false);
-  const [inspections, setInspections] = useState<any>(initialinspections);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
 
-  const getInspectionsStatus = async () => {
-    setLoading(true);
-    try {
-      const {data} = await inspectionService.inspectionStatus(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
-      setInspections(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getInspectionsStatus();
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
+  const {data: inspection, loading} = useGetOverviewInspectionStatus();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -65,7 +27,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={flourInspectionIcon}
               text="تعداد کل بازرسی‌های انجام شده"
-              count={inspections.totalNumberOfInspectionsPerformed || 0}
+              count={inspection.totalNumberOfInspectionsPerformed || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -73,7 +35,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={groupIcon}
               text="تعداد کل بازرسان"
-              count={inspections.totalNumberOfInspectors || 0}
+              count={inspection.totalNumberOfInspectors || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -81,7 +43,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={ovenIcon}
               text="تعداد واحدهای بازرسی شده دارای پروانه کسب"
-              count={inspections.numberOfInspectedUnitsWithBusinessLicense || 0}
+              count={inspection.numberOfInspectedUnitsWithBusinessLicense || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -89,7 +51,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={ovenDeactiveIcon}
               text="تعداد واحدهای بازرسی شده فاقد پروانه کسب"
-              count={inspections.numberOfInspectedUnitsWithoutBusinessLicense || 0}
+              count={inspection.numberOfInspectedUnitsWithoutBusinessLicense || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -99,7 +61,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={bakeryWorkerIcon}
               text="تعداد کل کارگران خبازی‌های بازرسی شده"
-              count={inspections.totalNumberOfInspectedWorkers || 0}
+              count={inspection.totalNumberOfInspectedWorkers || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -107,7 +69,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={wheatIcon}
               text="میانگین آرد مشاهده شده در واحدهای بازرسی شده"
-              count={inspections.averageObservedFlourOfInspectedUnits || 0}
+              count={inspection.averageObservedFlourOfInspectedUnits || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -115,7 +77,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={breadIcon}
               text="مجموع نانهای پخت شده در واحدهای بازرسی شده"
-              count={inspections.totalNumberOfBakedBreadsOfInspectedUnits || 0}
+              count={inspection.totalNumberOfBakedBreadsOfInspectedUnits || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -123,7 +85,7 @@ const OverviewInspectionStatus = () => {
             <Statistic
               icon={ovenInspectionIcon}
               text="مجموع واحد‌هایی که نیاز به بازرسی دارند"
-              count={inspections.totalUnitsSubjectToInspection || 0}
+              count={inspection.totalUnitsSubjectToInspection || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"

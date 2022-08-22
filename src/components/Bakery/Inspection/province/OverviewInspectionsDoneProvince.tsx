@@ -10,7 +10,12 @@ import Calendar from '../../../Calendar';
 import HeadlessChart from '../../HeadlessChart';
 import useGetOverviewOfInspectionsDone from '../../../../hooks/apis/inspection/useGetOverviewOfInspectionsDone';
 
-const OverviewInspectionsDone: React.FC<{}> = () => {
+interface OverviewInspectionsDoneProvinceProps {
+    cityTitle: any
+}
+  
+const OverviewInspectionsDoneProvince: React.FC<OverviewInspectionsDoneProvinceProps> = ({cityTitle}) => {
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -29,7 +34,7 @@ const OverviewInspectionsDone: React.FC<{}> = () => {
     loading,
     error: errorMessage,
     optionChart: options
-  } = useGetOverviewOfInspectionsDone();
+  } = useGetOverviewOfInspectionsDone(true);
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -57,7 +62,7 @@ const OverviewInspectionsDone: React.FC<{}> = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-      نگاه کلی به بازرسی‌های انجام شده در کشور
+      نگاه کلی به بازرسی‌های انجام شده در استان {cityTitle}
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6">
@@ -110,4 +115,4 @@ const OverviewInspectionsDone: React.FC<{}> = () => {
   );
 };
 
-export default OverviewInspectionsDone;
+export default OverviewInspectionsDoneProvince;
