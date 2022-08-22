@@ -35,12 +35,28 @@ function inspectionDone({ tag, ...params }: any = {}, config?: any) {
         .get(`/api/v1/inspection/done`, params, { ...config });
 }
 
+function inspectionReport({ tag, ...params }: any = {}, config?: any) {
+    return request
+        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+        .build({ mock: true })
+        .get(`/api/v1/inspection/report`, params, { ...config });
+}
+
+function inspectionStatusOfCookingVariety({ tag, ...params }: any = {}, config?: any) {
+    return request
+        .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+        .build({ mock: true })
+        .get(`/api/v1/inspection/cooking-variety`, params, { ...config });
+}
+
 const inspectionService = {
     inspectionStatus,
     inspectionAll,
     inspectionAverageFlour,
     ratioOfInspection,
-    inspectionDone
+    inspectionDone,
+    inspectionReport,
+    inspectionStatusOfCookingVariety
 }
 
 export default inspectionService;

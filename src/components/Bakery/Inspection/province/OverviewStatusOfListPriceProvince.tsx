@@ -1,14 +1,18 @@
 import Pie from '../../../../containers/Overview/components/Pie'
 import useGetOverviewStatusOfListPrice from "../../../../hooks/apis/inspection/useGetOverviewStatusOfListPrice";
 
-const OverviewStatusOfListPrice: React.FC<{}> = () => {
-    
-    const {list: dataset} = useGetOverviewStatusOfListPrice();
+interface OverviewStatusOfListPriceProvinceProps {
+    cityTitle: any;
+}
+  
+const OverviewStatusOfListPriceProvince: React.FC<OverviewStatusOfListPriceProvinceProps> = ({cityTitle}) => {
 
+    const {list: dataset} = useGetOverviewStatusOfListPrice(true);
+ 
     return (
         <fieldset className="text-center border rounded-xl p-4 w-1/2">
             <legend className="text-black mx-auto px-3">
-            وضعیت نرخ نامه واحد‌های بازرسی شده در کل کشور
+            وضعیت نرخ نامه واحد‌های بازرسی شده در استان {cityTitle}
             </legend>
             {dataset && (
                 <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow pb-8">
@@ -36,4 +40,4 @@ const OverviewStatusOfListPrice: React.FC<{}> = () => {
     )
 }
 
-export default OverviewStatusOfListPrice;
+export default OverviewStatusOfListPriceProvince;
