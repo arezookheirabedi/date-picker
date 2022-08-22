@@ -89,7 +89,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
   const getNumberOfInquiry = async () => {
     setNumberOfInquiryLoading(true);
     try {
-      const {data} = await hcsService.getPassengerPermissionsCount({
+      const {data} = await passengerService.getPassengerPermissionsCount({
         permissionStatus: 'DISQUALIFIED'
       }, {cancelToken: cancelToken.token});
       setInquiryCount(data.count);
@@ -103,7 +103,7 @@ const OverviewPassengerStatusCard: React.FC<{}> = () => {
   const getIllegalTicketsSold = async () => {
     setIllegalTicketsSoldLoading(true);
     try {
-      const {data} = await hcsService.getPassengerPermissionsCount({
+      const {data} = await passengerService.getPassengerPermissionsCount({
         forSale: true,
         permissionStatus: 'DISQUALIFIED'
       }, {cancelToken: cancelToken.token});

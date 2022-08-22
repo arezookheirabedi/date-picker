@@ -1,59 +1,87 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
-import LocalTableSearch from 'src/components/LocalTableSearch';
 import RetryButton from 'src/components/RetryButton';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-import Table from 'src/components/TableScopeSort';
-import {toPersianDigit} from 'src/helpers/utils';
-import guildService from 'src/services/guild.service';
+import Table from 'src/components/TableXHR';
+import {sideCities, toPersianDigit} from 'src/helpers/utils';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
-import {pilgrimsList} from '../public/constant';
+import arbaeenService from 'src/services/arbaeen.service';
+import axios from 'axios';
+import {useLocation} from 'react-router-dom';
+import {EERRORS} from 'src/constants/errors.enum';
 
+const pageSize = 10;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
+  const location = useLocation();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totalItems, setTotalItems] = useState(0);
+
   const [loading, setLoading] = useState(false);
-  const [dataset, setDataset] = useState<any>([]);
+  const [dataSet, setDataSet] = useState<any>([]);
   const [error, setError] = useState<any>(null);
-  const [orgDataset, setOrgDataset] = useState<any>([]);
   const [query, setQuery] = useState({
     retry: false,
-    categoryValue: null,
+    departureDestinationBorder: null,
+    currentPage: 1,
   });
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
+  const getIt = async ({retry, currentPage, ...params}: any) => {
+    const newData = {
+      ...params,
+      pageNumber: Number(query.currentPage) - 1,
+    };
+    setLoading(true);
+    setError(null);
+    try {
+      const {data} = await arbaeenService.getPiligrimList(newData, {cancelToken: source.token});
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          pilgrimName: `${item.firstName || '-'} ${item.lastName || '-'}`,
+          nationalId: item.nationalId || '',
+          exitBorder: item.departureDestinationBorder || 'نامشخص',
+          dateOfDispatch: item.departureDate,
+          returnDate: item.returnDate,
+          SendingProvince: item.departureOriginProvince || 'نامشخص',
+          pilgrimMobileNumber: item.mobileNumber || '',
+        });
+      });
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+      setLoading(false);
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const normalizedData: any[] = [];
-    pilgrimsList.forEach((item: any, index: number) => {
-      normalizedData.push({
-        id: `ovca_${index}`,
-        pilgrimName: item.pilgrimName || 'نامشخص',
-        pilgrimNationalId: item.pilgrimNationalId,
-        exitBorder: item.exitBorder || 'نامشخص',
-        dateOfDispatch: item.dateOfDispatch,
-        returnDate: item.returnDate,
-        SendingProvince: item.SendingProvince || 'نامشخص',
-        pilgrimMobileNumber: item.pilgrimMobileNumber,
-      });
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
     });
-    setDataset([...normalizedData]);
-    setOrgDataset([...normalizedData]);
-  }, []);
+    if (existsCity) {
+      getIt({...query, departureOriginProvince: provinceName});
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setDataSet([]);
+    };
+  }, [location.search, query]);
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const provinceName = params.get('provinceName') || ('تهران' as any);
-  //   const existsCity = sideCities.some((item: any) => {
-  //     return item.name === provinceName;
-  //   });
-  //   if (existsCity) {
-  //     getIt({...query, province: provinceName});
-  //   }
-  //   // eslint-disable-next-line consistent-return
-  //   return () => {
-  //     source.cancel('Operation canceled by the user.');
-  //     setData([]);
-  //   };
-  // }, [location.search, query]);
+  function handlePageChange(page: number = 1) {
+    setQuery({...query, currentPage: page});
+  }
   return (
     <>
       <fieldset className="mb-2 rounded-xl border p-4 text-center" id="arborean-overview">
@@ -62,22 +90,12 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
           <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                endPoint={guildService.getRegisterList}
-                placeholder="مرز خروج "
-                objectKey="categoryValue"
+                endPoint={arbaeenService.abroadList}
+                placeholder="همه مرزهای خروج "
+                objectKey="departureDestinationBorder"
                 setQueryParams={setQuery}
                 queryParams={query}
-              />
-            </div>
-          </div>
-
-          <div className="align-center flex flex-grow justify-end">
-            <div className="align-center relative inline-flex leading-3">
-              <LocalTableSearch
-                orgDataset={orgDataset}
-                setData={setDataset}
-                query={query}
-                placeholder="جستجوی سازمان"
+                hasPaginate
               />
             </div>
           </div>
@@ -90,27 +108,29 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
             </div>
           ) : (
             <Table
-              totalItems={(dataset || []).length}
               loading={loading}
-              dataSet={[...dataset]}
-              pagination={{pageSize: 10, maxPages: 3}}
+              handlePageChange={handlePageChange}
+              dataSet={[...dataSet]}
+              pagination={{pageSize, currentPage: query.currentPage}}
+              totalItems={totalItems}
               columns={[
                 {
                   name: 'نام و نام خانوادگی زائر',
                   key: 'pilgrimName',
-                  render: (v: any, record, index: number, page: number) => (
-                    <div className="flex justify-center">
-                      {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                  render: (v: any, record, index: number) => (
+                    <div className="flex w-full justify-start">
+                      {toPersianDigit(
+                        ((query.currentPage - 1) * pageSize + (index + 1)).toString()
+                      )}
+                      .{record.pilgrimName}
                     </div>
                   ),
                 },
                 {
                   name: 'کدملی زائر',
-                  key: 'pilgrimNationalId',
+                  key: 'nationalId',
                   render: (v: any, record: any) => (
-                    <span className="">
-                      {Number(record.pilgrimNationalId || 0).toPersianDigits()}
-                    </span>
+                    <span className="">{Number(record.nationalId || 0).toPersianDigits()}</span>
                   ),
                 },
                 {
@@ -164,8 +184,8 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                   name: 'شماره موبایل زائر',
                   key: 'pilgrimMobileNumber',
                   render: (v: any, record: any) => (
-                    <span className="">
-                      {Number(record.pilgrimMobileNumber || 0).toPersianDigits()}
+                    <span className="text-cyan-400">
+                      {toPersianDigit(record.pilgrimMobileNumber) || ''}
                     </span>
                   ),
                 },

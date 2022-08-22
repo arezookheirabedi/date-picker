@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import ableEye from '../../../assets/images/icons/able-eye-icon.svg';
-import disableEye from '../../../assets/images/icons/disable-eye-icon.svg';
+import ableEye from 'src/assets/images/icons/able-eye-icon.svg';
+import disableEye from 'src/assets/images/icons/disable-eye-icon.svg';
 
 interface IProps {
   value: any;
@@ -10,9 +10,9 @@ const HiddenMobileNumber: React.FC<IProps> = ({value}) => {
 
   return (
     <>
-      <div className="flex justify items-center">
+      <div className="flex justify-center items-center">
         <input
-          className="focus:outline-none"
+          className={`${typeInputText ? 'text-cyan-400' : ''}focus:outline-none lg:w-1/2`}
           value={value}
           type={`${typeInputText ? 'text' : 'password'}`}
           readOnly
