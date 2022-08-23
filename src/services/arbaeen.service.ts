@@ -39,12 +39,23 @@ function getPligrimCountPerBorder(params: any = {}, config?: any) {
       ...config,
     });
 }
+
+function getPilgrimCount(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/number-zaerin`, params, {
+      ...config,
+    });
+}
+
 const arbaeenService = {
   arbaeenGetAll,
   getPiligrimList,
   abroadList,
   getPligrimGenderPerProvince,
   getPligrimCountPerBorder,
+  getPilgrimCount,
 };
 
 export default arbaeenService;
