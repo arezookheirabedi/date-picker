@@ -1,7 +1,7 @@
 import React from 'react';
 
 import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatus';
-import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
+// import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
 
 // import OverviewArbaeen from 'src/components/Arbaeen/public/OverviewArbaeen';
 
@@ -32,7 +32,7 @@ const Arbaeen = () => {
       <OverviewPligrimTripType />
       <OverviewPilgrimHelthStatus />
       <OverviewPilgrimVaccineStatus />
-      <OverviewOfTheLatestVaccinationStatusOfPilgrims />
+      {/* <OverviewOfTheLatestVaccinationStatusOfPilgrims /> */}
       <OverviewOfExistBorders />
       <OverviewPligrimAge />
       <OverviewPilgrimGenderByProvince />
