@@ -40,7 +40,9 @@ export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
       const provinces: any[] = [];
       const maleCount: any[] = [];
       const femaleCount: any[] = [];
-      res.data.forEach((item: any) => {
+      const sortData = res.data.sort((a: any, b: any) => (a.maleCount > b.maleCount ? 1 : -1));
+
+      sortData.forEach((item: any) => {
         maleCount.push(item.maleCount);
         femaleCount.push(item.femaleCount);
         provinces.push(item.province);

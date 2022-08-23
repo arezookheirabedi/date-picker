@@ -22,61 +22,44 @@ const OverviewPilgrimGenderByProvince: React.FC<{}> = () => {
 
   const optionChart = {
     chart: {
-      renderTo: 'container',
       type: 'column',
       numberFormatter() {
         // eslint-disable-next-line prefer-rest-params
         const ret = Highcharts.numberFormat.apply(0, arguments as any);
         return converters.fa(ret);
       },
-
-      events: {
-        redraw: () => {
-          // eslint-disable-next-line
-          // console.log('redraw');
-        },
-      },
-      // zoomType: 'x'
-      // styledMode: true
+      className: 'transport-line-chart',
     },
     title: {
-      text: '',
-    },
-    scrollbar: {
-      enabled: true,
-      barBackgroundColor: '#656565',
-      barBorderColor: '#eee',
-      barBorderRadius: 4,
-      barBorderWidth: 0,
-      height: 6,
-      buttonArrowColor: '#eee',
-      rifleColor: '#656565',
-      buttonBackgroundColor: 'transparent',
-      buttonBorderWidth: 0,
-      buttonBorderRadius: 0,
-      trackBackgroundColor: '#eee',
-      trackBorderWidth: 0,
-      trackBorderRadius: 4,
+      text: null,
     },
     credits: {
       enabled: false,
     },
-    // colors: ['#FFC700', '#883BA4', '#175A76', '#00AAB1'],
+    colors: ['#209F92', '#F3BC06'],
     plotOptions: {
-      series: {
-        // stacking: 'percent',
-        // stacking: `${notPercent?'normal':'percent'}`,
-        stacking: 'percent',
-        // borderRadius: 5,
-        pointWidth: 15,
-      },
       column: {
+        marker: {
+          enabled: false,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: '#fff',
+              lineWidth: 3,
+            },
+          },
+        },
+        lineWidth: 2,
         threshold: null,
-        grouping: false,
-        shadow: false,
-        borderWidth: 0,
+        borderRadius: 2,
+        states: {
+          hover: {
+            lineWidth: 1,
+          },
+        },
       },
     },
+
     yAxis: {
       gridLineDashStyle: 'dash',
       lineDashStyle: 'dash',
@@ -90,31 +73,52 @@ const OverviewPilgrimGenderByProvince: React.FC<{}> = () => {
     legend: {
       enabled: false,
     },
+
     xAxis: {
-      categories: [],
-      type: 'category',
-      labels: {
-        rotation: 45,
+      scrollbar: {
+        enabled: true,
+        barBackgroundColor: '#656565',
+        barBorderColor: '#eee',
+        barBorderRadius: 4,
+        barBorderWidth: 0,
+        height: 6,
+        buttonArrowColor: '#eee',
+        rifleColor: '#656565',
+        buttonBackgroundColor: 'transparent',
+        buttonBorderWidth: 0,
+        buttonBorderRadius: 0,
+        trackBackgroundColor: '#eee',
+        trackBorderWidth: 0,
+        trackBorderRadius: 4,
+        showFull: false,
       },
-      // lineDashStyle: 'dash',
-      // lineColor: '#000000',
-      // lineWidth: 1
+
+      // min: 0,
+      // max: 30,
+
+      lineDashStyle: 'dash',
+      lineColor: '#000000',
+      lineWidth: 1,
     },
     tooltip: {
       shared: true,
       useHTML: true,
+      borderRadius: 16,
+      borderWidth: 0,
+      valueDecimals: 0,
       valueSuffix: 'نفر',
       style: {
         direction: 'rtl',
         textAlign: 'right',
         fontFamily: 'inherit',
-        fontSize: 10,
       },
-      borderWidth: 0,
-      // headerFormat: `<div style="min-width:220px">{point.x}</div>`
     },
-
-    series: [],
+    series: [
+      {
+        lineWidth: 4,
+        // pointWidth: 16,
+      },
+    ],
   };
 
   return (

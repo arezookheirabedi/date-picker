@@ -17,7 +17,7 @@ const initialData = {
       name: 'تعداد',
 
       data: [
-        {name: 'سال (۱۵-۰)', y: 0, color: '#716DE3'},
+        {name: 'سال (۱۵-۰)', y: 0, color: '#ff0060'},
         {name: 'سال (۳۰-۱۶)', y: 0, color: '#BFDDE7'},
         {name: 'سال (۴۵-۳۱)', y: 0, color: '#004D65'},
         {name: ' سال (۶۰-۴۶)', y: 0, color: '#209F92'},
@@ -43,108 +43,106 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
         cancelToken: source.token,
       });
 
-      const border: any[] = [];
+      const ageRange: any[] = [];
       const count: any[] = [];
       res.data.forEach((item: any) => {
-        border.push(item.departureDestinationBorder);
+        ageRange.push(item.departureDestinationBorder);
         count.push(item.count);
       });
-      const newBorder = border.filter((i: any) => i !== 'MEHRAN');
-      const newBorder2 = newBorder.filter((i: any) => i !== 'CHAZABE');
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const dataTemp = {
-        categories: [...newBorder2],
+        categories: [...ageRange],
         series: [
           {
             name: 'تعداد',
             data: [
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === 'هوایی';
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۱۵-۰)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === 'هوایی';
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۱۵-۰)';
                   })
                 ],
-                color: '#716DE3',
+                color: '#ff0060',
               },
 
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === 'شلمچه';
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۳۰-۱۶)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === 'شلمچه';
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۳۰-۱۶)';
                   })
                 ],
                 color: '#004D65',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === 'خسروی';
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۴۵-۳۱)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === 'خسروی';
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۴۵-۳۱)';
                   })
                 ],
                 color: '#BFDDE7',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === 'چزابه';
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === ' سال (۶۰-۴۶)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === 'چزابه';
+                  ageRange.findIndex((i: any) => {
+                    return i === ' سال (۶۰-۴۶)';
                   })
                 ],
                 color: '#716DE3',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === 'مهران';
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === ' سال (۷۵-۶۱)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
+                  ageRange.findIndex((i: any) => {
                     return i === 'مهران';
                   })
                 ],
                 color: '#FF0060',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === 'باشماق';
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا ';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === 'باشماق';
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا ';
                   })
                 ],
                 color: '#F3BC06',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
                     return i === 'تمرچین';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
+                  ageRange.findIndex((i: any) => {
                     return i === 'تمرچین';
                   })
                 ],
