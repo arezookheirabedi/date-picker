@@ -117,7 +117,7 @@ const OverviewPligrimAge = () => {
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff0060'}} />
                   <span> سال (۱۵-۰)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
