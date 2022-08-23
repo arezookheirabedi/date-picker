@@ -39,7 +39,10 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(query: any) {
 
       const border: any[] = [];
       const count: any[] = [];
-      res.data.forEach((item: any) => {
+
+      const sortData = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
+
+      sortData.forEach((item: any) => {
         border.push(item.departureDestinationBorder);
         count.push(item.count);
       });
