@@ -164,19 +164,24 @@ const ZaerinInfoPopup: React.FC<any> = ({data}) => {
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Marker: React.FC<any> = ({children, feature, classProp}) => {
-  // const onClickHandler = () => {
-  //   onClick(feature.properties.description);
-  // };
 
-  return (
-    <div
-      // onClick={onClickHandler}
-      className={`marker ${feature && feature.properties.from ? 'marker--native' : 'marker--normal'} ${classProp || ''}`}>
-      {children}
-    </div>
-  );
-};
+    // console.log('class props => ', classProp)
+    // console.log('feature props => ', feature.properties.from)
+    // const onClickHandler = () => {
+    //   onClick(feature.properties.description);
+    // };
+
+    return (
+      <div
+        // onClick={onClickHandler}
+        className={`marker  ${classProp || ''}`}>
+        {children}
+      </div>
+    );
+  }
+;
 
 
 const GeneralLookAtTheLocationOfProcessions = () => {
@@ -184,8 +189,11 @@ const GeneralLookAtTheLocationOfProcessions = () => {
   function predictPoints(lnt: any, lng: any, map: any) {
     const i1: any = lnt;
     const i2: any = lng;
+
     setInterval(() => {
-      const predict = [100, 100, 100];
+      const condition = Math.floor(Math.random() * 4);
+      const markerCondition = Math.floor(Math.random() * 10);
+      // const predict = [100, 100, 100];
       // eslint-disable-next-line no-plusplus
       // console.log('lng => ', parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))
       // eslint-disable-next-line no-plusplus
@@ -200,20 +208,32 @@ const GeneralLookAtTheLocationOfProcessions = () => {
       ReactDOM.render(
         // onClick={markerClicked}
         // @ts-ignore
-        <Marker/>,
+        <Marker classProp={markerCondition === 0 ? 'marker--native' : 'marker--normal'}/>,
         ref.current
       );
 
 
+      // console.log('lat => ', ((i1 + parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))))
+      // console.log('lng => ', ((i2 + parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))))
+
       // Create a Mapbox Marker at our new DOM node
       const mapboxglMarker = new mapboxgl.Marker(ref.current);
-      if (Math.floor(Math.random() * 2)) {
+
+      if (condition === 0) {
         mapboxglMarker
-          .setLngLat([(i1 + parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5))), (i2 + parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))])
+          .setLngLat([(parseFloat(i1) + (parseFloat((Math.random() / 100).toFixed(8)))), (parseFloat(i2) + (parseFloat((Math.random() / 100).toFixed(8))))])
           .addTo(map);
-      } else {
+      } else if (condition === 1) {
         mapboxglMarker
-          .setLngLat([(i1 - parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5))), (i2 - parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))])
+          .setLngLat([(parseFloat(i1) - (parseFloat((Math.random() / 100).toFixed(8)))), (parseFloat(i2) - (parseFloat((Math.random() / 100).toFixed(8))))])
+          .addTo(map);
+      } else if (condition === 2) {
+        mapboxglMarker
+          .setLngLat([(parseFloat(i1) + (parseFloat((Math.random() / 100).toFixed(8)))), (parseFloat(i2) - (parseFloat((Math.random() / 100).toFixed(8))))])
+          .addTo(map);
+      } else if (condition === 3) {
+        mapboxglMarker
+          .setLngLat([(parseFloat(i1) - (parseFloat((Math.random() / 100).toFixed(8)))), (parseFloat(i2) + (parseFloat((Math.random() / 100).toFixed(8))))])
           .addTo(map);
       }
 
@@ -221,7 +241,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
   }
 
   const mapContainer = useRef(null);
-  const map : any = useRef(null);
+  const map: any = useRef(null);
 
   // const marker = useRef(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -252,7 +272,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
       ReactDOM.render(
         // onClick={markerClicked}
         // @ts-ignore
-        <Marker feature={feature} classProp={classes}/>,
+        <Marker feature={feature} classProp={feature.properties.markerClass || classes}/>,
         ref.current
       );
 
@@ -269,10 +289,10 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     console.log(map)
-  },[showBorder])
+  }, [showBorder])
 
   // Initialize map when component mounts
   useEffect(() => {
@@ -287,7 +307,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
       );
     }
 
-     map.current = new mapboxgl.Map({
+    map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
@@ -465,8 +485,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
     // eslint-disable-next-line consistent-return
     return () => map.current.remove();
   }, []);
-
-
 
 
   return (
