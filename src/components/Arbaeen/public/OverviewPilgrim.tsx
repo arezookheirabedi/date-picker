@@ -1,77 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
-import arbaeenService from '../../../services/arbaeen.service';
+import useGetArbaeenCountData from 'src/hooks/apis/useGetArbaeenCountData';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import groupIcon from '../../../assets/images/icons/all-group.svg';
-import blueEventIcon from '../../../assets/images/icons/blue-event.svg';
-import greenEventIcon from '../../../assets/images/icons/green-event.svg';
-import groupWithFlagIcon from '../../../assets/images/icons/group-with-flag.svg';
+import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
 import groupWithMapIcon from '../../../assets/images/icons/group-with-map.svg';
-import redEventIcon from '../../../assets/images/icons/red-event.svg';
-import redCrescentIcon from '../../../assets/images/icons/red-crescent.svg';
+import greenPersons from '../../../assets/images/icons/persons-green-icon.svg';
+import greenwemen from '../../../assets/images/icons/green-wemen.svg';
+import earthPersons from '../../../assets/images/icons/earth-persons.svg';
+import menEarth from '../../../assets/images/icons/men-earth.svg';
+import wemenEarth from '../../../assets/images/icons/wemen-earth.svg';
 
-const initialValue = {
-  totalNumberOfRegistrants: 3732000,
-  totlaVizaRequest: 3422120,
-  totalPublishedVisa: 3002240,
-  totalNumberOfPilgrims: 3422120,
-  numberOfForeignPilgrims: 12097,
-  percentOfForeignPilgrims: 35,
-  numberOfRequestRejections: 200152,
-  totalServicesProvided: 12452,
-};
 const OverviewPilgrim = () => {
-  const [totalLoading, setTotalLoding] = useState<boolean>(false);
-  const [totla, setTotal] = useState<number>(12000);
-  const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialValue);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const getAllPilgrims = async () => {
-    setLoading(true);
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
-      const newData = {
-        totalNumberOfRegistrants: 12000,
-        totlaVizaRequest: 11500,
-        totalPublishedVisa: 11000,
-        totalNumberOfPilgrims: 10000,
-        numberOfForeignPilgrims: 1000,
-        percentOfForeignPilgrims: 10,
-        numberOfRequestRejections: 500,
-        totalServicesProvided: 750,
-      };
-      setPilgrims(newData);
-      // setPilgrims(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const getIt = async (params: any) => {
-    setTotalLoding(true);
-    try {
-      const {data} = await arbaeenService.getPiligrimList(params, {cancelToken: source.token});
-      setTotal(data.totalElements);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTotalLoding(false);
-    }
-  };
-  useEffect(() => {
-    getAllPilgrims();
-    getIt({pageNumber: 0});
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
+  const {data: pilgrims, loading} = useGetArbaeenCountData({
+    countFemale: true,
+    countMale: true,
+    countTotal: true,
+  });
 
   return (
     <>
@@ -82,53 +25,53 @@ const OverviewPilgrim = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={groupIcon}
-              text="تعداد کل ثبت نام شدگان"
-              count={totla || 0}
-              loading={totalLoading}
-            />
-            <Statistic
-              icon={blueEventIcon}
-              text="مجموع درخواست برای روادید"
-              count={pilgrims.totlaVizaRequest || 0}
+              text="تعداد کل پیش ثبت نام شدگان نهایی"
+              count={0}
               loading={loading}
             />
             <Statistic
-              icon={greenEventIcon}
-              text="تعداد کل روادید صادر شده"
-              count={pilgrims.totalPublishedVisa || 0}
+              icon={greenGroupIcon}
+              text="تعداد کل ثبت نام شدگان نهایی"
+              count={pilgrims.countTotal}
               loading={loading}
             />
             <Statistic
-              icon={groupWithFlagIcon}
-              text="تعداد کل زائران"
-              count={pilgrims.totalNumberOfPilgrims || 0}
+              icon={greenPersons}
+              text=" تعداد کل ثبت نام شدگان نهایی مرد"
+              count={pilgrims.countMale || 0}
+              loading={loading}
+            />
+            <Statistic
+              icon={greenwemen}
+              text="تعداد کل ثبت نام شدگان نهایی زن"
+              count={pilgrims.countFemale || 0}
               loading={loading}
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={groupWithMapIcon}
-              text="تعداد زائران اتباع خارجی"
-              count={pilgrims.numberOfForeignPilgrims || 0}
+              text="تعداد کل پیش ثبت نام شدگان نهایی اتباع خارجی"
+              count={0}
               loading={loading}
             />
             <Statistic
-              icon={groupWithMapIcon}
-              text="درصد زائران اتباع خارجی"
-              count={pilgrims.percentOfForeignPilgrims || 0}
+              icon={earthPersons}
+              text=" تعداد کل ثبت نام شدگان نهایی اتباع خارجی"
+              count={0}
               isPercentage
               loading={loading}
             />
             <Statistic
-              icon={redEventIcon}
-              text="تعداد رد درخواست روادید به دلیل عدم واکسیناسیون"
-              count={pilgrims.numberOfRequestRejections || 0}
+              icon={menEarth}
+              text=" تعداد کل ثبت نام شدگان نهایی مرد اتباع خارجی"
+              count={0}
               loading={loading}
             />
             <Statistic
-              icon={redCrescentIcon}
-              text="مجموع خدمات ارائه شده توسط هلال احمر"
-              count={pilgrims.totalServicesProvided || 0}
+              icon={wemenEarth}
+              text=" تعداد کل ثبت نام شدگان نهایی زن اتباع خارجی"
+              count={0}
               loading={loading}
             />
           </div>

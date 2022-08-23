@@ -13,6 +13,7 @@ import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
 import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg';
 import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
 import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
+import redVaccine from '../../../assets/images/icons/red-vaccine.svg';
 
 const initialValue = {
   numberOfVaccinatedPilgrims: 0,
@@ -74,6 +75,12 @@ const OverviewPilgrimVaccineStatus = () => {
               loading={loading}
             />
             <Statistic
+              icon={redVaccine}
+              text=" تعداد زائران فاقد شرایط واکسیناسیون"
+              count={pilgrims.numberOfPilgrimsNotVaccinated || 0}
+              loading={loading}
+            />
+            <Statistic
               icon={personGrayVaccine}
               text="تعداد زائران واکسن نزده"
               count={pilgrims.numberOfPilgrimsNotVaccinated || 0}
@@ -81,37 +88,37 @@ const OverviewPilgrimVaccineStatus = () => {
             />
             <Statistic
               icon={YellowVaccine}
-              text="تعداد کل افراد با دوز اول"
+              text="تعداد کل زائران  با دوز اول"
               count={pilgrims.totalNumberOfPeoplewithFirstDose || 0}
-              loading={loading}
-            />
-            <Statistic
-              icon={OrangeVaccine}
-              text="تعداد کل افراد با دوز دوم"
-              count={pilgrims.totalNumberOfPeoplewithSecondDose || 0}
               loading={loading}
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
+              icon={OrangeVaccine}
+              text="تعداد کل زائران  با دوز دوم"
+              count={pilgrims.totalNumberOfPeoplewithSecondDose || 0}
+              loading={loading}
+            />
+            <Statistic
               icon={PurppleVaccine}
-              text="تعداد کل افراد با دوز سوم"
+              text="تعداد کل زائران  با دوز سوم"
               count={pilgrims.totalNumberOfPeoplewithThirdDose || 0}
               loading={loading}
             />
             <Statistic
               icon={DarkgreenVaccine}
-              text="تعداد کل افراد با دوز چهارم"
+              text="تعداد کل زائران  با دوز چهارم"
               count={pilgrims.totalNumberOfPeoplewithFourthDose || 0}
               loading={loading}
             />
             <Statistic
               icon={NavyVaccine}
-              text="تعداد کل افراد با دوز پنجم"
+              text="تعداد کل زائران  با دوز پنجم"
               count={pilgrims.totalNumberOfPeoplewithFifthDose || 0}
               loading={loading}
             />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>
