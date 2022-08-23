@@ -1,16 +1,9 @@
-
-import greenPattern from 'src/assets/images/patterns/pie-green.svg';
-import yellowPattern from 'src/assets/images/patterns/pie-yellow.svg';
-import redPattern from 'src/assets/images/patterns/pie-red.svg';
 import Pie from '../../../../containers/Overview/components/Pie'
+import useGetOverviewBreadQualityInInspectedUnits from "../../../../hooks/apis/inspection/useGetOverviewBreadQualityInInspectedUnits";
 
 const OverviewBreadQualityInInspectedUnits: React.FC<{}> = () => {
 
-      const dataset = [
-        {title: 'خوب', count: 54, color: '#07816C', image: greenPattern},
-        {title: 'متوسط', count: 32, color: '#F3BC06', image: yellowPattern},
-        {title: 'ضعیف', count: 32, color: '#C20A0C', image: redPattern}
-    ]
+    const {list: dataset} = useGetOverviewBreadQualityInInspectedUnits();
 
     return (
         <fieldset className="text-center border rounded-xl p-4 w-1/2">
@@ -23,9 +16,8 @@ const OverviewBreadQualityInInspectedUnits: React.FC<{}> = () => {
                     className="flex flex-grow items-center space-x-5 rtl:space-x-reverse justify-between px-16 pb-2 w-full">
                     <div className="flex flex-grow items-center justify-start">
                         <div className="w-2 h-2 rounded-full flex justify-center items-center" style={{backgroundColor: '#07816C'}}/>
-                        <span className="font-normal mr-2">خوب</span>
+                            <span className="font-normal mr-2">خوب</span>
                     </div>
-                    <span className='text-left'>٪۵۴</span>
                 </div>
                 <div className="flex flex-grow relative space-x-5">
                     <span className="h-px bottom-0 absolute inset-x-28"
@@ -37,7 +29,6 @@ const OverviewBreadQualityInInspectedUnits: React.FC<{}> = () => {
                         <div className="w-2 h-2 rounded-full flex justify-center items-center" style={{backgroundColor: '#F3BC06'}}/>
                         <span className="font-normal mr-2">متوسط</span>
                     </div>
-                    <span className='text-left'>٪۵۴</span>
                 </div>
                 <div className="flex flex-grow relative space-x-5">
                     <span className="h-px bottom-0 absolute inset-x-28"
@@ -47,9 +38,8 @@ const OverviewBreadQualityInInspectedUnits: React.FC<{}> = () => {
                     className="flex flex-grow items-center space-x-5 rtl:space-x-reverse justify-between px-16 pt-2 pb-2 mb-10" style={{borderColor: 'rgb(244 244 245)'}}>
                     <div className='flex flex-grow items-center justify-start'>
                         <div className="w-2 h-2 rounded-full flex justify-center items-center" style={{backgroundColor: '#C20A0C'}}/>
-                        <span className="font-normal mr-2">ضعیف</span>
+                            <span className="font-normal mr-2">ضعیف</span>
                     </div>
-                    <span className='text-left'>٪۳۲</span>
                 </div>
             </div>
         </fieldset>

@@ -1,14 +1,20 @@
+
+import React from 'react';
 import Pie from '../../../../containers/Overview/components/Pie'
 import useGetOverviewReportOfInspectedUnits from "../../../../hooks/apis/inspection/useGetOverviewReportOfInspectedUnits";
 
-const OverviewReportOfInspectedUnitsInCountry: React.FC<{}> = () => {
-
-    const {list: dataset} = useGetOverviewReportOfInspectedUnits();
+interface OverviewReportOfInspectedUnitsProvinceProps {
+    cityTitle: any;
+  }
+  
+const OverviewReportOfInspectedUnitsProvince: React.FC<OverviewReportOfInspectedUnitsProvinceProps> = ({cityTitle}) => {
+    
+    const {list: dataset} = useGetOverviewReportOfInspectedUnits(true);
 
     return (
         <fieldset className="text-center border rounded-xl p-4 w-1/2">
             <legend className="text-black mx-auto px-3">
-            نگاه کلی به گزارش واحد‌های بازرسی شده در کل کشور
+            نگاه کلی به گزارش واحد‌های بازرسی شده در استان {cityTitle}
             </legend>
             {dataset && (
                 <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow pb-3">
@@ -42,4 +48,4 @@ const OverviewReportOfInspectedUnitsInCountry: React.FC<{}> = () => {
     )
 }
 
-export default OverviewReportOfInspectedUnitsInCountry;
+export default OverviewReportOfInspectedUnitsProvince;
