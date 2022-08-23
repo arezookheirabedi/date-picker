@@ -237,7 +237,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           .addTo(map);
       }
 
-    }, 10000)
+    }, 20000)
   }
 
   const mapContainer = useRef(null);
@@ -252,7 +252,40 @@ const GeneralLookAtTheLocationOfProcessions = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [zoom, setZoom] = useState(12.5);
 
-  const [showBorder, setShowBorder] = useState<any>(false);
+  const [showBorder, setShowBorder] = useState<any>(true);
+  const [showRoad, setShowRoad] = useState<any>(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showParking, setShowParking] = useState<any>(true);
+
+  useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+
+    map?.current?.setLayoutProperty(
+      'border',
+      'visibility',
+      `${showBorder ? 'visible' : 'none'}`
+    );
+    map?.current?.setLayoutProperty(
+      'outline',
+      'visibility',
+      `${showBorder ? 'visible' : 'none'}`
+    );
+
+
+  }, [showBorder])
+
+
+
+  useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+
+    map?.current?.setLayoutProperty(
+      'route',
+      'visibility',
+      `${showRoad ? 'visible' : 'none'}`
+    );
+
+  }, [showRoad])
 
 
   // const markerClicked = (title: any) => {
@@ -289,10 +322,15 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 
   }
 
-  useEffect(() => {
+  useEffect(()=> {
     if (!map.current) return; // wait for map to initialize
-    console.log(map)
-  }, [showBorder])
+    const parkings = document.querySelectorAll('.marker--parking');
+
+    parkings.forEach((item : any)=> {
+      item.classList.toggle('hidden')
+    })
+
+  },[showParking])
 
   // Initialize map when component mounts
   useEffect(() => {
@@ -465,8 +503,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
     showPoints(MehranGeoJson, map.current);
     predictPoints(46.0651, 33.1103, map.current)
     predictPoints(46.0736, 33.1030, map.current)
-    predictPoints(46.0552, 33.1021, map.current)
-    predictPoints(46.1031, 33.1089, map.current)
     showPoints(KhosraviGeoJson, map.current);
     showPoints(avareziTehranQomGeo, map.current);
     showPoints(avareziQazvinZanjanJson, map.current)
@@ -483,7 +519,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
     });
     // Clean up on unmount
     // eslint-disable-next-line consistent-return
-    return () => map.current.remove();
+    // return () => map.current.remove();
   }, []);
 
 
@@ -493,13 +529,13 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         ابر حرکتی زائران کربلا
       </legend>
 
-      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm hidden">
+      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm">
         <ButtonToggle
           name="overTime"
           title="جاده های کشور"
-          selected={showBorder}
+          selected={showRoad}
           // disabled={loading}
-          onChange={setShowBorder}
+          onChange={setShowRoad}
           defaultIcon={clockIcon}
           activeIcon={clockActiveIcon}
           showCheckedIcon
@@ -507,6 +543,9 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         <ButtonToggle
           name="flourQuota"
           title="پارکینگ های زائرین"
+          selected={showParking}
+          // disabled={loading}
+          onChange={setShowParking}
           // selected={flourQuota}
           // disabled={loading}
           // onChange={setFlourQuota}
@@ -517,16 +556,16 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         <ButtonToggle
           name="isExtortion"
           title="گذرگاه های مرزی"
-          // selected={isExtortion}
+          selected={showBorder}
           // disabled={loading}
-          // onChange={setIsExtortion}
+          onChange={setShowBorder}
           defaultIcon={extortionIcon}
           activeIcon={extortionActiveIcon}
           showCheckedIcon
         />
       </div>
 
-      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm hidden">
+      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm">
         <ButtonToggle
           name="inActivity"
           title="عوارضی های بین راهی"
@@ -535,10 +574,12 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           defaultIcon={inactivityIcon}
           activeIcon={inactivityEnableIcon}
           showCheckedIcon
+          disabled
         />
         <ButtonToggle
           name="unusualTransaction"
           title="پایگاه های هلال احمر"
+          disabled
           // selected={unusualTransaction}
           // onChange={setUnusualTransaction}
           defaultIcon={unusualTransactionIcon}
@@ -548,6 +589,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         <ButtonToggle
           name="unusualTransaction"
           title="موکب ها"
+          disabled
           // selected={unusualTransaction}
           // onChange={setUnusualTransaction}
           defaultIcon={unusualTransactionIcon}
