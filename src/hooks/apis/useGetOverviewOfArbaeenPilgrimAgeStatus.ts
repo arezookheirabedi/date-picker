@@ -4,25 +4,31 @@ import arbaeenService from 'src/services/arbaeen.service';
 import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
-  categories: ['هوایی', 'مرز شلمچه', 'مرز خسروی', 'مرز چزابه ', 'مرز مهران'],
+  categories: [
+    'سال (۱۵-۰)',
+    'سال (۳۰-۱۶)',
+    'سال (۴۵-۳۱)',
+    ' سال (۶۰-۴۶)',
+    ' سال (۷۵-۶۱)',
+    '۷۵ سال به بالا ',
+  ],
   series: [
     {
       name: 'تعداد',
 
       data: [
-        {name: 'هوایی', y: 0, color: '#209F92'},
-        {name: 'شلمچه', y: 0, color: '#004D65'},
-        {name: 'خسروی', y: 0, color: '#BFDDE7'},
-        {name: 'چزابه', y: 0, color: '#716DE3'},
-        {name: 'مهران', y: 0, color: '#FF0060'},
-        {name: 'باشماق', y: 0, color: '#F3BC06'},
-        {name: 'تمرچین', y: 0, color: '#8800ff'},
+        {name: 'سال (۱۵-۰)', y: 0, color: '#716DE3'},
+        {name: 'سال (۳۰-۱۶)', y: 0, color: '#BFDDE7'},
+        {name: 'سال (۴۵-۳۱)', y: 0, color: '#004D65'},
+        {name: ' سال (۶۰-۴۶)', y: 0, color: '#209F92'},
+        {name: ' سال (۷۵-۶۱)', y: 0, color: '#F3BC06'},
+        {name: '۷۵ سال به بالا ', y: 0, color: '#8800ff'},
       ],
     },
   ],
 } as any;
 
-export default function useGetOverviewOfArbaeenPilgrimExistAbroad(query: any) {
+export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
   const [data, setData] = useState<any>(initialData);
@@ -45,6 +51,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(query: any) {
       });
       const newBorder = border.filter((i: any) => i !== 'MEHRAN');
       const newBorder2 = newBorder.filter((i: any) => i !== 'CHAZABE');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const dataTemp = {
         categories: [...newBorder2],
         series: [
@@ -62,7 +69,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(query: any) {
                     return i === 'هوایی';
                   })
                 ],
-                color: '#209F92',
+                color: '#716DE3',
               },
 
               {
@@ -148,7 +155,8 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(query: any) {
         ],
       } as any;
 
-      setData(dataTemp);
+      setData(initialData);
+      // setData(dataTemp);
       setError(false);
       setLoading(false);
     } catch (err: any) {
