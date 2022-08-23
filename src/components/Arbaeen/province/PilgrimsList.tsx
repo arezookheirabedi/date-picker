@@ -17,7 +17,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const location = useLocation();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
-
+  const [borderQueryNull, setBorderQueryNull] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any>([]);
   const [error, setError] = useState<any>(null);
@@ -25,6 +25,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     retry: false,
     departureDestinationBorder: null,
     currentPage: 1,
+    departureOriginProvince: 'تهران',
   });
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -64,20 +65,28 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   };
 
   useEffect(() => {
+    getIt({...query});
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setDataSet([]);
+    };
+  }, [query]);
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getIt({...query, departureOriginProvince: provinceName});
+      setBorderQueryNull(!borderQueryNull);
+      setQuery({
+        retry: false,
+        departureDestinationBorder: null,
+        currentPage: 1,
+        departureOriginProvince: provinceName,
+      });
     }
-    // eslint-disable-next-line consistent-return
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataSet([]);
-    };
-  }, [location.search, query]);
+  }, [location.search]);
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -95,7 +104,8 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 objectKey="departureDestinationBorder"
                 setQueryParams={setQuery}
                 queryParams={query}
-                hasPaginate
+                hasPaginateTableXhr
+                borderQueryNull={borderQueryNull}
               />
             </div>
           </div>
