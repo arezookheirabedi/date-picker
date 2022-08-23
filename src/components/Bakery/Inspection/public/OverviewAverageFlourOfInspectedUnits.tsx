@@ -7,7 +7,7 @@ import DatePickerModal from '../../../DatePickerModal';
 import Spinner from '../../../Spinner';
 import Calendar from '../../../Calendar';
 import HeadlessChart from '../../HeadlessChart';
-import useGetOverviewAverageFlourOfInspectedUnits from '../../../../hooks/apis/useGetOverviewAverageFlourOfInspectedUnits';
+import useGetOverviewAverageFlourOfInspectedUnits from '../../../../hooks/apis/inspection/useGetOverviewAverageFlourOfInspectedUnits';
 
 const optionChart = {
   chart: {

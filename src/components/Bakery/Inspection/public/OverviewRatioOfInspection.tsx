@@ -9,7 +9,7 @@ import DatePickerModal from '../../../DatePickerModal';
 import Spinner from '../../../Spinner';
 import Calendar from '../../../Calendar';
 import HeadlessChart from '../HeadlessChart';
-import useGetRatioOfInspection from '../../../../hooks/apis/useGetRatioOfInspection';
+import useGetRatioOfInspection from '../../../../hooks/apis/inspection/useGetRatioOfInspection';
 
 const OverviewRatioOfInspection: React.FC<{}> = () => {
     const [showDatePicker, setShowDatePicker] = useState(false);
