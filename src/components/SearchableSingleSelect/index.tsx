@@ -8,7 +8,7 @@ import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 
 interface IProps {
-  hasPaginate?: boolean;
+  hasPaginateTableXhr?: boolean;
   tag?: string;
   category?: string;
   endPoint?: any;
@@ -16,6 +16,7 @@ interface IProps {
   placeholder?: any;
   setQueryParams: (v: any) => void;
   objectKey: string;
+  borderQueryNull?: boolean;
 }
 
 const SearchableSingleSelect: React.FC<IProps> = ({
@@ -26,7 +27,8 @@ const SearchableSingleSelect: React.FC<IProps> = ({
   setQueryParams,
   queryParams,
   objectKey,
-  hasPaginate,
+  hasPaginateTableXhr,
+  borderQueryNull,
 }) => {
   const [selected, setSelected] = useState<{key: number | string | null; value: string}>();
   const [query, setQuery] = useState('');
@@ -96,13 +98,17 @@ const SearchableSingleSelect: React.FC<IProps> = ({
     let params = {...queryParams};
     if (selected) {
       params = {...queryParams, [`${objectKey}`]: selected.key};
-      if (hasPaginate) {
+      if (hasPaginateTableXhr) {
         params = {...queryParams, currentPage: 1, [`${objectKey}`]: selected.key};
       }
 
       setQueryParams(params);
     }
   }, [selected]);
+
+  useEffect(() => {
+    setSelected({key: null, value: placeholder});
+  }, [borderQueryNull]);
 
   return (
     <div className="flex  flex-col items-center justify-center space-y-3">
