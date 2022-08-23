@@ -3,14 +3,11 @@ import React, {useEffect, useLayoutEffect, useRef} from 'react';
 import Highcharts from 'highcharts';
 import PatternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
-import pattern1 from 'src/assets/images/patterns/pie-orange.svg';
-import pattern4 from 'src/assets/images/patterns/pie-dark-red.svg';
-import pattern2 from 'src/assets/images/patterns/pie-red.svg';
-import pattern3 from 'src/assets/images/patterns/pie-dark-green.svg';
 
 PatternFill(Highcharts);
 
-const options: (data: any[]) => any = data => {
+const options: (data: any[], name: string, sign: string) => any = (data, name, sign) => {
+
   let option: any = {
     chart: {type: 'pie', height: 200},
     title: {
@@ -44,7 +41,7 @@ const options: (data: any[]) => any = data => {
       borderRadius: 16,
       borderWidth: 0,
       shape: 'square',
-      pointFormat: '<div>{series.name} : {point.y} نفر</div>',
+      pointFormat: `<div style="font-family: IRANSans">${name} : {point.y} ${sign}</div>`,
       backgroundColor: {
         linearGradient: [0, 0, 0, 60],
         stops: [
@@ -55,121 +52,49 @@ const options: (data: any[]) => any = data => {
     },
   };
 
-  if(data && data.length > 4)
-  option = {
-    ...option,
-    series: [
-      {
-        name: 'تعداد',
-        colorByPoint: true,
-        data: [
-          {
-            // index 0 is total employe
-            name: data[1].title,
-            y: data[1].count,
-            color: {
-              pattern: {
-                //   opacity: 0.75,
-                image: pattern3,
-                aspectRatio: 3 / 2,
-                width: 200,
-                height: 200,
-                y: 0,
-                x: 40,
-              },
-            },
-            states: {
-              hover: {
-                color: '#19544e',
-              },
-              select: {
-                color: '#19544e',
-              },
-            },
-          },
-          {
-            name: data[2].title,
-            y: data[2].count,
-            color: {
-              pattern: {
-                //   opacity: 0.75,
-                image: pattern1,
-                // aspectRatio: 3 / 2,
-                width: 200,
-                height: 200,
-                y: 40,
-                x: -40,
-              },
-            },
-            states: {
-              hover: {
-                color: '#F3821F',
-              },
-              select: {
-                color: '#F3821F',
-              },
-            },
-          },
-          {
-            name: data[3].title,
-            y: data[3].count,
-            color: {
-              pattern: {
-                //   opacity: 0.75,
-                image: pattern2,
-                aspectRatio: 3 / 2,
-                width: 200,
-                height: 200,
-                y: 10,
-                x: 10,
-              },
-            },
-            states: {
-              hover: {
-                color: '#C10000',
-              },
-              select: {
-                color: '#C10000',
-              },
-            },
-          },
-          {
-            name: data[4].title,
-            y: data[4].count,
-            color: {
-              pattern: {
-                //   opacity: 0.75,
-                image: pattern4,
-                aspectRatio: 3 / 2,
-                width: 200,
-                height: 200,
-                y: 0,
-                x: 10,
-              },
-            },
-            states: {
-              hover: {
-                color: '#44032e',
-              },
-              select: {
-                color: '#44032e',
-              },
-            },
-          },
-        ],
+  let temp = {}
+  temp = data.map((item: any) => {
+    return {
+      name: item.title,
+      y: item.count,
+      color: {
+        pattern: {
+          image: item.image,
+          width: 200,
+          height: 200,
+          aspectRatio: 2 / .75 ,
+          y: 0,
+          x: 200
+        },
       },
-    ],
-  };
-
+      states: {
+        hover: {
+          color: item.color,
+        },
+        select: {
+          color: item.color,
+        },
+      },
+    }
+  })
+    option = {
+      ...option,
+    series: [{
+      colorByPoint: true,
+      data: temp
+    }]
+    }
+  
   return option;
 };
+
 interface IProps {
   data: any[];
+  name: string,
+  sign: string
 }
 
-
-
-const Pie: React.FC<IProps> = ({data}) => {
+const Pie: React.FC<IProps> = ({data, name, sign}) => {
   const chartRef = useRef<any>();
 
   useEffect(() => {
@@ -188,7 +113,7 @@ const Pie: React.FC<IProps> = ({data}) => {
       ref={chartRef}
       highcharts={Highcharts}
       allowChartUpdate
-      options={options(data)}
+      options={options(data, name, sign)}
     />
   );
 };
