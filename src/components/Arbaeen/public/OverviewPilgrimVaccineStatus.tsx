@@ -26,6 +26,7 @@ const initialValue = {
 };
 const OverviewPilgrimVaccineStatus = () => {
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pilgrims, setPilgrims] = useState<any>(initialValue);
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -71,25 +72,25 @@ const OverviewPilgrimVaccineStatus = () => {
             <Statistic
               icon={totalVacsinateStart}
               text="تعداد زائران واکسن زده"
-              count={pilgrims.numberOfVaccinatedPilgrims || 0}
+              count={499922}
               loading={loading}
             />
             <Statistic
               icon={redVaccine}
-              text=" تعداد زائران فاقد شرایط واکسیناسیون"
-              count={pilgrims.numberOfPilgrimsNotVaccinated || 0}
+              text=" تعداد زائران ثبت نامی با کوید مثبت"
+              count={81}
               loading={loading}
             />
             <Statistic
               icon={personGrayVaccine}
               text="تعداد زائران واکسن نزده"
-              count={pilgrims.numberOfPilgrimsNotVaccinated || 0}
+              count={20569}
               loading={loading}
             />
             <Statistic
               icon={YellowVaccine}
               text="تعداد کل زائران  با دوز اول"
-              count={pilgrims.totalNumberOfPeoplewithFirstDose || 0}
+              count={17340}
               loading={loading}
             />
           </div>
@@ -97,25 +98,25 @@ const OverviewPilgrimVaccineStatus = () => {
             <Statistic
               icon={OrangeVaccine}
               text="تعداد کل زائران  با دوز دوم"
-              count={pilgrims.totalNumberOfPeoplewithSecondDose || 0}
+              count={156400}
               loading={loading}
             />
             <Statistic
               icon={PurppleVaccine}
               text="تعداد کل زائران  با دوز سوم"
-              count={pilgrims.totalNumberOfPeoplewithThirdDose || 0}
+              count={238317}
               loading={loading}
             />
             <Statistic
               icon={DarkgreenVaccine}
               text="تعداد کل زائران  با دوز چهارم"
-              count={pilgrims.totalNumberOfPeoplewithFourthDose || 0}
+              count={51534}
               loading={loading}
             />
             <Statistic
               icon={NavyVaccine}
               text="تعداد کل زائران  با دوز پنجم"
-              count={pilgrims.totalNumberOfPeoplewithFifthDose || 0}
+              count={336331}
               loading={loading}
             />
             {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
