@@ -140,7 +140,7 @@ const CallChart: React.FC<any> = () => {
   const [loading, setLoading] = useState(false);
   const [isCancel, setIsCancel] = useState(false);
 
-  console.log('dataset => ', dataset);
+  // console.log('dataset => ', dataset);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 

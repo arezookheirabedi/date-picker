@@ -53,6 +53,7 @@ const OverviewOfAffectedAfterTravelingInCountry = () => {
       const response = await hcsService.patientsAfterTrip(params, {
         cancelToken: source.token,
       });
+      console.log("++++++", response)
       setData(response.data);
       setErrorMessage(false);
       setLoading(false);

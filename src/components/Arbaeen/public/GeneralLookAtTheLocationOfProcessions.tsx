@@ -8,6 +8,18 @@ import avareziTehranQomGeo from "../geos/avarezi-tehran-qom-geo.json";
 import avareziQazvinZanjanJson from "../geos/avarezi-qazvin-zanjan.json";
 import avareziQomKashanJson from "../geos/avarezi-qom-kashan.geo.json";
 import parkingsGeoJson from "../geos/parkings-geo.json";
+import {roadGeo} from "../geos/road-geo";
+import ButtonToggle from "../../Form/ButtonToggle";
+import clockIcon from "../../../assets/images/icons/clock.svg";
+import clockActiveIcon from "../../../assets/images/icons/clock-active.svg";
+import chartBoxIcon from "../../../assets/images/icons/chart-box.svg";
+import chartBoxActiveIcon from "../../../assets/images/icons/chart-box-active.svg";
+import extortionIcon from "../../../assets/images/icons/extortion.svg";
+import extortionActiveIcon from "../../../assets/images/icons/extortion-active.svg";
+import inactivityIcon from "../../../assets/images/icons/inactivity.svg";
+import inactivityEnableIcon from "../../../assets/images/icons/inactivity-enable.svg";
+import unusualTransactionIcon from "../../../assets/images/icons/unusualTransaction.svg";
+import unusualTransactionEnableIcon from "../../../assets/images/icons/unusualTransaction-enable.svg";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZXJmYW5hYmJhc2lpIiwiYSI6ImNsNXRuNW82cjBpdmIzZHAzM2N5YmUxMHMifQ.9Oe2j9ApsiywqNAb2ZY6vg';
 
@@ -209,6 +221,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
   }
 
   const mapContainer = useRef(null);
+  const map : any = useRef(null);
 
   // const marker = useRef(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -219,11 +232,14 @@ const GeneralLookAtTheLocationOfProcessions = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [zoom, setZoom] = useState(12.5);
 
+  const [showBorder, setShowBorder] = useState<any>(false);
+
+
   // const markerClicked = (title: any) => {
   //   window.alert(title);
   // };
 
-  const showPoints = (geo: any, map: any, classes: any = '', withPredict: any = true) => {
+  const showPoints = (geo: any, mapProp: any, classes: any = '', withPredict: any = true) => {
     // Render custom marker components
     geo.features.forEach((feature: any) => {
       // Create a React ref
@@ -243,18 +259,25 @@ const GeneralLookAtTheLocationOfProcessions = () => {
       // Create a Mapbox Marker at our new DOM node
       new mapboxgl.Marker(ref.current)
         .setLngLat(feature.geometry.coordinates)
-        .addTo(map);
+        .addTo(mapProp);
     });
 
 
     if (withPredict) {
-      predictPoints(geo.features[0].geometry.coordinates[0], geo.features[0].geometry.coordinates[1], map);
+      predictPoints(geo.features[0].geometry.coordinates[0], geo.features[0].geometry.coordinates[1], mapProp);
     }
 
   }
 
+  useEffect(()=> {
+    if (!map.current) return; // wait for map to initialize
+    console.log(map)
+  },[showBorder])
+
   // Initialize map when component mounts
   useEffect(() => {
+
+    if (map.current) return; // initialize map only once
 
     if (mapboxgl.getRTLTextPluginStatus() !== 'loaded') {
       mapboxgl.setRTLTextPlugin(
@@ -264,7 +287,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
       );
     }
 
-    const map = new mapboxgl.Map({
+     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
@@ -272,9 +295,9 @@ const GeneralLookAtTheLocationOfProcessions = () => {
     });
 
     // second template
-    map.on('load', () => {
+    map.current.on('load', () => {
 // Add a data source containing GeoJSON data.
-      map.addSource('border', {
+      map.current.addSource('border', {
         'type': 'geojson',
         'data': {
           "type": "FeatureCollection",
@@ -326,9 +349,28 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         }
       });
 
+      map.current.addSource('route', {
+        'type': 'geojson',
+        'data': roadGeo
+      });
+
+      map.current.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round',
+          'visibility': 'visible'
+        },
+        'paint': {
+          'line-color': '#ff0000',
+          'line-width': 2
+        }
+      });
 
 // Add a new layer to visualize the polygon.
-      map.addLayer({
+      map.current.addLayer({
         'id': 'border',
         'type': 'fill',
         'source': 'border', // reference the data source
@@ -339,7 +381,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         }
       });
 // Add a black outline around the polygon.
-      map.addLayer({
+      map.current.addLayer({
         'id': 'outline',
         'type': 'line',
         'source': 'border',
@@ -364,48 +406,67 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         .setDOMContent(placeholder)
         .setLngLat({lng: lngi, lat: lati})
         .setMaxWidth('20rem')
-        .addTo(map);
+        .addTo(map.current);
     }
 
-
-    map.on('click', 'border', (e: any) => {
-      map.getCanvas().style.cursor = 'pointer';
+    map.current.on('click', 'route', (e: any) => {
+      map.current.getCanvas().style.cursor = 'pointer';
 
       addPopup(<ZaerinInfoPopup data={e.features[0].properties}/>, e.lngLat.lat, e.lngLat.lng);
 
     });
 
-    map.on('mousemove', 'border', () => {
-      map.getCanvas().style.cursor = 'pointer';
+    map.current.on('mousemove', 'route', () => {
+      map.current.getCanvas().style.cursor = 'pointer';
 
     });
 
-    map.on('mouseleave', 'border', () => {
-      map.getCanvas().style.cursor = '';
+    map.current.on('mouseleave', 'route', () => {
+      map.current.getCanvas().style.cursor = '';
     });
 
-    showPoints(MehranGeoJson, map);
-    predictPoints(46.0651,33.1103,map)
-    predictPoints(46.0736,33.1030,map)
-    predictPoints(46.0552,33.1021,map)
-    predictPoints(46.1031,33.1089,map)
-    showPoints(KhosraviGeoJson, map);
-    showPoints(avareziTehranQomGeo, map);
-    showPoints(avareziQazvinZanjanJson, map)
-    showPoints(avareziQomKashanJson, map)
-    showPoints(parkingsGeoJson, map, 'marker--parking', false)
+
+    map.current.on('click', 'border', (e: any) => {
+      map.current.getCanvas().style.cursor = 'pointer';
+
+      addPopup(<ZaerinInfoPopup data={e.features[0].properties}/>, e.lngLat.lat, e.lngLat.lng);
+
+    });
+
+    map.current.on('mousemove', 'border', () => {
+      map.current.getCanvas().style.cursor = 'pointer';
+
+    });
+
+    map.current.on('mouseleave', 'border', () => {
+      map.current.getCanvas().style.cursor = '';
+    });
+
+    showPoints(MehranGeoJson, map.current);
+    predictPoints(46.0651, 33.1103, map.current)
+    predictPoints(46.0736, 33.1030, map.current)
+    predictPoints(46.0552, 33.1021, map.current)
+    predictPoints(46.1031, 33.1089, map.current)
+    showPoints(KhosraviGeoJson, map.current);
+    showPoints(avareziTehranQomGeo, map.current);
+    showPoints(avareziQazvinZanjanJson, map.current)
+    showPoints(avareziQomKashanJson, map.current)
+    showPoints(parkingsGeoJson, map.current, 'marker--parking', false)
 
     // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-    map.on('move', () => {
-      setLng(map.getCenter().lng.toFixed(4));
-      setLat(map.getCenter().lat.toFixed(4));
-      setZoom(map.getZoom().toFixed(2));
+    map.current.on('move', () => {
+      setLng(map.current.getCenter().lng.toFixed(4));
+      setLat(map.current.getCenter().lat.toFixed(4));
+      setZoom(map.current.getZoom().toFixed(2));
     });
     // Clean up on unmount
-    return () => map.remove();
+    // eslint-disable-next-line consistent-return
+    return () => map.current.remove();
   }, []);
+
+
 
 
   return (
@@ -413,6 +474,69 @@ const GeneralLookAtTheLocationOfProcessions = () => {
       <legend className="text-black mx-auto px-3">
         ابر حرکتی زائران کربلا
       </legend>
+
+      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm hidden">
+        <ButtonToggle
+          name="overTime"
+          title="جاده های کشور"
+          selected={showBorder}
+          // disabled={loading}
+          onChange={setShowBorder}
+          defaultIcon={clockIcon}
+          activeIcon={clockActiveIcon}
+          showCheckedIcon
+        />
+        <ButtonToggle
+          name="flourQuota"
+          title="پارکینگ های زائرین"
+          // selected={flourQuota}
+          // disabled={loading}
+          // onChange={setFlourQuota}
+          defaultIcon={chartBoxIcon}
+          activeIcon={chartBoxActiveIcon}
+          showCheckedIcon
+        />
+        <ButtonToggle
+          name="isExtortion"
+          title="گذرگاه های مرزی"
+          // selected={isExtortion}
+          // disabled={loading}
+          // onChange={setIsExtortion}
+          defaultIcon={extortionIcon}
+          activeIcon={extortionActiveIcon}
+          showCheckedIcon
+        />
+      </div>
+
+      <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm hidden">
+        <ButtonToggle
+          name="inActivity"
+          title="عوارضی های بین راهی"
+          // selected={bakeryWithoutTransaction}
+          // onChange={setBakeryWithoutTransaction}
+          defaultIcon={inactivityIcon}
+          activeIcon={inactivityEnableIcon}
+          showCheckedIcon
+        />
+        <ButtonToggle
+          name="unusualTransaction"
+          title="پایگاه های هلال احمر"
+          // selected={unusualTransaction}
+          // onChange={setUnusualTransaction}
+          defaultIcon={unusualTransactionIcon}
+          activeIcon={unusualTransactionEnableIcon}
+          showCheckedIcon
+        />
+        <ButtonToggle
+          name="unusualTransaction"
+          title="موکب ها"
+          // selected={unusualTransaction}
+          // onChange={setUnusualTransaction}
+          defaultIcon={unusualTransactionIcon}
+          activeIcon={unusualTransactionEnableIcon}
+          showCheckedIcon
+        />
+      </div>
       <div>
         <div className="sidebar hidden">
           Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
