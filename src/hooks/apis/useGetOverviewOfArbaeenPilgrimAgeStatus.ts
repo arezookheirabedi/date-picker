@@ -28,6 +28,24 @@ const initialData = {
   ],
 } as any;
 
+const GetAgeRange = (data: string) => {
+  switch (data) {
+    case '0-15':
+      return 'سال (۱۵-۰)';
+    case '16-30':
+      return 'سال (۳۰-۱۶)';
+    case '31-45':
+      return 'سال (۴۵-۳۱)';
+    case '46-60':
+      return 'سال (۶۰-۴۶)';
+    case '61-75':
+      return ' سال (۷۵-۶۱)';
+    case '76-up':
+      return '۷۵ سال به بالا ';
+    default:
+      return '';
+  }
+};
 export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
@@ -39,17 +57,17 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
   const getIt = async ({retry, ...params}: any) => {
     try {
       setLoading(true);
-      const res = await arbaeenService.getPligrimCountPerBorder(params, {
+      const res = await arbaeenService.getPiligrimAgeRange(params, {
         cancelToken: source.token,
       });
-
+      const sortData = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
       const ageRange: any[] = [];
       const count: any[] = [];
-      res.data.forEach((item: any) => {
-        ageRange.push(item.departureDestinationBorder);
-        count.push(item.count);
+      sortData.forEach((item: any) => {
+        ageRange.push(GetAgeRange(item.ageGroup));
+        count.push(Number(item.count));
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       const dataTemp = {
         categories: [...ageRange],
         series: [
@@ -81,7 +99,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
                     return i === 'سال (۳۰-۱۶)';
                   })
                 ],
-                color: '#004D65',
+                color: '#BFDDE7',
               },
               {
                 name: ageRange[
@@ -94,7 +112,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
                     return i === 'سال (۴۵-۳۱)';
                   })
                 ],
-                color: '#BFDDE7',
+                color: '#004D65',
               },
               {
                 name: ageRange[
@@ -117,7 +135,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
                 ],
                 y: count[
                   ageRange.findIndex((i: any) => {
-                    return i === 'مهران';
+                    return i === ' سال (۷۵-۶۱)';
                   })
                 ],
                 color: '#FF0060',
@@ -153,8 +171,8 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
         ],
       } as any;
 
-      setData(initialData);
-      // setData(dataTemp);
+      // setData(initialData);
+      setData(dataTemp);
       setError(false);
       setLoading(false);
     } catch (err: any) {
