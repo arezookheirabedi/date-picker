@@ -153,24 +153,11 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
                 ],
                 color: '#F3BC06',
               },
-              {
-                name: ageRange[
-                  ageRange.findIndex((i: any) => {
-                    return i === 'تمرچین';
-                  })
-                ],
-                y: count[
-                  ageRange.findIndex((i: any) => {
-                    return i === 'تمرچین';
-                  })
-                ],
-                color: '#8800ff',
-              },
             ],
           },
         ],
       } as any;
-
+      debugger;
       // setData(initialData);
       setData(dataTemp);
       setError(false);
