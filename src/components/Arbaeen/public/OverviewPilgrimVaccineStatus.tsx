@@ -116,7 +116,7 @@ const OverviewPilgrimVaccineStatus = () => {
             <Statistic
               icon={NavyVaccine}
               text="تعداد کل زائران  با دوز پنجم"
-              count={336331}
+              count={36331}
               loading={loading}
             />
             {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
