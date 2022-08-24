@@ -48,6 +48,14 @@ function getPilgrimCount(params: any = {}, config?: any) {
       ...config,
     });
 }
+function getPiligrimAgeRange(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-age-group/count`, params, {
+      ...config,
+    });
+}
 
 const arbaeenService = {
   arbaeenGetAll,
@@ -56,6 +64,7 @@ const arbaeenService = {
   getPligrimGenderPerProvince,
   getPligrimCountPerBorder,
   getPilgrimCount,
+  getPiligrimAgeRange,
 };
 
 export default arbaeenService;
