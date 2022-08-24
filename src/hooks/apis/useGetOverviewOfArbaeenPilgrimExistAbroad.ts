@@ -46,10 +46,9 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(query: any) {
         border.push(item.departureDestinationBorder);
         count.push(item.count);
       });
-      const newBorder = border.filter((i: any) => i !== 'MEHRAN');
-      const newBorder2 = newBorder.filter((i: any) => i !== 'CHAZABE');
+
       const dataTemp = {
-        categories: [...newBorder2],
+        categories: [...border],
         series: [
           {
             name: 'تعداد',
