@@ -56,6 +56,14 @@ function getPiligrimAgeRange(params: any = {}, config?: any) {
       ...config,
     });
 }
+function getVaccineInfo(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-last-dose-while-registered/count`, params, {
+      ...config,
+    });
+}
 
 const arbaeenService = {
   arbaeenGetAll,
@@ -65,6 +73,7 @@ const arbaeenService = {
   getPligrimCountPerBorder,
   getPilgrimCount,
   getPiligrimAgeRange,
+  getVaccineInfo,
 };
 
 export default arbaeenService;
