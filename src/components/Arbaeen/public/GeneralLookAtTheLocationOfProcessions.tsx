@@ -237,7 +237,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           .addTo(map);
       }
 
-    }, 20000)
+    }, 30000)
   }
 
   const mapContainer = useRef(null);
