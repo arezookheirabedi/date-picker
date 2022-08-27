@@ -9,7 +9,7 @@ import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/O
 import OverviewOfThePercentageOfEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
 import GeneralLookAtTransportationAxesAndExitBordersOfCountry from 'src/components/Arbaeen/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry';
 import MokebList from 'src/components/Arbaeen/public/MokebList';
-import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCitiesList';
+import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/public/ThPilgrimsProvinceList';
 import TheLargestNumberOfOriginPilgrimsCountriesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCountriesList';
 import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
 import OverviewPilgrim from 'src/components/Arbaeen/public/OverviewPilgrim';
