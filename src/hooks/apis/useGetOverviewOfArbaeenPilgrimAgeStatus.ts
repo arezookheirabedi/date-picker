@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
+import {sideCities} from 'src/helpers/utils';
+import {useHistory, useLocation} from 'react-router-dom';
 import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
@@ -46,7 +48,10 @@ const GetAgeRange = (data: string) => {
       return '';
   }
 };
-export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
+export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
+  query: any,
+  hasProvince: boolean = false
+) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
   const [data, setData] = useState<any>(initialData);
@@ -157,8 +162,6 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
           },
         ],
       } as any;
-      debugger;
-      // setData(initialData);
       setData(dataTemp);
       setError(false);
       setLoading(false);
@@ -173,6 +176,9 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
   };
 
   useEffect(() => {
+    if (hasProvince) {
+      return;
+    }
     getIt(query);
     // eslint-disable-next-line consistent-return
     return () => {
@@ -180,6 +186,29 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(query: any) {
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
+  const location = useLocation();
+  const history = useHistory();
+  useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getIt({...query, province: provinceName});
+    } else {
+      history.go(-1);
+    }
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData(initialData);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search, query]);
 
   return {loading, error, data};
 }
