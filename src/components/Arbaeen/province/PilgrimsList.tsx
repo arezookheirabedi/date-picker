@@ -94,7 +94,10 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   return (
     <>
       <fieldset className="mb-2 rounded-xl border p-4 text-center" id="arborean-overview">
-        <legend className="mx-auto px-3 text-black">لیست زائران</legend>
+        <legend className="text-black mx-auto px-3">
+          لیست زائران استان&nbsp;
+          {cityTitle}
+        </legend>
         <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
           <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
