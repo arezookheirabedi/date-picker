@@ -1,7 +1,10 @@
 import React, {useRef, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
+
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 // @ts-ignore
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+
 import MehranGeoJson from "../geos/mehran-border-geo.json";
 import KhosraviGeoJson from "../geos/khosravi-border-geo.json";
 import avareziTehranQomGeo from "../geos/avarezi-tehran-qom-geo.json";
@@ -21,8 +24,10 @@ import inactivityEnableIcon from "../../../assets/images/icons/inactivity-enable
 import unusualTransactionIcon from "../../../assets/images/icons/unusualTransaction.svg";
 import unusualTransactionEnableIcon from "../../../assets/images/icons/unusualTransaction-enable.svg";
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZXJmYW5hYmJhc2lpIiwiYSI6ImNsNXRuNW82cjBpdmIzZHAzM2N5YmUxMHMifQ.9Oe2j9ApsiywqNAb2ZY6vg';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
+import {borderGeo} from "../geos/border-geo";
 
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXJmYW5hYmJhc2lpIiwiYSI6ImNsNXRuNW82cjBpdmIzZHAzM2N5YmUxMHMifQ.9Oe2j9ApsiywqNAb2ZY6vg';
 
 const ZaerinInfoPopup: React.FC<any> = ({data}) => {
 
@@ -163,7 +168,6 @@ const ZaerinInfoPopup: React.FC<any> = ({data}) => {
   </div>
 }
 
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Marker: React.FC<any> = ({children, feature, classProp}) => {
 
@@ -183,14 +187,13 @@ const Marker: React.FC<any> = ({children, feature, classProp}) => {
   }
 ;
 
-
 const GeneralLookAtTheLocationOfProcessions = () => {
 
   function predictPoints(lnt: any, lng: any, map: any) {
     const i1: any = lnt;
     const i2: any = lng;
 
-    setInterval(() => {
+    const intervalID = setInterval(() => {
       const condition = Math.floor(Math.random() * 4);
       const markerCondition = Math.floor(Math.random() * 10);
       // const predict = [100, 100, 100];
@@ -211,10 +214,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         <Marker classProp={markerCondition === 0 ? 'marker--native' : 'marker--normal'}/>,
         ref.current
       );
-
-
-      // console.log('lat => ', ((i1 + parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))))
-      // console.log('lng => ', ((i2 + parseFloat((Math.random() / predict[Math.floor(Math.random() * 3)]).toFixed(5)))))
 
       // Create a Mapbox Marker at our new DOM node
       const mapboxglMarker = new mapboxgl.Marker(ref.current);
@@ -237,24 +236,26 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           .addTo(map);
       }
 
-    }, 30000)
+    }, 20000)
+
+    setTimeout(() => {
+      clearInterval(intervalID)
+    }, 60000 * 5)
   }
 
   const mapContainer = useRef(null);
   const map: any = useRef(null);
+  const mapDraw: any = useRef(null);
 
   // const marker = useRef(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 
   const [lng, setLng] = useState(46.0856);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [lat, setLat] = useState(33.1073);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [zoom, setZoom] = useState(12.5);
 
   const [showBorder, setShowBorder] = useState<any>(true);
   const [showRoad, setShowRoad] = useState<any>(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showParking, setShowParking] = useState<any>(true);
 
   useEffect(() => {
@@ -273,7 +274,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 
 
   }, [showBorder])
-
 
 
   useEffect(() => {
@@ -322,21 +322,17 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     const parkings = document.querySelectorAll('.marker--parking');
 
-    parkings.forEach((item : any)=> {
+    parkings.forEach((item: any) => {
       item.classList.toggle('hidden')
     })
 
-  },[showParking])
+  }, [showParking])
 
-  // Initialize map when component mounts
   useEffect(() => {
-
-    if (map.current) return; // initialize map only once
-
     if (mapboxgl.getRTLTextPluginStatus() !== 'loaded') {
       mapboxgl.setRTLTextPlugin(
         'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
@@ -344,6 +340,12 @@ const GeneralLookAtTheLocationOfProcessions = () => {
         true // Lazy load the plugin
       );
     }
+  }, [])
+
+  // Initialize map when component mounts
+  useEffect(() => {
+
+    if (map.current) return; // initialize map only once
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -357,54 +359,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 // Add a data source containing GeoJSON data.
       map.current.addSource('border', {
         'type': 'geojson',
-        'data': {
-          "type": "FeatureCollection",
-          "features": [
-            {
-              "type": "Feature",
-              "properties": {
-                "name": "مرز مهران"
-              },
-              "geometry": {
-                'type': 'Polygon',
-// These coordinates outline border.
-                'coordinates': [
-                  [
-                    [46.05331, 33.127632],
-                    [46.03975296, 33.0951369],
-                    [46.0948562, 33.087946],
-                    [46.122150, 33.0734186],
-                    [46.121807, 33.117137],
-                    [46.092281, 33.120731],
-                    [46.067905, 33.127119],
-                    [46.05331, 33.127632],
-                  ]
-                ]
-              }
-            },
-            {
-              "type": "Feature",
-              "properties": {
-                "name": "مرز خسروی"
-              },
-              "geometry": {
-                'type': 'Polygon',
-// These coordinates outline border.
-                'coordinates': [
-                  [
-                    [45.464687, 34.394870],
-                    [45.466232, 34.383821],
-                    [45.472240, 34.375887],
-                    [45.484771, 34.385237],
-                    [45.485115, 34.395295],
-                    [45.476188, 34.402094],
-                    [45.464687, 34.394870]
-                  ]
-                ]
-              }
-            }
-          ]
-        }
+        'data': borderGeo
       });
 
       map.current.addSource('route', {
@@ -469,14 +424,11 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 
     map.current.on('click', 'route', (e: any) => {
       map.current.getCanvas().style.cursor = 'pointer';
-
       addPopup(<ZaerinInfoPopup data={e.features[0].properties}/>, e.lngLat.lat, e.lngLat.lng);
-
     });
 
     map.current.on('mousemove', 'route', () => {
       map.current.getCanvas().style.cursor = 'pointer';
-
     });
 
     map.current.on('mouseleave', 'route', () => {
@@ -486,9 +438,7 @@ const GeneralLookAtTheLocationOfProcessions = () => {
 
     map.current.on('click', 'border', (e: any) => {
       map.current.getCanvas().style.cursor = 'pointer';
-
       addPopup(<ZaerinInfoPopup data={e.features[0].properties}/>, e.lngLat.lat, e.lngLat.lng);
-
     });
 
     map.current.on('mousemove', 'border', () => {
@@ -522,6 +472,50 @@ const GeneralLookAtTheLocationOfProcessions = () => {
     // return () => map.current.remove();
   }, []);
 
+  const updateArea = (e: any, action: any) => {
+
+    console.log('action => ', action);
+    const data = mapDraw.current.getAll();
+    console.log('e => ', e);
+    console.log('mapDraw data => ', data);
+    console.log('polygon => ', data?.features[0]?.geometry?.coordinates);
+//     const answer = document.getElementById('calculated-area');
+//     if (data.features.length > 0) {
+//       const area = turf.area(data);
+// // Restrict the area to 2 decimal points.
+//       const rounded_area = Math.round(area * 100) / 100;
+//       answer.innerHTML = `<p><strong>${rounded_area}</strong></p><p>square meters</p>`;
+//     } else {
+//       answer.innerHTML = '';
+//       if (e.type !== 'draw.delete')
+//         alert('Click the map to draw a polygon.');
+//     }
+  }
+
+  useEffect(() => {
+
+    if (mapDraw.current) return;
+
+    mapDraw.current = new MapboxDraw({
+      displayControlsDefault: false,
+// Select which mapbox-gl-draw control buttons to add to the map.
+      controls: {
+        polygon: true,
+        trash: true
+      },
+// Set mapbox-gl-draw to draw by default.
+// The user does not have to click the polygon control button first.
+      defaultMode: 'draw_polygon'
+    });
+
+    map.current.addControl(mapDraw.current);
+
+    map.current.on('draw.create', (e: any) => updateArea(e, 'created'));
+    map.current.on('draw.delete', (e: any) => updateArea(e, 'deleted'));
+    map.current.on('draw.update', (e: any) => updateArea(e, 'updated'));
+
+    // return () => map.current.remove();
+  })
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -534,7 +528,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           name="overTime"
           title="جاده های کشور"
           selected={showRoad}
-          // disabled={loading}
           onChange={setShowRoad}
           defaultIcon={clockIcon}
           activeIcon={clockActiveIcon}
@@ -544,7 +537,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           name="flourQuota"
           title="پارکینگ های زائرین"
           selected={showParking}
-          // disabled={loading}
           onChange={setShowParking}
           // selected={flourQuota}
           // disabled={loading}
@@ -557,7 +549,6 @@ const GeneralLookAtTheLocationOfProcessions = () => {
           name="isExtortion"
           title="گذرگاه های مرزی"
           selected={showBorder}
-          // disabled={loading}
           onChange={setShowBorder}
           defaultIcon={extortionIcon}
           activeIcon={extortionActiveIcon}
