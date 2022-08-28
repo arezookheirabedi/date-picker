@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
 import arbaeenService from 'src/services/arbaeen.service';
 import axios from 'axios';
@@ -57,8 +58,9 @@ const ListOfTransportationAxesStatus = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">لیست وضعیت محورهای مواصلاتی</legend>
+      <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
 
-      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      {/* <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading && (
           <div className="p-40">
             <Spinner />
@@ -73,6 +75,7 @@ const ListOfTransportationAxesStatus = () => {
 
         {!error && !loading && (
           <Table
+          
             dataSet={[...dataset]}
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
@@ -129,7 +132,7 @@ const ListOfTransportationAxesStatus = () => {
             totalItems={(dataset || []).length}
           />
         )}
-      </div>
+      </div> */}
     </fieldset>
   );
 };

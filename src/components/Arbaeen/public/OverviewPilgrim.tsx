@@ -26,7 +26,7 @@ const OverviewPilgrim = () => {
             <Statistic
               icon={groupIcon}
               text="تعداد کل پیش ثبت نام شدگان نهایی"
-              count={0}
+              count={935271}
               loading={loading}
             />
             <Statistic

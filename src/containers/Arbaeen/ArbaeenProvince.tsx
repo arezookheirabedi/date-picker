@@ -2,7 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import AccessDenied from 'src/components/Access/AccessDenied';
 import OverviewMap from 'src/components/Arbaeen/province/OverviewMap';
+import OverviewOfExistBordersProvince from 'src/components/Arbaeen/province/OverviewOfExistBordersProvince';
+import OverviewPilgrimGenderByProvince from 'src/components/Arbaeen/province/OverviewPilgrimGenderByProvince';
+import OverviewPligrimAgeProvince from 'src/components/Arbaeen/province/OverviewPligrimAgeProvince';
 import PilgrimsList from 'src/components/Arbaeen/province/PilgrimsList';
+import ThePligrimsCitiesList from 'src/components/Arbaeen/province/ThePligrimsCitiesList';
 import {sideCities} from 'src/helpers/utils';
 import useHasProvinceResource from 'src/hooks/useHasProvinceResource';
 
@@ -36,6 +40,10 @@ const ArbaeenProvince = () => {
       {hasProvinceResources && (
         <>
           <PilgrimsList cityTitle={cityTitle} />
+          <OverviewOfExistBordersProvince cityTitle={cityTitle} />
+          <OverviewPligrimAgeProvince cityTitle={cityTitle} />
+          <OverviewPilgrimGenderByProvince cityTitle={cityTitle} />
+          <ThePligrimsCitiesList cityTitle={cityTitle} />
         </>
       )}
     </div>
