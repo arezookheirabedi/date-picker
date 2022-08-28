@@ -60,7 +60,7 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="text-black mx-auto px-3">
-        لیست بیشترین شهرهای مبدا زائرین استان‌&nbsp;
+        لیست شهرهای مبدا زائرین استان‌&nbsp;
         {cityTitle}
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
