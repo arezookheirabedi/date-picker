@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
 import {EERRORS} from 'src/constants/errors.enum';
 import arbaeenService from 'src/services/arbaeen.service';
-import {pilgrimsCity} from './constant';
 
 const ThPilgrimsProvinceList: React.FC<{}> = () => {
   const [error, setError] = useState(null);
@@ -23,7 +21,6 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
     setError(null);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {data} = await arbaeenService.getPiligrimOriginProvince(
         {},
         {cancelToken: source.token}
@@ -81,7 +78,7 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
-                name: 'شهر',
+                name: 'استان',
                 key: 'city',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex justify-start">
@@ -91,6 +88,7 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
               },
               {
                 name: 'تعداد زائرین',
+                sortable: true,
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
                   <span className=" ">{Number(record.pilgrimsCount || 0).toPersianDigits()}</span>

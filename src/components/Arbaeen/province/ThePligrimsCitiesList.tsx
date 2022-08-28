@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
@@ -7,7 +6,6 @@ import Table from 'src/components/TableScopeSort';
 import {EERRORS} from 'src/constants/errors.enum';
 import {sideCities} from 'src/helpers/utils';
 import arbaeenService from 'src/services/arbaeen.service';
-import {pilgrimsCity} from '../public/constant';
 
 const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const location = useLocation();
@@ -100,6 +98,7 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
               },
               {
                 name: 'تعداد زائرین',
+                sortable: true,
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
                   <span className=" ">{Number(record.pilgrimsCount || 0).toPersianDigits()}</span>
