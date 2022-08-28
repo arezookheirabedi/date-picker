@@ -11,7 +11,7 @@ const initialData = {
     'سال (۱۵-۰)',
     ' سال (۷۵-۶۱)',
     'سال (۳۰-۱۶)',
-    ' سال (۶۰-۴۶)',
+    'سال (۶۰-۴۶)',
     'سال (۴۵-۳۱)',
   ],
   series: [
@@ -19,11 +19,11 @@ const initialData = {
       name: 'تعداد',
 
       data: [
-        {name: '۷۵ سال به بالا ', y: 3157, color: '#8800ff'},
+        {name: '۷۵ سال به بالا', y: 3157, color: '#8800ff'},
         {name: 'سال (۴۵-۳۱)', y: 177805, color: '#004D65'},
-        {name: ' سال (۶۰-۴۶)', y: 166493, color: '#209F92'},
+        {name: 'سال (۶۰-۴۶)', y: 166493, color: '#209F92'},
         {name: 'سال (۳۰-۱۶)', y: 96538, color: '#BFDDE7'},
-        {name: ' سال (۷۵-۶۱)', y: 63747, color: '#F3BC06'},
+        {name: 'سال (۷۵-۶۱)', y: 63747, color: '#F3BC06'},
         {name: 'سال (۱۵-۰)', y: 55178, color: '#ff0060'},
       ],
     },
@@ -41,9 +41,9 @@ const GetAgeRange = (data: string) => {
     case '46-60':
       return 'سال (۶۰-۴۶)';
     case '61-75':
-      return ' سال (۷۵-۶۱)';
+      return 'سال (۷۵-۶۱)';
     case '76-up':
-      return '۷۵ سال به بالا ';
+      return '۷۵ سال به بالا';
     default:
       return '';
   }
@@ -65,14 +65,17 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
       const res = await arbaeenService.getPiligrimAgeRange(params, {
         cancelToken: source.token,
       });
-      const sortData = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
+
+      const sortData = res.data.sort((a: any, b: any) =>
+        Number(a.count) > Number(b.count) ? 1 : -1
+      );
+      console.log(res, sortData);
       const ageRange: any[] = [];
       const count: any[] = [];
       sortData.forEach((item: any) => {
         ageRange.push(GetAgeRange(item.ageGroup));
         count.push(Number(item.count));
       });
-
       const dataTemp = {
         categories: [...ageRange],
         series: [
@@ -122,46 +125,47 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
               {
                 name: ageRange[
                   ageRange.findIndex((i: any) => {
-                    return i === ' سال (۶۰-۴۶)';
+                    return i === 'سال (۶۰-۴۶)';
                   })
                 ],
                 y: count[
                   ageRange.findIndex((i: any) => {
-                    return i === ' سال (۶۰-۴۶)';
+                    return i === 'سال (۶۰-۴۶)';
                   })
                 ],
-                color: '#716DE3',
+                color: '#209F92',
               },
               {
                 name: ageRange[
                   ageRange.findIndex((i: any) => {
-                    return i === ' سال (۷۵-۶۱)';
+                    return i === 'سال (۷۵-۶۱)';
                   })
                 ],
                 y: count[
                   ageRange.findIndex((i: any) => {
-                    return i === ' سال (۷۵-۶۱)';
-                  })
-                ],
-                color: '#FF0060',
-              },
-              {
-                name: ageRange[
-                  ageRange.findIndex((i: any) => {
-                    return i === '۷۵ سال به بالا ';
-                  })
-                ],
-                y: count[
-                  ageRange.findIndex((i: any) => {
-                    return i === '۷۵ سال به بالا ';
+                    return i === 'سال (۷۵-۶۱)';
                   })
                 ],
                 color: '#F3BC06',
+              },
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا';
+                  })
+                ],
+                y: count[
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا';
+                  })
+                ],
+                color: '#8800ff',
               },
             ],
           },
         ],
       } as any;
+      console.log(dataTemp);
       setData(dataTemp);
       setError(false);
       setLoading(false);
