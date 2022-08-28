@@ -56,7 +56,7 @@ const RedHalalBasesList: React.FC<{}> = () => {
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
-      <legend className="mx-auto px-3 text-black">لیست پایگاه های حلال احمر</legend>
+      <legend className="mx-auto px-3 text-black">لیست پایگاه های هلال احمر</legend>
 
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
