@@ -3,7 +3,7 @@ import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
-import useGetPilgrimGenderByProvinceOfStackChart from 'src/hooks/apis/useGetPilgrimGenderByProvinceOfStackChart';
+import useGetPilgrimGenderByCityOfStackChart from 'src/hooks/apis/useGetPilgrimGenderByCityOfStackChart';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 
@@ -18,7 +18,7 @@ const OverviewPilgrimGenderByProvince: React.FC<{cityTitle: string}> = ({cityTit
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetPilgrimGenderByProvinceOfStackChart(query, true);
+  } = useGetPilgrimGenderByCityOfStackChart(query);
 
   const optionChart = {
     chart: {
@@ -124,7 +124,7 @@ const OverviewPilgrimGenderByProvince: React.FC<{cityTitle: string}> = ({cityTit
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به جنسیت زائران به تفکیک استان&nbsp;
+        نگاه کلی به جنسیت زائران به تفکیک شهرهای استان&nbsp;
         {cityTitle}
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
