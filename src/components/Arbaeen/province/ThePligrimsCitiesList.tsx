@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
+import {EERRORS} from 'src/constants/errors.enum';
+import {sideCities} from 'src/helpers/utils';
 import arbaeenService from 'src/services/arbaeen.service';
 import {pilgrimsCity} from '../public/constant';
 
 const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
+  const location = useLocation();
   const [error, setError] = useState(null);
   const [query, setQuery] = useState({
     retry: false,
@@ -17,41 +21,50 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const fetcher = async () => {
+  const fetcher = async (params: any) => {
     setLoading(true);
     setError(null);
-
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
+      const {data} = await arbaeenService.getPiligrimOriginCity(params, {
+        cancelToken: source.token,
+      });
       const normalizedData: any[] = [];
-      pilgrimsCity.forEach((item: any, index: number) => {
+      data.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
           city: item.city || 'نامشخص',
-          pilgrimsCount: item.pilgrimsCount,
-          womenPercentage: item.womenPercentage,
-          menPercentage: item.menPercentage,
-          visasIssuedCount: item.visasIssuedCount,
-          vaccinePercentage: item.vaccinePercentage,
-          firestDosesPercentage: item.firestDosesPercentage,
-          secondDosesPercentage: item.secondDosesPercentage,
-          thirdDosesPercentage: item.thirdDosesPercentage,
+          pilgrimsCount: item.totalCount || 0,
+          womenPercentage: item.femaleCountPercentage || 0,
+          menPercentage: item.maleCountPercentage || 0,
+          vaccinePercentage: item.vaccinesCountPercentage || 0,
+          firstDosesPercentage: item.firstDosePercentage || 0,
+          secondDosesPercentage: item.secondDosePercentage || 0,
+          thirdDosesPercentage: item.thirdDosePercentage || 0,
+          fifthDosesPercentage: item.fifthDosePercentage || 0,
+          forthDosesPercentage: item.fourthDosePercentage || 0,
         });
       });
       setDataSet([...normalizedData]);
+      setLoading(false);
     } catch (err: any) {
-      console.log(err);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetcher();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+    if (existsCity) {
+      fetcher({province: provinceName});
+    }
     return () => {
       source.cancel('Operation canceled by the user.');
     };
