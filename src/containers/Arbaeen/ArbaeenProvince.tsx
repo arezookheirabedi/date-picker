@@ -9,6 +9,8 @@ import PilgrimsList from 'src/components/Arbaeen/province/PilgrimsList';
 import ThePligrimsCitiesList from 'src/components/Arbaeen/province/ThePligrimsCitiesList';
 import {sideCities} from 'src/helpers/utils';
 import useHasProvinceResource from 'src/hooks/useHasProvinceResource';
+import Irancell from 'src/assets/images/logos/irancell-logo.svg';
+import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 
 const ArbaeenProvince = () => {
   const location = useLocation();
@@ -44,6 +46,17 @@ const ArbaeenProvince = () => {
           <OverviewPligrimAgeProvince cityTitle={cityTitle} />
           <OverviewPilgrimGenderByProvince cityTitle={cityTitle} />
           <ThePligrimsCitiesList cityTitle={cityTitle} />
+          <fieldset className=" rounded-xl border py-2 px-4 text-center">
+            <div className=" flex justify-between">
+              <div className="flex items-center justify-start">
+                <img src={Irancell} className="inline" alt="irancell-logo" />
+                <span className="px-2">باهمکاری ایرانسل</span>
+              </div>
+              <div>
+                <img src={Vasl} className="inline " alt="vasl-logo" />
+              </div>
+            </div>
+          </fieldset>
         </>
       )}
     </div>
