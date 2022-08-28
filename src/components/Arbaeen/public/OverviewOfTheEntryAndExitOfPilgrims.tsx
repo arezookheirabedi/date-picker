@@ -11,6 +11,7 @@ const initialValue = {
 };
 const OverviewOfTheEntryAndExitOfPilgrims = () => {
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pilgrims, setPilgrims] = useState<any>(initialValue);
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -50,19 +51,15 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={redPeopleIcon}
-            text="تعداد کل افراد خارج شده از کشور"
-            count={pilgrims.totalNumberOfPassengerLeftTheCountry || 0}
-            hasInfo
-            infoText=" "
+            text="تعداد  زائران خارج شده از کشور"
+            count={0}
             loading={loading}
           />
           <Statistic
             icon={greenPeopleIcon}
-            text="تعداد کل افراد وارد شده به کشور"
-            count={pilgrims.totalNumberOfPassengerInterTheCountry || 0}
+            text="تعداد زائران وارد شده به کشور"
+            count={0}
             loading={loading}
-            hasInfo
-            infoText=""
           />
         </div>
       </div>
