@@ -28,7 +28,7 @@ const GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به موقعیت موکبها و پایگاه های هلال احمر
+        نگاه کلی به موقعیت موکب ها و پایگاه های هلال احمر
       </legend>
       <div>
         <div ref={mapContainer} className="map-container" />
