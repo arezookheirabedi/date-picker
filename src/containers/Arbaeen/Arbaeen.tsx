@@ -37,6 +37,7 @@ const Arbaeen = () => {
       <OverviewPligrimAge />
       <OverviewPilgrimGenderByProvince />
       <OverviewOfTheEntryAndExitOfPilgrims />
+      <TheLargestNumberOfOriginPilgrimsCitiesList />
       <OverviewOfThePercentageOfEntryAndExitOfPilgrims />
       {/* <GeneralLookAtTransportationAxesAndExitBordersOfCountry /> */}
       <ListOfTheBusiestBorderCrossings />
@@ -45,7 +46,7 @@ const Arbaeen = () => {
       {/* <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases /> */}
       <MokebList />
       <RedHalalBasesList />
-      <TheLargestNumberOfOriginPilgrimsCitiesList />
+
       <TheLargestNumberOfOriginPilgrimsCountriesList />
     </div>
   );
