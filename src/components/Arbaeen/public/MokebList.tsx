@@ -57,8 +57,9 @@ const MokebList: React.FC<{}> = () => {
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">لیست موکب ها</legend>
+      <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
 
-      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
+      {/* <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
@@ -110,7 +111,7 @@ const MokebList: React.FC<{}> = () => {
             ]}
           />
         )}
-      </div>
+      </div> */}
     </fieldset>
   );
 };

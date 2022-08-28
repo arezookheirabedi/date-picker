@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
 // import useGetOverviewOfTheLatestVaccinationStatusColumnChart
 //   from "../../../hooks/apis/useGetOverviewOfTheLatestVaccinationStatusColumnChart";
@@ -6,7 +7,7 @@ import Highcharts from 'highcharts/highstock';
 // import RetryButton from "../../RetryButton";
 import Charts from '../../Charts';
 // import SingleDatepickerQuery from "../../SingleDatepickerQuery";
-import DatepickerQuery from '../../DatepickerQuery';
+// import DatepickerQuery from '../../DatepickerQuery';
 
 const {HeadlessChart} = Charts;
 
@@ -112,7 +113,6 @@ const optionChart = {
 };
 
 const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
-  const [query, setQuery] = useState();
   const dataset = {
     categories: [
       'زمینی وارد شده',
@@ -147,9 +147,9 @@ const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-3/4 justify-between">
-            <div className="align-center flex justify-between">
+            {/* <div className="align-center flex justify-between">
               <DatepickerQuery query={query} setQuery={setQuery} />
-            </div>
+            </div> */}
           </div>
           <div className="w-full">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
@@ -198,8 +198,9 @@ const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
         {/* {!loading && !errorMessage && ( */}
         {/*  <HeadlessChart data={dataset} optionsProp={optionChart}/> */}
         {/* )} */}
+        <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
 
-        <HeadlessChart data={dataset} optionsProp={optionChart} />
+        {/* <HeadlessChart data={dataset} optionsProp={optionChart} /> */}
         {/* {!loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}
