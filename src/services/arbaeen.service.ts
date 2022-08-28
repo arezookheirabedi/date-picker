@@ -7,12 +7,14 @@ function arbaeenGetAll({tag, ...params}: any = {}, config?: any) {
     .build({mock: true})
     .get(`/api/v1/arbaeen/all?lang=fa`, params, {...config});
 }
+
 function getPiligrimList(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/arbaeen/reports?lang=fa`, params, {...config});
 }
+
 function abroadList() {
   const mock = {
     data: [
@@ -25,6 +27,7 @@ function abroadList() {
   };
   return Promise.resolve(mock);
 }
+
 function getPligrimGenderPerProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -33,6 +36,16 @@ function getPligrimGenderPerProvince(params: any = {}, config?: any) {
       ...config,
     });
 }
+
+function getPligrimGenderPerCity(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-city-and-gender/count?lang=fa`, params, {
+      ...config,
+    });
+}
+
 function getPligrimCountPerBorder(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -62,6 +75,7 @@ function getPiligrimAgeRange(params: any = {}, config?: any) {
       ...config,
     });
 }
+
 function getVaccineInfo(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -75,6 +89,26 @@ function getVaccineInfo(params: any = {}, config?: any) {
     );
 }
 
+function getPiligrimOriginProvince(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(
+      `/api/v1/arbaeen/reports/zaerin/group-by-departure-origin-province/general?lang=fa`,
+      params,
+      {
+        ...config,
+      }
+    );
+}
+function getPiligrimOriginCity(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-departure-origin-city/general?lang=fa`, params, {
+      ...config,
+    });
+}
 const arbaeenService = {
   arbaeenGetAll,
   getPiligrimList,
@@ -84,6 +118,9 @@ const arbaeenService = {
   getPilgrimCount,
   getPiligrimAgeRange,
   getVaccineInfo,
+  getPligrimGenderPerCity,
+  getPiligrimOriginProvince,
+  getPiligrimOriginCity,
 };
 
 export default arbaeenService;

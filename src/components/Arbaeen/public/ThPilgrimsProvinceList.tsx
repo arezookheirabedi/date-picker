@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
+import {EERRORS} from 'src/constants/errors.enum';
 import arbaeenService from 'src/services/arbaeen.service';
 import {pilgrimsCity} from './constant';
 
@@ -23,29 +24,34 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
+      const {data} = await arbaeenService.getPiligrimOriginProvince(
+        {},
         {cancelToken: source.token}
       );
       const normalizedData: any[] = [];
-      pilgrimsCity.forEach((item: any, index: number) => {
+      data.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          city: item.city || 'نامشخص',
-          pilgrimsCount: item.pilgrimsCount,
-          womenPercentage: item.womenPercentage,
-          menPercentage: item.menPercentage,
-          visasIssuedCount: item.visasIssuedCount,
-          vaccinePercentage: item.vaccinePercentage,
-          firestDosesPercentage: item.firestDosesPercentage,
-          secondDosesPercentage: item.secondDosesPercentage,
-          thirdDosesPercentage: item.thirdDosesPercentage,
+          city: item.province || 'نامشخص',
+          pilgrimsCount: item.totalCount || 0,
+          womenPercentage: item.femaleCountPercentage || 0,
+          menPercentage: item.maleCountPercentage || 0,
+          vaccinePercentage: item.vaccinesCountPercentage || 0,
+          firstDosesPercentage: item.firstDosePercentage || 0,
+          secondDosesPercentage: item.secondDosePercentage || 0,
+          thirdDosesPercentage: item.thirdDosePercentage || 0,
+          fifthDosesPercentage: item.fifthDosePercentage || 0,
+          forthDosesPercentage: item.fourthDosePercentage || 0,
         });
       });
       setDataSet([...normalizedData]);
+      setLoading(false);
     } catch (err: any) {
-      console.log(err);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -101,12 +107,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
               },
 
               {
-                name: 'تعداد روادید صادر شده',
-                key: 'visasIssuedCount',
+                name: 'درصد مردان زائر',
+                key: 'menPercentage',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                    {Number(record.visasIssuedCount || 0).toPersianDigits()}
-                  </span>
+                  <span className=" ">{Number(record.menPercentage || 0).toPersianDigits()}٪</span>
                 ),
               },
               {
@@ -120,10 +124,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
               },
               {
                 name: 'درصد دوز اول',
-                key: 'firestDosesPercentage',
+                key: 'firstDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.firstDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -150,7 +154,7 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.thirdDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.forthDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -159,7 +163,7 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.thirdDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.fifthDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
