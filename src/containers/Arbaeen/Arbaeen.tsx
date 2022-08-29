@@ -7,9 +7,9 @@ import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/Overview
 
 import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
 import OverviewOfThePercentageOfEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
-import GeneralLookAtTransportationAxesAndExitBordersOfCountry from 'src/components/Arbaeen/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry';
+// import GeneralLookAtTransportationAxesAndExitBordersOfCountry from 'src/components/Arbaeen/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry';
 import MokebList from 'src/components/Arbaeen/public/MokebList';
-import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCitiesList';
+import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/public/ThPilgrimsProvinceList';
 import TheLargestNumberOfOriginPilgrimsCountriesList from 'src/components/Arbaeen/public/TheLargestNumberOfOriginPilgrimsCountriesList';
 import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
 import OverviewPilgrim from 'src/components/Arbaeen/public/OverviewPilgrim';
@@ -21,7 +21,7 @@ import OverviewPligrimAge from 'src/components/Arbaeen/public/OverviewPligrimAge
 import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
-import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
+// import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
 import GeneralLookAtTheLocationOfProcessions from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessions';
 
 const Arbaeen = () => {
@@ -37,15 +37,16 @@ const Arbaeen = () => {
       <OverviewPligrimAge />
       <OverviewPilgrimGenderByProvince />
       <OverviewOfTheEntryAndExitOfPilgrims />
+      <TheLargestNumberOfOriginPilgrimsCitiesList />
       <OverviewOfThePercentageOfEntryAndExitOfPilgrims />
-      <GeneralLookAtTransportationAxesAndExitBordersOfCountry />
+      {/* <GeneralLookAtTransportationAxesAndExitBordersOfCountry /> */}
       <ListOfTheBusiestBorderCrossings />
       <ListOfTransportationAxesStatus />
       <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
-      <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases />
+      {/* <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases /> */}
       <MokebList />
       <RedHalalBasesList />
-      <TheLargestNumberOfOriginPilgrimsCitiesList />
+
       <TheLargestNumberOfOriginPilgrimsCountriesList />
     </div>
   );
