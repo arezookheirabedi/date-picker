@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
+import {EERRORS} from 'src/constants/errors.enum';
 import arbaeenService from 'src/services/arbaeen.service';
-import {pilgrimsCity} from './constant';
 
-const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
+const ThPilgrimsProvinceList: React.FC<{}> = () => {
   const [error, setError] = useState(null);
   const [query, setQuery] = useState({
     retry: false,
@@ -22,30 +21,34 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
     setError(null);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
+      const {data} = await arbaeenService.getPiligrimOriginProvince(
+        {},
         {cancelToken: source.token}
       );
       const normalizedData: any[] = [];
-      pilgrimsCity.forEach((item: any, index: number) => {
+      data.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          city: item.city || 'نامشخص',
-          pilgrimsCount: item.pilgrimsCount,
-          womenPercentage: item.womenPercentage,
-          menPercentage: item.menPercentage,
-          visasIssuedCount: item.visasIssuedCount,
-          vaccinePercentage: item.vaccinePercentage,
-          firestDosesPercentage: item.firestDosesPercentage,
-          secondDosesPercentage: item.secondDosesPercentage,
-          thirdDosesPercentage: item.thirdDosesPercentage,
+          city: item.province || 'نامشخص',
+          pilgrimsCount: item.totalCount || 0,
+          womenPercentage: item.femaleCountPercentage || 0,
+          menPercentage: item.maleCountPercentage || 0,
+          vaccinePercentage: item.vaccinesCountPercentage || 0,
+          firstDosesPercentage: item.firstDosePercentage || 0,
+          secondDosesPercentage: item.secondDosePercentage || 0,
+          thirdDosesPercentage: item.thirdDosePercentage || 0,
+          fifthDosesPercentage: item.fifthDosePercentage || 0,
+          forthDosesPercentage: item.fourthDosePercentage || 0,
         });
       });
       setDataSet([...normalizedData]);
+      setLoading(false);
     } catch (err: any) {
-      console.log(err);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -59,7 +62,7 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
-      <legend className="mx-auto px-3 text-black">لیست بیشترین شهرهای مبدا زائرین </legend>
+      <legend className="mx-auto px-3 text-black">لیست استان های مبدا زائرین </legend>
 
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
@@ -75,7 +78,7 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
-                name: 'شهر',
+                name: 'استان',
                 key: 'city',
                 render: (v: any, record, index: number, page: number) => (
                   <div className="flex justify-start">
@@ -85,6 +88,7 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
               },
               {
                 name: 'تعداد زائرین',
+                sortable: true,
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
                   <span className=" ">{Number(record.pilgrimsCount || 0).toPersianDigits()}</span>
@@ -99,21 +103,12 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
                   </span>
                 ),
               },
+
               {
                 name: 'درصد مردان زائر',
                 key: 'menPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">{Number(record.menPercentage || 0).toPersianDigits()}٪</span>
-                ),
-              },
-
-              {
-                name: 'تعداد روادید صادر شده',
-                key: 'visasIssuedCount',
-                render: (v: any, record: any) => (
-                  <span className=" ">
-                    {Number(record.visasIssuedCount || 0).toPersianDigits()}
-                  </span>
                 ),
               },
               {
@@ -127,10 +122,10 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
               },
               {
                 name: 'درصد دوز اول',
-                key: 'firestDosesPercentage',
+                key: 'firstDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.firestDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.firstDosesPercentage || 0).toPersianDigits()}٪
                   </span>
                 ),
               },
@@ -152,6 +147,24 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
                   </span>
                 ),
               },
+              {
+                name: 'درصد دوز چهارم',
+                key: 'thirdDosesPercentage',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.forthDosesPercentage || 0).toPersianDigits()}٪
+                  </span>
+                ),
+              },
+              {
+                name: 'درصد دوز پنجم',
+                key: 'thirdDosesPercentage',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.fifthDosesPercentage || 0).toPersianDigits()}٪
+                  </span>
+                ),
+              },
             ]}
           />
         )}
@@ -159,4 +172,4 @@ const TheLargestNumberOfOriginPilgrimsCitiesList: React.FC<{}> = () => {
     </fieldset>
   );
 };
-export default TheLargestNumberOfOriginPilgrimsCitiesList;
+export default ThPilgrimsProvinceList;

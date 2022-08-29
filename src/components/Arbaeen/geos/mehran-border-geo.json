@@ -5,7 +5,8 @@
       "properties": {
         "title": "Lincoln Park",
         "description": "A northside park that is home to the Lincoln Park Zoo",
-        "from": "native"
+        "from": "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -20,7 +21,8 @@
       "properties": {
         "title": "Lincoln Park",
         "description": "A northside park that is home to the Lincoln Park Zoo",
-        "from": "native"
+        "from": "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -34,7 +36,8 @@
       "type": "Feature",
       "properties": {
         "title": "Burnham Park",
-        "description": "A lakefront park on Chicago's south side"
+        "description": "A lakefront park on Chicago's south side",
+        "markerClass" : "marker--normal"
       },
       "geometry": {
         "coordinates": [
@@ -49,7 +52,8 @@
       "properties": {
         "title": "Millennium Park",
         "description": "A downtown park known for its art installations and unique architecture",
-        "from": "native"
+        "from": "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -63,7 +67,8 @@
       "type": "Feature",
       "properties": {
         "title": "Grant Park",
-        "description": "A downtown park that is the site of many of Chicago's favorite festivals and events"
+        "description": "A downtown park that is the site of many of Chicago's favorite festivals and events",
+        "markerClass" : "marker--normal"
       },
       "geometry": {
         "coordinates": [
@@ -78,7 +83,8 @@
       "properties": {
         "title": "Humboldt Park",
         "description": "A large park on Chicago's northwest side",
-        "from": "native"
+        "from": "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -93,7 +99,8 @@
       "properties": {
         "title": "Douglas Park",
         "description": "A large park near in Chicago's North Lawndale neighborhood",
-        "from": "native"
+        "from": "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -107,7 +114,8 @@
       "type": "Feature",
       "properties": {
         "title": "Calumet Park",
-        "description": "A park on the Illinois-Indiana border featuring a historic fieldhouse"
+        "description": "A park on the Illinois-Indiana border featuring a historic fieldhouse",
+        "markerClass" : "marker--normal"
       },
       "geometry": {
         "coordinates": [
@@ -122,7 +130,8 @@
       "properties": {
         "title": "Jackson Park",
         "description": "A lakeside park that was the site of the 1893 World's Fair",
-        "from": "native"
+        "from": "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -136,7 +145,8 @@
       "type": "Feature",
       "properties": {
         "title": "Columbus Park",
-        "description": "A large park in Chicago's Austin neighborhood"
+        "description": "A large park in Chicago's Austin neighborhood",
+        "markerClass" : "marker--normal"
       },
       "geometry": {
         "coordinates": [
@@ -150,7 +160,8 @@
       "type": "Feature",
       "properties": {
         "title": "Columbus Park",
-        "description": "A large park in Chicago's Austin neighborhood"
+        "description": "A large park in Chicago's Austin neighborhood",
+        "markerClass" : "marker--normal"
       },
       "geometry": {
         "coordinates": [
@@ -165,7 +176,8 @@
       "properties": {
         "title": "Columbus Park",
         "description": "A large park in Chicago's Austin neighborhood",
-        "from" : "native"
+        "from" : "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -180,7 +192,8 @@
       "properties": {
         "title": "Columbus Park",
         "description": "A large park in Chicago's Austin neighborhood",
-        "from" : "native"
+        "from" : "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -195,7 +208,8 @@
       "properties": {
         "title": "Columbus Park",
         "description": "A large park in Chicago's Austin neighborhood",
-        "from" : "native"
+        "from" : "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -210,7 +224,8 @@
       "properties": {
         "title": "Columbus Park",
         "description": "A large park in Chicago's Austin neighborhood",
-        "from" : "native"
+        "from" : "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -225,7 +240,8 @@
       "properties": {
         "title": "Columbus Park",
         "description": "A large park in Chicago's Austin neighborhood",
-        "from" : "native"
+        "from" : "native",
+        "markerClass" : "marker--native"
       },
       "geometry": {
         "coordinates": [
@@ -239,7 +255,8 @@
       "type": "Feature",
       "properties": {
         "title": "Columbus Park",
-        "description": "A large park in Chicago's Austin neighborhood"
+        "description": "A large park in Chicago's Austin neighborhood",
+        "markerClass" : "marker--normal"
       },
       "geometry": {
         "coordinates": [
