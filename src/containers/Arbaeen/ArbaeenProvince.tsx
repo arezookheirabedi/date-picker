@@ -11,6 +11,9 @@ import {sideCities} from 'src/helpers/utils';
 import useHasProvinceResource from 'src/hooks/useHasProvinceResource';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
+import OverviewPilgrim from 'src/components/Arbaeen/province/OverviewPilgrim';
+import OverviewPligrimTripType from 'src/components/Arbaeen/province/OverviewPligrimTripType';
+import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/province/OverviewPilgrimVaccineStatus';
 
 const ArbaeenProvince = () => {
   const location = useLocation();
@@ -41,6 +44,10 @@ const ArbaeenProvince = () => {
       {!hasProvinceResources && <AccessDenied id="arborean-overview" />}
       {hasProvinceResources && (
         <>
+          <OverviewPilgrim cityTitle={cityTitle} />
+          <OverviewPligrimTripType cityTitle={cityTitle} />
+          <OverviewPilgrimVaccineStatus cityTitle={cityTitle} />
+
           <PilgrimsList cityTitle={cityTitle} />
           <OverviewOfExistBordersProvince cityTitle={cityTitle} />
           <OverviewPligrimAgeProvince cityTitle={cityTitle} />
