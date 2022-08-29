@@ -2,8 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Table from 'src/components/TableScopeSort';
-import Irancell from 'src/assets/images/logos/irancell-logo.svg';
-import Vasl from 'src/assets/images/logos/vasl-logo.svg';
+
 import arbaeenService from 'src/services/arbaeen.service';
 import axios from 'axios';
 import {pilgrimsCountries} from './constant';
@@ -122,17 +121,6 @@ const TheLargestNumberOfOriginPilgrimsCountriesList: React.FC<{}> = () => {
             />
           )}
         </div> */}
-      </fieldset>
-      <fieldset className=" rounded-xl border py-2 px-4 text-center">
-        <div className=" flex justify-between">
-          <div className="flex items-center justify-start">
-            <img src={Irancell} className="inline" alt="irancell-logo" />
-            <span className="px-2">باهمکاری ایرانسل</span>
-          </div>
-          <div>
-            <img src={Vasl} className="inline " alt="vasl-logo" />
-          </div>
-        </div>
       </fieldset>
     </>
   );
