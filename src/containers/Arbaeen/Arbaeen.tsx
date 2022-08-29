@@ -48,6 +48,17 @@ const Arbaeen = () => {
       <RedHalalBasesList />
 
       <TheLargestNumberOfOriginPilgrimsCountriesList />
+      <fieldset className=" rounded-xl border py-2 px-4 text-center">
+        <div className=" flex justify-between">
+          <div className="flex items-center justify-start">
+            <img src={Irancell} className="inline" alt="irancell-logo" />
+            <span className="px-2">باهمکاری ایرانسل</span>
+          </div>
+          <div>
+            <img src={Vasl} className="inline " alt="vasl-logo" />
+          </div>
+        </div>
+      </fieldset>
     </div>
   );
 };
