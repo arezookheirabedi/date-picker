@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Irancell from 'src/assets/images/logos/irancell-logo.svg';
+import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatus';
 // import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
 
