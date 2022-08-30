@@ -271,23 +271,28 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
   };
 
   const getCities = async (provinceCode: any) => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getCities(provinceCode)) as any;
-    data[0].cities.forEach((item: any) => {
-      normalizedData.push({
-        title: item.name,
-        value: item.cityCode,
+    try {
+      const normalizedData: any[] = [];
+      const {data} = (await fsServices.getCities(provinceCode)) as any;
+      data[0] &&
+        data[0].cities?.forEach((item: any) => {
+          normalizedData.push({
+            title: item.name,
+            value: item.cityCode,
+          });
+        });
+      setCityOptions(() => {
+        return [
+          {
+            title: 'انتخاب شهر',
+            value: null,
+          },
+          ...normalizedData,
+        ];
       });
-    });
-    setCityOptions(() => {
-      return [
-        {
-          title: 'انتخاب شهر',
-          value: null,
-        },
-        ...normalizedData,
-      ];
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const cancelTokenendPoint = cancelTokenSource();
