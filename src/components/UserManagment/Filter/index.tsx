@@ -83,7 +83,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({
   };
   return (
     <>
-      <form className="w-3/4 space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-full space-y-4 ml-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex space-x-3 rtl:space-x-reverse">
           {userType && (
             <div className="w-full">
