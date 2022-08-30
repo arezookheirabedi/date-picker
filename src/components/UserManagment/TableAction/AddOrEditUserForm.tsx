@@ -178,10 +178,13 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
       });
       return;
     }
+
+    // console.log([values.mobileSet]);
+    // debugger;
     const extraData = {
       province: provinceTitleInput ? provinceTitleInput.title : null,
       city: cityTitleInput ? cityTitleInput.title : null,
-      mobileSet: userData && userData.mobileSet[0] ? [userData.mobileSet[0]] : [values.mobileSet],
+      mobileSet: [values.mobileSet],
       roles: valuesOfRole,
       resources: [tagResources, provinceResources, cityResources],
       nationalId: values.nationalId ? values.nationalId : null,
