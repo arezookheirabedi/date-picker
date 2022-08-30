@@ -163,8 +163,6 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
           },
         ],
       } as any;
-      debugger;
-      console.log(sortData, dataTemp);
       setData(dataTemp);
       setError(false);
       setLoading(false);
