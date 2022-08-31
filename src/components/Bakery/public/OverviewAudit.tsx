@@ -332,7 +332,7 @@ const OverviewAudit: React.FC<{}> = () => {
                   <div className="flex justify-center items-center">
                     <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
                       {record.flourQuota ? (
-                        <div className="">
+                        <div className="w-4 h-4">
                           <img
                             className="w-4 h-4"
                             src={chartBoxIcon}
@@ -343,14 +343,14 @@ const OverviewAudit: React.FC<{}> = () => {
                         <div className="w-4 h-4" />
                       )}
                       {record.isExtortion ? (
-                        <div className="">
+                        <div className="w-4 h-4">
                           <img className="w-4 h-4" src={extortionIcon} alt="مشکوک به گران فروشی" />
                         </div>
                       ) : (
                         <div className="w-4 h-4" />
                       )}
                       {record.workTime ? (
-                        <div className="">
+                        <div className="w-4 h-4">
                           <img
                             className="w-4 h-4"
                             src={clockIcon}
@@ -361,7 +361,7 @@ const OverviewAudit: React.FC<{}> = () => {
                         <div className="w-4 h-4" />
                       )}
                       {record.bakeryWithoutTransaction ? (
-                        <div className="">
+                        <div className="w-4 h-4">
                           <img
                             className="w-4 h-4"
                             src={inactivityIcon}
@@ -372,7 +372,7 @@ const OverviewAudit: React.FC<{}> = () => {
                         <div className="w-4 h-4" />
                       )}
                       {record.unusualTransaction ? (
-                        <div className="">
+                        <div className="w-4 h-4">
                           <img
                             className="w-4 h-4"
                             src={unusualTransactionIcon}

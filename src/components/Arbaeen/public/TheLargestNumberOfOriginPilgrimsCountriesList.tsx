@@ -59,10 +59,10 @@ const TheLargestNumberOfOriginPilgrimsCountriesList: React.FC<{}> = () => {
     <>
       {' '}
       <fieldset className="mb-2 rounded-xl border p-4 text-center">
-        <legend className="mx-auto px-3 text-black">
-          لیست بیشترین کشور های مبدا اتباع خارجی زائرین
-        </legend>
+        <legend className="mx-auto px-3 text-black">لیست کشور های مبدا اتباع خارجی زائرین</legend>
+        <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
 
+        {/* 
         <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
           {error && !loading ? (
             <div className="p-40">
@@ -121,7 +121,7 @@ const TheLargestNumberOfOriginPilgrimsCountriesList: React.FC<{}> = () => {
               ]}
             />
           )}
-        </div>
+        </div> */}
       </fieldset>
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
         <div className=" flex justify-between">

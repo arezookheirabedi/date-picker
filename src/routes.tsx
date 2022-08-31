@@ -25,6 +25,8 @@ import GuildEmployee from './containers/Guild/GuildEmployee';
 import GuildEmployeeProvince from './containers/Guild/GuildEmployeeProvince';
 import ServicePort from './containers/ServicePort/ServicePort';
 import BakeryMonitoring from './containers/Bakery/BakeryMonitoring';
+import BakeryInspection from './containers/Bakery/Inspection/Inspection';
+import BakeryInspectionProvince from './containers/Bakery/Inspection/InspectionProvince';
 import InspectorManagement from './containers/InspectorsManagement';
 import UserManagment from './containers/UserManagment/UserManagment';
 import Arbaeen from './containers/Arbaeen/Arbaeen';
@@ -669,6 +671,63 @@ const routes: IRoute[] = [
           'ROLE_REPORT_VIEWER_GUILD_BAKERY_AUDIT',
         ],
         main: Bakery,
+      },
+
+      {
+        keyIndex: '13',
+        icon: (active, disabled) => (
+          <IconWrapperStyle
+            name="inspection"
+            className="w-5 h-5"
+            active={active}
+            disabled={disabled}
+          />
+        ),
+        link: '/dashboard/guilds/inspection/bakery/public',
+        simLink: '/dashboard/guilds/inspection/bakery',
+        exact: true,
+        inMenu: true,
+        title: 'داشبورد بازرسی آرد و نان',
+        children: [
+          {
+            keyIndex: '131',
+            title: 'عمومی',
+            link: '/dashboard/guilds/inspection/bakery/public',
+            icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
+            roles: [
+              'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
+              'ROLE_REPORT_VIEWER_GUILD',
+              'ROLE_REPORT_VIEWER_GUILD_INSPECTION_BAKERY_PUBLIC',
+              'ROLE_REPORT_VIEWER_GUILD_INSPECTION_BAKERY_PROVINCE',
+            ],
+            main: BakeryInspection,
+          },
+          {
+            keyIndex: '132',
+            title: 'استانی',
+            enTitle: 'province',
+            link: '/dashboard/guilds/inspection/bakery/province',
+            icon: active => <IconWrapperStyle name="sub-transport" active={active}/>,
+            roles: [
+              'ROLE_ADMIN',
+              'ROLE_REPORT_VIEWER',
+              'ROLE_REPORT_VIEWER_GUILD',
+              'ROLE_REPORT_VIEWER_GUILD_INSPECTION_BAKERY_PUBLIC',
+              'ROLE_REPORT_VIEWER_GUILD_INSPECTION_BAKERY_PROVINCE',
+            ],
+            main: BakeryInspectionProvince,
+          },
+        ],
+        // disabled: true,
+        roles: [
+          'ROLE_ADMIN',
+          'ROLE_REPORT_VIEWER',
+          'ROLE_REPORT_VIEWER_GUILD',
+          'ROLE_REPORT_VIEWER_GUILD_INSPECTION_BAKERY_PUBLIC',
+          'ROLE_REPORT_VIEWER_GUILD_INSPECTION_BAKERY_PROVINCE',
+        ],
+        main: BakeryInspection,
       },
     ],
   },
