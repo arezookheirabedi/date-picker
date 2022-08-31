@@ -258,12 +258,18 @@ const PrivateLayout: React.FC<any> = () => {
             </Switch>
           </div>
 
-          <div className="flex flex-row-reverse justify-center text-xs space-x-1 pt-2 pb-3 poweredby">
+          <div className="flex flex-row-reverse justify-center items-center text-xs space-x-1 pt-2 pb-3 poweredby">
             <span>Powered</span>
             <span>by</span>
-            <a href="https://vasl.ir" target="_blank" rel="noreferrer">
+            {/* <a href="https://vasl.ir" target="_blank" rel="noreferrer">
               <span>Va</span>
               <span>sl</span>
+            </a> */}
+            <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+              <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell.png`} className="w-12 ml-1" alt="" />
+            </a>
+            <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+              <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell-labs.png`} className="w-8 ml-1" alt="" />
             </a>
           </div>
         </div>
