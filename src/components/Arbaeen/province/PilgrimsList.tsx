@@ -4,8 +4,6 @@ import RetryButton from 'src/components/RetryButton';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import Table from 'src/components/TableXHR';
 import {sideCities, toPersianDigit} from 'src/helpers/utils';
-import Irancell from 'src/assets/images/logos/irancell-logo.svg';
-import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 import arbaeenService from 'src/services/arbaeen.service';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
@@ -17,7 +15,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const location = useLocation();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [totalItems, setTotalItems] = useState(0);
-
+  const [borderQueryNull, setBorderQueryNull] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [dataSet, setDataSet] = useState<any>([]);
   const [error, setError] = useState<any>(null);
@@ -25,6 +23,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     retry: false,
     departureDestinationBorder: null,
     currentPage: 1,
+    departureOriginProvince: 'تهران',
   });
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -64,20 +63,28 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   };
 
   useEffect(() => {
+    getIt({...query});
+    return () => {
+      source.cancel('Operation canceled by the user.');
+      setDataSet([]);
+    };
+  }, [query]);
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getIt({...query, departureOriginProvince: provinceName});
+      setBorderQueryNull(!borderQueryNull);
+      setQuery({
+        retry: false,
+        departureDestinationBorder: null,
+        currentPage: 1,
+        departureOriginProvince: provinceName,
+      });
     }
-    // eslint-disable-next-line consistent-return
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataSet([]);
-    };
-  }, [location.search, query]);
+  }, [location.search]);
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -85,7 +92,10 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   return (
     <>
       <fieldset className="mb-2 rounded-xl border p-4 text-center" id="arborean-overview">
-        <legend className="mx-auto px-3 text-black">لیست زائران</legend>
+        <legend className="text-black mx-auto px-3">
+          لیست زائران استان&nbsp;
+          {cityTitle}
+        </legend>
         <div className="align-center justify-spacebetween mb-8 flex space-x-5 rtl:space-x-reverse">
           <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
@@ -95,7 +105,8 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 objectKey="departureDestinationBorder"
                 setQueryParams={setQuery}
                 queryParams={query}
-                hasPaginate
+                hasPaginateTableXhr
+                borderQueryNull={borderQueryNull}
               />
             </div>
           </div>
@@ -192,17 +203,6 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
               ]}
             />
           )}
-        </div>
-      </fieldset>
-      <fieldset className=" rounded-xl border py-2 px-4 text-center">
-        <div className=" flex justify-between">
-          <div className="flex items-center justify-start">
-            <img src={Irancell} className="inline" alt="irancell-logo" />
-            <span className="px-2">باهمکاری ایرانسل</span>
-          </div>
-          <div>
-            <img src={Vasl} className="inline " alt="vasl-logo" />
-          </div>
         </div>
       </fieldset>
     </>

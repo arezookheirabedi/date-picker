@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
-// api services
-import axios from 'axios';
-import arbaeenService from '../../../services/arbaeen.service';
+import useGetArbaeenCountData from 'src/hooks/apis/useGetArbaeenCountData';
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
@@ -13,47 +11,13 @@ import passengerNegativeTestIcon from '../../../assets/images/icons/passenger-ne
 import passengerPositiveTest from '../../../assets/images/icons/passenger-positive-test.svg';
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
 
-const initialValue = {
-  numberOfQueries: 0,
-  numberOfPositiveTests: 0,
-  numberOfPositiveThings: 0,
-  numberOfInfectionPercent: 0,
-};
 const OverviewPilgrimHelthStatus = () => {
-  const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialValue);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
-
-  const getAllPilgrims = async () => {
-    setLoading(true);
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
-      const newData = {
-        numberOfQueries: 5000,
-        numberOfPositiveTests: 1000,
-        numberOfPositiveThings: 1000,
-        numberOfInfectionPercent: 10,
-      };
-      setPilgrims(newData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getAllPilgrims();
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
-
+  const {data: pilgrims, loading} = useGetArbaeenCountData({
+    countHasDiabetes: true,
+    countHasHepatitis: true,
+    countHeartDisease: true,
+    countHasMetalInBody: true,
+  });
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -62,27 +26,26 @@ const OverviewPilgrimHelthStatus = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={informationUpdatedIcon}
-              text="تعداد استعلام های انجام شده"
-              count={pilgrims.numberOfQueries || 0}
+              text="تعداد زائران با بیماری دیابت"
+              count={pilgrims.countHasDiabetes || 0}
               loading={loading}
             />
             <Statistic
               icon={testIcon}
-              text="تعداد تست های مثبت"
-              count={pilgrims.numberOfPositiveTests || 0}
+              text="تعداد زائران با بیماری هپاتیت"
+              count={pilgrims.countHasHepatitis || 0}
               loading={loading}
             />
             <Statistic
               icon={passengerNegativeTestIcon}
-              text="موارد مثبت بعد از سفر"
-              count={pilgrims.numberOfPositiveThings || 0}
+              text="تعداد زائران با مشکلات قلبی "
+              count={pilgrims.countHeartDisease || 0}
               loading={loading}
             />
             <Statistic
               icon={passengerPositiveTest}
-              text="درصد ابتلا بعد از سفر"
-              count={pilgrims.numberOfInfectionPercent || 0}
-              isPercentage
+              text="تعداد زائران با وجود پلاتین در بدن"
+              count={pilgrims.countHasMetalInBody || 0}
               loading={loading}
             />
           </div>
