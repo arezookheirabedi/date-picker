@@ -124,7 +124,6 @@ const OverviewPilgrimVaccineStatus = () => {
               icon={redVaccine}
               text=" تعداد زائران فاقد شرایط واکسیناسیون"
               count={pilgrims.pass6MonthFromLastVaccines || 0}
-              // count={388948}
               loading={loading}
             />
 
