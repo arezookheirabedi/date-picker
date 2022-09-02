@@ -1,5 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import dayjs from 'dayjs';
 import {MapView} from '@deck.gl/core/typed';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
 import {DataFilterExtension} from '@deck.gl/extensions/typed';
@@ -47,10 +48,8 @@ const dataFilter = new DataFilterExtension({
 });
 
 function formatLabel(t: any) {
-  const date = new Date(t);
-  return `${date.getUTCFullYear()}/${
-    date.getUTCMonth() + 1
-  }/${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}`;
+  const date = dayjs(t);
+  return `${date.format('YYYY-MM-DD HH:mm')}`;
 }
 
 function getTimeRange(data: any) {
@@ -148,7 +147,7 @@ const TimelineMap: React.FC<{}> = () => {
           getRadius: d => d.magnitude,
           getFillColor: d => {
             const r = Math.sqrt(Math.max(d.depth, 0));
-            return [255 - r * 15, r * 5, r * 10];
+            return [24 - r * 15, r * 90, r * 118];
           },
 
           getFilterValue: (d: any) => d.timestamp,
