@@ -32,7 +32,6 @@ const Arbaeen = () => {
       <DensityOfPassengersMap />
       <TimelineMap />
       <GeneralLookAtTheLocationOfProcessions />
-      <GeneralLookAtTheLocationOfProcessions />
       <OverviewPilgrim />
       <OverviewPligrimTripType />
       <OverviewPilgrimHelthStatus />
