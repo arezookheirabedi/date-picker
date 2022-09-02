@@ -23,10 +23,15 @@ import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/List
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
 // import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
 import GeneralLookAtTheLocationOfProcessions from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessions';
+import DensityOfPassengersMap from '../../components/Arbaeen/public/DensityOfPassengersMap';
+import TimelineMap from '../../components/Arbaeen/public/TimelineMap';
 
 const Arbaeen = () => {
   return (
     <div className="space-y-16 mb-8">
+      <DensityOfPassengersMap />
+      <TimelineMap />
+      <GeneralLookAtTheLocationOfProcessions />
       <GeneralLookAtTheLocationOfProcessions />
       <OverviewPilgrim />
       <OverviewPligrimTripType />
