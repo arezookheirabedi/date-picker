@@ -123,7 +123,7 @@ const TimelineMap: React.FC<{}> = () => {
           };
         });
 
-      console.log('Finish', res);
+      console.log('Finish');
 
       setData([...res]);
     } catch (err: any) {
@@ -135,7 +135,6 @@ const TimelineMap: React.FC<{}> = () => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      console.log('Here');
       setLayers([
         new ScatterplotLayer({
           id: 'earthquakes',
