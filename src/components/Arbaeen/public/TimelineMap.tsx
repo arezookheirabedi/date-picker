@@ -109,17 +109,19 @@ const TimelineMap: React.FC<{}> = () => {
 
       const json = await csvtojson().fromString(file || '');
 
-      const res = json.map(row => {
-        const coordinates = JSON.parse(row.location.coordinates);
-        return {
-          timestamp: new Date(row.Submittime).getTime(),
-          longitude: Number(coordinates[0]),
-          latitude: Number(coordinates[1]),
-          // depth: Number(row.CountOfSamah),
-          depth: 1,
-          magnitude: Number(row.CountOfSamah),
-        };
-      });
+      const res = json
+        .filter(x => x.isPassenger === 'true')
+        .map(row => {
+          const coordinates = JSON.parse(row.location.coordinates);
+          return {
+            timestamp: new Date(row.Submittime).getTime(),
+            longitude: Number(coordinates[0]),
+            latitude: Number(coordinates[1]),
+            // depth: Number(row.CountOfSamah),
+            depth: 1,
+            magnitude: Number(row.CountOfSamah),
+          };
+        });
 
       console.log('Finish', res);
 
