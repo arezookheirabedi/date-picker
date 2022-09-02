@@ -1,5 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import dayjs from 'dayjs';
 import {MapView} from '@deck.gl/core/typed';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
 import {DataFilterExtension} from '@deck.gl/extensions/typed';
@@ -47,10 +48,8 @@ const dataFilter = new DataFilterExtension({
 });
 
 function formatLabel(t: any) {
-  const date = new Date(t);
-  return `${date.getUTCFullYear()}/${
-    date.getUTCMonth() + 1
-  }/${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}`;
+  const date = dayjs(t);
+  return `${date.format('YYYY-MM-DD HH:mm')}`;
 }
 
 function getTimeRange(data: any) {
@@ -74,7 +73,7 @@ function getTooltip({object}: any) {
   return (
     object &&
     `\
-      Time: ${new Date(object.timestamp).toUTCString()}
+      زمان: ${dayjs(object.timestamp).format('YYYY-MM-DD HH:mm')}
       سافران: ${object.magnitude}
       `
   );
@@ -85,7 +84,6 @@ const FILE_NAME = 'ar_location_ptrue_tmp_loc';
 const TimelineMap: React.FC<{}> = () => {
   const [data, setData] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const [layers, setLayers] = useState<any[]>([]);
   const [filter, setFilter] = useState(null);
   const timeRange = useMemo(() => getTimeRange(data), [data]);
 
@@ -133,37 +131,35 @@ const TimelineMap: React.FC<{}> = () => {
     }
   };
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setLayers([
-        new ScatterplotLayer({
-          id: 'earthquakes',
-          data,
-          opacity: 0.8,
-          radiusScale: 100,
-          radiusMinPixels: 1,
-          wrapLongitude: true,
-          getPosition: d => [d.longitude, d.latitude, -d.depth * 1000],
-          // getRadius: (d) => Math.pow(2, d.magnitude),
-          getRadius: d => d.magnitude,
-          getFillColor: d => {
-            const r = Math.sqrt(Math.max(d.depth, 0));
-            return [255 - r * 15, r * 5, r * 10];
-          },
+  const layers = [
+    data &&
+      data.length > 0 &&
+      new ScatterplotLayer({
+        id: 'earthquakes',
+        data,
+        opacity: 0.8,
+        radiusScale: 100,
+        radiusMinPixels: 1,
+        wrapLongitude: true,
+        getPosition: d => [d.longitude, d.latitude, -d.depth * 1000],
+        // getRadius: (d) => Math.pow(2, d.magnitude),
+        getRadius: d => d.magnitude,
+        getFillColor: d => {
+          const r = Math.sqrt(Math.max(d.depth, 0));
+          return [24 - r * 15, r * 90, r * 118];
+        },
 
-          getFilterValue: (d: any) => d.timestamp,
-          filterRange: [filterValue[0], filterValue[1]],
-          filterSoftRange: [
-            filterValue[0] * 0.9 + filterValue[1] * 0.1,
-            filterValue[0] * 0.1 + filterValue[1] * 0.9,
-          ],
-          extensions: [dataFilter],
+        getFilterValue: (d: any) => d.timestamp,
+        filterRange: [filterValue[0], filterValue[1]],
+        filterSoftRange: [
+          filterValue[0] * 0.9 + filterValue[1] * 0.1,
+          filterValue[0] * 0.1 + filterValue[1] * 0.9,
+        ],
+        extensions: [dataFilter],
 
-          pickable: true,
-        }),
-      ]);
-    }
-  }, [data]);
+        pickable: true,
+      }),
+  ];
 
   useEffect(() => {
     fetcher();
@@ -214,7 +210,7 @@ const TimelineMap: React.FC<{}> = () => {
             height={500}
             ref={mapRef}
             mapStyle="mapbox://styles/mapbox/light-v10"
-            className="map-container"
+            // className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
         </DeckGL>

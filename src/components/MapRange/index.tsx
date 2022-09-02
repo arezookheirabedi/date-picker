@@ -32,11 +32,16 @@ const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any)
   return (
     <div className="absolute bottom-8 left-0 flex justify-center w-full items-center">
       <div className="max-w-sm w-full space-x-4 flex flex-row-reverse justify-center items-center">
-        <button className="" type="button" onClick={() => setIsPlaying(!isPlaying)}>
+        <button
+          className=""
+          style={{color: '#ffcc00'}}
+          type="button"
+          onClick={() => setIsPlaying(!isPlaying)}
+        >
           {isPlaying ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-8 w-8"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -49,7 +54,7 @@ const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any)
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-8 w-8"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -65,9 +70,11 @@ const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any)
           min={min}
           max={max}
           value={value}
+          reverse
+          trackStyle={[{backgroundColor: '#ffcc00'}]}
+          handleStyle={[{borderColor: '#ffcc00', boxShadow: 'none'}]}
           onChange={newValue => onChange(newValue)}
           tipFormatter={formatLabel}
-          tipProps={{}}
         />
       </div>
     </div>
