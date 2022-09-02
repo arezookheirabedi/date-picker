@@ -324,12 +324,16 @@ const GeneralLookAtTheLocationOfProcessions = () => {
   }, [showParking]);
 
   useEffect(() => {
-    if (mapboxgl.getRTLTextPluginStatus() !== 'loaded') {
-      mapboxgl.setRTLTextPlugin(
-        'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-        null,
-        true // Lazy load the plugin
-      );
+    try {
+      if (mapboxgl.getRTLTextPluginStatus() !== 'loaded') {
+        mapboxgl.setRTLTextPlugin(
+          'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+          null,
+          true // Lazy load the plugin
+        );
+      }
+    } catch (err) {
+      console.error(err);
     }
   }, []);
 
