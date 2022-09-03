@@ -1,12 +1,21 @@
+/* eslint-disable */
+
 import React, {useEffect, useRef, useState} from 'react';
+
 import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import DeckGL from '@deck.gl/react/typed';
+// @ts-ignore
+import {PolygonLayer, PathLayer} from '@deck.gl/layers';
+// import {colorRange} from "./DensityOfPassengersMap";
+import {borders} from "../geos/borders";
+import {roads} from "../geos/roads";
 
 try {
   setRTLTextPlugin(
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    () => {},
+    () => {
+    },
     true
   );
 } catch (e) {
@@ -29,73 +38,205 @@ function getTooltip({object}: any) {
   if (!object) {
     return null;
   }
-  const lat = object.position[1];
-  const lng = object.position[0];
-  const count = object.points.length;
+  // const lat = object.position[1];
+  // const lng = object.position[0];
+  // const count = object.points.length;
 
   return `\
-    latitude: ${Number.isFinite(lat) ? lat.toFixed(6) : ''}
-    longitude: ${Number.isFinite(lng) ? lng.toFixed(6) : ''}
-    ${count} مسافر`;
+    zipcode : ${object.zipcode}
+    population: ${object.population}
+    ${object.population} مسافر`;
 }
 
+
 const FilterMap: React.FC<{}> = () => {
-  const [data, setData] = useState<any[]>([]);
+  const [borderData, setBorderData] = useState<any[]>(borders);
+  const [showBorder, setShowBorder] = useState<any>(false);
+  const [borderLayers, setBorderLayers] = useState<any[]>([]);
+  const [pathData, setPathData] = useState<any[]>(roads);
+  const [showPath, setShowPath] = useState<any>(false);
+  const [pathLayers, setPathLayers] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const [layers, setLayers] = useState<any[]>([]);
+
 
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
-  const fetcher = async () => {
-    setSubmitted(true);
-    try {
-
-      // setData([...res]);
-      setData([]);
-    } catch (err: any) {
-      console.error(err);
-    } finally {
-      setSubmitted(false);
-    }
-  };
+  const pathRef: any = useRef(null);
+  const borderRef: any = useRef(null);
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setLayers([]);
-  //       // @ts-ignore
-  //       new HexagonLayer({
-  //         id: 'heatmap',
-  //         // @ts-ignore
-  //         colorRange,
-  //         coverage: 1,
-  //         data,
-  //         elevationRange: [0, 3000],
-  //         elevationScale: data && data.length ? 50 : 0,
-  //         extruded: true,
-  //         getPosition: (d: any) => d,
-  //         pickable: true,
-  //         radius: 1000,
-  //         upperPercentile: 100,
-  //         // @ts-ignore
-  //         material,
 
-  //         transitions: {
-  //           elevationScale: 3000,
-  //         },
-  //       }),
-  //     ]);
-    }
-  }, [data, submitted]);
+    if (borderRef.current) return;
 
-  useEffect(() => {
-    fetcher();
+    borderRef.current = new PolygonLayer({
+      id: 'polygon-layer',
+      data: borderData,
+      pickable: true,
+      stroked: true,
+      filled: true,
+      wireframe: true,
+      lineWidthMinPixels: 1,
+      // @ts-ignore
+      getPolygon: d => d.contour,
+      // @ts-ignore
+      getElevation: d => d.population / d.area / 10,
+      // @ts-ignore
+      getFillColor: [255, 240, 0],
+      getLineColor: [255, 240, 0],
+      getLineWidth: 1,
+      fillColor: '#FF0000',
+      visible: true
+    })
+
+    setBorderLayers([borderRef.current]);
   }, []);
+
+
+  useEffect(() => {
+
+    if (pathRef.current) return;
+
+    pathRef.current = new PathLayer({
+      id: 'path-layer',
+      data: pathData,
+      pickable: true,
+      widthScale: 20,
+      widthMinPixels: 2,
+      // @ts-ignore
+      getPath: d => d.path,
+      // @ts-ignore
+      getColor: d => {
+        const hex = d.color;
+        // convert to RGB
+        return hex.match(/[0-9a-f]{2}/g).map((x: any) => {
+          return parseInt(x, 16);
+        });
+      },
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      getWidth: d => 5,
+      visible: true
+    });
+
+    setPathLayers([pathRef.current]);
+
+  }, [])
+
+  useEffect(() => {
+    if (!pathRef.current) return;
+
+    if (showPath) {
+      setPathLayers([pathRef.current.clone({visible: true})]);
+    } else {
+      setPathLayers([pathRef.current.clone({visible: false})]);
+    }
+  }, [showPath])
+
+  useEffect(() => {
+    if (!borderRef.current) return;
+
+    if (showBorder) {
+      setBorderLayers([borderRef.current.clone({visible: true})]);
+    } else {
+      setBorderLayers([borderRef.current.clone({visible: false})]);
+    }
+  }, [showBorder])
+
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا</legend>
+      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا فیلتر</legend>
       <div className="relative" style={{height: '500px'}}>
+        <div className="filter-map">
+          {/* <div className="filter-map__search"> */}
+          {/*  <input type="text" placeholder="جستجو" /> */}
+          {/* </div> */}
+          <h5 className="text-right  text-primary-color text-base mb-4 mt-2 mx-auto">فیلتر مکان ها</h5>
+          <div className="select-radio mb-32">
+            <div className="select-radio__group">
+              <input type="checkbox" className="select-radio__input" id="road" name="road"
+                     onClick={() => setShowPath((prev: any) => !prev)}/>
+              <label htmlFor="road" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                مسیر ها
+              </label>
+            </div>
+
+            <div className="select-radio__group">
+              <input type="checkbox" className="select-radio__input" id="parking" name="parking"/>
+              <label htmlFor="parking" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                پارکینگ
+              </label>
+            </div>
+
+            <div className="select-radio__group">
+              <input type="checkbox" className="select-radio__input" id="border-crossing" name="border-crossing"
+                     onClick={() => setShowBorder((prev: any) => !prev)}
+              />
+              <label htmlFor="border-crossing" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                گذرگاه های مرزی
+              </label>
+            </div>
+
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="procession"
+                name="procession"
+              />
+              <label htmlFor="procession" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                موکب
+              </label>
+            </div>
+
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="base"
+                name="base"
+              />
+              <label htmlFor="base" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                پایگاه حلال احمر
+              </label>
+            </div>
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="zaerin"
+                name="zaerin"
+              />
+              <label htmlFor="zaerin" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                زائران
+              </label>
+            </div>
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="emergency"
+                name="emergency"
+              />
+              <label htmlFor="emergency" className="select-radio__label text-right">
+                <span className="select-radio__button"/>
+                اورژانس
+              </label>
+            </div>
+          </div>
+          <div className="w-11/12 mx-auto filter-map__submit text-center">
+            <button type="button" className="button button--primary">
+              اعمال فیلتر
+            </button>
+          </div>
+        </div>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -123,7 +264,7 @@ const FilterMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
-          layers={layers}
+          layers={[borderLayers, pathLayers]}
           initialViewState={INITIAL_VIEW_STATE}
           controller
           height={500}
