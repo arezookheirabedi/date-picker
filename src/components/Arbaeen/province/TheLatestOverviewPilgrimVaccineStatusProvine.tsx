@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import arbaeenService from 'src/services/arbaeen.service';
-// import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import {useHistory, useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../../containers/Guild/components/Statistic';
@@ -37,12 +37,12 @@ const TheLatestOverviewPilgrimVaccineStatusProvine: React.FC<{cityTitle: string}
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  // const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime(
-  //   {
-  //     countLastPositiveTestResultWhileRegistered: true,
-  //   },
-  //   true
-  // );
+  const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime(
+    {
+      countLastPositiveTestResult: true,
+    },
+    true
+  );
   const getAllPilgrims = async (params: any) => {
     setLoading(true);
     try {
@@ -103,8 +103,8 @@ const TheLatestOverviewPilgrimVaccineStatusProvine: React.FC<{cityTitle: string}
             <Statistic
               icon={sufferingIcon}
               text=" تعداد زائران ثبت نامی با کوید مثبت"
-              count="-"
-              loading={loading}
+              count={totalInfo.countLastPositiveTestResult || 0}
+              loading={loadingPositiveTest}
             />
             <Statistic
               icon={personGrayVaccine}
