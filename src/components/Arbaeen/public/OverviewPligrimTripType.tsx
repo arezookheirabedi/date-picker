@@ -1,5 +1,5 @@
 import React from 'react';
-import useGetArbaeenCountData from 'src/hooks/apis/useGetArbaeenCountData';
+import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import airplanIcon from '../../../assets/images/icons/airplan.svg';
 import groupWithFlagIcon from '../../../assets/images/icons/group-with-flag.svg';
@@ -7,7 +7,7 @@ import carIcon from '../../../assets/images/icons/car.svg';
 import railIcon from '../../../assets/images/icons/rail.svg';
 
 const OverviewPligrimTripType = () => {
-  const {data: pilgrims, loading} = useGetArbaeenCountData({
+  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
     countZaerinAir: true,
     countTotal: true,
     countZaerinGround: true,

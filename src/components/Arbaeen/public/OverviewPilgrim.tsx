@@ -1,4 +1,4 @@
-import useGetArbaeenCountData from 'src/hooks/apis/useGetArbaeenCountData';
+import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import groupIcon from '../../../assets/images/icons/all-group.svg';
 import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
@@ -10,7 +10,7 @@ import menEarth from '../../../assets/images/icons/men-earth.svg';
 import wemenEarth from '../../../assets/images/icons/wemen-earth.svg';
 
 const OverviewPilgrim = () => {
-  const {data: pilgrims, loading} = useGetArbaeenCountData({
+  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
     countFemale: true,
     countMale: true,
     countTotal: true,

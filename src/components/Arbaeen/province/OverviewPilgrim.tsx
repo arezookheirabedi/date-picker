@@ -1,19 +1,22 @@
-import useGetArbaeenCountData from 'src/hooks/apis/useGetArbaeenCountData';
+import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
 import greenPersons from '../../../assets/images/icons/persons-green-icon.svg';
 import greenwemen from '../../../assets/images/icons/green-wemen.svg';
 
 const OverviewPilgrim: React.FC<{cityTitle: string}> = ({cityTitle}) => {
-  const {data: pilgrims, loading} = useGetArbaeenCountData({
-    countFemale: true,
-    countMale: true,
-    countTotal: true,
-  });
+  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime(
+    {
+      countFemale: true,
+      countMale: true,
+      countTotal: true,
+    },
+    true
+  );
 
   return (
     <>
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
+      <fieldset className="text-center border rounded-xl p-4 mb-16 " id="arborean-overview">
         <legend className="text-black mx-auto px-3">
           نگاه کلی به زائران اربعین استان&nbsp;
           {cityTitle}

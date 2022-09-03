@@ -91,7 +91,7 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   }
   return (
     <>
-      <fieldset className="mb-2 rounded-xl border p-4 text-center" id="arborean-overview">
+      <fieldset className="mb-2 rounded-xl border p-4 text-center">
         <legend className="text-black mx-auto px-3">
           لیست زائران استان&nbsp;
           {cityTitle}
