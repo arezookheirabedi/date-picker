@@ -69,7 +69,6 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
       const sortData = res.data.sort((a: any, b: any) =>
         Number(a.count) > Number(b.count) ? 1 : -1
       );
-      console.log(res, sortData);
       const ageRange: any[] = [];
       const count: any[] = [];
       sortData.forEach((item: any) => {
@@ -165,7 +164,6 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
           },
         ],
       } as any;
-      console.log(dataTemp);
       setData(dataTemp);
       setError(false);
       setLoading(false);
