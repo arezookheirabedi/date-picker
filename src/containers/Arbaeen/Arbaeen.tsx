@@ -7,7 +7,7 @@ import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/Overview
 
 // import OverviewArbaeen from 'src/components/Arbaeen/public/OverviewArbaeen';
 
-import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
+// import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
 import OverviewOfThePercentageOfEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
 // import GeneralLookAtTransportationAxesAndExitBordersOfCountry from 'src/components/Arbaeen/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry';
 import MokebList from 'src/components/Arbaeen/public/MokebList';
@@ -21,6 +21,14 @@ import OverviewOfExistBorders from 'src/components/Arbaeen/public/OverviewOfExis
 import OverviewPilgrimGenderByProvince from 'src/components/Arbaeen/public/OverviewPilgrimGenderByProvince';
 import OverviewPligrimAge from 'src/components/Arbaeen/public/OverviewPligrimAge';
 import TheLatestOverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatus';
+import OverviewPligrimGroundTripType from 'src/components/Arbaeen/public/OverviewPligrimGroundTripType';
+import OverviewOfExistBordersPercentage from 'src/components/Arbaeen/public/OverviewOfExistBordersPercentage';
+import OverviewPligrimAgePercentage from 'src/components/Arbaeen/public/OverviewPligrimAgePercentage';
+import OverviewPilgrimPercentage from 'src/components/Arbaeen/public/OverviewPilgrimPercentage';
+import OverviewPligrimTripTypePercentage from 'src/components/Arbaeen/public/OverviewPligrimTripTypePercentage';
+import OverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatusPercentage';
+// import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
+import TheLatestOverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatusPercentage';
 import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
@@ -36,15 +44,22 @@ const Arbaeen = () => {
       <TimelineMap />
       <GeneralLookAtTheLocationOfProcessions />
       <OverviewPilgrim />
+      <OverviewPilgrimPercentage />
       <OverviewPligrimTripType />
+      <OverviewPligrimTripTypePercentage />
+      <OverviewPligrimGroundTripType />
       {/* <OverviewPilgrimHelthStatus /> */}
       <OverviewPilgrimVaccineStatus />
+      <OverviewPilgrimVaccineStatusPercentage />
       <TheLatestOverviewPilgrimVaccineStatus />
+      <TheLatestOverviewPilgrimVaccineStatusPercentage />
       {/* <OverviewOfTheLatestVaccinationStatusOfPilgrims /> */}
       <OverviewOfExistBorders />
+      <OverviewOfExistBordersPercentage />
       <OverviewPligrimAge />
+      <OverviewPligrimAgePercentage />
       <OverviewPilgrimGenderByProvince />
-      <OverviewOfTheEntryAndExitOfPilgrims />
+      {/* <OverviewOfTheEntryAndExitOfPilgrims /> */}
       <TheLargestNumberOfOriginPilgrimsCitiesList />
       <OverviewOfThePercentageOfEntryAndExitOfPilgrims />
       {/* <GeneralLookAtTransportationAxesAndExitBordersOfCountry /> */}

@@ -1,8 +1,8 @@
 import React from 'react';
 import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import Statistic from '../../../containers/Guild/components/Statistic';
-import airplanIcon from '../../../assets/images/icons/airplan.svg';
-import groupWithFlagIcon from '../../../assets/images/icons/group-with-flag.svg';
+import taxiPilgrim from '../../../assets/images/icons/taxi-pilgrim.svg';
+import busPilgrim from '../../../assets/images/icons/bus-pilgrim.svg';
 import carIcon from '../../../assets/images/icons/car.svg';
 // import railIcon from '../../../assets/images/icons/rail.svg';
 
@@ -21,20 +21,20 @@ const OverviewPligrimGroundTripType = () => {
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
-              icon={groupWithFlagIcon}
-              text="  اتوبوس"
+              icon={busPilgrim}
+              text="تعداد کل زائران با اتوبوس"
               count={pilgrims.countBusAndMiniBus || 0}
               loading={loading}
             />
             <Statistic
-              icon={airplanIcon}
-              text=" تاکسی "
+              icon={taxiPilgrim}
+              text="تعداد کل زائران با تاکسی "
               count={pilgrims.countTaxi || 0}
               loading={loading}
             />
             <Statistic
               icon={carIcon}
-              text=" وسیله شخصی"
+              text="تعداد کل زائران با وسیله شخصی "
               count={pilgrims.personal || 0}
               loading={loading}
             />

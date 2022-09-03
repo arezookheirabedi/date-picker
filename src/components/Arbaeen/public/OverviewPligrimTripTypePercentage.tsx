@@ -24,28 +24,28 @@ const OverviewPligrimTripTypePercentage = () => {
             <Statistic
               icon={groupWithFlagIcon}
               text="درصد کل زائران"
-              count={pilgrims.countTotal || 0}
+              count={pilgrims.countTotalPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
               icon={airplanIcon}
               text="درصد کل زائران هوایی"
-              count={pilgrims.countZaerinAir || 0}
+              count={pilgrims.countZaerinAirPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
               icon={carIcon}
               text="درصد کل زائران زمینی"
-              count={pilgrims.countZaerinGround || 0}
+              count={pilgrims.countZaerinGroundPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
               icon={railIcon}
               text="درصد کل زائران ریلی"
-              count={pilgrims.countZaerinRail || 0}
+              count={pilgrims.countZaerinRailPercentage || 0}
               loading={loading}
               isPercentage
             />
