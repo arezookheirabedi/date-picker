@@ -106,8 +106,8 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
       const json = await csvtojson().fromString(file || '');
 
       const res = json
-        .filter(x => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
-        .reduce((result, d) => {
+        .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
+        .reduce((result: any, d: any) => {
           [...Array(Number(d.CountOfSamah))].forEach(() => {
             try {
               result.push(JSON.parse(d.location.coordinates));
@@ -142,7 +142,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
           elevationRange: [0, 3000],
           elevationScale: data && data.length ? 50 : 0,
           extruded: true,
-          getPosition: d => d,
+          getPosition: (d: any) => d,
           pickable: true,
           radius: 1000,
           upperPercentile: 100,

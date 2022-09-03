@@ -38,7 +38,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-const MS_PER_DAY = 1000 * 60 * 10;
+const MS_PER_DAY = 1000 * 60 * 8;
 
 const dataFilter = new DataFilterExtension({
   filterSize: 1,
@@ -74,7 +74,7 @@ function getTooltip({object}: any) {
     object &&
     `\
       زمان: ${dayjs(object.timestamp).format('YYYY-MM-DD HH:mm')}
-      سافران: ${object.magnitude}
+      ${object.isPassenger ? 'مسافران' : 'زائران'}: ${object.magnitude}
       `
   );
 }
@@ -83,6 +83,7 @@ const FILE_NAME = 'ar_location_ptrue_tmp_loc';
 
 const TimelineMap: React.FC<{}> = () => {
   const [data, setData] = useState<any[]>([]);
+  const [data2, setData2] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [filter, setFilter] = useState(null);
   const timeRange = useMemo(() => getTimeRange(data), [data]);
@@ -107,14 +108,30 @@ const TimelineMap: React.FC<{}> = () => {
 
       const json = await csvtojson().fromString(file || '');
 
-      const res = json
-        .filter(x => x.isPassenger === 'true')
-        .map(row => {
+      const res1 = json
+        .filter((x: any) => x.isPassenger === 'true')
+        .map((row: any) => {
           const coordinates = JSON.parse(row.location.coordinates);
           return {
             timestamp: new Date(row.Submittime).getTime(),
             longitude: Number(coordinates[0]),
             latitude: Number(coordinates[1]),
+            isPassenger: row.isPassenger === 'true',
+            // depth: Number(row.CountOfSamah),
+            depth: 1,
+            magnitude: Number(row.CountOfSamah),
+          };
+        });
+
+      const res2 = json
+        .filter((x: any) => x.isPassenger !== 'true')
+        .map((row: any) => {
+          const coordinates = JSON.parse(row.location.coordinates);
+          return {
+            timestamp: new Date(row.Submittime).getTime(),
+            longitude: Number(coordinates[0]),
+            latitude: Number(coordinates[1]),
+            isPassenger: row.isPassenger !== 'true',
             // depth: Number(row.CountOfSamah),
             depth: 1,
             magnitude: Number(row.CountOfSamah),
@@ -123,7 +140,8 @@ const TimelineMap: React.FC<{}> = () => {
 
       console.log('Finish');
 
-      setData([...res]);
+      setData([...res1]);
+      setData2([...res2]);
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -135,18 +153,45 @@ const TimelineMap: React.FC<{}> = () => {
     data &&
       data.length > 0 &&
       new ScatterplotLayer({
-        id: 'earthquakes',
+        id: 'earthquakes1',
         data,
         opacity: 0.8,
         radiusScale: 100,
         radiusMinPixels: 1,
         wrapLongitude: true,
-        getPosition: d => [d.longitude, d.latitude, -d.depth * 1000],
+        getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
         // getRadius: (d) => Math.pow(2, d.magnitude),
-        getRadius: d => d.magnitude,
-        getFillColor: d => {
+        getRadius: (d: any) => d.magnitude / 3,
+        getFillColor: (d: any) => {
           const r = Math.sqrt(Math.max(d.depth, 0));
           return [24 - r * 15, r * 90, r * 118];
+        },
+
+        getFilterValue: (d: any) => d.timestamp,
+        filterRange: [filterValue[0], filterValue[1]],
+        filterSoftRange: [
+          filterValue[0] * 0.9 + filterValue[1] * 0.1,
+          filterValue[0] * 0.1 + filterValue[1] * 0.9,
+        ],
+        extensions: [dataFilter],
+
+        pickable: true,
+      }),
+    data2 &&
+      data2.length > 0 &&
+      new ScatterplotLayer({
+        id: 'earthquakes2',
+        data: data2,
+        opacity: 0.8,
+        radiusScale: 100,
+        radiusMinPixels: 1,
+        wrapLongitude: true,
+        getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
+        // getRadius: (d) => Math.pow(2, d.magnitude),
+        getRadius: (d: any) => d.magnitude / 3,
+        getFillColor: (d: any) => {
+          const r = Math.sqrt(Math.max(d.depth, 0));
+          return [46 - r * 15, r * 106, r * 79];
         },
 
         getFilterValue: (d: any) => d.timestamp,
