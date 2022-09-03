@@ -13,6 +13,10 @@ import {roads} from '../geos/roads';
 import {PickingInfo} from '@deck.gl/core/typed';
 import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
+import {ScatterplotLayer} from '@deck.gl/layers/typed';
+import JSZip from 'jszip';
+import csvtojson from 'csvtojson';
+import arbaeenService from 'src/services/arbaeen.service';
 
 try {
   setRTLTextPlugin(
@@ -53,6 +57,8 @@ const getTooltip: (info: PickingInfo) => TooltipContent = ({object}: PickingInfo
   };
 };
 
+const FILE_NAME = 'ar_location_ptrue_tmp_loc';
+
 const FilterMap: React.FC<{}> = () => {
   const [selected, setSelected] = useState<any>(null);
   const [borderData, setBorderData] = useState<any[]>(borders);
@@ -61,6 +67,9 @@ const FilterMap: React.FC<{}> = () => {
   const [pathData, setPathData] = useState<any[]>(roads);
   const [showPath, setShowPath] = useState<any>(false);
   const [pathLayers, setPathLayers] = useState<any[]>([]);
+  const [zaerinData, setZaerinData] = useState<any[]>([]);
+  const [showZaerin, setShowZaerin] = useState<any>(false);
+  const [zaerinLayers, setZaerinLayers] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
 
   const mapRef = useRef(null);
@@ -68,6 +77,7 @@ const FilterMap: React.FC<{}> = () => {
 
   const pathRef: any = useRef(null);
   const borderRef: any = useRef(null);
+  const zaerinRef: any = useRef(null);
 
   useEffect(() => {
     if (borderRef.current) return;
@@ -166,6 +176,104 @@ const FilterMap: React.FC<{}> = () => {
     setPathLayers([pathRef.current]);
   }, []);
 
+  const fetchZaerinData = async () => {
+    try {
+      const {data: response} = await arbaeenService.getPiligrimReportAsFile(
+        {
+          fileName: `${FILE_NAME}.zip`,
+        },
+        {responseType: 'blob'}
+      );
+      const zip = await JSZip.loadAsync(response);
+
+      const file = await zip.file(`${FILE_NAME}.csv`)?.async('text');
+
+      const json = await csvtojson().fromString(file || '');
+
+      const res = json
+        .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
+        .reduce((result: any, d: any) => {
+          [...Array(Number(d.CountOfSamah))].forEach(() => {
+            try {
+              result.push(JSON.parse(d.location.coordinates));
+            } catch (e) {
+              console.error(e);
+            }
+          });
+
+          return result;
+        }, []);
+
+      console.log('Finish');
+
+      setZaerinData([...res]);
+
+      zaerinRef.current = new ScatterplotLayer({
+        id: 'zaerin-layer',
+        data: [...res],
+        pickable: true,
+        opacity: 0.8,
+        radiusScale: 100,
+        radiusMinPixels: 1,
+        wrapLongitude: true,
+        getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
+        // getRadius: (d) => Math.pow(2, d.magnitude),
+        getRadius: (d: any) => d.magnitude / 3,
+        getFillColor: (d: any) => {
+          const r = Math.sqrt(Math.max(d.depth, 0));
+          return [46 - r * 15, r * 106, r * 79];
+        },
+        PopupTemplate: ({params}: any) => {
+          const [loading, setLoading] = useState<boolean>(false);
+
+          const fetchPopupData = async (param: any) => {
+            setLoading(true);
+            try {
+              setTimeout(() => {
+                console.log('first');
+                setLoading(false);
+              }, 2000);
+            } catch (err) {
+            } finally {
+            }
+          };
+
+          useEffect(() => {
+            fetchPopupData({});
+          }, [params]);
+
+          return (
+            <>
+              {loading ? (
+                <div className="flex items-center text-xs">
+                  <Loading />
+                  <span>درحال دریافت اطلاعات</span>
+                </div>
+              ) : (
+                <>
+                  <div className="hidden">{JSON.stringify(params, null, 2)}</div>
+                  create PopupTemplate component
+                </>
+              )}
+            </>
+          );
+        },
+        visible: true,
+      });
+
+      setZaerinLayers([zaerinRef.current]);
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    if (zaerinRef.current) return;
+
+    fetchZaerinData();
+  }, []);
+
   useEffect(() => {
     if (!pathRef.current) return;
 
@@ -185,6 +293,16 @@ const FilterMap: React.FC<{}> = () => {
       setBorderLayers([borderRef.current.clone({visible: false})]);
     }
   }, [showBorder]);
+
+  useEffect(() => {
+    if (!zaerinRef.current) return;
+
+    if (showZaerin) {
+      setZaerinLayers([zaerinRef.current.clone({visible: true})]);
+    } else {
+      setZaerinLayers([zaerinRef.current.clone({visible: false})]);
+    }
+  }, [showZaerin]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -255,7 +373,13 @@ const FilterMap: React.FC<{}> = () => {
               </label>
             </div>
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="zaerin" name="zaerin" />
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="zaerin"
+                name="zaerin"
+                onClick={() => setShowZaerin((prev: any) => !prev)}
+              />
               <label htmlFor="zaerin" className="select-radio__label text-right">
                 <span className="select-radio__button" />
                 زائران
