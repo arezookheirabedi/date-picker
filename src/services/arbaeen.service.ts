@@ -88,7 +88,14 @@ function getVaccineInfo(params: any = {}, config?: any) {
       }
     );
 }
-
+function getTheLatestVaccineInfo(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-last-dose/count?lang=fa`, params, {
+      ...config,
+    });
+}
 function getPiligrimOriginProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -121,6 +128,7 @@ const arbaeenService = {
   getPligrimGenderPerCity,
   getPiligrimOriginProvince,
   getPiligrimOriginCity,
+  getTheLatestVaccineInfo,
 };
 
 export default arbaeenService;

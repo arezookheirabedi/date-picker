@@ -2,7 +2,9 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import arbaeenService from 'src/services/arbaeen.service';
-import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+// import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import {useHistory, useLocation} from 'react-router-dom';
+import {sideCities} from 'src/helpers/utils';
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
 import personGrayVaccine from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
@@ -27,19 +29,26 @@ const initialValue = {
   ],
 };
 
-const OverviewPilgrimVaccineStatus = () => {
+const TheLatestOverviewPilgrimVaccineStatusProvine: React.FC<{cityTitle: string}> = ({
+  cityTitle,
+}) => {
   const [loading, setLoading] = useState(false);
   const [pilgrims, setPilgrims] = useState<any>(initialValue);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime({
-    countLastPositiveTestResultWhileRegistered: true,
-  });
-  const getAllPilgrims = async () => {
+  // const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime(
+  //   {
+  //     countLastPositiveTestResultWhileRegistered: true,
+  //   },
+  //   true
+  // );
+  const getAllPilgrims = async (params: any) => {
     setLoading(true);
     try {
-      const {data} = await arbaeenService.getVaccineInfo({}, {cancelToken: source.token});
+      const {data} = await arbaeenService.getTheLatestVaccineInfo(params, {
+        cancelToken: source.token,
+      });
 
       setPilgrims({...data});
     } catch (error) {
@@ -53,20 +62,35 @@ const OverviewPilgrimVaccineStatus = () => {
     const data = pilgrims?.zaerinGroupByDoses?.find((item: any) => item.dose === i);
     return data?.count || 0;
   };
+
+  const location = useLocation();
+  const history = useHistory();
   useEffect(() => {
-    getAllPilgrims();
+    const params = new URLSearchParams(location.search);
+    const provinceName = params.get('provinceName') || ('تهران' as any);
+    const existsCity = sideCities.some((item: any) => {
+      return item.name === provinceName;
+    });
+
+    if (existsCity) {
+      getAllPilgrims({province: provinceName});
+    } else {
+      history.go(-1);
+    }
+    // eslint-disable-next-line consistent-return
     return () => {
       setPilgrims({...initialValue});
 
       source.cancel('Operation canceled by the user.');
     };
-  }, []);
+  }, [location.search]);
 
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی به وضعیت واکسیناسیون زائران در هنگام ثبت نام
+          نگاه کلی به آخرین وضعیت واکسیناسیون زائران استان&nbsp;
+          {cityTitle}
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -79,8 +103,8 @@ const OverviewPilgrimVaccineStatus = () => {
             <Statistic
               icon={sufferingIcon}
               text=" تعداد زائران ثبت نامی با کوید مثبت"
-              count={totalInfo.countLastPositiveTestResultWhileRegistered || 0}
-              loading={loadingPositiveTest}
+              count="-"
+              loading={loading}
             />
             <Statistic
               icon={personGrayVaccine}
@@ -139,4 +163,4 @@ const OverviewPilgrimVaccineStatus = () => {
   );
 };
 
-export default OverviewPilgrimVaccineStatus;
+export default TheLatestOverviewPilgrimVaccineStatusProvine;

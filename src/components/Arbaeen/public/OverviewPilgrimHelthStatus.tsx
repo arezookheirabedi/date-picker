@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useGetArbaeenCountData from 'src/hooks/apis/useGetArbaeenCountData';
+import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
@@ -12,7 +12,7 @@ import passengerPositiveTest from '../../../assets/images/icons/passenger-positi
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
 
 const OverviewPilgrimHelthStatus = () => {
-  const {data: pilgrims, loading} = useGetArbaeenCountData({
+  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
     countHasDiabetes: true,
     countHasHepatitis: true,
     countHeartDisease: true,
