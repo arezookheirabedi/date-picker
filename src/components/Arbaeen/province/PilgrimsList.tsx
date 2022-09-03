@@ -141,7 +141,9 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                   name: 'کدملی زائر',
                   key: 'nationalId',
                   render: (v: any, record: any) => (
-                    <span className="">{Number(record.nationalId || 0).toPersianDigits()}</span>
+                    <span className="">
+                      {record.nationalId ? toPersianDigit(record.nationalId) : '-'}
+                    </span>
                   ),
                 },
                 {
@@ -196,7 +198,9 @@ const PilgrimsList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                   key: 'pilgrimMobileNumber',
                   render: (v: any, record: any) => (
                     <span className="text-cyan-400">
-                      {toPersianDigit(record.pilgrimMobileNumber) || ''}
+                      {record.pilgrimMobileNumber
+                        ? toPersianDigit(record.pilgrimMobileNumber)
+                        : '-'}
                     </span>
                   ),
                 },
