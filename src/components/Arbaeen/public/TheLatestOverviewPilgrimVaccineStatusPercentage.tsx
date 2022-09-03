@@ -3,9 +3,9 @@ import axios from 'axios';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import arbaeenService from 'src/services/arbaeen.service';
 import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import Statistic from 'src/containers/Guild/components/Statistic';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
-import Statistic from 'src/containers/Guild/components/Statistic';
 import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
@@ -27,7 +27,7 @@ const initialValue = {
   ],
 };
 
-const TheLatestOverviewPilgrimVaccineStatus = () => {
+const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
   const [loading, setLoading] = useState(false);
   const [pilgrims, setPilgrims] = useState<any>(initialValue);
   const {CancelToken} = axios;
@@ -66,67 +66,76 @@ const TheLatestOverviewPilgrimVaccineStatus = () => {
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی به آخرین وضعیت واکسیناسیون زائران
+          نگاه کلی به درصد آخرین وضعیت واکسیناسیون زائران
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={totalVacsinateStart}
-              text="تعداد زائران واکسن زده"
+              text="درصد زائران واکسن زده"
               count={pilgrims.totalVaccines || 0}
               loading={loading}
+              isPercentage
             />
             <Statistic
               icon={sufferingIcon}
-              text=" تعداد زائران ثبت نامی با کوید مثبت"
+              text=" درصد زائران ثبت نامی با کوید مثبت"
               count={totalInfo.countLastPositiveTestResult || 0}
               loading={loadingPositiveTest}
+              isPercentage
             />
             <Statistic
               icon={personGrayVaccine}
-              text="تعداد زائران واکسن نزده"
+              text="درصد زائران واکسن نزده"
               count={pilgrims.totalNonVaccines || 0}
               loading={loading}
+              isPercentage
             />
             <Statistic
               icon={YellowVaccine}
-              text="تعداد کل زائران  با دوز اول"
+              text="درصد کل زائران  با دوز اول"
               count={getValue(1)}
               loading={loading}
+              isPercentage
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={OrangeVaccine}
-              text="تعداد کل زائران  با دوز دوم"
+              text="درصد کل زائران  با دوز دوم"
               count={getValue(2)}
               loading={loading}
+              isPercentage
             />
             <Statistic
               icon={PurppleVaccine}
-              text="تعداد کل زائران  با دوز سوم"
+              text="درصد کل زائران  با دوز سوم"
               count={getValue(3)}
               loading={loading}
+              isPercentage
             />
             <Statistic
               icon={DarkgreenVaccine}
-              text="تعداد کل زائران  با دوز چهارم"
+              text="درصد کل زائران  با دوز چهارم"
               count={getValue(4)}
               loading={loading}
+              isPercentage
             />
             <Statistic
               icon={NavyVaccine}
-              text="تعداد کل زائران  با دوز پنجم"
+              text="درصد کل زائران  با دوز پنجم"
               count={getValue(5)}
               loading={loading}
+              isPercentage
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={redVaccine}
-              text=" تعداد زائران فاقد شرایط واکسیناسیون"
+              text=" درصد زائران فاقد شرایط واکسیناسیون"
               count={pilgrims.pass6MonthFromLastVaccines || 0}
               loading={loading}
+              isPercentage
             />
 
             <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
@@ -139,4 +148,4 @@ const TheLatestOverviewPilgrimVaccineStatus = () => {
   );
 };
 
-export default TheLatestOverviewPilgrimVaccineStatus;
+export default TheLatestOverviewPilgrimVaccineStatusPercentage;

@@ -25,6 +25,15 @@ export interface IInitialCount {
   countZaerinRail: number;
   countLastPositiveTestResultWhileRegistered: number;
   countLastPositiveTestResult: number;
+  countNonIranian: number;
+  countMaleNonIranian: number;
+  countFemaleNonIranian: number;
+  countIranian: number;
+  countMaleIranian: number;
+  countFemaleIranian: number;
+  countTaxi: number;
+  countBusAndMiniBus: number;
+  personal: number;
 }
 
 export const initialCount = {
@@ -48,6 +57,15 @@ export const initialCount = {
   countZaerinRail: 0,
   countLastPositiveTestResultWhileRegistered: 0,
   countLastPositiveTestResult: 0,
+  countNonIranian: 0,
+  countMaleNonIranian: 0,
+  countFemaleNonIranian: 0,
+  countIranian: 0,
+  countMaleIranian: 0,
+  countFemaleIranian: 0,
+  countTaxi: 0,
+  countBusAndMiniBus: 0,
+  personal: 0,
 };
 
 export default function useGetArbaeenCountDataOnRegisterTime(
