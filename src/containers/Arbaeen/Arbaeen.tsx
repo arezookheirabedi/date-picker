@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
@@ -15,10 +16,11 @@ import TheLargestNumberOfOriginPilgrimsCountriesList from 'src/components/Arbaee
 import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
 import OverviewPilgrim from 'src/components/Arbaeen/public/OverviewPilgrim';
 import OverviewPligrimTripType from 'src/components/Arbaeen/public/OverviewPligrimTripType';
-import OverviewPilgrimHelthStatus from 'src/components/Arbaeen/public/OverviewPilgrimHelthStatus';
+// import OverviewPilgrimHelthStatus from 'src/components/Arbaeen/public/OverviewPilgrimHelthStatus';
 import OverviewOfExistBorders from 'src/components/Arbaeen/public/OverviewOfExistBorders';
 import OverviewPilgrimGenderByProvince from 'src/components/Arbaeen/public/OverviewPilgrimGenderByProvince';
 import OverviewPligrimAge from 'src/components/Arbaeen/public/OverviewPligrimAge';
+import TheLatestOverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatus';
 import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
@@ -31,8 +33,9 @@ const Arbaeen = () => {
       <GeneralLookAtTheLocationOfProcessions />
       <OverviewPilgrim />
       <OverviewPligrimTripType />
-      <OverviewPilgrimHelthStatus />
+      {/* <OverviewPilgrimHelthStatus /> */}
       <OverviewPilgrimVaccineStatus />
+      <TheLatestOverviewPilgrimVaccineStatus />
       {/* <OverviewOfTheLatestVaccinationStatusOfPilgrims /> */}
       <OverviewOfExistBorders />
       <OverviewPligrimAge />
@@ -47,7 +50,6 @@ const Arbaeen = () => {
       {/* <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases /> */}
       <MokebList />
       <RedHalalBasesList />
-
       <TheLargestNumberOfOriginPilgrimsCountriesList />
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
         <div className=" flex justify-between">
