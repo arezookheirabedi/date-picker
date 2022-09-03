@@ -18,12 +18,15 @@ const initialValue = {
   totalNonVaccines: 0,
   totalVaccines: 0,
   totalZaerin: 0,
+  pass6MonthFromLastVaccinesPercentage: 0,
+  totalNonVaccinesPercentage: 0,
+  totalVaccinesPercentage: 0,
   zaerinGroupByDoses: [
-    {dose: 2, count: 0},
-    {dose: 5, count: 0},
-    {dose: 4, count: 0},
-    {dose: 1, count: 0},
-    {dose: 3, count: 0},
+    {dose: 2, count: 0, percentage: 0},
+    {dose: 5, count: 0, percentage: 0},
+    {dose: 4, count: 0, percentage: 0},
+    {dose: 1, count: 0, percentage: 0},
+    {dose: 3, count: 0, percentage: 0},
   ],
 };
 
@@ -51,7 +54,7 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
 
   const getValue = (i: number) => {
     const data = pilgrims?.zaerinGroupByDoses?.find((item: any) => item.dose === i);
-    return data?.count || 0;
+    return data?.percentage || 0;
   };
   useEffect(() => {
     getAllPilgrims();
@@ -73,7 +76,7 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
             <Statistic
               icon={totalVacsinateStart}
               text="درصد زائران واکسن زده"
-              count={pilgrims.totalVaccines || 0}
+              count={pilgrims.totalVaccinesPercentage || 0}
               loading={loading}
               isPercentage
             />
@@ -87,7 +90,7 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
             <Statistic
               icon={personGrayVaccine}
               text="درصد زائران واکسن نزده"
-              count={pilgrims.totalNonVaccines || 0}
+              count={pilgrims.totalNonVaccinesPercentage || 0}
               loading={loading}
               isPercentage
             />
@@ -133,7 +136,7 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
             <Statistic
               icon={redVaccine}
               text=" درصد زائران فاقد شرایط واکسیناسیون"
-              count={pilgrims.pass6MonthFromLastVaccines || 0}
+              count={pilgrims.pass6MonthFromLastVaccinesPercentage || 0}
               loading={loading}
               isPercentage
             />
