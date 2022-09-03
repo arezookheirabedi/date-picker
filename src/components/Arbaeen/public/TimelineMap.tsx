@@ -38,7 +38,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-const MS_PER_DAY = 1000 * 60 * 5;
+const MS_PER_DAY = 1000 * 60 * 8;
 
 const dataFilter = new DataFilterExtension({
   filterSize: 1,
@@ -83,6 +83,7 @@ const FILE_NAME = 'ar_location_ptrue_tmp_loc';
 
 const TimelineMap: React.FC<{}> = () => {
   const [data, setData] = useState<any[]>([]);
+  const [data2, setData2] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [filter, setFilter] = useState(null);
   const timeRange = useMemo(() => getTimeRange(data), [data]);
@@ -107,8 +108,8 @@ const TimelineMap: React.FC<{}> = () => {
 
       const json = await csvtojson().fromString(file || '');
 
-      const res = json
-        // .filter((x: any) => x.isPassenger === 'true')
+      const res1 = json
+        .filter((x: any) => x.isPassenger === 'true')
         .map((row: any) => {
           const coordinates = JSON.parse(row.location.coordinates);
           return {
@@ -122,9 +123,25 @@ const TimelineMap: React.FC<{}> = () => {
           };
         });
 
+      const res2 = json
+        .filter((x: any) => x.isPassenger !== 'true')
+        .map((row: any) => {
+          const coordinates = JSON.parse(row.location.coordinates);
+          return {
+            timestamp: new Date(row.Submittime).getTime(),
+            longitude: Number(coordinates[0]),
+            latitude: Number(coordinates[1]),
+            isPassenger: row.isPassenger !== 'true',
+            // depth: Number(row.CountOfSamah),
+            depth: 1,
+            magnitude: Number(row.CountOfSamah),
+          };
+        });
+
       console.log('Finish');
 
-      setData([...res]);
+      setData([...res1]);
+      setData2([...res2]);
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -135,9 +152,9 @@ const TimelineMap: React.FC<{}> = () => {
   const layers = [
     data &&
       data.length > 0 &&
-      (new ScatterplotLayer({
+      new ScatterplotLayer({
         id: 'earthquakes1',
-        data: data.filter(x => x.isPassenger),
+        data,
         opacity: 0.8,
         radiusScale: 100,
         radiusMinPixels: 1,
@@ -160,9 +177,11 @@ const TimelineMap: React.FC<{}> = () => {
 
         pickable: true,
       }),
+    data2 &&
+      data2.length > 0 &&
       new ScatterplotLayer({
         id: 'earthquakes2',
-        data: data.filter(x => !x.isPassenger),
+        data: data2,
         opacity: 0.8,
         radiusScale: 100,
         radiusMinPixels: 1,
@@ -172,7 +191,7 @@ const TimelineMap: React.FC<{}> = () => {
         getRadius: (d: any) => d.magnitude / 3,
         getFillColor: (d: any) => {
           const r = Math.sqrt(Math.max(d.depth, 0));
-          return [24 - r * 15, r * 90, r * 118];
+          return [46 - r * 15, r * 106, r * 79];
         },
 
         getFilterValue: (d: any) => d.timestamp,
@@ -184,7 +203,7 @@ const TimelineMap: React.FC<{}> = () => {
         extensions: [dataFilter],
 
         pickable: true,
-      })),
+      }),
   ];
 
   useEffect(() => {
