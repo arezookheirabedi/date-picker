@@ -2,26 +2,27 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 
-import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup} from 'react-map-gl';
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import DeckGL from '@deck.gl/react/typed';
 // @ts-ignore
-import {PolygonLayer, PathLayer} from '@deck.gl/layers';
+import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers';
 // import {colorRange} from "./DensityOfPassengersMap";
-import {borders} from "../geos/borders";
-import {roads} from "../geos/roads";
+import {borders} from '../geos/borders';
+import {roads} from '../geos/roads';
+import {PickingInfo} from '@deck.gl/core/typed';
+import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
+import Loading from 'src/components/Loading';
 
 try {
   setRTLTextPlugin(
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    () => {
-    },
+    () => {},
     true
   );
 } catch (e) {
   console.error(e);
 }
-
 
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
@@ -33,8 +34,7 @@ const INITIAL_VIEW_STATE = {
   // bearing: -27,
 };
 
-
-function getTooltip({object}: any) {
+const getTooltip: (info: PickingInfo) => TooltipContent = ({object}: PickingInfo) => {
   if (!object) {
     return null;
   }
@@ -42,14 +42,19 @@ function getTooltip({object}: any) {
   // const lng = object.position[0];
   // const count = object.points.length;
 
-  return `\
-    zipcode : ${object.zipcode}
-    population: ${object.population}
-    ${object.population} مسافر`;
-}
-
+  return {
+    html: `<span>${object.name}</span>`,
+    className: 'font-base shadow-lg text-sm',
+    style: {
+      background: '#ffffff',
+      borderRadius: '0.5rem',
+      color: '#424242',
+    },
+  };
+};
 
 const FilterMap: React.FC<{}> = () => {
+  const [selected, setSelected] = useState<any>(null);
   const [borderData, setBorderData] = useState<any[]>(borders);
   const [showBorder, setShowBorder] = useState<any>(false);
   const [borderLayers, setBorderLayers] = useState<any[]>([]);
@@ -58,7 +63,6 @@ const FilterMap: React.FC<{}> = () => {
   const [pathLayers, setPathLayers] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
 
-
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
@@ -66,7 +70,6 @@ const FilterMap: React.FC<{}> = () => {
   const borderRef: any = useRef(null);
 
   useEffect(() => {
-
     if (borderRef.current) return;
 
     borderRef.current = new PolygonLayer({
@@ -86,15 +89,21 @@ const FilterMap: React.FC<{}> = () => {
       getLineColor: [255, 240, 0],
       getLineWidth: 1,
       fillColor: '#FF0000',
-      visible: true
-    })
+      PopupTemplate: ({params}: any) => {
+        return (
+          <>
+            <div className="hidden">{JSON.stringify(params, null, 2)}</div>
+            create PopupTemplate component
+          </>
+        );
+      },
+      visible: true,
+    });
 
     setBorderLayers([borderRef.current]);
   }, []);
 
-
   useEffect(() => {
-
     if (pathRef.current) return;
 
     pathRef.current = new PathLayer({
@@ -116,12 +125,46 @@ const FilterMap: React.FC<{}> = () => {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       getWidth: d => 5,
-      visible: true
+      PopupTemplate: ({params}: any) => {
+        const [loading, setLoading] = useState<boolean>(false);
+
+        const fetchPopupData = async (param: any) => {
+          setLoading(true);
+          try {
+            setTimeout(() => {
+              console.log('first');
+              setLoading(false);
+            }, 2000);
+          } catch (err) {
+          } finally {
+          }
+        };
+
+        useEffect(() => {
+          fetchPopupData({});
+        }, [params]);
+
+        return (
+          <>
+            {loading ? (
+              <div className="flex items-center text-xs">
+                <Loading />
+                <span>درحال دریافت اطلاعات</span>
+              </div>
+            ) : (
+              <>
+                <div className="hidden">{JSON.stringify(params, null, 2)}</div>
+                create PopupTemplate component
+              </>
+            )}
+          </>
+        );
+      },
+      visible: true,
     });
 
     setPathLayers([pathRef.current]);
-
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!pathRef.current) return;
@@ -131,7 +174,7 @@ const FilterMap: React.FC<{}> = () => {
     } else {
       setPathLayers([pathRef.current.clone({visible: false})]);
     }
-  }, [showPath])
+  }, [showPath]);
 
   useEffect(() => {
     if (!borderRef.current) return;
@@ -141,8 +184,7 @@ const FilterMap: React.FC<{}> = () => {
     } else {
       setBorderLayers([borderRef.current.clone({visible: false})]);
     }
-  }, [showBorder])
-
+  }, [showBorder]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -152,32 +194,43 @@ const FilterMap: React.FC<{}> = () => {
           {/* <div className="filter-map__search"> */}
           {/*  <input type="text" placeholder="جستجو" /> */}
           {/* </div> */}
-          <h5 className="text-right  text-primary-color text-base mb-4 mt-2 mx-auto">فیلتر مکان ها</h5>
+          <h5 className="text-right  text-primary-color text-base mb-4 mt-2 mx-auto">
+            فیلتر مکان‌ها
+          </h5>
           <div className="select-radio mb-32">
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="road" name="road"
-                     onClick={() => setShowPath((prev: any) => !prev)}/>
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="road"
+                name="road"
+                onClick={() => setShowPath((prev: any) => !prev)}
+              />
               <label htmlFor="road" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
-                مسیر ها
+                <span className="select-radio__button" />
+                مسیرها
               </label>
             </div>
 
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="parking" name="parking"/>
+              <input type="checkbox" className="select-radio__input" id="parking" name="parking" />
               <label htmlFor="parking" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 پارکینگ
               </label>
             </div>
 
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="border-crossing" name="border-crossing"
-                     onClick={() => setShowBorder((prev: any) => !prev)}
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="border-crossing"
+                name="border-crossing"
+                onClick={() => setShowBorder((prev: any) => !prev)}
               />
               <label htmlFor="border-crossing" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
-                گذرگاه های مرزی
+                <span className="select-radio__button" />
+                گذرگاه‌های مرزی
               </label>
             </div>
 
@@ -189,32 +242,22 @@ const FilterMap: React.FC<{}> = () => {
                 name="procession"
               />
               <label htmlFor="procession" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 موکب
               </label>
             </div>
 
             <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="base"
-                name="base"
-              />
+              <input type="checkbox" className="select-radio__input" id="base" name="base" />
               <label htmlFor="base" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
-                پایگاه حلال احمر
+                <span className="select-radio__button" />
+                پایگاه حلال‌احمر
               </label>
             </div>
             <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="zaerin"
-                name="zaerin"
-              />
+              <input type="checkbox" className="select-radio__input" id="zaerin" name="zaerin" />
               <label htmlFor="zaerin" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 زائران
               </label>
             </div>
@@ -226,7 +269,7 @@ const FilterMap: React.FC<{}> = () => {
                 name="emergency"
               />
               <label htmlFor="emergency" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 اورژانس
               </label>
             </div>
@@ -266,9 +309,22 @@ const FilterMap: React.FC<{}> = () => {
           ref={deckRef}
           layers={[borderLayers, pathLayers]}
           initialViewState={INITIAL_VIEW_STATE}
-          controller
+          controller={{
+            doubleClickZoom: false,
+          }}
           height={500}
-          getTooltip={getTooltip}
+          // getTooltip={getTooltip}
+          // @ts-ignore
+          ContextProvider={MapContext.Provider}
+          onClick={({x, y, coordinate, layer, color, object, index}: PickingInfo) => {
+            console.log('deck onClick', object);
+            console.log('layer', layer);
+            if (object) {
+              setSelected({x, y, coordinate, object, layer});
+            } else {
+              setSelected(null);
+            }
+          }}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
           <StaticMap
@@ -280,6 +336,16 @@ const FilterMap: React.FC<{}> = () => {
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
+          {selected && (
+            <Popup
+              longitude={selected.coordinate[0]}
+              latitude={selected.coordinate[1]}
+              closeButton={false}
+              offsetLeft={10}
+            >
+              <selected.layer.props.PopupTemplate params={selected.object} />
+            </Popup>
+          )}
         </DeckGL>
       </div>
     </fieldset>
