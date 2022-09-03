@@ -178,10 +178,13 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
       });
       return;
     }
+
+    // console.log([values.mobileSet]);
+    // debugger;
     const extraData = {
       province: provinceTitleInput ? provinceTitleInput.title : null,
       city: cityTitleInput ? cityTitleInput.title : null,
-      mobileSet: userData && userData.mobileSet[0] ? [userData.mobileSet[0]] : [values.mobileSet],
+      mobileSet: [values.mobileSet],
       roles: valuesOfRole,
       resources: [tagResources, provinceResources, cityResources],
       nationalId: values.nationalId ? values.nationalId : null,
@@ -268,23 +271,28 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
   };
 
   const getCities = async (provinceCode: any) => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getCities(provinceCode)) as any;
-    data[0].cities.forEach((item: any) => {
-      normalizedData.push({
-        title: item.name,
-        value: item.cityCode,
+    try {
+      const normalizedData: any[] = [];
+      const {data} = (await fsServices.getCities(provinceCode)) as any;
+      data[0] &&
+        data[0].cities?.forEach((item: any) => {
+          normalizedData.push({
+            title: item.name,
+            value: item.cityCode,
+          });
+        });
+      setCityOptions(() => {
+        return [
+          {
+            title: 'انتخاب شهر',
+            value: null,
+          },
+          ...normalizedData,
+        ];
       });
-    });
-    setCityOptions(() => {
-      return [
-        {
-          title: 'انتخاب شهر',
-          value: null,
-        },
-        ...normalizedData,
-      ];
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const cancelTokenendPoint = cancelTokenSource();

@@ -3,22 +3,31 @@ import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
 import {sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
+import {EBORDERS} from 'src/constants/border.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
-  categories: ['هوایی', 'مرز شلمچه', 'مرز خسروی', 'مرز چزابه ', 'مرز مهران'],
+  categories: [
+    EBORDERS.HAVAEE,
+    EBORDERS.SHALAMCHE,
+    EBORDERS.KHOSRAVI,
+    EBORDERS.CHAZABE,
+    EBORDERS.MEHRAN,
+    EBORDERS.BASHMAGH,
+    EBORDERS.TAMARCHIN,
+  ],
   series: [
     {
       name: 'تعداد',
 
       data: [
-        {name: 'هوایی', y: 0, color: '#209F92'},
-        {name: 'شلمچه', y: 0, color: '#004D65'},
-        {name: 'خسروی', y: 0, color: '#BFDDE7'},
-        {name: 'چزابه', y: 0, color: '#716DE3'},
-        {name: 'مهران', y: 0, color: '#FF0060'},
-        {name: 'باشماق', y: 0, color: '#F3BC06'},
-        {name: 'تمرچین', y: 0, color: '#8800ff'},
+        {name: EBORDERS.HAVAEE, y: 0, color: '#209F92'},
+        {name: EBORDERS.SHALAMCHE, y: 0, color: '#004D65'},
+        {name: EBORDERS.KHOSRAVI, y: 0, color: '#BFDDE7'},
+        {name: EBORDERS.CHAZABE, y: 0, color: '#716DE3'},
+        {name: EBORDERS.MEHRAN, y: 0, color: '#FF0060'},
+        {name: EBORDERS.BASHMAGH, y: 0, color: '#F3BC06'},
+        {name: EBORDERS.TAMARCHIN, y: 0, color: '#8800ff'},
       ],
     },
   ],
@@ -61,12 +70,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'هوایی';
+                    return i === EBORDERS.HAVAEE;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'هوایی';
+                    return i === EBORDERS.HAVAEE;
                   })
                 ],
                 color: '#209F92',
@@ -75,12 +84,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'شلمچه';
+                    return i === EBORDERS.SHALAMCHE;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'شلمچه';
+                    return i === EBORDERS.SHALAMCHE;
                   })
                 ],
                 color: '#004D65',
@@ -88,12 +97,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'خسروی';
+                    return i === EBORDERS.KHOSRAVI;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'خسروی';
+                    return i === EBORDERS.KHOSRAVI;
                   })
                 ],
                 color: '#BFDDE7',
@@ -101,12 +110,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'چزابه';
+                    return i === EBORDERS.CHAZABE;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'چزابه';
+                    return i === EBORDERS.CHAZABE;
                   })
                 ],
                 color: '#716DE3',
@@ -114,12 +123,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'مهران';
+                    return i === EBORDERS.MEHRAN;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'مهران';
+                    return i === EBORDERS.MEHRAN;
                   })
                 ],
                 color: '#FF0060',
@@ -127,12 +136,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'باشماق';
+                    return i === EBORDERS.BASHMAGH;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'باشماق';
+                    return i === EBORDERS.BASHMAGH;
                   })
                 ],
                 color: '#F3BC06',
@@ -140,12 +149,12 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
               {
                 name: border[
                   border.findIndex((i: any) => {
-                    return i === 'تمرچین';
+                    return i === EBORDERS.TAMARCHIN;
                   })
                 ],
                 y: count[
                   border.findIndex((i: any) => {
-                    return i === 'تمرچین';
+                    return i === EBORDERS.TAMARCHIN;
                   })
                 ],
                 color: '#8800ff',
@@ -154,7 +163,6 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
           },
         ],
       } as any;
-
       setData(dataTemp);
       setError(false);
       setLoading(false);

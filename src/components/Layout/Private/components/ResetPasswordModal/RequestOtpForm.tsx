@@ -19,18 +19,27 @@ interface IProps {
 }
 
 const RequestOtpForm: React.FC<IProps> = ({
-  resetIsOpen,
-  setResetIsOpen,
-  setConfirmOtpModal,
-  setFormData,
-}) => {
+                                            resetIsOpen,
+                                            setResetIsOpen,
+                                            setConfirmOtpModal,
+                                            setFormData,
+                                          }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [typeInputText, setTypeInputText] = useState(false);
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required('وارد کردن پسورد قبلی الزامی است.'),
     newPassword: Yup.string()
       .required('وارد کردن پسورد الزامی است.')
-      .matches(AppRegex.password, 'حداقل کلمه عبور ۸ کارکتر می باشد.'),
+      .matches(AppRegex.password, `
+            * فرمت رمز عبور درست نمیباشد.
+      رمز عبور باید
+        حداقل ۸ کاراکتر ،
+       حداقل دو حرف کوچک ،
+       حداقل دو حرف بزرگ ،
+       حداقل یک عدد ،
+      و حداقل شامل یکی از کاراکترهای !@#
+      باشد.
+      `),
     confirmPassword: Yup.string()
       .required('تکرار کلمه عبور الزامی است.')
       .oneOf([Yup.ref('newPassword')], 'تکرار کلمه عبور اشتیاه است.'),
@@ -105,7 +114,7 @@ const RequestOtpForm: React.FC<IProps> = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter" />
+              <Dialog.Overlay className="fixed inset-0 bg-opacity-90 bg-clip-padding backdrop-blur backdrop-filter"/>
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -121,7 +130,8 @@ const RequestOtpForm: React.FC<IProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
+              <div
+                className="relative my-8 inline-block w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-10 align-middle shadow-2xl transition-all">
                 <Dialog.Title as="h3" className="my-8 font-bold leading-6 text-gray-900">
                   <form
                     className="p-5 text-base"
@@ -274,7 +284,7 @@ const RequestOtpForm: React.FC<IProps> = ({
                             type="submit"
                             className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
                           >
-                            <span>{!loading ? 'ارسال کد فعالسازی' : <DotLoading />}</span>
+                            <span>{!loading ? 'ارسال کد فعالسازی' : <DotLoading/>}</span>
                           </button>
 
                           <button

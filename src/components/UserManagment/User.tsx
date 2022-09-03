@@ -158,6 +158,7 @@ export default function User() {
         <div className="flex flex-grow align-center justify-start">
           <div className="w-3/4 flex">
             <Filter
+              userType
               provinceOption={provinceOptions}
               sattusOption={statusOption}
               query={query}
