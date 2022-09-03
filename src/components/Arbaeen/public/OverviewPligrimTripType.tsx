@@ -17,7 +17,7 @@ const OverviewPligrimTripType = () => {
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی به زائران اربعین براساس نوع سفر
+          نگاه کلی به تعداد زائران اربعین براساس نوع سفر
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
