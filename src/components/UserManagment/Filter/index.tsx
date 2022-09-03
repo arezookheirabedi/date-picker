@@ -11,15 +11,23 @@ interface Iprops {
   sattusOption: Array<any>;
   query: any;
   setQuery: (data: any) => void;
+  userType?: boolean;
 }
 
 interface ISavedVisite {
   nationalIdOrMobileNumber: any;
   province: any;
   locked: any;
+  username: any;
 }
 
-const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, query, setQuery}) => {
+const FilterSavedInquiry: React.FC<Iprops> = ({
+  provinceOption,
+  sattusOption,
+  query,
+  setQuery,
+  userType,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -48,6 +56,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
         ...query,
         province: values.province,
         locked: values.locked,
+        username: values.username ? values.username : null,
         nationalIdOrMobileNumber: newNumber,
         currentPage: 1,
       };
@@ -56,6 +65,7 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
 
   const handelRemoveFilter = () => {
     reset({
+      username: null,
       nationalIdOrMobileNumber: null,
       locked: null,
       province: null,
@@ -66,14 +76,25 @@ const FilterSavedInquiry: React.FC<Iprops> = ({provinceOption, sattusOption, que
         province: null,
         locked: null,
         nationalIdOrMobileNumber: null,
+        username: null,
         currentPage: 1,
       };
     });
   };
   return (
     <>
-      <form className="w-3/4 space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-full space-y-4 ml-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex space-x-3 rtl:space-x-reverse">
+          {userType && (
+            <div className="w-full">
+              <input
+                type="text"
+                {...register('username')}
+                placeholder="نام کاربری"
+                className="rtl  relative block w-full rounded-full  bg-white px-5 py-2 placeholder-gray-400 shadow-lg focus:outline-none disabled:bg-gray-50 sm:text-sm  focus-visible disabled:shadow-none"
+              />
+            </div>
+          )}
           <div className="w-full">
             <input
               onKeyPress={onPress}

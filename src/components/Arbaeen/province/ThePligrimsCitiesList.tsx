@@ -66,7 +66,7 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     return () => {
       source.cancel('Operation canceled by the user.');
     };
-  }, [query]);
+  }, [location.search, query]);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">

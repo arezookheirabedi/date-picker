@@ -67,6 +67,7 @@ function getPilgrimCount(params: any = {}, config?: any) {
       ...config,
     });
 }
+
 function getPiligrimAgeRange(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -108,6 +109,7 @@ function getPiligrimOriginProvince(params: any = {}, config?: any) {
       }
     );
 }
+
 function getPiligrimOriginCity(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -116,6 +118,13 @@ function getPiligrimOriginCity(params: any = {}, config?: any) {
       ...config,
     });
 }
+
+function getPiligrimReportAsFile(params: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/reports/coordinates/csv?lang=fa`, params, {
+    ...config,
+  });
+}
+
 const arbaeenService = {
   arbaeenGetAll,
   getPiligrimList,
@@ -129,6 +138,7 @@ const arbaeenService = {
   getPiligrimOriginProvince,
   getPiligrimOriginCity,
   getTheLatestVaccineInfo,
+  getPiligrimReportAsFile,
 };
 
 export default arbaeenService;
