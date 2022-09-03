@@ -1,13 +1,17 @@
 import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import Statistic from '../../../containers/Guild/components/Statistic';
-// import groupIcon from '../../../assets/images/icons/all-group.svg';
-import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
-import groupWithMapIcon from '../../../assets/images/icons/group-with-map.svg';
-import greenPersons from '../../../assets/images/icons/persons-green-icon.svg';
-import greenwemen from '../../../assets/images/icons/green-wemen.svg';
-import earthPersons from '../../../assets/images/icons/earth-persons.svg';
-import menEarth from '../../../assets/images/icons/men-earth.svg';
-import wemenEarth from '../../../assets/images/icons/wemen-earth.svg';
+import groupIcon from '../../../assets/images/icons/all-group.svg';
+// import pilgrimList from '../../../assets/images/icons/pilgrim-list.svg';
+// import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
+import passport from '../../../assets/images/icons/passport.svg';
+// import greenPersons from '../../../assets/images/icons/persons-green-icon.svg';
+import greenwemen from '../../../assets/images/icons/woman-pilgrim.svg';
+// import greenwemen from '../../../assets/images/icons/green-wemen.svg';
+// import earthPersons from '../../../assets/images/icons/earth-persons.svg';
+import menEarth from '../../../assets/images/icons/foreigner-man.svg';
+import wemenEarth from '../../../assets/images/icons/foreigener-woman.svg';
+import manPilgrim from '../../../assets/images/icons/man-pilgrim.svg';
+import earthPersons from '../../../assets/images/icons/pilgrim-foreigner.svg';
 
 const OverviewPilgrimPercentage = () => {
   const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
@@ -27,38 +31,38 @@ const OverviewPilgrimPercentage = () => {
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             {/* <Statistic
-              icon={groupIcon}
-              text="تعداد کل پیش ثبت نام شدگان نهایی"
+              icon={pilgrimList}
+              text="  درصد کل پیش ثبت نام شدگان نهایی ایرانی"
               count={935271}
               loading={loading}
-
+              isPercentage
             /> */}
 
             <Statistic
-              icon={greenGroupIcon}
+              icon={groupIcon}
               text=" درصد کل ثبت نام شدگان نهایی ایرانی"
-              count={pilgrims.countIranian || 0}
+              count={pilgrims.countIranianPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
-              icon={greenPersons}
+              icon={manPilgrim}
               text=" درصد کل ثبت نام شدگان نهایی ایرانی مرد"
-              count={pilgrims.countMaleIranian || 0}
+              count={pilgrims.countMaleIranianPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
               icon={greenwemen}
               text="درصد کل ثبت نام شدگان نهایی ایرانی زن"
-              count={pilgrims.countFemaleIranian || 0}
+              count={pilgrims.countFemaleIranianPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
               icon={earthPersons}
               text=" درصد کل ثبت نام شدگان نهایی اتباع خارجی"
-              count={pilgrims.countNonIranian || 0}
+              count={pilgrims.countNonIranianPercentage || 0}
               loading={loading}
               isPercentage
             />
@@ -66,22 +70,22 @@ const OverviewPilgrimPercentage = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={menEarth}
-              text="  درصد کل ثبت نام شدگان نهایی اتباع خارجی مرد"
-              count={pilgrims.countMaleNonIranian || 0}
+              text="درصد کل ثبت نام شدگان نهایی اتباع خارجی مرد"
+              count={pilgrims.countMaleNonIranianPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
               icon={wemenEarth}
               text=" درصد کل ثبت نام شدگان نهایی اتباع خارجی زن"
-              count={pilgrims.countFemaleNonIranian || 0}
+              count={pilgrims.countFemaleNonIranianPercentage || 0}
               loading={loading}
               isPercentage
             />
             <Statistic
-              icon={groupWithMapIcon}
+              icon={passport}
               text="درصد کل روادیدهای صادر شده"
-              count={pilgrims.countTotal || 0}
+              count={pilgrims.countTotalPercentage || 0}
               loading={loading}
               isPercentage
             />
