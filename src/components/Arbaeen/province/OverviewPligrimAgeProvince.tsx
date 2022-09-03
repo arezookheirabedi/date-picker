@@ -120,27 +120,27 @@ const OverviewPligrimAgeProvince: React.FC<{cityTitle: string}> = ({cityTitle}) 
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff0060'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#A0442F'}} />
                   <span> سال (۱۵-۰)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F38c06'}} />
                   <span>سال (۳۰-۱۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#9DAF9F'}} />
                   <span> سال (۴۵-۳۱)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#3B4D59'}} />
                   <span> سال (۶۰-۴۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#216785'}} />
                   <span> سال (۷۵-۶۱) </span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#8800ff'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#191222'}} />
                   <span>۷۵ سال به بالا </span>
                 </div>
               </div>
