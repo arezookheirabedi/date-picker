@@ -70,7 +70,6 @@ const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any)
           min={min}
           max={max}
           value={value}
-          reverse
           trackStyle={[{backgroundColor: '#ffcc00'}]}
           handleStyle={[{borderColor: '#ffcc00', boxShadow: 'none'}]}
           onChange={newValue => onChange(newValue)}
