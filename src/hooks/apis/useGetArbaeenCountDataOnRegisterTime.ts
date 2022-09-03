@@ -24,6 +24,7 @@ export interface IInitialCount {
   countZaerinGround: number;
   countZaerinRail: number;
   countLastPositiveTestResultWhileRegistered: number;
+  countLastPositiveTestResult: number;
 }
 
 export const initialCount = {
@@ -46,6 +47,7 @@ export const initialCount = {
   countZaerinGround: 0,
   countZaerinRail: 0,
   countLastPositiveTestResultWhileRegistered: 0,
+  countLastPositiveTestResult: 0,
 };
 
 export default function useGetArbaeenCountDataOnRegisterTime(
