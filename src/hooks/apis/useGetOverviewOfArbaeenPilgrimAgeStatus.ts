@@ -19,12 +19,12 @@ const initialData = {
       name: 'تعداد',
 
       data: [
-        {name: '۷۵ سال به بالا', y: 3157, color: '#8800ff'},
-        {name: 'سال (۴۵-۳۱)', y: 177805, color: '#004D65'},
-        {name: 'سال (۶۰-۴۶)', y: 166493, color: '#209F92'},
-        {name: 'سال (۳۰-۱۶)', y: 96538, color: '#BFDDE7'},
-        {name: 'سال (۷۵-۶۱)', y: 63747, color: '#F3BC06'},
-        {name: 'سال (۱۵-۰)', y: 55178, color: '#ff0060'},
+        {name: '۷۵ سال به بالا', y: 3157, color: '#191222'},
+        {name: 'سال (۴۵-۳۱)', y: 177805, color: '#9DAF9F'},
+        {name: 'سال (۶۰-۴۶)', y: 166493, color: '#3B4D59'},
+        {name: 'سال (۳۰-۱۶)', y: 96538, color: '#F38c06'},
+        {name: 'سال (۷۵-۶۱)', y: 63747, color: '#216785'},
+        {name: 'سال (۱۵-۰)', y: 55178, color: '#A0442F'},
       ],
     },
   ],
@@ -92,7 +92,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۱۵-۰)';
                   })
                 ],
-                color: '#ff0060',
+                color: '#A0442F',
               },
 
               {
@@ -106,7 +106,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۳۰-۱۶)';
                   })
                 ],
-                color: '#BFDDE7',
+                color: '#F38c06',
               },
               {
                 name: ageRange[
@@ -119,7 +119,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۴۵-۳۱)';
                   })
                 ],
-                color: '#004D65',
+                color: '#9DAF9F',
               },
               {
                 name: ageRange[
@@ -132,7 +132,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۶۰-۴۶)';
                   })
                 ],
-                color: '#209F92',
+                color: '#3B4D59',
               },
               {
                 name: ageRange[
@@ -145,7 +145,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۷۵-۶۱)';
                   })
                 ],
-                color: '#F3BC06',
+                color: '#216785',
               },
               {
                 name: ageRange[
@@ -158,7 +158,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === '۷۵ سال به بالا';
                   })
                 ],
-                color: '#8800ff',
+                color: '#191222',
               },
             ],
           },

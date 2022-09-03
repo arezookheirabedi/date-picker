@@ -21,13 +21,13 @@ const initialData = {
       name: 'تعداد',
 
       data: [
-        {name: EBORDERS.HAVAEE, y: 0, color: '#209F92'},
-        {name: EBORDERS.SHALAMCHE, y: 0, color: '#004D65'},
-        {name: EBORDERS.KHOSRAVI, y: 0, color: '#BFDDE7'},
-        {name: EBORDERS.CHAZABE, y: 0, color: '#716DE3'},
-        {name: EBORDERS.MEHRAN, y: 0, color: '#FF0060'},
-        {name: EBORDERS.BASHMAGH, y: 0, color: '#F3BC06'},
-        {name: EBORDERS.TAMARCHIN, y: 0, color: '#8800ff'},
+        {name: EBORDERS.HAVAEE, y: 0, color: '#3B4D59'},
+        {name: EBORDERS.SHALAMCHE, y: 0, color: '#9DAF9F'},
+        {name: EBORDERS.KHOSRAVI, y: 0, color: '#F4B108'},
+        {name: EBORDERS.CHAZABE, y: 0, color: '#F38c06'},
+        {name: EBORDERS.MEHRAN, y: 0, color: '#A0442F'},
+        {name: EBORDERS.BASHMAGH, y: 0, color: '#216785'},
+        {name: EBORDERS.TAMARCHIN, y: 0, color: '#191222'},
       ],
     },
   ],
@@ -78,7 +78,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.HAVAEE;
                   })
                 ],
-                color: '#209F92',
+                color: '#3B4D59',
               },
 
               {
@@ -92,7 +92,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.SHALAMCHE;
                   })
                 ],
-                color: '#004D65',
+                color: '#9DAF9F',
               },
               {
                 name: border[
@@ -105,7 +105,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.KHOSRAVI;
                   })
                 ],
-                color: '#BFDDE7',
+                color: '#F4B108',
               },
               {
                 name: border[
@@ -118,7 +118,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.CHAZABE;
                   })
                 ],
-                color: '#716DE3',
+                color: '#F38c06',
               },
               {
                 name: border[
@@ -131,7 +131,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.MEHRAN;
                   })
                 ],
-                color: '#FF0060',
+                color: '#A0442F',
               },
               {
                 name: border[
@@ -144,7 +144,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.BASHMAGH;
                   })
                 ],
-                color: '#F3BC06',
+                color: '#216785',
               },
               {
                 name: border[
@@ -157,7 +157,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
                     return i === EBORDERS.TAMARCHIN;
                   })
                 ],
-                color: '#8800ff',
+                color: '#191222',
               },
             ],
           },
