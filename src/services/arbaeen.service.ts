@@ -140,6 +140,25 @@ function gerBorderTraffic({...params}: any = {}, config?: any) {
     ...config,
   });
 }
+function getMokebList({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-mokebs?lang=fa`, params, {
+    ...config,
+  });
+}
+function getRoadStatistics({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/road-statistics/latest-submit/page?lang=fa`, params, {
+    ...config,
+  });
+}
+
+function getTheLatestBordersStatus({...params}: any = {}, config?: any) {
+  return request
+    .build()
+    .get(`/api/v1/arbaeen/region-statistics/latest-submit/page?lang=fa`, params, {
+      ...config,
+    });
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPilgrimExistanceAndImportanceChart(params: any = {}, config?: any) {
   const lists = [3, 4, 1, 2, 500001, 500002];
@@ -171,6 +190,9 @@ const arbaeenService = {
   getEntranceAxndExistanceBorder,
   getPilgrimExistanceAndImportanceChart,
   gerBorderTraffic,
+  getMokebList,
+  getRoadStatistics,
+  getTheLatestBordersStatus,
 };
 
 export default arbaeenService;
