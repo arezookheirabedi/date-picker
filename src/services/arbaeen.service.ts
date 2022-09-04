@@ -1,4 +1,5 @@
 // import qs from 'qs';
+import {EBORDERS} from 'src/constants/border.enum';
 import request from '../helpers/request';
 
 function arbaeenGetAll({tag, ...params}: any = {}, config?: any) {
@@ -18,16 +19,30 @@ function getPiligrimList(params: any = {}, config?: any) {
 function abroadList() {
   const mock = {
     data: [
-      {key: 'شلمچه', value: 'شلمچه'},
-      {key: 'چزابه', value: 'چزابه'},
-      {key: 'مهران', value: 'مهران'},
-      {key: 'خسروی', value: 'خسروی'},
-      {key: 'هوایی', value: 'هوایی'},
+      {key: EBORDERS.SHALAMCHE, value: 'شلمچه'},
+      {key: EBORDERS.CHAZABE, value: 'چزابه'},
+      {key: EBORDERS.MEHRAN, value: 'مهران'},
+      {key: EBORDERS.KHOSRAVI, value: 'خسروی'},
+      {key: EBORDERS.HAVAEE, value: 'هوایی'},
+      {key: EBORDERS.BASHMAGH, value: 'باشماق'},
+      {key: EBORDERS.TAMARCHIN, value: 'تمرچین'},
     ],
   };
   return Promise.resolve(mock);
 }
-
+function abroadListWithId() {
+  const mock = {
+    data: [
+      {key: '1', value: 'شلمچه'},
+      {key: '2', value: 'چزابه'},
+      {key: '3', value: 'مهران'},
+      {key: '4', value: 'خسروی'},
+      {key: '5', value: 'باشماق'},
+      {key: '6', value: 'تمرچین'},
+    ],
+  };
+  return Promise.resolve(mock);
+}
 function getPligrimGenderPerProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -139,6 +154,7 @@ const arbaeenService = {
   getPiligrimOriginCity,
   getTheLatestVaccineInfo,
   getPiligrimReportAsFile,
+  abroadListWithId,
 };
 
 export default arbaeenService;
