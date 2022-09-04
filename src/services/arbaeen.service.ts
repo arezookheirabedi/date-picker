@@ -20,7 +20,7 @@ function abroadList() {
   const mock = {
     data: [
       {key: EBORDERS.SHALAMCHE, value: 'شلمچه'},
-      {key: EBORDERS.CHAZABE, value: 'چزابه'},
+      {key: EBORDERS.CHAZABE, value: 'چذابه'},
       {key: EBORDERS.MEHRAN, value: 'مهران'},
       {key: EBORDERS.KHOSRAVI, value: 'خسروی'},
       {key: EBORDERS.HAVAEE, value: 'هوایی'},
@@ -33,12 +33,12 @@ function abroadList() {
 function abroadListWithId() {
   const mock = {
     data: [
-      {key: '1', value: 'شلمچه'},
-      {key: '2', value: 'چزابه'},
-      {key: '3', value: 'مهران'},
-      {key: '4', value: 'خسروی'},
-      {key: '5', value: 'باشماق'},
-      {key: '6', value: 'تمرچین'},
+      {key: '3', value: 'شلمچه'},
+      {key: '4', value: 'چذابه'},
+      {key: '1', value: 'مهران'},
+      {key: '2', value: 'خسروی'},
+      {key: '500001', value: 'باشماق'},
+      {key: '500002', value: 'تمرچین'},
     ],
   };
   return Promise.resolve(mock);
@@ -139,6 +139,13 @@ function getPiligrimReportAsFile(params: any = {}, config?: any) {
     ...config,
   });
 }
+function getEntranceAxndExistanceBorder({borderId, ...params}: any = {}, config?: any) {
+  return request
+    .build()
+    .get(`/api/v1/arbaeen/borders-traffics/border-id/${borderId}?lang=fa`, params, {
+      ...config,
+    });
+}
 
 const arbaeenService = {
   arbaeenGetAll,
@@ -155,6 +162,7 @@ const arbaeenService = {
   getTheLatestVaccineInfo,
   getPiligrimReportAsFile,
   abroadListWithId,
+  getEntranceAxndExistanceBorder,
 };
 
 export default arbaeenService;
