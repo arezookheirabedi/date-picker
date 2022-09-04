@@ -3,37 +3,52 @@ import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
 import {sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
-import {EBORDERS} from 'src/constants/border.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
   categories: [
-    EBORDERS.HAVAEE,
-    EBORDERS.SHALAMCHE,
-    EBORDERS.KHOSRAVI,
-    EBORDERS.CHAZABE,
-    EBORDERS.MEHRAN,
-    EBORDERS.BASHMAGH,
-    EBORDERS.TAMARCHIN,
+    '۷۵ سال به بالا ',
+    'سال (۱۵-۰)',
+    ' سال (۷۵-۶۱)',
+    'سال (۳۰-۱۶)',
+    'سال (۶۰-۴۶)',
+    'سال (۴۵-۳۱)',
   ],
   series: [
     {
-      name: 'تعداد',
+      name: 'درصد',
 
       data: [
-        {name: EBORDERS.HAVAEE, y: 0, color: '#3B4D59'},
-        {name: EBORDERS.SHALAMCHE, y: 0, color: '#9DAF9F'},
-        {name: EBORDERS.KHOSRAVI, y: 0, color: '#F4B108'},
-        {name: EBORDERS.CHAZABE, y: 0, color: '#F38c06'},
-        {name: EBORDERS.MEHRAN, y: 0, color: '#A0442F'},
-        {name: EBORDERS.BASHMAGH, y: 0, color: '#216785'},
-        {name: EBORDERS.TAMARCHIN, y: 0, color: '#191222'},
+        {name: '۷۵ سال به بالا', y: 3157, color: '#191222'},
+        {name: 'سال (۴۵-۳۱)', y: 177805, color: '#9DAF9F'},
+        {name: 'سال (۶۰-۴۶)', y: 166493, color: '#3B4D59'},
+        {name: 'سال (۳۰-۱۶)', y: 96538, color: '#F38c06'},
+        {name: 'سال (۷۵-۶۱)', y: 63747, color: '#216785'},
+        {name: 'سال (۱۵-۰)', y: 55178, color: '#A0442F'},
       ],
     },
   ],
 } as any;
 
-export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
+const GetAgeRange = (data: string) => {
+  switch (data) {
+    case '0-15':
+      return 'سال (۱۵-۰)';
+    case '16-30':
+      return 'سال (۳۰-۱۶)';
+    case '31-45':
+      return 'سال (۴۵-۳۱)';
+    case '46-60':
+      return 'سال (۶۰-۴۶)';
+    case '61-75':
+      return 'سال (۷۵-۶۱)';
+    case '76-up':
+      return '۷۵ سال به بالا';
+    default:
+      return '';
+  }
+};
+export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
   query: any,
   hasProvince: boolean = false
 ) {
@@ -47,114 +62,100 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
   const getIt = async ({retry, ...params}: any) => {
     try {
       setLoading(true);
-      const res = await arbaeenService.getPligrimCountPerBorder(params, {
+      const res = await arbaeenService.getPiligrimAgeRange(params, {
         cancelToken: source.token,
       });
 
-      const border: any[] = [];
+      const sortData = res.data.sort((a: any, b: any) =>
+        Number(a.count) > Number(b.count) ? 1 : -1
+      );
+      const ageRange: any[] = [];
       const count: any[] = [];
-
-      const sortData = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
-
       sortData.forEach((item: any) => {
-        border.push(item.departureDestinationBorder);
-        count.push(item.count);
+        ageRange.push(GetAgeRange(item.ageGroup));
+        count.push(Number(item.countPercentage));
       });
-
       const dataTemp = {
-        categories: [...border],
+        categories: [...ageRange],
         series: [
           {
-            name: 'تعداد',
+            name: 'درصد',
             data: [
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.HAVAEE;
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۱۵-۰)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.HAVAEE;
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۱۵-۰)';
                   })
                 ],
-                color: '#3B4D59',
+                color: '#A0442F',
               },
 
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.SHALAMCHE;
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۳۰-۱۶)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.SHALAMCHE;
-                  })
-                ],
-                color: '#9DAF9F',
-              },
-              {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.KHOSRAVI;
-                  })
-                ],
-                y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.KHOSRAVI;
-                  })
-                ],
-                color: '#F4B108',
-              },
-              {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.CHAZABE;
-                  })
-                ],
-                y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.CHAZABE;
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۳۰-۱۶)';
                   })
                 ],
                 color: '#F38c06',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.MEHRAN;
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۴۵-۳۱)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.MEHRAN;
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۴۵-۳۱)';
                   })
                 ],
-                color: '#A0442F',
+                color: '#9DAF9F',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.BASHMAGH;
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۶۰-۴۶)';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.BASHMAGH;
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۶۰-۴۶)';
+                  })
+                ],
+                color: '#3B4D59',
+              },
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۷۵-۶۱)';
+                  })
+                ],
+                y: count[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۷۵-۶۱)';
                   })
                 ],
                 color: '#216785',
               },
               {
-                name: border[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.TAMARCHIN;
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا';
                   })
                 ],
                 y: count[
-                  border.findIndex((i: any) => {
-                    return i === EBORDERS.TAMARCHIN;
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا';
                   })
                 ],
                 color: '#191222',
@@ -187,7 +188,6 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
-
   const location = useLocation();
   const history = useHistory();
   useEffect(() => {

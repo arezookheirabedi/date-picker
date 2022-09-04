@@ -6,18 +6,21 @@ import groupWithFlagIcon from '../../../assets/images/icons/group-with-flag.svg'
 import carIcon from '../../../assets/images/icons/car.svg';
 import railIcon from '../../../assets/images/icons/rail.svg';
 
-const OverviewPligrimTripType = () => {
-  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
-    countZaerinAir: true,
-    countTotal: true,
-    countZaerinGround: true,
-    countZaerinRail: true,
-  });
+const OverviewPligrimTripType: React.FC<{cityTitle: string}> = ({cityTitle}) => {
+  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime(
+    {
+      countZaerinAir: true,
+      countTotal: true,
+      countZaerinGround: true,
+      countZaerinRail: true,
+    },
+    true
+  );
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
-          نگاه کلی به تعداد زائران اربعین براساس نوع سفر
+        <legend className="mx-auto px-3 text-black">
+          نگاه کلی به زائران اربعین استان &nbsp;{cityTitle}&nbsp;&nbsp;بر اساس نوع سفر
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
