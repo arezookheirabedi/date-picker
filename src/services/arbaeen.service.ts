@@ -1,4 +1,5 @@
 // import qs from 'qs';
+import qs from 'qs';
 import {EBORDERS} from 'src/constants/border.enum';
 import request from '../helpers/request';
 
@@ -30,19 +31,7 @@ function abroadList() {
   };
   return Promise.resolve(mock);
 }
-function abroadListWithId() {
-  const mock = {
-    data: [
-      {key: '3', value: 'شلمچه'},
-      {key: '4', value: 'چذابه'},
-      {key: '1', value: 'مهران'},
-      {key: '2', value: 'خسروی'},
-      {key: '500001', value: 'باشماق'},
-      {key: '500002', value: 'تمرچین'},
-    ],
-  };
-  return Promise.resolve(mock);
-}
+
 function getPligrimGenderPerProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -146,6 +135,24 @@ function getEntranceAxndExistanceBorder({borderId, ...params}: any = {}, config?
       ...config,
     });
 }
+function gerBorderTraffic({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/borders-traffics/accumulative?lang=fa`, params, {
+    ...config,
+  });
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getPilgrimExistanceAndImportanceChart(params: any = {}, config?: any) {
+  const lists = [3, 4, 1, 2, 500001, 500002];
+  return request.build().get(
+    `/api/v1/arbaeen/borders-traffics/accumulative-based-on-border-id?lang=fa&${qs.stringify({
+      borderIdList: lists,
+    })}`,
+    {},
+    {
+      ...config,
+    }
+  );
+}
 
 const arbaeenService = {
   arbaeenGetAll,
@@ -161,8 +168,9 @@ const arbaeenService = {
   getPiligrimOriginCity,
   getTheLatestVaccineInfo,
   getPiligrimReportAsFile,
-  abroadListWithId,
   getEntranceAxndExistanceBorder,
+  getPilgrimExistanceAndImportanceChart,
+  gerBorderTraffic,
 };
 
 export default arbaeenService;
