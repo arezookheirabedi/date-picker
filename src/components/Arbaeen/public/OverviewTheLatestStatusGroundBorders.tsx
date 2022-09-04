@@ -2,23 +2,19 @@
 import React, {useEffect, useState} from 'react';
 import arbaeenService from 'src/services/arbaeen.service';
 import axios from 'axios';
+import Table from 'src/components/TableXHR';
+import {EERRORS} from 'src/constants/errors.enum';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
-import Table from '../../Table';
-import {axisData} from './constant';
 
+const pageSize = 10;
 const OverviewTheLatestStatusGroundBorders = () => {
   const [error, setError] = useState(null);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totalItems, setTotalItems] = useState(0);
   const [query, setQuery] = useState({
-    tag: 'transport',
-    category: 'serviceType',
-    from: null,
-    to: null,
     retry: false,
+    currentPage: 1,
   }) as any;
-
   const [loading, setLoading] = useState(false);
   const [dataset, setDataSet] = useState<any>([]);
   const {CancelToken} = axios;
@@ -30,14 +26,33 @@ const OverviewTheLatestStatusGroundBorders = () => {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
+      const {data} = await arbaeenService.getTheLatestBordersStatus(
+        {pageNumber: query.currentPage - 1},
         {cancelToken: source.token}
       );
-      setDataSet(axisData);
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `ovca_${index}`,
+          name: item.name || 'نامشخص',
+          numberOfPassengers: item.numberOfPassengers || 'نامشخص',
+          numberOfSamah: item.numberOfSamah || 'نامشخص',
+          numberOfPassengersIn50KM: item.numberOfPassengersIn50KM || 0,
+          numberOfPassengersIn100KM: item.numberOfPassengersIn100KM || 0,
+          numberOfPassengersIn150KM: item.numberOfPassengersIn150KM || 0,
+          numberOfPassengersIn200KM: item.numberOfPassengersIn200KM || 0,
+        });
+      });
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+
+      setLoading(false);
     } catch (err: any) {
-      console.log(err);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -47,7 +62,11 @@ const OverviewTheLatestStatusGroundBorders = () => {
     return () => {
       source.cancel('Operation canceled by the user.');
     };
-  }, []);
+  }, [query]);
+
+  function handlePageChange(page: number = 1) {
+    setQuery({...query, currentPage: page});
+  }
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -69,8 +88,10 @@ const OverviewTheLatestStatusGroundBorders = () => {
 
         {!error && !loading && (
           <Table
+            handlePageChange={handlePageChange}
             dataSet={[...dataset]}
-            pagination={{pageSize: 20, maxPages: 3}}
+            pagination={{pageSize, currentPage: query.currentPage}}
+            totalItems={totalItems}
             columns={[
               {
                 name: 'نام مرز',
@@ -84,39 +105,37 @@ const OverviewTheLatestStatusGroundBorders = () => {
 
               {
                 name: ' تعداد مسافران ',
-                key: 'avaragePilgrim',
+                key: 'numberOfPassengers',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
                 name: 'تعداد زائران ',
-                key: 'avaragePilgrim',
+                key: 'numberOfSamah',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
                 name: 'تعداد زائران در شعاع ۵۰ کیلومتری ',
-                key: 'avaragePilgrim',
+                key: 'numberOfPassengersIn50KM',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
                 name: 'تعداد زائران در شعاع ۱۰۰ کیلومتری ',
 
-                key: 'avaragePilgrim',
+                key: 'numberOfPassengersIn100KM',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
                 name: 'تعداد زائران در شعاع ۱۵۰ کیلومتری ',
 
-                key: 'avaragePilgrim',
+                key: 'numberOfPassengersIn150KM',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
                 name: 'تعداد زائران در شعاع ۲۰۰ کیلومتری ',
-
-                key: 'avaragePilgrim',
+                key: 'numberOfPassengersIn200KM',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
           />
         )}
       </div>
