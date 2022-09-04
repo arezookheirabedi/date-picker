@@ -14,29 +14,13 @@ import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg
 import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
 import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import redVaccine from '../../../assets/images/icons/red-vaccine.svg';
-
-const initialValue = {
-  pass6MonthFromLastVaccines: 0,
-  totalNonVaccines: 0,
-  totalVaccines: 0,
-  totalZaerin: 0,
-  pass6MonthFromLastVaccinesPercentage: 0,
-  totalNonVaccinesPercentage: 0,
-  totalVaccinesPercentage: 0,
-  zaerinGroupByDoses: [
-    {dose: 2, count: 0, percentage: 0},
-    {dose: 5, count: 0, percentage: 0},
-    {dose: 4, count: 0, percentage: 0},
-    {dose: 1, count: 0, percentage: 0},
-    {dose: 3, count: 0, percentage: 0},
-  ],
-};
+import {initialVaccineValue} from '../public/constant';
 
 const TheLatestOverviewPilgrimVaccineStatusProvine: React.FC<{cityTitle: string}> = ({
   cityTitle,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialValue);
+  const [pilgrims, setPilgrims] = useState<any>(initialVaccineValue);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
@@ -82,7 +66,7 @@ const TheLatestOverviewPilgrimVaccineStatusProvine: React.FC<{cityTitle: string}
     }
     // eslint-disable-next-line consistent-return
     return () => {
-      setPilgrims({...initialValue});
+      setPilgrims({...initialVaccineValue});
 
       source.cancel('Operation canceled by the user.');
     };
