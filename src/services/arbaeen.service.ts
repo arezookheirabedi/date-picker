@@ -122,6 +122,36 @@ function getPiligrimReportAsFile(params: any = {}, config?: any) {
   );
 }
 
+function getRoadInfo(id: any, config?: any) {
+  return (
+    request
+      .build()
+      .get(`/api/v1/arbaeen/road-statistics/road-id/${id}?lang=fa`, {}, {
+        ...config,
+      })
+  );
+}
+
+function getAirportAndBorderInfo(params: any, config?: any) {
+  return (
+    request
+      .build()
+      .get(`/api/v1/arbaeen/reports/region-traffic/count`, params, {
+        ...config,
+      })
+  );
+}
+
+function getMokeb(id: any, config?: any) {
+  return (
+    request
+      .build()
+      .get(`/api/v1/arbaeen/ar-mokebs/${id}`, {}, {
+        ...config,
+      })
+  );
+}
+
 const arbaeenService = {
   arbaeenGetAll,
   getPiligrimList,
@@ -135,6 +165,9 @@ const arbaeenService = {
   getPiligrimOriginProvince,
   getPiligrimOriginCity,
   getPiligrimReportAsFile,
+  getRoadInfo,
+  getAirportAndBorderInfo,
+  getMokeb
 };
 
 export default arbaeenService;
