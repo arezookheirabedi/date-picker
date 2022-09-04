@@ -91,7 +91,11 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 sortable: true,
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
-                  <span className=" ">{Number(record.pilgrimsCount || 0).toPersianDigits()}</span>
+                  <span className=" ">
+                    {Number(record.pilgrimsCount || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                  </span>
                 ),
               },
               {
@@ -99,7 +103,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'womenPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.womenPercentage || 0).toPersianDigits()}٪
+                    {Number(record.womenPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -108,7 +115,12 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 name: 'درصد مردان زائر',
                 key: 'menPercentage',
                 render: (v: any, record: any) => (
-                  <span className=" ">{Number(record.menPercentage || 0).toPersianDigits()}٪</span>
+                  <span className=" ">
+                    {Number(record.menPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
+                  </span>
                 ),
               },
               {
@@ -116,7 +128,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'vaccinePercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.vaccinePercentage || 0).toPersianDigits()}٪
+                    {Number(record.vaccinePercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -125,7 +140,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'firstDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.firstDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.firstDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -143,7 +161,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.thirdDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.thirdDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -152,7 +173,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.forthDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.forthDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -161,7 +185,10 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.fifthDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.fifthDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },

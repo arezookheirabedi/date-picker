@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import AccessDenied from 'src/components/Access/AccessDenied';
@@ -11,6 +12,10 @@ import {sideCities} from 'src/helpers/utils';
 import useHasProvinceResource from 'src/hooks/useHasProvinceResource';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
+import OverviewPilgrim from 'src/components/Arbaeen/province/OverviewPilgrim';
+import OverviewPligrimTripType from 'src/components/Arbaeen/province/OverviewPligrimTripType';
+import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/province/OverviewPilgrimVaccineStatus';
+import TheLatestOverviewPilgrimVaccineStatusProvine from 'src/components/Arbaeen/province/TheLatestOverviewPilgrimVaccineStatusProvine';
 
 const ArbaeenProvince = () => {
   const location = useLocation();
@@ -41,6 +46,10 @@ const ArbaeenProvince = () => {
       {!hasProvinceResources && <AccessDenied id="arborean-overview" />}
       {hasProvinceResources && (
         <>
+          <OverviewPilgrim cityTitle={cityTitle} />
+          <OverviewPligrimTripType cityTitle={cityTitle} />
+          <OverviewPilgrimVaccineStatus cityTitle={cityTitle} />
+          <TheLatestOverviewPilgrimVaccineStatusProvine cityTitle={cityTitle} />
           <PilgrimsList cityTitle={cityTitle} />
           <OverviewOfExistBordersProvince cityTitle={cityTitle} />
           <OverviewPligrimAgeProvince cityTitle={cityTitle} />

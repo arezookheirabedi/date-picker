@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimExistAbroad from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroad';
+import useGetOverviewOfArbaeenPilgrimExistAbroadPercentage from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroadPercentage';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 import Charts from '../../Charts';
@@ -73,6 +73,9 @@ const optionChart = {
     title: {
       enabled: false,
     },
+    labels: {
+      format: '٪{text}',
+    },
   },
   legend: {
     enabled: false,
@@ -87,7 +90,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: 'نفر',
+    valueSuffix: '٪',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -98,7 +101,7 @@ const optionChart = {
   },
 };
 
-const OverviewOfExistBorders = () => {
+const OverviewOfExistBordersPercentage = () => {
   const [query, setQuery] = useState({
     retry: false,
   });
@@ -106,11 +109,11 @@ const OverviewOfExistBorders = () => {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimExistAbroad(query);
+  } = useGetOverviewOfArbaeenPilgrimExistAbroadPercentage(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به تعداد زائران در مرزهای خروجی</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به درصد زائران در مرزهای خروجی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
@@ -170,4 +173,4 @@ const OverviewOfExistBorders = () => {
   );
 };
 
-export default OverviewOfExistBorders;
+export default OverviewOfExistBordersPercentage;

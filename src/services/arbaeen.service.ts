@@ -89,7 +89,14 @@ function getVaccineInfo(params: any = {}, config?: any) {
       }
     );
 }
-
+function getTheLatestVaccineInfo(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-last-dose/count?lang=fa`, params, {
+      ...config,
+    });
+}
 function getPiligrimOriginProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -113,13 +120,9 @@ function getPiligrimOriginCity(params: any = {}, config?: any) {
 }
 
 function getPiligrimReportAsFile(params: any = {}, config?: any) {
-  return (
-    request
-      .build()
-      .get(`/api/v1/arbaeen/reports/coordinates/csv?lang=fa`, params, {
-        ...config,
-      })
-  );
+  return request.build().get(`/api/v1/arbaeen/reports/coordinates/csv?lang=fa`, params, {
+    ...config,
+  });
 }
 
 const arbaeenService = {
@@ -134,6 +137,7 @@ const arbaeenService = {
   getPligrimGenderPerCity,
   getPiligrimOriginProvince,
   getPiligrimOriginCity,
+  getTheLatestVaccineInfo,
   getPiligrimReportAsFile,
 };
 
