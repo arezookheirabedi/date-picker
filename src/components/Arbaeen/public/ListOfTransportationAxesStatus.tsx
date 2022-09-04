@@ -57,10 +57,10 @@ const ListOfTransportationAxesStatus = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">لیست وضعیت محورهای مواصلاتی</legend>
-      <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
+      <legend className="text-black mx-auto px-3">آخرین وضعیت محورهای مواصلاتی</legend>
+      {/* <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div> */}
 
-      {/* <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+      <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {loading && (
           <div className="p-40">
             <Spinner />
@@ -75,12 +75,11 @@ const ListOfTransportationAxesStatus = () => {
 
         {!error && !loading && (
           <Table
-          
             dataSet={[...dataset]}
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
-                name: 'اسم محور',
+                name: 'نام محور',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <span>
@@ -99,40 +98,45 @@ const ListOfTransportationAxesStatus = () => {
                 },
               },
               {
-                name: 'متوسط زائران در محور',
+                name: ' تعداد مسافران ',
                 key: 'avaragePilgrim',
                 render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
               {
-                name: 'وضعیت ترافیک',
-                key: 'trafficStatus',
-                render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+                name: 'تعداد زائران ',
+                key: 'avaragePilgrim',
+                render: (v: any) => <span>{Number(v).toLocaleString('fa')}</span>,
               },
-              {
-                name: 'وضعیت محور',
-                key: 'axisStatus',
-                render: () => {
-                  let status;
-                  const checkStatus = Math.floor(Math.random() * 2);
-                  if (!checkStatus) {
-                    status = 'مسدود';
-                  } else {
-                    status = 'غیر مسدود';
-                  }
-                  return (
-                    <span
-                      className={`${checkStatus ? 'text-green-600' : 'text-red-600'} font-semibold`}
-                    >
-                      {status}
-                    </span>
-                  );
-                },
-              },
+              // {
+              //   name: 'وضعیت ترافیک',
+              //   key: 'trafficStatus',
+              //   render: (v: any) => <span>{(v as number).toLocaleString('fa')}</span>,
+              // },
+              // {
+              //   name: 'وضعیت محور',
+              //   key: 'axisStatus',
+              //   render: () => {
+              //     let status;
+              //     const checkStatus = Math.floor(Math.random() * 2);
+              //     if (!checkStatus) {
+              //       status = 'مسدود';
+              //     } else {
+              //       status = 'غیر مسدود';
+              //     }
+              //     return (
+              //       <span
+              //         className={`${checkStatus ? 'text-green-600' : 'text-red-600'} font-semibold`}
+              //       >
+              //         {status}
+              //       </span>
+              //     );
+              //   },
+              // },
             ]}
             totalItems={(dataset || []).length}
           />
         )}
-      </div> */}
+      </div>
     </fieldset>
   );
 };
