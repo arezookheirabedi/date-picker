@@ -152,13 +152,20 @@ function getRoadStatistics({...params}: any = {}, config?: any) {
 }
 
 function getTheLatestBordersStatus({...params}: any = {}, config?: any) {
-  return request
-    .build()
-    .get(`/api/v1/arbaeen/region-statistics/latest-submit/page?lang=fa`, params, {
+  const lists = [250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001];
+
+  return request.build().get(
+    `/api/v1/arbaeen/region-statistics/latest-submit/page?lang=fa&${qs.stringify({
+      regionIdList: lists,
+    })} `,
+    params,
+    {
       ...config,
-    });
+    }
+  );
 }
 
+/* pageNumber=0&pageSize=10&sort=ASC&&&&&&&&& */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPilgrimExistanceAndImportanceChart(params: any = {}, config?: any) {
   const lists = [3, 4, 1, 2, 500001, 500002];
