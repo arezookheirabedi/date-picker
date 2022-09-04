@@ -85,3 +85,9 @@ fieldset {
   overflow: hidden;
   overflow-x: scroll;
 }
+
+.mapboxgl-popup-content{
+  box-shadow: #00000059 0 5px 15px !important;
+  min-width: 14rem !important;
+  border-radius: 10px !important;
+}
