@@ -12,27 +12,11 @@ import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg
 import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
 import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
 import redVaccine from '../../../assets/images/icons/red-vaccine.svg';
-
-const initialValue = {
-  pass6MonthFromLastVaccines: 0,
-  totalNonVaccines: 0,
-  totalVaccines: 0,
-  totalZaerin: 0,
-  pass6MonthFromLastVaccinesPercentage: 0,
-  totalNonVaccinesPercentage: 0,
-  totalVaccinesPercentage: 0,
-  zaerinGroupByDoses: [
-    {dose: 2, count: 0, percentage: 0},
-    {dose: 5, count: 0, percentage: 0},
-    {dose: 4, count: 0, percentage: 0},
-    {dose: 1, count: 0, percentage: 0},
-    {dose: 3, count: 0, percentage: 0},
-  ],
-};
+import {initialVaccineValue} from './constant';
 
 const OverviewPilgrimVaccineStatusPercentage = () => {
   const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialValue);
+  const [pilgrims, setPilgrims] = useState<any>(initialVaccineValue);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
@@ -54,12 +38,12 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
 
   const getValue = (i: number) => {
     const data = pilgrims?.zaerinGroupByDoses?.find((item: any) => item.dose === i);
-    return data?.percentage || 0;
+    return data?.countPercentage || 0;
   };
   useEffect(() => {
     getAllPilgrims();
     return () => {
-      setPilgrims({...initialValue});
+      setPilgrims({...initialVaccineValue});
 
       source.cancel('Operation canceled by the user.');
     };
@@ -83,7 +67,7 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
             <Statistic
               icon={sufferingIcon}
               text=" درصد زائران ثبت نامی با کوید مثبت"
-              count={totalInfo.countLastPositiveTestResultWhileRegistered || 0}
+              count={totalInfo.countLastPositiveTestResultWhileRegisteredPercentage || 0}
               loading={loadingPositiveTest}
               isPercentage
             />

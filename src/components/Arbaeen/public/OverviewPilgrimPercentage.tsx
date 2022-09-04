@@ -3,7 +3,7 @@ import Statistic from '../../../containers/Guild/components/Statistic';
 import groupIcon from '../../../assets/images/icons/all-group.svg';
 // import pilgrimList from '../../../assets/images/icons/pilgrim-list.svg';
 // import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
-import passport from '../../../assets/images/icons/passport.svg';
+// import passport from '../../../assets/images/icons/passport.svg';
 // import greenPersons from '../../../assets/images/icons/persons-green-icon.svg';
 import greenwemen from '../../../assets/images/icons/woman-pilgrim.svg';
 // import greenwemen from '../../../assets/images/icons/green-wemen.svg';
@@ -82,13 +82,14 @@ const OverviewPilgrimPercentage = () => {
               loading={loading}
               isPercentage
             />
-            <Statistic
+            {/* <Statistic
               icon={passport}
               text="درصد کل روادیدهای صادر شده"
               count={pilgrims.countTotalPercentage || 0}
               loading={loading}
               isPercentage
-            />
+            /> */}
+            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
             <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
           </div>
         </div>
