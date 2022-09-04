@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimExistAbroad from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroad';
+import useGetOverviewOfArbaeenPilgrimExistAbroadPercentage from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroadPercentage';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 import Charts from '../../Charts';
@@ -73,6 +73,9 @@ const optionChart = {
     title: {
       enabled: false,
     },
+    labels: {
+      format: '٪{text}',
+    },
   },
   legend: {
     enabled: false,
@@ -87,7 +90,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: 'نفر',
+    valueSuffix: '٪',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -106,7 +109,7 @@ const OverviewOfExistBordersPercentage = () => {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimExistAbroad(query);
+  } = useGetOverviewOfArbaeenPilgrimExistAbroadPercentage(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
