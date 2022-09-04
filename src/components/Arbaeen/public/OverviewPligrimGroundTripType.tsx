@@ -9,8 +9,8 @@ import carIcon from '../../../assets/images/icons/car.svg';
 const OverviewPligrimGroundTripType = () => {
   const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
     countTaxi: true,
-    countBusAndMiniBus: true,
-    personal: true,
+    countBusAndMinibus: true,
+    countPersonal: true,
   });
   return (
     <>
@@ -23,7 +23,7 @@ const OverviewPligrimGroundTripType = () => {
             <Statistic
               icon={busPilgrim}
               text="تعداد کل زائران با اتوبوس"
-              count={pilgrims.countBusAndMiniBus || 0}
+              count={pilgrims.countBusAndMinibus || 0}
               loading={loading}
             />
             <Statistic
@@ -35,7 +35,7 @@ const OverviewPligrimGroundTripType = () => {
             <Statistic
               icon={carIcon}
               text="تعداد کل زائران با وسیله شخصی "
-              count={pilgrims.personal || 0}
+              count={pilgrims.countPersonal || 0}
               loading={loading}
             />
             {/* <Statistic
