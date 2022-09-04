@@ -122,7 +122,7 @@ const OverviewOfExistBordersPercentage = () => {
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
-                  <span>مرز چزابه</span>
+                  <span>مرز چذابه</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
