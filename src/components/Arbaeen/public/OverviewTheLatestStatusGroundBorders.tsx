@@ -34,7 +34,7 @@ const OverviewTheLatestStatusGroundBorders = () => {
       data.content.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.name || 'نامشخص',
+          name: item.regionName || 'نامشخص',
           numberOfPassengers: item.numberOfPassengers || 'نامشخص',
           numberOfSamah: item.numberOfSamah || 'نامشخص',
           numberOfPassengersIn50KM: item.numberOfPassengersIn50KM || 0,
