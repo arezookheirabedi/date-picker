@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {Listbox, Transition} from '@headlessui/react';
 import styled from 'styled-components';
 
@@ -8,14 +8,24 @@ interface IOption {
   value: any;
 }
 interface IProps {
-  options?: IOption[];
-  clearable?: boolean;
+  options: IOption[];
+  queryParams: any;
+  placeholder?: any;
+  setQueryParams: (v: any) => void;
+  objectKey: string;
 }
 
 const Select: React.FC<IProps> = props => {
-  const {options} = props;
+  const {options, setQueryParams, objectKey, queryParams} = props;
 
-  const [selectedObject, setSelectedObject] = useState<IOption>();
+  const [selectedObject, setSelectedObject] = useState<IOption>(options[0]);
+  useEffect(() => {
+    let params = {...queryParams};
+
+    params = {...queryParams, [`${objectKey}`]: selectedObject.value};
+
+    setQueryParams(params);
+  }, [selectedObject]);
 
   return (
     <Listbox value={selectedObject} onChange={setSelectedObject}>
@@ -56,16 +66,11 @@ const Select: React.FC<IProps> = props => {
                     className={({active}) =>
                       `${
                         active ? 'text-gray-900 bg-gray-100' : 'text-gray-900'
-                      } cursor-default select-none relative py-2 pl-10 pr-4`
+                      } cursor-default select-none relative py-2 pl-5 pr-4`
                     }
                   >
                     {({selected, active}) => (
                       <>
-                        <span
-                          className={`${selected ? 'font-medium' : 'font-normal'} block truncate`}
-                        >
-                          {option.label}
-                        </span>
                         {selected ? (
                           <span
                             className={`${active ? 'text-gray-600' : 'text-gray-600'}
@@ -87,6 +92,11 @@ const Select: React.FC<IProps> = props => {
                             </svg>
                           </span>
                         ) : null}
+                        <span
+                          className={`${selected ? 'font-medium' : 'font-normal'} block truncate`}
+                        >
+                          {option.label}
+                        </span>
                       </>
                     )}
                   </Listbox.Option>
