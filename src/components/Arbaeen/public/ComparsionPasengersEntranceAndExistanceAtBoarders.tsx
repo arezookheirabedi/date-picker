@@ -38,6 +38,9 @@ const ComparsionPasengersEntranceAndExistanceAtBoarders: React.FC<{}> = () => {
     },
     colors: ['#c20a0c', '#07816c'],
     plotOptions: {
+      series: {
+        borderRadius: 10,
+      },
       column: {
         marker: {
           enabled: false,
@@ -51,7 +54,6 @@ const ComparsionPasengersEntranceAndExistanceAtBoarders: React.FC<{}> = () => {
         },
         lineWidth: 2,
         threshold: null,
-        borderRadius: 2,
         states: {
           hover: {
             lineWidth: 1,
