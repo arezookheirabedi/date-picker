@@ -6,8 +6,9 @@ import greenPeopleIcon from '../../../assets/images/icons/green-map-people.svg';
 import redPeopleIcon from '../../../assets/images/icons/map-red-people.svg';
 
 const initialValue = {
-  totalNumberOfPassengerLeftTheCountry: 0,
-  totalNumberOfPassengerInterTheCountry: 0,
+  borderId: '',
+  enteringCount: 0,
+  exitingCount: 0,
 };
 const OverviewOfTheEntryAndExitOfPilgrims = () => {
   const [loading, setLoading] = useState(false);
@@ -20,16 +21,9 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
     setLoading(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
-      const newData = {
-        totalNumberOfPassengerLeftTheCountry: 10000,
-        totalNumberOfPassengerInterTheCountry: 10000,
-      };
-      setPilgrims(newData);
-      // setPilgrims(data);
+      const {data} = await arbaeenService.gerBorderTraffic({cancelToken: source.token});
+
+      setPilgrims({...data});
     } catch (error) {
       console.log(error);
     } finally {
@@ -54,13 +48,13 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
           <Statistic
             icon={redPeopleIcon}
             text="تعداد  مسافران خارج شده از کشور"
-            count={0}
+            count={pilgrims.exitingCount || 0}
             loading={loading}
           />
           <Statistic
             icon={greenPeopleIcon}
             text="تعداد مسافران وارد شده به کشور"
-            count={0}
+            count={pilgrims.enteringCount || 0}
             loading={loading}
           />
         </div>
