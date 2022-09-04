@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
+import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
+import arbaeenService from 'src/services/arbaeen.service';
 import Charts from '../../Charts';
 
 const {HeadlessChart} = Charts;
@@ -108,6 +110,10 @@ const optionChart = {
 };
 
 const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
+  const [query, setQuery] = useState({
+    retry: false,
+    departureDestinationBorder: null,
+  });
   const dataset = {
     categories: [
       '۱۴۰۱/۰۵/۲۱',
@@ -142,10 +148,25 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به روند ورود و خروج زائران</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به روند ورود و خروج مسافران از مرزهای زمینی
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="w-full">
+          <div className="align-center flex w-3/4 justify-between">
+            <div className="align-center flex justify-between">
+              {' '}
+              <SearchableSingleSelect
+                endPoint={arbaeenService.abroadListWithId}
+                placeholder="همه مرزهای خروج "
+                objectKey="departureDestinationBorder"
+                setQueryParams={setQuery}
+                queryParams={query}
+                hasPaginateTableXhr
+              />
+            </div>
+          </div>
+          <div className="w-1/2">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-4 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
@@ -160,7 +181,7 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
             </div>
           </div>
         </div>
-        <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
+        {/* <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div> */}
 
         {/* {loading && ( */}
         {/*  <div className="p-40"> */}
@@ -178,7 +199,7 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
         {/*  <HeadlessChart data={dataset} optionsProp={optionChart}/> */}
         {/* )} */}
 
-        {/* <HeadlessChart data={dataset} optionsProp={optionChart} /> */}
+        <HeadlessChart data={dataset} optionsProp={optionChart} />
         {/* {!loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}
