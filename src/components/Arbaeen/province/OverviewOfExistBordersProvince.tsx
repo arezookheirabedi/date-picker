@@ -121,10 +121,6 @@ const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitl
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
-                  <span>مرز مهران</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
                   <span>مرز چزابه</span>
                 </div>
@@ -148,6 +144,10 @@ const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitl
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
                   <span>مرز تمرچین</span>
                 </div>
+              </div>
+              <div className="inline-flex flex-col justify-center items-center space-y-2">
+                <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
+                <span>مرز مهران</span>
               </div>
             </div>
           </div>
