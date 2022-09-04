@@ -100,7 +100,6 @@ const optionChart = {
 
 const OverviewOfTheLatestVaccinationStatusOfPilgrims = () => {
   const [query, setQuery] = useState({
-    tag: 'transport',
     retry: false,
   });
   const {

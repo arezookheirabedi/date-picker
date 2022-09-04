@@ -23,44 +23,61 @@ export default function useGetPilgrimExistanceAndImportanceChart(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null) as any;
   const [data, setData] = useState<any>(initialData);
+  const getBorders = (border: string) => {
+    switch (border) {
+      case '3':
+        return 'شلمچه';
+      case '4':
+        return 'چذابه';
+      case '1':
+        return 'مهران';
+      case '2':
+        return 'خسروی';
+      case '500001':
+        return 'باشماق';
+      case '500002':
+        return 'تمرچین';
+      default:
+        return '';
+    }
+  };
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await arbaeenService.getPligrimGenderPerProvince(
-        {
-          ...params,
-        },
-        {cancelToken: source.token}
+      const res = await arbaeenService.getPilgrimExistanceAndImportanceChart(params, {
+        cancelToken: source.token,
+      });
+      const borders: any[] = [];
+      const enteringCount: any[] = [];
+      const exitingCount: any[] = [];
+      const sortData = res.data.sort((a: any, b: any) =>
+        a.exitingCount > b.exitingCount ? 1 : -1
       );
-      const provinces: any[] = [];
-      const maleCount: any[] = [];
-      const femaleCount: any[] = [];
-      const sortData = res.data.sort((a: any, b: any) => (a.maleCount > b.maleCount ? 1 : -1));
 
       sortData.forEach((item: any) => {
-        maleCount.push(item.maleCount);
-        femaleCount.push(item.femaleCount);
-        provinces.push(item.province);
+        enteringCount.push(item.enteringCount);
+        exitingCount.push(item.exitingCount);
+        borders.push(getBorders(item.borderId));
       });
-
       setData(() => {
         return {
-          categories: provinces,
+          categories: [...borders],
           series: [
             {
               name: 'مسافران وارد شده',
               color: '#07816c',
-              data: [...femaleCount],
+              data: [...enteringCount],
             },
             {
               name: ' مسافران خارج شده',
               color: '#c20a0c',
-              data: [...maleCount],
+              data: [...exitingCount],
             },
           ],
         };
