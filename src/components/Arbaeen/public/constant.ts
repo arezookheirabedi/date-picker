@@ -233,3 +233,20 @@ export const axisData = [
     axisStatus: 'غیر مسدود',
   },
 ];
+
+export const initialVaccineValue = {
+  pass6MonthFromLastVaccines: 0,
+  totalNonVaccines: 0,
+  totalVaccines: 0,
+  totalZaerin: 0,
+  pass6MonthFromLastVaccinesPercentage: 0,
+  totalNonVaccinesPercentage: 0,
+  totalVaccinesPercentage: 0,
+  zaerinGroupByDoses: [
+    {dose: 2, count: 0, countPercentage: 0},
+    {dose: 5, count: 0, countPercentage: 0},
+    {dose: 4, count: 0, countPercentage: 0},
+    {dose: 1, count: 0, countPercentage: 0},
+    {dose: 3, count: 0, countPercentage: 0},
+  ],
+};
