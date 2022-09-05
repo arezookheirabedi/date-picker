@@ -745,7 +745,7 @@ const routes: IRoute[] = [
 
   {
     keyIndex: '3',
-    link: '/dashboard/arbaeen/public',
+    link: '/dashboard/arbaeen/map',
     simLink: '/dashboard/arbaeen',
     exact: true,
     inMenu: true,
