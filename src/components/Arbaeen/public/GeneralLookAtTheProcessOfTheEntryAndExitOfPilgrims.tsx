@@ -13,12 +13,13 @@ import Charts from '../../Charts';
 const {HeadlessChart} = Charts;
 
 const options = [
-  {value: '3', label: 'شلمچه'},
-  {value: '4', label: 'چذابه'},
-  {value: '1', label: 'مهران'},
-  {value: '2', label: 'خسروی'},
-  {value: '500001', label: 'باشماق'},
-  {value: '500002', label: 'تمرچین'},
+  {value: 0, label: 'همه مرزها'},
+  {value: 3, label: 'شلمچه'},
+  {value: 4, label: 'چذابه'},
+  {value: 1, label: 'مهران'},
+  {value: 2, label: 'خسروی'},
+  {value: 500001, label: 'باشماق'},
+  {value: 500002, label: 'تمرچین'},
 ];
 
 const converters = {
@@ -126,7 +127,7 @@ const optionChart = {
 const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
   const [query, setQuery] = useState({
     retry: false,
-    borderId: 1,
+    borderIdList: [3, 4, 1, 2, 500001, 500002],
   });
   const {
     data: dataset,
@@ -145,7 +146,7 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
             <div className="align-center flex justify-between">
               <Select
                 options={options}
-                objectKey="borderId"
+                objectKey="borderIdList"
                 setQueryParams={setQuery}
                 queryParams={query}
               />
