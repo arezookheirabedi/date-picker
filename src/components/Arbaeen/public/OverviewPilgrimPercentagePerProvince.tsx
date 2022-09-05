@@ -35,6 +35,9 @@ const OverviewPilgrimPercentagePerProvince: React.FC<{}> = () => {
     },
     colors: [ECOLOR.COLOR6],
     plotOptions: {
+      series: {
+        borderRadius: 14,
+      },
       column: {
         marker: {
           enabled: false,
@@ -105,8 +108,8 @@ const OverviewPilgrimPercentagePerProvince: React.FC<{}> = () => {
       useHTML: true,
       borderRadius: 16,
       borderWidth: 0,
-      valueDecimals: 0,
-      valueSuffix: 'درصد',
+      // valueDecimals: 0,
+      valueSuffix: '٪',
       style: {
         direction: 'rtl',
         textAlign: 'right',
