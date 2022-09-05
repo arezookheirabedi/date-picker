@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
 import arbaeenService from 'src/services/arbaeen.service';
 import axios from 'axios';
@@ -6,14 +5,7 @@ import {EERRORS} from 'src/constants/errors.enum';
 import Table from 'src/components/TableXHR';
 import {toPersianDigit} from 'src/helpers/utils';
 import dayjs from 'dayjs';
-import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
-import moderateRainy from '../../../assets/images/icons/moderate-rainy.svg';
-import partlyCloudy from '../../../assets/images/icons/partly-cloudy.svg';
-import rainy from '../../../assets/images/icons/rainy.svg';
-import sunny from '../../../assets/images/icons/sunny.svg';
-import thunder from '../../../assets/images/icons/thunder.svg';
-import windy from '../../../assets/images/icons/windy.svg';
 
 const pageSize = 10;
 const ListOfTransportationAxesStatus = () => {
@@ -77,19 +69,12 @@ const ListOfTransportationAxesStatus = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به آخرین وضعیت محورهای مواصلاتی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading && (
-          <div className="p-40">
-            <Spinner />
-          </div>
-        )}
-        {error && !loading && (
+        {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
             <RetryButton setQuery={setQuery} />
           </div>
-        )}
-
-        {!error && !loading && (
+        ) : (
           <Table
             handlePageChange={handlePageChange}
             dataSet={[...dataset]}
