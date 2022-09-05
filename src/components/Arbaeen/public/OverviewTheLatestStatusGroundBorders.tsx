@@ -4,6 +4,7 @@ import arbaeenService from 'src/services/arbaeen.service';
 import axios from 'axios';
 import Table from 'src/components/TableXHR';
 import {EERRORS} from 'src/constants/errors.enum';
+import {toPersianDigit} from 'src/helpers/utils';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 
@@ -74,20 +75,14 @@ const OverviewTheLatestStatusGroundBorders = () => {
       {/* <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div> */}
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading && (
-          <div className="p-40">
-            <Spinner />
-          </div>
-        )}
-        {error && !loading && (
+        {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
             <RetryButton setQuery={setQuery} />
           </div>
-        )}
-
-        {!error && !loading && (
+        ) : (
           <Table
+            loading={loading}
             handlePageChange={handlePageChange}
             dataSet={[...dataset]}
             pagination={{pageSize, currentPage: query.currentPage}}
@@ -97,9 +92,10 @@ const OverviewTheLatestStatusGroundBorders = () => {
                 name: 'نام مرز',
                 key: 'name',
                 render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                  <div className="flex w-full justify-start">
+                    {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    {record.name}
+                  </div>
                 ),
               },
 
