@@ -30,13 +30,14 @@ import TheLatestOverviewPilgrimVaccineStatusPercentage from 'src/components/Arba
 import ComparsionPasengersEntranceAndExistanceAtBoarders from 'src/components/Arbaeen/public/ComparsionPasengersEntranceAndExistanceAtBoarders';
 import OverviewTheLatestStatusGroundBorders from 'src/components/Arbaeen/public/OverviewTheLatestStatusGroundBorders';
 // import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
+import EmergencyList from 'src/components/Arbaeen/public/EmergencyList';
+import ParckingList from 'src/components/Arbaeen/public/ParckingList';
+import OverviewPilgrimPercentagePerProvince from 'src/components/Arbaeen/public/OverviewPilgrimPercentagePerProvince';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
 // import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
 
-
 const Arbaeen = () => {
-
   return (
     <div className="space-y-16 mb-8">
       <OverviewPilgrim />
@@ -56,6 +57,7 @@ const Arbaeen = () => {
       <OverviewPligrimAge />
       <OverviewPligrimAgePercentage />
       <OverviewPilgrimGenderByProvince />
+      <OverviewPilgrimPercentagePerProvince />
       <TheLargestNumberOfOriginPilgrimsCitiesList />
       <OverviewOfTheEntryAndExitOfPilgrims />
       {/* <OverviewOfThePercentageOfEntryAndExitOfPilgrims /> */}
@@ -66,6 +68,8 @@ const Arbaeen = () => {
       <ListOfTransportationAxesStatus />
       {/* <ListOfTheBusiestBorderCrossings /> */}
       <MokebList />
+      <EmergencyList />
+      <ParckingList />
       {/* <RedHalalBasesList /> */}
       {/* <TheLargestNumberOfOriginPilgrimsCountriesList /> */}
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
