@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import React, {useEffect, useRef, useState} from 'react';
-
 import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup} from 'react-map-gl';
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import DeckGL from '@deck.gl/react/typed';
@@ -17,6 +16,7 @@ import {ScatterplotLayer} from '@deck.gl/layers/typed';
 import JSZip from 'jszip';
 import csvtojson from 'csvtojson';
 import arbaeenService from 'src/services/arbaeen.service';
+import {useSelector} from 'src/hooks/useTypedSelector';
 
 try {
   setRTLTextPlugin(
@@ -71,6 +71,8 @@ const FilterMap: React.FC<{}> = () => {
   const [showZaerin, setShowZaerin] = useState<any>(false);
   const [zaerinLayers, setZaerinLayers] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
+
+  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
 
   const mapRef = useRef(null);
   const deckRef = useRef(null);
