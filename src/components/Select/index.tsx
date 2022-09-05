@@ -18,13 +18,34 @@ interface IProps {
 const Select: React.FC<IProps> = props => {
   const {options, setQueryParams, objectKey, queryParams} = props;
 
-  const [selectedObject, setSelectedObject] = useState<IOption>(options[0]);
+  const [selectedObject, setSelectedObject] = useState<IOption>({value: null, label: 'همه مرزها'});
+
+  const getValues = (data: number) => {
+    switch (data) {
+      case 0:
+        return [3, 4, 1, 2, 500001, 500002];
+      case 1:
+        return [1];
+      case 2:
+        return [2];
+      case 3:
+        return [3];
+      case 4:
+        return [4];
+      case 500001:
+        return [500001];
+      case 500002:
+        return [500002];
+      default:
+        return [3, 4, 1, 2, 500001, 500002];
+    }
+  };
   useEffect(() => {
     let params = {...queryParams};
-
-    params = {...queryParams, [`${objectKey}`]: selectedObject.value};
-
-    setQueryParams(params);
+    if (selectedObject) {
+      params = {...queryParams, [`${objectKey}`]: getValues(selectedObject.value)};
+      setQueryParams(params);
+    }
   }, [selectedObject]);
 
   return (
