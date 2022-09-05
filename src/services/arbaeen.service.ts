@@ -1,5 +1,5 @@
-// import qs from 'qs';
 import qs from 'qs';
+// import qs from 'qs';
 import {EBORDERS} from 'src/constants/border.enum';
 import request from '../helpers/request';
 
@@ -37,6 +37,14 @@ function getPligrimGenderPerProvince(params: any = {}, config?: any) {
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(`/api/v1/arbaeen/reports/zaerin/group-by-province-and-gender/count?lang=fa`, params, {
+      ...config,
+    });
+}
+function getPligrimCountPerProvince(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-province/count?lang=fa`, params, {
       ...config,
     });
 }
@@ -128,12 +136,17 @@ function getPiligrimReportAsFile(params: any = {}, config?: any) {
     ...config,
   });
 }
-function getEntranceAxndExistanceBorder({borderId, ...params}: any = {}, config?: any) {
-  return request
-    .build()
-    .get(`/api/v1/arbaeen/borders-traffics/border-id/${borderId}?lang=fa`, params, {
+
+function getEntranceAxndExistanceBorder(params: any = [], config?: any) {
+  return request.build().get(
+    `/api/v1/arbaeen/borders-traffics?lang=fa&${qs.stringify({
+      borderIdList: params.borderIdList,
+    })}`,
+    {},
+    {
       ...config,
-    });
+    }
+  );
 }
 function gerBorderTraffic({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/borders-traffics/accumulative?lang=fa`, params, {
@@ -145,6 +158,11 @@ function getMokebList({...params}: any = {}, config?: any) {
     ...config,
   });
 }
+function getEmergencyList({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-emergencies?lang=fa`, params, {
+    ...config,
+  });
+}
 function getRoadStatistics({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/road-statistics/latest-submit/page?lang=fa`, params, {
     ...config,
@@ -152,13 +170,11 @@ function getRoadStatistics({...params}: any = {}, config?: any) {
 }
 
 function getTheLatestBordersStatus({...params}: any = {}, config?: any) {
-  const lists = [250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001];
-
+  // const lists = [250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001];
   return request.build().get(
-    `/api/v1/arbaeen/region-statistics/latest-submit/page?lang=fa&${qs.stringify({
-      regionIdList: lists,
-    })} `,
+    `/api/v1/arbaeen/region-statistics/latest-submit/page?lang=fa&regionIdList=250001,500001,1,500002,300001,1500001,1250001,1750001,750001`,
     params,
+
     {
       ...config,
     }
@@ -168,11 +184,9 @@ function getTheLatestBordersStatus({...params}: any = {}, config?: any) {
 /* pageNumber=0&pageSize=10&sort=ASC&&&&&&&&& */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPilgrimExistanceAndImportanceChart(params: any = {}, config?: any) {
-  const lists = [3, 4, 1, 2, 500001, 500002];
+  // const lists = [3, 4, 1, 2, 500001, 500002];
   return request.build().get(
-    `/api/v1/arbaeen/borders-traffics/accumulative-based-on-border-id?lang=fa&${qs.stringify({
-      borderIdList: lists,
-    })}`,
+    `/api/v1/arbaeen/borders-traffics/accumulative-based-on-border-id?lang=fa&borderIdList=3,4,1,2,500001,500002`,
     {},
     {
       ...config,
@@ -205,28 +219,28 @@ function getMokeb(id: any, config?: any) {
     }
   );
 }
-
-function getEmergency(id: any, config?: any) {
-  return request.build().get(
-    `/api/v1/arbaeen/ar-emergencies/${id}`,
-    {},
-    {
-      ...config,
-    }
-  );
+function getParckingList(params: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-parkings`, params, {
+    ...config,
+  });
 }
 
-function getParking(id: any, config?: any) {
-  return request.build().get(
-    `/api/v1/arbaeen/ar-parkings/${id}`,
-    {},
-    {
-      ...config,
-    }
-  );
+function getBorderListById() {
+  const mock = {
+    data: [
+      {key: '3', value: 'شلمچه'},
+      {key: '4', value: 'چذابه'},
+      {key: '1', value: 'مهران'},
+      {key: '2', value: 'خسروی'},
+      {key: '500001', value: 'باشماق'},
+      {key: '500002', value: 'تمرچین'},
+    ],
+  };
+  return Promise.resolve(mock);
 }
 
 const arbaeenService = {
+  getBorderListById,
   arbaeenGetAll,
   getPiligrimList,
   abroadList,
@@ -249,8 +263,9 @@ const arbaeenService = {
   getRoadInfo,
   getAirportAndBorderInfo,
   getMokeb,
-  getEmergency,
-  getParking
+  getEmergencyList,
+  getParckingList,
+  getPligrimCountPerProvince,
 };
 
 export default arbaeenService;
