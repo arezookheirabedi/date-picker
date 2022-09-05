@@ -56,11 +56,11 @@ const INITIAL_VIEW_STATE = {
 };
 
 export const colorRange = [
-  [1, 152, 189],
-  [73, 227, 206],
-  [216, 254, 181],
-  [254, 237, 177],
-  [254, 173, 84],
+  [23, 90, 118],
+  [60, 83, 110],
+  [97, 76, 102],
+  [135, 69, 94],
+  [172, 62, 86],
   [209, 55, 78],
 ];
 
@@ -86,11 +86,13 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
-  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
+  const {loadingHourly: zaerinLoading, dataHourly: zaerinDataSource} = useSelector(
+    state => state.fetchZaerin
+  );
 
   const fetcher = async () => {
     const res = zaerinDataSource
-      .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
+      .filter((x: any) => x.isPassenger === 'true')
       .reduce((result: any, d: any) => {
         [...Array(Number(d.CountOfSamah))].forEach(() => {
           try {
@@ -102,8 +104,6 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
 
         return result;
       }, []);
-
-    console.log('Finish');
 
     setData([...res]);
   };
@@ -148,8 +148,8 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا</legend>
-      <div className="relative" style={{height: '500px'}}>
+      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
+      <div className="relative" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -181,14 +181,14 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
           effects={[lightingEffect]}
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          height={500}
+          height={650}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
           <StaticMap
             reuseMaps
             preventStyleDiffing
-            height={500}
+            height={650}
             ref={mapRef}
             mapStyle="mapbox://styles/mapbox/light-v10"
             className="map-container"

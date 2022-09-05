@@ -122,8 +122,6 @@ const TimelineMap: React.FC<{}> = () => {
         };
       });
 
-    console.log('Finish');
-
     setData([...res1]);
     setData2([...res2]);
   };
@@ -140,7 +138,7 @@ const TimelineMap: React.FC<{}> = () => {
         wrapLongitude: true,
         getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
         // getRadius: (d) => Math.pow(2, d.magnitude),
-        getRadius: (d: any) => d.magnitude / 3,
+        getRadius: (d: any) => d.magnitude / 10,
         getFillColor: (d: any) => {
           const r = Math.sqrt(Math.max(d.depth, 0));
           return [24 - r * 15, r * 90, r * 118];
@@ -197,8 +195,8 @@ const TimelineMap: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا</legend>
-      <div className="relative" style={{height: '500px'}}>
+      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در ۲۴ ساعت اخیر</legend>
+      <div className="relative" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -230,14 +228,14 @@ const TimelineMap: React.FC<{}> = () => {
           layers={layers}
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          height={500}
+          height={650}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
           <StaticMap
             reuseMaps
             preventStyleDiffing
-            height={500}
+            height={650}
             ref={mapRef}
             mapStyle="mapbox://styles/mapbox/light-v10"
             // className="map-container"
