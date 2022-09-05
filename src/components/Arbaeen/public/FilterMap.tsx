@@ -13,6 +13,8 @@ import {mokebs} from '../geos/mokebs';
 import {PickingInfo} from '@deck.gl/core/typed';
 import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
+import {EditableGeoJsonLayer} from '@nebula.gl/layers';
+import {ViewMode, DrawPolygonMode} from '@nebula.gl/edit-modes';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
@@ -23,6 +25,13 @@ import Road from '../popup/Road';
 import Mokeb from '../popup/Mokeb';
 import Border from '../popup/‌Border';
 import Airport from '../popup/Airport';
+
+const myFeatureCollection = {
+  type: 'FeatureCollection',
+  features: [
+    /* insert features here */
+  ],
+};
 
 try {
   setRTLTextPlugin(
@@ -44,33 +53,15 @@ const INITIAL_VIEW_STATE = {
   // bearing: -27,
 };
 
-const getTooltip: (info: PickingInfo) => TooltipContent = ({object}: PickingInfo) => {
-  if (!object) {
-    return null;
-  }
-  // const lat = object.position[1];
-  // const lng = object.position[0];
-  // const count = object.points.length;
-
-  return {
-    html: `<span>${object.name}</span>`,
-    className: 'font-base shadow-lg text-sm',
-    style: {
-      background: '#ffffff',
-      borderRadius: '0.5rem',
-      color: '#424242',
-    },
-  };
-};
-
-const FILE_NAME = 'ar_location_ptrue_tmp_loc';
-
 const ICON_MAPPING = {
   marker: {x: 0, y: 0, width: 128, height: 128, mask: true},
 };
 
 const FilterMap: React.FC<{}> = () => {
   const [selected, setSelected] = useState<any>(null);
+  const [feature, setFeature] = useState(myFeatureCollection);
+  const [editMode, setEditMode] = useState(() => ViewMode);
+  const [selectedPoint, setSelectedPoint] = useState<any[]>([]);
 
   // airports
   const [airportData, setAirportData] = useState<any[]>(airports);
@@ -389,10 +380,74 @@ const FilterMap: React.FC<{}> = () => {
     }
   }, [showMokeb]);
 
+  // @ts-ignore
+  const editorLayer = new EditableGeoJsonLayer({
+    id: 'editor-layer',
+    data: feature,
+    mode: editMode,
+    selectedFeatureIndexes: selectedPoint,
+    onEdit: ({updatedData}: any) => {
+      setFeature(updatedData);
+    },
+    PopupTemplate: ({params}: any) => {
+      const [loading, setLoading] = useState<boolean>(false);
+
+      const fetchPopupData = async (param: any) => {
+        setLoading(true);
+        try {
+          setTimeout(() => {
+            console.log('first');
+            setLoading(false);
+          }, 2000);
+        } catch (err) {
+        } finally {
+        }
+      };
+
+      useEffect(() => {
+        fetchPopupData({});
+      }, [params]);
+
+      return (
+        <>
+          {loading ? (
+            <div className="flex items-center text-xs">
+              <Loading />
+              <span>درحال دریافت اطلاعات</span>
+            </div>
+          ) : (
+            <>
+              {/* <div className="hidden">{JSON.stringify(params, null, 2)}</div>
+              create PopupTemplate component */}
+            </>
+          )}
+        </>
+      );
+    },
+  });
+
+  useEffect(() => {
+    setSelectedPoint([]);
+  }, [editMode]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا فیلتر</legend>
       <div className="relative" style={{height: '650px'}}>
+        <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
+          <button
+            className="bg-white shadow-2xl rounded-md p-2 w-6 h-6 text-xs"
+            onClick={() => setEditMode(() => ViewMode)}
+          >
+            1
+          </button>
+          <button
+            className="bg-white shadow-2xl rounded-md p-2 w-6 h-6 text-xs"
+            onClick={() => setEditMode(() => DrawPolygonMode)}
+          >
+            2
+          </button>
+        </div>
         <div className="filter-map">
           {/* <div className="filter-map__search"> */}
           {/*  <input type="text" placeholder="جستجو" /> */}
@@ -536,7 +591,7 @@ const FilterMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
-          layers={[borderLayers, pathLayers, airportLayers, mokebLayers, zaerinLayers]}
+          layers={[editorLayer, borderLayers, pathLayers, airportLayers, mokebLayers, zaerinLayers]}
           initialViewState={INITIAL_VIEW_STATE}
           controller={{
             doubleClickZoom: false,
@@ -560,13 +615,20 @@ const FilterMap: React.FC<{}> = () => {
             }
           }}
           onClick={({x, y, coordinate, layer, color, object, index}: PickingInfo) => {
-            console.log('deck onClick', object);
-            console.log('layer', layer);
-            if (object) {
-              setSelected({x, y, coordinate, object, layer});
+            if (editMode !== ViewMode) {
+              // don't change selection while editing
+              return;
             } else {
-              setSelected(null);
+              console.log('deck onClick', object);
+              console.log('layer', layer);
+              if (object) {
+                setSelected({x, y, coordinate, object, layer});
+              } else {
+                setSelected(null);
+              }
             }
+
+            setSelectedPoint(object ? [index] : []);
           }}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
