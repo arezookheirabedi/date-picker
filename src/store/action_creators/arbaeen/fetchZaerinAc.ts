@@ -24,8 +24,9 @@ export const fetchZaerinAc = () => async (dispatch: Dispatch<Action>) => {
     );
     const zip = await JSZip.loadAsync(response);
 
+    const keys = Object.keys(zip?.files);
     debugger;
-    const file = await zip.file(`${FILE_NAME}.csv`)?.async('text');
+    const file = await zip.file(keys[0])?.async('text');
     debugger;
 
     const json = await csvtojson().fromString(file || '');
@@ -55,9 +56,7 @@ export const fetchZaerinHourlyAc = () => async (dispatch: Dispatch<Action>) => {
     );
     const zip = await JSZip.loadAsync(response);
 
-    debugger;
     const file = await zip.file(`${FILE_NAME_HOURLY}.csv`)?.async('text');
-    debugger;
 
     const json = await csvtojson().fromString(file || '');
 
