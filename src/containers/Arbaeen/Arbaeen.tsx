@@ -24,54 +24,60 @@ import OverviewOfExistBordersPercentage from 'src/components/Arbaeen/public/Over
 import OverviewPligrimAgePercentage from 'src/components/Arbaeen/public/OverviewPligrimAgePercentage';
 import OverviewPilgrimPercentage from 'src/components/Arbaeen/public/OverviewPilgrimPercentage';
 import OverviewPligrimTripTypePercentage from 'src/components/Arbaeen/public/OverviewPligrimTripTypePercentage';
-import OverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatusPercentage';
+import OverviewPilgrimVaccineStatusPercentage
+  from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatusPercentage';
 // import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
-import TheLatestOverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatusPercentage';
-import ComparsionPasengersEntranceAndExistanceAtBoarders from 'src/components/Arbaeen/public/ComparsionPasengersEntranceAndExistanceAtBoarders';
+import TheLatestOverviewPilgrimVaccineStatusPercentage
+  from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatusPercentage';
+import ComparsionPasengersEntranceAndExistanceAtBoarders
+  from 'src/components/Arbaeen/public/ComparsionPasengersEntranceAndExistanceAtBoarders';
 import OverviewTheLatestStatusGroundBorders from 'src/components/Arbaeen/public/OverviewTheLatestStatusGroundBorders';
 // import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import EmergencyList from 'src/components/Arbaeen/public/EmergencyList';
 import ParckingList from 'src/components/Arbaeen/public/ParckingList';
 import OverviewPilgrimPercentagePerProvince from 'src/components/Arbaeen/public/OverviewPilgrimPercentagePerProvince';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
-import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
+import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims
+  from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
 // import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
 
 const Arbaeen = () => {
   return (
     <div className="space-y-16 mb-8">
-      <OverviewPilgrim />
-      <OverviewPilgrimPercentage />
-      <OverviewPligrimTripType />
-      <OverviewPligrimTripTypePercentage />
-      <OverviewPligrimGroundTripType />
+      <OverviewPilgrim/>
+      <OverviewPilgrimPercentage/>
+      <OverviewPligrimTripType/>
+      <OverviewPligrimTripTypePercentage/>
+      <OverviewPligrimGroundTripType/>
       {/* <OverviewPilgrimHelthStatus /> */}
-      <OverviewPilgrimVaccineStatus />
-      <OverviewPilgrimVaccineStatusPercentage />
-      <TheLatestOverviewPilgrimVaccineStatus />
-      <TheLatestOverviewPilgrimVaccineStatusPercentage />
+      <OverviewPilgrimVaccineStatus/>
+      <OverviewPilgrimVaccineStatusPercentage/>
+      <TheLatestOverviewPilgrimVaccineStatus/>
+      <TheLatestOverviewPilgrimVaccineStatusPercentage/>
       {/* <OverviewOfTheLatestVaccinationStatusOfPilgrims /> */}
-      <OverviewOfExistBorders />
-      <OverviewOfExistBordersPercentage />
+      <OverviewOfExistBorders/>
+      <OverviewOfExistBordersPercentage/>
 
-      <OverviewPligrimAge />
-      <OverviewPligrimAgePercentage />
-      <OverviewPilgrimGenderByProvince />
+      <OverviewPligrimAge/>
+      <OverviewPligrimAgePercentage/>
+      <OverviewPilgrimGenderByProvince/>
       <OverviewPilgrimPercentagePerProvince />
-      <TheLargestNumberOfOriginPilgrimsCitiesList />
-      <OverviewOfTheEntryAndExitOfPilgrims />
+      <TheLargestNumberOfOriginPilgrimsCitiesList/>
+      <OverviewOfTheEntryAndExitOfPilgrims/>
       {/* <OverviewOfThePercentageOfEntryAndExitOfPilgrims /> */}
       {/* <GeneralLookAtTransportationAxesAndExitBordersOfCountry /> */}
-      <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
-      <ComparsionPasengersEntranceAndExistanceAtBoarders />
-      <OverviewTheLatestStatusGroundBorders />
-      <ListOfTransportationAxesStatus />
+      <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims/>
+      <ComparsionPasengersEntranceAndExistanceAtBoarders/>
+      <OverviewTheLatestStatusGroundBorders/>
+      <ListOfTransportationAxesStatus/>
       {/* <ListOfTheBusiestBorderCrossings /> */}
-      <MokebList />
+      <MokebList/>
       <EmergencyList />
       <ParckingList />
       {/* <RedHalalBasesList /> */}
       {/* <TheLargestNumberOfOriginPilgrimsCountriesList /> */}
+
+      {/*
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
         <div className=" flex justify-between">
           <div className="flex items-center justify-start">
@@ -81,6 +87,25 @@ const Arbaeen = () => {
           <div>
             <img src={Vasl} className="inline " alt="vasl-logo" />
           </div>
+        </div>
+      </fieldset>
+        */}
+
+      <fieldset className=" rounded-xl border py-2 px-4 text-center">
+        <div className=" flex justify-center">
+          <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+            <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell.png`} className="w-12 ml-1" alt=""/>
+          </a>
+          <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+            <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell-labs.png`} className="w-8 ml-1" alt=""/>
+          </a>
+          {/* <div className="flex items-center justify-start"> */}
+          {/*  <img src={Irancell} className="inline" alt="irancell-logo" /> */}
+          {/*  <span className="px-2">باهمکاری ایرانسل</span> */}
+          {/* </div> */}
+          {/* <div> */}
+          {/*  <img src={Vasl} className="inline " alt="vasl-logo" /> */}
+          {/* </div> */}
         </div>
       </fieldset>
     </div>
