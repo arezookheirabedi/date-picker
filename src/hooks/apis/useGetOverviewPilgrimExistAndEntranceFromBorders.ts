@@ -9,7 +9,6 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
   const [data, setData] = useState<any>([]);
-
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
@@ -31,11 +30,8 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
       const countEntrance: any[] = [];
       result.forEach((item: any) => {
         date.push(getTime(item.dateTime));
-        if (item.type === 'EXIT') {
-          countExist.push(item.count);
-        } else if (item.type === 'ENTER') {
-          countEntrance.push(item.count);
-        }
+        countExist.push(item.exitingCount);
+        countEntrance.push(item.enteringCount);
       });
 
       setData(() => {
