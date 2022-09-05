@@ -1,0 +1,9 @@
+export enum ECOLOR {
+  COLOR1 = '#EBEDEE',
+  COLOR2 = '#D7DBDE',
+  COLOR3 = '#B0B7BC',
+  COLOR4 = '#88949B',
+  COLOR5 = '#62707A',
+  COLOR6 = '#3B4D59',
+  COLOR7 = '#216785',
+}

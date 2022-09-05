@@ -3,6 +3,7 @@ import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
 import {sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
+import {ECOLOR} from 'src/constants/color.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
@@ -19,12 +20,12 @@ const initialData = {
       name: 'درصد',
 
       data: [
-        {name: '۷۵ سال به بالا', y: 3157, color: '#191222'},
-        {name: 'سال (۴۵-۳۱)', y: 177805, color: '#9DAF9F'},
-        {name: 'سال (۶۰-۴۶)', y: 166493, color: '#3B4D59'},
-        {name: 'سال (۳۰-۱۶)', y: 96538, color: '#F38c06'},
-        {name: 'سال (۷۵-۶۱)', y: 63747, color: '#216785'},
-        {name: 'سال (۱۵-۰)', y: 55178, color: '#A0442F'},
+        {name: '۷۵ سال به بالا', y: 3157, color: ECOLOR.COLOR6},
+        {name: 'سال (۴۵-۳۱)', y: 177805, color: ECOLOR.COLOR3},
+        {name: 'سال (۶۰-۴۶)', y: 166493, color: ECOLOR.COLOR4},
+        {name: 'سال (۳۰-۱۶)', y: 96538, color: ECOLOR.COLOR2},
+        {name: 'سال (۷۵-۶۱)', y: 63747, color: ECOLOR.COLOR5},
+        {name: 'سال (۱۵-۰)', y: 55178, color: ECOLOR.COLOR1},
       ],
     },
   ],
@@ -92,7 +93,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
                     return i === 'سال (۱۵-۰)';
                   })
                 ],
-                color: '#A0442F',
+                color: ECOLOR.COLOR1,
               },
 
               {
@@ -106,7 +107,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
                     return i === 'سال (۳۰-۱۶)';
                   })
                 ],
-                color: '#F38c06',
+                color: ECOLOR.COLOR2,
               },
               {
                 name: ageRange[
@@ -119,7 +120,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
                     return i === 'سال (۴۵-۳۱)';
                   })
                 ],
-                color: '#9DAF9F',
+                color: ECOLOR.COLOR3,
               },
               {
                 name: ageRange[
@@ -132,7 +133,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
                     return i === 'سال (۶۰-۴۶)';
                   })
                 ],
-                color: '#3B4D59',
+                color: ECOLOR.COLOR4,
               },
               {
                 name: ageRange[
@@ -145,7 +146,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
                     return i === 'سال (۷۵-۶۱)';
                   })
                 ],
-                color: '#216785',
+                color: ECOLOR.COLOR5,
               },
               {
                 name: ageRange[
@@ -158,7 +159,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(
                     return i === '۷۵ سال به بالا';
                   })
                 ],
-                color: '#191222',
+                color: ECOLOR.COLOR6,
               },
             ],
           },
