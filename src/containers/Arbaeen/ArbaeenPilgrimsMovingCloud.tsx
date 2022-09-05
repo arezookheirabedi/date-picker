@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { fetchZaerinAc } from 'src/store/action_creators/arbaeen/fetchZaerinAc';
+import { fetchZaerinAc, fetchZaerinHourlyAc } from 'src/store/action_creators/arbaeen/fetchZaerinAc';
 import { useDispatch } from 'react-redux';
 // import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 // import Vasl from 'src/assets/images/logos/vasl-logo.svg';
@@ -14,6 +14,7 @@ const ArbaeenPilgrimsMovingCloud = () => {
 
   useEffect(() => {
     dispatch(fetchZaerinAc());
+    dispatch(fetchZaerinHourlyAc());
   }, []);
 
 

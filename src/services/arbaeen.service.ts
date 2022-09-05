@@ -219,6 +219,17 @@ function getMokeb(id: any, config?: any) {
     }
   );
 }
+
+function getPolygonData(params: any, config?: any) {
+  return request.build().get(
+    `/api/v1/arbaeen/reports/polygon/count?${params}&isPassenger=true`,
+    {},
+    {
+      ...config,
+    }
+  );
+}
+
 function getParckingList(params: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/ar-parkings`, params, {
     ...config,
@@ -266,6 +277,7 @@ const arbaeenService = {
   getEmergencyList,
   getParckingList,
   getPligrimCountPerProvince,
+  getPolygonData,
 };
 
 export default arbaeenService;

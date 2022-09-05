@@ -86,7 +86,9 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
-  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
+  const {loadingHourly: zaerinLoading, dataHourly: zaerinDataSource} = useSelector(
+    state => state.fetchZaerin
+  );
 
   const fetcher = async () => {
     const res = zaerinDataSource

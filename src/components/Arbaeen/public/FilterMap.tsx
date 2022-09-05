@@ -34,6 +34,7 @@ import Border from '../popup/‌Border';
 import Airport from '../popup/Airport';
 import Emergency from '../popup/Emergency';
 import Parking from '../popup/Parking';
+import Polygon from '../popup/Polygon';
 
 const myFeatureCollection = {
   type: 'FeatureCollection',
@@ -193,7 +194,7 @@ const FilterMap: React.FC<{}> = () => {
     if (airportRef.current) return;
 
     airportRef.current = new IconLayer({
-      id: 'icon-layer',
+      id: 'icon-layer-airport',
       data: airportData,
       pickable: true,
       // iconAtlas and iconMapping are required
@@ -224,7 +225,7 @@ const FilterMap: React.FC<{}> = () => {
     if (emergencyRef.current) return;
 
     emergencyRef.current = new IconLayer({
-      id: 'icon-layer',
+      id: 'icon-layer-emergency',
       data: emergencyData,
       pickable: true,
       // iconAtlas and iconMapping are required
@@ -501,41 +502,7 @@ const FilterMap: React.FC<{}> = () => {
       setFeature(updatedData);
     },
     // @ts-ignore
-    PopupTemplate: ({params}: any) => {
-      const [loading, setLoading] = useState<boolean>(false);
-
-      const fetchPopupData = async (param: any) => {
-        setLoading(true);
-        try {
-          setTimeout(() => {
-            console.log('first');
-            setLoading(false);
-          }, 2000);
-        } catch (err) {
-        } finally {
-        }
-      };
-
-      useEffect(() => {
-        fetchPopupData({});
-      }, [params]);
-
-      return (
-        <>
-          {loading ? (
-            <div className="flex items-center text-xs">
-              <Loading />
-              <span>درحال دریافت اطلاعات</span>
-            </div>
-          ) : (
-            <>
-              {/* <div className="hidden">{JSON.stringify(params, null, 2)}</div>
-              create PopupTemplate component */}
-            </>
-          )}
-        </>
-      );
-    },
+    PopupTemplate: Polygon,
   });
 
   useEffect(() => {
@@ -546,7 +513,7 @@ const FilterMap: React.FC<{}> = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
       <div className="relative" style={{height: '650px'}}>
-        <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
+        {/* <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
           <button
             className="bg-white shadow-2xl rounded-md p-2 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => ViewMode)}
@@ -559,7 +526,7 @@ const FilterMap: React.FC<{}> = () => {
           >
             2
           </button>
-        </div>
+        </div> */}
         <div className="filter-map">
           {/* <div className="filter-map__search"> */}
           {/*  <input type="text" placeholder="جستجو" /> */}
