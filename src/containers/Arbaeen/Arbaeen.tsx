@@ -31,6 +31,7 @@ import OverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/publi
 import TheLatestOverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatusPercentage';
 import ComparsionPasengersEntranceAndExistanceAtBoarders from 'src/components/Arbaeen/public/ComparsionPasengersEntranceAndExistanceAtBoarders';
 import OverviewTheLatestStatusGroundBorders from 'src/components/Arbaeen/public/OverviewTheLatestStatusGroundBorders';
+import EmergencyList from 'src/components/Arbaeen/public/EmergencyList';
 import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
@@ -73,6 +74,7 @@ const Arbaeen = () => {
       {/* <ListOfTheBusiestBorderCrossings /> */}
       {/* <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases /> */}
       <MokebList />
+      <EmergencyList />
       {/* <RedHalalBasesList /> */}
       {/* <TheLargestNumberOfOriginPilgrimsCountriesList /> */}
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
