@@ -1,6 +1,5 @@
 /* eslint-disable */
-
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup} from 'react-map-gl';
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import DeckGL from '@deck.gl/react/typed';
@@ -9,6 +8,8 @@ import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers'
 // import {colorRange} from "./DensityOfPassengersMap";
 import {borders} from '../geos/borders';
 import {roads} from '../geos/roads';
+import {airports} from '../geos/airport';
+import {mokebs} from '../geos/mokebs';
 import {PickingInfo} from '@deck.gl/core/typed';
 import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
@@ -17,6 +18,14 @@ import JSZip from 'jszip';
 import csvtojson from 'csvtojson';
 import arbaeenService from 'src/services/arbaeen.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
+
+import airportIcon from '../../../assets/images/markers/airport-icon.svg';
+import mokebIcon from '../../../assets/images/markers/mokeb-icon.png';
+
+import Road from '../popup/Road';
+import Mokeb from '../popup/Mokeb';
+import Border from '../popup/‌Border';
+import Airport from '../popup/Airport';
 
 try {
   setRTLTextPlugin(
@@ -59,14 +68,34 @@ const getTooltip: (info: PickingInfo) => TooltipContent = ({object}: PickingInfo
 
 const FILE_NAME = 'ar_location_ptrue_tmp_loc';
 
+const ICON_MAPPING = {
+  marker: {x: 0, y: 0, width: 128, height: 128, mask: true},
+};
+
 const FilterMap: React.FC<{}> = () => {
   const [selected, setSelected] = useState<any>(null);
+
+  // airports
+  const [airportData, setAirportData] = useState<any[]>(airports);
+  const [showAirport, setShowAirport] = useState<any>(false);
+  const [airportLayers, setAirportLayers] = useState<any[]>([]);
+
+  // mokeb
+  const [mokebData, setMokebData] = useState<any[]>(mokebs);
+  const [showMokeb, setShowMokeb] = useState<any>(false);
+  const [mokebLayers, setMokebLayers] = useState<any[]>([]);
+
+  // borders
   const [borderData, setBorderData] = useState<any[]>(borders);
   const [showBorder, setShowBorder] = useState<any>(false);
   const [borderLayers, setBorderLayers] = useState<any[]>([]);
+
+  // roads
   const [pathData, setPathData] = useState<any[]>(roads);
   const [showPath, setShowPath] = useState<any>(false);
   const [pathLayers, setPathLayers] = useState<any[]>([]);
+
+  // zaerin
   const [zaerinData, setZaerinData] = useState<any[]>([]);
   const [showZaerin, setShowZaerin] = useState<any>(false);
   const [zaerinLayers, setZaerinLayers] = useState<any[]>([]);
@@ -79,7 +108,95 @@ const FilterMap: React.FC<{}> = () => {
 
   const pathRef: any = useRef(null);
   const borderRef: any = useRef(null);
+  const airportRef: any = useRef(null);
   const zaerinRef: any = useRef(null);
+  const mokebRef: any = useRef(null);
+
+  function AirPortMarker() {
+    return `
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#041e39"/>
+      <stop offset="1" stop-color="#57687a"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_48493" data-name="Group 48493" transform="translate(8425 4469)">
+    <g id="_3669413_location_ic_on_icon" data-name="3669413_location_ic_on_icon" transform="translate(-8425 -4469)">
+      <path id="Path_94545" data-name="Path 94545" d="M30,4C18.957,4,10,12.151,10,22.2,10,35.85,30,56,30,56S50,35.85,50,22.2C50,12.151,41.043,4,30,4Z" transform="translate(0 0)" fill="url(#linear-gradient)"/>
+      <path id="Path_94546" data-name="Path 94546" d="M0,0H60V60H0Z" fill="none"/>
+      <path id="_3671647_airplane_icon" data-name="3671647_airplane_icon" d="M7.56,10.8H2.52L.9,13.5H0v-9H.9L2.52,7.2H7.56L5.4,0H7.2l4.32,7.2H16.2a1.8,1.8,0,1,1,0,3.6H11.52L7.2,18H5.4Z" transform="translate(21 15)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
+  `;
+  }
+
+  const svgToDataURL = (svg: any) => {
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  };
+
+  useEffect(() => {
+    if (mokebRef.current) return;
+
+    mokebRef.current = new IconLayer({
+      id: 'icon-layer-mokeb',
+      data: mokebData,
+      pickable: true,
+      // iconAtlas and iconMapping are required
+      // getIcon: return a string
+      // iconAtlas: svgToDataURL(airportIcon),
+      getIcon: () => ({
+        url: mokebIcon,
+        width: 24,
+        height: 24,
+      }),
+      iconMapping: ICON_MAPPING,
+      // // @ts-ignore
+      // // getIcon: d => 'marker',
+      sizeScale: 10,
+      // @ts-ignore
+      getPosition: d => d.coordinates,
+      // @ts-ignore
+      getSize: d => 4,
+      // @ts-ignore
+      // getColor: d => [Math.sqrt(d.exits), 140, 0],
+      PopupTemplate: Mokeb,
+    });
+
+    setMokebLayers([mokebRef.current]);
+  }, []);
+
+  useEffect(() => {
+    if (airportRef.current) return;
+
+    airportRef.current = new IconLayer({
+      id: 'icon-layer',
+      data: airportData,
+      pickable: true,
+      // iconAtlas and iconMapping are required
+      // getIcon: return a string
+      // iconAtlas: svgToDataURL(airportIcon),
+      getIcon: () => ({
+        url: svgToDataURL(AirPortMarker()),
+        width: 24,
+        height: 24,
+      }),
+      iconMapping: ICON_MAPPING,
+      // // @ts-ignore
+      // // getIcon: d => 'marker',
+      sizeScale: 10,
+      // @ts-ignore
+      getPosition: d => d.coordinates,
+      // @ts-ignore
+      getSize: d => 4,
+      // @ts-ignore
+      // getColor: d => [Math.sqrt(d.exits), 140, 0],
+      PopupTemplate: Airport,
+    });
+
+    setAirportLayers([airportRef.current]);
+  }, []);
 
   useEffect(() => {
     if (borderRef.current) return;
@@ -97,23 +214,18 @@ const FilterMap: React.FC<{}> = () => {
       // @ts-ignore
       getElevation: d => d.population / d.area / 10,
       // @ts-ignore
-      getFillColor: [255, 240, 0],
-      getLineColor: [255, 240, 0],
+      getFillColor: [0, 0, 0, 150],
+      getLineColor: [0, 0, 0],
       getLineWidth: 1,
       fillColor: '#FF0000',
-      PopupTemplate: ({params}: any) => {
-        return (
-          <>
-            <div className="hidden">{JSON.stringify(params, null, 2)}</div>
-            create PopupTemplate component
-          </>
-        );
-      },
+      PopupTemplate: Border,
       visible: true,
     });
 
     setBorderLayers([borderRef.current]);
   }, []);
+
+  const [hoverInfo, setHoverInfo] = useState(false);
 
   useEffect(() => {
     if (pathRef.current) return;
@@ -123,7 +235,7 @@ const FilterMap: React.FC<{}> = () => {
       data: pathData,
       pickable: true,
       widthScale: 20,
-      widthMinPixels: 2,
+      widthMinPixels: 3,
       // @ts-ignore
       getPath: d => d.path,
       // @ts-ignore
@@ -137,41 +249,7 @@ const FilterMap: React.FC<{}> = () => {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       getWidth: d => 5,
-      PopupTemplate: ({params}: any) => {
-        const [loading, setLoading] = useState<boolean>(false);
-
-        const fetchPopupData = async (param: any) => {
-          setLoading(true);
-          try {
-            setTimeout(() => {
-              console.log('first');
-              setLoading(false);
-            }, 2000);
-          } catch (err) {
-          } finally {
-          }
-        };
-
-        useEffect(() => {
-          fetchPopupData({});
-        }, [params]);
-
-        return (
-          <>
-            {loading ? (
-              <div className="flex items-center text-xs">
-                <Loading />
-                <span>درحال دریافت اطلاعات</span>
-              </div>
-            ) : (
-              <>
-                <div className="hidden">{JSON.stringify(params, null, 2)}</div>
-                create PopupTemplate component
-              </>
-            )}
-          </>
-        );
-      },
+      PopupTemplate: Road,
       visible: true,
     });
 
@@ -180,19 +258,7 @@ const FilterMap: React.FC<{}> = () => {
 
   const fetchZaerinData = async () => {
     try {
-      const {data: response} = await arbaeenService.getPiligrimReportAsFile(
-        {
-          fileName: `${FILE_NAME}.zip`,
-        },
-        {responseType: 'blob'}
-      );
-      const zip = await JSZip.loadAsync(response);
-
-      const file = await zip.file(`${FILE_NAME}.csv`)?.async('text');
-
-      const json = await csvtojson().fromString(file || '');
-
-      const res = json
+      const res = zaerinDataSource
         .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
         .reduce((result: any, d: any) => {
           [...Array(Number(d.CountOfSamah))].forEach(() => {
@@ -205,8 +271,6 @@ const FilterMap: React.FC<{}> = () => {
 
           return result;
         }, []);
-
-      console.log('Finish');
 
       setZaerinData([...res]);
 
@@ -273,8 +337,8 @@ const FilterMap: React.FC<{}> = () => {
   useEffect(() => {
     if (zaerinRef.current) return;
 
-    fetchZaerinData();
-  }, []);
+    if (zaerinDataSource && !zaerinLoading) fetchZaerinData();
+  }, [zaerinLoading]);
 
   useEffect(() => {
     if (!pathRef.current) return;
@@ -306,10 +370,30 @@ const FilterMap: React.FC<{}> = () => {
     }
   }, [showZaerin]);
 
+  useEffect(() => {
+    if (!airportRef.current) return;
+
+    if (showAirport) {
+      setAirportLayers([airportRef.current.clone({visible: true})]);
+    } else {
+      setAirportLayers([airportRef.current.clone({visible: false})]);
+    }
+  }, [showAirport]);
+
+  useEffect(() => {
+    if (!mokebRef.current) return;
+
+    if (showMokeb) {
+      setMokebLayers([mokebRef.current.clone({visible: true})]);
+    } else {
+      setMokebLayers([mokebRef.current.clone({visible: false})]);
+    }
+  }, [showMokeb]);
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا فیلتر</legend>
-      <div className="relative" style={{height: '500px'}}>
+      <div className="relative" style={{height: '650px'}}>
         <div className="filter-map">
           {/* <div className="filter-map__search"> */}
           {/*  <input type="text" placeholder="جستجو" /> */}
@@ -329,6 +413,20 @@ const FilterMap: React.FC<{}> = () => {
               <label htmlFor="road" className="select-radio__label text-right">
                 <span className="select-radio__button" />
                 مسیرها
+              </label>
+            </div>
+
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="airports"
+                name="airports"
+                onClick={() => setShowAirport((prev: any) => !prev)}
+              />
+              <label htmlFor="airports" className="select-radio__label text-right">
+                <span className="select-radio__button" />
+                فرودگاه ها
               </label>
             </div>
 
@@ -360,6 +458,7 @@ const FilterMap: React.FC<{}> = () => {
                 className="select-radio__input"
                 id="procession"
                 name="procession"
+                onClick={() => setShowMokeb((prev: any) => !prev)}
               />
               <label htmlFor="procession" className="select-radio__label text-right">
                 <span className="select-radio__button" />
@@ -368,8 +467,8 @@ const FilterMap: React.FC<{}> = () => {
             </div>
 
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="base" name="base" />
-              <label htmlFor="base" className="select-radio__label text-right">
+              <input type="checkbox" className="select-radio__input" id="helal_ahmar" name="helal_ahmar" />
+              <label htmlFor="helal_ahmar" className="select-radio__label text-right">
                 <span className="select-radio__button" />
                 پایگاه حلال‌احمر
               </label>
@@ -400,7 +499,7 @@ const FilterMap: React.FC<{}> = () => {
               </label>
             </div>
           </div>
-          <div className="w-11/12 mx-auto filter-map__submit text-center">
+          <div className="w-10/12 mx-auto filter-map__submit text-center">
             <button type="button" className="button button--primary">
               اعمال فیلتر
             </button>
@@ -433,15 +532,29 @@ const FilterMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
-          layers={[borderLayers, pathLayers]}
+          layers={[borderLayers, pathLayers, airportLayers, mokebLayers]}
           initialViewState={INITIAL_VIEW_STATE}
           controller={{
             doubleClickZoom: false,
           }}
-          height={500}
+          height={650}
           // getTooltip={getTooltip}
           // @ts-ignore
           ContextProvider={MapContext.Provider}
+          getCursor={() => {
+            return hoverInfo ? 'pointer' : 'grab';
+          }}
+          onHover={({x, y, coordinate, layer, color, object, index}: PickingInfo) => {
+            if (object) {
+              if (!hoverInfo) {
+                setHoverInfo(true);
+              }
+            } else {
+              if (hoverInfo) {
+                setHoverInfo(false);
+              }
+            }
+          }}
           onClick={({x, y, coordinate, layer, color, object, index}: PickingInfo) => {
             console.log('deck onClick', object);
             console.log('layer', layer);
