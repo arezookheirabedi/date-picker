@@ -5,10 +5,8 @@ import {MapView} from '@deck.gl/core/typed';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
 import {DataFilterExtension} from '@deck.gl/extensions/typed';
 import DeckGL from '@deck.gl/react/typed';
-import JSZip from 'jszip';
-import csvtojson from 'csvtojson';
-import arbaeenService from 'src/services/arbaeen.service';
 import MapRange from 'src/components/MapRange';
+import {useSelector} from 'src/hooks/useTypedSelector';
 
 try {
   setRTLTextPlugin(
@@ -79,8 +77,6 @@ function getTooltip({object}: any) {
   );
 }
 
-const FILE_NAME = 'ar_location_ptrue_tmp_loc';
-
 const TimelineMap: React.FC<{}> = () => {
   const [data, setData] = useState<any[]>([]);
   const [data2, setData2] = useState<any[]>([]);
@@ -91,62 +87,45 @@ const TimelineMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
+  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
+
   const filterValue = filter || timeRange;
 
   const fetcher = async () => {
-    setSubmitted(true);
-    try {
-      const {data: response} = await arbaeenService.getPiligrimReportAsFile(
-        {
-          fileName: `${FILE_NAME}.zip`,
-        },
-        {responseType: 'blob'}
-      );
-      const zip = await JSZip.loadAsync(response);
+    const res1 = zaerinDataSource
+      .filter((x: any) => x.isPassenger === 'true')
+      .map((row: any) => {
+        const coordinates = JSON.parse(row.location.coordinates);
+        return {
+          timestamp: new Date(row.Submittime).getTime(),
+          longitude: Number(coordinates[0]),
+          latitude: Number(coordinates[1]),
+          isPassenger: row.isPassenger === 'true',
+          // depth: Number(row.CountOfSamah),
+          depth: 1,
+          magnitude: Number(row.CountOfSamah),
+        };
+      });
 
-      const file = await zip.file(`${FILE_NAME}.csv`)?.async('text');
+    const res2 = zaerinDataSource
+      .filter((x: any) => x.isPassenger !== 'true')
+      .map((row: any) => {
+        const coordinates = JSON.parse(row.location.coordinates);
+        return {
+          timestamp: new Date(row.Submittime).getTime(),
+          longitude: Number(coordinates[0]),
+          latitude: Number(coordinates[1]),
+          isPassenger: row.isPassenger !== 'true',
+          // depth: Number(row.CountOfSamah),
+          depth: 1,
+          magnitude: Number(row.CountOfSamah),
+        };
+      });
 
-      const json = await csvtojson().fromString(file || '');
+    console.log('Finish');
 
-      const res1 = json
-        .filter((x: any) => x.isPassenger === 'true')
-        .map((row: any) => {
-          const coordinates = JSON.parse(row.location.coordinates);
-          return {
-            timestamp: new Date(row.Submittime).getTime(),
-            longitude: Number(coordinates[0]),
-            latitude: Number(coordinates[1]),
-            isPassenger: row.isPassenger === 'true',
-            // depth: Number(row.CountOfSamah),
-            depth: 1,
-            magnitude: Number(row.CountOfSamah),
-          };
-        });
-
-      const res2 = json
-        .filter((x: any) => x.isPassenger !== 'true')
-        .map((row: any) => {
-          const coordinates = JSON.parse(row.location.coordinates);
-          return {
-            timestamp: new Date(row.Submittime).getTime(),
-            longitude: Number(coordinates[0]),
-            latitude: Number(coordinates[1]),
-            isPassenger: row.isPassenger !== 'true',
-            // depth: Number(row.CountOfSamah),
-            depth: 1,
-            magnitude: Number(row.CountOfSamah),
-          };
-        });
-
-      console.log('Finish');
-
-      setData([...res1]);
-      setData2([...res2]);
-    } catch (err: any) {
-      console.error(err);
-    } finally {
-      setSubmitted(false);
-    }
+    setData([...res1]);
+    setData2([...res2]);
   };
 
   const layers = [
@@ -207,8 +186,14 @@ const TimelineMap: React.FC<{}> = () => {
   ];
 
   useEffect(() => {
-    fetcher();
-  }, []);
+    if (zaerinLoading) setSubmitted(true);
+    if (!zaerinLoading) {
+      setSubmitted(false);
+      if (zaerinDataSource) {
+        fetcher();
+      }
+    }
+  }, [zaerinLoading]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
