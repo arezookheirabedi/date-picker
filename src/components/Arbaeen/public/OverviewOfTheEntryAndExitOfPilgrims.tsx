@@ -21,7 +21,7 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
     setLoading(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.gerBorderTraffic({cancelToken: source.token});
+      const {data} = await arbaeenService.gerBorderTraffic({}, {cancelToken: source.token});
 
       setPilgrims({...data});
     } catch (error) {
