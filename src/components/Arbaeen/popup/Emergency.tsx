@@ -23,7 +23,7 @@ const Emergency: React.FC<any> = ({params}: any) => {
   const fetchPopupData = async (param: any) => {
     setLoading(true);
     try {
-      const {data} = await arbaeenService.getEmergency(param);
+      const {data} = await arbaeenService.getEmergencyList(param);
       setData(data);
     } catch (err) {
       console.log(err)
