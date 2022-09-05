@@ -197,8 +197,8 @@ const TimelineMap: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا</legend>
-      <div className="relative" style={{height: '500px'}}>
+      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در ۲۴ ساعت اخیر</legend>
+      <div className="relative" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -230,14 +230,14 @@ const TimelineMap: React.FC<{}> = () => {
           layers={layers}
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          height={500}
+          height={650}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
           <StaticMap
             reuseMaps
             preventStyleDiffing
-            height={500}
+            height={650}
             ref={mapRef}
             mapStyle="mapbox://styles/mapbox/light-v10"
             // className="map-container"

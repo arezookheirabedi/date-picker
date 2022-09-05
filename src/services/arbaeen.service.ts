@@ -206,6 +206,26 @@ function getMokeb(id: any, config?: any) {
   );
 }
 
+function getEmergency(id: any, config?: any) {
+  return request.build().get(
+    `/api/v1/arbaeen/ar-emergencies/${id}`,
+    {},
+    {
+      ...config,
+    }
+  );
+}
+
+function getParking(id: any, config?: any) {
+  return request.build().get(
+    `/api/v1/arbaeen/ar-parkings/${id}`,
+    {},
+    {
+      ...config,
+    }
+  );
+}
+
 const arbaeenService = {
   arbaeenGetAll,
   getPiligrimList,
@@ -229,6 +249,8 @@ const arbaeenService = {
   getRoadInfo,
   getAirportAndBorderInfo,
   getMokeb,
+  getEmergency,
+  getParking
 };
 
 export default arbaeenService;
