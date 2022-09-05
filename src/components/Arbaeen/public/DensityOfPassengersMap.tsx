@@ -3,9 +3,7 @@ import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
 import {AmbientLight, PointLight, LightingEffect} from '@deck.gl/core/typed';
 import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import DeckGL from '@deck.gl/react/typed';
-import JSZip from 'jszip';
-import csvtojson from 'csvtojson';
-import arbaeenService from 'src/services/arbaeen.service';
+import {useSelector} from 'src/hooks/useTypedSelector';
 
 try {
   setRTLTextPlugin(
@@ -80,8 +78,6 @@ function getTooltip({object}: any) {
     ${count} مسافر`;
 }
 
-const FILE_NAME = 'ar_location_ptrue_tmp_loc';
-
 const DensityOfPassengersMap: React.FC<{}> = () => {
   const [data, setData] = useState<any[]>([]);
   const [submitted, setSubmitted] = useState(false);
@@ -90,43 +86,26 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
+  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
+
   const fetcher = async () => {
-    setSubmitted(true);
-    try {
-      const {data: response} = await arbaeenService.getPiligrimReportAsFile(
-        {
-          fileName: `${FILE_NAME}.zip`,
-        },
-        {responseType: 'blob'}
-      );
-      const zip = await JSZip.loadAsync(response);
+    const res = zaerinDataSource
+      .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
+      .reduce((result: any, d: any) => {
+        [...Array(Number(d.CountOfSamah))].forEach(() => {
+          try {
+            result.push(JSON.parse(d.location.coordinates));
+          } catch (e) {
+            console.error(e);
+          }
+        });
 
-      const file = await zip.file(`${FILE_NAME}.csv`)?.async('text');
+        return result;
+      }, []);
 
-      const json = await csvtojson().fromString(file || '');
+    console.log('Finish');
 
-      const res = json
-        .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
-        .reduce((result: any, d: any) => {
-          [...Array(Number(d.CountOfSamah))].forEach(() => {
-            try {
-              result.push(JSON.parse(d.location.coordinates));
-            } catch (e) {
-              console.error(e);
-            }
-          });
-
-          return result;
-        }, []);
-
-      console.log('Finish');
-
-      setData([...res]);
-    } catch (err: any) {
-      console.error(err);
-    } finally {
-      setSubmitted(false);
-    }
+    setData([...res]);
   };
 
   useEffect(() => {
@@ -158,8 +137,14 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   }, [data, submitted]);
 
   useEffect(() => {
-    fetcher();
-  }, []);
+    if (zaerinLoading) setSubmitted(true);
+    if (!zaerinLoading) {
+      setSubmitted(false);
+      if (zaerinDataSource) {
+        fetcher();
+      }
+    }
+  }, [zaerinLoading]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
