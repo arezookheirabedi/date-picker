@@ -56,11 +56,11 @@ const INITIAL_VIEW_STATE = {
 };
 
 export const colorRange = [
-  [1, 152, 189],
-  [73, 227, 206],
-  [216, 254, 181],
-  [254, 237, 177],
-  [254, 173, 84],
+  [23, 90, 118],
+  [60, 83, 110],
+  [97, 76, 102],
+  [135, 69, 94],
+  [172, 62, 86],
   [209, 55, 78],
 ];
 
@@ -104,8 +104,6 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
 
         return result;
       }, []);
-
-    console.log('Finish');
 
     setData([...res]);
   };

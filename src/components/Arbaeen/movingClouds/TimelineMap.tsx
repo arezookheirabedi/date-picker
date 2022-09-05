@@ -122,8 +122,6 @@ const TimelineMap: React.FC<{}> = () => {
         };
       });
 
-    console.log('Finish');
-
     setData([...res1]);
     setData2([...res2]);
   };
@@ -140,7 +138,7 @@ const TimelineMap: React.FC<{}> = () => {
         wrapLongitude: true,
         getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
         // getRadius: (d) => Math.pow(2, d.magnitude),
-        getRadius: (d: any) => d.magnitude / 3,
+        getRadius: (d: any) => d.magnitude / 10,
         getFillColor: (d: any) => {
           const r = Math.sqrt(Math.max(d.depth, 0));
           return [24 - r * 15, r * 90, r * 118];

@@ -4,7 +4,6 @@ import arbaeenService from 'src/services/arbaeen.service';
 import qs from 'qs';
 
 const Polygon: React.FC<any> = ({params}: any) => {
-  console.log(params);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>({
     location: null,
@@ -12,7 +11,6 @@ const Polygon: React.FC<any> = ({params}: any) => {
     numberOfAvailableAutolances: null,
     numberOfAvailableMotolances: null,
   });
-  console.log('data => ', data);
 
   const fetchPopupData = async (param: any) => {
     setLoading(true);
@@ -27,7 +25,6 @@ const Polygon: React.FC<any> = ({params}: any) => {
   };
 
   useEffect(() => {
-    console.log('gdasafgsaf');
     fetchPopupData(
       qs.stringify(
         {
@@ -53,6 +50,12 @@ const Polygon: React.FC<any> = ({params}: any) => {
               <span className="text-xs ml-2 text-gray-500">موقعیت : </span>
               <span className="text-xs text-gray-500">{params.location}</span>
             </div>
+
+            {!data.numberOfAvailableAmbulances && (
+              <div className="pt-4 flex justify-start">
+                <span className="text-xs">داده‌ای یافت نشد</span>
+              </div>
+            )}
 
             {data.numberOfAvailableAmbulances && (
               <div className="flex justify-start items-center border-b border-gray-300 pb-2 pt-2">

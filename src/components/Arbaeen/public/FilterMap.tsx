@@ -8,25 +8,27 @@ import DeckGL, {FlyToInterpolator} from 'deck.gl';
 
 // @ts-ignore
 import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers';
-// import {colorRange} from "./DensityOfPassengersMap";
+import {colorRange} from '../movingClouds/DensityOfPassengersMap';
 import {borders} from '../geos/borders';
 import {roads} from '../geos/roads';
 import {airports} from '../geos/airport';
 import {emergencies} from '../geos/emergencies';
 import {mokebs} from '../geos/mokebs';
 import {parkings} from '../geos/parkings';
-import {PickingInfo} from '@deck.gl/core/typed';
+import {AmbientLight, LightingEffect, PickingInfo, PointLight} from '@deck.gl/core/typed';
 import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
 import {EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {ViewMode, DrawPolygonMode} from '@nebula.gl/edit-modes';
-import {ScatterplotLayer} from '@deck.gl/layers/typed';
+import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
 import airportIcon from '../../../assets/images/markers/airport-icon.svg';
 import mokebIcon from '../../../assets/images/markers/mokeb-icon.svg';
 import emergencyIcon from '../../../assets/images/markers/emergency.svg';
 import parkingIcon from '../../../assets/images/markers/parking-icon.svg';
+import mapSelectIcon from '../../../assets/images/icons/map-select.svg';
+import mapDrawIcon from '../../../assets/images/icons/map-draw.svg';
 
 import Road from '../popup/Road';
 import Mokeb from '../popup/Mokeb';
@@ -53,13 +55,43 @@ try {
   console.error(e);
 }
 
+const ambientLight = new AmbientLight({
+  color: [255, 255, 255],
+  intensity: 1.0,
+});
+
+const pointLight1 = new PointLight({
+  color: [255, 255, 255],
+  intensity: 0.8,
+  position: [-0.144528, 49.739968, 80000],
+});
+
+const pointLight2 = new PointLight({
+  color: [255, 255, 255],
+  intensity: 0.8,
+  position: [-3.807751, 54.104682, 8000],
+});
+
+const lightingEffect = new LightingEffect({
+  ambientLight,
+  pointLight1,
+  pointLight2,
+});
+
+const material = {
+  ambient: 0.64,
+  diffuse: 0.6,
+  shininess: 32,
+  specularColor: [51, 51, 51],
+};
+
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
   latitude: 32.7219,
   zoom: 4.5,
   minZoom: 3,
   maxZoom: 15,
-  // pitch: 40.5,
+  pitch: 40.5,
   // bearing: -27,
 };
 
@@ -76,7 +108,7 @@ const FilterMap: React.FC<{}> = () => {
 
   // airports
   const [airportData, setAirportData] = useState<any[]>(airports);
-  const [showAirport, setShowAirport] = useState<any>(false);
+  const [showAirport, setShowAirport] = useState<any>(true);
   const [airportLayers, setAirportLayers] = useState<any[]>([]);
 
   // emergency
@@ -109,7 +141,9 @@ const FilterMap: React.FC<{}> = () => {
   const [zaerinLayers, setZaerinLayers] = useState<any>(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
+  const {loadingHourly: zaerinLoading, dataHourly: zaerinDataSource} = useSelector(
+    state => state.fetchZaerin
+  );
 
   const mapRef = useRef(null);
   const deckRef = useRef(null);
@@ -197,6 +231,7 @@ const FilterMap: React.FC<{}> = () => {
       id: 'icon-layer-airport',
       data: airportData,
       pickable: true,
+      visible: true,
       // iconAtlas and iconMapping are required
       // getIcon: return a string
       // iconAtlas: svgToDataURL(airportIcon),
@@ -314,34 +349,37 @@ const FilterMap: React.FC<{}> = () => {
   const fetchZaerinData = async () => {
     try {
       const res = zaerinDataSource
-        .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
-        .map((row: any) => {
-          const coordinates = JSON.parse(row.location.coordinates);
-          return {
-            timestamp: new Date(row.Submittime).getTime(),
-            longitude: Number(coordinates[0]),
-            latitude: Number(coordinates[1]),
-            isPassenger: row.isPassenger === 'true',
-            // depth: Number(row.CountOfSamah),
-            depth: 1,
-            magnitude: Number(row.CountOfSamah),
-          };
+        .filter((x: any) => x.isPassenger === 'true')
+        .reduce((result: any, d: any) => {
+          [...Array(Number(d.CountOfSamah))].forEach(() => {
+            try {
+              result.push(JSON.parse(d.location.coordinates));
+            } catch (e) {
+              console.error(e);
+            }
+          });
+
+          return result;
         }, []);
 
-      zaerinRef.current = new ScatterplotLayer({
+      zaerinRef.current = new HexagonLayer({
         id: 'zaerin-layer',
-        data: [...res],
+        // @ts-ignore
+        colorRange,
+        coverage: 1,
+        data: res,
+        elevationRange: [0, 3000],
+        elevationScale: res && res.length ? 50 : 0,
+        extruded: true,
+        getPosition: (d: any) => d,
         pickable: true,
-        opacity: 0.8,
-        radiusScale: 100,
-        radiusMinPixels: 1,
-        wrapLongitude: true,
-        getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
-        // getRadius: (d) => Math.pow(2, d.magnitude),
-        getRadius: (d: any) => d.magnitude / 3,
-        getFillColor: (d: any) => {
-          const r = Math.sqrt(Math.max(d.depth, 0));
-          return [46 - r * 15, r * 106, r * 79];
+        radius: 1000,
+        upperPercentile: 100,
+        // @ts-ignore
+        material,
+
+        transitions: {
+          elevationScale: 3000,
         },
         PopupTemplate: ({params}: any) => {
           const [loading, setLoading] = useState<boolean>(false);
@@ -509,24 +547,49 @@ const FilterMap: React.FC<{}> = () => {
     setSelectedPoint([]);
   }, [editMode]);
 
+  const removePolygon = () => {
+    const f = {...feature};
+    f.features.splice(selectedPoint[0], 1);
+    setFeature(f);
+  };
+
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
       <div className="relative" style={{height: '650px'}}>
-        {/* <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
+        <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
           <button
-            className="bg-white shadow-2xl rounded-md p-2 w-6 h-6 text-xs"
+            className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => ViewMode)}
           >
-            1
+            <img src={mapSelectIcon} className="w-6 h-6" alt="Map Select Polygon" />
           </button>
           <button
-            className="bg-white shadow-2xl rounded-md p-2 w-6 h-6 text-xs"
+            className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => DrawPolygonMode)}
           >
-            2
+            <img src={mapDrawIcon} className="w-6 h-6" alt="Map Draw Polygon" />
           </button>
-        </div> */}
+          <button
+            className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
+            onClick={removePolygon}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="#175A76"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </div>
         <div className="filter-map">
           {/* <div className="filter-map__search"> */}
           {/*  <input type="text" placeholder="جستجو" /> */}
@@ -564,6 +627,7 @@ const FilterMap: React.FC<{}> = () => {
                 type="checkbox"
                 className="select-radio__input"
                 id="airports"
+                checked={showAirport}
                 name="airports"
                 onClick={() => {
                   setShowAirport((prev: any) => !prev);
@@ -756,8 +820,8 @@ const FilterMap: React.FC<{}> = () => {
               // don't change selection while editing
               return;
             } else {
-              console.log('deck onClick', object);
-              console.log('layer', layer);
+              // console.log('deck onClick', object);
+              // console.log('layer', layer);
               if (object) {
                 setSelected({x, y, coordinate, object, layer});
               } else {
