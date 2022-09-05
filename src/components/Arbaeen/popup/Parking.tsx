@@ -20,7 +20,7 @@ const Parking: React.FC<any> = ({params}: any) => {
   const fetchPopupData = async (param: any) => {
     setLoading(true);
     try {
-      const {data} = await arbaeenService.getParking(param);
+      const {data} = await arbaeenService.getParckingList(param);
       setData(data);
     } catch (err) {
       console.log(err)
@@ -29,6 +29,7 @@ const Parking: React.FC<any> = ({params}: any) => {
     }
   };
 
+  
   useEffect(() => {
     fetchPopupData(params.id);
   }, [params]);

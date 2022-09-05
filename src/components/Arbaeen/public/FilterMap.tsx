@@ -4,7 +4,7 @@ import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup} from 'rea
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 // import DeckGL from '@deck.gl/react/typed';
 // @ts-ignore
-import DeckGL, {FlyToInterpolator} from 'deck.gl'
+import DeckGL, {FlyToInterpolator} from 'deck.gl';
 
 // @ts-ignore
 import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers';
@@ -32,8 +32,8 @@ import Road from '../popup/Road';
 import Mokeb from '../popup/Mokeb';
 import Border from '../popup/‌Border';
 import Airport from '../popup/Airport';
-import Emergency from "../popup/Emergency";
-import Parking from "../popup/Parking";
+import Emergency from '../popup/Emergency';
+import Parking from '../popup/Parking';
 
 const myFeatureCollection = {
   type: 'FeatureCollection',
@@ -45,8 +45,7 @@ const myFeatureCollection = {
 try {
   setRTLTextPlugin(
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    () => {
-    },
+    () => {},
     true
   );
 } catch (e) {
@@ -109,7 +108,6 @@ const FilterMap: React.FC<{}> = () => {
   const [zaerinLayers, setZaerinLayers] = useState<any>(false);
   const [submitted, setSubmitted] = useState(false);
 
-
   const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
 
   const mapRef = useRef(null);
@@ -152,32 +150,10 @@ const FilterMap: React.FC<{}> = () => {
     });
 
     setParkingLayers([parkingRef.current]);
-
   }, []);
-
 
   useEffect(() => {
     if (emergencyRef.current) return;
-
-  function AirPortMarker() {
-    return `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
-  <defs>
-    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#041e39"/>
-      <stop offset="1" stop-color="#57687a"/>
-    </linearGradient>
-  </defs>
-  <g id="Group_48493" data-name="Group 48493" transform="translate(8425 4469)">
-    <g id="_3669413_location_ic_on_icon" data-name="3669413_location_ic_on_icon" transform="translate(-8425 -4469)">
-      <path id="Path_94545" data-name="Path 94545" d="M30,4C18.957,4,10,12.151,10,22.2,10,35.85,30,56,30,56S50,35.85,50,22.2C50,12.151,41.043,4,30,4Z" transform="translate(0 0)" fill="url(#linear-gradient)"/>
-      <path id="Path_94546" data-name="Path 94546" d="M0,0H60V60H0Z" fill="none"/>
-      <path id="_3671647_airplane_icon" data-name="3671647_airplane_icon" d="M7.56,10.8H2.52L.9,13.5H0v-9H.9L2.52,7.2H7.56L5.4,0H7.2l4.32,7.2H16.2a1.8,1.8,0,1,1,0,3.6H11.52L7.2,18H5.4Z" transform="translate(21 15)" fill="#fff"/>
-    </g>
-  </g>
-</svg>
-  `;
-  }
 
     setMokebLayers([emergencyRef.current]);
   }, []);
@@ -245,6 +221,37 @@ const FilterMap: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
+    if (emergencyRef.current) return;
+
+    emergencyRef.current = new IconLayer({
+      id: 'icon-layer',
+      data: emergencyData,
+      pickable: true,
+      // iconAtlas and iconMapping are required
+      // getIcon: return a string
+      // iconAtlas: svgToDataURL(airportIcon),
+      getIcon: () => ({
+        url: emergencyIcon,
+        width: 500,
+        height: 500,
+      }),
+      iconMapping: ICON_MAPPING,
+      // // @ts-ignore
+      // // getIcon: d => 'marker',
+      sizeScale: 10,
+      // @ts-ignore
+      getPosition: d => d.coordinates,
+      // @ts-ignore
+      getSize: d => 4,
+      // @ts-ignore
+      // getColor: d => [Math.sqrt(d.exits), 140, 0],
+      PopupTemplate: Emergency,
+    });
+
+    setEmergencyLayers([emergencyRef.current]);
+  }, []);
+
+  useEffect(() => {
     if (borderRef.current) return;
 
     borderRef.current = new PolygonLayer({
@@ -295,6 +302,7 @@ const FilterMap: React.FC<{}> = () => {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       getWidth: d => 5,
+      // @ts-ignore
       PopupTemplate: Road,
       visible: true,
     });
@@ -357,7 +365,7 @@ const FilterMap: React.FC<{}> = () => {
             <>
               {loading ? (
                 <div className="flex items-center text-xs">
-                  <Loading/>
+                  <Loading />
                   <span>درحال دریافت اطلاعات</span>
                 </div>
               ) : (
@@ -460,7 +468,7 @@ const FilterMap: React.FC<{}> = () => {
   }, [showParking]);
 
   const goToBorder = useCallback(() => {
-    setShowBorder((prev: any) => !prev)
+    setShowBorder((prev: any) => !prev);
     if (!showBorder) {
       setMapState((prev: any) => {
         return {
@@ -469,20 +477,19 @@ const FilterMap: React.FC<{}> = () => {
           transitionDuration: 800,
           longitude: 47.3347,
           latitude: 33.7219,
-          transitionInterpolator: new FlyToInterpolator()
-        }
-      })
+          transitionInterpolator: new FlyToInterpolator(),
+        };
+      });
     } else {
       setMapState(() => {
         return {
           ...INITIAL_VIEW_STATE,
           transitionDuration: 800,
-          transitionInterpolator: new FlyToInterpolator()
-
-        }
-      })
+          transitionInterpolator: new FlyToInterpolator(),
+        };
+      });
     }
-  }, [showBorder])
+  }, [showBorder]);
 
   // @ts-ignore
   const editorLayer = new EditableGeoJsonLayer({
@@ -493,6 +500,7 @@ const FilterMap: React.FC<{}> = () => {
     onEdit: ({updatedData}: any) => {
       setFeature(updatedData);
     },
+    // @ts-ignore
     PopupTemplate: ({params}: any) => {
       const [loading, setLoading] = useState<boolean>(false);
 
@@ -519,7 +527,7 @@ const FilterMap: React.FC<{}> = () => {
               <Loading />
               <span>درحال دریافت اطلاعات</span>
             </div>
-          ) : ( 
+          ) : (
             <>
               {/* <div className="hidden">{JSON.stringify(params, null, 2)}</div>
               create PopupTemplate component */}
@@ -567,19 +575,19 @@ const FilterMap: React.FC<{}> = () => {
                 id="road"
                 name="road"
                 onClick={() => {
-                  setShowPath((prev: any) => !prev)
+                  setShowPath((prev: any) => !prev);
                   if (showBorder) {
                     setMapState(() => {
                       return {
                         ...INITIAL_VIEW_STATE,
                         transitionDuration: 1000,
-                      }
-                    })
+                      };
+                    });
                   }
                 }}
               />
               <label htmlFor="road" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 مسیرها
               </label>
             </div>
@@ -587,44 +595,47 @@ const FilterMap: React.FC<{}> = () => {
             <div className="select-radio__group">
               <input
                 type="checkbox"
-                checked
                 className="select-radio__input"
                 id="airports"
                 name="airports"
                 onClick={() => {
-                  setShowAirport((prev: any) => !prev)
+                  setShowAirport((prev: any) => !prev);
                   if (showBorder) {
                     setMapState(() => {
                       return {
                         ...INITIAL_VIEW_STATE,
                         transitionDuration: 1000,
-                      }
-                    })
+                      };
+                    });
                   }
                 }}
               />
               <label htmlFor="airports" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 فرودگاه ها
               </label>
             </div>
 
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="parking" name="parking"
-                     onClick={() => {
-                       setShowParking((prev: any) => !prev)
-                       if (showBorder) {
-                         setMapState(() => {
-                           return {
-                             ...INITIAL_VIEW_STATE,
-                             transitionDuration: 1000,
-                           }
-                         })
-                       }
-                     }}
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="parking"
+                name="parking"
+                onClick={() => {
+                  setShowParking((prev: any) => !prev);
+                  if (showBorder) {
+                    setMapState(() => {
+                      return {
+                        ...INITIAL_VIEW_STATE,
+                        transitionDuration: 1000,
+                      };
+                    });
+                  }
+                }}
               />
               <label htmlFor="parking" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 پارکینگ
               </label>
             </div>
@@ -638,7 +649,7 @@ const FilterMap: React.FC<{}> = () => {
                 onClick={goToBorder}
               />
               <label htmlFor="border-crossing" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 گذرگاه‌های مرزی
               </label>
             </div>
@@ -650,19 +661,19 @@ const FilterMap: React.FC<{}> = () => {
                 id="procession"
                 name="procession"
                 onClick={() => {
-                  setShowMokeb((prev: any) => !prev)
+                  setShowMokeb((prev: any) => !prev);
                   if (showBorder) {
                     setMapState(() => {
                       return {
                         ...INITIAL_VIEW_STATE,
                         transitionDuration: 1000,
-                      }
-                    })
+                      };
+                    });
                   }
                 }}
               />
               <label htmlFor="procession" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 موکب
               </label>
             </div>
@@ -675,7 +686,7 @@ const FilterMap: React.FC<{}> = () => {
                 name="helal_ahmar"
               />
               <label htmlFor="helal_ahmar" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 پایگاه حلال‌احمر
               </label>
             </div>
@@ -688,7 +699,7 @@ const FilterMap: React.FC<{}> = () => {
                 onClick={() => setShowZaerin((prev: any) => !prev)}
               />
               <label htmlFor="zaerin" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 زائران
               </label>
             </div>
@@ -701,7 +712,7 @@ const FilterMap: React.FC<{}> = () => {
                 onClick={() => setShowEmergency((prev: any) => !prev)}
               />
               <label htmlFor="emergency" className="select-radio__label text-right">
-                <span className="select-radio__button"/>
+                <span className="select-radio__button" />
                 اورژانس
               </label>
             </div>
@@ -739,7 +750,16 @@ const FilterMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
-          layers={[editorLayer, borderLayers, pathLayers, airportLayers, mokebLayers, zaerinLayers, emergencyLayers, parkingLayers]}
+          layers={[
+            editorLayer,
+            borderLayers,
+            pathLayers,
+            airportLayers,
+            mokebLayers,
+            zaerinLayers,
+            emergencyLayers,
+            parkingLayers,
+          ]}
           initialViewState={mapState}
           controller={{
             doubleClickZoom: false,
@@ -751,6 +771,7 @@ const FilterMap: React.FC<{}> = () => {
           getCursor={() => {
             return hoverInfo ? 'pointer' : 'grab';
           }}
+          // @ts-ignore
           onHover={({x, y, coordinate, layer, color, object, index}: PickingInfo) => {
             if (object) {
               if (!hoverInfo) {
@@ -762,6 +783,7 @@ const FilterMap: React.FC<{}> = () => {
               }
             }
           }}
+          // @ts-ignore
           onClick={({x, y, coordinate, layer, color, object, index}: PickingInfo) => {
             if (editMode !== ViewMode) {
               // don't change selection while editing
@@ -796,7 +818,7 @@ const FilterMap: React.FC<{}> = () => {
               closeButton={false}
               offsetLeft={10}
             >
-              <selected.layer.props.PopupTemplate params={selected.object}/>
+              <selected.layer.props.PopupTemplate params={selected.object} />
             </Popup>
           )}
         </DeckGL>
