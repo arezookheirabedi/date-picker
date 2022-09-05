@@ -24,15 +24,19 @@ const OverviewTheLatestStatusGroundBorders = () => {
   const fetcher = async () => {
     setLoading(true);
     setError(null);
-
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {data} = await arbaeenService.getTheLatestBordersStatus(
-        {pageNumber: query.currentPage - 1},
+        {
+          pageNumber: query.currentPage - 1,
+        },
         {cancelToken: source.token}
       );
+      const sortData = data.content.sort((a: any, b: any) =>
+        a.numberOfPassengers < b.numberOfPassengers ? 1 : -1
+      );
       const normalizedData: any[] = [];
-      data.content.forEach((item: any, index: number) => {
+      sortData.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
           name: item.regionName || 'نامشخص',
