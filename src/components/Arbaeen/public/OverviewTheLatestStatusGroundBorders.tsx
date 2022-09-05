@@ -32,11 +32,8 @@ const OverviewTheLatestStatusGroundBorders = () => {
         },
         {cancelToken: source.token}
       );
-      const sortData = data.content.sort((a: any, b: any) =>
-        a.numberOfPassengers < b.numberOfPassengers ? 1 : -1
-      );
       const normalizedData: any[] = [];
-      sortData.forEach((item: any, index: number) => {
+      data.content.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
           name: item.regionName || 'نامشخص',
@@ -76,8 +73,6 @@ const OverviewTheLatestStatusGroundBorders = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به آخرین وضعیت مرزهای زمینی</legend>
-      {/* <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div> */}
-
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
