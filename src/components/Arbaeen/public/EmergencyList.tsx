@@ -36,13 +36,10 @@ const EmergencyList: React.FC<{}> = () => {
       data.content.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.name || 'نامشخص',
-          location: item.location || 'نامشخص',
+          name: item.location || 'نامشخص',
           numberOfAvailableAmbulances: item.numberOfAvailableAmbulances || 0,
           numberOfAvailableAutolances: item.nnumberOfAvailableAutolances || 0,
           numberOfAvailableMotolances: item.numberOfAvailableMotolances || 0,
-          numberOfRequiredAmbulances: item.numberOfRequiredAmbulances || 0,
-          numberOfRequiredAutolances: item.numberOfRequiredAutolances || 0,
         });
       });
       setDataSet([...normalizedData]);
@@ -94,41 +91,34 @@ const EmergencyList: React.FC<{}> = () => {
                   </div>
                 ),
               },
-              {
-                name: 'موقعیت ',
-                key: 'location',
-              },
-              // {
-              //   name: 'نوع بنا',
-              //   key: 'type',
-              // },
-              // {
-              //   name: 'ظرفیت موکب',
-              //   key: 'capacity',
-              //   render: (v: any, record: any) => (
-              //     <span className=" ">{Number(record.capacity || 0).toPersianDigits()}</span>
-              //   ),
-              // },
-              // {
-              //   name: 'محل اعزام',
-              //   key: 'mokebFrom',
-              //   render: (v: any, record: any) => <span className=" ">{record.mokebFrom}</span>,
-              // },
 
-              // {
-              //   name: 'مسئول موکب',
-              //   key: 'owner',
-              //   render: (v: any, record: any) => (
-              //     <span className="text-sky-500">{record.owner}</span>
-              //   ),
-              // },
-              // {
-              //   name: 'نام و نام خانوادگی مسئول موکب',
-              //   key: 'managerName',
-              //   render: (v: any, record: any) => (
-              //     <span className="text-sky-500">{record.managerName}</span>
-              //   ),
-              // },
+              {
+                name: 'تعداد آمبولانس',
+                key: 'numberOfAvailableAmbulances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableAmbulances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد اتولانس',
+                key: 'numberOfAvailableAutolances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableAutolances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد موتولانس ',
+                key: 'numberOfAvailableMotolances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableMotolances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
             ]}
           />
         )}
