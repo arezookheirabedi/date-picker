@@ -100,9 +100,10 @@ const ListOfTransportationAxesStatus = () => {
                 name: 'نام محور',
                 key: 'name',
                 render: (v: any, record, index: number) => (
-                  <span>
-                    {(index + 1).toLocaleString('fa')}.{v}
-                  </span>
+                  <div className="flex w-full justify-start">
+                    {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    {record.name}
+                  </div>
                 ),
               },
               // {
