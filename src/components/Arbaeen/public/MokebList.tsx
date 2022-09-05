@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
@@ -6,7 +5,6 @@ import Table from 'src/components/TableXHR';
 import {EERRORS} from 'src/constants/errors.enum';
 import {toPersianDigit} from 'src/helpers/utils';
 import arbaeenService from 'src/services/arbaeen.service';
-import {mokebList} from './constant';
 
 const pageSize = 10;
 const MokebList: React.FC<{}> = () => {
