@@ -79,6 +79,7 @@ const MokebList: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
+            loading={loading}
             handlePageChange={handlePageChange}
             dataSet={[...dataset]}
             pagination={{pageSize, currentPage: query.currentPage}}
