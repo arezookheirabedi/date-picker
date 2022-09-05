@@ -119,6 +119,8 @@ const OverviewPilgrimVaccineStatusPercentage = () => {
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={redVaccine}
+              infoText="تعداد زائران ۱۸ سال به بالا كه واكسن نزده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
+              hasInfo
               text=" درصد زائران فاقد شرایط واکسیناسیون"
               count={pilgrims.pass6MonthFromLastVaccinesPercentage || 0}
               loading={loading}

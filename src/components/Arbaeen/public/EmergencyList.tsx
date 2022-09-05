@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
@@ -7,7 +8,7 @@ import {toPersianDigit} from 'src/helpers/utils';
 import arbaeenService from 'src/services/arbaeen.service';
 
 const pageSize = 10;
-const MokebList: React.FC<{}> = () => {
+const EmergencyList: React.FC<{}> = () => {
   const [error, setError] = useState(null);
   const [totalItems, setTotalItems] = useState(0);
 
@@ -27,22 +28,18 @@ const MokebList: React.FC<{}> = () => {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.getMokebList(
+      const {data} = await arbaeenService.getEmergencyList(
         {pageNumber: query.currentPage - 1},
         {cancelToken: source.token}
       );
-
       const normalizedData: any[] = [];
       data.content.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
-          name: item.name || 'نامشخص',
-          location: item.mokebLocation || 'نامشخص',
-          owner: item.adminName || 'نامشخص',
-          managerName: item.managerName || 'نامشخص',
-          type: item.mokebBuilding || 'نامشخص',
-          capacity: item.mokebCapacity || 0,
-          mokebFrom: item.mokebFrom || 'نامشخص',
+          name: item.location || 'نامشخص',
+          numberOfAvailableAmbulances: item.numberOfAvailableAmbulances || 0,
+          numberOfAvailableAutolances: item.nnumberOfAvailableAutolances || 0,
+          numberOfAvailableMotolances: item.numberOfAvailableMotolances || 0,
         });
       });
       setDataSet([...normalizedData]);
@@ -70,7 +67,7 @@ const MokebList: React.FC<{}> = () => {
   }
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
-      <legend className="mx-auto px-3 text-black">لیست موکب ها</legend>
+      <legend className="mx-auto px-3 text-black">لیست اورژانس ها</legend>
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
@@ -86,7 +83,7 @@ const MokebList: React.FC<{}> = () => {
             totalItems={totalItems}
             columns={[
               {
-                name: 'اسم موکب',
+                name: 'نام ',
                 key: 'name',
                 render: (v: any, record, index: number) => (
                   <div className="flex w-full justify-start">
@@ -95,41 +92,34 @@ const MokebList: React.FC<{}> = () => {
                   </div>
                 ),
               },
-              {
-                name: 'موقعیت موکب',
-                key: 'location',
-              },
-              // {
-              //   name: 'نوع بنا',
-              //   key: 'type',
-              // },
-              {
-                name: 'ظرفیت موکب',
-                key: 'capacity',
-                render: (v: any, record: any) => (
-                  <span className=" ">{Number(record.capacity || 0).toPersianDigits()}</span>
-                ),
-              },
-              {
-                name: 'محل اعزام',
-                key: 'mokebFrom',
-                render: (v: any, record: any) => <span className=" ">{record.mokebFrom}</span>,
-              },
 
               {
-                name: 'مسئول موکب',
-                key: 'owner',
+                name: 'تعداد آمبولانس',
+                key: 'numberOfAvailableAmbulances',
                 render: (v: any, record: any) => (
-                  <span className="text-sky-500">{record.owner}</span>
+                  <span className=" ">
+                    {Number(record.numberOfAvailableAmbulances || 0).toPersianDigits()}
+                  </span>
                 ),
               },
-              // {
-              //   name: 'نام و نام خانوادگی مسئول موکب',
-              //   key: 'managerName',
-              //   render: (v: any, record: any) => (
-              //     <span className="text-sky-500">{record.managerName}</span>
-              //   ),
-              // },
+              {
+                name: 'تعداد اتولانس',
+                key: 'numberOfAvailableAutolances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableAutolances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد موتولانس ',
+                key: 'numberOfAvailableMotolances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableMotolances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
             ]}
           />
         )}
@@ -137,4 +127,4 @@ const MokebList: React.FC<{}> = () => {
     </fieldset>
   );
 };
-export default MokebList;
+export default EmergencyList;
