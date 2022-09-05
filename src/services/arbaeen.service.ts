@@ -145,6 +145,11 @@ function getMokebList({...params}: any = {}, config?: any) {
     ...config,
   });
 }
+function getEmergencyList({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-emergencies?lang=fa`, params, {
+    ...config,
+  });
+}
 function getRoadStatistics({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/road-statistics/latest-submit/page?lang=fa`, params, {
     ...config,
@@ -200,6 +205,7 @@ const arbaeenService = {
   getMokebList,
   getRoadStatistics,
   getTheLatestBordersStatus,
+  getEmergencyList,
 };
 
 export default arbaeenService;
