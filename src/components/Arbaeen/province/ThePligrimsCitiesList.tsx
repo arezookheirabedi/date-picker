@@ -109,7 +109,10 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 key: 'womenPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.womenPercentage || 0).toPersianDigits()}٪
+                    {Number(record.womenPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -117,7 +120,12 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 name: 'درصد مردان زائر',
                 key: 'menPercentage',
                 render: (v: any, record: any) => (
-                  <span className=" ">{Number(record.menPercentage || 0).toPersianDigits()}٪</span>
+                  <span className=" ">
+                    {Number(record.menPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
+                  </span>
                 ),
               },
 
@@ -126,7 +134,10 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 key: 'vaccinePercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.vaccinePercentage || 0).toPersianDigits()}٪
+                    {Number(record.vaccinePercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -135,7 +146,10 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 key: 'firstDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.firstDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.firstDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -144,7 +158,10 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 key: 'secondDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.secondDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.secondDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -153,7 +170,10 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 key: 'thirdDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.thirdDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.thirdDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },
@@ -162,7 +182,10 @@ const ThePligrimsCitiesList: React.FC<{cityTitle: string}> = ({cityTitle}) => {
                 key: 'forthDosesPercentage',
                 render: (v: any, record: any) => (
                   <span className=" ">
-                    {Number(record.forthDosesPercentage || 0).toPersianDigits()}٪
+                    {Number(record.forthDosesPercentage || 0)
+                      .toFixed(2)
+                      .toPersianDigits()}
+                    ٪
                   </span>
                 ),
               },

@@ -3,30 +3,30 @@ import axios from 'axios';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import arbaeenService from 'src/services/arbaeen.service';
 import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
-import Statistic from '../../../containers/Guild/components/Statistic';
-import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
-import personGrayVaccine from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
-import YellowVaccine from '../../../assets/images/icons/big-yellow-vaccine.svg';
-import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
-import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg';
-import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
-import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
-import redVaccine from '../../../assets/images/icons/red-vaccine.svg';
+import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
+import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
+import Statistic from 'src/containers/Guild/components/Statistic';
+import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
+import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
+import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
+import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
+import NavyVaccine from 'src/assets/images/icons/navy-vaccine-lg.svg';
+import redVaccine from 'src/assets/images/icons/red-vaccine.svg';
 import {initialVaccineValue} from './constant';
 
-const OverviewPilgrimVaccineStatus = () => {
+const TheLatestOverviewPilgrimVaccineStatus = () => {
   const [loading, setLoading] = useState(false);
   const [pilgrims, setPilgrims] = useState<any>(initialVaccineValue);
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
   const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime({
-    countLastPositiveTestResultWhileRegistered: true,
+    countLastPositiveTestResult: true,
   });
   const getAllPilgrims = async () => {
     setLoading(true);
     try {
-      const {data} = await arbaeenService.getVaccineInfo({}, {cancelToken: source.token});
+      const {data} = await arbaeenService.getTheLatestVaccineInfo({}, {cancelToken: source.token});
 
       setPilgrims({...data});
     } catch (error) {
@@ -53,7 +53,7 @@ const OverviewPilgrimVaccineStatus = () => {
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی به وضعیت واکسیناسیون زائران در هنگام ثبت نام
+          نگاه کلی به آخرین وضعیت واکسیناسیون زائران
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -66,7 +66,7 @@ const OverviewPilgrimVaccineStatus = () => {
             <Statistic
               icon={sufferingIcon}
               text=" تعداد زائران ثبت نامی با کوید مثبت"
-              count={totalInfo.countLastPositiveTestResultWhileRegistered || 0}
+              count={totalInfo.countLastPositiveTestResult || 0}
               loading={loadingPositiveTest}
             />
             <Statistic
@@ -126,4 +126,4 @@ const OverviewPilgrimVaccineStatus = () => {
   );
 };
 
-export default OverviewPilgrimVaccineStatus;
+export default TheLatestOverviewPilgrimVaccineStatus;

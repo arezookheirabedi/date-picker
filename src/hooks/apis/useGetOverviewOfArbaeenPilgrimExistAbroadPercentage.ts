@@ -19,7 +19,7 @@ const initialData = {
   ],
   series: [
     {
-      name: 'تعداد',
+      name: 'درصد',
 
       data: [
         {name: EBORDERS.HAVAEE, y: 0, color: ECOLOR.COLOR4},
@@ -34,7 +34,7 @@ const initialData = {
   ],
 } as any;
 
-export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
+export default function useGetOverviewOfArbaeenPilgrimExistAbroadPercentage(
   query: any,
   hasProvince: boolean = false
 ) {
@@ -59,14 +59,14 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
 
       sortData.forEach((item: any) => {
         border.push(item.departureDestinationBorder);
-        count.push(item.count);
+        count.push(item.countPercentage);
       });
 
       const dataTemp = {
         categories: [...border],
         series: [
           {
-            name: 'تعداد',
+            name: 'درصد',
             data: [
               {
                 name: border[

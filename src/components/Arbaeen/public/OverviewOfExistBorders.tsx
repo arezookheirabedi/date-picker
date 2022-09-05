@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import useGetOverviewOfArbaeenPilgrimExistAbroad from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroad';
+import {ECOLOR} from 'src/constants/color.enum';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 import Charts from '../../Charts';
@@ -110,40 +111,40 @@ const OverviewOfExistBorders = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به مرزهای خروجی زائران</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به تعداد زائران در مرزهای خروجی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
-                  <span>مرز مهران</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
+                  <span>مرز چذابه</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
-                  <span>مرز چزابه</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
                   <span> مرز خسروی</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
                   <span> مرز شلمچه</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
                   <span> هوایی</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
                   <span> مرز باشماق</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#8800ff'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
                   <span>مرز تمرچین</span>
                 </div>
+              </div>
+              <div className="inline-flex flex-col justify-center items-center space-y-2">
+                <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
+                <span>مرز مهران</span>
               </div>
             </div>
           </div>

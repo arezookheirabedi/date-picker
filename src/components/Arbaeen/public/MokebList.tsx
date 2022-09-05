@@ -2,14 +2,20 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
-import Table from 'src/components/TableScopeSort';
+import Table from 'src/components/TableXHR';
+import {EERRORS} from 'src/constants/errors.enum';
+import {toPersianDigit} from 'src/helpers/utils';
 import arbaeenService from 'src/services/arbaeen.service';
 import {mokebList} from './constant';
 
+const pageSize = 10;
 const MokebList: React.FC<{}> = () => {
   const [error, setError] = useState(null);
+  const [totalItems, setTotalItems] = useState(0);
+
   const [query, setQuery] = useState({
     retry: false,
+    currentPage: 1,
   }) as any;
 
   const [loading, setLoading] = useState(false);
@@ -23,26 +29,33 @@ const MokebList: React.FC<{}> = () => {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
+      const {data} = await arbaeenService.getMokebList(
+        {pageNumber: query.currentPage - 1},
         {cancelToken: source.token}
       );
+
       const normalizedData: any[] = [];
-      mokebList.forEach((item: any, index: number) => {
+      data.content.forEach((item: any, index: number) => {
         normalizedData.push({
           id: `ovca_${index}`,
           name: item.name || 'نامشخص',
-          location: item.location || 'نامشخص',
-          owner: item.owner || 'نامشخص',
+          location: item.mokebLocation || 'نامشخص',
+          owner: item.adminName || 'نامشخص',
           managerName: item.managerName || 'نامشخص',
-          type: item.type || 'نامشخص',
-          capacity: item.capacity,
+          type: item.mokebBuilding || 'نامشخص',
+          capacity: item.mokebCapacity || 0,
+          mokebFrom: item.mokebFrom || 'نامشخص',
         });
       });
       setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+      setLoading(false);
     } catch (err: any) {
-      console.log(err);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -54,12 +67,13 @@ const MokebList: React.FC<{}> = () => {
     };
   }, [query]);
 
+  function handlePageChange(page: number = 1) {
+    setQuery({...query, currentPage: page});
+  }
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">لیست موکب ها</legend>
-      <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
-
-      {/* <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
@@ -67,17 +81,18 @@ const MokebList: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            totalItems={(dataset || []).length}
-            loading={loading}
+            handlePageChange={handlePageChange}
             dataSet={[...dataset]}
-            pagination={{pageSize: 10, maxPages: 3}}
+            pagination={{pageSize, currentPage: query.currentPage}}
+            totalItems={totalItems}
             columns={[
               {
                 name: 'اسم موکب',
                 key: 'name',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex justify-start">
-                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                render: (v: any, record, index: number) => (
+                  <div className="flex w-full justify-start">
+                    {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    {record.name}
                   </div>
                 ),
               },
@@ -85,10 +100,10 @@ const MokebList: React.FC<{}> = () => {
                 name: 'موقعیت موکب',
                 key: 'location',
               },
-              {
-                name: 'نوع موکب',
-                key: 'type',
-              },
+              // {
+              //   name: 'نوع بنا',
+              //   key: 'type',
+              // },
               {
                 name: 'ظرفیت موکب',
                 key: 'capacity',
@@ -96,22 +111,30 @@ const MokebList: React.FC<{}> = () => {
                   <span className=" ">{Number(record.capacity || 0).toPersianDigits()}</span>
                 ),
               },
+              {
+                name: 'محل اعزام',
+                key: 'mokebFrom',
+                render: (v: any, record: any) => <span className=" ">{record.mokebFrom}</span>,
+              },
 
               {
-                name: 'صاحب موکب',
+                name: 'مسئول موکب',
                 key: 'owner',
-              },
-              {
-                name: 'نام و نام خانوادگی مسئول موکب',
-                key: 'managerName',
                 render: (v: any, record: any) => (
-                  <span className="text-sky-500">{record.managerName}</span>
+                  <span className="text-sky-500">{record.owner}</span>
                 ),
               },
+              // {
+              //   name: 'نام و نام خانوادگی مسئول موکب',
+              //   key: 'managerName',
+              //   render: (v: any, record: any) => (
+              //     <span className="text-sky-500">{record.managerName}</span>
+              //   ),
+              // },
             ]}
           />
         )}
-      </div> */}
+      </div>
     </fieldset>
   );
 };

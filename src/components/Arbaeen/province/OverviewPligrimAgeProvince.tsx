@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import useGetOverviewOfArbaeenPilgrimAgeStatus from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimAgeStatus';
+import {ECOLOR} from 'src/constants/color.enum';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 import Charts from '../../Charts';
@@ -120,27 +121,27 @@ const OverviewPligrimAgeProvince: React.FC<{cityTitle: string}> = ({cityTitle}) 
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff0060'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
                   <span> سال (۱۵-۰)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
                   <span>سال (۳۰-۱۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
                   <span> سال (۴۵-۳۱)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
                   <span> سال (۶۰-۴۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
                   <span> سال (۷۵-۶۱) </span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#8800ff'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
                   <span>۷۵ سال به بالا </span>
                 </div>
               </div>

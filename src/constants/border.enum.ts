@@ -4,6 +4,6 @@ export enum EBORDERS {
   KHOSRAVI = 'خسروی (استان کرمانشاه)',
   TAMARCHIN = 'تمرچین (استان آذربایجان غربی)',
   BASHMAGH = 'باشماق (استان کردستان)',
-  CHAZABE = 'چزابه',
+  CHAZABE = 'چذابه',
   MEHRAN = 'مهران',
 }

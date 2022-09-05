@@ -3,6 +3,7 @@ import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
 import {sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
+import {ECOLOR} from 'src/constants/color.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
 const initialData = {
@@ -19,12 +20,12 @@ const initialData = {
       name: 'تعداد',
 
       data: [
-        {name: '۷۵ سال به بالا', y: 3157, color: '#8800ff'},
-        {name: 'سال (۴۵-۳۱)', y: 177805, color: '#004D65'},
-        {name: 'سال (۶۰-۴۶)', y: 166493, color: '#209F92'},
-        {name: 'سال (۳۰-۱۶)', y: 96538, color: '#BFDDE7'},
-        {name: 'سال (۷۵-۶۱)', y: 63747, color: '#F3BC06'},
-        {name: 'سال (۱۵-۰)', y: 55178, color: '#ff0060'},
+        {name: '۷۵ سال به بالا', y: 3157, color: ECOLOR.COLOR6},
+        {name: 'سال (۴۵-۳۱)', y: 177805, color: ECOLOR.COLOR3},
+        {name: 'سال (۶۰-۴۶)', y: 166493, color: ECOLOR.COLOR4},
+        {name: 'سال (۳۰-۱۶)', y: 96538, color: ECOLOR.COLOR2},
+        {name: 'سال (۷۵-۶۱)', y: 63747, color: ECOLOR.COLOR5},
+        {name: 'سال (۱۵-۰)', y: 55178, color: ECOLOR.COLOR1},
       ],
     },
   ],
@@ -69,7 +70,6 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
       const sortData = res.data.sort((a: any, b: any) =>
         Number(a.count) > Number(b.count) ? 1 : -1
       );
-      console.log(res, sortData);
       const ageRange: any[] = [];
       const count: any[] = [];
       sortData.forEach((item: any) => {
@@ -93,7 +93,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۱۵-۰)';
                   })
                 ],
-                color: '#ff0060',
+                color: ECOLOR.COLOR1,
               },
 
               {
@@ -107,7 +107,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۳۰-۱۶)';
                   })
                 ],
-                color: '#BFDDE7',
+                color: ECOLOR.COLOR2,
               },
               {
                 name: ageRange[
@@ -120,7 +120,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۴۵-۳۱)';
                   })
                 ],
-                color: '#004D65',
+                color: ECOLOR.COLOR3,
               },
               {
                 name: ageRange[
@@ -133,7 +133,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۶۰-۴۶)';
                   })
                 ],
-                color: '#209F92',
+                color: ECOLOR.COLOR4,
               },
               {
                 name: ageRange[
@@ -146,7 +146,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === 'سال (۷۵-۶۱)';
                   })
                 ],
-                color: '#F3BC06',
+                color: ECOLOR.COLOR5,
               },
               {
                 name: ageRange[
@@ -159,13 +159,12 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
                     return i === '۷۵ سال به بالا';
                   })
                 ],
-                color: '#8800ff',
+                color: ECOLOR.COLOR6,
               },
             ],
           },
         ],
       } as any;
-      console.log(dataTemp);
       setData(dataTemp);
       setError(false);
       setLoading(false);
