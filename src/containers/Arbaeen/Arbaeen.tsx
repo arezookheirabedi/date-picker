@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from 'react';
+import React from 'react';
 import Irancell from 'src/assets/images/logos/irancell-logo.svg';
 import Vasl from 'src/assets/images/logos/vasl-logo.svg';
-import { useDispatch } from 'react-redux';
-import { fetchZaerinAc } from 'src/store/action_creators/arbaeen/fetchZaerinAc';
 import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/public/OverviewPilgrimVaccineStatus';
 // import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
-
 // import OverviewArbaeen from 'src/components/Arbaeen/public/OverviewArbaeen';
-
 import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
 // import OverviewOfThePercentageOfEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfThePercentageOfEntryAndExitOfPilgrims';
 // import GeneralLookAtTransportationAxesAndExitBordersOfCountry from 'src/components/Arbaeen/public/GeneralLookAtTransportationAxesAndExitBordersOfCountry';
@@ -33,31 +29,16 @@ import OverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/publi
 import TheLatestOverviewPilgrimVaccineStatusPercentage from 'src/components/Arbaeen/public/TheLatestOverviewPilgrimVaccineStatusPercentage';
 import ComparsionPasengersEntranceAndExistanceAtBoarders from 'src/components/Arbaeen/public/ComparsionPasengersEntranceAndExistanceAtBoarders';
 import OverviewTheLatestStatusGroundBorders from 'src/components/Arbaeen/public/OverviewTheLatestStatusGroundBorders';
-import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
+// import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
 // import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
-import GeneralLookAtTheLocationOfProcessions from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessions';
-import FilterMap from '../../components/Arbaeen/public/FilterMap';
-import DensityOfPassengersMap from '../../components/Arbaeen/public/DensityOfPassengersMap';
-import TimelineMap from '../../components/Arbaeen/public/TimelineMap';
 
 
 const Arbaeen = () => {
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchZaerinAc());
-  }, []);
-
-
   return (
     <div className="space-y-16 mb-8">
-      <FilterMap />
-      <DensityOfPassengersMap />
-      <TimelineMap />
-      <GeneralLookAtTheLocationOfProcessions />
       <OverviewPilgrim />
       <OverviewPilgrimPercentage />
       <OverviewPligrimTripType />
@@ -84,7 +65,6 @@ const Arbaeen = () => {
       <OverviewTheLatestStatusGroundBorders />
       <ListOfTransportationAxesStatus />
       {/* <ListOfTheBusiestBorderCrossings /> */}
-      {/* <GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases /> */}
       <MokebList />
       {/* <RedHalalBasesList /> */}
       {/* <TheLargestNumberOfOriginPilgrimsCountriesList /> */}
