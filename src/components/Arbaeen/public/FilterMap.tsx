@@ -14,9 +14,6 @@ import {PickingInfo} from '@deck.gl/core/typed';
 import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
-import JSZip from 'jszip';
-import csvtojson from 'csvtojson';
-import arbaeenService from 'src/services/arbaeen.service';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
 import airportIcon from '../../../assets/images/markers/airport-icon.svg';
@@ -96,9 +93,8 @@ const FilterMap: React.FC<{}> = () => {
   const [pathLayers, setPathLayers] = useState<any[]>([]);
 
   // zaerin
-  const [zaerinData, setZaerinData] = useState<any[]>([]);
   const [showZaerin, setShowZaerin] = useState<any>(false);
-  const [zaerinLayers, setZaerinLayers] = useState<any[]>([]);
+  const [zaerinLayers, setZaerinLayers] = useState<any>(false);
   const [submitted, setSubmitted] = useState(false);
 
   const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
@@ -260,19 +256,18 @@ const FilterMap: React.FC<{}> = () => {
     try {
       const res = zaerinDataSource
         .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
-        .reduce((result: any, d: any) => {
-          [...Array(Number(d.CountOfSamah))].forEach(() => {
-            try {
-              result.push(JSON.parse(d.location.coordinates));
-            } catch (e) {
-              console.error(e);
-            }
-          });
-
-          return result;
+        .map((row: any) => {
+          const coordinates = JSON.parse(row.location.coordinates);
+          return {
+            timestamp: new Date(row.Submittime).getTime(),
+            longitude: Number(coordinates[0]),
+            latitude: Number(coordinates[1]),
+            isPassenger: row.isPassenger === 'true',
+            // depth: Number(row.CountOfSamah),
+            depth: 1,
+            magnitude: Number(row.CountOfSamah),
+          };
         }, []);
-
-      setZaerinData([...res]);
 
       zaerinRef.current = new ScatterplotLayer({
         id: 'zaerin-layer',
@@ -317,14 +312,14 @@ const FilterMap: React.FC<{}> = () => {
                 </div>
               ) : (
                 <>
-                  <div className="hidden">{JSON.stringify(params, null, 2)}</div>
-                  create PopupTemplate component
+                  {/* <div className="hidden">{JSON.stringify(params, null, 2)}</div>
+                  create PopupTemplate component */}
                 </>
               )}
             </>
           );
         },
-        visible: true,
+        visible: false,
       });
 
       setZaerinLayers([zaerinRef.current]);
@@ -337,7 +332,11 @@ const FilterMap: React.FC<{}> = () => {
   useEffect(() => {
     if (zaerinRef.current) return;
 
-    if (zaerinDataSource && !zaerinLoading) fetchZaerinData();
+    if (zaerinLoading) setSubmitted(true);
+    if (!zaerinLoading) {
+      setSubmitted(false);
+      if (zaerinDataSource && zaerinDataSource.length > 0) fetchZaerinData();
+    }
   }, [zaerinLoading]);
 
   useEffect(() => {
@@ -467,7 +466,12 @@ const FilterMap: React.FC<{}> = () => {
             </div>
 
             <div className="select-radio__group">
-              <input type="checkbox" className="select-radio__input" id="helal_ahmar" name="helal_ahmar" />
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="helal_ahmar"
+                name="helal_ahmar"
+              />
               <label htmlFor="helal_ahmar" className="select-radio__label text-right">
                 <span className="select-radio__button" />
                 پایگاه حلال‌احمر
@@ -532,7 +536,7 @@ const FilterMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
-          layers={[borderLayers, pathLayers, airportLayers, mokebLayers]}
+          layers={[borderLayers, pathLayers, airportLayers, mokebLayers, zaerinLayers]}
           initialViewState={INITIAL_VIEW_STATE}
           controller={{
             doubleClickZoom: false,
