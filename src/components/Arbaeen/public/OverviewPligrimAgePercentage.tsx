@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimExistAbroad from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroad';
+import useGetOverviewOfArbaeenPilgrimAgeStatusPercentage from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimAgeStatusPercentage';
 import {ECOLOR} from 'src/constants/color.enum';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
@@ -74,6 +74,9 @@ const optionChart = {
     title: {
       enabled: false,
     },
+    labels: {
+      format: '٪{text}',
+    },
   },
   legend: {
     enabled: false,
@@ -88,7 +91,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: 'نفر',
+    valueSuffix: '٪',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -99,7 +102,7 @@ const optionChart = {
   },
 };
 
-const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitle}) => {
+const OverviewPligrimAgePercentage = () => {
   const [query, setQuery] = useState({
     retry: false,
   });
@@ -107,14 +110,11 @@ const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitl
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimExistAbroad(query, true);
+  } = useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به مرزهای خروجی زائران استان&nbsp;
-        {cityTitle}
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به درصد زائران در رده های سنی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
@@ -122,32 +122,28 @@ const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitl
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
-                  <span>مرز چذابه</span>
+                  <span> سال (۱۵-۰)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
-                  <span> مرز خسروی</span>
+                  <span>سال (۳۰-۱۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
-                  <span> مرز شلمچه</span>
+                  <span> سال (۴۵-۳۱)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
-                  <span> هوایی</span>
+                  <span> سال (۶۰-۴۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
-                  <span> مرز باشماق</span>
+                  <span> سال (۷۵-۶۱) </span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
-                  <span>مرز تمرچین</span>
+                  <span>۷۵ سال به بالا </span>
                 </div>
-              </div>
-              <div className="inline-flex flex-col justify-center items-center space-y-2">
-                <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
-                <span>مرز مهران</span>
               </div>
             </div>
           </div>
@@ -174,4 +170,4 @@ const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitl
   );
 };
 
-export default OverviewOfExistBordersProvince;
+export default OverviewPligrimAgePercentage;

@@ -1,4 +1,6 @@
 // import qs from 'qs';
+import qs from 'qs';
+import {EBORDERS} from 'src/constants/border.enum';
 import request from '../helpers/request';
 
 function arbaeenGetAll({tag, ...params}: any = {}, config?: any) {
@@ -18,11 +20,13 @@ function getPiligrimList(params: any = {}, config?: any) {
 function abroadList() {
   const mock = {
     data: [
-      {key: 'شلمچه', value: 'شلمچه'},
-      {key: 'چزابه', value: 'چزابه'},
-      {key: 'مهران', value: 'مهران'},
-      {key: 'خسروی', value: 'خسروی'},
-      {key: 'هوایی', value: 'هوایی'},
+      {key: EBORDERS.SHALAMCHE, value: 'شلمچه'},
+      {key: EBORDERS.CHAZABE, value: 'چذابه'},
+      {key: EBORDERS.MEHRAN, value: 'مهران'},
+      {key: EBORDERS.KHOSRAVI, value: 'خسروی'},
+      {key: EBORDERS.HAVAEE, value: 'هوایی'},
+      {key: EBORDERS.BASHMAGH, value: 'باشماق'},
+      {key: EBORDERS.TAMARCHIN, value: 'تمرچین'},
     ],
   };
   return Promise.resolve(mock);
@@ -89,7 +93,14 @@ function getVaccineInfo(params: any = {}, config?: any) {
       }
     );
 }
-
+function getTheLatestVaccineInfo(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(`/api/v1/arbaeen/reports/zaerin/group-by-last-dose/count?lang=fa`, params, {
+      ...config,
+    });
+}
 function getPiligrimOriginProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -113,42 +124,85 @@ function getPiligrimOriginCity(params: any = {}, config?: any) {
 }
 
 function getPiligrimReportAsFile(params: any = {}, config?: any) {
-  return (
-    request
-      .build()
-      .get(`/api/v1/arbaeen/reports/coordinates/csv?lang=fa`, params, {
-        ...config,
-      })
+  return request.build().get(`/api/v1/arbaeen/reports/coordinates/csv?lang=fa`, params, {
+    ...config,
+  });
+}
+function getEntranceAxndExistanceBorder({borderId, ...params}: any = {}, config?: any) {
+  return request
+    .build()
+    .get(`/api/v1/arbaeen/borders-traffics/border-id/${borderId}?lang=fa`, params, {
+      ...config,
+    });
+}
+function gerBorderTraffic({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/borders-traffics/accumulative?lang=fa`, params, {
+    ...config,
+  });
+}
+function getMokebList({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-mokebs?lang=fa`, params, {
+    ...config,
+  });
+}
+function getRoadStatistics({...params}: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/road-statistics/latest-submit/page?lang=fa`, params, {
+    ...config,
+  });
+}
+
+function getTheLatestBordersStatus({...params}: any = {}, config?: any) {
+  const lists = [250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001];
+
+  return request.build().get(
+    `/api/v1/arbaeen/region-statistics/latest-submit/page?lang=fa&${qs.stringify({
+      regionIdList: lists,
+    })} `,
+    params,
+    {
+      ...config,
+    }
+  );
+}
+
+/* pageNumber=0&pageSize=10&sort=ASC&&&&&&&&& */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getPilgrimExistanceAndImportanceChart(params: any = {}, config?: any) {
+  const lists = [3, 4, 1, 2, 500001, 500002];
+  return request.build().get(
+    `/api/v1/arbaeen/borders-traffics/accumulative-based-on-border-id?lang=fa&${qs.stringify({
+      borderIdList: lists,
+    })}`,
+    {},
+    {
+      ...config,
+    }
   );
 }
 
 function getRoadInfo(id: any, config?: any) {
-  return (
-    request
-      .build()
-      .get(`/api/v1/arbaeen/road-statistics/road-id/${id}?lang=fa`, {}, {
-        ...config,
-      })
+  return request.build().get(
+    `/api/v1/arbaeen/road-statistics/road-id/${id}?lang=fa`,
+    {},
+    {
+      ...config,
+    }
   );
 }
 
 function getAirportAndBorderInfo(params: any, config?: any) {
-  return (
-    request
-      .build()
-      .get(`/api/v1/arbaeen/reports/region-traffic/count`, params, {
-        ...config,
-      })
-  );
+  return request.build().get(`/api/v1/arbaeen/reports/region-traffic/count`, params, {
+    ...config,
+  });
 }
 
 function getMokeb(id: any, config?: any) {
-  return (
-    request
-      .build()
-      .get(`/api/v1/arbaeen/ar-mokebs/${id}`, {}, {
-        ...config,
-      })
+  return request.build().get(
+    `/api/v1/arbaeen/ar-mokebs/${id}`,
+    {},
+    {
+      ...config,
+    }
   );
 }
 
@@ -164,10 +218,17 @@ const arbaeenService = {
   getPligrimGenderPerCity,
   getPiligrimOriginProvince,
   getPiligrimOriginCity,
+  getTheLatestVaccineInfo,
   getPiligrimReportAsFile,
+  getEntranceAxndExistanceBorder,
+  getPilgrimExistanceAndImportanceChart,
+  gerBorderTraffic,
+  getMokebList,
+  getRoadStatistics,
+  getTheLatestBordersStatus,
   getRoadInfo,
   getAirportAndBorderInfo,
-  getMokeb
+  getMokeb,
 };
 
 export default arbaeenService;

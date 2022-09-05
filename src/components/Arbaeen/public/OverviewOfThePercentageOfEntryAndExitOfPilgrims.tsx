@@ -66,16 +66,16 @@ const optionChart = {
       grouping: false,
       shadow: false,
       borderWidth: 0,
-      dataLabels: {
-        enabled: true,
-        // eslint-disable-next-line no-useless-concat
-        format: '<h1 style="font-family: IRANSans">%{y}</h1>',
-        style: {
-          fontSize: '10px',
-          fontFamily: 'IRANSans',
-        },
-        useHTML: true,
-      },
+      // dataLabels: {
+      //   enabled: true,
+      //   // eslint-disable-next-line no-useless-concat
+      //   // format: '<h1 style="font-family: IRANSans">%{y}</h1>',
+      //   style: {
+      //     fontSize: '10px',
+      //     fontFamily: 'IRANSans',
+      //   },
+      //   useHTML: true,
+      // },
     },
   },
   yAxis: {
@@ -86,6 +86,9 @@ const optionChart = {
     opposite: true,
     title: {
       enabled: false,
+    },
+    labels: {
+      format: '٪{text}',
     },
   },
   legend: {
@@ -126,15 +129,15 @@ const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
       {
         name: 'درصد ورود یا خروج',
         data: [
-          {name: 'زمینی وارد شده', y: 50, color: '#ff4042'},
-          {name: 'زمینی خارج شده', y: 43, color: '#7dbf9e'},
-          {name: 'هوایی وارد شده', y: 40, color: '#c20a0c'},
-          {name: 'هوایی خارج شده', y: 49, color: '#07816c'},
-          {name: 'ریلی وارد شده', y: 10, color: '#850506'},
+          {name: 'زمینی وارد شده', y: 50, color: '#7dbf9e'},
+          {name: 'زمینی خارج شده', y: 43, color: '#ff4042'},
+          {name: 'هوایی وارد شده', y: 40, color: '#07816c'},
+          {name: 'هوایی خارج شده', y: 49, color: '#c20a0c'},
+          {name: 'ریلی وارد شده', y: 10, color: '#005852'},
           {
             name: 'ریلی خارج شده',
             y: 8,
-            color: '#005852',
+            color: '#850506',
           },
         ],
       },
@@ -155,27 +158,27 @@ const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-4 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#005852'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#850506'}} />
                   <span>ریلی خارج شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#850506'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#005852'}} />
                   <span>ریلی وارد شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#07816c'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#c20a0c'}} />
                   <span>هوایی خارج شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#c20a0c'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#07816c'}} />
                   <span>هوایی وارد شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#7dbf9e'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff4042'}} />
                   <span>زمینی خارج شده</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#ff4042'}} />
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#7dbf9e'}} />
                   <span>زمینی وارد شده</span>
                 </div>
               </div>
@@ -198,9 +201,9 @@ const OverviewOfThePercentageOfEntryAndExitOfPilgrims = () => {
         {/* {!loading && !errorMessage && ( */}
         {/*  <HeadlessChart data={dataset} optionsProp={optionChart}/> */}
         {/* )} */}
-        <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
+        {/* <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div> */}
 
-        {/* <HeadlessChart data={dataset} optionsProp={optionChart} /> */}
+        <HeadlessChart data={dataset} optionsProp={optionChart} />
         {/* {!loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}
