@@ -92,7 +92,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
 
   const fetcher = async () => {
     const res = zaerinDataSource
-      .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
+      .filter((x: any) => x.isPassenger === 'true')
       .reduce((result: any, d: any) => {
         [...Array(Number(d.CountOfSamah))].forEach(() => {
           try {
