@@ -8,7 +8,6 @@ import DeckGL, {FlyToInterpolator} from 'deck.gl';
 
 // @ts-ignore
 import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers';
-import {colorRange} from '../movingClouds/DensityOfPassengersMap';
 import {borders} from '../geos/borders';
 import {roads} from '../geos/roads';
 import {airports} from '../geos/airport';
@@ -20,7 +19,7 @@ import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
 import {EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {ViewMode, DrawPolygonMode} from '@nebula.gl/edit-modes';
-import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
+import {HeatmapLayer, HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
 import airportIcon from '../../../assets/images/markers/airport-icon.svg';
@@ -84,6 +83,15 @@ const material = {
   shininess: 32,
   specularColor: [51, 51, 51],
 };
+
+export const colorRange = [
+  [23, 90, 118],
+  [60, 83, 110],
+  [97, 76, 102],
+  [135, 69, 94],
+  [172, 62, 86],
+  [209, 55, 78],
+];
 
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
@@ -351,36 +359,27 @@ const FilterMap: React.FC<{}> = () => {
       const res = zaerinDataSource
         .filter((x: any) => x.isPassenger === 'true')
         .reduce((result: any, d: any) => {
-          [...Array(Number(d.CountOfSamah))].forEach(() => {
-            try {
-              result.push(JSON.parse(d.location.coordinates));
-            } catch (e) {
-              console.error(e);
-            }
-          });
+          try {
+            result.push([...JSON.parse(d.location.coordinates), Number(d.CountOfSamah)]);
+          } catch (e) {
+            console.error(e);
+          }
 
           return result;
         }, []);
 
-      zaerinRef.current = new HexagonLayer({
+      console.log(res);
+
+      zaerinRef.current = new HeatmapLayer({
         id: 'zaerin-layer',
         // @ts-ignore
-        colorRange,
-        coverage: 1,
         data: res,
-        elevationRange: [0, 3000],
-        elevationScale: res && res.length ? 50 : 0,
-        extruded: true,
-        getPosition: (d: any) => d,
-        pickable: true,
-        radius: 1000,
-        upperPercentile: 100,
-        // @ts-ignore
-        material,
-
-        transitions: {
-          elevationScale: 3000,
-        },
+        getPosition: d => [d[0], d[1]],
+        getWeight: d => d[2],
+        radiusPixels: 30,
+        intensity: 1,
+        threshold: 0.03,
+        visible: false,
         PopupTemplate: ({params}: any) => {
           const [loading, setLoading] = useState<boolean>(false);
 
@@ -416,7 +415,6 @@ const FilterMap: React.FC<{}> = () => {
             </>
           );
         },
-        visible: false,
       });
 
       setZaerinLayers([zaerinRef.current]);
