@@ -9,8 +9,8 @@ import carIcon from '../../../assets/images/icons/car.svg';
 const OverviewPligrimGroundTripType = () => {
   const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
     countTaxi: true,
-    countBusAndMinibus: true,
-    countPersonal: true,
+    countBusAndMiniBus: true,
+    personal: true,
   });
   return (
     <>

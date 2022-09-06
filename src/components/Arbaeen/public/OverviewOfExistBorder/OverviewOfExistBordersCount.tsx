@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimExistAbroadPercentage from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimExistAbroadPercentage';
 import {ECOLOR} from 'src/constants/color.enum';
-import Spinner from '../../Spinner';
-import RetryButton from '../../RetryButton';
-import Charts from '../../Charts';
+import Spinner from '../../../Spinner';
+import RetryButton from '../../../RetryButton';
+import Charts from '../../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -74,9 +73,6 @@ const optionChart = {
     title: {
       enabled: false,
     },
-    labels: {
-      format: '٪{text}',
-    },
   },
   legend: {
     enabled: false,
@@ -91,7 +87,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: '٪',
+    valueSuffix: 'نفر',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -102,19 +98,21 @@ const optionChart = {
   },
 };
 
-const OverviewOfExistBordersPercentage = () => {
-  const [query, setQuery] = useState({
-    retry: false,
-  });
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimExistAbroadPercentage(query);
-
+interface IProps {
+  dataset: any;
+  loading: boolean;
+  errorMessage: any;
+  setQuery: any;
+}
+const OverviewOfExistBordersCount: React.FC<IProps> = ({
+  dataset,
+  loading,
+  errorMessage,
+  setQuery,
+}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به درصد زائران در مرزهای خروجی</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به تعداد زائران در مرزهای خروجی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
@@ -174,4 +172,4 @@ const OverviewOfExistBordersPercentage = () => {
   );
 };
 
-export default OverviewOfExistBordersPercentage;
+export default OverviewOfExistBordersCount;

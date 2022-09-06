@@ -6,7 +6,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {ECOLOR} from 'src/constants/color.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
-const initialData = {
+const initialDataCount = {
   categories: [
     '۷۵ سال به بالا ',
     'سال (۱۵-۰)',
@@ -31,6 +31,30 @@ const initialData = {
   ],
 } as any;
 
+const initialDataPercentage = {
+  categories: [
+    '۷۵ سال به بالا ',
+    'سال (۱۵-۰)',
+    ' سال (۷۵-۶۱)',
+    'سال (۳۰-۱۶)',
+    'سال (۶۰-۴۶)',
+    'سال (۴۵-۳۱)',
+  ],
+  series: [
+    {
+      name: 'درصد',
+
+      data: [
+        {name: '۷۵ سال به بالا', y: 3157, color: ECOLOR.COLOR6},
+        {name: 'سال (۴۵-۳۱)', y: 177805, color: ECOLOR.COLOR3},
+        {name: 'سال (۶۰-۴۶)', y: 166493, color: ECOLOR.COLOR4},
+        {name: 'سال (۳۰-۱۶)', y: 96538, color: ECOLOR.COLOR2},
+        {name: 'سال (۷۵-۶۱)', y: 63747, color: ECOLOR.COLOR5},
+        {name: 'سال (۱۵-۰)', y: 55178, color: ECOLOR.COLOR1},
+      ],
+    },
+  ],
+} as any;
 const GetAgeRange = (data: string) => {
   switch (data) {
     case '0-15':
@@ -55,7 +79,8 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
 ) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
-  const [data, setData] = useState<any>(initialData);
+  const [dataCount, setDataCount] = useState<any>(initialDataCount);
+  const [dataPercentage, setDataPercentage] = useState<any>(initialDataPercentage);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -72,11 +97,14 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
       );
       const ageRange: any[] = [];
       const count: any[] = [];
+      const countPercentage: any[] = [];
+
       sortData.forEach((item: any) => {
         ageRange.push(GetAgeRange(item.ageGroup));
         count.push(Number(item.count));
+        countPercentage.push(Number(item.countPercentage));
       });
-      const dataTemp = {
+      const dataTempCount = {
         categories: [...ageRange],
         series: [
           {
@@ -165,7 +193,97 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
           },
         ],
       } as any;
-      setData(dataTemp);
+      setDataCount(dataTempCount);
+      const dataTempPercentage = {
+        categories: [...ageRange],
+        series: [
+          {
+            name: 'درصد',
+            data: [
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۱۵-۰)';
+                  })
+                ],
+                y: countPercentage[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۱۵-۰)';
+                  })
+                ],
+                color: ECOLOR.COLOR1,
+              },
+
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۳۰-۱۶)';
+                  })
+                ],
+                y: countPercentage[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۳۰-۱۶)';
+                  })
+                ],
+                color: ECOLOR.COLOR2,
+              },
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۴۵-۳۱)';
+                  })
+                ],
+                y: countPercentage[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۴۵-۳۱)';
+                  })
+                ],
+                color: ECOLOR.COLOR3,
+              },
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۶۰-۴۶)';
+                  })
+                ],
+                y: countPercentage[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۶۰-۴۶)';
+                  })
+                ],
+                color: ECOLOR.COLOR4,
+              },
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۷۵-۶۱)';
+                  })
+                ],
+                y: countPercentage[
+                  ageRange.findIndex((i: any) => {
+                    return i === 'سال (۷۵-۶۱)';
+                  })
+                ],
+                color: ECOLOR.COLOR5,
+              },
+              {
+                name: ageRange[
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا';
+                  })
+                ],
+                y: countPercentage[
+                  ageRange.findIndex((i: any) => {
+                    return i === '۷۵ سال به بالا';
+                  })
+                ],
+                color: ECOLOR.COLOR6,
+              },
+            ],
+          },
+        ],
+      } as any;
+      setDataPercentage(dataTempPercentage);
       setError(false);
       setLoading(false);
     } catch (err: any) {
@@ -185,7 +303,8 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
     getIt(query);
     // eslint-disable-next-line consistent-return
     return () => {
-      setData(initialData);
+      setDataCount(initialDataCount);
+      setDataPercentage(initialDataPercentage);
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
@@ -208,10 +327,12 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
     }
     // eslint-disable-next-line consistent-return
     return () => {
-      setData(initialData);
+      setDataCount(initialDataCount);
+      setDataPercentage(initialDataPercentage);
+
       source.cancel('Operation canceled by the user.');
     };
   }, [location.search, query]);
 
-  return {loading, error, data};
+  return {loading, error, dataCount, dataPercentage};
 }

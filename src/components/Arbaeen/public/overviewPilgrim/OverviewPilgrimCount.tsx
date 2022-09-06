@@ -1,28 +1,20 @@
-import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
-import Statistic from '../../../containers/Guild/components/Statistic';
-import groupIcon from '../../../assets/images/icons/all-group.svg';
-import pilgrimList from '../../../assets/images/icons/pilgrim-list.svg';
-// import greenGroupIcon from '../../../assets/images/icons/green-group-icon.svg';
-import passport from '../../../assets/images/icons/passport.svg';
-// import greenPersons from '../../../assets/images/icons/persons-green-icon.svg';
-import greenwemen from '../../../assets/images/icons/woman-pilgrim.svg';
-// import greenwemen from '../../../assets/images/icons/green-wemen.svg';
-// import earthPersons from '../../../assets/images/icons/earth-persons.svg';
-import menEarth from '../../../assets/images/icons/foreigner-man.svg';
-import wemenEarth from '../../../assets/images/icons/foreigener-woman.svg';
-import manPilgrim from '../../../assets/images/icons/man-pilgrim.svg';
-import earthPersons from '../../../assets/images/icons/pilgrim-foreigner.svg';
+import {IInitialCount} from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import Statistic from 'src/containers/Guild/components/Statistic';
+import groupIcon from 'src/assets/images/icons/all-group.svg';
+import pilgrimList from 'src/assets/images/icons/pilgrim-list.svg';
+import passport from 'src/assets/images/icons/passport.svg';
+import greenwemen from 'src/assets/images/icons/woman-pilgrim.svg';
+import menEarth from 'src/assets/images/icons/foreigner-man.svg';
+import wemenEarth from 'src/assets/images/icons/foreigener-woman.svg';
+import manPilgrim from 'src/assets/images/icons/man-pilgrim.svg';
+import earthPersons from 'src/assets/images/icons/pilgrim-foreigner.svg';
 
-const OverviewPilgrim = () => {
-  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
-    countIranian: true,
-    countMaleIranian: true,
-    countFemaleIranian: true,
-    countNonIranian: true,
-    countMaleNonIranian: true,
-    countFemaleNonIranian: true,
-    countTotal: true,
-  });
+interface IProps {
+  loading: boolean;
+  pilgrims: IInitialCount;
+}
+
+const OverviewPilgrimCount: React.FC<IProps> = ({pilgrims, loading}) => {
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -87,4 +79,4 @@ const OverviewPilgrim = () => {
   );
 };
 
-export default OverviewPilgrim;
+export default OverviewPilgrimCount;
