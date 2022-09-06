@@ -20,8 +20,8 @@ const ArbaeenPilgrimsMovingCloud = () => {
 
   return (
     <div className="space-y-16 mb-8">
-      <FilterMap />
       <DensityOfPassengersMap />
+      <FilterMap />
       <TimelineMap />
       {/* <GeneralLookAtTheLocationOfProcessions /> */}
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
