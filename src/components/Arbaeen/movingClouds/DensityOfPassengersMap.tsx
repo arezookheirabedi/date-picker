@@ -190,7 +190,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
             preventStyleDiffing
             height={650}
             ref={mapRef}
-            mapStyle="mapbox://styles/mapbox/light-v10"
+            mapStyle="mapbox://styles/mapbox/dark-v10"
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
