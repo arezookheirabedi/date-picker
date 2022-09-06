@@ -54,44 +54,7 @@ try {
   console.error(e);
 }
 
-const ambientLight = new AmbientLight({
-  color: [255, 255, 255],
-  intensity: 1.0,
-});
 
-const pointLight1 = new PointLight({
-  color: [255, 255, 255],
-  intensity: 0.8,
-  position: [-0.144528, 49.739968, 80000],
-});
-
-const pointLight2 = new PointLight({
-  color: [255, 255, 255],
-  intensity: 0.8,
-  position: [-3.807751, 54.104682, 8000],
-});
-
-const lightingEffect = new LightingEffect({
-  ambientLight,
-  pointLight1,
-  pointLight2,
-});
-
-const material = {
-  ambient: 0.64,
-  diffuse: 0.6,
-  shininess: 32,
-  specularColor: [51, 51, 51],
-};
-
-export const colorRange = [
-  [23, 90, 118],
-  [60, 83, 110],
-  [97, 76, 102],
-  [135, 69, 94],
-  [172, 62, 86],
-  [209, 55, 78],
-];
 
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
@@ -99,7 +62,7 @@ const INITIAL_VIEW_STATE = {
   zoom: 4.5,
   minZoom: 3,
   maxZoom: 15,
-  pitch: 40.5,
+  // pitch: 40.5,
   // bearing: -27,
 };
 
