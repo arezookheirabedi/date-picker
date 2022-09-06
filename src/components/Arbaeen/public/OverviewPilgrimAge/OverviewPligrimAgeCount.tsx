@@ -1,6 +1,7 @@
 import React from 'react';
 import Highcharts from 'highcharts/highstock';
 import {ECOLOR} from 'src/constants/color.enum';
+import Information from 'src/assets/images/icons/information.svg';
 import Spinner from '../../../Spinner';
 import RetryButton from '../../../RetryButton';
 import Charts from '../../../Charts';
@@ -142,7 +143,16 @@ const OverviewPligrimAgeCount: React.FC<IProps> = ({dataset, loading, errorMessa
             </div>
           </div>
         </div>
-
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                مقایسه تعداد زائران به تفکیک سال تولد وارد شده در هنگام ثبت نام
+              </span>
+            </div>
+          </div>
+        </div>
         {loading && (
           <div className="p-40">
             <Spinner />
