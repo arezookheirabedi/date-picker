@@ -7,6 +7,7 @@ import {DataFilterExtension} from '@deck.gl/extensions/typed';
 import DeckGL from '@deck.gl/react/typed';
 import MapRange from 'src/components/MapRange';
 import {useSelector} from 'src/hooks/useTypedSelector';
+import {toPersianDigit} from 'src/helpers/utils';
 
 try {
   setRTLTextPlugin(
@@ -36,7 +37,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-const MS_PER_DAY = 1000 * 60 * 8;
+const MS_PER_DAY = 1000 * 60 * 12;
 
 const dataFilter = new DataFilterExtension({
   filterSize: 1,
@@ -71,8 +72,10 @@ function getTooltip({object}: any) {
   return (
     object &&
     `\
-      زمان: ${dayjs(object.timestamp).format('YYYY-MM-DD HH:mm')}
-      ${object.isPassenger ? 'مسافران' : 'زائران'}: ${object.magnitude}
+      تاریخ: ${toPersianDigit(
+        dayjs(object.timestamp).calendar('jalali').format('YYYY-MM-DD HH:mm')
+      )}
+      ${object.isPassenger ? 'تعداد زائران' : 'تعداد مفیم'}: ${object.magnitude}
       `
   );
 }
