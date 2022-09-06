@@ -59,6 +59,8 @@ const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
               loading={loading}
               isPercentage
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={YellowVaccine}
               text="درصد کل زائران  با دوز اول"
@@ -66,8 +68,6 @@ const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
               loading={loading}
               isPercentage
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={OrangeVaccine}
               text="درصد کل زائران  با دوز دوم"
@@ -82,6 +82,8 @@ const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
               loading={loading}
               isPercentage
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={DarkgreenVaccine}
               text="درصد کل زائران  با دوز چهارم"
@@ -96,8 +98,6 @@ const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
               loading={loading}
               isPercentage
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={redVaccine}
               infoText="تعداد زائران ۱۸ سال به بالا كه واكسن نزده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
@@ -108,9 +108,9 @@ const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
               isPercentage
             />
 
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>
