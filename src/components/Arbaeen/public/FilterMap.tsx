@@ -329,8 +329,6 @@ const FilterMap: React.FC<{}> = () => {
           return result;
         }, []);
 
-      console.log(res);
-
       zaerinRef.current = new HeatmapLayer({
         id: 'zaerin-layer',
         // @ts-ignore
@@ -338,10 +336,7 @@ const FilterMap: React.FC<{}> = () => {
         getPosition: d => [d[0], d[1]],
         getWeight: d => d[2],
         colorRange: [
-          [255, 255, 255, 0],
-          [209, 222, 228, 130],
-          [162, 189, 200, 255],
-          [116, 156, 173, 255],
+          [116, 156, 173, 130],
           [69, 123, 145, 255],
           [23, 90, 118, 255],
         ],
