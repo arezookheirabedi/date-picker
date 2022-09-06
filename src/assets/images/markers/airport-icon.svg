@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1104.391" height="1104.391" viewBox="0 0 1104.391 1104.391">
   <defs>
     <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
       <stop offset="0" stop-color="#041e39"/>
@@ -7,9 +7,9 @@
   </defs>
   <g id="Group_48493" data-name="Group 48493" transform="translate(8425 4469)">
     <g id="_3669413_location_ic_on_icon" data-name="3669413_location_ic_on_icon" transform="translate(-8425 -4469)">
-      <path id="Path_94545" data-name="Path 94545" d="M30,4C18.957,4,10,12.151,10,22.2,10,35.85,30,56,30,56S50,35.85,50,22.2C50,12.151,41.043,4,30,4Z" transform="translate(0 0)" fill="url(#linear-gradient)"/>
-      <path id="Path_94546" data-name="Path 94546" d="M0,0H60V60H0Z" fill="none"/>
-      <path id="_3671647_airplane_icon" data-name="3671647_airplane_icon" d="M7.56,10.8H2.52L.9,13.5H0v-9H.9L2.52,7.2H7.56L5.4,0H7.2l4.32,7.2H16.2a1.8,1.8,0,1,1,0,3.6H11.52L7.2,18H5.4Z" transform="translate(21 15)" fill="#fff"/>
+      <path id="Path_94545" data-name="Path 94545" d="M378.13,4C174.87,4,10,154.031,10,339c0,251.249,368.13,622.14,368.13,622.14S746.26,590.247,746.26,339C746.26,154.031,581.391,4,378.13,4Z" transform="translate(174.065 69.626)" fill="url(#linear-gradient)"/>
+      <path id="Path_94546" data-name="Path 94546" d="M0,0H1104.391V1104.391H0Z" fill="none"/>
+      <path id="_3671647_airplane_icon" data-name="3671647_airplane_icon" d="M139.153,198.79H46.384l-29.819,49.7H0V82.829H16.566l29.819,49.7h92.769L99.4,0h33.132l79.516,132.527h86.142a33.132,33.132,0,1,1,0,66.263H212.043L132.527,331.317H99.4Z" transform="translate(386.537 276.098)" fill="#fff"/>
     </g>
   </g>
 </svg>

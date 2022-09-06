@@ -1,5 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import {useDispatch} from 'react-redux';
 import dayjs from 'dayjs';
 import {MapView} from '@deck.gl/core/typed';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
@@ -7,6 +8,8 @@ import {DataFilterExtension} from '@deck.gl/extensions/typed';
 import DeckGL from '@deck.gl/react/typed';
 import MapRange from 'src/components/MapRange';
 import {useSelector} from 'src/hooks/useTypedSelector';
+import {toPersianDigit} from 'src/helpers/utils';
+import {fetchZaerinAc} from 'src/store/action_creators/arbaeen/fetchZaerinAc';
 
 try {
   setRTLTextPlugin(
@@ -36,7 +39,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-const MS_PER_DAY = 1000 * 60 * 8;
+const MS_PER_DAY = 1000 * 60 * 12;
 
 const dataFilter = new DataFilterExtension({
   filterSize: 1,
@@ -71,8 +74,10 @@ function getTooltip({object}: any) {
   return (
     object &&
     `\
-      زمان: ${dayjs(object.timestamp).format('YYYY-MM-DD HH:mm')}
-      ${object.isPassenger ? 'مسافران' : 'زائران'}: ${object.magnitude}
+      تاریخ: ${toPersianDigit(
+        dayjs(object.timestamp).calendar('jalali').format('YYYY-MM-DD HH:mm')
+      )}
+      ${object.isPassenger ? 'تعداد زائران' : 'تعداد مفیم'}: ${toPersianDigit(object.magnitude)}
       `
   );
 }
@@ -87,9 +92,14 @@ const TimelineMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
+  const dispatch = useDispatch();
   const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
 
   const filterValue = filter || timeRange;
+
+  const loadData = () => {
+    dispatch(fetchZaerinAc());
+  };
 
   const fetcher = async () => {
     const res1 = zaerinDataSource
@@ -122,8 +132,6 @@ const TimelineMap: React.FC<{}> = () => {
         };
       });
 
-    console.log('Finish');
-
     setData([...res1]);
     setData2([...res2]);
   };
@@ -140,7 +148,7 @@ const TimelineMap: React.FC<{}> = () => {
         wrapLongitude: true,
         getPosition: (d: any) => [d.longitude, d.latitude, -d.depth * 1000],
         // getRadius: (d) => Math.pow(2, d.magnitude),
-        getRadius: (d: any) => d.magnitude / 3,
+        getRadius: (d: any) => d.magnitude / 10,
         getFillColor: (d: any) => {
           const r = Math.sqrt(Math.max(d.depth, 0));
           return [24 - r * 15, r * 90, r * 118];
@@ -197,11 +205,11 @@ const TimelineMap: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا</legend>
-      <div className="relative" style={{height: '500px'}}>
+      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در ۲۴ ساعت اخیر</legend>
+      <div className="relative" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
-            submitted ? '' : 'hidden'
+            submitted || zaerinDataSource.length === 0 ? '' : 'hidden'
           }`}
         />
         <div
@@ -224,20 +232,29 @@ const TimelineMap: React.FC<{}> = () => {
             />
           </svg>
         </div>
+        <div
+          className={` absolute left-1/2 top-1/2  z-20 -translate-x-1/2 -translate-y-1/2 ${
+            zaerinDataSource.length === 0 && !submitted ? '' : 'hidden'
+          }`}
+        >
+          <button className="button button--primary px-8" type="button" onClick={loadData}>
+            نمایش نقشه
+          </button>
+        </div>
         <DeckGL
           ref={deckRef}
           views={MAP_VIEW}
           layers={layers}
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          height={500}
+          height={650}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
           <StaticMap
             reuseMaps
             preventStyleDiffing
-            height={500}
+            height={650}
             ref={mapRef}
             mapStyle="mapbox://styles/mapbox/light-v10"
             // className="map-container"

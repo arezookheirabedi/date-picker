@@ -15,7 +15,8 @@ import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 import OverviewPilgrim from 'src/components/Arbaeen/province/OverviewPilgrim';
 import OverviewPligrimTripType from 'src/components/Arbaeen/province/OverviewPligrimTripType';
 import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/province/OverviewPilgrimVaccineStatus';
-import TheLatestOverviewPilgrimVaccineStatusProvine from 'src/components/Arbaeen/province/TheLatestOverviewPilgrimVaccineStatusProvine';
+import TheLatestOverviewPilgrimVaccineStatusProvine
+  from 'src/components/Arbaeen/province/TheLatestOverviewPilgrimVaccineStatusProvine';
 
 const ArbaeenProvince = () => {
   const location = useLocation();
@@ -43,19 +44,37 @@ const ArbaeenProvince = () => {
         selectDefault
       />
 
-      {!hasProvinceResources && <AccessDenied id="arborean-overview" />}
+      {!hasProvinceResources && <AccessDenied id="arborean-overview"/>}
       {hasProvinceResources && (
         <>
-          <OverviewPilgrim cityTitle={cityTitle} />
-          <OverviewPligrimTripType cityTitle={cityTitle} />
-          <OverviewPilgrimVaccineStatus cityTitle={cityTitle} />
-          <TheLatestOverviewPilgrimVaccineStatusProvine cityTitle={cityTitle} />
-          <PilgrimsList cityTitle={cityTitle} />
-          <OverviewOfExistBordersProvince cityTitle={cityTitle} />
-          <OverviewPligrimAgeProvince cityTitle={cityTitle} />
-          <OverviewPilgrimGenderByProvince cityTitle={cityTitle} />
-          <ThePligrimsCitiesList cityTitle={cityTitle} />
+          <OverviewPilgrim cityTitle={cityTitle}/>
+          <OverviewPligrimTripType cityTitle={cityTitle}/>
+          <OverviewPilgrimVaccineStatus cityTitle={cityTitle}/>
+          <TheLatestOverviewPilgrimVaccineStatusProvine cityTitle={cityTitle}/>
+          <PilgrimsList cityTitle={cityTitle}/>
+          <OverviewOfExistBordersProvince cityTitle={cityTitle}/>
+          <OverviewPligrimAgeProvince cityTitle={cityTitle}/>
+          <OverviewPilgrimGenderByProvince cityTitle={cityTitle}/>
+          <ThePligrimsCitiesList cityTitle={cityTitle}/>
           <fieldset className=" rounded-xl border py-2 px-4 text-center">
+            <div className=" flex justify-center">
+              <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+                <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell.png`} className="w-12 ml-1" alt=""/>
+              </a>
+              <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+                <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell-labs.png`} className="w-8 ml-1"
+                     alt=""/>
+              </a>
+              {/* <div className="flex items-center justify-start"> */}
+              {/*  <img src={Irancell} className="inline" alt="irancell-logo" /> */}
+              {/*  <span className="px-2">باهمکاری ایرانسل</span> */}
+              {/* </div> */}
+              {/* <div> */}
+              {/*  <img src={Vasl} className="inline " alt="vasl-logo" /> */}
+              {/* </div> */}
+            </div>
+
+            {/*
             <div className=" flex justify-between">
               <div className="flex items-center justify-start">
                 <img src={Irancell} className="inline" alt="irancell-logo" />
@@ -65,6 +84,7 @@ const ArbaeenProvince = () => {
                 <img src={Vasl} className="inline " alt="vasl-logo" />
               </div>
             </div>
+            */}
           </fieldset>
         </>
       )}

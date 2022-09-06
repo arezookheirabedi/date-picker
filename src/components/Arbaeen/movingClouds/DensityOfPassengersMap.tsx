@@ -48,12 +48,14 @@ const material = {
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
   latitude: 32.7219,
-  zoom: 4.5,
+  zoom: 5,
   minZoom: 3,
   maxZoom: 15,
-  pitch: 40.5,
+  pitch: 60.5,
   // bearing: -27,
 };
+
+
 
 export const colorRange = [
   [1, 152, 189],
@@ -61,7 +63,7 @@ export const colorRange = [
   [216, 254, 181],
   [254, 237, 177],
   [254, 173, 84],
-  [209, 55, 78],
+  [209, 55, 78]
 ];
 
 function getTooltip({object}: any) {
@@ -86,11 +88,13 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
-  const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
+  const {loadingHourly: zaerinLoading, dataHourly: zaerinDataSource} = useSelector(
+    state => state.fetchZaerin
+  );
 
   const fetcher = async () => {
     const res = zaerinDataSource
-      .filter((x: any) => x.Submittime === '2022-08-31T17:00:00.000Z' && x.isPassenger === 'true')
+      .filter((x: any) => x.isPassenger === 'true')
       .reduce((result: any, d: any) => {
         [...Array(Number(d.CountOfSamah))].forEach(() => {
           try {
@@ -102,8 +106,6 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
 
         return result;
       }, []);
-
-    console.log('Finish');
 
     setData([...res]);
   };
@@ -148,8 +150,8 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا</legend>
-      <div className="relative" style={{height: '500px'}}>
+      <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
+      <div className="relative" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -181,16 +183,16 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
           effects={[lightingEffect]}
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          height={500}
+          height={650}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
           <StaticMap
             reuseMaps
             preventStyleDiffing
-            height={500}
+            height={650}
             ref={mapRef}
-            mapStyle="mapbox://styles/mapbox/light-v10"
+            mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json"
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
