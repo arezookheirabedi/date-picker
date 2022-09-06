@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimAgeStatusPercentage from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimAgeStatusPercentage';
 import {ECOLOR} from 'src/constants/color.enum';
-import Spinner from '../../Spinner';
-import RetryButton from '../../RetryButton';
-import Charts from '../../Charts';
+import Spinner from '../../../Spinner';
+import RetryButton from '../../../RetryButton';
+import Charts from '../../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -102,16 +101,18 @@ const optionChart = {
   },
 };
 
-const OverviewPligrimAgePercentage = () => {
-  const [query, setQuery] = useState({
-    retry: false,
-  });
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(query);
-
+interface IProps {
+  dataset: any;
+  loading: boolean;
+  errorMessage: any;
+  setQuery: any;
+}
+const OverviewPligrimAgePercentage: React.FC<IProps> = ({
+  dataset,
+  loading,
+  errorMessage,
+  setQuery,
+}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به درصد زائران در رده های سنی</legend>
