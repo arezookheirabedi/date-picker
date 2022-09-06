@@ -7,7 +7,7 @@ import {EBORDERS} from 'src/constants/border.enum';
 import {ECOLOR} from 'src/constants/color.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
-const initialData = {
+const initialDataCount = {
   categories: [
     EBORDERS.HAVAEE,
     EBORDERS.SHALAMCHE,
@@ -34,13 +34,40 @@ const initialData = {
   ],
 } as any;
 
+const initialDataPercentage = {
+  categories: [
+    EBORDERS.HAVAEE,
+    EBORDERS.SHALAMCHE,
+    EBORDERS.KHOSRAVI,
+    EBORDERS.CHAZABE,
+    EBORDERS.MEHRAN,
+    EBORDERS.BASHMAGH,
+    EBORDERS.TAMARCHIN,
+  ],
+  series: [
+    {
+      name: 'درصد',
+
+      data: [
+        {name: EBORDERS.HAVAEE, y: 0, color: ECOLOR.COLOR4},
+        {name: EBORDERS.SHALAMCHE, y: 0, color: ECOLOR.COLOR3},
+        {name: EBORDERS.KHOSRAVI, y: 0, color: ECOLOR.COLOR2},
+        {name: EBORDERS.CHAZABE, y: 0, color: ECOLOR.COLOR1},
+        {name: EBORDERS.MEHRAN, y: 0, color: ECOLOR.COLOR7},
+        {name: EBORDERS.BASHMAGH, y: 0, color: ECOLOR.COLOR5},
+        {name: EBORDERS.TAMARCHIN, y: 0, color: ECOLOR.COLOR6},
+      ],
+    },
+  ],
+} as any;
 export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
   query: any,
   hasProvince: boolean = false
 ) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
-  const [data, setData] = useState<any>(initialData);
+  const [dataCount, setDataCount] = useState<any>(initialDataCount);
+  const [dataPercentage, setDataPercentage] = useState<any>(initialDataPercentage);
 
   const {CancelToken} = axios;
   const source = CancelToken.source();
@@ -54,15 +81,17 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
 
       const border: any[] = [];
       const count: any[] = [];
+      const countPercentage: any[] = [];
 
-      const sortData = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
+      const sortDataCount = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
 
-      sortData.forEach((item: any) => {
+      sortDataCount.forEach((item: any) => {
         border.push(item.departureDestinationBorder);
         count.push(item.count);
+        countPercentage.push(item.countPercentage);
       });
 
-      const dataTemp = {
+      const dataTempCount = {
         categories: [...border],
         series: [
           {
@@ -164,7 +193,110 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
           },
         ],
       } as any;
-      setData(dataTemp);
+      setDataCount(dataTempCount);
+      const dataTempPercentage = {
+        categories: [...border],
+        series: [
+          {
+            name: 'درصد',
+            data: [
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.HAVAEE;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.HAVAEE;
+                  })
+                ],
+                color: ECOLOR.COLOR4,
+              },
+
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.SHALAMCHE;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.SHALAMCHE;
+                  })
+                ],
+                color: ECOLOR.COLOR3,
+              },
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.KHOSRAVI;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.KHOSRAVI;
+                  })
+                ],
+                color: ECOLOR.COLOR2,
+              },
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.CHAZABE;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.CHAZABE;
+                  })
+                ],
+                color: ECOLOR.COLOR1,
+              },
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.MEHRAN;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.MEHRAN;
+                  })
+                ],
+                color: ECOLOR.COLOR7,
+              },
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.BASHMAGH;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.BASHMAGH;
+                  })
+                ],
+                color: ECOLOR.COLOR5,
+              },
+              {
+                name: border[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.TAMARCHIN;
+                  })
+                ],
+                y: countPercentage[
+                  border.findIndex((i: any) => {
+                    return i === EBORDERS.TAMARCHIN;
+                  })
+                ],
+                color: ECOLOR.COLOR6,
+              },
+            ],
+          },
+        ],
+      } as any;
+      setDataPercentage(dataTempPercentage);
       setError(false);
       setLoading(false);
     } catch (err: any) {
@@ -184,7 +316,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
     getIt(query);
     // eslint-disable-next-line consistent-return
     return () => {
-      setData(initialData);
+      setDataCount(initialDataCount);
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
@@ -208,10 +340,10 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
     }
     // eslint-disable-next-line consistent-return
     return () => {
-      setData(initialData);
+      setDataCount(initialDataCount);
       source.cancel('Operation canceled by the user.');
     };
   }, [location.search, query]);
 
-  return {loading, error, data};
+  return {loading, error, dataCount, dataPercentage};
 }
