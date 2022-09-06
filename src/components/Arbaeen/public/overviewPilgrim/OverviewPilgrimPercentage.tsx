@@ -49,13 +49,6 @@ const OverviewPilgrimPercentage: React.FC<IProps> = ({pilgrims, loading}) => {
               loading={loading}
               isPercentage
             />
-            <Statistic
-              icon={earthPersons}
-              text=" درصد کل ثبت نام شدگان نهایی اتباع خارجی"
-              count={pilgrims.countNonIranianPercentage || 0}
-              loading={loading}
-              isPercentage
-            />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
@@ -87,7 +80,7 @@ const OverviewPilgrimPercentage: React.FC<IProps> = ({pilgrims, loading}) => {
               isPercentage
             /> */}
             {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>
