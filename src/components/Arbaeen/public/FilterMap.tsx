@@ -54,8 +54,6 @@ try {
   console.error(e);
 }
 
-
-
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
   latitude: 32.7219,
@@ -339,6 +337,14 @@ const FilterMap: React.FC<{}> = () => {
         data: res,
         getPosition: d => [d[0], d[1]],
         getWeight: d => d[2],
+        colorRange: [
+          [255, 255, 255, 0],
+          [209, 222, 228, 130],
+          [162, 189, 200, 255],
+          [116, 156, 173, 255],
+          [69, 123, 145, 255],
+          [23, 90, 118, 255],
+        ],
         radiusPixels: 30,
         intensity: 1,
         threshold: 0.03,
