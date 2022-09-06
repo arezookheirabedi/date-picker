@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimAgeStatusPercentage from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimAgeStatusPercentage';
 import {ECOLOR} from 'src/constants/color.enum';
-import Spinner from '../../Spinner';
-import RetryButton from '../../RetryButton';
-import Charts from '../../Charts';
+import Spinner from '../../../Spinner';
+import RetryButton from '../../../RetryButton';
+import Charts from '../../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -102,19 +101,21 @@ const optionChart = {
   },
 };
 
-const OverviewPligrimAgePercentage = () => {
-  const [query, setQuery] = useState({
-    retry: false,
-  });
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimAgeStatusPercentage(query);
-
+interface IProps {
+  dataset: any;
+  loading: boolean;
+  errorMessage: any;
+  setQuery: any;
+}
+const OverviewOfExistBordersPercentage: React.FC<IProps> = ({
+  dataset,
+  loading,
+  errorMessage,
+  setQuery,
+}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به درصد زائران در رده های سنی</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به درصد زائران در مرزهای خروجی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
@@ -122,28 +123,32 @@ const OverviewPligrimAgePercentage = () => {
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
-                  <span> سال (۱۵-۰)</span>
+                  <span>مرز چذابه</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
-                  <span>سال (۳۰-۱۶)</span>
+                  <span> مرز خسروی</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
-                  <span> سال (۴۵-۳۱)</span>
+                  <span> مرز شلمچه</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
-                  <span> سال (۶۰-۴۶)</span>
+                  <span> هوایی</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
-                  <span> سال (۷۵-۶۱) </span>
+                  <span> مرز باشماق</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
-                  <span>۷۵ سال به بالا </span>
+                  <span>مرز تمرچین</span>
                 </div>
+              </div>
+              <div className="inline-flex flex-col justify-center items-center space-y-2">
+                <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
+                <span>مرز مهران</span>
               </div>
             </div>
           </div>
@@ -170,4 +175,4 @@ const OverviewPligrimAgePercentage = () => {
   );
 };
 
-export default OverviewPligrimAgePercentage;
+export default OverviewOfExistBordersPercentage;

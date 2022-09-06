@@ -250,3 +250,13 @@ export const initialVaccineValue = {
     {dose: 3, count: 0, countPercentage: 0},
   ],
 };
+export interface IInitialVaccineValue {
+  pass6MonthFromLastVaccines: number;
+  totalNonVaccines: number;
+  totalVaccines: number;
+  totalZaerin: number;
+  pass6MonthFromLastVaccinesPercentage: number;
+  totalNonVaccinesPercentage: number;
+  totalVaccinesPercentage: number;
+  zaerinGroupByDoses: Array<{dose: number; count: number; countPercentage: number}>;
+}

@@ -95,14 +95,14 @@ const OverviewPilgrimVaccineStatus: React.FC<{cityTitle: string}> = ({cityTitle}
               count={pilgrims.totalNonVaccines || 0}
               loading={loading}
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={YellowVaccine}
               text="تعداد کل زائران  با دوز اول"
               count={getValue(1)}
               loading={loading}
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={OrangeVaccine}
               text="تعداد کل زائران  با دوز دوم"
@@ -115,6 +115,8 @@ const OverviewPilgrimVaccineStatus: React.FC<{cityTitle: string}> = ({cityTitle}
               count={getValue(3)}
               loading={loading}
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={DarkgreenVaccine}
               text="تعداد کل زائران  با دوز چهارم"
@@ -127,8 +129,6 @@ const OverviewPilgrimVaccineStatus: React.FC<{cityTitle: string}> = ({cityTitle}
               count={getValue(5)}
               loading={loading}
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={redVaccine}
               hasInfo
@@ -138,9 +138,9 @@ const OverviewPilgrimVaccineStatus: React.FC<{cityTitle: string}> = ({cityTitle}
               loading={loading}
             />
 
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>

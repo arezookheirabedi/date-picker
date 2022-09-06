@@ -105,6 +105,11 @@ const FilterMap: React.FC<{}> = () => {
   const [showPath, setShowPath] = useState<any>(false);
   const [pathLayers, setPathLayers] = useState<any[]>([]);
 
+  // radar
+  const [radatData, setRadarData] = useState<any[]>([]);
+  const [showRadar, setShowRadar] = useState<any>(false);
+  const [radarLayers, setRadarLayers] = useState<any[]>([]);
+
   // zaerin
   const [showZaerin, setShowZaerin] = useState<any>(false);
   const [zaerinLayers, setZaerinLayers] = useState<any>(false);
@@ -334,13 +339,13 @@ const FilterMap: React.FC<{}> = () => {
         // @ts-ignore
         data: res,
         getPosition: d => [d[0], d[1]],
-        getWeight: d => d[2],
+        getWeight: d => d[2] * 3,
         colorRange: [
-          [116, 156, 173, 130],
-          [69, 123, 145, 255],
+          [23, 90, 118, 130],
+          [23, 90, 118, 190],
           [23, 90, 118, 255],
         ],
-        radiusPixels: 30,
+        radiusPixels: 60,
         intensity: 1,
         threshold: 0.03,
         visible: false,
@@ -744,14 +749,15 @@ const FilterMap: React.FC<{}> = () => {
         <DeckGL
           ref={deckRef}
           layers={[
-            editorLayer,
+            radarLayers,
+            zaerinLayers,
             borderLayers,
             pathLayers,
             airportLayers,
             mokebLayers,
-            zaerinLayers,
             emergencyLayers,
             parkingLayers,
+            editorLayer,
           ]}
           initialViewState={mapState}
           controller={{

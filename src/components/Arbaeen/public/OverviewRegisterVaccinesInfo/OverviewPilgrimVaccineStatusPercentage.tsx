@@ -1,8 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React from 'react';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
-import arbaeenService from 'src/services/arbaeen.service';
-import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import Statistic from 'src/containers/Guild/components/Statistic';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
@@ -12,48 +9,32 @@ import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import NavyVaccine from 'src/assets/images/icons/navy-vaccine-lg.svg';
 import redVaccine from 'src/assets/images/icons/red-vaccine.svg';
-import {initialVaccineValue} from './constant';
+import {IInitialCount} from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import {IInitialVaccineValue} from '../constant';
 
-const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
-  const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialVaccineValue);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+interface IProps {
+  loading: boolean;
+  totalInfo: IInitialCount;
+  pilgrims: IInitialVaccineValue;
+  loadingPositiveTest: boolean;
+}
 
-  const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime({
-    countLastPositiveTestResult: true,
-  });
-  const getAllPilgrims = async () => {
-    setLoading(true);
-    try {
-      const {data} = await arbaeenService.getTheLatestVaccineInfo({}, {cancelToken: source.token});
-
-      setPilgrims({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
+  pilgrims,
+  loading,
+  totalInfo,
+  loadingPositiveTest,
+}) => {
   const getValue = (i: number) => {
     const data = pilgrims?.zaerinGroupByDoses?.find((item: any) => item.dose === i);
     return data?.countPercentage || 0;
   };
-  useEffect(() => {
-    getAllPilgrims();
-    return () => {
-      setPilgrims({...initialVaccineValue});
-
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
-          نگاه کلی به درصد آخرین وضعیت واکسیناسیون زائران
+          نگاه کلی به درصد واکسیناسیون زائران در هنگام ثبت نام
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -67,7 +48,7 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
             <Statistic
               icon={sufferingIcon}
               text=" درصد زائران ثبت نامی با کوید مثبت"
-              count={totalInfo.countLastPositiveTestResultPercentage || 0}
+              count={totalInfo.countLastPositiveTestResultWhileRegisteredPercentage || 0}
               loading={loadingPositiveTest}
               isPercentage
             />
@@ -78,6 +59,8 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
               loading={loading}
               isPercentage
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={YellowVaccine}
               text="درصد کل زائران  با دوز اول"
@@ -85,8 +68,6 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
               loading={loading}
               isPercentage
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={OrangeVaccine}
               text="درصد کل زائران  با دوز دوم"
@@ -101,6 +82,8 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
               loading={loading}
               isPercentage
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={DarkgreenVaccine}
               text="درصد کل زائران  با دوز چهارم"
@@ -115,8 +98,6 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
               loading={loading}
               isPercentage
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={redVaccine}
               infoText="تعداد زائران ۱۸ سال به بالا كه واكسن نزده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
@@ -127,9 +108,9 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
               isPercentage
             />
 
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>
@@ -137,4 +118,4 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage = () => {
   );
 };
 
-export default TheLatestOverviewPilgrimVaccineStatusPercentage;
+export default OverviewPilgrimVaccineStatusPercentage;

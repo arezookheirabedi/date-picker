@@ -235,13 +235,9 @@ function getMokeb(id: any, config?: any) {
 }
 
 function getPolygonData(params: any, config?: any) {
-  return request.build().get(
-    `/api/v1/arbaeen/reports/polygon/count?${params}&isPassenger=true`,
-    {},
-    {
-      ...config,
-    }
-  );
+  return request.build().post(`/api/v1/arbaeen/reports/polygon/count`, params, {
+    ...config,
+  });
 }
 
 function getParckingList(params: any = {}, config?: any) {

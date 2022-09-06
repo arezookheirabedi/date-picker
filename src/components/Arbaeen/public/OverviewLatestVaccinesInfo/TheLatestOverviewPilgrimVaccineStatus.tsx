@@ -1,8 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React from 'react';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
-import arbaeenService from 'src/services/arbaeen.service';
-import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
 import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
 import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import Statistic from 'src/containers/Guild/components/Statistic';
@@ -12,43 +9,26 @@ import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import NavyVaccine from 'src/assets/images/icons/navy-vaccine-lg.svg';
 import redVaccine from 'src/assets/images/icons/red-vaccine.svg';
-import {initialVaccineValue} from './constant';
+import {IInitialCount} from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import {IInitialVaccineValue} from '../constant';
 
-const TheLatestOverviewPilgrimVaccineStatus = () => {
-  const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialVaccineValue);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+interface IProps {
+  loading: boolean;
+  totalInfo: IInitialCount;
+  pilgrims: IInitialVaccineValue;
+  loadingPositiveTest: boolean;
+}
 
-  const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime({
-    countLastPositiveTestResult: true,
-  });
-  const getAllPilgrims = async () => {
-    setLoading(true);
-    try {
-      const {data} = await arbaeenService.getTheLatestVaccineInfo({}, {cancelToken: source.token});
-
-      setPilgrims({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const TheLatestOverviewPilgrimVaccineStatus: React.FC<IProps> = ({
+  pilgrims,
+  loading,
+  totalInfo,
+  loadingPositiveTest,
+}) => {
   const getValue = (i: number) => {
     const data = pilgrims?.zaerinGroupByDoses?.find((item: any) => item.dose === i);
     return data?.count || 0;
   };
-  useEffect(() => {
-    getAllPilgrims();
-    return () => {
-      setPilgrims({...initialVaccineValue});
-
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
-
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -75,14 +55,14 @@ const TheLatestOverviewPilgrimVaccineStatus = () => {
               count={pilgrims.totalNonVaccines || 0}
               loading={loading}
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={YellowVaccine}
               text="تعداد کل زائران  با دوز اول"
               count={getValue(1)}
               loading={loading}
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={OrangeVaccine}
               text="تعداد کل زائران  با دوز دوم"
@@ -95,6 +75,8 @@ const TheLatestOverviewPilgrimVaccineStatus = () => {
               count={getValue(3)}
               loading={loading}
             />
+          </div>
+          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={DarkgreenVaccine}
               text="تعداد کل زائران  با دوز چهارم"
@@ -107,8 +89,6 @@ const TheLatestOverviewPilgrimVaccineStatus = () => {
               count={getValue(5)}
               loading={loading}
             />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
               icon={redVaccine}
               infoText="تعداد زائران ۱۸ سال به بالا كه واكسن نزده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
@@ -118,9 +98,9 @@ const TheLatestOverviewPilgrimVaccineStatus = () => {
               loading={loading}
             />
 
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
+            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>
