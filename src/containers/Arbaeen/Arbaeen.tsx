@@ -14,7 +14,6 @@ import TheLargestNumberOfOriginPilgrimsCitiesList from 'src/components/Arbaeen/p
 // import OverviewPilgrimHelthStatus from 'src/components/Arbaeen/public/OverviewPilgrimHelthStatus';
 import OverviewPilgrimGenderByProvince from 'src/components/Arbaeen/public/OverviewPilgrimGenderByProvince';
 import OverviewPligrimGroundTripType from 'src/components/Arbaeen/public/OverviewPligrimGroundTripType';
-// import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
 import ComparsionPasengersEntranceAndExistanceAtBoarders from 'src/components/Arbaeen/public/ComparsionPasengersEntranceAndExistanceAtBoarders';
 import OverviewTheLatestStatusGroundBorders from 'src/components/Arbaeen/public/OverviewTheLatestStatusGroundBorders';
 // import ListOfTheBusiestBorderCrossings from '../../components/Arbaeen/public/ListOfTheBusiestBorderCrossings';
@@ -36,14 +35,10 @@ const Arbaeen = () => {
     <div className="space-y-16 mb-8">
       <OverviewPilgrim />
       <OverviewPligrimTripType />
-
       <OverviewPligrimGroundTripType />
       {/* <OverviewPilgrimHelthStatus /> */}
       <OverviewRegisterVaccinesInfo />
       <OverviewLatestVaccinesInfo />
-
-      {/* <OverviewOfTheLatestVaccinationStatusOfPilgrims /> */}
-
       <OverviewOfExistBorder />
       <OverviewPilgrimAge />
       <OverviewPilgrimGenderByProvince />

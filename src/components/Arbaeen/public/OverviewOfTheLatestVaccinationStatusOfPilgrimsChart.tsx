@@ -98,7 +98,7 @@ const optionChart = {
   },
 };
 
-const OverviewOfTheLatestVaccinationStatusOfPilgrims = () => {
+const OverviewOfTheLatestVaccinationStatusOfPilgrimsChart = () => {
   const [query, setQuery] = useState({
     retry: false,
   });
@@ -168,4 +168,4 @@ const OverviewOfTheLatestVaccinationStatusOfPilgrims = () => {
   );
 };
 
-export default OverviewOfTheLatestVaccinationStatusOfPilgrims;
+export default OverviewOfTheLatestVaccinationStatusOfPilgrimsChart;
