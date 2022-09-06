@@ -104,7 +104,7 @@ const OverviewOfExistBordersProvince: React.FC<{cityTitle: string}> = ({cityTitl
     retry: false,
   });
   const {
-    data: dataset,
+    dataCount: dataset,
     loading,
     error: errorMessage,
   } = useGetOverviewOfArbaeenPilgrimExistAbroad(query, true);

@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimVaccination from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimVaccination';
-import Spinner from '../../Spinner';
-import RetryButton from '../../RetryButton';
-import Charts from '../../Charts';
+import {ECOLOR} from 'src/constants/color.enum';
+import Spinner from '../../../Spinner';
+import RetryButton from '../../../RetryButton';
+import Charts from '../../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -87,7 +87,7 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
-    valueSuffix: ' درصد',
+    valueSuffix: 'نفر',
     style: {
       direction: 'rtl',
       textAlign: 'right',
@@ -98,49 +98,45 @@ const optionChart = {
   },
 };
 
-const OverviewOfTheLatestVaccinationStatusOfPilgrims = () => {
-  const [query, setQuery] = useState({
-    retry: false,
-  });
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimVaccination(query);
-
+interface IProps {
+  dataset: any;
+  loading: boolean;
+  errorMessage: any;
+  setQuery: any;
+}
+const OverviewPligrimAgeCount: React.FC<IProps> = ({dataset, loading, errorMessage, setQuery}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">
-        نگاه کلی به آخرین وضعیت واکسیناسیون زائران
-      </legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به تعداد زائران در رده های سنی</legend>
+
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="w-full">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
-                  <span>واکسن نزده</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
+                  <span> سال (۱۵-۰)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#716DE3'}} />
-                  <span>دوز پنجم</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
+                  <span>سال (۳۰-۱۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#BFDDE7'}} />
-                  <span>دوز چهارم</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
+                  <span> سال (۴۵-۳۱)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
-                  <span>دوز سوم</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
+                  <span> سال (۶۰-۴۶)</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#209F92'}} />
-                  <span>دوز دوم</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
+                  <span> سال (۷۵-۶۱) </span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#F3BC06'}} />
-                  <span>دوز اول</span>
+                  <div className="w-20 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
+                  <span>۷۵ سال به بالا </span>
                 </div>
               </div>
             </div>
@@ -168,4 +164,4 @@ const OverviewOfTheLatestVaccinationStatusOfPilgrims = () => {
   );
 };
 
-export default OverviewOfTheLatestVaccinationStatusOfPilgrims;
+export default OverviewPligrimAgeCount;

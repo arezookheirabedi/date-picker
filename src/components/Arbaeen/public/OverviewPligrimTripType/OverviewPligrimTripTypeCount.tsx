@@ -1,18 +1,17 @@
 import React from 'react';
-import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
-import Statistic from '../../../containers/Guild/components/Statistic';
-import airplanIcon from '../../../assets/images/icons/airplan.svg';
-import groupWithFlagIcon from '../../../assets/images/icons/group-with-flag.svg';
-import carIcon from '../../../assets/images/icons/car.svg';
-import railIcon from '../../../assets/images/icons/rail.svg';
+import {IInitialCount} from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import Statistic from 'src/containers/Guild/components/Statistic';
+import airplanIcon from 'src/assets/images/icons/airplan.svg';
+import groupWithFlagIcon from 'src/assets/images/icons/group-with-flag.svg';
+import carIcon from 'src/assets/images/icons/car.svg';
+import railIcon from 'src/assets/images/icons/rail.svg';
 
-const OverviewPligrimTripType = () => {
-  const {data: pilgrims, loading} = useGetArbaeenCountDataOnRegisterTime({
-    countZaerinAir: true,
-    countTotal: true,
-    countZaerinGround: true,
-    countZaerinRail: true,
-  });
+interface IProps {
+  loading: boolean;
+  pilgrims: IInitialCount;
+}
+
+const OverviewPligrimTripTypeCount: React.FC<IProps> = ({pilgrims, loading}) => {
   return (
     <>
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -52,4 +51,4 @@ const OverviewPligrimTripType = () => {
   );
 };
 
-export default OverviewPligrimTripType;
+export default OverviewPligrimTripTypeCount;
