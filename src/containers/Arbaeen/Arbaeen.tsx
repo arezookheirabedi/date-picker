@@ -57,6 +57,8 @@ const Arbaeen = () => {
       <ParckingList />
       {/* <RedHalalBasesList /> */}
       {/* <TheLargestNumberOfOriginPilgrimsCountriesList /> */}
+
+      {/*
       <fieldset className=" rounded-xl border py-2 px-4 text-center">
         <div className=" flex justify-between">
           <div className="flex items-center justify-start">
@@ -67,6 +69,44 @@ const Arbaeen = () => {
             <img src={Vasl} className="inline " alt="vasl-logo" />
           </div>
         </div>
+      </fieldset>
+        */}
+      <fieldset className=" rounded-xl border py-2 px-4 text-center">
+        <div className=" flex justify-center">
+          <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell.png`}
+              className="w-12 ml-1"
+              alt=""
+            />
+          </a>
+          <a href="https://irancell.ir" target="_blank" rel="noreferrer">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell-labs.png`}
+              className="w-8 ml-1"
+              alt=""
+            />
+          </a>
+          {/* <div className="flex items-center justify-start"> */}
+          {/*  <img src={Irancell} className="inline" alt="irancell-logo" /> */}
+          {/*  <span className="px-2">باهمکاری ایرانسل</span> */}
+          {/* </div> */}
+          {/* <div> */}
+          {/*  <img src={Vasl} className="inline " alt="vasl-logo" /> */}
+          {/* </div> */}
+        </div>
+
+        {/*
+            <div className=" flex justify-between">
+              <div className="flex items-center justify-start">
+                <img src={Irancell} className="inline" alt="irancell-logo" />
+                <span className="px-2">باهمکاری ایرانسل</span>
+              </div>
+              <div>
+                <img src={Vasl} className="inline " alt="vasl-logo" />
+              </div>
+            </div>
+            */}
       </fieldset>
     </div>
   );
