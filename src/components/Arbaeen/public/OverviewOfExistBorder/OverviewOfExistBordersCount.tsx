@@ -1,6 +1,7 @@
 import React from 'react';
 import Highcharts from 'highcharts/highstock';
 import {ECOLOR} from 'src/constants/color.enum';
+import Information from 'src/assets/images/icons/information.svg';
 import Spinner from '../../../Spinner';
 import RetryButton from '../../../RetryButton';
 import Charts from '../../../Charts';
@@ -112,9 +113,11 @@ const OverviewOfExistBordersCount: React.FC<IProps> = ({
 }) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به تعداد زائران در مرزهای خروجی</legend>
+      <legend className="text-black mx-auto px-3">
+        نگاه کلی به تعداد زائران بر اساس انتخاب مرز خروجی
+      </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
+        <div className="flex items-center justify-between mb-5 mt-6 px-8">
           <div className="w-full">
             <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
@@ -150,7 +153,16 @@ const OverviewOfExistBordersCount: React.FC<IProps> = ({
             </div>
           </div>
         </div>
-
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                مقایسه تعداد زائران به تفکیک مرز خروجی انتخاب شده در هنگام ثبت نام
+              </span>
+            </div>
+          </div>
+        </div>
         {loading && (
           <div className="p-40">
             <Spinner />
