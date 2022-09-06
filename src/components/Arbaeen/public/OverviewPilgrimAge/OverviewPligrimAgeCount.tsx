@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Highcharts from 'highcharts/highstock';
-import useGetOverviewOfArbaeenPilgrimAgeStatus from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimAgeStatus';
 import {ECOLOR} from 'src/constants/color.enum';
-import Spinner from '../../Spinner';
-import RetryButton from '../../RetryButton';
-import Charts from '../../Charts';
+import Spinner from '../../../Spinner';
+import RetryButton from '../../../RetryButton';
+import Charts from '../../../Charts';
 
 const {HeadlessChart} = Charts;
 
@@ -99,16 +98,13 @@ const optionChart = {
   },
 };
 
-const OverviewPligrimAge = () => {
-  const [query, setQuery] = useState({
-    retry: false,
-  });
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useGetOverviewOfArbaeenPilgrimAgeStatus(query);
-
+interface IProps {
+  dataset: any;
+  loading: boolean;
+  errorMessage: any;
+  setQuery: any;
+}
+const OverviewPligrimAgeCount: React.FC<IProps> = ({dataset, loading, errorMessage, setQuery}) => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">نگاه کلی به تعداد زائران در رده های سنی</legend>
@@ -168,4 +164,4 @@ const OverviewPligrimAge = () => {
   );
 };
 
-export default OverviewPligrimAge;
+export default OverviewPligrimAgeCount;

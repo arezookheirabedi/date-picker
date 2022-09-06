@@ -317,6 +317,8 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
     // eslint-disable-next-line consistent-return
     return () => {
       setDataCount(initialDataCount);
+      setDataPercentage(initialDataPercentage);
+
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
@@ -341,6 +343,8 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
     // eslint-disable-next-line consistent-return
     return () => {
       setDataCount(initialDataCount);
+      setDataPercentage(initialDataPercentage);
+
       source.cancel('Operation canceled by the user.');
     };
   }, [location.search, query]);
