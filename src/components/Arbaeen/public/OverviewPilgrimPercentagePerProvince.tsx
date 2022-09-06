@@ -5,6 +5,7 @@ import RetryButton from 'src/components/RetryButton';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import {ECOLOR} from 'src/constants/color.enum';
 import useGetPilgrimPercentagePerProvince from 'src/hooks/apis/useGetPilgrimPercentagePerProvince';
+import Information from 'src/assets/images/icons/information.svg';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 
@@ -130,27 +131,15 @@ const OverviewPilgrimPercentagePerProvince: React.FC<{}> = () => {
         نگاه کلی به درصد زائران اربعین به تفکیک استان
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
-        <div className="mb-10 mt-6 flex items-center justify-between px-8">
-          <div className="align-center flex w-3/4 justify-between">
-            {/* <div className="align-center flex justify-between">
-              <SingleDatepickerQuery query={query} setQuery={setQuery} />
-            </div> */}
-          </div>
-
-          {/* <div className="w-2/4">
-            <div className="flex flex-col justify-end space-y-4 text-xs text-gray-600 rtl:space-x-reverse lg:flex-row lg:space-y-0 lg:space-x-2">
-              <div className="flex flex-col justify-end space-y-4 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-2">
-                <div className="inline-flex flex-col items-center justify-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#FF0060'}} />
-                  <span> زائران زن</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-20 h-2 rounded" style={{backgroundColor: '#004D65'}} />
-                  <span> زائران مرد</span>
-                </div>
-              </div>
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                مقایسه درصد زائران ثبت نامی به تفکیک استان مبدا انتخاب شده در هنگام ثبت نام
+              </span>
             </div>
-          </div> */}
+          </div>
         </div>
 
         {loading && (
