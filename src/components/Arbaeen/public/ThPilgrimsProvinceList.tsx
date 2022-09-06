@@ -91,11 +91,7 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
                 sortable: true,
                 key: 'pilgrimsCount',
                 render: (v: any, record: any) => (
-                  <span className=" ">
-                    {Number(record.pilgrimsCount || 0)
-                      .toFixed(2)
-                      .toPersianDigits()}
-                  </span>
+                  <span className=" ">{Number(record.pilgrimsCount || 0).toPersianDigits()}</span>
                 ),
               },
               {

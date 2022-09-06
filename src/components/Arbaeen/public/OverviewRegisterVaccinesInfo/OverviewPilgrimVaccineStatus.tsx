@@ -43,18 +43,24 @@ const OverviewPilgrimVaccineStatus: React.FC<IProps> = ({
               text="تعداد زائران واکسن زده"
               count={pilgrims.totalVaccines || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام حداقل یک دوز واکسن کوید را دریافت کرده‌اند."
             />
             <Statistic
               icon={sufferingIcon}
               text=" تعداد زائران ثبت نامی با کوید مثبت"
               count={totalInfo.countLastPositiveTestResultWhileRegistered || 0}
               loading={loadingPositiveTest}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام به بیماری کوید مبتلا بوداند."
             />
             <Statistic
               icon={personGrayVaccine}
               text="تعداد زائران واکسن نزده"
               count={pilgrims.totalNonVaccines || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام هیچ واکسن کویدی دریافت نکرده‌اند."
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -63,18 +69,24 @@ const OverviewPilgrimVaccineStatus: React.FC<IProps> = ({
               text="تعداد کل زائران  با دوز اول"
               count={getValue(1)}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام  یک دوز واکسن کوید را دریافت کرده‌اند."
             />
             <Statistic
               icon={OrangeVaccine}
               text="تعداد کل زائران  با دوز دوم"
               count={getValue(2)}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام  دو دوز واکسن کوید را دریافت کرده‌اند."
             />
             <Statistic
               icon={PurppleVaccine}
               text="تعداد کل زائران  با دوز سوم"
               count={getValue(3)}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام  سه دوز واکسن کوید را دریافت کرده‌اند."
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
@@ -83,16 +95,20 @@ const OverviewPilgrimVaccineStatus: React.FC<IProps> = ({
               text="تعداد کل زائران  با دوز چهارم"
               count={getValue(4)}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام  چهار دوز واکسن کوید را دریافت کرده‌اند."
             />
             <Statistic
               icon={NavyVaccine}
               text="تعداد کل زائران  با دوز پنجم"
               count={getValue(5)}
               loading={loading}
+              hasInfo
+              infoText="تعداد زائرانی که در هنگام ثبت نام  پنج دوز واکسن کوید را دریافت کرده‌اند."
             />
             <Statistic
               icon={redVaccine}
-              infoText="تعداد زائران ۱۸ سال به بالا كه واكسن نزده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
+              infoText="تعداد زائران ۱۸ سال به بالا كه در هنگام ثبت نام واكسن  کوید دریافت نکرده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
               hasInfo
               text=" تعداد زائران فاقد شرایط واکسیناسیون"
               count={pilgrims.pass6MonthFromLastVaccines || 0}
