@@ -1,53 +1,34 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React from 'react';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
-import arbaeenService from 'src/services/arbaeen.service';
-import useGetArbaeenCountDataOnRegisterTime from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
-import Statistic from '../../../containers/Guild/components/Statistic';
-import totalVacsinateStart from '../../../assets/images/icons/total-vaccinate-start-work-panel.svg';
-import personGrayVaccine from '../../../assets/images/icons/none-vaccinate-start-wok-panel.svg';
-import YellowVaccine from '../../../assets/images/icons/big-yellow-vaccine.svg';
-import OrangeVaccine from '../../../assets/images/icons/orange-vaccine.svg';
-import PurppleVaccine from '../../../assets/images/icons/big-purpule-vaccine.svg';
-import DarkgreenVaccine from '../../../assets/images/icons/darkgreen-vaccine.svg';
-import NavyVaccine from '../../../assets/images/icons/navy-vaccine-lg.svg';
-import redVaccine from '../../../assets/images/icons/red-vaccine.svg';
-import {initialVaccineValue} from './constant';
+import Statistic from 'src/containers/Guild/components/Statistic';
+import totalVacsinateStart from 'src/assets/images/icons/total-vaccinate-start-work-panel.svg';
+import personGrayVaccine from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
+import YellowVaccine from 'src/assets/images/icons/big-yellow-vaccine.svg';
+import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
+import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
+import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
+import NavyVaccine from 'src/assets/images/icons/navy-vaccine-lg.svg';
+import redVaccine from 'src/assets/images/icons/red-vaccine.svg';
+import {IInitialCount} from 'src/hooks/apis/useGetArbaeenCountDataOnRegisterTime';
+import {IInitialVaccineValue} from '../constant';
 
-const OverviewPilgrimVaccineStatusPercentage = () => {
-  const [loading, setLoading] = useState(false);
-  const [pilgrims, setPilgrims] = useState<any>(initialVaccineValue);
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+interface IProps {
+  loading: boolean;
+  totalInfo: IInitialCount;
+  pilgrims: IInitialVaccineValue;
+  loadingPositiveTest: boolean;
+}
 
-  const {data: totalInfo, loading: loadingPositiveTest} = useGetArbaeenCountDataOnRegisterTime({
-    countLastPositiveTestResultWhileRegistered: true,
-  });
-  const getAllPilgrims = async () => {
-    setLoading(true);
-    try {
-      const {data} = await arbaeenService.getVaccineInfo({}, {cancelToken: source.token});
-
-      setPilgrims({...data});
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const OverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
+  pilgrims,
+  loading,
+  totalInfo,
+  loadingPositiveTest,
+}) => {
   const getValue = (i: number) => {
     const data = pilgrims?.zaerinGroupByDoses?.find((item: any) => item.dose === i);
     return data?.countPercentage || 0;
   };
-  useEffect(() => {
-    getAllPilgrims();
-    return () => {
-      setPilgrims({...initialVaccineValue});
-
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
   return (
     <>
