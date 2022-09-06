@@ -11,7 +11,7 @@ import routes from 'src/routes';
 import {isLogin} from 'src/helpers/utils';
 import logo from 'src/assets/images/logos/logo.svg';
 // eslint-disable-next-line
-import sidebarBorder from 'src/assets/images/patterns/sidebar-border.svg';
+import sidebarBorder from 'src/assets/images/patterns/sidebar.png';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import NotFound from 'src/containers/Errors/NotFound';
 import {IProfile} from 'src/models/authentication.model';
