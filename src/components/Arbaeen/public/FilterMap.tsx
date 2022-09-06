@@ -523,7 +523,7 @@ const FilterMap: React.FC<{}> = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
-      <div className="relative" style={{height: '650px'}}>
+      <div className="relative rounded-xl overflow-hidden" style={{height: '650px'}}>
         <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"

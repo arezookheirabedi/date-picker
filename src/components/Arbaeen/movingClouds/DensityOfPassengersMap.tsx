@@ -149,7 +149,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
-      <div className="relative" style={{height: '650px'}}>
+      <div className="relative rounded-xl overflow-hidden" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
