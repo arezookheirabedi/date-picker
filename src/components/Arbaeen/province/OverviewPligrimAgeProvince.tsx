@@ -104,7 +104,7 @@ const OverviewPligrimAgeProvince: React.FC<{cityTitle: string}> = ({cityTitle}) 
     retry: false,
   });
   const {
-    data: dataset,
+    dataCount: dataset,
     loading,
     error: errorMessage,
   } = useGetOverviewOfArbaeenPilgrimAgeStatus(query, true);
