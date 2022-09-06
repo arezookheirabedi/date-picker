@@ -48,20 +48,22 @@ const material = {
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
   latitude: 32.7219,
-  zoom: 4.5,
+  zoom: 5,
   minZoom: 3,
   maxZoom: 15,
-  pitch: 40.5,
+  pitch: 60.5,
   // bearing: -27,
 };
 
+
+
 export const colorRange = [
-  [23, 90, 118],
-  [60, 83, 110],
-  [97, 76, 102],
-  [135, 69, 94],
-  [172, 62, 86],
-  [209, 55, 78],
+  [1, 152, 189],
+  [73, 227, 206],
+  [216, 254, 181],
+  [254, 237, 177],
+  [254, 173, 84],
+  [209, 55, 78]
 ];
 
 function getTooltip({object}: any) {
@@ -190,7 +192,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
             preventStyleDiffing
             height={650}
             ref={mapRef}
-            mapStyle="mapbox://styles/mapbox/dark-v10"
+            mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json"
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />

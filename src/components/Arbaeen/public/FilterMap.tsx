@@ -8,7 +8,6 @@ import DeckGL, {FlyToInterpolator} from 'deck.gl';
 
 // @ts-ignore
 import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers';
-import {colorRange} from '../movingClouds/DensityOfPassengersMap';
 import {borders} from '../geos/borders';
 import {roads} from '../geos/roads';
 import {airports} from '../geos/airport';
@@ -20,7 +19,7 @@ import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
 import {EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {ViewMode, DrawPolygonMode} from '@nebula.gl/edit-modes';
-import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
+import {HeatmapLayer, HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
 import airportIcon from '../../../assets/images/markers/airport-icon.svg';
@@ -55,43 +54,13 @@ try {
   console.error(e);
 }
 
-const ambientLight = new AmbientLight({
-  color: [255, 255, 255],
-  intensity: 1.0,
-});
-
-const pointLight1 = new PointLight({
-  color: [255, 255, 255],
-  intensity: 0.8,
-  position: [-0.144528, 49.739968, 80000],
-});
-
-const pointLight2 = new PointLight({
-  color: [255, 255, 255],
-  intensity: 0.8,
-  position: [-3.807751, 54.104682, 8000],
-});
-
-const lightingEffect = new LightingEffect({
-  ambientLight,
-  pointLight1,
-  pointLight2,
-});
-
-const material = {
-  ambient: 0.64,
-  diffuse: 0.6,
-  shininess: 32,
-  specularColor: [51, 51, 51],
-};
-
 const INITIAL_VIEW_STATE = {
   longitude: 54.3347,
   latitude: 32.7219,
   zoom: 4.5,
   minZoom: 3,
   maxZoom: 15,
-  pitch: 40.5,
+  // pitch: 40.5,
   // bearing: -27,
 };
 
@@ -351,36 +320,35 @@ const FilterMap: React.FC<{}> = () => {
       const res = zaerinDataSource
         .filter((x: any) => x.isPassenger === 'true')
         .reduce((result: any, d: any) => {
-          [...Array(Number(d.CountOfSamah))].forEach(() => {
-            try {
-              result.push(JSON.parse(d.location.coordinates));
-            } catch (e) {
-              console.error(e);
-            }
-          });
+          try {
+            result.push([...JSON.parse(d.location.coordinates), Number(d.CountOfSamah)]);
+          } catch (e) {
+            console.error(e);
+          }
 
           return result;
         }, []);
 
-      zaerinRef.current = new HexagonLayer({
+      console.log(res);
+
+      zaerinRef.current = new HeatmapLayer({
         id: 'zaerin-layer',
         // @ts-ignore
-        colorRange,
-        coverage: 1,
         data: res,
-        elevationRange: [0, 3000],
-        elevationScale: res && res.length ? 50 : 0,
-        extruded: true,
-        getPosition: (d: any) => d,
-        pickable: true,
-        radius: 1000,
-        upperPercentile: 100,
-        // @ts-ignore
-        material,
-
-        transitions: {
-          elevationScale: 3000,
-        },
+        getPosition: d => [d[0], d[1]],
+        getWeight: d => d[2],
+        colorRange: [
+          [255, 255, 255, 0],
+          [209, 222, 228, 130],
+          [162, 189, 200, 255],
+          [116, 156, 173, 255],
+          [69, 123, 145, 255],
+          [23, 90, 118, 255],
+        ],
+        radiusPixels: 30,
+        intensity: 1,
+        threshold: 0.03,
+        visible: false,
         PopupTemplate: ({params}: any) => {
           const [loading, setLoading] = useState<boolean>(false);
 
@@ -416,7 +384,6 @@ const FilterMap: React.FC<{}> = () => {
             </>
           );
         },
-        visible: false,
       });
 
       setZaerinLayers([zaerinRef.current]);
