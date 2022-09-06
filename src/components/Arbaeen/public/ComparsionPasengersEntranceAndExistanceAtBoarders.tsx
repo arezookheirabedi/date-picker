@@ -157,7 +157,8 @@ const ComparsionPasengersEntranceAndExistanceAtBoarders: React.FC<{}> = () => {
             <div className="flex flex-row  items-center justify-start  text-xs">
               <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">
-                نمایش روند ورود و خروج مسافران به تفکیک مرزهای زمینی از تاریخ ۱۴۰۱/۰۵/۳۱ تا به امروز
+                مقایسه روند ورود و خروج مسافران به تفکیک مرزهای زمینی از تاریخ ۱۴۰۱/۰۵/۳۱ تا به
+                امروز
               </span>
             </div>
           </div>
