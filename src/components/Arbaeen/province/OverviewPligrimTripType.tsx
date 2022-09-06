@@ -22,6 +22,7 @@ const OverviewPligrimTripType: React.FC<{cityTitle: string}> = ({cityTitle}) => 
         <legend className="mx-auto px-3 text-black">
           نگاه کلی به زائران اربعین استان &nbsp;{cityTitle}&nbsp;&nbsp;بر اساس نوع سفر
         </legend>
+
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
             <Statistic
@@ -29,24 +30,32 @@ const OverviewPligrimTripType: React.FC<{cityTitle: string}> = ({cityTitle}) => 
               text="تعداد کل زائران"
               count={pilgrims.countTotal || 0}
               loading={loading}
+              hasInfo
+              infoText={`  تعداد کل زائران ثبت نام شده نهایی  در استان`}
             />
             <Statistic
               icon={airplanIcon}
               text="تعداد کل زائران هوایی"
               count={pilgrims.countZaerinAir || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائرانی که نوع سفر خود را هوایی انتخاب کرده‌اند."
             />
             <Statistic
               icon={carIcon}
               text="تعداد کل زائران زمینی"
               count={pilgrims.countZaerinGround || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائرانی که نوع سفر خود را زمینی انتخاب کرده‌اند."
             />
             <Statistic
               icon={railIcon}
               text="تعداد کل زائران ریلی"
               count={pilgrims.countZaerinRail || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائرانی که نوع سفر خود را ریلی انتخاب کرده‌اند."
             />
           </div>
         </div>
