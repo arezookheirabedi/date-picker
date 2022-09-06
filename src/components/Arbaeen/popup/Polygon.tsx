@@ -1,85 +1,154 @@
 import React, {useEffect, useState} from 'react';
 import Loading from 'src/components/Loading';
 import arbaeenService from 'src/services/arbaeen.service';
-import qs from 'qs';
 
 const Polygon: React.FC<any> = ({params}: any) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<any>({
-    location: null,
-    numberOfAvailableAmbulances: null,
-    numberOfAvailableAutolances: null,
-    numberOfAvailableMotolances: null,
+  const [loadingLocal, setLoadingLocal] = useState<boolean>(false);
+  const [loadingPassenger, setLoadingPassenger] = useState<boolean>(false);
+  const [dataLocal, setDataLocal] = useState<any>({
+    average: null,
+    maximum: null,
+    minimum: null,
+    sum: null,
+  });
+  // eslint-disable-next-line
+  const [dataPassenger, setDataPassenger] = useState<any>({
+    average: null,
+    maximum: null,
+    minimum: null,
+    sum: null,
   });
 
-  const fetchPopupData = async (param: any) => {
-    setLoading(true);
+  const fetchPopupDataLocal = async (param: any) => {
+    setLoadingLocal(true);
     try {
-      const {data: polygonData} = await arbaeenService.getPolygonData(encodeURI(param));
-      setData(polygonData);
+      const {data: polygonData} = await arbaeenService.getPolygonData(param);
+      setDataLocal(polygonData);
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setLoadingLocal(false);
+    }
+  };
+  const fetchPopupDataPassenger = async (param: any) => {
+    setLoadingPassenger(true);
+    try {
+      const {data: polygonData} = await arbaeenService.getPolygonData(param);
+      setDataPassenger(polygonData);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoadingPassenger(false);
     }
   };
 
   useEffect(() => {
-    fetchPopupData(
-      qs.stringify(
-        {
-          coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]})),
-        },
-        {arrayFormat: 'indices', allowDots: true}
-      )
-    );
+    fetchPopupDataLocal({
+      coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]})),
+      isPassenger: false,
+    });
+    fetchPopupDataPassenger({
+      coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]})),
+      isPassenger: true,
+    });
   }, [params]);
 
   return (
     <>
-      {loading ? (
+      {loadingLocal || loadingPassenger ? (
         <div className="flex items-center text-xs">
           <Loading />
           <span>درحال دریافت اطلاعات</span>
         </div>
       ) : (
         <>
-          <div className="hidden">{JSON.stringify(params, null, 2)}</div>
           <div className="w-full max-h-60 overflow-y-auto px-2 custom-scrollbar-gray ">
             <div className="flex item-center justify-start items-center border-b border-gray-300 pb-2 pt-1">
-              <span className="text-xs ml-2 text-gray-500">موقعیت : </span>
-              <span className="text-xs text-gray-500">{params.location}</span>
+              <span className="text-xs ml-2 text-gray-500">مقیم : </span>
             </div>
 
-            {!data.numberOfAvailableAmbulances && (
+            {!dataLocal.average && (
               <div className="pt-4 flex justify-start">
                 <span className="text-xs">داده‌ای یافت نشد</span>
               </div>
             )}
 
-            {data.numberOfAvailableAmbulances && (
+            {dataLocal.average && (
               <div className="flex justify-start items-center border-b border-gray-300 pb-2 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد آمبولانس : </span>
+                <span className="text-xs ml-2 text-lime-600">تعداد متوسط : </span>
                 <span className="text-xs text-lime-600">
-                  {data.numberOfAvailableAmbulances || '-'}
+                  {(dataLocal.average || '-').commaSeprator().toPersianDigits()}
                 </span>
               </div>
             )}
-
-            {data.numberOfAvailableAutolances && (
+            {dataLocal.maximum && (
               <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
-                <span className="text-xs ml-2  text-lime-600">تعداد اتولانس : </span>
+                <span className="text-xs ml-2  text-lime-600">تعداد بیشترین : </span>
                 <span className="text-xs text-lime-600">
-                  {data.numberOfAvailableAutolances || '-'}
+                  {(dataLocal.maximum || '-').commaSeprator().toPersianDigits()}
                 </span>
               </div>
             )}
 
-            {data.numberOfAvailableMotolances && (
+            {dataLocal.minimum && (
               <div className="flex justify-start items-center  pb-1 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد موتولانس : </span>
+                <span className="text-xs ml-2 text-lime-600">تعداد کمترین : </span>
                 <span className="text-xs text-lime-600">
-                  {data.numberOfAvailableMotolances || '-'}
+                  {(dataLocal.minimum || '-').commaSeprator().toPersianDigits()}
+                </span>
+              </div>
+            )}
+
+            {dataLocal.sum && (
+              <div className="flex justify-start items-center  pb-1 pt-2">
+                <span className="text-xs ml-2 text-lime-600">تعداد مجموع : </span>
+                <span className="text-xs text-lime-600">
+                  {(dataLocal.sum || '-').commaSeprator().toPersianDigits()}
+                </span>
+              </div>
+            )}
+
+            <div className="mt-4 flex item-center justify-start items-center border-b border-gray-300 pb-2 pt-1">
+              <span className="text-xs ml-2 text-gray-500">زائر : </span>
+            </div>
+
+            {!dataPassenger.average && (
+              <div className="pt-4 flex justify-start">
+                <span className="text-xs">داده‌ای یافت نشد</span>
+              </div>
+            )}
+
+            {dataPassenger.average && (
+              <div className="flex justify-start items-center border-b border-gray-300 pb-2 pt-2">
+                <span className="text-xs ml-2 text-lime-600">تعداد متوسط : </span>
+                <span className="text-xs text-lime-600">
+                  {(dataPassenger.average || '-').commaSeprator().toPersianDigits()}
+                </span>
+              </div>
+            )}
+            {dataPassenger.maximum && (
+              <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
+                <span className="text-xs ml-2  text-lime-600">تعداد بیشترین : </span>
+                <span className="text-xs text-lime-600">
+                  {(dataPassenger.maximum || '-').commaSeprator().toPersianDigits()}
+                </span>
+              </div>
+            )}
+
+            {dataPassenger.minimum && (
+              <div className="flex justify-start items-center  pb-1 pt-2">
+                <span className="text-xs ml-2 text-lime-600">تعداد کمترین : </span>
+                <span className="text-xs text-lime-600">
+                  {(dataPassenger.minimum || '-').commaSeprator().toPersianDigits()}
+                </span>
+              </div>
+            )}
+
+            {dataPassenger.sum && (
+              <div className="flex justify-start items-center  pb-1 pt-2">
+                <span className="text-xs ml-2 text-lime-600">تعداد مجموع : </span>
+                <span className="text-xs text-lime-600">
+                  {(dataPassenger.sum || '-').commaSeprator().toPersianDigits()}
                 </span>
               </div>
             )}
