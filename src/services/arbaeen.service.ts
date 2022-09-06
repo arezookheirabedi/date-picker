@@ -40,6 +40,7 @@ function getPligrimGenderPerProvince(params: any = {}, config?: any) {
       ...config,
     });
 }
+
 function getPligrimCountPerProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -101,6 +102,7 @@ function getVaccineInfo(params: any = {}, config?: any) {
       }
     );
 }
+
 function getTheLatestVaccineInfo(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -109,6 +111,7 @@ function getTheLatestVaccineInfo(params: any = {}, config?: any) {
       ...config,
     });
 }
+
 function getPiligrimOriginProvince(params: any = {}, config?: any) {
   return request
     .withHeaders({'Content-Type': 'application/json;utf-8'})
@@ -148,21 +151,31 @@ function getEntranceAxndExistanceBorder(params: any = [], config?: any) {
     }
   );
 }
+
 function gerBorderTraffic({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/borders-traffics/accumulative?lang=fa`, params, {
     ...config,
   });
 }
+
 function getMokebList({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/ar-mokebs?lang=fa`, params, {
     ...config,
   });
 }
+
 function getEmergencyList({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/ar-emergencies?lang=fa`, params, {
     ...config,
   });
 }
+
+function getEmergency(params: any , config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-emergencies/${params}/?lang=fa`, {}, {
+    ...config,
+  });
+}
+
 function getRoadStatistics({...params}: any = {}, config?: any) {
   return request.build().get(`/api/v1/arbaeen/road-statistics/latest-submit/page?lang=fa`, params, {
     ...config,
@@ -182,6 +195,7 @@ function getTheLatestBordersStatus({...params}: any = {}, config?: any) {
 }
 
 /* pageNumber=0&pageSize=10&sort=ASC&&&&&&&&& */
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPilgrimExistanceAndImportanceChart(params: any = {}, config?: any) {
   // const lists = [3, 4, 1, 2, 500001, 500002];
@@ -221,13 +235,9 @@ function getMokeb(id: any, config?: any) {
 }
 
 function getPolygonData(params: any, config?: any) {
-  return request.build().get(
-    `/api/v1/arbaeen/reports/polygon/count?${params}&isPassenger=true`,
-    {},
-    {
-      ...config,
-    }
-  );
+  return request.build().post(`/api/v1/arbaeen/reports/polygon/count`, params, {
+    ...config,
+  });
 }
 
 function getParckingList(params: any = {}, config?: any) {
@@ -235,6 +245,13 @@ function getParckingList(params: any = {}, config?: any) {
     ...config,
   });
 }
+
+function getParking(params: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-parkings/${params}`, {}, {
+    ...config,
+  });
+}
+
 
 function getBorderListById() {
   const mock = {
@@ -278,6 +295,8 @@ const arbaeenService = {
   getParckingList,
   getPligrimCountPerProvince,
   getPolygonData,
+  getEmergency,
+  getParking
 };
 
 export default arbaeenService;

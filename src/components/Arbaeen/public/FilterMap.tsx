@@ -105,9 +105,18 @@ const FilterMap: React.FC<{}> = () => {
   const [showPath, setShowPath] = useState<any>(false);
   const [pathLayers, setPathLayers] = useState<any[]>([]);
 
-  // zaerin
-  const [showZaerin, setShowZaerin] = useState<any>(false);
-  const [zaerinLayers, setZaerinLayers] = useState<any>(false);
+  // radar
+  const [radatData, setRadarData] = useState<any[]>([]);
+  const [showRadar, setShowRadar] = useState<any>(false);
+  const [radarLayers, setRadarLayers] = useState<any[]>([]);
+
+  // native zaerin
+  const [showNativeZaerin, setShowNativeZaerin] = useState<any>(false);
+  const [nativeZaerinLayers, setNativeZaerinLayers] = useState<any>(null);
+
+  // moving zaerin
+  const [showMovingZaerin, setShowMovingZaerin] = useState<any>(false);
+  const [movingZaerinLayers, setMovingZaerinLayers] = useState<any>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const {loadingHourly: zaerinLoading, dataHourly: zaerinDataSource} = useSelector(
@@ -120,7 +129,8 @@ const FilterMap: React.FC<{}> = () => {
   const pathRef: any = useRef(null);
   const borderRef: any = useRef(null);
   const airportRef: any = useRef(null);
-  const zaerinRef: any = useRef(null);
+  const zaerinMovingRef: any = useRef(null);
+  const zaerinNativeRef: any = useRef(null);
   const mokebRef: any = useRef(null);
   const emergencyRef: any = useRef(null);
   const parkingRef: any = useRef(null);
@@ -315,9 +325,15 @@ const FilterMap: React.FC<{}> = () => {
     setPathLayers([pathRef.current]);
   }, []);
 
+  const [zaerinMovingData , setZaerinMovingData] = useState([])
+  const [zaerinNativeData , setZaerinNativeData] = useState([])
+
+  console.log('zaerin native data => ' , zaerinNativeData);
+  console.log('zaerin moving data => ' , zaerinMovingData);
+
   const fetchZaerinData = async () => {
     try {
-      const res = zaerinDataSource
+      const movingZaerin = zaerinDataSource
         .filter((x: any) => x.isPassenger === 'true')
         .reduce((result: any, d: any) => {
           try {
@@ -329,18 +345,42 @@ const FilterMap: React.FC<{}> = () => {
           return result;
         }, []);
 
-      zaerinRef.current = new HeatmapLayer({
-        id: 'zaerin-layer',
+      const nativeZaerin = zaerinDataSource
+        .filter((x: any) => x.isPassenger !== 'true')
+        .reduce((result: any, d: any) => {
+          try {
+            result.push([...JSON.parse(d.location.coordinates), Number(d.CountOfSamah)]);
+          } catch (e) {
+            console.error(e);
+          }
+
+          return result;
+        }, []);
+
+      setZaerinMovingData(movingZaerin);
+      setZaerinNativeData(nativeZaerin);
+
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+    }
+  };
+
+  useEffect(()=> {
+    if (zaerinMovingRef.current) return;
+    if(zaerinMovingData.length){
+      zaerinMovingRef.current = new HeatmapLayer({
+        id: 'zaerin-layer-moving',
         // @ts-ignore
-        data: res,
+        data: zaerinMovingData,
         getPosition: d => [d[0], d[1]],
-        getWeight: d => d[2],
+        getWeight: d => d[2] * 3,
         colorRange: [
-          [116, 156, 173, 130],
-          [69, 123, 145, 255],
+          [23, 90, 118, 130],
+          [23, 90, 118, 190],
           [23, 90, 118, 255],
         ],
-        radiusPixels: 30,
+        radiusPixels: 60,
         intensity: 1,
         threshold: 0.03,
         visible: false,
@@ -381,16 +421,72 @@ const FilterMap: React.FC<{}> = () => {
         },
       });
 
-      setZaerinLayers([zaerinRef.current]);
-    } catch (err: any) {
-      console.error(err);
-    } finally {
+      setMovingZaerinLayers([zaerinMovingRef.current]);
     }
-  };
+
+  },[zaerinMovingData])
+
+  useEffect(()=> {
+    if (zaerinNativeRef.current) return;
+    if(zaerinNativeData.length){
+      zaerinNativeRef.current = new HeatmapLayer({
+        id: 'zaerin-layer-native',
+        // @ts-ignore
+        data: zaerinNativeData,
+        getPosition: d => [d[0], d[1]],
+        getWeight: d => d[2] * 3,
+        colorRange: [
+          [0, 190, 0, 130],
+          [0, 190, 0, 190],
+          [0, 190, 0, 255],
+        ],
+        radiusPixels: 60,
+        intensity: 1,
+        threshold: 0.03,
+        visible: false,
+        PopupTemplate: ({params}: any) => {
+          const [loading, setLoading] = useState<boolean>(false);
+
+          const fetchPopupData = async (param: any) => {
+            setLoading(true);
+            try {
+              setTimeout(() => {
+                console.log('first');
+                setLoading(false);
+              }, 2000);
+            } catch (err) {
+            } finally {
+            }
+          };
+
+          useEffect(() => {
+            fetchPopupData({});
+          }, [params]);
+
+          return (
+            <>
+              {loading ? (
+                <div className="flex items-center text-xs">
+                  <Loading />
+                  <span>درحال دریافت اطلاعات</span>
+                </div>
+              ) : (
+                <>
+                  {/* <div className="hidden">{JSON.stringify(params, null, 2)}</div>
+                  create PopupTemplate component */}
+                </>
+              )}
+            </>
+          );
+        },
+      });
+
+      setNativeZaerinLayers([zaerinNativeRef.current]);
+    }
+
+  },[zaerinNativeData])
 
   useEffect(() => {
-    if (zaerinRef.current) return;
-
     if (zaerinLoading) setSubmitted(true);
     if (!zaerinLoading) {
       setSubmitted(false);
@@ -419,14 +515,24 @@ const FilterMap: React.FC<{}> = () => {
   }, [showBorder]);
 
   useEffect(() => {
-    if (!zaerinRef.current) return;
+    if (!zaerinMovingRef.current) return;
 
-    if (showZaerin) {
-      setZaerinLayers([zaerinRef.current.clone({visible: true})]);
+    if (showMovingZaerin) {
+      setMovingZaerinLayers([zaerinMovingRef.current.clone({visible: true})]);
     } else {
-      setZaerinLayers([zaerinRef.current.clone({visible: false})]);
+      setMovingZaerinLayers([zaerinMovingRef.current.clone({visible: false})]);
     }
-  }, [showZaerin]);
+  }, [showMovingZaerin]);
+
+  useEffect(() => {
+    if (!zaerinNativeRef.current) return;
+
+    if (showNativeZaerin) {
+      setNativeZaerinLayers([zaerinNativeRef.current.clone({visible: true})]);
+    } else {
+      setNativeZaerinLayers([zaerinNativeRef.current.clone({visible: false})]);
+    }
+  }, [showNativeZaerin]);
 
   useEffect(() => {
     if (!airportRef.current) return;
@@ -518,7 +624,7 @@ const FilterMap: React.FC<{}> = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
-      <div className="relative" style={{height: '650px'}}>
+      <div className="relative rounded-xl overflow-hidden" style={{height: '650px'}}>
         <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
@@ -683,17 +789,32 @@ const FilterMap: React.FC<{}> = () => {
                 پایگاه حلال‌احمر
               </label>
             </div>
+
             <div className="select-radio__group">
               <input
                 type="checkbox"
                 className="select-radio__input"
-                id="zaerin"
-                name="zaerin"
-                onClick={() => setShowZaerin((prev: any) => !prev)}
+                id="zaerin-native"
+                name="zaerin-native"
+                onClick={() => setShowNativeZaerin((prev: any) => !prev)}
               />
-              <label htmlFor="zaerin" className="select-radio__label text-right">
+              <label htmlFor="zaerin-native" className="select-radio__label text-right">
                 <span className="select-radio__button" />
-                زائران
+                زائران مقیم
+              </label>
+            </div>
+
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="zaerin-moving"
+                name="zaerin-moving"
+                onClick={() => setShowMovingZaerin((prev: any) => !prev)}
+              />
+              <label htmlFor="zaerin-moving" className="select-radio__label text-right">
+                <span className="select-radio__button" />
+                زائران در حال حرکت
               </label>
             </div>
             <div className="select-radio__group">
@@ -744,14 +865,16 @@ const FilterMap: React.FC<{}> = () => {
         <DeckGL
           ref={deckRef}
           layers={[
-            editorLayer,
+            radarLayers,
+            movingZaerinLayers,
+            nativeZaerinLayers,
             borderLayers,
             pathLayers,
             airportLayers,
             mokebLayers,
-            zaerinLayers,
             emergencyLayers,
             parkingLayers,
+            editorLayer,
           ]}
           initialViewState={mapState}
           controller={{

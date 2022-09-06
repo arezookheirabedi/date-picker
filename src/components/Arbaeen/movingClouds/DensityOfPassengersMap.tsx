@@ -55,15 +55,13 @@ const INITIAL_VIEW_STATE = {
   // bearing: -27,
 };
 
-
-
 export const colorRange = [
   [1, 152, 189],
   [73, 227, 206],
   [216, 254, 181],
   [254, 237, 177],
   [254, 173, 84],
-  [209, 55, 78]
+  [209, 55, 78],
 ];
 
 function getTooltip({object}: any) {
@@ -118,14 +116,14 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
           id: 'heatmap',
           // @ts-ignore
           colorRange,
-          coverage: 1,
+          coverage: 0.7,
           data,
           elevationRange: [0, 3000],
           elevationScale: data && data.length ? 50 : 0,
           extruded: true,
           getPosition: (d: any) => d,
           pickable: true,
-          radius: 1000,
+          radius: 5000,
           upperPercentile: 100,
           // @ts-ignore
           material,
@@ -151,7 +149,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
-      <div className="relative" style={{height: '650px'}}>
+      <div className="relative rounded-xl overflow-hidden" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -192,7 +190,8 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
             preventStyleDiffing
             height={650}
             ref={mapRef}
-            mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json"
+            // mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json"
+            mapStyle="mapbox://styles/mapbox/light-v10"
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
