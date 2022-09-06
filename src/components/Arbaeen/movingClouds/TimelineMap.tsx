@@ -1,5 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import {useDispatch} from 'react-redux';
 import dayjs from 'dayjs';
 import {MapView} from '@deck.gl/core/typed';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
@@ -8,6 +9,7 @@ import DeckGL from '@deck.gl/react/typed';
 import MapRange from 'src/components/MapRange';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import {toPersianDigit} from 'src/helpers/utils';
+import {fetchZaerinAc} from 'src/store/action_creators/arbaeen/fetchZaerinAc';
 
 try {
   setRTLTextPlugin(
@@ -75,7 +77,7 @@ function getTooltip({object}: any) {
       تاریخ: ${toPersianDigit(
         dayjs(object.timestamp).calendar('jalali').format('YYYY-MM-DD HH:mm')
       )}
-      ${object.isPassenger ? 'تعداد زائران' : 'تعداد مفیم'}: ${object.magnitude}
+      ${object.isPassenger ? 'تعداد زائران' : 'تعداد مفیم'}: ${toPersianDigit(object.magnitude)}
       `
   );
 }
@@ -90,9 +92,14 @@ const TimelineMap: React.FC<{}> = () => {
   const mapRef = useRef(null);
   const deckRef = useRef(null);
 
+  const dispatch = useDispatch();
   const {loading: zaerinLoading, data: zaerinDataSource} = useSelector(state => state.fetchZaerin);
 
   const filterValue = filter || timeRange;
+
+  const loadData = () => {
+    dispatch(fetchZaerinAc());
+  };
 
   const fetcher = async () => {
     const res1 = zaerinDataSource
@@ -202,7 +209,7 @@ const TimelineMap: React.FC<{}> = () => {
       <div className="relative" style={{height: '650px'}}>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
-            submitted ? '' : 'hidden'
+            submitted || zaerinDataSource.length === 0 ? '' : 'hidden'
           }`}
         />
         <div
@@ -224,6 +231,15 @@ const TimelineMap: React.FC<{}> = () => {
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
             />
           </svg>
+        </div>
+        <div
+          className={` absolute left-1/2 top-1/2  z-20 -translate-x-1/2 -translate-y-1/2 ${
+            zaerinDataSource.length === 0 && !submitted ? '' : 'hidden'
+          }`}
+        >
+          <button className="button button--primary px-8" type="button" onClick={loadData}>
+            نمایش نقشه
+          </button>
         </div>
         <DeckGL
           ref={deckRef}
