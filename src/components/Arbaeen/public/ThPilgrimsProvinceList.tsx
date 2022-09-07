@@ -55,6 +55,9 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
 
   useEffect(() => {
     fetcher();
+    setInterval(() => {
+      fetcher();
+    }, 60000 * 5)
     return () => {
       source.cancel('Operation canceled by the user.');
     };
@@ -62,13 +65,13 @@ const ThPilgrimsProvinceList: React.FC<{}> = () => {
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
-      <legend className="mx-auto px-3 text-black">لیست استان های مبدا زائرین </legend>
+      <legend className="mx-auto px-3 text-black">لیست استان های مبدا زائرین</legend>
 
       <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
-            <RetryButton setQuery={setQuery} />
+            <RetryButton setQuery={setQuery}/>
           </div>
         ) : (
           <Table
