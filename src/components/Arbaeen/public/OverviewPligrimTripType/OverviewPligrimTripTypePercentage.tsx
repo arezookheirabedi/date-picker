@@ -19,19 +19,14 @@ const OverviewPligrimTripTypePercentage: React.FC<IProps> = ({pilgrims, loading}
         </legend>
         <div className="flex flex-col justify-between space-y-8">
           <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-            {/* <Statistic
-              icon={groupWithFlagIcon}
-              text="درصد کل زائران"
-              count={pilgrims.countTotalPercentage || 0}
-              loading={loading}
-              isPercentage
-            /> */}
             <Statistic
               icon={airplanIcon}
               text="درصد کل زائران هوایی"
               count={pilgrims.countZaerinAirPercentage || 0}
               loading={loading}
               isPercentage
+              hasInfo
+              infoText="درصد کل زائرانی که نوع سفر خود را هوایی انتخاب کرده‌اند."
             />
             <Statistic
               icon={carIcon}
@@ -39,6 +34,8 @@ const OverviewPligrimTripTypePercentage: React.FC<IProps> = ({pilgrims, loading}
               count={pilgrims.countZaerinGroundPercentage || 0}
               loading={loading}
               isPercentage
+              hasInfo
+              infoText="درصد کل زائرانی که نوع سفر خود را زمینی انتخاب کرده‌اند."
             />
             <Statistic
               icon={railIcon}
@@ -46,8 +43,9 @@ const OverviewPligrimTripTypePercentage: React.FC<IProps> = ({pilgrims, loading}
               count={pilgrims.countZaerinRailPercentage || 0}
               loading={loading}
               isPercentage
+              hasInfo
+              infoText="درصد کل زائرانی که نوع سفر خود را ریلی انتخاب کرده‌اند."
             />
-            {/* <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" /> */}
           </div>
         </div>
       </fieldset>

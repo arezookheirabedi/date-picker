@@ -100,8 +100,6 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
             />
             <Statistic
               icon={redVaccine}
-              infoText="تعداد زائران ۱۸ سال به بالا كه واكسن نزده اند یا از دوز يك يا دو آنها بيشتر از ۶ ماه گذشته است."
-              hasInfo
               text=" درصد زائران فاقد شرایط واکسیناسیون"
               count={pilgrims.pass6MonthFromLastVaccinesPercentage || 0}
               loading={loading}

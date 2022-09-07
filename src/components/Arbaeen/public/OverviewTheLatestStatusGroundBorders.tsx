@@ -5,6 +5,7 @@ import axios from 'axios';
 import Table from 'src/components/TableXHR';
 import {EERRORS} from 'src/constants/errors.enum';
 import {toPersianDigit} from 'src/helpers/utils';
+import Information from 'src/assets/images/icons/information.svg';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 
@@ -72,8 +73,17 @@ const OverviewTheLatestStatusGroundBorders = () => {
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
-      <legend className="text-black mx-auto px-3">نگاه کلی به آخرین وضعیت مرزهای زمینی</legend>
+      <legend className="text-black mx-auto px-3">نگاه کلی به آخرین وضعیت نقاط مرزی</legend>
+
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">نمایش آخرین وضعیت نقاط مرزی در یک ساعت اخیر</span>
+            </div>
+          </div>
+        </div>
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>

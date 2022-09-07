@@ -60,6 +60,13 @@ const initialDataPercentage = {
     },
   ],
 } as any;
+
+const GetBorders = (data: string) => {
+  if (data === 'چزابه') {
+    return EBORDERS.CHAZABE;
+  }
+  return data;
+};
 export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
   query: any,
   hasProvince: boolean = false
@@ -86,7 +93,7 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
       const sortDataCount = res.data.sort((a: any, b: any) => (a.count > b.count ? 1 : -1));
 
       sortDataCount.forEach((item: any) => {
-        border.push(item.departureDestinationBorder);
+        border.push(GetBorders(item.departureDestinationBorder));
         count.push(item.count);
         countPercentage.push(item.countPercentage);
       });
