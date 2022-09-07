@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import {setRTLTextPlugin, _MapContext as MapContext , StaticMap, FullscreenControl} from 'react-map-gl';
 import {AmbientLight, PointLight, LightingEffect} from '@deck.gl/core/typed';
 import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
-import DeckGL from '@deck.gl/react/typed';
+// @ts-ignore
+import DeckGL from 'deck.gl';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
 try {
@@ -182,6 +183,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
           initialViewState={INITIAL_VIEW_STATE}
           controller
           height={650}
+          ContextProvider={MapContext.Provider}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
@@ -195,6 +197,7 @@ const DensityOfPassengersMap: React.FC<{}> = () => {
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
+          <FullscreenControl style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}/>
         </DeckGL>
       </div>
     </fieldset>
