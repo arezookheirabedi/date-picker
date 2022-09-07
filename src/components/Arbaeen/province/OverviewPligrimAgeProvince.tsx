@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Highcharts from 'highcharts/highstock';
 import useGetOverviewOfArbaeenPilgrimAgeStatus from 'src/hooks/apis/useGetOverviewOfArbaeenPilgrimAgeStatus';
 import {ECOLOR} from 'src/constants/color.enum';
+import Information from 'src/assets/images/icons/information.svg';
 import Spinner from '../../Spinner';
 import RetryButton from '../../RetryButton';
 import Charts from '../../Charts';
@@ -145,6 +146,17 @@ const OverviewPligrimAgeProvince: React.FC<{cityTitle: string}> = ({cityTitle}) 
                   <span>۷۵ سال به بالا </span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                مقایسه تعداد زائران به تفکیک سال تولد وارد شده در هنگام ثبت نام در استان &nbsp;
+                {cityTitle}
+              </span>
             </div>
           </div>
         </div>

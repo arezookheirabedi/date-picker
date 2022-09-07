@@ -25,24 +25,32 @@ const OverviewPligrimTripTypeCount: React.FC<IProps> = ({pilgrims, loading}) => 
               text="تعداد کل زائران"
               count={pilgrims.countTotal || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائران ثبت نام شده نهایی ایرانی و غیر ایرانی"
             />
             <Statistic
               icon={airplanIcon}
               text="تعداد کل زائران هوایی"
               count={pilgrims.countZaerinAir || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائرانی که نوع سفر خود را هوایی انتخاب کرده‌اند."
             />
             <Statistic
               icon={carIcon}
               text="تعداد کل زائران زمینی"
               count={pilgrims.countZaerinGround || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائرانی که نوع سفر خود را زمینی انتخاب کرده‌اند."
             />
             <Statistic
               icon={railIcon}
               text="تعداد کل زائران ریلی"
               count={pilgrims.countZaerinRail || 0}
               loading={loading}
+              hasInfo
+              infoText="تعداد کل زائرانی که نوع سفر خود را ریلی انتخاب کرده‌اند."
             />
           </div>
         </div>

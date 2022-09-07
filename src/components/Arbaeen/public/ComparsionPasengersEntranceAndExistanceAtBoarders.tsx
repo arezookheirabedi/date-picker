@@ -4,6 +4,7 @@ import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import useGetPilgrimExistanceAndImportanceChart from 'src/hooks/apis/useGetPilgrimExistanceAndImportanceChart';
+import Information from 'src/assets/images/icons/information.svg';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 
@@ -148,6 +149,17 @@ const ComparsionPasengersEntranceAndExistanceAtBoarders: React.FC<{}> = () => {
                   <span> مسافران خارج شده از کشور</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                مقایسه روند ورود و خروج مسافران به تفکیک مرزهای زمینی از تاریخ ۱۴۰۱/۰۵/۳۱ تا به
+                امروز
+              </span>
             </div>
           </div>
         </div>

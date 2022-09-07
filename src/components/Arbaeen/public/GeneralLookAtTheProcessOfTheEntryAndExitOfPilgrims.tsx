@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
+import Information from 'src/assets/images/icons/information.svg';
+
 import useGetOverviewPilgrimExistAndEntranceFromBorders from 'src/hooks/apis/useGetOverviewPilgrimExistAndEntranceFromBorders';
 // import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 // import arbaeenService from 'src/services/arbaeen.service';
@@ -164,6 +166,18 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
                   <span>وروی</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                نمایش روند ورود و خروج مسافران از مرزهای مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ
+                شلمچه به صورت روزانه از تاریخ ۱۴۰۱/۰۵/۳۱ تا به امروز
+              </span>
             </div>
           </div>
         </div>

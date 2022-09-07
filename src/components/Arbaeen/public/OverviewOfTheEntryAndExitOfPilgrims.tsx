@@ -50,12 +50,16 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
             text="تعداد  مسافران خارج شده از کشور"
             count={pilgrims.exitingCount || 0}
             loading={loading}
+            hasInfo
+            infoText="تعداد مسافران خارج شده از کشور از مرزهای (مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ شلمچه) در ۲۴ ساعت اخیر"
           />
           <Statistic
             icon={greenPeopleIcon}
             text="تعداد مسافران وارد شده به کشور"
             count={pilgrims.enteringCount || 0}
             loading={loading}
+            hasInfo
+            infoText="تعداد مسافران وارد شده به کشور از مرزهای (مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ شلمچه) در ۲۴ ساعت اخیر"
           />
         </div>
       </div>
