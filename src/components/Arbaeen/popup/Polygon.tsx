@@ -77,7 +77,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
               <div className="flex justify-start items-center border-b border-gray-300 pb-2 pt-2">
                 <span className="text-xs ml-2 text-lime-600">تعداد متوسط : </span>
                 <span className="text-xs text-lime-600">
-                  {(dataLocal.average || '-').commaSeprator().toPersianDigits()}
+                  {(dataLocal.average || '-').toPersianDigits()}
                 </span>
               </div>
             )}
