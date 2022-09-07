@@ -77,7 +77,9 @@ function getTooltip({object}: any) {
       تاریخ: ${toPersianDigit(
         dayjs(object.timestamp).calendar('jalali').format('YYYY-MM-DD HH:mm')
       )}
-      ${object.isPassenger ? 'تعداد زائران' : 'تعداد مفیم'}: ${toPersianDigit(object.magnitude)}
+      ${
+        object.isPassenger ? 'تعداد زائران' : 'تعداد مفیم'
+      }: ${`${object.magnitude}`.commaSeprator().toPersianDigits()}
       `
   );
 }
@@ -102,6 +104,7 @@ const TimelineMap: React.FC<{}> = () => {
   };
 
   const fetcher = async () => {
+    console.log(zaerinDataSource);
     const res1 = zaerinDataSource
       .filter((x: any) => x.isPassenger === 'true')
       .map((row: any) => {
@@ -113,7 +116,7 @@ const TimelineMap: React.FC<{}> = () => {
           isPassenger: row.isPassenger === 'true',
           // depth: Number(row.CountOfSamah),
           depth: 1,
-          magnitude: Number(row.CountOfSamah),
+          magnitude: Number(row.CountOfSamah || "0"),
         };
       });
 
@@ -128,7 +131,7 @@ const TimelineMap: React.FC<{}> = () => {
           isPassenger: row.isPassenger !== 'true',
           // depth: Number(row.CountOfSamah),
           depth: 1,
-          magnitude: Number(row.CountOfSamah),
+          magnitude: Number(row.CountOfSamah || '0'),
         };
       });
 
