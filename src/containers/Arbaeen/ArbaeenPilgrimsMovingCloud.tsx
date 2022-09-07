@@ -13,8 +13,14 @@ const ArbaeenPilgrimsMovingCloud = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchZaerinHourlyAc());
+    setInterval(()=>{
+      dispatch(fetchZaerinHourlyAc());
+    },3600000)
   }, []);
+
+  useEffect(()=>{
+    dispatch(fetchZaerinHourlyAc());
+  },[])
 
 
   return (
