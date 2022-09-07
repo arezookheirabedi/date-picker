@@ -36,6 +36,7 @@ import Airport from '../popup/Airport';
 import Emergency from '../popup/Emergency';
 import Parking from '../popup/Parking';
 import Polygon from '../popup/Polygon';
+import {ScatterplotLayer} from '@deck.gl/layers/typed';
 
 const myFeatureCollection = {
   type: 'FeatureCollection',
@@ -129,6 +130,51 @@ const FilterMap: React.FC<{}> = () => {
   const mokebRef: any = useRef(null);
   const emergencyRef: any = useRef(null);
   const parkingRef: any = useRef(null);
+  const radarRef: any = useRef(null);
+
+  useEffect(() => {
+    if (radarRef.current) return;
+
+    radarRef.current = new ScatterplotLayer({
+      id: 'radar-layer',
+      data: [
+        {
+          name: '1',
+          code: 'ra-1',
+          exits: 100000000000,
+          coordinates: [44.0197, 32.6027],
+        },
+        {
+          name: '2',
+          code: 'ra-2',
+          exits: 250000000000,
+          coordinates: [44.0197, 32.6027],
+        },
+        {
+          name: '3',
+          code: 'ra-3',
+          exits: 500000000000,
+          coordinates: [44.0197, 32.6027],
+        },
+      ],
+      pickable: true,
+      opacity: 1,
+      stroked: true,
+      filled: true,
+      visible: false,
+      radiusScale: 1,
+      // radiusMinPixels: 1,
+      // radiusMaxPixels: 100,
+      lineWidthMinPixels: 1,
+      getPosition: (d: any) => d.coordinates,
+      getRadius: (d: any) => Math.sqrt(d.exits),
+      getFillColor: (d: any) => [255, 140, 0, 0],
+      getLineColor: (d: any) => [23, 90, 118, 200],
+      PopupTemplate: () => <></>,
+    });
+
+    setRadarLayers([radarRef.current]);
+  }, []);
 
   useEffect(() => {
     if (parkingRef.current) return;
@@ -404,6 +450,16 @@ const FilterMap: React.FC<{}> = () => {
   }, [zaerinLoading]);
 
   useEffect(() => {
+    if (!radarRef.current) return;
+
+    if (showRadar) {
+      setRadarLayers([radarRef.current.clone({visible: true})]);
+    } else {
+      setRadarLayers([radarRef.current.clone({visible: false})]);
+    }
+  }, [showRadar]);
+
+  useEffect(() => {
     if (!pathRef.current) return;
 
     if (showPath) {
@@ -565,6 +621,22 @@ const FilterMap: React.FC<{}> = () => {
             فیلتر مکان‌ها
           </h5>
           <div className="select-radio mb-32">
+            <div className="select-radio__group">
+              <input
+                type="checkbox"
+                className="select-radio__input"
+                id="radar"
+                name="radar"
+                onClick={() => {
+                  setShowRadar((prev: any) => !prev);
+                }}
+              />
+              <label htmlFor="radar" className="select-radio__label text-right">
+                <span className="select-radio__button" />
+                شعاع
+              </label>
+            </div>
+
             <div className="select-radio__group">
               <input
                 type="checkbox"
