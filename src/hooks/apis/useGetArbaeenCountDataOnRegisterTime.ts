@@ -128,17 +128,22 @@ export default function useGetArbaeenCountDataOnRegisterTime(
     }
   };
 
+  // ((60000 * 5) + Math.floor(Math.random() * 120000) + 1)
   useEffect(() => {
     if (hasProvince) {
       return;
     }
     getIt(query);
+    setInterval(() => {
+      getIt(query);
+    },(60000 * 5))
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialCount);
       source.cancel('Operation canceled by the user.');
     };
   }, []);
+
   const location = useLocation();
   const history = useHistory();
   useEffect(() => {
@@ -152,6 +157,9 @@ export default function useGetArbaeenCountDataOnRegisterTime(
     });
 
     if (existsCity) {
+      setInterval(() => {
+        getIt({...query, province: provinceName});
+      },(60000 * 5))
       getIt({...query, province: provinceName});
     } else {
       history.go(-1);

@@ -74,9 +74,9 @@ function getTooltip({object}: any) {
   const count = object.points.length;
 
   return `\
-    latitude: ${Number.isFinite(lat) ? lat.toFixed(6) : ''}
-    longitude: ${Number.isFinite(lng) ? lng.toFixed(6) : ''}
-    ${count} مسافر`;
+  عرض جغرافیایی: ${Number.isFinite(lat) ? lat.toFixed(6) : ''}
+  طول جغرافیایی: ${Number.isFinite(lng) ? lng.toFixed(6) : ''}
+     تعداد زائر: ${count}      `;
 }
 
 const DensityOfPassengersMap: React.FC<{}> = () => {
