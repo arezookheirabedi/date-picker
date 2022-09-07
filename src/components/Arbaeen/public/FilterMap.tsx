@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup} from 'react-map-gl';
+import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup, FullscreenControl} from 'react-map-gl';
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 // import DeckGL from '@deck.gl/react/typed';
 // @ts-ignore
@@ -14,6 +14,7 @@ import {airports} from '../geos/airport';
 import {emergencies} from '../geos/emergencies';
 import {mokebs} from '../geos/mokebs';
 import {parkings} from '../geos/parkings';
+import {redCrescent} from '../geos/red-crescent';
 import {AmbientLight, LightingEffect, PickingInfo, PointLight} from '@deck.gl/core/typed';
 import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
 import Loading from 'src/components/Loading';
@@ -26,6 +27,7 @@ import airportIcon from '../../../assets/images/markers/airport-icon.svg';
 import mokebIcon from '../../../assets/images/markers/mokeb-icon.svg';
 import emergencyIcon from '../../../assets/images/markers/emergency.svg';
 import parkingIcon from '../../../assets/images/markers/parking-icon.svg';
+import redCrescentIcon from '../../../assets/images/markers/red-crescent-icon.svg'
 import mapSelectIcon from '../../../assets/images/icons/map-select.svg';
 import mapDrawIcon from '../../../assets/images/icons/map-draw.svg';
 
@@ -36,7 +38,7 @@ import Airport from '../popup/Airport';
 import Emergency from '../popup/Emergency';
 import Parking from '../popup/Parking';
 import Polygon from '../popup/Polygon';
-import {ScatterplotLayer} from '@deck.gl/layers/typed';
+import RedCrescent from "../popup/RedCrescent";
 
 const myFeatureCollection = {
   type: 'FeatureCollection',
@@ -48,7 +50,8 @@ const myFeatureCollection = {
 try {
   setRTLTextPlugin(
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    () => {},
+    () => {
+    },
     true
   );
 } catch (e) {
@@ -80,6 +83,11 @@ const FilterMap: React.FC<{}> = () => {
   const [airportData, setAirportData] = useState<any[]>(airports);
   const [showAirport, setShowAirport] = useState<any>(true);
   const [airportLayers, setAirportLayers] = useState<any[]>([]);
+
+  // Red Crescent
+  const [redCrescentData, setRedCrescentData] = useState<any[]>(redCrescent);
+  const [showRedCrescent, setShowRedCrescent] = useState<any>(false);
+  const [redCrescentLayers, setRedCrescentLayers] = useState<any[]>([]);
 
   // emergency
   const [emergencyData, setEmergencyData] = useState<any[]>(emergencies);
@@ -135,51 +143,7 @@ const FilterMap: React.FC<{}> = () => {
   const mokebRef: any = useRef(null);
   const emergencyRef: any = useRef(null);
   const parkingRef: any = useRef(null);
-  const radarRef: any = useRef(null);
-
-  useEffect(() => {
-    if (radarRef.current) return;
-
-    radarRef.current = new ScatterplotLayer({
-      id: 'radar-layer',
-      data: [
-        {
-          name: '1',
-          code: 'ra-1',
-          exits: 100000000000,
-          coordinates: [44.0197, 32.6027],
-        },
-        {
-          name: '2',
-          code: 'ra-2',
-          exits: 250000000000,
-          coordinates: [44.0197, 32.6027],
-        },
-        {
-          name: '3',
-          code: 'ra-3',
-          exits: 500000000000,
-          coordinates: [44.0197, 32.6027],
-        },
-      ],
-      pickable: true,
-      opacity: 1,
-      stroked: true,
-      filled: true,
-      visible: false,
-      radiusScale: 1,
-      // radiusMinPixels: 1,
-      // radiusMaxPixels: 100,
-      lineWidthMinPixels: 1,
-      getPosition: (d: any) => d.coordinates,
-      getRadius: (d: any) => Math.sqrt(d.exits),
-      getFillColor: (d: any) => [255, 140, 0, 0],
-      getLineColor: (d: any) => [23, 90, 118, 200],
-      PopupTemplate: () => <></>,
-    });
-
-    setRadarLayers([radarRef.current]);
-  }, []);
+  const redCrescentRef: any = useRef(null);
 
   useEffect(() => {
     if (parkingRef.current) return;
@@ -210,6 +174,37 @@ const FilterMap: React.FC<{}> = () => {
     });
 
     setParkingLayers([parkingRef.current]);
+  }, []);
+
+  useEffect(() => {
+    if (redCrescentRef.current) return;
+
+    redCrescentRef.current = new IconLayer({
+      id: 'icon-layer-red',
+      data: redCrescentData,
+      pickable: true,
+      // iconAtlas and iconMapping are required
+      // getIcon: return a string
+      // iconAtlas: svgToDataURL(airportIcon),
+      getIcon: () => ({
+        url: redCrescentIcon,
+        width: 700,
+        height: 700,
+      }),
+      iconMapping: ICON_MAPPING,
+      // // @ts-ignore
+      // // getIcon: d => 'marker',
+      sizeScale: 10,
+      // @ts-ignore
+      getPosition: d => d.coordinates,
+      // @ts-ignore
+      getSize: d => 4,
+      // @ts-ignore
+      // getColor: d => [Math.sqrt(d.exits), 140, 0],
+      PopupTemplate: RedCrescent,
+    });
+
+    setRedCrescentLayers([redCrescentRef.current]);
   }, []);
 
   useEffect(() => {
@@ -371,11 +366,8 @@ const FilterMap: React.FC<{}> = () => {
     setPathLayers([pathRef.current]);
   }, []);
 
-  const [zaerinMovingData , setZaerinMovingData] = useState([])
-  const [zaerinNativeData , setZaerinNativeData] = useState([])
-
-  console.log('zaerin native data => ' , zaerinNativeData);
-  console.log('zaerin moving data => ' , zaerinMovingData);
+  const [zaerinMovingData, setZaerinMovingData] = useState([])
+  const [zaerinNativeData, setZaerinNativeData] = useState([])
 
   const fetchZaerinData = async () => {
     try {
@@ -412,9 +404,9 @@ const FilterMap: React.FC<{}> = () => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     if (zaerinMovingRef.current) return;
-    if(zaerinMovingData.length){
+    if (zaerinMovingData.length) {
       zaerinMovingRef.current = new HeatmapLayer({
         id: 'zaerin-layer-moving',
         // @ts-ignore
@@ -453,7 +445,7 @@ const FilterMap: React.FC<{}> = () => {
             <>
               {loading ? (
                 <div className="flex items-center text-xs">
-                  <Loading />
+                  <Loading/>
                   <span>درحال دریافت اطلاعات</span>
                 </div>
               ) : (
@@ -470,11 +462,11 @@ const FilterMap: React.FC<{}> = () => {
       setMovingZaerinLayers([zaerinMovingRef.current]);
     }
 
-  },[zaerinMovingData])
+  }, [zaerinMovingData])
 
-  useEffect(()=> {
+  useEffect(() => {
     if (zaerinNativeRef.current) return;
-    if(zaerinNativeData.length){
+    if (zaerinNativeData.length) {
       zaerinNativeRef.current = new HeatmapLayer({
         id: 'zaerin-layer-native',
         // @ts-ignore
@@ -513,7 +505,7 @@ const FilterMap: React.FC<{}> = () => {
             <>
               {loading ? (
                 <div className="flex items-center text-xs">
-                  <Loading />
+                  <Loading/>
                   <span>درحال دریافت اطلاعات</span>
                 </div>
               ) : (
@@ -530,7 +522,7 @@ const FilterMap: React.FC<{}> = () => {
       setNativeZaerinLayers([zaerinNativeRef.current]);
     }
 
-  },[zaerinNativeData])
+  }, [zaerinNativeData])
 
   useEffect(() => {
     if (zaerinLoading) setSubmitted(true);
@@ -541,16 +533,6 @@ const FilterMap: React.FC<{}> = () => {
   }, [zaerinLoading]);
 
   useEffect(() => {
-    if (!radarRef.current) return;
-
-    if (showRadar) {
-      setRadarLayers([radarRef.current.clone({visible: true})]);
-    } else {
-      setRadarLayers([radarRef.current.clone({visible: false})]);
-    }
-  }, [showRadar]);
-
-  useEffect(() => {
     if (!pathRef.current) return;
 
     if (showPath) {
@@ -559,6 +541,16 @@ const FilterMap: React.FC<{}> = () => {
       setPathLayers([pathRef.current.clone({visible: false})]);
     }
   }, [showPath]);
+
+  useEffect(() => {
+    if (!redCrescentRef.current) return;
+
+    if (showRedCrescent) {
+      setRedCrescentLayers([redCrescentRef.current.clone({visible: true})]);
+    } else {
+      setRedCrescentLayers([redCrescentRef.current.clone({visible: false})]);
+    }
+  }, [showRedCrescent]);
 
   useEffect(() => {
     if (!borderRef.current) return;
@@ -681,18 +673,18 @@ const FilterMap: React.FC<{}> = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">ابر حرکتی زائران کربلا در یک ساعت اخیر</legend>
       <div className="relative rounded-xl overflow-hidden" style={{height: '650px'}}>
-        <div className="absolute left-4 top-4 z-10 flex flex-col space-y-4">
+        <div className="absolute left-4 top-16 z-10 flex flex-col space-y-4">
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => ViewMode)}
           >
-            <img src={mapSelectIcon} className="w-6 h-6" alt="Map Select Polygon" />
+            <img src={mapSelectIcon} className="w-6 h-6" alt="Map Select Polygon"/>
           </button>
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => DrawPolygonMode)}
           >
-            <img src={mapDrawIcon} className="w-6 h-6" alt="Map Draw Polygon" />
+            <img src={mapDrawIcon} className="w-6 h-6" alt="Map Draw Polygon"/>
           </button>
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
@@ -714,201 +706,7 @@ const FilterMap: React.FC<{}> = () => {
             </svg>
           </button>
         </div>
-        <div className="filter-map">
-          {/* <div className="filter-map__search"> */}
-          {/*  <input type="text" placeholder="جستجو" /> */}
-          {/* </div> */}
-          <h5 className="text-right  text-primary-color text-base mb-4 mt-2 mx-auto">
-            فیلتر مکان‌ها
-          </h5>
-          <div className="select-radio mb-32">
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="radar"
-                name="radar"
-                onClick={() => {
-                  setShowRadar((prev: any) => !prev);
-                }}
-              />
-              <label htmlFor="radar" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                شعاع
-              </label>
-            </div>
 
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="road"
-                name="road"
-                onClick={() => {
-                  setShowPath((prev: any) => !prev);
-                  if (showBorder) {
-                    setMapState(() => {
-                      return {
-                        ...INITIAL_VIEW_STATE,
-                        transitionDuration: 1000,
-                      };
-                    });
-                  }
-                }}
-              />
-              <label htmlFor="road" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                مسیرها
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="airports"
-                checked={showAirport}
-                name="airports"
-                onClick={() => {
-                  setShowAirport((prev: any) => !prev);
-                  if (showBorder) {
-                    setMapState(() => {
-                      return {
-                        ...INITIAL_VIEW_STATE,
-                        transitionDuration: 1000,
-                      };
-                    });
-                  }
-                }}
-              />
-              <label htmlFor="airports" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                فرودگاه ها
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="parking"
-                name="parking"
-                onClick={() => {
-                  setShowParking((prev: any) => !prev);
-                  if (showBorder) {
-                    setMapState(() => {
-                      return {
-                        ...INITIAL_VIEW_STATE,
-                        transitionDuration: 1000,
-                      };
-                    });
-                  }
-                }}
-              />
-              <label htmlFor="parking" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                پارکینگ
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="border-crossing"
-                name="border-crossing"
-                onClick={goToBorder}
-              />
-              <label htmlFor="border-crossing" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                گذرگاه‌های مرزی
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="procession"
-                name="procession"
-                onClick={() => {
-                  setShowMokeb((prev: any) => !prev);
-                  if (showBorder) {
-                    setMapState(() => {
-                      return {
-                        ...INITIAL_VIEW_STATE,
-                        transitionDuration: 1000,
-                      };
-                    });
-                  }
-                }}
-              />
-              <label htmlFor="procession" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                موکب
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="helal_ahmar"
-                name="helal_ahmar"
-              />
-              <label htmlFor="helal_ahmar" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                پایگاه حلال‌احمر
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="zaerin-native"
-                name="zaerin-native"
-                onClick={() => setShowNativeZaerin((prev: any) => !prev)}
-              />
-              <label htmlFor="zaerin-native" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                زائران مقیم
-              </label>
-            </div>
-
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="zaerin-moving"
-                name="zaerin-moving"
-                onClick={() => setShowMovingZaerin((prev: any) => !prev)}
-              />
-              <label htmlFor="zaerin-moving" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                زائران در حال حرکت
-              </label>
-            </div>
-            <div className="select-radio__group">
-              <input
-                type="checkbox"
-                className="select-radio__input"
-                id="emergency"
-                name="emergency"
-                onClick={() => setShowEmergency((prev: any) => !prev)}
-              />
-              <label htmlFor="emergency" className="select-radio__label text-right">
-                <span className="select-radio__button" />
-                اورژانس
-              </label>
-            </div>
-          </div>
-          {/* <div className="w-10/12 mx-auto filter-map__submit text-center"> */}
-          {/*  <button type="button" className="button button--primary"> */}
-          {/*    اعمال فیلتر */}
-          {/*  </button> */}
-          {/* </div> */}
-        </div>
         <div
           className={`absolute left-0 top-0 bg-white z-10 opacity-70 w-full h-full ${
             submitted ? '' : 'hidden'
@@ -947,6 +745,7 @@ const FilterMap: React.FC<{}> = () => {
             emergencyLayers,
             parkingLayers,
             editorLayer,
+            redCrescentLayers
           ]}
           initialViewState={mapState}
           controller={{
@@ -990,6 +789,186 @@ const FilterMap: React.FC<{}> = () => {
           }}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
+          <div className="filter-map">
+            {/* <div className="filter-map__search"> */}
+            {/*  <input type="text" placeholder="جستجو" /> */}
+            {/* </div> */}
+            <h5 className="text-right  text-primary-color text-base mb-4 mt-2 mx-auto">
+              فیلتر مکان‌ها
+            </h5>
+            <div className="select-radio mb-32">
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="road"
+                  name="road"
+                  onClick={() => {
+                    setShowPath((prev: any) => !prev);
+                    if (showBorder) {
+                      setMapState(() => {
+                        return {
+                          ...INITIAL_VIEW_STATE,
+                          transitionDuration: 1000,
+                        };
+                      });
+                    }
+                  }}
+                />
+                <label htmlFor="road" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  مسیرها
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="airports"
+                  checked={showAirport}
+                  name="airports"
+                  onClick={() => {
+                    setShowAirport((prev: any) => !prev);
+                    if (showBorder) {
+                      setMapState(() => {
+                        return {
+                          ...INITIAL_VIEW_STATE,
+                          transitionDuration: 1000,
+                        };
+                      });
+                    }
+                  }}
+                />
+                <label htmlFor="airports" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  فرودگاه ها
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="parking"
+                  name="parking"
+                  onClick={() => {
+                    setShowParking((prev: any) => !prev);
+                    if (showBorder) {
+                      setMapState(() => {
+                        return {
+                          ...INITIAL_VIEW_STATE,
+                          transitionDuration: 1000,
+                        };
+                      });
+                    }
+                  }}
+                />
+                <label htmlFor="parking" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  پارکینگ
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="border-crossing"
+                  name="border-crossing"
+                  onClick={goToBorder}
+                />
+                <label htmlFor="border-crossing" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  گذرگاه‌های مرزی
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="procession"
+                  name="procession"
+                  onClick={() => {
+                    setShowMokeb((prev: any) => !prev);
+                    if (showBorder) {
+                      setMapState(() => {
+                        return {
+                          ...INITIAL_VIEW_STATE,
+                          transitionDuration: 1000,
+                        };
+                      });
+                    }
+                  }}
+                />
+                <label htmlFor="procession" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  موکب
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="helal_ahmar"
+                  name="helal_ahmar"
+                  onClick={() => setShowRedCrescent((prev: any) => !prev)}
+                />
+                <label htmlFor="helal_ahmar" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  پایگاه حلال‌احمر
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="zaerin-native"
+                  name="zaerin-native"
+                  onClick={() => setShowNativeZaerin((prev: any) => !prev)}
+                />
+                <label htmlFor="zaerin-native" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  زائران مقیم
+                </label>
+              </div>
+
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="zaerin-moving"
+                  name="zaerin-moving"
+                  onClick={() => setShowMovingZaerin((prev: any) => !prev)}
+                />
+                <label htmlFor="zaerin-moving" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  زائران در حال حرکت
+                </label>
+              </div>
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
+                  id="emergency"
+                  name="emergency"
+                  onClick={() => setShowEmergency((prev: any) => !prev)}
+                />
+                <label htmlFor="emergency" className="select-radio__label text-right">
+                  <span className="select-radio__button"/>
+                  اورژانس
+                </label>
+              </div>
+            </div>
+            {/* <div className="w-10/12 mx-auto filter-map__submit text-center"> */}
+            {/*  <button type="button" className="button button--primary"> */}
+            {/*    اعمال فیلتر */}
+            {/*  </button> */}
+            {/* </div> */}
+          </div>
           <StaticMap
             reuseMaps
             preventStyleDiffing
@@ -999,6 +978,7 @@ const FilterMap: React.FC<{}> = () => {
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
+          <FullscreenControl style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}/>
           {selected && (
             <Popup
               longitude={selected.coordinate[0]}
@@ -1006,7 +986,7 @@ const FilterMap: React.FC<{}> = () => {
               closeButton={false}
               offsetLeft={10}
             >
-              <selected.layer.props.PopupTemplate params={selected.object} />
+              <selected.layer.props.PopupTemplate params={selected.object}/>
             </Popup>
           )}
         </DeckGL>
