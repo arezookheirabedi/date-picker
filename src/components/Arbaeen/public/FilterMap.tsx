@@ -918,7 +918,7 @@ const FilterMap: React.FC<{}> = () => {
                 />
                 <label htmlFor="helal_ahmar" className="select-radio__label text-right">
                   <span className="select-radio__button"/>
-                  پایگاه حلال‌احمر
+                  پایگاه هلال احمر
                 </label>
               </div>
 
