@@ -1,13 +1,19 @@
 /* eslint-disable */
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {setRTLTextPlugin, _MapContext as MapContext, StaticMap, Popup, FullscreenControl} from 'react-map-gl';
+import {
+  setRTLTextPlugin,
+  _MapContext as MapContext,
+  StaticMap,
+  Popup,
+  FullscreenControl,
+} from 'react-map-gl';
 // import {HexagonLayer} from '@deck.gl/aggregation-layers/typed';
 // import DeckGL from '@deck.gl/react/typed';
 // @ts-ignore
 import DeckGL, {FlyToInterpolator} from 'deck.gl';
 
 // @ts-ignore
-import {PolygonLayer, PathLayer, IconLayer, GeoJsonLayer} from '@deck.gl/layers';
+import {PolygonLayer, PathLayer, IconLayer, ScatterplotLayer} from '@deck.gl/layers';
 import {borders} from '../geos/borders';
 import {roads} from '../geos/roads';
 import {airports} from '../geos/airport';
@@ -15,19 +21,18 @@ import {emergencies} from '../geos/emergencies';
 import {mokebs} from '../geos/mokebs';
 import {parkings} from '../geos/parkings';
 import {redCrescent} from '../geos/red-crescent';
-import {AmbientLight, LightingEffect, PickingInfo, PointLight} from '@deck.gl/core/typed';
-import {TooltipContent} from '@deck.gl/core/typed/lib/tooltip';
+import {PickingInfo} from '@deck.gl/core/typed';
 import Loading from 'src/components/Loading';
 import {EditableGeoJsonLayer} from '@nebula.gl/layers';
 import {ViewMode, DrawPolygonMode} from '@nebula.gl/edit-modes';
-import {HeatmapLayer, HexagonLayer} from '@deck.gl/aggregation-layers/typed';
+import {HeatmapLayer} from '@deck.gl/aggregation-layers/typed';
 import {useSelector} from 'src/hooks/useTypedSelector';
 
 import airportIcon from '../../../assets/images/markers/airport-icon.svg';
 import mokebIcon from '../../../assets/images/markers/mokeb-icon.svg';
 import emergencyIcon from '../../../assets/images/markers/emergency.svg';
 import parkingIcon from '../../../assets/images/markers/parking-icon.svg';
-import redCrescentIcon from '../../../assets/images/markers/red-crescent-icon.svg'
+import redCrescentIcon from '../../../assets/images/markers/red-crescent-icon.svg';
 import mapSelectIcon from '../../../assets/images/icons/map-select.svg';
 import mapDrawIcon from '../../../assets/images/icons/map-draw.svg';
 
@@ -38,7 +43,7 @@ import Airport from '../popup/Airport';
 import Emergency from '../popup/Emergency';
 import Parking from '../popup/Parking';
 import Polygon from '../popup/Polygon';
-import RedCrescent from "../popup/RedCrescent";
+import RedCrescent from '../popup/RedCrescent';
 
 const myFeatureCollection = {
   type: 'FeatureCollection',
@@ -50,8 +55,7 @@ const myFeatureCollection = {
 try {
   setRTLTextPlugin(
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    () => {
-    },
+    () => {},
     true
   );
 } catch (e) {
@@ -144,6 +148,51 @@ const FilterMap: React.FC<{}> = () => {
   const emergencyRef: any = useRef(null);
   const parkingRef: any = useRef(null);
   const redCrescentRef: any = useRef(null);
+  const radarRef: any = useRef(null);
+
+  useEffect(() => {
+    if (radarRef.current) return;
+
+    radarRef.current = new ScatterplotLayer({
+      id: 'radar-layer',
+      data: [
+        {
+          name: '1',
+          code: 'ra-1',
+          exits: 100000000000,
+          coordinates: [44.0197, 32.6027],
+        },
+        {
+          name: '2',
+          code: 'ra-2',
+          exits: 250000000000,
+          coordinates: [44.0197, 32.6027],
+        },
+        {
+          name: '3',
+          code: 'ra-3',
+          exits: 500000000000,
+          coordinates: [44.0197, 32.6027],
+        },
+      ],
+      pickable: true,
+      opacity: 1,
+      stroked: true,
+      filled: true,
+      visible: false,
+      radiusScale: 1,
+      // radiusMinPixels: 1,
+      // radiusMaxPixels: 100,
+      lineWidthMinPixels: 1,
+      getPosition: (d: any) => d.coordinates,
+      getRadius: (d: any) => Math.sqrt(d.exits),
+      getFillColor: (d: any) => [255, 140, 0, 0],
+      getLineColor: (d: any) => [23, 90, 118, 200],
+      PopupTemplate: () => <></>,
+    });
+
+    setRadarLayers([radarRef.current]);
+  }, []);
 
   useEffect(() => {
     if (parkingRef.current) return;
@@ -366,8 +415,8 @@ const FilterMap: React.FC<{}> = () => {
     setPathLayers([pathRef.current]);
   }, []);
 
-  const [zaerinMovingData, setZaerinMovingData] = useState([])
-  const [zaerinNativeData, setZaerinNativeData] = useState([])
+  const [zaerinMovingData, setZaerinMovingData] = useState([]);
+  const [zaerinNativeData, setZaerinNativeData] = useState([]);
 
   const fetchZaerinData = async () => {
     try {
@@ -397,7 +446,6 @@ const FilterMap: React.FC<{}> = () => {
 
       setZaerinMovingData(movingZaerin);
       setZaerinNativeData(nativeZaerin);
-
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -445,7 +493,7 @@ const FilterMap: React.FC<{}> = () => {
             <>
               {loading ? (
                 <div className="flex items-center text-xs">
-                  <Loading/>
+                  <Loading />
                   <span>درحال دریافت اطلاعات</span>
                 </div>
               ) : (
@@ -461,8 +509,7 @@ const FilterMap: React.FC<{}> = () => {
 
       setMovingZaerinLayers([zaerinMovingRef.current]);
     }
-
-  }, [zaerinMovingData])
+  }, [zaerinMovingData]);
 
   useEffect(() => {
     if (zaerinNativeRef.current) return;
@@ -505,7 +552,7 @@ const FilterMap: React.FC<{}> = () => {
             <>
               {loading ? (
                 <div className="flex items-center text-xs">
-                  <Loading/>
+                  <Loading />
                   <span>درحال دریافت اطلاعات</span>
                 </div>
               ) : (
@@ -521,8 +568,7 @@ const FilterMap: React.FC<{}> = () => {
 
       setNativeZaerinLayers([zaerinNativeRef.current]);
     }
-
-  }, [zaerinNativeData])
+  }, [zaerinNativeData]);
 
   useEffect(() => {
     if (zaerinLoading) setSubmitted(true);
@@ -622,6 +668,16 @@ const FilterMap: React.FC<{}> = () => {
     }
   }, [showParking]);
 
+  useEffect(() => {
+    if (!radarRef.current) return;
+
+    if (showRadar) {
+      setRadarLayers([radarRef.current.clone({visible: true})]);
+    } else {
+      setRadarLayers([radarRef.current.clone({visible: false})]);
+    }
+  }, [showRadar]);
+
   const goToBorder = useCallback(() => {
     setShowBorder((prev: any) => !prev);
     if (!showBorder) {
@@ -678,13 +734,13 @@ const FilterMap: React.FC<{}> = () => {
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => ViewMode)}
           >
-            <img src={mapSelectIcon} className="w-6 h-6" alt="Map Select Polygon"/>
+            <img src={mapSelectIcon} className="w-6 h-6" alt="Map Select Polygon" />
           </button>
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
             onClick={() => setEditMode(() => DrawPolygonMode)}
           >
-            <img src={mapDrawIcon} className="w-6 h-6" alt="Map Draw Polygon"/>
+            <img src={mapDrawIcon} className="w-6 h-6" alt="Map Draw Polygon" />
           </button>
           <button
             className="bg-white shadow-2xl rounded-md flex justify-center items-center p-1.5 w-6 h-6 text-xs"
@@ -745,7 +801,7 @@ const FilterMap: React.FC<{}> = () => {
             emergencyLayers,
             parkingLayers,
             editorLayer,
-            redCrescentLayers
+            redCrescentLayers,
           ]}
           initialViewState={mapState}
           controller={{
@@ -801,6 +857,21 @@ const FilterMap: React.FC<{}> = () => {
                 <input
                   type="checkbox"
                   className="select-radio__input"
+                  id="radar"
+                  name="radar"
+                  onClick={() => {
+                    setShowRadar((prev: any) => !prev);
+                  }}
+                />
+                <label htmlFor="radar" className="select-radio__label text-right">
+                  <span className="select-radio__button" />
+                  شعاع
+                </label>
+              </div>
+              <div className="select-radio__group">
+                <input
+                  type="checkbox"
+                  className="select-radio__input"
                   id="road"
                   name="road"
                   onClick={() => {
@@ -816,7 +887,7 @@ const FilterMap: React.FC<{}> = () => {
                   }}
                 />
                 <label htmlFor="road" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   مسیرها
                 </label>
               </div>
@@ -841,7 +912,7 @@ const FilterMap: React.FC<{}> = () => {
                   }}
                 />
                 <label htmlFor="airports" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   فرودگاه ها
                 </label>
               </div>
@@ -865,7 +936,7 @@ const FilterMap: React.FC<{}> = () => {
                   }}
                 />
                 <label htmlFor="parking" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   پارکینگ
                 </label>
               </div>
@@ -879,7 +950,7 @@ const FilterMap: React.FC<{}> = () => {
                   onClick={goToBorder}
                 />
                 <label htmlFor="border-crossing" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   گذرگاه‌های مرزی
                 </label>
               </div>
@@ -903,7 +974,7 @@ const FilterMap: React.FC<{}> = () => {
                   }}
                 />
                 <label htmlFor="procession" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   موکب
                 </label>
               </div>
@@ -917,7 +988,7 @@ const FilterMap: React.FC<{}> = () => {
                   onClick={() => setShowRedCrescent((prev: any) => !prev)}
                 />
                 <label htmlFor="helal_ahmar" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   پایگاه هلال احمر
                 </label>
               </div>
@@ -931,7 +1002,7 @@ const FilterMap: React.FC<{}> = () => {
                   onClick={() => setShowNativeZaerin((prev: any) => !prev)}
                 />
                 <label htmlFor="zaerin-native" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   زائران مقیم
                 </label>
               </div>
@@ -945,7 +1016,7 @@ const FilterMap: React.FC<{}> = () => {
                   onClick={() => setShowMovingZaerin((prev: any) => !prev)}
                 />
                 <label htmlFor="zaerin-moving" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   زائران در حال حرکت
                 </label>
               </div>
@@ -958,7 +1029,7 @@ const FilterMap: React.FC<{}> = () => {
                   onClick={() => setShowEmergency((prev: any) => !prev)}
                 />
                 <label htmlFor="emergency" className="select-radio__label text-right">
-                  <span className="select-radio__button"/>
+                  <span className="select-radio__button" />
                   اورژانس
                 </label>
               </div>
@@ -978,7 +1049,9 @@ const FilterMap: React.FC<{}> = () => {
             className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
-          <FullscreenControl style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}/>
+          <FullscreenControl
+            style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}
+          />
           {selected && (
             <Popup
               longitude={selected.coordinate[0]}
@@ -986,7 +1059,7 @@ const FilterMap: React.FC<{}> = () => {
               closeButton={false}
               offsetLeft={10}
             >
-              <selected.layer.props.PopupTemplate params={selected.object}/>
+              <selected.layer.props.PopupTemplate params={selected.object} />
             </Popup>
           )}
         </DeckGL>
