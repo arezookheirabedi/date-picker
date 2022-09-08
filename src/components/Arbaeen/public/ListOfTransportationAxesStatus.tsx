@@ -73,7 +73,7 @@ const ListOfTransportationAxesStatus = () => {
         <div className="flex items-center justify-start mb-10 mt-5 px-8">
           <div className="w-full">
             <div className="flex flex-row  items-center justify-start  text-xs">
-              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <img src={Information} className="inline " width="18" height="18" alt=""/>
               <span className="px-2">نمایش آخرین وضعیت محورهای مواصلاتی در یک ساعت اخیر</span>
             </div>
           </div>
@@ -81,7 +81,7 @@ const ListOfTransportationAxesStatus = () => {
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
-            <RetryButton setQuery={setQuery} />
+            <RetryButton setQuery={setQuery}/>
           </div>
         ) : (
           <Table
@@ -130,16 +130,16 @@ const ListOfTransportationAxesStatus = () => {
                     <div className="flex w-full justify-center">
                       <span className="text-gray-500 whitespace-normal px-1">
                         {record.submitTime &&
-                          toPersianDigit(
-                            dayjs(record.submitTime).calendar('jalali').format('HH:mm')
-                          )}
+                        toPersianDigit(
+                          dayjs(record.submitTime).calendar('jalali').format('HH:mm')
+                        )}
                       </span>
                       <span className="text-gray-500 whitespace-normal ">
                         -{' '}
                         {record.submitTime &&
-                          toPersianDigit(
-                            dayjs(record.submitTime).calendar('jalali').format('YYYY/MM/DD')
-                          )}
+                        toPersianDigit(
+                          dayjs(record.submitTime).calendar('jalali').format('YYYY/MM/DD')
+                        )}
                       </span>
                     </div>
                   </>

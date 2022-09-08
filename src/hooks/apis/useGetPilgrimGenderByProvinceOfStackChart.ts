@@ -77,6 +77,9 @@ export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
   };
   useEffect(() => {
     getIt(query);
+    setInterval(() => {
+      getIt(query);
+    },(60000 * 5))
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialData);

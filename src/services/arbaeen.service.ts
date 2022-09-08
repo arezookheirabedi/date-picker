@@ -252,6 +252,12 @@ function getParking(params: any = {}, config?: any) {
   });
 }
 
+function getRedCrescent(params: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-helalahmars/${params}`, {}, {
+    ...config,
+  });
+}
+
 
 function getBorderListById() {
   const mock = {
@@ -296,7 +302,8 @@ const arbaeenService = {
   getPligrimCountPerProvince,
   getPolygonData,
   getEmergency,
-  getParking
+  getParking,
+  getRedCrescent
 };
 
 export default arbaeenService;
