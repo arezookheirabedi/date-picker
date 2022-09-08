@@ -853,7 +853,7 @@ const FilterMap: React.FC<{}> = () => {
               فیلتر مکان‌ها
             </h5>
             <div className="select-radio mb-32">
-              <div className="select-radio__group">
+              {/* <div className="select-radio__group">
                 <input
                   type="checkbox"
                   className="select-radio__input"
@@ -867,7 +867,7 @@ const FilterMap: React.FC<{}> = () => {
                   <span className="select-radio__button" />
                   شعاع
                 </label>
-              </div>
+              </div> */}
               <div className="select-radio__group">
                 <input
                   type="checkbox"
