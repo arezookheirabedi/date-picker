@@ -33,6 +33,9 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
 
   useEffect(() => {
     getAllPilgrims();
+    setInterval(() => {
+      getAllPilgrims();
+    }, 60000 * 5)
     return () => {
       source.cancel('Operation canceled by the user.');
     };
@@ -44,14 +47,15 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
         نگاه کلی به ورود و خروج مسافران از مرزهای زمینی
       </legend>
       <div className="flex flex-col justify-between space-y-8">
-        <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
+        <div
+          className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
             icon={redPeopleIcon}
             text="تعداد  مسافران خارج شده از کشور"
             count={pilgrims.exitingCount || 0}
             loading={loading}
             hasInfo
-            infoText="تعداد مسافران خارج شده از کشور از مرزهای (مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ شلمچه) در ۲۴ ساعت اخیر"
+            infoText="تعداد مسافران خارج شده از کشور از مرزهای (مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ شلمچه) از تاریخ ۱۴۰۱/۰۵/۳۱ تا به امروز"
           />
           <Statistic
             icon={greenPeopleIcon}
@@ -59,7 +63,7 @@ const OverviewOfTheEntryAndExitOfPilgrims = () => {
             count={pilgrims.enteringCount || 0}
             loading={loading}
             hasInfo
-            infoText="تعداد مسافران وارد شده به کشور از مرزهای (مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ شلمچه) در ۲۴ ساعت اخیر"
+            infoText="تعداد مسافران وارد شده به کشور از مرزهای (مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ شلمچه) از تاریخ ۱۴۰۱/۰۵/۳۱ تا به امروز"
           />
         </div>
       </div>

@@ -11,8 +11,8 @@ const OverviewPligrimTripType: React.FC<{}> = () => {
   });
   return (
     <>
-      <OverviewPligrimTripTypeCount pilgrims={pilgrims} loading={dataLoading} />;
-      <OverviewPligrimTripTypePercentage pilgrims={pilgrims} loading={dataLoading} />;
+      <OverviewPligrimTripTypeCount pilgrims={pilgrims} loading={dataLoading} />
+      <OverviewPligrimTripTypePercentage pilgrims={pilgrims} loading={dataLoading} />
     </>
   );
 };
