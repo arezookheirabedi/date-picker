@@ -1,11 +1,17 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import {
+  _MapContext as MapContext,
+  FullscreenControl,
+  setRTLTextPlugin,
+  StaticMap,
+} from 'react-map-gl';
 import {useDispatch} from 'react-redux';
 import dayjs from 'dayjs';
 import {MapView} from '@deck.gl/core/typed';
 import {ScatterplotLayer} from '@deck.gl/layers/typed';
 import {DataFilterExtension} from '@deck.gl/extensions/typed';
-import DeckGL from '@deck.gl/react/typed';
+// @ts-ignore
+import DeckGL from 'deck.gl';
 import MapRange from 'src/components/MapRange';
 import {useSelector} from 'src/hooks/useTypedSelector';
 import {toPersianDigit} from 'src/helpers/utils';
@@ -116,7 +122,7 @@ const TimelineMap: React.FC<{}> = () => {
           isPassenger: row.isPassenger === 'true',
           // depth: Number(row.CountOfSamah),
           depth: 1,
-          magnitude: Number(row.CountOfSamah || "0"),
+          magnitude: Number(row.CountOfSamah || '0'),
         };
       });
 
@@ -246,11 +252,14 @@ const TimelineMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
+          // @ts-ignore
           views={MAP_VIEW}
+          // @ts-ignore
           layers={layers}
           initialViewState={INITIAL_VIEW_STATE}
           controller
           height={650}
+          ContextProvider={MapContext.Provider}
           getTooltip={getTooltip}
         >
           {/* <StaticMap reuseMaps mapStyle={mapStyle} preventStyleDiffing /> */}
@@ -262,6 +271,10 @@ const TimelineMap: React.FC<{}> = () => {
             mapStyle="mapbox://styles/mapbox/light-v10"
             // className="map-container"
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+          />
+
+          <FullscreenControl
+            style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}
           />
         </DeckGL>
 

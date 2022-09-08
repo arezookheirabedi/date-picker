@@ -72,6 +72,9 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
 
   useEffect(() => {
     getIt(query);
+    setInterval(() => {
+      getIt(query);
+    }, 60000 * 5)
     return () => {
       setData([]);
       source.cancel('Operation canceled by the user.');

@@ -38,18 +38,29 @@ const Arbaeen = () => {
       <OverviewPligrimGroundTripType />
       {/* <OverviewPilgrimHelthStatus /> */}
       <OverviewRegisterVaccinesInfo />
+      {/* done */}
       <OverviewLatestVaccinesInfo />
+      {/* done */}
       <OverviewOfExistBorder />
+      {/* done */}
       <OverviewPilgrimAge />
+      {/* done */}
       <OverviewPilgrimGenderByProvince />
+      {/* done */}
       <OverviewPilgrimPercentagePerProvince />
+      {/* done */}
       <TheLargestNumberOfOriginPilgrimsCitiesList />
+      {/* done */}
       <OverviewOfTheEntryAndExitOfPilgrims />
       {/* <OverviewOfThePercentageOfEntryAndExitOfPilgrims /> */}
       {/* <GeneralLookAtTransportationAxesAndExitBordersOfCountry /> */}
+      {/* done */}
       <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
+      {/* done */}
       <ComparsionPasengersEntranceAndExistanceAtBoarders />
+      {/* done */}
       <OverviewTheLatestStatusGroundBorders />
+      {/* done */}
       <ListOfTransportationAxesStatus />
       {/* <ListOfTheBusiestBorderCrossings /> */}
       <MokebList />
