@@ -321,6 +321,9 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
       return;
     }
     getIt(query);
+    setInterval(() => {
+      getIt(query);
+    },(60000 * 5))
     // eslint-disable-next-line consistent-return
     return () => {
       setDataCount(initialDataCount);
@@ -343,6 +346,9 @@ export default function useGetOverviewOfArbaeenPilgrimExistAbroad(
     });
 
     if (existsCity) {
+      setInterval(() => {
+        getIt({...query, province: provinceName});
+      },(60000 * 5))
       getIt({...query, province: provinceName});
     } else {
       history.go(-1);

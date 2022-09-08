@@ -29,6 +29,9 @@ const OverviewRegisterVaccinesInfo: React.FC<{}> = () => {
   };
 
   useEffect(() => {
+    setInterval(() => {
+      getAllPilgrims();
+    },(60000 * 5))
     getAllPilgrims();
     return () => {
       setPilgrims({...initialVaccineValue});
