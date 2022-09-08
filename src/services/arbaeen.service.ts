@@ -170,10 +170,14 @@ function getEmergencyList({...params}: any = {}, config?: any) {
   });
 }
 
-function getEmergency(params: any , config?: any) {
-  return request.build().get(`/api/v1/arbaeen/ar-emergencies/${params}/?lang=fa`, {}, {
-    ...config,
-  });
+function getEmergency(params: any, config?: any) {
+  return request.build().get(
+    `/api/v1/arbaeen/ar-emergencies/${params}/?lang=fa`,
+    {},
+    {
+      ...config,
+    }
+  );
 }
 
 function getRoadStatistics({...params}: any = {}, config?: any) {
@@ -235,9 +239,12 @@ function getMokeb(id: any, config?: any) {
 }
 
 function getPolygonData(params: any, config?: any) {
-  return request.build().post(`/api/v1/arbaeen/reports/polygon/count`, params, {
-    ...config,
-  });
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .post(`/api/v1/arbaeen/reports/polygon/count`, params, {
+      ...config,
+    });
 }
 
 function getParckingList(params: any = {}, config?: any) {
@@ -247,17 +254,24 @@ function getParckingList(params: any = {}, config?: any) {
 }
 
 function getParking(params: any = {}, config?: any) {
-  return request.build().get(`/api/v1/arbaeen/ar-parkings/${params}`, {}, {
-    ...config,
-  });
+  return request.build().get(
+    `/api/v1/arbaeen/ar-parkings/${params}`,
+    {},
+    {
+      ...config,
+    }
+  );
 }
 
 function getRedCrescent(params: any = {}, config?: any) {
-  return request.build().get(`/api/v1/arbaeen/ar-helalahmars/${params}`, {}, {
-    ...config,
-  });
+  return request.build().get(
+    `/api/v1/arbaeen/ar-helalahmars/${params}`,
+    {},
+    {
+      ...config,
+    }
+  );
 }
-
 
 function getBorderListById() {
   const mock = {
@@ -303,7 +317,7 @@ const arbaeenService = {
   getPolygonData,
   getEmergency,
   getParking,
-  getRedCrescent
+  getRedCrescent,
 };
 
 export default arbaeenService;
