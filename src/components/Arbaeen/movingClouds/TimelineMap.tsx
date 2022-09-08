@@ -1,5 +1,10 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {_MapContext as MapContext, FullscreenControl, setRTLTextPlugin, StaticMap} from 'react-map-gl';
+import {
+  _MapContext as MapContext,
+  FullscreenControl,
+  setRTLTextPlugin,
+  StaticMap,
+} from 'react-map-gl';
 import {useDispatch} from 'react-redux';
 import dayjs from 'dayjs';
 import {MapView} from '@deck.gl/core/typed';
@@ -117,7 +122,7 @@ const TimelineMap: React.FC<{}> = () => {
           isPassenger: row.isPassenger === 'true',
           // depth: Number(row.CountOfSamah),
           depth: 1,
-          magnitude: Number(row.CountOfSamah || "0"),
+          magnitude: Number(row.CountOfSamah || '0'),
         };
       });
 
@@ -247,7 +252,9 @@ const TimelineMap: React.FC<{}> = () => {
         </div>
         <DeckGL
           ref={deckRef}
+          // @ts-ignore
           views={MAP_VIEW}
+          // @ts-ignore
           layers={layers}
           initialViewState={INITIAL_VIEW_STATE}
           controller
@@ -266,7 +273,9 @@ const TimelineMap: React.FC<{}> = () => {
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           />
 
-          <FullscreenControl style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}/>
+          <FullscreenControl
+            style={{marginTop: '20px', marginRight: '20px', left: '13px', top: '0px'}}
+          />
         </DeckGL>
 
         {timeRange && (
