@@ -20,7 +20,7 @@ import OverviewTheLatestStatusGroundBorders from 'src/components/Arbaeen/public/
 import EmergencyList from 'src/components/Arbaeen/public/EmergencyList';
 import ParckingList from 'src/components/Arbaeen/public/ParckingList';
 import OverviewPilgrimPercentagePerProvince from 'src/components/Arbaeen/public/OverviewPilgrimPercentagePerProvince';
-import OverviewPilgrim from 'src/components/Arbaeen/public/overviewPilgrim';
+import OverviewPilgrim from 'src/components/Arbaeen/public/OverviewPilgrim';
 import OverviewPligrimTripType from 'src/components/Arbaeen/public/OverviewPligrimTripType';
 import OverviewRegisterVaccinesInfo from 'src/components/Arbaeen/public/OverviewRegisterVaccinesInfo';
 import OverviewLatestVaccinesInfo from 'src/components/Arbaeen/public/OverviewLatestVaccinesInfo';
