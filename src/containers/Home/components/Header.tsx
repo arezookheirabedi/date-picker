@@ -18,16 +18,16 @@ const Header = () => {
       </div>
       <div className="header__text-box">
         <h1 className="heading-primary">
-          <span className="heading-primary--main">سکوی مدیریت هوشمند اجتماعی بحران‌های سلامتی</span>
-          <span className="heading-primary--sub">تجمیع ، پایش و تحلیل اطلاعات</span>
+          <span className="heading-primary--main u-color-white">سکوی مدیریت هوشمند اجتماعی بحران‌های سلامتی</span>
+          <span className="heading-primary--sub u-color-white">تجمیع ، پایش و تحلیل اطلاعات</span>
         </h1>
         <h2 className="heading-secondary">
-          <span className="heading-secondary--main">
+          <span className="heading-secondary--main u-color-white">
             اخذ تصمیمات صحیح در حوزه‌ی مدیریت بحران نیازمند به ایجاد مجموعه سامانه‌هایی است. که ضمن
             افزایش مشارکت شهروندان در کنترل بحران بستر‌های داده‌کاوی مناسبی را در راستای تصمیم سازی
             نهادهای متولی ایجاد نماید.
           </span>
-          <span className="heading-secondary--sub">
+          <span className="heading-secondary--sub u-color-white">
             سامانه‌های موضوع این طرح با هدف ایجاد بستر‌های خدمت‌رسانی به شهروندان و نظارت‌بر حسن
             اجرای آئین نامه‌های شرایط بحران طراحی و راه‌اندازی شده‌اند.
           </span>
