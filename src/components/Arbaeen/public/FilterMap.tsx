@@ -392,8 +392,8 @@ const FilterMap: React.FC<{}> = () => {
       id: 'path-layer',
       data: pathData,
       pickable: true,
-      widthScale: 20,
-      widthMinPixels: 2,
+      widthScale: 30,
+      widthMinPixels: 4,
       // @ts-ignore
       getPath: d => d.path,
       // @ts-ignore
