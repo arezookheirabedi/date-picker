@@ -1,17 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
-import Table from 'src/components/TableScopeSort';
+import Table from 'src/components/TableXHR';
+import {EERRORS} from 'src/constants/errors.enum';
+import {toPersianDigit} from 'src/helpers/utils';
 import arbaeenService from 'src/services/arbaeen.service';
-import {redHelalList} from './constant';
 
+const pageSize = 10;
 const RedHalalBasesList: React.FC<{}> = () => {
+  const [totalItems, setTotalItems] = useState(0);
+
   const [error, setError] = useState(null);
   const [query, setQuery] = useState({
     retry: false,
+    currentPage: 1,
   }) as any;
-
   const [loading, setLoading] = useState(false);
   const [dataset, setDataSet] = useState<any>([]);
   const {CancelToken} = axios;
@@ -22,27 +25,32 @@ const RedHalalBasesList: React.FC<{}> = () => {
     setError(null);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {data} = await arbaeenService.arbaeenGetAll(
-        {tag: 'transparent'},
-        {cancelToken: source.token}
-      );
+      const {data} = await arbaeenService.getHelelList({}, {cancelToken: source.token});
       const normalizedData: any[] = [];
-      redHelalList.forEach((item: any, index: number) => {
+      data.content.forEach((item: any) => {
         normalizedData.push({
-          id: `ovca_${index}`,
+          id: item.id,
           name: item.name || 'نامشخص',
           location: item.location || 'نامشخص',
-          baseCode: item.baseCode,
+          baseCode: item.id || 'نامشخص',
           managerName: item.managerName || 'نامشخص',
-          capacity: item.capacity,
-          providedServicesCount: item.providedServicesCount,
+          capacity: item.capacity || 'نامشخص',
+          numberOfPersonnel: item.numberOfPersonnel || 'نامشخص',
+          hoursOfServices: item.hoursOfServices || 0,
+          numberOfAvailableAmbulances: item.numberOfAvailableAmbulances || 0,
+          numberOfAvailableAutolances: item.nnumberOfAvailableAutolances || 0,
+          numberOfAvailableMotolances: item.numberOfAvailableMotolances || 0,
         });
       });
       setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+      setLoading(false);
     } catch (err: any) {
-      console.log(err);
-    } finally {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
       setLoading(false);
     }
   };
@@ -54,12 +62,14 @@ const RedHalalBasesList: React.FC<{}> = () => {
     };
   }, [query]);
 
+  function handlePageChange(page: number = 1) {
+    setQuery({...query, currentPage: page});
+  }
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">لیست پایگاه های هلال احمر</legend>
-      <div className="p-40 text-red-500"> اطلاعات مورد نیاز دریافت نمی شود.</div>
 
-      {/* <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
+      <div className="align-center flex w-full flex-col justify-center rounded-xl bg-white p-4 shadow">
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
@@ -67,41 +77,20 @@ const RedHalalBasesList: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            totalItems={(dataset || []).length}
             loading={loading}
+            handlePageChange={handlePageChange}
             dataSet={[...dataset]}
-            pagination={{pageSize: 10, maxPages: 3}}
+            pagination={{pageSize, currentPage: query.currentPage}}
+            totalItems={totalItems}
             columns={[
               {
                 name: 'اسم پایگاه',
                 key: 'name',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex justify-start">
-                    {((page - 1) * 10 + index + 1).toPersianDigits()}.{v}
+                render: (v: any, record, index: number) => (
+                  <div className="flex w-full justify-start">
+                    {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    {record.name}
                   </div>
-                ),
-              },
-              {
-                name: 'کد پایگاه',
-                key: 'baseCode',
-                render: (v: any, record: any) => (
-                  <span className=" ">{Number(record.baseCode || 0).toPersianDigits()}</span>
-                ),
-              },
-              {
-                name: 'ظرفیت پایگاه',
-                key: 'capacity',
-                render: (v: any, record: any) => (
-                  <span className=" ">{Number(record.capacity || 0).toPersianDigits()}</span>
-                ),
-              },
-              {
-                name: 'تعداد خدمات ارائه شده',
-                key: 'providedServicesCount',
-                render: (v: any, record: any) => (
-                  <span className=" ">
-                    {Number(record.providedServicesCount || 0).toPersianDigits()}
-                  </span>
                 ),
               },
               {
@@ -109,13 +98,60 @@ const RedHalalBasesList: React.FC<{}> = () => {
                 key: 'location',
               },
               {
-                name: 'مسئول پایگاه',
-                key: 'managerName',
+                name: 'کد پایگاه',
+                key: 'baseCode',
+                render: (v: any, record: any) => <span className=" ">{record.baseCode}</span>,
+              },
+              {
+                name: 'ظرفیت پایگاه',
+                key: 'capacity',
+                render: (v: any, record: any) => <span className=" ">{record.capacity}</span>,
+              },
+              {
+                name: 'تعداد پرسنل',
+                key: 'numberOfPersonnel',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfPersonnel || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
+
+              {
+                name: 'ساعات سرویس',
+                key: 'hoursOfServices',
+              },
+              {
+                name: 'تعداد آمبولانس',
+                key: 'numberOfAvailableAmbulances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableAmbulances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد اتولانس',
+                key: 'numberOfAvailableAutolances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableAutolances || 0).toPersianDigits()}
+                  </span>
+                ),
+              },
+              {
+                name: 'تعداد موتولانس ',
+                key: 'numberOfAvailableMotolances',
+                render: (v: any, record: any) => (
+                  <span className=" ">
+                    {Number(record.numberOfAvailableMotolances || 0).toPersianDigits()}
+                  </span>
+                ),
               },
             ]}
           />
         )}
-      </div> */}
+      </div>
     </fieldset>
   );
 };
