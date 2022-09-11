@@ -32,6 +32,7 @@ import UserManagment from './containers/UserManagment/UserManagment';
 import Arbaeen from './containers/Arbaeen/Arbaeen';
 import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
 import ArbaeenPilgrimsMovingCloud from './containers/Arbaeen/ArbaeenPilgrimsMovingCloud';
+import ArbaeenPilgrimsList from './containers/Arbaeen/ArbaeenPilgrimsList';
 
 const routes: IRoute[] = [
   {
@@ -786,6 +787,13 @@ const routes: IRoute[] = [
             link: '/dashboard/arbaeen/province',
             roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
             main: ArbaeenProvince,
+          },
+          {
+            keyIndex: '4',
+            title: 'لیست زائرین',
+            link: '/dashboard/arbaeen/PilgrimsList',
+            roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
+            main: ArbaeenPilgrimsList,
           },
         ],
         roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
