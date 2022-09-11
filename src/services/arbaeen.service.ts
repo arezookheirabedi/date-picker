@@ -286,6 +286,11 @@ function getBorderListById() {
   };
   return Promise.resolve(mock);
 }
+function getHelelList(params: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-helalahmars?lang=fa`, params, {
+    ...config,
+  });
+}
 
 const arbaeenService = {
   getBorderListById,
@@ -318,6 +323,7 @@ const arbaeenService = {
   getEmergency,
   getParking,
   getRedCrescent,
+  getHelelList,
 };
 
 export default arbaeenService;
