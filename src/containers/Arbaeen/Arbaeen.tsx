@@ -26,6 +26,7 @@ import OverviewRegisterVaccinesInfo from 'src/components/Arbaeen/public/Overview
 import OverviewLatestVaccinesInfo from 'src/components/Arbaeen/public/OverviewLatestVaccinesInfo';
 import OverviewOfExistBorder from 'src/components/Arbaeen/public/OverviewOfExistBorder';
 import OverviewPilgrimAge from 'src/components/Arbaeen/public/OverviewPilgrimAge';
+import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
 // import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
@@ -64,9 +65,9 @@ const Arbaeen = () => {
       <ListOfTransportationAxesStatus />
       {/* <ListOfTheBusiestBorderCrossings /> */}
       <MokebList />
+      <RedHalalBasesList />
       <EmergencyList />
       <ParckingList />
-      {/* <RedHalalBasesList /> */}
       {/* <TheLargestNumberOfOriginPilgrimsCountriesList /> */}
 
       {/*

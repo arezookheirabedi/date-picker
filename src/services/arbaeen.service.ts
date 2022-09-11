@@ -286,7 +286,18 @@ function getBorderListById() {
   };
   return Promise.resolve(mock);
 }
-
+function getHelelList(params: any = {}, config?: any) {
+  return request.build().get(`/api/v1/arbaeen/ar-helalahmars?lang=fa`, params, {
+    ...config,
+  });
+}
+function pilgrimsInquiryByNationalId({nationalId, ...params}: any = {}, config?: any) {
+  return request
+    .build()
+    .get(`/api/v1/arbaeen/reports/qr-code/national-id/${nationalId}?lang=fa`, params, {
+      ...config,
+    });
+}
 const arbaeenService = {
   getBorderListById,
   arbaeenGetAll,
@@ -318,6 +329,8 @@ const arbaeenService = {
   getEmergency,
   getParking,
   getRedCrescent,
+  getHelelList,
+  pilgrimsInquiryByNationalId,
 };
 
 export default arbaeenService;
