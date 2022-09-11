@@ -7,7 +7,8 @@ import {Link as InnerLink} from "react-scroll";
 import Svg from "../../../components/Svg";
 
 // normal images
-import logoDepartmentInterior from "../../../assets/images/logos/logo-department-interior.png";
+// import logoDepartmentInterior from "../../../assets/images/logos/logo-department-interior.png";
+import logoDepartmentInterior from "../../../assets/images/logos/logo-department-interior-white.png";
 
 import NavigationMobile from "./NavigationMobile";
 
@@ -66,7 +67,7 @@ const Navigation = () => {
           </li>
 
           <li className="u-d-mobile-none">
-            <LinkReactRouter to={EPUBLICROUTE.LOGIN} className="btn btn--black btn--animate">
+            <LinkReactRouter to={EPUBLICROUTE.LOGIN} className="btn btn--white btn--animate">
 
               <LoginLogoSvg/>
               <span>ورود</span>

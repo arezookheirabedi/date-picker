@@ -4,7 +4,7 @@ import arbaeenService from 'src/services/arbaeen.service';
 
 const Polygon: React.FC<any> = ({params}: any) => {
   const [loadingLocal, setLoadingLocal] = useState<boolean>(false);
-  const [loadingPassenger, setLoadingPassenger] = useState<boolean>(false);
+  // const [loadingPassenger, setLoadingPassenger] = useState<boolean>(false);
   const [dataLocal, setDataLocal] = useState<any>({
     average: null,
     maximum: null,
@@ -23,48 +23,62 @@ const Polygon: React.FC<any> = ({params}: any) => {
     setLoadingLocal(true);
     try {
       const {data: polygonData} = await arbaeenService.getPolygonData(param);
-      setDataLocal(polygonData);
+      const movingPassenger = polygonData.filter((item: any) => {
+        return item.passenger === true;
+      })
+
+      const nativePassenger = polygonData.filter((item: any) => {
+        return item.passenger === false;
+      })
+
+      if (nativePassenger.length) {
+        setDataLocal(nativePassenger[0]);
+      }
+
+      if (movingPassenger.length) {
+        setDataPassenger(movingPassenger[0]);
+      }
+
     } catch (err) {
       console.log(err);
     } finally {
       setLoadingLocal(false);
     }
   };
-  const fetchPopupDataPassenger = async (param: any) => {
-    setLoadingPassenger(true);
-    try {
-      const {data: polygonData} = await arbaeenService.getPolygonData(param);
-      setDataPassenger(polygonData);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoadingPassenger(false);
-    }
-  };
+  // const fetchPopupDataPassenger = async (param: any) => {
+  //   setLoadingPassenger(true);
+  //   try {
+  //     const {data: polygonData} = await arbaeenService.getPolygonData(param);
+  //     setDataPassenger(polygonData);
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setLoadingPassenger(false);
+  //   }
+  // };
 
   useEffect(() => {
     fetchPopupDataLocal({
-      coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]})),
-      isPassenger: false,
+      coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]}))
     });
-    fetchPopupDataPassenger({
-      coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]})),
-      isPassenger: true,
-    });
+    // fetchPopupDataPassenger({
+    //   coordinates: [...params.geometry.coordinates[0]].map(x => ({x: x[0], y: x[1]})),
+    //   isPassenger: true,
+    // });
   }, [params]);
 
   return (
     <>
-      {loadingLocal || loadingPassenger ? (
+      {loadingLocal ? (
         <div className="flex items-center text-xs">
-          <Loading />
+          <Loading/>
           <span>درحال دریافت اطلاعات</span>
         </div>
       ) : (
         <>
           <div className="w-full max-h-60 overflow-y-auto px-2 custom-scrollbar-gray ">
             <div className="flex item-center justify-start items-center border-b border-gray-300 pb-2 pt-1">
-              <span className="text-xs ml-2 text-gray-500">مقیم : </span>
+              <span className="text-xs ml-2 text-gray-500">زائر مقیم: </span>
             </div>
 
             {!dataLocal.average && (
@@ -75,7 +89,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
 
             {dataLocal.average && (
               <div className="flex justify-start items-center border-b border-gray-300 pb-2 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد متوسط : </span>
+                <span className="text-xs ml-2 text-lime-600">متوسط تجمع: </span>
                 <span className="text-xs text-lime-600">
                   {(dataLocal.average || '-').toPersianDigits()}
                 </span>
@@ -83,7 +97,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
             )}
             {dataLocal.maximum && (
               <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
-                <span className="text-xs ml-2  text-lime-600">تعداد بیشترین : </span>
+                <span className="text-xs ml-2  text-lime-600">بیشترین تجمع: </span>
                 <span className="text-xs text-lime-600">
                   {(dataLocal.maximum || '-').commaSeprator().toPersianDigits()}
                 </span>
@@ -91,8 +105,8 @@ const Polygon: React.FC<any> = ({params}: any) => {
             )}
 
             {dataLocal.minimum && (
-              <div className="flex justify-start items-center  pb-1 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد کمترین : </span>
+              <div className="flex justify-start items-center border-b border-gray-300  pb-1 pt-2">
+                <span className="text-xs ml-2 text-lime-600">کمترین تجمع: </span>
                 <span className="text-xs text-lime-600">
                   {(dataLocal.minimum || '-').commaSeprator().toPersianDigits()}
                 </span>
@@ -101,7 +115,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
 
             {dataLocal.sum && (
               <div className="flex justify-start items-center  pb-1 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد مجموع : </span>
+                <span className="text-xs ml-2 text-lime-600">مجموع زائران:  </span>
                 <span className="text-xs text-lime-600">
                   {(dataLocal.sum || '-').commaSeprator().toPersianDigits()}
                 </span>
@@ -109,7 +123,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
             )}
 
             <div className="mt-4 flex item-center justify-start items-center border-b border-gray-300 pb-2 pt-1">
-              <span className="text-xs ml-2 text-gray-500">زائر : </span>
+              <span className="text-xs ml-2 text-gray-500">زائر در حال حرکت: </span>
             </div>
 
             {!dataPassenger.average && (
@@ -120,7 +134,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
 
             {dataPassenger.average && (
               <div className="flex justify-start items-center border-b border-gray-300 pb-2 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد متوسط : </span>
+                <span className="text-xs ml-2 text-lime-600">متوسط تجمع: </span>
                 <span className="text-xs text-lime-600">
                   {(dataPassenger.average || '-').commaSeprator().toPersianDigits()}
                 </span>
@@ -128,7 +142,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
             )}
             {dataPassenger.maximum && (
               <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
-                <span className="text-xs ml-2  text-lime-600">تعداد بیشترین : </span>
+                <span className="text-xs ml-2  text-lime-600">بیشترین تجمع: </span>
                 <span className="text-xs text-lime-600">
                   {(dataPassenger.maximum || '-').commaSeprator().toPersianDigits()}
                 </span>
@@ -136,8 +150,8 @@ const Polygon: React.FC<any> = ({params}: any) => {
             )}
 
             {dataPassenger.minimum && (
-              <div className="flex justify-start items-center  pb-1 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد کمترین : </span>
+              <div className="flex justify-start items-center border-b border-gray-300 pb-1 pt-2">
+                <span className="text-xs ml-2 text-lime-600">کمترین تجمع: </span>
                 <span className="text-xs text-lime-600">
                   {(dataPassenger.minimum || '-').commaSeprator().toPersianDigits()}
                 </span>
@@ -146,7 +160,7 @@ const Polygon: React.FC<any> = ({params}: any) => {
 
             {dataPassenger.sum && (
               <div className="flex justify-start items-center  pb-1 pt-2">
-                <span className="text-xs ml-2 text-lime-600">تعداد مجموع : </span>
+                <span className="text-xs ml-2 text-lime-600">مجموع زائران:  </span>
                 <span className="text-xs text-lime-600">
                   {(dataPassenger.sum || '-').commaSeprator().toPersianDigits()}
                 </span>
