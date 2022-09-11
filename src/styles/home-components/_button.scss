@@ -76,6 +76,24 @@
     }
   
   }
+  &--white {
+    background-color: transparent;
+    color: $color-white;
+    border: 2px solid $color-white !important;
+    transition: all 0.2s ease-out;
+    &:hover {
+      background-color: #242121;
+      //color: $color-white;
+      //border: 2px solid transparent !important;
+    }
+
+    //&:hover svg path {
+    //  fill: $color-black;
+    //}
+
+  }
+
+
   &--inline{
     width:100%
   }

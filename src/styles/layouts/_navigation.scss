@@ -1,5 +1,6 @@
 .navigation {
   direction: rtl;
+  color: white !important;
   &__mobile-li{
     display: none !important;
   }
@@ -94,22 +95,24 @@
   width: 100%;
   margin-top: 3.2rem;
   height: 9rem;
-  background: rgb(255, 255, 255);
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.022846638655462215) 22%,
-    rgba(255, 255, 255, 0.5) 25%,
-    rgba(255, 255, 255, 0.7) 30%,
-    rgba(255, 255, 255, 0.8) 35%,
-    rgba(255, 255, 255, 0.85) 40%,
-    rgba(255, 255, 255, 0.82) 50%,
-    rgba(255, 255, 255, 0.84) 60%,
-    rgba(255, 255, 255, 0.8491771708683473) 70%,
-    rgba(255, 255, 255, 0.8995973389355743) 80%,
-    rgba(255, 255, 255, 0.9472163865546218) 90%,
-    rgba(255, 255, 255, 1) 100%
-  );
+  background: #2f2b2b;
+  opacity: 0.8;
+  //background: rgb(255, 255, 255);
+  //background: radial-gradient(
+  //  circle,
+  //  rgba(255, 255, 255, 0) 0%,
+  //  rgba(255, 255, 255, 0.022846638655462215) 22%,
+  //  rgba(255, 255, 255, 0.5) 25%,
+  //  rgba(255, 255, 255, 0.7) 30%,
+  //  rgba(255, 255, 255, 0.8) 35%,
+  //  rgba(255, 255, 255, 0.85) 40%,
+  //  rgba(255, 255, 255, 0.82) 50%,
+  //  rgba(255, 255, 255, 0.84) 60%,
+  //  rgba(255, 255, 255, 0.8491771708683473) 70%,
+  //  rgba(255, 255, 255, 0.8995973389355743) 80%,
+  //  rgba(255, 255, 255, 0.9472163865546218) 90%,
+  //  rgba(255, 255, 255, 1) 100%
+  //);
 
   @include respond(r415){
     background: rgb(255, 255, 255);
@@ -195,7 +198,9 @@
     text-align: center;
     position: relative;
     margin-top: -14.2rem;
-    background: rgba(255, 255, 255, 0.5);
+    //background: rgba(255, 255, 255, 0.5);
+    background: #2f2b2b;
+    //opacity: 0.8;
   }
 
   &__logo {

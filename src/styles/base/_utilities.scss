@@ -30,7 +30,7 @@
 }
 
 .anchor-underline {
-  border-bottom: 2px solid $color-black;
+  border-bottom: 2px solid $color-white;
   padding-bottom: 0.2rem;
 }
 
@@ -133,6 +133,10 @@
 
 .color-primary {
   color: #57687a;
+}
+
+.u-color-white{
+  color: white !important;
 }
 
 .u-color-red {

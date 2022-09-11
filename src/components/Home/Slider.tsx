@@ -7,6 +7,8 @@ import CitizenshipProfile from "./slider/CitizenshipProfile";
 import GuildManagement from "./slider/GuildManagement";
 import PassengerManagement from "./slider/PassengerManagement";
 import TransportManagement from "./slider/TransportManagement";
+import BakeryManagement from "./slider/BakeryManagement";
+import ArbaeenManagement from "./slider/ArbaeenManagement";
 
 const slides = [
   {
@@ -24,6 +26,14 @@ const slides = [
   {
     key: uuidv4(),
     content: <div><CitizenshipProfile/></div>
+  },
+  {
+    key: uuidv4(),
+    content: <div><BakeryManagement/></div>
+  },
+  {
+    key: uuidv4(),
+    content: <div><ArbaeenManagement /></div>
   }
 ];
 const Slider = () => {
