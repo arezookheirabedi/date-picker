@@ -291,7 +291,13 @@ function getHelelList(params: any = {}, config?: any) {
     ...config,
   });
 }
-
+function pilgrimsInquiryByNationalId({nationalId, ...params}: any = {}, config?: any) {
+  return request
+    .build()
+    .get(`/api/v1/arbaeen/reports/qr-code/national-id/${nationalId}?lang=fa`, params, {
+      ...config,
+    });
+}
 const arbaeenService = {
   getBorderListById,
   arbaeenGetAll,
@@ -324,6 +330,7 @@ const arbaeenService = {
   getParking,
   getRedCrescent,
   getHelelList,
+  pilgrimsInquiryByNationalId,
 };
 
 export default arbaeenService;
