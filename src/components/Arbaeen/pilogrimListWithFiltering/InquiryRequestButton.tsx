@@ -42,7 +42,6 @@ const InquiryRequestButton: React.FC<{}> = () => {
   };
 
   const openModal: () => void = () => {
-    debugger;
     setIsOpen(true);
   };
 
