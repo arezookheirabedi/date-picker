@@ -6,7 +6,7 @@ import Dots from "./Dots";
 
 let interval: any = null;
 
-export default function Example({time = 3000, slides: sourceSlides = []}) {
+export default function Example({time = 5000, slides: sourceSlides = []}) {
   const ref = useRef();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [state, setState] = useState({
