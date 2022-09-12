@@ -45,7 +45,10 @@ const InquiryForm: React.FC<IProps> = ({openModal, setData}) => {
     } catch (errors: any) {
       reset();
       if (errors.errors && errors.errors.length) {
-        cogoToast.error('خطا در ارسال اطلاعات');
+        cogoToast.error(errors.errors[0].message || 'خطا در ارسال اطلاعات');
+      }
+      if (errors.message) {
+        cogoToast.error(errors.message || '');
       }
     } finally {
       setSubmitted(false);
@@ -72,7 +75,7 @@ const InquiryForm: React.FC<IProps> = ({openModal, setData}) => {
             className="flex w-full items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-sm text-white rtl:space-x-reverse"
             style={{backgroundColor: !formState.isValid ? 'gray' : '#175A76'}}
           >
-            <span>{!submitted ? 'اعمال فیلتر' : <DotLoading />}</span>
+            <span>{!submitted ? 'جستجوی زائر' : <DotLoading />}</span>
           </button>
         </div>
       </div>
