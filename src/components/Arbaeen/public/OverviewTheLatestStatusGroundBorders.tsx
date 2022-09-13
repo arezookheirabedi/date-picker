@@ -40,10 +40,10 @@ const OverviewTheLatestStatusGroundBorders = () => {
           name: item.regionName || 'نامشخص',
           numberOfPassengers: item.numberOfPassengers || 'نامشخص',
           numberOfSamah: item.numberOfSamah || 'نامشخص',
-          numberOfPassengersIn50KM: item.numberOfPassengersIn50KM || 0,
-          numberOfPassengersIn100KM: item.numberOfPassengersIn100KM || 0,
-          numberOfPassengersIn150KM: item.numberOfPassengersIn150KM || 0,
-          numberOfPassengersIn200KM: item.numberOfPassengersIn200KM || 0,
+          numberOfPassengersIn50KM: item.numberOfPassengersIn50KM?.countOfSamah || 0,
+          numberOfPassengersIn100KM: item.numberOfPassengersIn100KM?.countOfSamah || 0,
+          numberOfPassengersIn150KM: item.numberOfPassengersIn150KM?.countOfSamah || 0,
+          numberOfPassengersIn200KM: item.numberOfPassengersIn200KM?.countOfSamah || 0,
         });
       });
       setDataSet([...normalizedData]);
@@ -64,7 +64,7 @@ const OverviewTheLatestStatusGroundBorders = () => {
     fetcher();
     setInterval(() => {
       fetcher();
-    }, 60000 * 5)
+    }, 60000 * 5);
     return () => {
       source.cancel('Operation canceled by the user.');
     };
@@ -82,7 +82,7 @@ const OverviewTheLatestStatusGroundBorders = () => {
         <div className="flex items-center justify-start mb-10 mt-5 px-8">
           <div className="w-full">
             <div className="flex flex-row  items-center justify-start  text-xs">
-              <img src={Information} className="inline " width="18" height="18" alt=""/>
+              <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">نمایش آخرین وضعیت نقاط مرزی در یک ساعت اخیر</span>
             </div>
           </div>
@@ -90,7 +90,7 @@ const OverviewTheLatestStatusGroundBorders = () => {
         {error && !loading ? (
           <div className="p-40">
             <div className="text-red-500">{error}</div>
-            <RetryButton setQuery={setQuery}/>
+            <RetryButton setQuery={setQuery} />
           </div>
         ) : (
           <Table
