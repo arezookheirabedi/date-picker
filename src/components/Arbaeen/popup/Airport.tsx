@@ -25,7 +25,6 @@ const Airport: React.FC<any> = ({params}: any) => {
     exitingCount: null,
     enteringCount: null
   })
-  console.log('data => ', data)
 
   const fetchPopupData = async (params: any) => {
     setLoading(true);
@@ -109,7 +108,7 @@ const Airport: React.FC<any> = ({params}: any) => {
                 <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
                   <span className="text-xs ml-2 text-lime-600">تعداد مسافران در شعاع ۵۰ کیلومتری : </span>
                   <span
-                    className="text-xs text-lime-600">{data.numberOfPassengersIn50KM ? data.numberOfPassengersIn50KM.commaSeprator().toPersianDigits() : '-'}</span>
+                    className="text-xs text-lime-600">{data.numberOfPassengersIn50KM ? data.numberOfPassengersIn50KM?.countOfSamah.commaSeprator().toPersianDigits() : '-'}</span>
                 </div>
               )
             }
@@ -119,7 +118,7 @@ const Airport: React.FC<any> = ({params}: any) => {
                 <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
                   <span className="text-xs ml-2 text-lime-600">تعداد مسافران در شعاع ۱۰۰ کیلومتری : </span>
                   <span
-                    className="text-xs text-lime-600">{data.numberOfPassengersIn100KM ? data.numberOfPassengersIn100KM.commaSeprator().toPersianDigits() : '-'}</span>
+                    className="text-xs text-lime-600">{data.numberOfPassengersIn100KM ? data.numberOfPassengersIn100KM?.countOfSamah.commaSeprator().toPersianDigits() : '-'}</span>
                 </div>
               )
             }
@@ -129,7 +128,7 @@ const Airport: React.FC<any> = ({params}: any) => {
                 <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
                   <span className="text-xs ml-2 text-lime-600">تعداد مسافران در شعاع ۱۵۰ کیلومتری : </span>
                   <span
-                    className="text-xs text-lime-600">{data.numberOfPassengersIn150KM ? data.numberOfPassengersIn150KM.commaSeprator().toPersianDigits() : '-'}</span>
+                    className="text-xs text-lime-600">{data.numberOfPassengersIn150KM ? data.numberOfPassengersIn150KM?.countOfSamah.commaSeprator().toPersianDigits() : '-'}</span>
                 </div>
               )
             }
@@ -139,7 +138,7 @@ const Airport: React.FC<any> = ({params}: any) => {
                 <div className="flex  justify-start items-center border-b border-gray-300 pb-2 pt-2">
                   <span className="text-xs ml-2 text-lime-600">تعداد مسافران در شعاع ۲۰۰ کیلومتری : </span>
                   <span
-                    className="text-xs text-lime-600">{data.numberOfPassengersIn200KM ? data.numberOfPassengersIn200KM.commaSeprator().toPersianDigits() : '-'}</span>
+                    className="text-xs text-lime-600">{data.numberOfPassengersIn200KM ? data.numberOfPassengersIn200KM?.countOfSamah.commaSeprator().toPersianDigits() : '-'}</span>
                 </div>
               )
             }

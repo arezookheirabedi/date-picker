@@ -38,7 +38,7 @@ import mapDrawIcon from '../../../assets/images/icons/map-draw.svg';
 
 import Road from '../popup/Road';
 import Mokeb from '../popup/Mokeb';
-import Border from '../popup/‌Border';
+import Border from '../popup/Border';
 import Airport from '../popup/Airport';
 import Emergency from '../popup/Emergency';
 import Parking from '../popup/Parking';
