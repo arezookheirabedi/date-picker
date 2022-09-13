@@ -100,7 +100,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
       firstName: userData && userData.firstName ? userData.firstName : null,
       lastName: userData && userData.lastName ? userData.lastName : null,
       locked: false,
-      mobileSet: userData && userData.mobileSet ? userData.mobileSet : null,
+      mobileSet: userData && userData.mobileSet ? userData.mobileSet[0] : null,
       nationalId: userData && userData.nationalId ? userData.nationalId : null,
       password: userData && userData.password ? userData.password : null,
       username: userData && userData.username ? userData.username : null,
