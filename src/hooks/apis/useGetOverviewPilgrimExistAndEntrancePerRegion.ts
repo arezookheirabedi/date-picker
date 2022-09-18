@@ -13,9 +13,21 @@ export default function useGetOverviewPilgrimExistAndEntrancePerRegion(query: an
   const [data, setData] = useState<any>([]);
   const {CancelToken} = axios;
   const source = CancelToken.source();
-
+  /* <div className="flex w-full justify-center">
+                        <span className="text-gray-500 whitespace-normal ">
+                          {toPersianDigit(
+                            dayjs(record.lastModifiedDate).calendar('jalali').format('YYYY/MM/DD')
+                          )}
+                        </span>
+                      </div>
+                      <div className="pt-3">
+                        <span className="text-gray-500 whitespace-normal">
+                          {toPersianDigit(
+                            dayjs(record.lastModifiedDate).calendar('jalali').format('HH:mm')
+                          )}
+                        </span> */
   const getTime = (value: string) => {
-    const date = toPersianDigit(dayjs(value).calendar('jalali').format('YYYY/MM/DD'));
+    const date = toPersianDigit(dayjs(value).calendar('jalali').format('YYYY/MM/DD HH:mm'));
     return date;
   };
 
