@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import AccessDenied from 'src/components/Access/AccessDenied';
 import OverviewMap from 'src/components/Arbaeen/province/OverviewMap';
 import OverviewOfExistBordersProvince from 'src/components/Arbaeen/province/OverviewOfExistBordersProvince';
@@ -15,10 +15,10 @@ import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 import OverviewPilgrim from 'src/components/Arbaeen/province/OverviewPilgrim';
 import OverviewPligrimTripType from 'src/components/Arbaeen/province/OverviewPligrimTripType';
 import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/province/OverviewPilgrimVaccineStatus';
-import TheLatestOverviewPilgrimVaccineStatusProvine
-  from 'src/components/Arbaeen/province/TheLatestOverviewPilgrimVaccineStatusProvine';
+import TheLatestOverviewPilgrimVaccineStatusProvine from 'src/components/Arbaeen/province/TheLatestOverviewPilgrimVaccineStatusProvine';
 
 const ArbaeenProvince = () => {
+  const history = useHistory();
   const location = useLocation();
   const [cityTitle, setCityTitle] = useState('تهران');
 
@@ -33,6 +33,8 @@ const ArbaeenProvince = () => {
     });
     if (existsCity) {
       setCityTitle(provinceName);
+    } else {
+      history.push('/dashboard/arbaeen/province');
     }
   }, [location.search]);
   return (
@@ -44,47 +46,35 @@ const ArbaeenProvince = () => {
         selectDefault
       />
 
-      {!hasProvinceResources && <AccessDenied id="arborean-overview"/>}
+      {!hasProvinceResources && <AccessDenied id="arborean-overview" />}
       {hasProvinceResources && (
         <>
-          <OverviewPilgrim cityTitle={cityTitle}/>
-          <OverviewPligrimTripType cityTitle={cityTitle}/>
-          <OverviewPilgrimVaccineStatus cityTitle={cityTitle}/>
-          <TheLatestOverviewPilgrimVaccineStatusProvine cityTitle={cityTitle}/>
-          <PilgrimsList cityTitle={cityTitle}/>
-          <OverviewOfExistBordersProvince cityTitle={cityTitle}/>
-          <OverviewPligrimAgeProvince cityTitle={cityTitle}/>
-          <OverviewPilgrimGenderByProvince cityTitle={cityTitle}/>
-          <ThePligrimsCitiesList cityTitle={cityTitle}/>
+          <OverviewPilgrim cityTitle={cityTitle} />
+          <OverviewPligrimTripType cityTitle={cityTitle} />
+          <OverviewPilgrimVaccineStatus cityTitle={cityTitle} />
+          <TheLatestOverviewPilgrimVaccineStatusProvine cityTitle={cityTitle} />
+          <PilgrimsList cityTitle={cityTitle} />
+          <OverviewOfExistBordersProvince cityTitle={cityTitle} />
+          <OverviewPligrimAgeProvince cityTitle={cityTitle} />
+          <OverviewPilgrimGenderByProvince cityTitle={cityTitle} />
+          <ThePligrimsCitiesList cityTitle={cityTitle} />
           <fieldset className=" rounded-xl border py-2 px-4 text-center">
             <div className=" flex justify-center">
               <a href="https://irancell.ir" target="_blank" rel="noreferrer">
-                <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell.png`} className="w-12 ml-1" alt=""/>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell.png`}
+                  className="w-12 ml-1"
+                  alt=""
+                />
               </a>
               <a href="https://irancell.ir" target="_blank" rel="noreferrer">
-                <img src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell-labs.png`} className="w-8 ml-1"
-                     alt=""/>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/logos/irancell/irancell-labs.png`}
+                  className="w-8 ml-1"
+                  alt=""
+                />
               </a>
-              {/* <div className="flex items-center justify-start"> */}
-              {/*  <img src={Irancell} className="inline" alt="irancell-logo" /> */}
-              {/*  <span className="px-2">باهمکاری ایرانسل</span> */}
-              {/* </div> */}
-              {/* <div> */}
-              {/*  <img src={Vasl} className="inline " alt="vasl-logo" /> */}
-              {/* </div> */}
             </div>
-
-            {/*
-            <div className=" flex justify-between">
-              <div className="flex items-center justify-start">
-                <img src={Irancell} className="inline" alt="irancell-logo" />
-                <span className="px-2">باهمکاری ایرانسل</span>
-              </div>
-              <div>
-                <img src={Vasl} className="inline " alt="vasl-logo" />
-              </div>
-            </div>
-            */}
           </fieldset>
         </>
       )}
