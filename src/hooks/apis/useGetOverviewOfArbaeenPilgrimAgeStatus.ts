@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
 import {sideCities} from 'src/helpers/utils';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {ECOLOR} from 'src/constants/color.enum';
 import {EERRORS} from '../../constants/errors.enum';
 
@@ -303,7 +303,7 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
     getIt(query);
     setInterval(() => {
       getIt(query);
-    },(60000 * 5))
+    }, 60000 * 5);
     // eslint-disable-next-line consistent-return
     return () => {
       setDataCount(initialDataCount);
@@ -312,7 +312,6 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
     };
   }, [query]);
   const location = useLocation();
-  const history = useHistory();
   useEffect(() => {
     if (!hasProvince) {
       return;
@@ -326,10 +325,8 @@ export default function useGetOverviewOfArbaeenPilgrimAgeStatus(
     if (existsCity) {
       setInterval(() => {
         getIt({...query, province: provinceName});
-      },(60000 * 5))
+      }, 60000 * 5);
       getIt({...query, province: provinceName});
-    } else {
-      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {

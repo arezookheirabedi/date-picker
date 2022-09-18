@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
-import {useHistory, useLocation} from 'react-router-dom';
 import {sideCities} from 'src/helpers/utils';
+import {useLocation} from 'react-router-dom';
 
 export interface IInitialCount {
   countFemale: number;
@@ -136,7 +136,7 @@ export default function useGetArbaeenCountDataOnRegisterTime(
     getIt(query);
     setInterval(() => {
       getIt(query);
-    },(60000 * 5))
+    }, 60000 * 5);
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialCount);
@@ -145,7 +145,6 @@ export default function useGetArbaeenCountDataOnRegisterTime(
   }, []);
 
   const location = useLocation();
-  const history = useHistory();
   useEffect(() => {
     if (!hasProvince) {
       return;
@@ -159,10 +158,8 @@ export default function useGetArbaeenCountDataOnRegisterTime(
     if (existsCity) {
       setInterval(() => {
         getIt({...query, province: provinceName});
-      },(60000 * 5))
+      }, 60000 * 5);
       getIt({...query, province: provinceName});
-    } else {
-      history.go(-1);
     }
     // eslint-disable-next-line consistent-return
     return () => {
