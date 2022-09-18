@@ -64,12 +64,12 @@ const initialًCityResourceOptions = [
 ];
 
 const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
-  actionType,
-  actionTitle,
-  setShowModal,
-  shouldRefresh,
-  userData,
-}) => {
+                                                       actionType,
+                                                       actionTitle,
+                                                       setShowModal,
+                                                       shouldRefresh,
+                                                       userData,
+                                                     }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [provinceOptions, setProvinceOptions] = useState<any>(initialProvinceOptions);
   const [ruleOptions, setRuleOptions] = useState<any>(initialًRuleOptions);
@@ -184,7 +184,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
     const extraData = {
       province: provinceTitleInput ? provinceTitleInput.title : null,
       city: cityTitleInput ? cityTitleInput.title : null,
-      mobileSet: [values.mobileSet],
+      mobileSet: values.mobileSet ? [values.mobileSet] : null,
       roles: valuesOfRole,
       resources: [tagResources, provinceResources, cityResources],
       nationalId: values.nationalId ? values.nationalId : null,
@@ -275,12 +275,12 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
       const normalizedData: any[] = [];
       const {data} = (await fsServices.getCities(provinceCode)) as any;
       data[0] &&
-        data[0].cities?.forEach((item: any) => {
-          normalizedData.push({
-            title: item.name,
-            value: item.cityCode,
-          });
+      data[0].cities?.forEach((item: any) => {
+        normalizedData.push({
+          title: item.name,
+          value: item.cityCode,
         });
+      });
       setCityOptions(() => {
         return [
           {
@@ -506,7 +506,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
                   selectedValue={userData.cityCode}
                 />
               ) : (
-                <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput} />
+                <SingleSelectInModal options={cityOptions} setValueOption={setCityTitleInput}/>
               )}
               {/* <input id="national-code" className="w-full border-solid border border-gray-400 rounded pr-4 py-1 h-9 text-sm" */}
               {/*       type="text"/> */}
@@ -674,7 +674,7 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
               className="button button--primary px-5 justify-start sm:text-xs sm:px-0 sm:justify-center md:text-sm  mx-auto w-52 mb-12"
             >
               {actionType === 'add' && (
-                <span>{!isLoading ? `ثبت ${actionTitle}` : <DotLoading />}</span>
+                <span>{!isLoading ? `ثبت ${actionTitle}` : <DotLoading/>}</span>
               )}
               {actionType === 'update' && ` ویرایش ${actionTitle}`}
             </button>
