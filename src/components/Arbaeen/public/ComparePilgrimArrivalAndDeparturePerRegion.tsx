@@ -168,6 +168,7 @@ const optionChart = {
 
 const ComparePilgrimArrivalAndDeparturePerRegion = () => {
   const [query, setQuery] = useState({
+    from: '2022-09-07T00:00:00',
     retry: false,
     borderIdList: [250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001],
   });
@@ -183,7 +184,7 @@ const ComparePilgrimArrivalAndDeparturePerRegion = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-1/2 justify-between">
-            <div className="align-center flex justify-between">
+            <div className="align-center flex justify-between w-1/2">
               <Select
                 addNullValue={[
                   250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001,
