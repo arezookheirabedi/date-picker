@@ -155,6 +155,7 @@ function getEntranceAxndExistanceRegion(params: any = [], config?: any) {
   return request.build().get(
     `/api/v1/arbaeen/region-statistics/group-by-submit-time?lang=fa&${qs.stringify({
       regionIdList: params.borderIdList,
+      from: params.from,
     })}`,
     {},
     {
