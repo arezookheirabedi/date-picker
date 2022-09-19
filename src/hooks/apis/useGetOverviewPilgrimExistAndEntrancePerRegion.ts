@@ -179,10 +179,11 @@ regionId: 500002, regionName: "پایانه مرزی تمرچین",
 
   useEffect(() => {
     getIt(query);
-    setInterval(() => {
+    const id = setInterval(() => {
       getIt(query);
     }, 60000 * 5);
     return () => {
+      clearInterval(id);
       setData([]);
       source.cancel('Operation canceled by the user.');
     };
