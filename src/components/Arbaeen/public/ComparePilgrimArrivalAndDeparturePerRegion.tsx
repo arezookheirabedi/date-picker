@@ -201,19 +201,19 @@ const ComparePilgrimArrivalAndDeparturePerRegion = () => {
               <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR0}} />
-                  <span> گذرگاه &nbsp;{EREGION.GHASRSHIRIN}</span>
+                  <span>گذرگاه &nbsp;&nbsp;&nbsp;{EREGION.MEHRAN}</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
-                  <span> گذرگاه &nbsp;{EREGION.KHORAMSHAR}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
                   <span>{EREGION.PAYANE_MEHRAN}</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
+                  <span> {EREGION.PAYANE_SHALAMCHE}</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
-                  <span>گذرگاه &nbsp;&nbsp;&nbsp;{EREGION.MEHRAN}</span>
+                  <span> گذرگاه &nbsp;{EREGION.KHORAMSHAR}</span>
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
@@ -221,20 +221,21 @@ const ComparePilgrimArrivalAndDeparturePerRegion = () => {
                 </div>
                 <div className="inline-flex flex-col justify-center items-center space-y-2">
                   <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
+                  <span> گذرگاه &nbsp;{EREGION.GHASRSHIRIN}</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
+                  <span> {EREGION.PAYANE_KHOSRAVI}</span>
+                </div>
+                <div className="inline-flex flex-col justify-center items-center space-y-2">
+                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
                   <span> {EREGION.PAYANE_BASHMAGH}</span>
                 </div>
               </div>
-              <div className="inline-flex flex-col justify-center items-center space-y-2">
-                <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
-                <span> {EREGION.PAYANE_KHOSRAVI}</span>
-              </div>
-              <div className="inline-flex flex-col justify-center items-center space-y-2">
-                <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
-                <span> {EREGION.PAYANE_TAMARCHIN}</span>
-              </div>
+
               <div className="inline-flex flex-col justify-center items-center space-y-2">
                 <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR8}} />
-                <span> {EREGION.PAYANE_SHALAMCHE}</span>
+                <span> {EREGION.PAYANE_TAMARCHIN}</span>
               </div>
             </div>
           </div>

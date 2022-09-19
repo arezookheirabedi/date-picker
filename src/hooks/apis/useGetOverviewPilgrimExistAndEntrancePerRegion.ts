@@ -88,37 +88,39 @@ regionId: 500002, regionName: "پایانه مرزی تمرچین",
 
           series: [
             {
-              name: EREGION.GHASRSHIRIN,
+              name: EREGION.MEHRAN,
               marker: {
                 fillColor: 'transparent',
                 lineColor: ECOLOR.COLOR0,
               },
-              data: [...ghasrshirin],
-            },
-            {
-              name: EREGION.KHORAMSHAR,
-              marker: {
-                fillColor: 'transparent',
-                lineColor: ECOLOR.COLOR1,
-              },
-              data: [...khoramshahr],
+              data: [...mehran],
             },
             {
               name: EREGION.PAYANE_MEHRAN,
               marker: {
                 fillColor: 'transparent',
-                lineColor: ECOLOR.COLOR2,
+                lineColor: ECOLOR.COLOR1,
               },
               data: [...pMehran],
             },
             {
-              name: EREGION.MEHRAN,
+              name: EREGION.PAYANE_SHALAMCHE,
+              marker: {
+                fillColor: 'transparent',
+                lineColor: ECOLOR.COLOR2,
+              },
+              data: [...pShalamche],
+            },
+
+            {
+              name: EREGION.KHORAMSHAR,
               marker: {
                 fillColor: 'transparent',
                 lineColor: ECOLOR.COLOR3,
               },
-              data: [...mehran],
+              data: [...khoramshahr],
             },
+
             {
               name: EREGION.PAYANE_CHAZABE,
               marker: {
@@ -128,12 +130,12 @@ regionId: 500002, regionName: "پایانه مرزی تمرچین",
               data: [...pChazabe],
             },
             {
-              name: EREGION.PAYANE_BASHMAGH,
+              name: EREGION.GHASRSHIRIN,
               marker: {
                 fillColor: 'transparent',
                 lineColor: ECOLOR.COLOR5,
               },
-              data: [...pBashmagh],
+              data: [...ghasrshirin],
             },
             {
               name: EREGION.PAYANE_KHOSRAVI,
@@ -144,20 +146,21 @@ regionId: 500002, regionName: "پایانه مرزی تمرچین",
               data: [...pKhosravi],
             },
             {
+              name: EREGION.PAYANE_BASHMAGH,
+              marker: {
+                fillColor: 'transparent',
+                lineColor: ECOLOR.COLOR6,
+              },
+              data: [...pBashmagh],
+            },
+
+            {
               name: EREGION.PAYANE_TAMARCHIN,
               marker: {
                 fillColor: 'transparent',
                 lineColor: ECOLOR.COLOR7,
               },
               data: [...pTamarchin],
-            },
-            {
-              name: EREGION.PAYANE_SHALAMCHE,
-              marker: {
-                fillColor: 'transparent',
-                lineColor: ECOLOR.COLOR8,
-              },
-              data: [...pShalamche],
             },
           ],
         };
