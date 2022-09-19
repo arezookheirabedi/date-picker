@@ -13,32 +13,45 @@ interface IProps {
   placeholder?: any;
   setQueryParams: (v: any) => void;
   objectKey: string;
+  addNullValue?: Array<any>;
 }
 
 const Select: React.FC<IProps> = props => {
-  const {options, setQueryParams, objectKey, queryParams} = props;
+  const {
+    options,
+    setQueryParams,
+    objectKey,
+    queryParams,
+    addNullValue = [3, 4, 1, 2, 500001, 500002],
+  } = props;
 
   const [selectedObject, setSelectedObject] = useState<IOption>({value: null, label: 'همه مرزها'});
 
   const getValues = (data: number) => {
-    switch (data) {
-      case 0:
-        return [3, 4, 1, 2, 500001, 500002];
-      case 1:
-        return [1];
-      case 2:
-        return [2];
-      case 3:
-        return [3];
-      case 4:
-        return [4];
-      case 500001:
-        return [500001];
-      case 500002:
-        return [500002];
-      default:
-        return [3, 4, 1, 2, 500001, 500002];
+    if (Number(data) === 0) {
+      return addNullValue;
     }
+
+    return [Number(data)];
+
+    // switch (data) {
+    //   case 0:
+    //     return [3, 4, 1, 2, 500001, 500002];
+    //   case 1:
+    //     return [1];
+    //   case 2:
+    //     return [2];
+    //   case 3:
+    //     return [3];
+    //   case 4:
+    //     return [4];
+    //   case 500001:
+    //     return [500001];
+    //   case 500002:
+    //     return [500002];
+    //   default:
+    //     return [3, 4, 1, 2, 500001, 500002];
+    // }
   };
   useEffect(() => {
     let params = {...queryParams};
@@ -50,7 +63,7 @@ const Select: React.FC<IProps> = props => {
 
   return (
     <Listbox value={selectedObject} onChange={setSelectedObject}>
-      <div className="relative">
+      <div className="relative w-1/2">
         <Listbox.Button className="relative w-full py-2 pr-3 pl-10 text-xs bg-white text-gray-900 border border-gray-200 rounded-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500">
           <span className="block truncate">
             {selectedObject ? selectedObject.label : 'انتخاب کنید'}
