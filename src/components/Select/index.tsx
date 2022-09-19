@@ -63,7 +63,7 @@ const Select: React.FC<IProps> = props => {
 
   return (
     <Listbox value={selectedObject} onChange={setSelectedObject}>
-      <div className="relative w-1/2">
+      <div className="relative w-full">
         <Listbox.Button className="relative w-full py-2 pr-3 pl-10 text-xs bg-white text-gray-900 border border-gray-200 rounded-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500">
           <span className="block truncate">
             {selectedObject ? selectedObject.label : 'انتخاب کنید'}
