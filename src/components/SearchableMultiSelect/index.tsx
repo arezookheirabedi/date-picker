@@ -112,36 +112,48 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
                     filteredTags
                       .slice(0, filteredTags.length > 20 ? 20 : filteredTags.length)
                       ?.map(tag => (
-                        <Combobox.Option
-                          key={tag.key}
-                          className={({active}) =>
-                            `relative cursor-default select-none py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 rtl:text-right ${
-                              active ? 'active-bg-color text-white' : 'text-gray-900'
-                            }`
-                          }
-                          value={tag}
-                        >
-                          {({selected, active}) => (
-                            <>
-                              <span
-                                className={`block truncate ${
-                                  selected ? 'font-medium' : 'font-normal'
-                                }`}
-                              >
-                                {tag.value}
-                              </span>
-                              {selected ? (
-                                <span
-                                  className={`absolute inset-y-0 left-0 flex items-center pl-3 rtl:right-0 rtl:left-auto rtl:pr-3 rtl:pl-0 ${
-                                    active ? 'text-white' : 'chek-color'
-                                  }`}
+                        <Combobox.Options className=" focus:outline-none absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 sm:text-sm">
+                          {filteredTags.length === 0 && query !== '' ? (
+                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                              موردی یافت نشد
+                            </div>
+                          ) : (
+                            filteredTags
+                              .slice(0, filteredTags.length > 20 ? 20 : filteredTags.length)
+                              ?.map(tag => (
+                                <Combobox.Option
+                                  key={tag.key}
+                                  className={({active}) =>
+                                    `relative cursor-default select-none py-2 pl-10 pr-4 rtl:pl-4 rtl:pr-10 rtl:text-right ${
+                                      active ? 'active-bg-color text-white' : 'text-gray-900'
+                                    }`
+                                  }
+                                  value={tag}
                                 >
-                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              ) : null}
-                            </>
+                                  {({selected, active}) => (
+                                    <>
+                                      <span
+                                        className={`block truncate ${
+                                          selected ? 'font-medium' : 'font-normal'
+                                        }`}
+                                      >
+                                        {tag.value}
+                                      </span>
+                                      {selected ? (
+                                        <span
+                                          className={`absolute inset-y-0 left-0 flex items-center pl-3 rtl:right-0 rtl:left-auto rtl:pr-3 rtl:pl-0 ${
+                                            active ? 'text-white' : 'chek-color'
+                                          }`}
+                                        >
+                                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Combobox.Option>
+                              ))
                           )}
-                        </Combobox.Option>
+                        </Combobox.Options>
                       ))
                   )}
                 </Combobox.Options>
