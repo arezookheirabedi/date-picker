@@ -16,12 +16,19 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
     const date = toPersianDigit(dayjs(value).calendar('jalali').format('YYYY/MM/DD'));
     return date;
   };
+  const getValues = (id: number) => {
+    if (id === 0) {
+      return [3, 4, 1, 2, 500001, 500002];
+    }
 
+    return [id];
+  };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
+    const newParams = getValues(Number(params.borderIdList));
     try {
-      const {data: result} = await arbaeenService.getEntranceAxndExistanceBorder(params, {
+      const {data: result} = await arbaeenService.getEntranceAxndExistanceBorder(newParams, {
         cancelToken: source.token,
       });
 
@@ -74,7 +81,7 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
     getIt(query);
     const id = setInterval(() => {
       getIt(query);
-    }, 60000 * 5)
+    }, 60000 * 5);
     return () => {
       clearInterval(id);
       setData([]);
