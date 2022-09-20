@@ -31,6 +31,22 @@ function abroadList() {
   };
   return Promise.resolve(mock);
 }
+function regionList() {
+  const mock = {
+    data: [
+      {key: 1750001, value: 'خرمشهر'},
+      {key: 500001, value: 'پایانه مرزی شلمچه'},
+      {key: 250001, value: 'پایانه مرزی مهران'},
+      {key: 1500001, value: 'مهران'},
+      {key: 1250001, value: 'قصر شیرین'},
+      {key: 750001, value: 'پایانه مرزی چذابه'},
+      {key: 300001, value: 'پایانه مرزی باشماق'},
+      {key: 1, value: 'پایانه مرزی خسروی'},
+      {key: 500002, value: 'پایانه مرزی تمرچین'},
+    ],
+  };
+  return Promise.resolve(mock);
+}
 
 function getPligrimGenderPerProvince(params: any = {}, config?: any) {
   return request
@@ -344,6 +360,7 @@ const arbaeenService = {
   getHelelList,
   pilgrimsInquiryByNationalId,
   getEntranceAxndExistanceRegion,
+  regionList,
 };
 
 export default arbaeenService;
