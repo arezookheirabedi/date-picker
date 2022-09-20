@@ -4,7 +4,8 @@ import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import Select from 'src/components/Select';
 import {ECOLOR} from 'src/constants/color.enum';
-import useGetOverviewPilgrimExistAndEntrancePerRegion from 'src/hooks/apis/useGetOverviewPilgrimExistAndEntrancePerRegion';
+import useGetOverviewPilgrimExistAndEntrancePerRegion
+  from 'src/hooks/apis/useGetOverviewPilgrimExistAndEntrancePerRegion';
 import {EREGION} from 'src/constants/region.enum';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
@@ -182,78 +183,75 @@ const ComparePilgrimArrivalAndDeparturePerRegion = () => {
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">مقایسه روند حرکت زائران در مرزهای زمینی</legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
-        <div className="flex items-center justify-between mb-10 mt-6 px-8">
-          <div className="align-center flex w-1/2 justify-between">
-            <div className="align-center flex justify-between w-1/2">
-              <Select
-                addNullValue={[
-                  250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001,
-                ]}
-                options={options}
-                objectKey="borderIdList"
-                setQueryParams={setQuery}
-                queryParams={query}
-              />
-            </div>
+        <div className="flex justify-between mb-10 mt-6 px-8">
+          <div className="align-center flex w-2/12 justify-between">
+            <Select
+              addNullValue={[
+                250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001,
+              ]}
+              options={options}
+              objectKey="borderIdList"
+              setQueryParams={setQuery}
+              queryParams={query}
+            />
           </div>
-          <div className="w-1/2">
-            <div className="flex flex-col justify-end lg:flex-row text-xs text-gray-600 space-y-4 lg:space-y-0 lg:space-x-2 rtl:space-x-reverse">
-              <div className="flex flex-col justify-end md:flex-row space-y-4 md:space-y-0 md:space-x-2 rtl:space-x-reverse">
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR0}} />
-                  <span>گذرگاه &nbsp;&nbsp;&nbsp;{EREGION.MEHRAN}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}} />
-                  <span>{EREGION.PAYANE_MEHRAN}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}} />
-                  <span> {EREGION.PAYANE_SHALAMCHE}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}} />
-                  <span> گذرگاه &nbsp;{EREGION.KHORAMSHAR}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}} />
-                  <span> {EREGION.PAYANE_CHAZABE}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}} />
-                  <span> گذرگاه &nbsp;{EREGION.GHASRSHIRIN}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}} />
-                  <span> {EREGION.PAYANE_KHOSRAVI}</span>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center space-y-2">
-                  <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}} />
-                  <span> {EREGION.PAYANE_BASHMAGH}</span>
-                </div>
+          <div className="w-9/12">
+            <div
+              className="flex flex-wrap justify-start  text-xs text-gray-600 justify-start   flex-row-reverse">
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR0}}/>
+                <span>گذرگاه &nbsp;&nbsp;&nbsp;{EREGION.MEHRAN}</span>
               </div>
-
-              <div className="inline-flex flex-col justify-center items-center space-y-2">
-                <div className="w-16 h-2 rounded" style={{backgroundColor: ECOLOR.COLOR8}} />
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}}/>
+                <span>{EREGION.PAYANE_MEHRAN}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}}/>
+                <span> {EREGION.PAYANE_SHALAMCHE}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}}/>
+                <span> گذرگاه &nbsp;{EREGION.KHORAMSHAR}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}}/>
+                <span> {EREGION.PAYANE_CHAZABE}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}}/>
+                <span> گذرگاه &nbsp;{EREGION.GHASRSHIRIN}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}}/>
+                <span> {EREGION.PAYANE_KHOSRAVI}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}}/>
+                <span> {EREGION.PAYANE_BASHMAGH}</span>
+              </div>
+              <div className="mb-2 w-20 mr-2">
+                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR8}}/>
                 <span> {EREGION.PAYANE_TAMARCHIN}</span>
               </div>
+
             </div>
           </div>
         </div>
 
         {loading && (
           <div className="p-40">
-            <Spinner />
+            <Spinner/>
           </div>
         )}
         {errorMessage && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery} />
+            <RetryButton setQuery={setQuery}/>
           </div>
         )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
+          <HeadlessChart data={dataset} optionsProp={optionChart}/>
         )}
         {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
