@@ -2,11 +2,9 @@ import React, {useState} from 'react';
 import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
-import Select from 'src/components/Select';
 import {ECOLOR} from 'src/constants/color.enum';
-import useGetOverviewPilgrimExistAndEntrancePerRegion
-  from 'src/hooks/apis/useGetOverviewPilgrimExistAndEntrancePerRegion';
-import {EREGION} from 'src/constants/region.enum';
+import useGetOverviewPilgrimExistAndEntrancePerRegion from 'src/hooks/apis/useGetOverviewPilgrimExistAndEntrancePerRegion';
+import SearchableMultiSelect from 'src/components/SearchableMultiSelect';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
 
@@ -24,16 +22,27 @@ regionId: 500002, regionName: "پایانه مرزی تمرچین",
 
 */
 const options = [
-  {value: 0, label: 'همه مرزها'},
-  {value: 1750001, label: 'خرمشهر'},
-  {value: 500001, label: 'پایانه مرزی شلمچه'},
-  {value: 250001, label: 'پایانه مرزی مهران'},
-  {value: 1500001, label: 'مهران'},
-  {value: 1250001, label: 'قصر شیرین'},
-  {value: 750001, label: 'پایانه مرزی چذابه'},
-  {value: 300001, label: 'پایانه مرزی باشماق'},
-  {value: 1, label: 'پایانه مرزی خسروی'},
-  {value: 500002, label: 'پایانه مرزی تمرچین'},
+  {key: 1500001, value: 'مهران'},
+  {key: 1750001, value: 'خرمشهر'},
+  {key: 500001, value: 'پایانه مرزی شلمچه'},
+  {key: 250001, value: 'پایانه مرزی مهران'},
+  {key: 1250001, value: 'قصر شیرین'},
+  {key: 750001, value: 'پایانه مرزی چذابه'},
+  {key: 300001, value: 'پایانه مرزی باشماق'},
+  {key: 1, value: 'پایانه مرزی خسروی'},
+  {key: 500002, value: 'پایانه مرزی تمرچین'},
+];
+
+const RegionsLegend = [
+  {key: 1500001, value: 'گذرگاه مهران', color: ECOLOR.COLOR0},
+  {key: 1750001, value: 'گذرگاه خرمشهر', color: ECOLOR.COLOR3},
+  {key: 500001, value: 'پایانه مرزی شلمچه', color: ECOLOR.COLOR2},
+  {key: 250001, value: 'پایانه مرزی مهران', color: ECOLOR.COLOR1},
+  {key: 1250001, value: 'قصر شیرین', color: ECOLOR.COLOR5},
+  {key: 750001, value: 'پایانه مرزی چذابه', color: ECOLOR.COLOR4},
+  {key: 300001, value: 'پایانه مرزی باشماق', color: ECOLOR.COLOR7},
+  {key: 1, value: 'پایانه مرزی خسروی', color: ECOLOR.COLOR6},
+  {key: 500002, value: 'پایانه مرزی تمرچین', color: ECOLOR.COLOR8},
 ];
 
 const converters = {
@@ -63,22 +72,7 @@ const optionChart = {
   title: {
     text: '',
   },
-  // scrollbar: {
-  //   enabled: true,
-  //   barBackgroundColor: '#656565',
-  //   barBorderColor: '#eee',
-  //   barBorderRadius: 4,
-  //   barBorderWidth: 0,
-  //   height: 6,
-  //   buttonArrowColor: '#eee',
-  //   rifleColor: '#656565',
-  //   buttonBackgroundColor: 'transparent',
-  //   buttonBorderWidth: 0,
-  //   buttonBorderRadius: 0,
-  //   trackBackgroundColor: '#eee',
-  //   trackBorderWidth: 0,
-  //   trackBorderRadius: 4,
-  // },
+
   credits: {
     enabled: false,
   },
@@ -128,25 +122,6 @@ const optionChart = {
     enabled: false,
   },
   xAxis: {
-    // scrollbar: {
-    //   enabled: true,
-    //   barBackgroundColor: '#656565',
-    //   barBorderColor: '#eee',
-    //   barBorderRadius: 4,
-    //   barBorderWidth: 0,
-    //   height: 6,
-    //   buttonArrowColor: '#eee',
-    //   rifleColor: '#656565',
-    //   buttonBackgroundColor: 'transparent',
-    //   buttonBorderWidth: 0,
-    //   buttonBorderRadius: 0,
-    //   trackBackgroundColor: '#eee',
-    //   trackBorderWidth: 0,
-    //   trackBorderRadius: 4,
-    //   showFull: false,
-    // },
-    // min: 0,
-    // max: 40,
     categories: [],
     type: 'category',
     labels: {
@@ -185,10 +160,7 @@ const ComparePilgrimArrivalAndDeparturePerRegion = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-2/12 justify-between">
-            <Select
-              addNullValue={[
-                250001, 500001, 1, 500002, 300001, 1500001, 1250001, 1750001, 750001,
-              ]}
+            <SearchableMultiSelect
               options={options}
               objectKey="borderIdList"
               setQueryParams={setQuery}
@@ -196,62 +168,42 @@ const ComparePilgrimArrivalAndDeparturePerRegion = () => {
             />
           </div>
           <div className="w-9/12">
-            <div
-              className="flex flex-wrap justify-start  text-xs text-gray-600 justify-start   flex-row-reverse">
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR0}}/>
-                <span>گذرگاه &nbsp;&nbsp;&nbsp;{EREGION.MEHRAN}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR1}}/>
-                <span>{EREGION.PAYANE_MEHRAN}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR2}}/>
-                <span> {EREGION.PAYANE_SHALAMCHE}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR3}}/>
-                <span> گذرگاه &nbsp;{EREGION.KHORAMSHAR}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR4}}/>
-                <span> {EREGION.PAYANE_CHAZABE}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR5}}/>
-                <span> گذرگاه &nbsp;{EREGION.GHASRSHIRIN}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR6}}/>
-                <span> {EREGION.PAYANE_KHOSRAVI}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR7}}/>
-                <span> {EREGION.PAYANE_BASHMAGH}</span>
-              </div>
-              <div className="mb-2 w-20 mr-2">
-                <div className="w-full  h-2 mb-2 rounded" style={{backgroundColor: ECOLOR.COLOR8}}/>
-                <span> {EREGION.PAYANE_TAMARCHIN}</span>
-              </div>
-
+            <div className="flex flex-wrap justify-start  text-xs text-gray-600 justify-start   flex-row-reverse">
+              {query.borderIdList ? (
+                query.borderIdList.map(i => {
+                  const region = RegionsLegend?.find((item: any) => Number(item.key) === Number(i));
+                  return (
+                    <>
+                      <div className="mb-2 w-20 mr-2">
+                        <div
+                          className="w-full  h-2 mb-2 rounded"
+                          style={{backgroundColor: `${region?.color}`}}
+                        />
+                        <span>{region?.value}</span>
+                      </div>
+                    </>
+                  );
+                })
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
 
         {loading && (
           <div className="p-40">
-            <Spinner/>
+            <Spinner />
           </div>
         )}
         {errorMessage && (
           <div className="p-40">
             <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
+            <RetryButton setQuery={setQuery} />
           </div>
         )}
         {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart}/>
+          <HeadlessChart data={dataset} optionsProp={optionChart} />
         )}
         {isEmpty(dataset) && !loading && !errorMessage && (
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
