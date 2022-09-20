@@ -145,7 +145,7 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-3/4 justify-between">
-            <div className="align-center flex justify-between w-1/3">
+            <div className="align-center flex justify-between ">
               <Select
                 options={options}
                 objectKey="borderIdList"
