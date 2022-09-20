@@ -49,6 +49,18 @@ function getPligrimCountPerProvince(params: any = {}, config?: any) {
       ...config,
     });
 }
+function getPligrimTripDurationPercentage(params: any = {}, config?: any) {
+  return request
+    .withHeaders({'Content-Type': 'application/json;utf-8'})
+    .build()
+    .get(
+      `/api/v1/arbaeen/reports/passenger-report-based-on-travel-duration-by-province/count?lang=fa`,
+      params,
+      {
+        ...config,
+      }
+    );
+}
 
 function getPligrimGenderPerCity(params: any = {}, config?: any) {
   return request
@@ -152,9 +164,15 @@ function getEntranceAxndExistanceBorder(params: any = [], config?: any) {
   );
 }
 function getEntranceAxndExistanceBorderBasedOnSelfReportInfo(params: any = [], config?: any) {
-  return request.build().get(`/api/v1/arbaeen/borders-traffics?lang=fa`, params, {
-    ...config,
-  });
+  return request
+    .build()
+    .get(
+      `/api/v1/arbaeen/reports/passenger-report-based-on-entering-and-existing-by-province-and-border?lang=fa`,
+      params,
+      {
+        ...config,
+      }
+    );
 }
 function getEntranceAxndExistanceRegion(params: any = [], config?: any) {
   return request.build().get(
@@ -350,6 +368,7 @@ const arbaeenService = {
   pilgrimsInquiryByNationalId,
   getEntranceAxndExistanceRegion,
   getEntranceAxndExistanceBorderBasedOnSelfReportInfo,
+  getPligrimTripDurationPercentage,
 };
 
 export default arbaeenService;
