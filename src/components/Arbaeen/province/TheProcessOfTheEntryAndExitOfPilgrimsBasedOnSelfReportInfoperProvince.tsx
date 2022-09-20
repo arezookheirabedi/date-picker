@@ -4,7 +4,7 @@ import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import Information from 'src/assets/images/icons/information.svg';
 import Select from 'src/components/Select';
-import useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo from 'src/hooks/apis/useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo';
+import useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince from 'src/hooks/apis/useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo';
 import {EBORDERS} from 'src/constants/border.enum';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
@@ -123,7 +123,9 @@ const optionChart = {
   },
 };
 
-const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
+const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince: React.FC<{
+  cityTitle: string;
+}> = ({cityTitle}) => {
   const [query, setQuery] = useState({
     retry: false,
     border: null,
@@ -132,12 +134,12 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo(query);
+  } = useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince(query, true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        ورود و خروج مسافران از مرزهای زمینی بر اساس اطلاعات خوداظهاری
+        ورود و خروج مسافران استان &nbsp;{cityTitle}&nbsp; از مرزهای زمینی بر اساس اطلاعات خوداظهاری
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
@@ -201,4 +203,4 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
   );
 };
 
-export default TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo;
+export default TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince;
