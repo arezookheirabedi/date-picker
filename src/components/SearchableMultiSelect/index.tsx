@@ -3,49 +3,31 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-// import Add from 'src/assets/images/icons/loading.svg';
-// import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-interface ITag {
+
+interface IProps {
+  queryParams: any;
+  placeholder?: any;
+  setQueryParams: (v: any) => void;
+  objectKey: string;
+  options: Array<ITag>;
+}
+export interface ITag {
   key: number | string | null;
   value: string;
 }
-const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
-  const [selected, setSelected] = useState<Array<ITag>>([]);
+const SearchableMultiSelect: React.FC<IProps> = ({
+  options,
+  setQueryParams,
+  objectKey,
+  queryParams,
+}) => {
+  const [selected, setSelected] = useState<Array<ITag>>([options[0]]);
   const [query, setQuery] = useState('');
 
   const [tags, setTags] = useState<any[]>([]);
 
-  const cancelTokenTag = cancelTokenSource();
-  const cancelTokenendPoint = cancelTokenSource();
-
-  function cancelRequestTag() {
-    cancelTokenTag.cancel(msgRequestCanceled);
-  }
-  function cancelRequestEndPoint() {
-    cancelTokenendPoint.cancel(msgRequestCanceled);
-  }
-  const fetcher = async () => {
-    try {
-      const res = await endPoint(
-        {pageNumber: 0, pageSize: 1000},
-        {cancelToken: cancelTokenendPoint.token}
-      );
-      /* should add role.title */
-      const newData = res.data.content.map((roule: any) => ({key: roule.id, value: roule.name}));
-      setTags([...newData]);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    fetcher();
-    return () => {
-      cancelRequestTag();
-      cancelRequestEndPoint();
-      setTags([]);
-    };
+    setTags([...options]);
   }, []);
   const filteredTags =
     query === ''
@@ -62,37 +44,72 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
     });
     setSelected([...newList]);
   };
+
+  useEffect(() => {
+    let params = {...queryParams};
+    if (selected) {
+      params = {...queryParams, [`${objectKey}`]: selected.map(i => i.key)};
+
+      setQueryParams(params);
+    }
+  }, [selected]);
   return (
     <>
       <div className="flex  flex-col items-center justify-center space-y-3">
         <div className="relative w-72">
           <Combobox value={selected} onChange={setSelected} multiple>
             <div className=" single-select">
-              <div
-                className="focus:outline-none relative flex w-full cursor-default items-center overflow-hidden rounded-lg bg-white py-2 pl-2 pr-10 text-left
-             shadow focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-                <Combobox.Input
-                  placeholder="انتخاب کنید"
-                  className="focus:outline-none inline-block border-none pr-1 text-sm leading-5 text-gray-900 focus:ring-0"
-                  // displayValue={(tag: any) => (tag ? tag.value : '')}
-                  onChange={event => setQuery(event.target.value)}
-                />
-                <Combobox.Button className="absolute inset-y-0 right-0 left-auto flex items-center pr-2 rtl:left-0 rtl:right-auto rtl:pl-2 rtl:pr-0">
+              <div className="py-2 pl-2 pr-10 relative w-full border border-gray-200 cursor-default overflow-hidden rounded-lg bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+                <ul className="flex flex-wrap gap-2 items-center">
+                  {/* {selected.length > 0 ? (
+                    <>
+                      {selected.map(tag => (
+                        <li
+                          className="bg-gray-200 text-gray-500 rounded text-xs border border-gray-300 flex items-center space-x-1 divide-x divide-gray-300"
+                          key={tag.key}
+                        >
+                          <span className="py-0.5 px-1">{tag.value}</span>
+                          <button
+                            className="p-0.5 hover:bg-red-100"
+                            type="button"
+                            onClick={() => handleDeselectItem(tag)}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 transform rotate-45"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        </li>
+                      ))}
+                    </>
+                  ) : ( */}
+                  <>
+                    <Combobox.Input
+                      placeholder="انتخاب کنید"
+                      className="focus:outline-none inline-block border-none pr-1 text-sm leading-5 text-gray-900 focus:ring-0"
+                      // displayValue={(tag: any) => (tag ? tag.value : '')}
+                      onChange={event => setQuery(event.target.value)}
+                    />
+                  </>
+                  {/* )} */}
+                  <li className="w-2">
+                    <Combobox.Input
+                      className="inline-block border-none text-sm leading-5 text-gray-900 focus:ring-0 focus:outline-none"
+                      //   displayValue={(person) => person.name}
+                      onChange={event => setQuery(event.target.value)}
+                      //   onClick={}
+                    />
+                  </li>
+                </ul>
+                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
                   <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </Combobox.Button>
               </div>
@@ -150,21 +167,17 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
           </Combobox>
         </div>
       </div>
-      {/*      <div className=" unVaccinated-count-wrapper  inline-flex rounded-lg border  p-4">
-          <span className="text">جمع کل واحد های صنفی بدون واکسیناسیون:</span>
-          <span className="count px-1">{toPersianDigit(totalItems.toString()) || ''}</span>
-          <span className="count">واحد صنفی</span>
-        </div> */}
-      {selected && selected.length ? (
+
+      {/* {selected && selected.length ? (
         <div className=" flex flex-row items-center  rounded-lg w-full py-2 shadow rtl:flex-row-reverse rtl:pl-10 rtl:pr-2 sm:text-sm ">
           <div className="flex">
-            {selected.map(tag => {
+             {selected.map(tag => {
               return (
                 <div
                   className="multi-select-box rounded text-xs border border-gray-300 flex items-center space-x-1 divide-x- divide-gray-300-"
                   key={tag.key}
                 >
-                  <span className="py-0.5 px-1 ">{tag.key}</span>
+                  <span className="py-0.5 px-1 ">{tag.value}</span>
                   <button
                     className=" p-0.5 hover:bg-blue-100"
                     type="button"
@@ -185,12 +198,12 @@ const SearchableMultiSelect: React.FC<{endPoint: any}> = ({endPoint}) => {
                   </button>
                 </div>
               );
-            })}
+            })} 
           </div>
         </div>
       ) : (
         <></>
-      )}
+      )} */}
     </>
   );
 };
