@@ -17,6 +17,7 @@ import OverviewPligrimTripType from 'src/components/Arbaeen/province/OverviewPli
 import OverviewPilgrimVaccineStatus from 'src/components/Arbaeen/province/OverviewPilgrimVaccineStatus';
 import TheLatestOverviewPilgrimVaccineStatusProvine from 'src/components/Arbaeen/province/TheLatestOverviewPilgrimVaccineStatusProvine';
 import TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince from 'src/components/Arbaeen/province/TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince';
+import OverviewOfTripDurationProvince from 'src/components/Arbaeen/province/OverviewOfTripDurationProvince';
 
 const ArbaeenProvince = () => {
   const history = useHistory();
@@ -58,6 +59,7 @@ const ArbaeenProvince = () => {
           <TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince
             cityTitle={cityTitle}
           />
+          <OverviewOfTripDurationProvince cityTitle={cityTitle} />
           <OverviewOfExistBordersProvince cityTitle={cityTitle} />
           <OverviewPligrimAgeProvince cityTitle={cityTitle} />
           <OverviewPilgrimGenderByProvince cityTitle={cityTitle} />

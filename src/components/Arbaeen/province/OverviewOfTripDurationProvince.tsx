@@ -11,7 +11,7 @@ import Spinner from '../../Spinner';
 
 const {HeadlessChart} = Charts;
 
-const OverviewOfTripDuration: React.FC<{}> = () => {
+const OverviewOfTripDurationProvince: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const [query, setQuery] = useState<any>({
     retry: false,
   });
@@ -128,7 +128,7 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">
-        نگاه کلی به مدت زمان سفر زائران بر اساس اطلاعات خوداظهاری
+        نگاه کلی به مدت زمان سفر زائران استان &nbsp;{cityTitle}&nbsp; بر اساس اطلاعات خوداظهاری
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-start mb-10 mt-5 px-8">
@@ -164,4 +164,4 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
   );
 };
 
-export default OverviewOfTripDuration;
+export default OverviewOfTripDurationProvince;
