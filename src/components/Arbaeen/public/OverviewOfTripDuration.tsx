@@ -128,7 +128,7 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">
-        نگاه کلی به مدت زمان سفر زائران بر اساس اطلاعات وارد شده زائر در هنگام ثبت نام
+        نگاه کلی به مدت زمان سفر زائران بر اساس اطلاعات وارد شده زائر در زمان ثبت نام
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-start mb-10 mt-5 px-8">
@@ -136,7 +136,7 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
             <div className="flex flex-row  items-center justify-start  text-xs">
               <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">
-                تعداد روزهایی سفر زائران بر اساس اطلاعات وارد شده در زمان ثبت نام
+                تعداد روزهایی سفر زائران بر اساس اطلاعات وارد شده زائر در زمان ثبت نام
               </span>
             </div>
           </div>
