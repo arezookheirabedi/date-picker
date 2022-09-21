@@ -54,7 +54,7 @@ function getPligrimTripDurationPercentage(params: any = {}, config?: any) {
     .withHeaders({'Content-Type': 'application/json;utf-8'})
     .build()
     .get(
-      `/api/v1/arbaeen/reports/passenger-report-based-on-travel-duration-by-province/count?lang=fa`,
+      `/api/v1/arbaeen/reports/passenger-report-based-on-travel-duration-by-province?lang=fa`,
       params,
       {
         ...config,
@@ -167,7 +167,7 @@ function getEntranceAxndExistanceBorderBasedOnSelfReportInfo(params: any = [], c
   return request
     .build()
     .get(
-      `/api/v1/arbaeen/reports/passenger-report-based-on-entering-and-existing-by-province-and-border?lang=fa`,
+      `/api/v1/arbaeen/reports/passenger-report-based-on-entering-and-exiting-by-province-and-border?lang=fa`,
       params,
       {
         ...config,
