@@ -5,6 +5,7 @@ import RetryButton from 'src/components/RetryButton';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import {ECOLOR} from 'src/constants/color.enum';
 import useGetPilgrimDurationTime from 'src/hooks/apis/useGetPilgrimDurationTime';
+import Information from 'src/assets/images/icons/information.svg';
 import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 
@@ -130,6 +131,16 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
         نگاه کلی به مدت زمان سفر زائران بر اساس اطلاعات وارد شده زائر در هنگام ثبت نام
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
+        <div className="flex items-center justify-start mb-10 mt-5 px-8">
+          <div className="w-full">
+            <div className="flex flex-row  items-center justify-start  text-xs">
+              <img src={Information} className="inline " width="18" height="18" alt="" />
+              <span className="px-2">
+                تعداد روزهایی سفر زائران بر اساس اطلاعات وارد شده در زمان ثبت نام
+              </span>
+            </div>
+          </div>
+        </div>
         {loading && (
           <div className="p-40">
             <Spinner />
