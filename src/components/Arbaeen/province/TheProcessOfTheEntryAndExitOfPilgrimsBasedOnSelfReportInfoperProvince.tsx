@@ -139,7 +139,7 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfoperProvince: Rea
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به روند ورود و خروج مسافران استان &nbsp;{cityTitle}&nbsp; از مرزهای زمینی بر اساس
+        نگاه کلی به روند ورود و خروج زائران استان &nbsp;{cityTitle}&nbsp; از مرزهای زمینی بر اساس
         اطلاعات وارد شده زائر در زمان ثبت نام
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
