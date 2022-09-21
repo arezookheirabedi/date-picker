@@ -45,7 +45,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-const MS_PER_DAY = 1000 * 60 * 12;
+const MS_PER_DAY = 1000 * 60;
 
 const dataFilter = new DataFilterExtension({
   filterSize: 1,
