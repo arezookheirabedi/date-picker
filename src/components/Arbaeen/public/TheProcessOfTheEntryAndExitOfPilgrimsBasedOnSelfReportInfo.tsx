@@ -3,25 +3,22 @@ import Highcharts from 'highcharts';
 import {isEmpty} from 'lodash';
 import RetryButton from 'src/components/RetryButton';
 import Information from 'src/assets/images/icons/information.svg';
-
-import useGetOverviewPilgrimExistAndEntranceFromBorders from 'src/hooks/apis/useGetOverviewPilgrimExistAndEntranceFromBorders';
-// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-// import arbaeenService from 'src/services/arbaeen.service';
 import Select from 'src/components/Select';
+import useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo from 'src/hooks/apis/useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo';
+import {EBORDERS} from 'src/constants/border.enum';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
-// import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 
 const {HeadlessChart} = Charts;
 
 const options = [
-  {value: 0, label: 'همه مرزها'},
-  {value: 3, label: 'شلمچه'},
-  {value: 4, label: 'چذابه'},
-  {value: 1, label: 'مهران'},
-  {value: 2, label: 'خسروی'},
-  {value: 500001, label: 'باشماق'},
-  {value: 500002, label: 'تمرچین'},
+  {value: null, label: 'همه مرزها'},
+  {value: EBORDERS.SHALAMCHE, label: 'شلمچه'},
+  {value: EBORDERS.CHAZABE, label: 'چذابه'},
+  {value: EBORDERS.MEHRAN, label: 'مهران'},
+  {value: EBORDERS.KHOSRAVI, label: 'خسروی'},
+  {value: EBORDERS.BASHMAGH, label: 'باشماق'},
+  {value: EBORDERS.TAMARCHIN, label: 'تمرچین'},
 ];
 
 const converters = {
@@ -126,29 +123,30 @@ const optionChart = {
   },
 };
 
-const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
+const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
   const [query, setQuery] = useState({
     retry: false,
-    borderIdList: [3, 4, 1, 2, 500001, 500002],
+    border: null,
   });
   const {
     data: dataset,
     loading,
     error: errorMessage,
-  } = useGetOverviewPilgrimExistAndEntranceFromBorders(query);
+  } = useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به روند ورود و خروج مسافران از مرزهای زمینی
+        نگاه کلی به روند ورود و خروج زائران از مرزهای زمینی بر اساس اطلاعات وارد شده زائر در زمان
+        ثبت نام
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
           <div className="align-center flex w-3/4 justify-between">
-            <div className="align-center flex justify-between  ">
+            <div className="align-center flex justify-between ">
               <Select
                 options={options}
-                objectKey="borderIdList"
+                objectKey="border"
                 setQueryParams={setQuery}
                 queryParams={query}
               />
@@ -176,7 +174,7 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
               <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">
                 نمایش روند ورود و خروج مسافران از مرزهای مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ
-                شلمچه به صورت روزانه از تاریخ ۱۴۰۱/۰۵/۳۱ تا به امروز
+                شلمچه بر اساس اطلاعات وارد شده زائر در زمان ثبت نام
               </span>
             </div>
           </div>
@@ -204,4 +202,4 @@ const GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims = () => {
   );
 };
 
-export default GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims;
+export default TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo;
