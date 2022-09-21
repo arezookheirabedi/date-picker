@@ -127,7 +127,7 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">
-        نگاه کلی به مدت زمان سفر زائران بر اساس اطلاعات خوداظهاری
+        نگاه کلی به مدت زمان سفر زائران بر اساس اطلاعات وارد شده زائر در هنگام ثبت نام
       </legend>
       <div className="align-center flex w-full flex-col justify-center rounded-lg bg-white p-4 shadow">
         {loading && (
