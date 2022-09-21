@@ -15,7 +15,7 @@ const OverviewOfTripDurationProvince: React.FC<{cityTitle: string}> = ({cityTitl
     retry: false,
   });
 
-  const {data: dataset, loading, error: errorMessage} = useGetPilgrimDurationTime(query);
+  const {data: dataset, loading, error: errorMessage} = useGetPilgrimDurationTime(query, true);
 
   const optionChart = {
     chart: {
