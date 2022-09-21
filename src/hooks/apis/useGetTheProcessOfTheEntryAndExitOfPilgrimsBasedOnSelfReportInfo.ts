@@ -36,8 +36,8 @@ export default function useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfRe
       const countEntrance: any[] = [];
       result.forEach((item: any) => {
         date.push(getTime(item.dateTime));
-        countExist.push(item.exitingCount);
-        countEntrance.push(item.enteringCount);
+        countExist.push(item.exitingCount || 0);
+        countEntrance.push(item.enteringCount || 0);
       });
 
       setData(() => {
@@ -88,8 +88,8 @@ export default function useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfRe
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
-  const location = useLocation();
 
+  const location = useLocation();
   function doProvinceActions() {
     if (getProvinceParam()) {
       getIt({...query, province: getProvinceParam()});

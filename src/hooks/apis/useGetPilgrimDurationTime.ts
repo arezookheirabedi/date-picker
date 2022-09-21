@@ -38,10 +38,11 @@ export default function useGetPilgrimDurationTime(query: any, hasProvince: boole
       const travelDuration: any[] = [];
       const percentage: any[] = [];
       const sortData = res.data.sort((a: any, b: any) => (a.percentage > b.percentage ? 1 : -1));
+      const validDuration = sortData.filter((item: any) => item.travelDuration !== null);
 
-      sortData.forEach((item: any) => {
+      validDuration.forEach((item: any) => {
         percentage.push(item.percentage);
-        travelDuration.push(item.travelDuration);
+        travelDuration.push(Number(item.travelDuration).toPersianDigits());
       });
 
       setData(() => {
@@ -91,7 +92,7 @@ export default function useGetPilgrimDurationTime(query: any, hasProvince: boole
     doProvinceActions();
     // eslint-disable-next-line consistent-return
     return () => {
-      setData([]);
+      setData([initialData]);
       source.cancel('Operation canceled by the user.');
     };
   }, [location.search, query]);
