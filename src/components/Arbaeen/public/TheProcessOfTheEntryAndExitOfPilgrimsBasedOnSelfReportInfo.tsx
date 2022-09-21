@@ -137,7 +137,8 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-        نگاه کلی به روند ورود و خروج زائران از مرزهای زمینی بر اساس اطلاعات خوداظهاری
+        نگاه کلی به روند ورود و خروج زائران از مرزهای زمینی بر اساس اطلاعات وارد شده زائر در زمان
+        ثبت نام
       </legend>
       <div className="flex flex-col align-center justify-center w-full rounded-lg bg-white p-4 shadow">
         <div className="flex items-center justify-between mb-10 mt-6 px-8">
@@ -173,7 +174,7 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
               <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">
                 نمایش روند ورود و خروج مسافران از مرزهای مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ
-                شلمچه بر اساس اطلاعات وارد شده زائر در هنگام ثبت نام
+                شلمچه بر اساس اطلاعات وارد شده زائر در زمان ثبت نام
               </span>
             </div>
           </div>
