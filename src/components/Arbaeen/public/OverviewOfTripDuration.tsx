@@ -136,7 +136,7 @@ const OverviewOfTripDuration: React.FC<{}> = () => {
             <div className="flex flex-row  items-center justify-start  text-xs">
               <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">
-                تعداد روزهایی سفر زائران بر اساس اطلاعات وارد شده زائر در زمان ثبت نام
+                مقایسه مدت زمان سفر زائران بر اساس اطلاعات وارد شده زائر در زمان ثبت نام
               </span>
             </div>
           </div>
