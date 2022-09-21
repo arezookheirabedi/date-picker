@@ -173,7 +173,7 @@ const TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo = () => {
               <img src={Information} className="inline " width="18" height="18" alt="" />
               <span className="px-2">
                 نمایش روند ورود و خروج مسافران از مرزهای مهران ـ چذابه ـ تمرچین ـ باشماق ـ خسروی ـ
-                شلمچه بر اساس اطلاعات خود اظهاری
+                شلمچه بر اساس اطلاعات وارد شده زائر در هنگام ثبت نام
               </span>
             </div>
           </div>
