@@ -47,7 +47,7 @@ const TheLatestOverviewPilgrimVaccineStatusPercentage: React.FC<IProps> = ({
             />
             <Statistic
               icon={sufferingIcon}
-              text=" درصد زائران ثبت نامی با کوید مثبت"
+              text=" درصد زائران با کوید مثبت"
               count={totalInfo.countLastPositiveTestResultPercentage || 0}
               loading={loadingPositiveTest}
               isPercentage
