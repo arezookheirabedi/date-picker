@@ -1,67 +1,92 @@
 import {useEffect, useState} from 'react';
-import inspectionService from 'src/services/inspection.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import axios from 'axios';
+import arbaeenService from 'src/services/arbaeen.service';
+import {EERRORS} from '../../../constants/errors.enum';
 
-export default function useGetRatioOfInspection(query: any) {
-    const [error, setError] = useState(null) as any;
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState({});
+const initialData = {
+  categories: [],
+  series: [
+    {
+      name: 'بازرسی‌های انجام شده',
+      color: '#07816C',
+      data: [],
+    },
+    {
+      name: 'نیاز به بازرسی',
+      color: '#F3BC06',
+      data: [],
+    },
+  ],
+} as any;
 
-    const cancelToken = cancelTokenSource();
+export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null) as any;
+  const [data, setData] = useState<any>(initialData);
 
-    function cancelRequest() {
-        cancelToken.cancel(msgRequestCanceled);
-    }
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
-    const getColumnChartTestResult = async (params: any) => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await inspectionService.ratioOfInspection(params, {
-            cancelToken: cancelToken.token,
-          });
-          const needToInspection: any[] = [];
-          const inspectionDone: any[] = [];
-          const grade: any[] = [];
-          response.data.forEach((item: any) => {
-            needToInspection.push(item.needToInspection);
-            inspectionDone.push(item.inspectionDone);
+  const getIt = async ({retry, ...params}: any) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await arbaeenService.getPligrimGenderPerProvince(
+        {
+          ...params,
+        },
+        {cancelToken: source.token}
+      );
+      const provinces: any[] = [];
+      const maleCount: any[] = [];
+      const femaleCount: any[] = [];
+      const sortData = res.data.sort((a: any, b: any) => (a.maleCount > b.maleCount ? 1 : -1));
 
-            grade.push(item.province);
-          });
-          const newData = [
+      sortData.forEach((item: any) => {
+        maleCount.push(item.maleCount);
+        femaleCount.push(item.femaleCount);
+        provinces.push(item.province);
+      });
+
+      setData(() => {
+        return {
+          categories: provinces,
+          series: [
             {
               name: 'بازرسی‌های انجام شده',
-              data: [...inspectionDone],
               color: '#07816C',
+              data: [...femaleCount],
             },
             {
               name: 'نیاز به بازرسی',
-              data: [...needToInspection],
               color: '#F3BC06',
+              data: [...maleCount],
             },
-          ];
-          setData({categories: [...grade], series: [...newData]});
-        } catch (err: any) {
-            setError(err.message);
-            console.log(err);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-        
+          ],
+        };
+      });
+      setLoading(false);
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
-
+    getIt(query);
+    setInterval(() => {
+      getIt(query);
+    }, 60000 * 5);
+    // eslint-disable-next-line consistent-return
     return () => {
-      setData([]);
-      cancelRequest();
-      clearTimeout(idSetTimeOut);
+      setData(initialData);
+      setError(null);
+      source.cancel('Operation canceled by the user.');
     };
   }, [query]);
 
-    return {loading, error, data};
+  return {loading, error, data};
 }
