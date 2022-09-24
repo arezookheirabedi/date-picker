@@ -1,19 +1,19 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import arbaeenService from 'src/services/arbaeen.service';
+import inspectionService from 'src/services/inspection.service';
 import {EERRORS} from '../../../constants/errors.enum';
 
 const initialData = {
   categories: [],
   series: [
     {
-      name: 'بازرسی‌های انجام شده',
-      color: '#07816C',
+      name: 'نیاز به بازرسی',
+      color: '#F3BC06',
       data: [],
     },
     {
-      name: 'نیاز به بازرسی',
-      color: '#F3BC06',
+      name: 'بازرسی‌های انجام شده',
+      color: '#07816C',
       data: [],
     },
   ],
@@ -31,21 +31,23 @@ export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
     setLoading(true);
     setError(null);
     try {
-      const res = await arbaeenService.getPligrimGenderPerProvince(
+      const res = await inspectionService.ratioOfInspection(
         {
           ...params,
         },
         {cancelToken: source.token}
       );
       const provinces: any[] = [];
-      const maleCount: any[] = [];
-      const femaleCount: any[] = [];
-      const sortData = res.data.sort((a: any, b: any) => (a.maleCount > b.maleCount ? 1 : -1));
+      const inspectionCount: any[] = [];
+      const neededToInspectionCount: any[] = [];
+      const sortData = res.data.sort((a: any, b: any) =>
+        a.inspectionCount > b.inspectionCount ? 1 : -1
+      );
 
       sortData.forEach((item: any) => {
-        maleCount.push(item.maleCount);
-        femaleCount.push(item.femaleCount);
-        provinces.push(item.province);
+        inspectionCount.push(item.inspectionCount || 0);
+        neededToInspectionCount.push(item.neededToInspectionCount || 0);
+        provinces.push(item.province || '');
       });
 
       setData(() => {
@@ -53,14 +55,14 @@ export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
           categories: provinces,
           series: [
             {
-              name: 'بازرسی‌های انجام شده',
-              color: '#07816C',
-              data: [...femaleCount],
-            },
-            {
               name: 'نیاز به بازرسی',
               color: '#F3BC06',
-              data: [...maleCount],
+              data: [...neededToInspectionCount],
+            },
+            {
+              name: 'بازرسی‌های انجام شده',
+              color: '#07816C',
+              data: [...inspectionCount],
             },
           ],
         };
@@ -77,9 +79,6 @@ export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
   };
   useEffect(() => {
     getIt(query);
-    setInterval(() => {
-      getIt(query);
-    }, 60000 * 5);
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialData);
