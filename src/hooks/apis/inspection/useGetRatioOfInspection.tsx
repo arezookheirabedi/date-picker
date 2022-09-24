@@ -19,7 +19,7 @@ const initialData = {
   ],
 } as any;
 
-export default function useGetPilgrimGenderByProvinceOfStackChart(query: any) {
+export default function useGetRatioOfInspection(query: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null) as any;
   const [data, setData] = useState<any>(initialData);
