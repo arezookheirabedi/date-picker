@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import Irancell from 'src/assets/images/logos/irancell-logo.svg';
-import Vasl from 'src/assets/images/logos/vasl-logo.svg';
 // import OverviewOfTheLatestVaccinationStatusOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheLatestVaccinationStatusOfPilgrims';
 // import OverviewArbaeen from 'src/components/Arbaeen/public/OverviewArbaeen';
 import OverviewOfTheEntryAndExitOfPilgrims from 'src/components/Arbaeen/public/OverviewOfTheEntryAndExitOfPilgrims';
@@ -28,6 +25,8 @@ import OverviewOfExistBorder from 'src/components/Arbaeen/public/OverviewOfExist
 import OverviewPilgrimAge from 'src/components/Arbaeen/public/OverviewPilgrimAge';
 import RedHalalBasesList from 'src/components/Arbaeen/public/RedHalalBasesList';
 import ComparePilgrimArrivalAndDeparturePerRegion from 'src/components/Arbaeen/public/ComparePilgrimArrivalAndDeparturePerRegion';
+import OverviewOfTripDuration from 'src/components/Arbaeen/public/OverviewOfTripDuration';
+import TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo from 'src/components/Arbaeen/public/TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo';
 import ListOfTransportationAxesStatus from '../../components/Arbaeen/public/ListOfTransportationAxesStatus';
 import GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims from '../../components/Arbaeen/public/GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims';
 // import GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases from '../../components/Arbaeen/public/GeneralLookAtTheLocationOfProcessionsAndRedCrescentBases';
@@ -58,11 +57,13 @@ const Arbaeen = () => {
       {/* <GeneralLookAtTransportationAxesAndExitBordersOfCountry /> */}
       {/* done */}
       <GeneralLookAtTheProcessOfTheEntryAndExitOfPilgrims />
+      <TheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo />
       {/* done */}
       <ComparsionPasengersEntranceAndExistanceAtBoarders />
       {/* done */}
       <OverviewTheLatestStatusGroundBorders />
       <ComparePilgrimArrivalAndDeparturePerRegion />
+      <OverviewOfTripDuration />
       {/* done */}
       <ListOfTransportationAxesStatus />
       {/* <ListOfTheBusiestBorderCrossings /> */}

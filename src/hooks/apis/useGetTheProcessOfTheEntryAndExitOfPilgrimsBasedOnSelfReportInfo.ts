@@ -3,9 +3,14 @@ import axios from 'axios';
 import arbaeenService from 'src/services/arbaeen.service';
 import {toPersianDigit} from 'src/helpers/utils';
 import dayjs from 'dayjs';
+import {useLocation} from 'react-router-dom';
 import {EERRORS} from '../../constants/errors.enum';
+import {getProvinceParam} from '../../helpers/utils';
 
-export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: any) {
+export default function useGetTheProcessOfTheEntryAndExitOfPilgrimsBasedOnSelfReportInfo(
+  query: any,
+  hasProvince: boolean = false
+) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(false);
   const [data, setData] = useState<any>([]);
@@ -16,29 +21,23 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
     const date = toPersianDigit(dayjs(value).calendar('jalali').format('YYYY/MM/DD'));
     return date;
   };
-  const getValues = (id: number) => {
-    if (id === 0) {
-      return [3, 4, 1, 2, 500001, 500002];
-    }
 
-    return [id];
-  };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getIt = async ({retry, ...params}: any) => {
     setLoading(true);
-    const newParams = getValues(Number(params.borderIdList));
     try {
-      const {data: result} = await arbaeenService.getEntranceAxndExistanceBorder(newParams, {
-        cancelToken: source.token,
-      });
+      const {data: result} =
+        await arbaeenService.getEntranceAxndExistanceBorderBasedOnSelfReportInfo(params, {
+          cancelToken: source.token,
+        });
 
       const date: any[] = [];
       const countExist: any[] = [];
       const countEntrance: any[] = [];
       result.forEach((item: any) => {
         date.push(getTime(item.dateTime));
-        countExist.push(item.exitingCount);
-        countEntrance.push(item.enteringCount);
+        countExist.push(item.exitingCount || 0);
+        countEntrance.push(item.enteringCount || 0);
       });
 
       setData(() => {
@@ -78,16 +77,34 @@ export default function useGetOverviewPilgrimExistAndEntranceFromBorders(query: 
   };
 
   useEffect(() => {
+    if (hasProvince) {
+      return;
+    }
     getIt(query);
-    const id = setInterval(() => {
-      getIt(query);
-    }, 60000 * 5);
+
+    // eslint-disable-next-line consistent-return
     return () => {
-      clearInterval(id);
       setData([]);
       source.cancel('Operation canceled by the user.');
     };
   }, [query]);
+
+  const location = useLocation();
+  function doProvinceActions() {
+    if (getProvinceParam()) {
+      getIt({...query, province: getProvinceParam()});
+    }
+  }
+
+  useEffect(() => {
+    if (!hasProvince) return;
+    doProvinceActions();
+    // eslint-disable-next-line consistent-return
+    return () => {
+      setData([]);
+      source.cancel('Operation canceled by the user.');
+    };
+  }, [location.search, query]);
 
   return {loading, error, data};
 }

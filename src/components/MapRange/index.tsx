@@ -8,6 +8,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any) => {
   //   eslint-disable-next-line
   const [isPlaying, setIsPlaying] = useState(false);
+  // const [initialFilterValue, setInitialFilterValue] = useState<any>(null);
   const [animation] = useState<any>({});
 
   // prettier-ignore
@@ -16,14 +17,25 @@ const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any)
   }, [animation]);
 
   if (isPlaying && !animation.id) {
-    const span = value[1] - value[0];
-    let nextValueMin = value[0] + animationSpeed;
-    if (nextValueMin + span >= max) {
-      nextValueMin = min;
-    }
+    // const span = value[1] - value[0];
+    // const nextValueMin = value[0] + animationSpeed;
+
     animation.id = requestAnimationFrame(() => {
+      // if (nextValueMin + span >= max) {
+      //   nextValueMin = min;
+      // }
+      let initialValue = null;
+      if (!initialValue) {
+        // eslint-disable-next-line prefer-destructuring
+        initialValue = value[0];
+      }
       animation.id = 0;
-      onChange([nextValueMin, nextValueMin + span]);
+      if (value[0] <= value[1]) {
+        onChange([(value[0] + animationSpeed), value[1]]);
+      } else {
+        onChange([min, value[1]]);
+      }
+
     });
   }
 
@@ -72,7 +84,10 @@ const MapRange = ({min, max, value, animationSpeed, formatLabel, onChange}: any)
           value={value}
           trackStyle={[{backgroundColor: '#ffcc00'}]}
           handleStyle={[{borderColor: '#ffcc00', boxShadow: 'none'}]}
-          onChange={newValue => onChange(newValue)}
+          // onChange={(newValue: any) => {
+          //   setInitialFilterValue(newValue);
+          //   onChange(newValue)
+          // }}
           tipFormatter={formatLabel}
         />
       </div>
