@@ -147,14 +147,12 @@ const OverviewListOfInspections: React.FC<{}> = () => {
             columns={[
               {
                 name: 'شماره خبازی',
-                key: 'number',
+                key: 'unitNumber',
                 className: 'flex justify-start',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex justify-start items-center space-x-2 rtl:space-x-reverse">
-                    <span className="w-8">
-                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.
-                    </span>
-                    <span>{Number(v).toPersianDigits()}</span>
+                render: (v: any, record, index: number) => (
+                  <div className="flex w-full justify-start">
+                    {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    {record.number}
                   </div>
                 ),
               },
@@ -165,7 +163,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
               },
               {
                 name: 'نام مالک',
-                key: 'name',
+                key: 'ownerName',
                 render: (v: any) => <span>{v}</span>,
               },
               {
@@ -175,62 +173,64 @@ const OverviewListOfInspections: React.FC<{}> = () => {
               },
               {
                 name: 'نوع تخلف',
-                key: 'types',
+                key: 'typeViolation',
                 render: (v: any, record: any) => (
                   <div className="flex justify-center items-center">
-                    <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
-                      {record.inactivity ? (
-                        <div className="w-4 h-4">
-                          <img className="w-4 h-4" src={nonActivityIcon} alt="عدم فعالیت" />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.listPrice ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={listPriceDeactiveIcon}
-                            alt="عدم نصب نرخ نامه"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.businessLicense ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={businessLicenseDeactiveIcon}
-                            alt="عدم نصب پروانه کسب"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.registeredPosDevice ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={posDeviceDeactiveIcon}
-                            alt="عدم استفاده از کارتخوان ثبت شده در سامانه"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.unapprovedPrice ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={unapprovedPriceDeactiveIcon}
-                            alt="عرضه نان به قیمت غیر مصوب"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                    </div>
+                    {record.typeViolation.lenght > 0 && (
+                      <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
+                        {record.typeViolation.inactivity ? (
+                          <div className="w-4 h-4">
+                            <img className="w-4 h-4" src={nonActivityIcon} alt="عدم فعالیت" />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {record.typeViolation.listPrice ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={listPriceDeactiveIcon}
+                              alt="عدم نصب نرخ نامه"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {record.typeViolation.businessLicense ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={businessLicenseDeactiveIcon}
+                              alt="عدم نصب پروانه کسب"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {record.typeViolation.registeredPosDevice ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={posDeviceDeactiveIcon}
+                              alt="عدم استفاده از کارتخوان ثبت شده در سامانه"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {record.typeViolation.unapprovedPrice ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={unapprovedPriceDeactiveIcon}
+                              alt="عرضه نان به قیمت غیر مصوب"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                      </div>
+                    )}
                   </div>
                 ),
               },

@@ -32,20 +32,19 @@ export default function useGetOverviewListOfInspections(query: any, hasProvince:
       const {data} = await inspectionService.inspectionAll(newData, {
         cancelToken: cancelToken.token,
       });
-      // const normalizedData: any[] = [];
-      // data.content.forEach((item: any, index: number) => {
-      //   normalizedData.push({
-      //     id: `ovca_${index}`,
-      //     categoryCode: item.categoryCode || 'نامشخص',
-      //     guildCode: item.guildCode || 'نامشخص',
-      //     ownerMobileNumber: item.ownerMobileNumber,
-      //     ownerNationalId: item.ownerNationalId || 'نامشخص',
-      //     categoryName: item.categoryName || 'نامشخص',
-      //     address: item.address || 'نامشخص',
-      //   });
-      // });
-      // setDataSet([...normalizedData]);
-      // setTotalItems(data.totalElements);
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `incpection_List_${index}`,
+          typeViolation: item.typeViolation || [],
+          address: item.address || 'نامشخص',
+          province: item.province || 'نامشخص',
+          unitNumber: item.unitNumber || 'نامشخص',
+          ownerName: `${item.operatorFirstName || '-'} ${item.operatorLastName || '-'}`,
+        });
+      });
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
       setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
