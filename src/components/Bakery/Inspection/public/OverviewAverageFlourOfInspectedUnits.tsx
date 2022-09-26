@@ -65,6 +65,8 @@ const optionChart = {
   tooltip: {
     shared: true,
     useHTML: true,
+    valueSuffix: 'کیسه',
+
     style: {
       direction: 'rtl',
       textAlign: 'right',

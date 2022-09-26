@@ -175,62 +175,58 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                 name: 'نوع تخلف',
                 key: 'typeViolation',
                 render: (v: any, record: any) => (
-                  <div className="flex justify-center items-center">
-                    {record.typeViolation.lenght > 0 && (
-                      <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
-                        {record.typeViolation.inactivity ? (
-                          <div className="w-4 h-4">
-                            <img className="w-4 h-4" src={nonActivityIcon} alt="عدم فعالیت" />
+                  <div className="flex justify-center items-center ">
+                    {record.typeViolation.length > 0 &&
+                      record.typeViolation.map((type: string) => {
+                        return (
+                          <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse px-1">
+                            {type === 'inactivity' ? (
+                              <div className="w-4 h-4">
+                                <img className="w-4 h-4" src={nonActivityIcon} alt="عدم فعالیت" />
+                              </div>
+                            ) : (
+                              // <div className="w-4 h-4" />
+                              <></>
+                            )}
+                            {type === 'noListPrice' ? (
+                              <div className="w-4 h-4">
+                                <img
+                                  className="w-4 h-4"
+                                  src={listPriceDeactiveIcon}
+                                  alt="عدم نصب نرخ نامه"
+                                />
+                              </div>
+                            ) : (
+                              // <div className="w-4 h-4" />
+                              <></>
+                            )}
+                            {type === 'noBusinessLicense' ? (
+                              <div className="w-4 h-4">
+                                <img
+                                  className="w-4 h-4"
+                                  src={businessLicenseDeactiveIcon}
+                                  alt="عدم نصب پروانه کسب"
+                                />
+                              </div>
+                            ) : (
+                              // <div className="w-4 h-4" />
+                              <></>
+                            )}
+                            {type === 'unapprovedPrice' ? (
+                              <div className="w-4 h-4">
+                                <img
+                                  className="w-4 h-4"
+                                  src={unapprovedPriceDeactiveIcon}
+                                  alt="عرضه نان به قیمت غیر مصوب"
+                                />
+                              </div>
+                            ) : (
+                              // <div className="w-4 h-4" />
+                              <></>
+                            )}
                           </div>
-                        ) : (
-                          <div className="w-4 h-4" />
-                        )}
-                        {record.typeViolation.noListPrice ? (
-                          <div className="w-4 h-4">
-                            <img
-                              className="w-4 h-4"
-                              src={listPriceDeactiveIcon}
-                              alt="عدم نصب نرخ نامه"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4" />
-                        )}
-                        {record.typeViolation.noBusinessLicense ? (
-                          <div className="w-4 h-4">
-                            <img
-                              className="w-4 h-4"
-                              src={businessLicenseDeactiveIcon}
-                              alt="عدم نصب پروانه کسب"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4" />
-                        )}
-                        {/* {record.typeViolation.registeredPosDevice ? (
-                          <div className="w-4 h-4">
-                            <img
-                              className="w-4 h-4"
-                              src={posDeviceDeactiveIcon}
-                              alt="عدم استفاده از کارتخوان ثبت شده در سامانه"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4" />
-                        )} */}
-                        {record.typeViolation.unapprovedPrice ? (
-                          <div className="w-4 h-4">
-                            <img
-                              className="w-4 h-4"
-                              src={unapprovedPriceDeactiveIcon}
-                              alt="عرضه نان به قیمت غیر مصوب"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4" />
-                        )}
-                      </div>
-                    )}
+                        );
+                      })}
                   </div>
                 ),
               },
