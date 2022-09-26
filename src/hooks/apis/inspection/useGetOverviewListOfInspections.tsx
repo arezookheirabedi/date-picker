@@ -69,20 +69,23 @@ export default function useGetOverviewListOfInspections(query: any, hasProvince:
   const location = useLocation();
 
   useEffect(() => {
+    if (!hasProvince) {
+      return;
+    }
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
-    if (existsCity && hasProvince) {
-      getIt(provinceName);
+    if (existsCity) {
+      getIt({...query, province: provinceName});
     }
     // eslint-disable-next-line consistent-return
     return () => {
       cancelRequest();
       setDataSet([]);
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
   return {loading, error, dataSet, totalItems};
 }
