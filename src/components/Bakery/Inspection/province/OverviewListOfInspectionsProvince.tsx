@@ -23,9 +23,9 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
     currentPage: 1,
     pageSize,
     inactivity: false,
-    istPrice: false,
-    businessLicense: false,
-    registeredPosDevice: false,
+    noListPrice: false,
+    noBusinessLicense: false,
+    // registeredPosDevice: false,
     unapprovedPrice: false,
   });
   const {
@@ -61,24 +61,24 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
           showCheckedIcon
         />
         <ButtonToggle
-          name="listPrice"
+          name="noListPrice"
           title="عدم نصب نرخ نامه"
-          selected={query.listPrice || false}
+          selected={query.noListPrice || false}
           disabled={loading}
           onChange={(e: any) => {
-            filterChange(e, 'listPrice');
+            filterChange(e, 'noListPrice');
           }}
           defaultIcon={listPriceDeactiveIcon}
           activeIcon={listPriceIcon}
           showCheckedIcon
         />
         <ButtonToggle
-          name="businessLicense"
+          name="noBusinessLicense"
           title="عدم نصب پروانه کسب"
-          selected={query.businessLicense || false}
+          selected={query.noBusinessLicense || false}
           disabled={loading}
           onChange={(e: any) => {
-            filterChange(e, 'businessLicense');
+            filterChange(e, 'noBusinessLicense');
           }}
           defaultIcon={businessLicenseDeactiveIcon}
           activeIcon={businessLicenseIcon}
@@ -87,7 +87,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
       </div>
 
       <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm">
-        <ButtonToggle
+        {/* <ButtonToggle
           name="registeredPosDevice"
           title="عدم استفاده از کارتخوان ثبت شده در سامانه"
           selected={query.registeredPosDevice || false}
@@ -97,7 +97,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
           defaultIcon={posDeviceDeactiveIcon}
           activeIcon={posDeviceIcon}
           showCheckedIcon
-        />
+        /> */}
         <ButtonToggle
           name="unapprovedPrice"
           title="عرضه نان به قیمت غیر مصوب"
@@ -113,7 +113,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
       </div>
 
       <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center space-x-4 rtl:space-x-reverse">
+        {/* <div className="flex align-center space-x-4 rtl:space-x-reverse">
           <div className="relative z-20 inline-block text-left px-5 py-1 shadow rounded">
             <div className="inline-flex justify-center items-center w-full text-sm font-medium">
               <span className="mx-3 whitespace-nowrap truncate">
@@ -121,7 +121,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         {errorMessage && !loading ? (
@@ -139,14 +139,12 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
             columns={[
               {
                 name: 'شماره خبازی',
-                key: 'number',
+                key: 'unitNumber',
                 className: 'flex justify-start',
-                render: (v: any, record, index: number, page: number) => (
-                  <div className="flex justify-start items-center space-x-2 rtl:space-x-reverse">
-                    <span className="w-8">
-                      {((page - 1) * 10 + (index + 1)).toLocaleString('fa')}.
-                    </span>
-                    <span>{Number(v).toPersianDigits()}</span>
+                render: (v: any, record, index: number) => (
+                  <div className="flex w-full justify-start">
+                    {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
+                    {record.unitNumber}
                   </div>
                 ),
               },
@@ -157,72 +155,74 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
               },
               {
                 name: 'نام مالک',
-                key: 'name',
+                key: 'ownerName',
                 render: (v: any) => <span>{v}</span>,
               },
-              {
-                name: 'کد ملی مالک',
-                key: 'nationalId',
-                render: (v: any) => <span>{Number(v).toPersianDigits()}</span>,
-              },
+              // {
+              //   name: 'کد ملی مالک',
+              //   key: 'nationalId',
+              //   render: (v: any) => <span>{Number(v).toPersianDigits()}</span>,
+              // },
               {
                 name: 'نوع تخلف',
-                key: 'types',
+                key: 'typeViolation',
                 render: (v: any, record: any) => (
                   <div className="flex justify-center items-center">
-                    <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
-                      {record.inactivity ? (
-                        <div className="w-4 h-4">
-                          <img className="w-4 h-4" src={nonActivityIcon} alt="عدم فعالیت" />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.listPrice ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={listPriceDeactiveIcon}
-                            alt="عدم نصب نرخ نامه"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.businessLicense ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={businessLicenseDeactiveIcon}
-                            alt="عدم نصب پروانه کسب"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.registeredPosDevice ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={posDeviceDeactiveIcon}
-                            alt="عدم استفاده از کارتخوان ثبت شده در سامانه"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                      {record.unapprovedPrice ? (
-                        <div className="w-4 h-4">
-                          <img
-                            className="w-4 h-4"
-                            src={unapprovedPriceDeactiveIcon}
-                            alt="عرضه نان به قیمت غیر مصوب"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4" />
-                      )}
-                    </div>
+                    {record.typeViolation.lenght > 0 && (
+                      <div className="flex justify-start items-center space-x-3 rtl:space-x-reverse">
+                        {record.typeViolation.inactivity ? (
+                          <div className="w-4 h-4">
+                            <img className="w-4 h-4" src={nonActivityIcon} alt="عدم فعالیت" />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {record.typeViolation.noListPrice ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={listPriceDeactiveIcon}
+                              alt="عدم نصب نرخ نامه"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {record.typeViolation.noBusinessLicense ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={businessLicenseDeactiveIcon}
+                              alt="عدم نصب پروانه کسب"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                        {/* {record.typeViolation.registeredPosDevice ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={posDeviceDeactiveIcon}
+                              alt="عدم استفاده از کارتخوان ثبت شده در سامانه"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )} */}
+                        {record.typeViolation.unapprovedPrice ? (
+                          <div className="w-4 h-4">
+                            <img
+                              className="w-4 h-4"
+                              src={unapprovedPriceDeactiveIcon}
+                              alt="عرضه نان به قیمت غیر مصوب"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4" />
+                        )}
+                      </div>
+                    )}
                   </div>
                 ),
               },

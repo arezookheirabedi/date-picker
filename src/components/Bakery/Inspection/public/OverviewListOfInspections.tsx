@@ -23,9 +23,9 @@ const OverviewListOfInspections: React.FC<{}> = () => {
     currentPage: 1,
     pageSize,
     inactivity: false,
-    listPrice: false,
-    businessLicense: false,
-    registeredPosDevice: false,
+    noListPrice: false,
+    noBusinessLicense: false,
+    // registeredPosDevice: false,
     unapprovedPrice: false,
   });
   const {
@@ -61,24 +61,24 @@ const OverviewListOfInspections: React.FC<{}> = () => {
           showCheckedIcon
         />
         <ButtonToggle
-          name="listPrice"
+          name="noListPrice"
           title="عدم نصب نرخ نامه"
-          selected={query.listPrice || false}
+          selected={query.noListPrice || false}
           disabled={loading}
           onChange={(e: any) => {
-            filterChange(e, 'listPrice');
+            filterChange(e, 'noListPrice');
           }}
           defaultIcon={listPriceDeactiveIcon}
           activeIcon={listPriceIcon}
           showCheckedIcon
         />
         <ButtonToggle
-          name="businessLicense"
+          name="noBusinessLicense"
           title="عدم نصب پروانه کسب"
-          selected={query.businessLicense || false}
+          selected={query.noBusinessLicense || false}
           disabled={loading}
           onChange={(e: any) => {
-            filterChange(e, 'businessLicense');
+            filterChange(e, 'noBusinessLicense');
           }}
           defaultIcon={businessLicenseDeactiveIcon}
           activeIcon={businessLicenseIcon}
@@ -87,7 +87,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
       </div>
 
       <div className="flex items-center space-x-4 rtl:space-x-reverse my-8 mt-4 text-sm">
-        <ButtonToggle
+        {/* <ButtonToggle
           name="registeredPosDevice"
           title="عدم استفاده از کارتخوان ثبت شده در سامانه"
           selected={query.registeredPosDevice || false}
@@ -97,7 +97,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
           defaultIcon={posDeviceDeactiveIcon}
           activeIcon={posDeviceIcon}
           showCheckedIcon
-        />
+        /> */}
         <ButtonToggle
           name="unapprovedPrice"
           title="عرضه نان به قیمت غیر مصوب"
@@ -113,7 +113,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
       </div>
 
       <div className="flex flex-grow items-center justify-between space-x-5 rtl:space-x-reverse mb-8">
-        <div className="flex align-center space-x-4 rtl:space-x-reverse">
+        {/* <div className="flex align-center space-x-4 rtl:space-x-reverse">
           <div className="relative z-20 inline-block text-left px-5 py-1 shadow rounded">
             <div className="inline-flex justify-center items-center w-full text-sm font-medium">
               <span className="mx-3 whitespace-nowrap truncate">
@@ -121,7 +121,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* {loading ? (
@@ -152,7 +152,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                 render: (v: any, record, index: number) => (
                   <div className="flex w-full justify-start">
                     {toPersianDigit(((query.currentPage - 1) * pageSize + (index + 1)).toString())}.
-                    {record.number}
+                    {record.unitNumber}
                   </div>
                 ),
               },
@@ -166,11 +166,11 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                 key: 'ownerName',
                 render: (v: any) => <span>{v}</span>,
               },
-              {
-                name: 'کد ملی مالک',
-                key: 'nationalId',
-                render: (v: any) => <span>{Number(v).toPersianDigits()}</span>,
-              },
+              // {
+              //   name: 'کد ملی مالک',
+              //   key: 'nationalId',
+              //   render: (v: any) => <span>{Number(v).toPersianDigits()}</span>,
+              // },
               {
                 name: 'نوع تخلف',
                 key: 'typeViolation',
@@ -185,7 +185,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                         ) : (
                           <div className="w-4 h-4" />
                         )}
-                        {record.typeViolation.listPrice ? (
+                        {record.typeViolation.noListPrice ? (
                           <div className="w-4 h-4">
                             <img
                               className="w-4 h-4"
@@ -196,7 +196,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                         ) : (
                           <div className="w-4 h-4" />
                         )}
-                        {record.typeViolation.businessLicense ? (
+                        {record.typeViolation.noBusinessLicense ? (
                           <div className="w-4 h-4">
                             <img
                               className="w-4 h-4"
@@ -207,7 +207,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                         ) : (
                           <div className="w-4 h-4" />
                         )}
-                        {record.typeViolation.registeredPosDevice ? (
+                        {/* {record.typeViolation.registeredPosDevice ? (
                           <div className="w-4 h-4">
                             <img
                               className="w-4 h-4"
@@ -217,7 +217,7 @@ const OverviewListOfInspections: React.FC<{}> = () => {
                           </div>
                         ) : (
                           <div className="w-4 h-4" />
-                        )}
+                        )} */}
                         {record.typeViolation.unapprovedPrice ? (
                           <div className="w-4 h-4">
                             <img
