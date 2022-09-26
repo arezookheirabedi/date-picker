@@ -10,8 +10,7 @@ import listPriceDeactiveIcon from '../../../../assets/images/icons/list-price-de
 import listPriceIcon from '../../../../assets/images/icons/list-price.svg';
 import businessLicenseDeactiveIcon from '../../../../assets/images/icons/business-license-deactive.svg';
 import businessLicenseIcon from '../../../../assets/images/icons/business-license.svg';
-import posDeviceDeactiveIcon from '../../../../assets/images/icons/pos-device-deactive.svg';
-import posDeviceIcon from '../../../../assets/images/icons/pos-device.svg';
+
 import unapprovedPriceDeactiveIcon from '../../../../assets/images/icons/unapproved-price-deactive.svg';
 import unapprovedPriceIcon from '../../../../assets/images/icons/unapproved-price.svg';
 import useGetOverviewListOfInspections from '../../../../hooks/apis/inspection/useGetOverviewListOfInspections';
