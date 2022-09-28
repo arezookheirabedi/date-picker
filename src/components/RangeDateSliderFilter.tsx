@@ -39,7 +39,7 @@ interface IProps {
   dates?: {
     from: any | null | undefined;
     to: any | null | undefined;
-  };
+  } | null;
 }
 
 // eslint-disable-next-line
@@ -74,11 +74,11 @@ const convertValueToLabel: (value: number) => string = value => {
 };
 
 const RangeDateSliderFilter: React.FC<IProps> = ({
-  selectedType,
-  changeType,
-  dates = {from: null, to: null},
-  wrapperClassName,
-}) => {
+                                                   selectedType,
+                                                   changeType,
+                                                   dates = {from: null, to: null},
+                                                   wrapperClassName,
+                                                 }) => {
   // eslint-disable-next-line
   const [disabledDays, setDisabledDays] = useState<any[]>([]);
   const [marks, setMarks] = useState([
@@ -129,6 +129,9 @@ const RangeDateSliderFilter: React.FC<IProps> = ({
   };
 
   useEffect(() => {
+    if (!dates) {
+      return;
+    }
     const tmp: any[] = [];
     if (dates?.from && dates?.to) {
       const finalFromDate = `${dates.from.year}/${dates.from.month}/${dates.from.day}`;
