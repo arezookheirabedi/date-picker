@@ -103,8 +103,6 @@ const OverviewReportOfInspectedUnit: React.FC<IOverviewReportOfInspectedUnit> = 
                                                                                    setQuery
                                                                                  }) => {
 
-  console.log('data chart => ', data)
-
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
