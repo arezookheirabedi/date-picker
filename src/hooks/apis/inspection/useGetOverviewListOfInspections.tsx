@@ -1,40 +1,51 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-// api services
-import axios from "axios";
 import inspectionService from '../../../services/inspection.service';
-import {sideCities} from '../../../helpers/utils';
-import {EERRORS} from "../../../constants/errors.enum";
+import {cancelTokenSource, msgRequestCanceled, sideCities} from '../../../helpers/utils';
+import {EERRORS} from '../../../constants/errors.enum';
 
-export default function useGetOverviewListOfInspections(hasProvince : boolean = false) {
+export default function useGetOverviewListOfInspections(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(false);
-  const [list, setList] = useState<any>([]);
-  const [filteredDataset, setFilteredDataset] = useState<any>([]);
-  const [error, setError] = useState(false);
-  const [count, setCount] = useState<any>(0);
-  
-  const {CancelToken} = axios;
-  const source = CancelToken.source();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totalItems, setTotalItems] = useState(0);
+  const [error, setError] = useState(null);
+  const [dataSet, setDataSet] = useState<any>([]);
 
-  const getListOfInspections = async (province: any = null) => {
+  const cancelToken = cancelTokenSource();
+
+  function cancelRequest() {
+    cancelToken.cancel(msgRequestCanceled);
+  }
+  const getIt = async ({retry, currentPage, ...params}: any = {}) => {
+    const newData = {...params, pageNumber: Number(query.currentPage) - 1};
+
+    Object.keys(newData).forEach(key => {
+      if (newData[key] === false) {
+        // delete newData[key];
+        newData[key] = null;
+      }
+    });
     setLoading(true);
+    setError(null);
     try {
-        const {data} = await inspectionService.inspectionAll(
-          {tag: 'transport', province},
-          {cancelToken: source.token}
-        );
-        const normalizedData: any[] = [];
-        data.forEach((item: any, index: number) => {
-          normalizedData.push({
-              id: `ovca_${index}`,
-              ...item,
-          });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {data} = await inspectionService.inspectionAll(newData, {
+        cancelToken: cancelToken.token,
+      });
+      const normalizedData: any[] = [];
+      data.content.forEach((item: any, index: number) => {
+        normalizedData.push({
+          id: `incpection_List_${index}`,
+          typeViolation: item.typeViolation || [],
+          address: item.address || 'نامشخص',
+          province: item.province || 'نامشخص',
+          unitNumber: item.unitNumber || 'نامشخص',
+          ownerName: `${item.operatorFirstName || '-'} ${item.operatorLastName || '-'}`,
         });
-        setCount(normalizedData.length);
-        setList([...normalizedData]);
-        setFilteredDataset([...normalizedData]);
-        setError(false);
-        setLoading(false);
+      });
+      setDataSet([...normalizedData]);
+      setTotalItems(data.totalElements);
+      setLoading(false);
     } catch (err: any) {
       if (err.message === 'cancel') {
         setLoading(true);
@@ -44,43 +55,37 @@ export default function useGetOverviewListOfInspections(hasProvince : boolean = 
       setLoading(false);
     }
   };
-
   useEffect(() => {
-    if (hasProvince) return;
-    getListOfInspections();
+    if (hasProvince) {
+      return;
+    }
+    getIt({...query});
     // eslint-disable-next-line consistent-return
     return () => {
-      setList([]);
-      source.cancel('Operation canceled by the user.');
+      cancelRequest();
+      setDataSet([]);
     };
-  }, []);
-
+  }, [query]);
   const location = useLocation();
 
   useEffect(() => {
-    if (!hasProvince) return;
+    if (!hasProvince) {
+      return;
+    }
     const params = new URLSearchParams(location.search);
     const provinceName = params.get('provinceName') || ('تهران' as any);
     const existsCity = sideCities.some((item: any) => {
       return item.name === provinceName;
     });
     if (existsCity) {
-      getListOfInspections(provinceName);
+      getIt({...query, province: provinceName});
     }
     // eslint-disable-next-line consistent-return
     return () => {
-      source.cancel('Operation canceled by the user.');
-      setList([]);
+      cancelRequest();
+      setDataSet([]);
     };
-  }, [location.search]);
+  }, [location.search, query]);
 
-  return {
-    loading,
-    list,
-    count,
-    setCount,
-    filteredDataset,
-    setFilteredDataset,
-    error
-    };
+  return {loading, error, dataSet, totalItems};
 }

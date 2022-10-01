@@ -1,67 +1,91 @@
 import {useEffect, useState} from 'react';
+import axios from 'axios';
 import inspectionService from 'src/services/inspection.service';
-import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
+import {EERRORS} from '../../../constants/errors.enum';
+
+const initialData = {
+  categories: [],
+  series: [
+    {
+      name: 'نیاز به بازرسی',
+      color: '#F3BC06',
+      data: [],
+    },
+    {
+      name: 'بازرسی‌های انجام شده',
+      color: '#07816C',
+      data: [],
+    },
+  ],
+} as any;
 
 export default function useGetRatioOfInspection(query: any) {
-    const [error, setError] = useState(null) as any;
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null) as any;
+  const [data, setData] = useState<any>(initialData);
 
-    const cancelToken = cancelTokenSource();
+  const {CancelToken} = axios;
+  const source = CancelToken.source();
 
-    function cancelRequest() {
-        cancelToken.cancel(msgRequestCanceled);
-    }
+  const getIt = async ({retry, ...params}: any) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await inspectionService.ratioOfInspection(
+        {
+          ...params,
+        },
+        {cancelToken: source.token}
+      );
+      const provinces: any[] = [];
+      const inspectionCount: any[] = [];
+      const neededToInspectionCount: any[] = [];
+      const sortData = res.data.sort((a: any, b: any) =>
+        a.inspectionCount > b.inspectionCount ? 1 : -1
+      );
 
-    const getColumnChartTestResult = async (params: any) => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await inspectionService.ratioOfInspection(params, {
-            cancelToken: cancelToken.token,
-          });
-          const needToInspection: any[] = [];
-          const inspectionDone: any[] = [];
-          const grade: any[] = [];
-          response.data.forEach((item: any) => {
-            needToInspection.push(item.needToInspection);
-            inspectionDone.push(item.inspectionDone);
+      sortData.forEach((item: any) => {
+        inspectionCount.push(item.inspectionCount || 0);
+        neededToInspectionCount.push(item.neededToInspectionCount || 0);
+        provinces.push(item.province || '');
+      });
 
-            grade.push(item.province);
-          });
-          const newData = [
-            {
-              name: 'بازرسی‌های انجام شده',
-              data: [...inspectionDone],
-              color: '#07816C',
-            },
+      setData(() => {
+        return {
+          categories: provinces,
+          series: [
             {
               name: 'نیاز به بازرسی',
-              data: [...needToInspection],
               color: '#F3BC06',
+              data: [...neededToInspectionCount],
             },
-          ];
-          setData({categories: [...grade], series: [...newData]});
-        } catch (err: any) {
-            setError(err.message);
-            console.log(err);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-        
+            {
+              name: 'بازرسی‌های انجام شده',
+              color: '#07816C',
+              data: [...inspectionCount],
+            },
+          ],
+        };
+      });
+      setLoading(false);
+    } catch (err: any) {
+      if (err.message === 'cancel') {
+        setLoading(true);
+        return;
+      }
+      setError(err.message || EERRORS.ERROR_500);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
-
+    getIt(query);
+    // eslint-disable-next-line consistent-return
     return () => {
-      setData([]);
-      cancelRequest();
-      clearTimeout(idSetTimeOut);
+      setData(initialData);
+      setError(null);
+      source.cancel('Operation canceled by the user.');
     };
   }, [query]);
 
-    return {loading, error, data};
+  return {loading, error, data};
 }
