@@ -49,6 +49,20 @@ function inspectionStatusOfCookingVariety({ tag, ...params }: any = {}, config?:
         .get(`/api/v1/inspection/cooking-variety`, params, { ...config });
 }
 
+function reports({ tag, ...params }: any = {}, config?: any) {
+    return request
+      .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+      .build()
+      .get(`/api/v1/inspection/reports`, params, { ...config });
+}
+
+function reportsGroupByDate({...params }: any = {}, config?: any){
+    return request
+      .withHeaders({ 'Content-Type': 'application/json;utf-8' })
+      .build()
+      .get(`/api/v1/inspection/reports/group-by-date/count`, params, { ...config });
+}
+
 const inspectionService = {
     inspectionStatus,
     inspectionAll,
@@ -56,7 +70,9 @@ const inspectionService = {
     ratioOfInspection,
     inspectionDone,
     inspectionReport,
-    inspectionStatusOfCookingVariety
+    inspectionStatusOfCookingVariety,
+    reports,
+    reportsGroupByDate
 }
 
 export default inspectionService;
