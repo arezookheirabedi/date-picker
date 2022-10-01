@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {getProvinceParam, sideCities} from 'src/helpers/utils';
 import OverviewInspectionStatusProvince from 'src/components/Bakery/Inspection/province/OverviewInspectionProvince';
-// import OverviewListOfInspectionsProvince
-//   from 'src/components/Bakery/Inspection/province/OverviewListOfInspectionsProvince';
+import OverviewListOfInspectionsProvince
+  from 'src/components/Bakery/Inspection/province/OverviewListOfInspectionsProvince';
 import OverviewReportOfInspectedUnitProvince
   from 'src/components/Bakery/Inspection/province/OverviewReportOfInspectedUnitProvince';
 import OverviewInspectionsDoneProvince from 'src/components/Bakery/Inspection/province/OverviewInspectionsDoneProvince';
@@ -69,10 +69,8 @@ const InspectionProvince = () => {
         {hasProvinceResources && (<>
 
           <OverviewInspectionStatusProvince cityTitle={cityTitle} data={inspection} loading={loading}/>
-          {/*
-        <OverviewListOfInspectionsProvince cityTitle={cityTitle} />
 
-        */}
+          <OverviewListOfInspectionsProvince cityTitle={cityTitle}/>
 
           <div className='flex w-full gap-x-6'>
             <OverviewReportOfInspectedUnitsProvince cityTitle={cityTitle}
