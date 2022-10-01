@@ -13,15 +13,14 @@ import wheatIcon from '../../../../assets/images/icons/wheat.svg';
 import breadIcon from '../../../../assets/images/icons/bread.svg';
 import ovenInspectionIcon from '../../../../assets/images/icons/oven-inspection.svg';
 
-import useGetOverviewInspectionStatus from '../../../../hooks/apis/inspection/useGetOverviewInspectionStatus'
-
 interface OverviewInspectionStatusProvinceProps {
   cityTitle: any;
+  data: any;
+  loading: any
 }
 
-const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinceProps> = ({cityTitle}) => {
+const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinceProps> = ({cityTitle,data, loading}) => {
 
-  const {data: inspection, loading} = useGetOverviewInspectionStatus(true);
  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="bakery-inspection-overview">
@@ -32,7 +31,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={flourInspectionIcon}
               text="تعداد کل بازرسی‌های انجام شده"
-              count={inspection.totalNumberOfInspectionsPerformed || 0}
+              count={data.inspectionCount || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -40,7 +39,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={groupIcon}
               text="تعداد کل بازرسان"
-              count={inspection.totalNumberOfInspectors || 0}
+              count={data.inspectorCount || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -48,7 +47,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={ovenIcon}
               text="تعداد واحدهای بازرسی شده دارای پروانه کسب"
-              count={inspection.numberOfInspectedUnitsWithBusinessLicense || 0}
+              count={data.unitsHavingBusinessLicense || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -56,7 +55,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={ovenDeactiveIcon}
               text="تعداد واحدهای بازرسی شده فاقد پروانه کسب"
-              count={inspection.numberOfInspectedUnitsWithoutBusinessLicense || 0}
+              count={data.unitsNotHavingBusinessLicense || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -66,7 +65,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={bakeryWorkerIcon}
               text="تعداد کل کارگران خبازی‌های بازرسی شده"
-              count={inspection.totalNumberOfInspectedWorkers || 0}
+              count={data.workersCount || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -74,7 +73,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={wheatIcon}
               text="میانگین آرد مشاهده شده در واحدهای بازرسی شده"
-              count={inspection.averageObservedFlourOfInspectedUnits || 0}
+              count={Math.floor(data.averageOfFlour) || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -82,7 +81,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={breadIcon}
               text="مجموع نانهای پخت شده در واحدهای بازرسی شده"
-              count={inspection.totalNumberOfBakedBreadsOfInspectedUnits || 0}
+              count={data.bakedBreadsCount || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
@@ -90,7 +89,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
             <Statistic
               icon={ovenInspectionIcon}
               text="مجموع واحد‌هایی که نیاز به بازرسی دارند"
-              count={inspection.totalUnitsSubjectToInspection || 0}
+              count={data.neededToInspectionCount || 0}
               loading={loading}
               hasInfo
               infoText="لورم اپیسوم"
