@@ -9,6 +9,7 @@ import redPattern from "../../../assets/images/patterns/pie-red.svg";
 import greenPattern from "../../../assets/images/patterns/pie-green.svg";
 import orangePattern from "../../../assets/images/patterns/pie-orange.svg";
 import yellowPattern from "../../../assets/images/patterns/pie-yellow.svg";
+import grayPattern from "../../../assets/images/patterns/pie-gray.svg"
 
 export default function useGetOverviewInspectionStatus(query: any, hasProvince: boolean = false) {
   const [loading, setLoading] = useState(true);
@@ -67,19 +68,19 @@ export default function useGetOverviewInspectionStatus(query: any, hasProvince: 
           title: 'میزان پخت',
           count: result.bakeryReportSubjectMizanePokhtPercentage,
           color: '#175A76',
-          image: '/static/media/pie-blue.98112834.svg'
+          image: bluePattern
         },
         {
           title: 'آرد فروشی',
           count: result.bakeryReportSubjectArdForoushiPercentage,
           color: '#F3BC06',
-          image: '/static/media/pie-yellow.41245a0f.svg'
+          image: yellowPattern
         },
         {
           title: 'سایر',
           count: result.bakeryReportSubjectSayerPercentage,
           color: '#209F92',
-          image: '/static/media/pie-green.e9cab3af.svg'
+          image: greenPattern
         },
       ])
 
@@ -88,13 +89,13 @@ export default function useGetOverviewInspectionStatus(query: any, hasProvince: 
           title: "واحد‌های بازرسی شده فعال",
           count: result.activeUnitsPercentage,
           color: "#07816C",
-          image: "/static/media/pie-green.e9cab3af.svg"
+          image: greenPattern
         },
         {
           title: "واحد‌های بازرسی شده غیرفعال",
           count: result.inactiveUnitsPercentage,
           color: "#8A8A8A",
-          image: "/static/media/pie-gray.e30581b2.svg"
+          image: grayPattern
         }
       ]);
 
