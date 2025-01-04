@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { ILogin } from 'src/models/authentication.model';
-import authenticateService from 'src/services/authentication.service';
 import { getToken, setRequestConfig, setToken } from './utils';
 
 let isRefreshing: boolean = false;
@@ -213,40 +212,12 @@ instance.interceptors.response.use(
 
 
     if (!tokens!.refresh_token) {
-      authenticateService.logout();
       return Promise.reject(error);
     }
-    return authenticateService
-      .token({
-        scope: tokens!.scope,
-        refresh_token: tokens!.refresh_token,
-        grant_type: 'refresh_token',
-      })
-      .then((res: any) => {
-        setToken(res.data);
-        axios.defaults.headers.common.Authorization = `Bearer ${res.data.access_token}`;
-        newConfig.headers.Authorization = `Bearer ${res.data.access_token}`;
-        processQueue(null, res.data.access_token);
-        return new Promise((resolve, reject) => {
-          axios
-            .request(newConfig)
-            .then(response => {
-              resolve(response);
-            })
-            .catch(err => {
-              reject(err);
-            });
-        })
-          .catch(err => {
-            processQueue(err, null);
-          })
-          .finally(() => {
-            isRefreshing = false;
-          });
-      })
-      .catch(() => {
-        authenticateService.logout();
-      });
+ 
+         
+     return"dddd"
+    
   }
 );
 

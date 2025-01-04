@@ -29,10 +29,7 @@ import BakeryInspection from './containers/Bakery/Inspection/Inspection';
 import BakeryInspectionProvince from './containers/Bakery/Inspection/InspectionProvince';
 import InspectorManagement from './containers/InspectorsManagement';
 import UserManagment from './containers/UserManagment/UserManagment';
-import Arbaeen from './containers/Arbaeen/Arbaeen';
-import ArbaeenProvince from './containers/Arbaeen/ArbaeenProvince';
-import ArbaeenPilgrimsMovingCloud from './containers/Arbaeen/ArbaeenPilgrimsMovingCloud';
-import ArbaeenPilgrimsList from './containers/Arbaeen/ArbaeenPilgrimsList';
+
 
 const routes: IRoute[] = [
   {
@@ -744,63 +741,7 @@ const routes: IRoute[] = [
   //   roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER', 'ROLE_REPORT_VIEWER_ZAERIN'],
   // },
 
-  {
-    keyIndex: '3',
-    link: '/dashboard/arbaeen/map',
-    simLink: '/dashboard/arbaeen',
-    exact: true,
-    inMenu: true,
-    title: 'سجا (زائرین اربعین)',
-    // disabled: true,
-    roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-    subMenu: [
-      {
-        keyIndex: '12',
-        icon: (active, disabled) => (
-          <IconWrapperStyle name="flag" className="w-5 h-5" active={active} disabled={disabled} />
-        ),
-        link: '/dashboard/arbaeen/map',
-        simLink: '/dashboard/arbaeen',
-        exact: true,
-        inMenu: true,
-        title: 'داشبورد سجا (زائرین اربعین)  ',
-        children: [
-          {
-            keyIndex: '1',
-            title: 'ابر حرکتی زائرین اربعین',
-            link: '/dashboard/arbaeen/map',
-            roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-            main: ArbaeenPilgrimsMovingCloud,
-          },
 
-          {
-            keyIndex: '2',
-            title: 'عمومی',
-            link: '/dashboard/arbaeen/public',
-            roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-            main: Arbaeen,
-          },
-          {
-            keyIndex: '3',
-            title: 'استانی',
-            enTitle: 'province',
-            link: '/dashboard/arbaeen/province',
-            roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-            main: ArbaeenProvince,
-          },
-          {
-            keyIndex: '4',
-            title: 'لیست زائرین',
-            link: '/dashboard/arbaeen/PilgrimsList',
-            roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-            main: ArbaeenPilgrimsList,
-          },
-        ],
-        roles: ['ROLE_ADMIN', 'ROLE_REPORT_VIEWER_ZAERIN'],
-        main: Arbaeen,
-      },
-    ],
-  },
 
   {
     keyIndex: '4',

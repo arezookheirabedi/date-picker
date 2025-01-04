@@ -2,7 +2,6 @@ import {Dialog, Transition} from '@headlessui/react';
 import React, {Fragment, useState} from 'react';
 import OtpInput from 'react-otp-input';
 import toast from 'cogo-toast';
-import authenticateService from 'src/services/authentication.service';
 import DotLoading from 'src/components/DotLoading';
 import {EERRORS} from 'src/constants/errors.enum';
 import {useHistory} from 'react-router-dom';
@@ -20,34 +19,9 @@ const ConfirmOtp: React.FC<IProps> = ({confirmOtpModal, setConfirmOtpModal, form
   const closeModal: () => void = () => {
     setConfirmOtpModal(false);
   };
-  const handleOtpChange = (otpValue: any) => {
-    setOtp(otpValue);
-  };
-  async function handelConfirm(data: string) {
-    setLoading(true);
-    try {
-      const res = await authenticateService.confirmPassword({
-        confirmationCode: data,
-      });
-      if (res.status === 204) {
-        setOtp('');
-        closeModal();
-        toast.success('تغییر کلمه عبور با موفقیت انجام شد.');
-        // history.push("/login")
-        authenticateService.logout(history);
-      } else {
-        throw new Error('خطایی در عملیات');
-      }
-    } catch (error: any) {
-      toast.error(error.message || EERRORS.ERROR_500);
-    } finally {
-      setLoading(false);
-      setOtp('');
-    }
-  }
+
   const handleSubmit: (e: React.MouseEvent<HTMLElement>) => void = e => {
     e.stopPropagation();
-    handelConfirm(otp);
   };
 
   return (
@@ -109,7 +83,7 @@ const ConfirmOtp: React.FC<IProps> = ({confirmOtpModal, setConfirmOtpModal, form
                 <div className="flex flex-col items-center justify-center">
                   <div className="mt-4 w-4 max-w-xs">
                     <div className="otp flex items-center justify-center space-x-4 text-sm rtl:space-x-reverse">
-                      <OtpInput value={otp} onChange={handleOtpChange} numInputs={6} isInputNum />
+                      <OtpInput value={otp}  numInputs={6} isInputNum />
                     </div>
                   </div>
 

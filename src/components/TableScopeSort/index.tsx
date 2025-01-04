@@ -29,7 +29,7 @@ interface IProps {
   totalItems: number;
   columns: IColumn[];
   dataSet: any[];
-  loading: boolean;
+  loading?: boolean;
   // orderMain: any;
   // handlePageChange: (data: number) => void;
 }

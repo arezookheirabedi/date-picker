@@ -6,11 +6,9 @@ import React, {useState} from 'react';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 // import {transportationTypes} from '../../../helpers/utils';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import SearchableSingleSelect from "../../SearchableSingleSelect";
 import DatepickerQuery from "../../DatepickerQuery";
-import useGetOverviewOfPatients from "../../../hooks/apis/useGetOverviewOfPatients";
 import RetryButton from "../../RetryButton";
 
 const {Line} = Charts;
@@ -34,7 +32,6 @@ const OverviewPublicPatients = () => {
     retry : false
   });
 
-  const {data, loading, error: errorMessage} = useGetOverviewOfPatients(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -111,21 +108,10 @@ const OverviewPublicPatients = () => {
             wrapperClassName="w-1/4"
           />
         </div>
-        {loading && (
-          <div className="p-40">
-            <Spinner/>
-          </div>
-        )}
-        {errorMessage && !loading &&(
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
-          </div>
-        )}
-        {!loading && data.length > 0 && !errorMessage && <Line data={data} showInLegends={false}/>}
-        {data.length === 0 && !loading && !errorMessage && (
+<Line data={[]} showInLegends={false}/>
+       
           <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+      
       </div>
     </fieldset>
   );

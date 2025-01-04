@@ -57,7 +57,7 @@ const OverviewPositive: React.FC<OverviewPositiveProps> = ({cityTitle}) => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             totalItems={totalItems}
             handlePageChange={handlePageChange}
             dataSet={[...dataSet]}

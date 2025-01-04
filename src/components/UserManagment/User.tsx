@@ -1,14 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {EERRORS} from 'src/constants/errors.enum';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
-import authenticationService from 'src/services/authentication.service';
 import HiddenMobileNumber from '../Form/HiddenMobileNumber';
 import SwitchToggleButton from '../Form/SwitchToggleButton';
 import RetryButton from '../RetryButton';
 import Table from '../TableXHR';
 import plusIcon from '../../assets/images/icons/plus.svg';
 import Actions from './TableAction';
-import fsServices from '../../services/fs.service';
 import EditOrAddUser from './TableAction/EditOrAddComponent';
 import Filter from './Filter';
 
@@ -35,26 +33,9 @@ export default function User() {
     retry: false,
     pageSize,
   });
-  const getProvince = async () => {
-    try {
-      const normalizedData: any[] = [];
-      const {data} = (await fsServices.getProvince()) as any;
-      data.forEach((item: any) => {
-        normalizedData.push({
-          label: item.province,
-          value: item.province,
-          id: item.provinceCode,
-        });
-      });
-      setProvinceOptions([...normalizedData]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    getProvince();
-  }, []);
+
+ 
 
   const cancelToken = cancelTokenSource();
 
@@ -62,73 +43,9 @@ export default function User() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, currentPage, ...params}: any) {
-    const newData = {
-      ...params,
-      pageNumber: Number(query.currentPage) - 1,
-    };
-    setErrorMessage(null);
-    setLoading(true);
-    try {
-      const {data} = await authenticationService.users(newData, {
-        cancelToken: cancelToken.token,
-      });
 
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any) => {
-        normalizedData.push({
-          id: item.id,
-          name: `${item.firstName || '-'} ${item.lastName || '-'}`,
-          province: item.province || '-',
-          accestance: item.roles[0],
-          nationalId: item.nationalId || '-',
-          mobileNumber: item.mobileSet || '-',
-          locked: !item.locked || false,
-          city: item.city || '-',
-          username: item.username || '-',
-          totalData: item,
-        });
-      });
 
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
 
-  const getRolesOption = async () => {
-    const normalizedData: Array<{name: string; title: string}> = [];
-    const {data} = (await authenticationService.rolePermision(
-      {pageNumber: 0, pageSize: 1000},
-      {cancelToken: cancelToken.token}
-    )) as any;
-    data.content.forEach((item: any) => {
-      normalizedData.push({
-        name: item.name,
-        title: item.title,
-      });
-    });
-    setRuleOptions([...normalizedData]);
-  };
-
-  useEffect(() => {
-    getRolesOption();
-  }, []);
-
-  useEffect(() => {
-    fetchReports({...query});
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-    };
-  }, [query, refresh]);
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -189,7 +106,7 @@ export default function User() {
             <div ref={wrapperRef}>
               <Table
                 handlePageChange={handlePageChange}
-                loading={loading}
+               
                 dataSet={[...dataSet]}
                 pagination={{pageSize, currentPage: query.currentPage}}
                 totalItems={totalItems}

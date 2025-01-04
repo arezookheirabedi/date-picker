@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
-import transportService from 'src/services/transport.service';
 import RetryButton from 'src/components/RetryButton';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import {EERRORS} from 'src/constants/errors.enum';
@@ -32,49 +31,7 @@ const TransportReport: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, from, to, ...params}: any) {
-    const newData = {
-      ...params,
-      pageNumber: Number(query.currentPage) - 1,
-      fromReportDate: query.from,
-      toReportDate: query.to,
-    };
-    setLoading(true);
-    try {
-      const {data} = await transportService.transportReportoverviewStatus(newData, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any) => {
-        normalizedData.push({
-          id: item.id,
-          reportName: item.reportName,
-          requestDateTime: item.requestDateTime,
-          lastModifiedDate: item.lastModifiedDate,
-          trackingCode: item.trackingCode,
-          reportStatus: item.reportStatus,
-        });
-      });
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
 
-  useEffect(() => {
-    fetchReports({...query});
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-    };
-  }, [query, refresh]);
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -101,7 +58,7 @@ const TransportReport: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             handlePageChange={handlePageChange}
             dataSet={[...dataSet]}
             pagination={{pageSize, currentPage: query.currentPage}}

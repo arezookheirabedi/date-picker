@@ -32,7 +32,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={flourInspectionIcon}
               text="تعداد کل بازرسی‌های انجام شده"
               count={data.inspectionCount || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -40,7 +40,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={groupIcon}
               text="تعداد کل بازرسان"
               count={data.inspectorCount || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -48,7 +48,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={ovenIcon}
               text="تعداد واحدهای بازرسی شده دارای پروانه کسب"
               count={data.unitsHavingBusinessLicense || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -56,7 +56,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={ovenDeactiveIcon}
               text="تعداد واحدهای بازرسی شده فاقد پروانه کسب"
               count={data.unitsNotHavingBusinessLicense || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -66,7 +66,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={bakeryWorkerIcon}
               text="تعداد کل کارگران خبازی‌های بازرسی شده"
               count={data.workersCount || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -74,7 +74,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={wheatIcon}
               text="میانگین آرد مشاهده شده در واحدهای بازرسی شده"
               count={Math.floor(data.averageOfFlour) || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -82,7 +82,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={breadIcon}
               text="مجموع نانهای پخت شده در واحدهای بازرسی شده"
               count={data.bakedBreadsCount || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />
@@ -90,7 +90,7 @@ const OverviewInspectionStatusProvince: React.FC<OverviewInspectionStatusProvinc
               icon={ovenInspectionIcon}
               text="مجموع واحد‌هایی که نیاز به بازرسی دارند"
               count={data.neededToInspectionCount || 0}
-              loading={loading}
+             
               hasInfo
               infoText="لورم اپیسوم"
             />

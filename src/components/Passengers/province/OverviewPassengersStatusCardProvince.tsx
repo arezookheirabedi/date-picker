@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from "react-router-dom";
 import axios from "axios";
-import hcsService from 'src/services/hcs.service';
 import testIcon from 'src/assets/images/icons/test-color.svg';
 import sufferingIcon from 'src/assets/images/icons/suffering-color.svg';
 import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import VaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import {sideCities} from 'src/helpers/utils';
-import passengerService from 'src/services/passenger.service';
 import Statistic from 'src/containers/Guild/components/Statistic';
 import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import totalPassengers from 'src/assets/images/icons/total-passengers.svg';
@@ -44,49 +42,9 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
   const source = CancelToken.source();
 
 
-  const getPcrResult = async (province: any): Promise<any> => {
-    setPcrLoading(true);
-    try {
-      const res = await passengerService.passengerTestResult({province}, {cancelToken: source.token});
-      if (res.status === 200) {
-        const newData = {...passengerPcrInfo, ...res.data};
-        setPassengerPcrInfo(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setPcrLoading(false);
-    }
-  };
+  
+ 
 
-  const getPassengerVaccinateInfo = async (province: any) => {
-    setLoading(true);
-    try {
-      const res = await passengerService.getDoses({province}, {cancelToken: source.token});
-      if (res.status === 200) {
-        const newData = {...passengerVaccinateInfo, ...res.data};
-        setPassengerVaccinateInfo(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getTripCount = async (province: any) => {
-    setTripLoading(true);
-    try {
-      const {data} = await hcsService.tripsCount({province}, {cancelToken: source.token});
-      setTripCount(data.count);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTripLoading(false);
-    }
-  };
 
   // const getNumberOfInquiry = async (province: any) => {
   //   setNumberOfInquiryLoading(true);
@@ -123,31 +81,6 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
   const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getPassengerVaccinateInfo(provinceName);
-      getPcrResult(provinceName);
-      getTripCount(provinceName);
-      // getNumberOfInquiry(provinceName);
-      // getIllegalTicketsSold(provinceName);
-    } else {
-      history.push('/dashboard/passenger/province');
-    }
-
-    return () => {
-      setPassengerVaccinateInfo(initialTotalVacinatelInfo);
-      setPassengerPcrInfo(initialpcrInfo);
-      setTripCount(0);
-      // setInquiryCount(0);
-      // setIllegalTicketsSold(0);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="passenger-overview">
@@ -163,23 +96,18 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
           <Statistic
             icon={totalPassengers}
             text="مجموع مسافران "
-            count={passengerVaccinateInfo.totalPopulation}
-            loading={loading}
             hasInfo
             infoText="مجموع افرادی که حداقل یک بلیط مسافرتی برای آنها صادر شده است."
           />
           <Statistic
             icon={sufferingIcon}
             text="مجموع مبتلایان بعد از سفر"
-            count={passengerPcrInfo.positiveMembersCountAfterTrip || 0}
-            loading={pcrLoading}
             hasInfo
             infoText="مجموع مسافرانی که تا ۱۵ روز بعد از سفر تست کوید آنها مثبت شده است."
           />
           <Statistic
             icon={suspiciousCovid}
             text="مجموع مسافران مشکوک به کوید"
-            count="-"
             hasInfo
             infoText="مجموع مسافرانی که به دلیل همسفری با افراد مبتلا، مشکوک ابتلا به کوید هستند."
             // loading={pcrLoading}
@@ -187,7 +115,6 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
           <Statistic
             icon={deadIcon}
             text="مجموع مسافران با تست نامشخص"
-            count="-"
             hasInfo
             infoText="مجموع مسافرانی که وضعیت کوید آنها مشخص نیست."
             // loading={pcrLoading}
@@ -203,22 +130,19 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             hasInfo
             icon={VaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count={passengerVaccinateInfo.totalVaccinesCount}
-            loading={loading}
+            
           />
           <Statistic
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
-            count={passengerVaccinateInfo.totalNonVaccinesCount}
-            loading={loading}
+
             hasInfo
             infoText="تعداد مسافرانی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
           <Statistic
             icon={VaccineIcon}
             text="درصد افراد واکسینه شده"
-            count={passengerVaccinateInfo.totalVaccinesCountToTotalPopulationPercentage}
-            loading={loading}
+           
             isPercentage
             hasInfo
             infoText="درصد مسافرانی که حداقل یک دوز واکسن را دریافت کرده اند."
@@ -226,8 +150,7 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
           <Statistic
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
-            count={passengerVaccinateInfo.totalNonVaccinesCountToTotalPopulationPercentage}
-            loading={loading}
+          
             isPercentage
             hasInfo
             infoText="درصد مسافرانی که در طرح واکسیناسیون شرکت نکرده‌اند."
@@ -241,22 +164,19 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             infoText="تعداد مسافرانی که به دلیل محدودیت‌های اعلام شده اجازه سفر ندارند."
             icon={redBaggage}
             text="تعداد استعلام فاقد مجوز"
-            count="-"
             // loading={numberOfInquiryLoading}
           />
           <Statistic
             icon={grayBaggage}
             text="مجموع سفرهای صورت گرفته"
-            count={tripCount}
-            loading={tripLoading}
+         
             hasInfo
             infoText="مجموع تمام سفرهای انجام شده از ابتدای راه اندازی سامانه."
           />
           <Statistic
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
-            count={passengerPcrInfo.positiveMembersCountAfterTripToTotalPopulationPercentage || 0}
-            loading={pcrLoading}
+
             isPercentage
             hasInfo
             infoText="درصد مسافران با تست کوید مثبت"
@@ -266,7 +186,6 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
             infoText="تعداد بلیط فروخته شده به افرادی که مجوز خرید بلیط را ندارند."
             icon={redBaggage}
             text="بلیط های غیرمجاز فروخته شده"
-            count="-"
             // loading={illegalTicketsSoldLoading}
           />
         </div>
@@ -274,18 +193,14 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
         <div
           className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
           <Statistic
-            loading={pcrLoading}
             icon={testIcon}
             text="تعداد آزمایش‌های مسافران"
-            count={passengerPcrInfo.testResultsCount || 0}
             hasInfo
             infoText="تعداد آزمایش های کوید انجام شده توسط مسافران"
           />
           <Statistic
-            loading={pcrLoading}
             icon={negetiveTestIcon}
             text="تعداد تست‌های منفی"
-            count={passengerPcrInfo.negativeTestResultsCount || 0}
             hasInfo
             infoText="تعداد نتایج منفی آزمایش‌هایش های کوید انجام شده توسط مسافران"
           />
@@ -299,13 +214,13 @@ const OverviewPassengerStatusCardProvince: React.FC<any> = ({cityTitle}) => {
           {/*   //  loading={pcrLoading} */}
           {/*   icon={totalVacsinateStart} */}
           {/*   text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه" */}
-          {/*   count="-" */}
+          {/*    */}
           {/* /> */}
           {/* <Statistic */}
           {/*   icon={noneVacsinateStart} */}
           {/*   text="مجموع افراد واکسینه نشده در زمان شروع سامانه" */}
           {/*   // loading={pcrLoading} */}
-          {/*   count="-" */}
+          {/*    */}
           {/* /> */}
         </div>
       </div>

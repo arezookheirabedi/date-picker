@@ -10,8 +10,6 @@ import MultiSelectInModal from '../../Select2/MultiSelectInModal';
 import {addUserValidation} from '../../../validations/index';
 import DotLoading from '../../../components/DotLoading';
 
-import fsServices from '../../../services/fs.service';
-import authService from '../../../services/authentication.service';
 
 interface IAddOrUpdateUser {
   actionType?: string;
@@ -156,144 +154,10 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
     });
   };
 
-  const onSubmit = async (values: any) => {
-    if (!valuesOfRole.length) {
-      cogoToast.error('اضافه کردن نقش اجباری است.', {
-        renderIcon: () => (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-red-700"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        ),
-      });
-      return;
-    }
+  const onSubmit =()=>{
+    console.log("gi")
+  }
 
-    // console.log([values.mobileSet]);
-    // debugger;
-    const extraData = {
-      province: provinceTitleInput ? provinceTitleInput.title : null,
-      city: cityTitleInput ? cityTitleInput.title : null,
-      mobileSet: values.mobileSet ? [values.mobileSet] : null,
-      roles: valuesOfRole,
-      resources: [tagResources, provinceResources, cityResources],
-      nationalId: values.nationalId ? values.nationalId : null,
-      provinceCode: provinceTitleInput ? provinceTitleInput.value : null,
-      cityCode: cityTitleInput ? cityTitleInput.value : null,
-    };
-    const finalData = {
-      ...values,
-      ...extraData,
-    };
-    console.log('final data => ', finalData);
-    setIsLoading(true);
-    try {
-      if (actionType === 'add') {
-        const {data} = await fsServices.addUser(finalData);
-      } else if (actionType === 'update') {
-        const {data} = await fsServices.updateUser(finalData);
-      }
-
-      cogoToast.success('عملیات با موفقیت انجام شد!');
-      setShowModal(false);
-      shouldRefresh((prev: boolean) => !prev);
-      // handleUpdateVisitList((prev: any) => !prev)
-    } catch (error: any) {
-      if (error.errors && error.errors.length) {
-        // cogoToast.error("خطا در ارسال اطلاعات");
-        error.errors.map((item: any) => {
-          setError(item.field, {
-            message: item.message,
-          });
-        });
-        return;
-      }
-
-      if (error.hasOwnProperty('fingerPrint') && error.fingerPrint) {
-        cogoToast.error('خطا در سرور');
-      }
-
-      if (error.message) {
-        cogoToast.error(error.message);
-
-        // setError("appointmentDate", {
-        //   message: error.message
-        // });
-        // if (errors && errors.length) {
-        //   errors.map((item: any) => {
-        //     return setError(item.field, {
-        //       message: item.message
-        //     })
-        //   })
-        // }
-      } else if (error.request) {
-        console.log('The request was made but no response was received');
-      } else {
-        console.log('Error', error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-    // try {
-    //   setTimeout(() => {
-    //     throw { message: "خطا در ثبت" };
-    //   }, 2000);
-    // } catch (error: any) {
-    //   cogoToast.error(error.message);
-    //   console.log(error);
-    // } finally {
-    //   setSubmitted(false);
-    // }
-  };
-
-  const getProvince = async () => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getProvince()) as any;
-    data.forEach((item: any) => {
-      normalizedData.push({
-        title: item.province,
-        value: item.provinceCode,
-      });
-    });
-    setProvinceOptions((prev: any) => {
-      return [...prev, ...normalizedData];
-    });
-  };
-
-  const getCities = async (provinceCode: any) => {
-    try {
-      const normalizedData: any[] = [];
-      const {data} = (await fsServices.getCities(provinceCode)) as any;
-      data[0] &&
-      data[0].cities?.forEach((item: any) => {
-        normalizedData.push({
-          title: item.name,
-          value: item.cityCode,
-        });
-      });
-      setCityOptions(() => {
-        return [
-          {
-            title: 'انتخاب شهر',
-            value: null,
-          },
-          ...normalizedData,
-        ];
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const cancelTokenendPoint = cancelTokenSource();
 
@@ -301,90 +165,13 @@ const AddOrUpdateUser: React.FC<IAddOrUpdateUser> = ({
     cancelTokenendPoint.cancel(msgRequestCanceled);
   }
 
-  const getRoles = async () => {
-    const normalizedData: any[] = [];
 
-    const {data} = (await authService.rolePermision(
-      {pageNumber: 0, pageSize: 1000},
-      {cancelToken: cancelTokenendPoint.token}
-    )) as any;
-    data.content.forEach((item: any) => {
-      normalizedData.push({
-        title: item.title,
-        value: item.name,
-      });
-    });
-    setRuleOptions(() => {
-      return [...normalizedData];
-    });
-  };
 
-  const getResources = async () => {
-    const normalizedTagData: any[] = [];
-    const normalizedProvinceData: any[] = [];
-    const normalizedCityData: any[] = [];
-    const {data} = (await authService.getResources(
-      {pageNumber: 0, pageSize: 1000},
-      {cancelToken: cancelTokenendPoint.token}
-    )) as any;
-    data.content.forEach((item: any) => {
-      if (item.name === 'tag') {
-        normalizedTagData.push({
-          title: item.title,
-          value: item.value,
-        });
-      }
-      if (item.name === 'province') {
-        normalizedProvinceData.push({
-          title: item.title,
-          value: item.value,
-        });
-      }
-      if (item.name === 'city') {
-        normalizedCityData.push({
-          title: item.title,
-          value: item.value,
-        });
-      }
-    });
+  
 
-    setTagOptions(() => {
-      return [...normalizedTagData];
-    });
 
-    setProvinceResourceOptions(() => {
-      return [...normalizedProvinceData];
-    });
 
-    setCityResourceOptions(() => {
-      return [...normalizedCityData];
-    });
-  };
 
-  useEffect(() => {
-    if (userData && userData.provinceCode) {
-      getCities(userData?.provinceCode);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (provinceTitleInput && provinceTitleInput.value) {
-      getCities(provinceTitleInput?.value);
-    } else {
-      setCityOptions(initialCityOptions);
-      setCityTitleInput(null);
-    }
-  }, [provinceTitleInput]);
-
-  useEffect(() => {
-    getProvince();
-    getRoles();
-    getResources();
-
-    return () => {
-      cancelRequestEndPoint();
-    };
-  }, []);
 
   return (
     <div>

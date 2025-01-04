@@ -3,8 +3,6 @@
 import React from "react";
 
 import Pie from '../../../../containers/Overview/components/Pie'
-import useGetOverviewReportOfInspectedUnits
-  from "../../../../hooks/apis/inspection/useGetOverviewReportOfInspectedUnits";
 import Spinner from "../../../Spinner";
 import RetryButton from "../../../RetryButton";
 

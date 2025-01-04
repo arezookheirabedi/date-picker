@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-// import hcsService from 'src/services/hcs.service';
 // import {Menu} from '@headlessui/react';
 import Table from '../../TableScopeSort';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import DatepickerQuery from "../../DatepickerQuery";
-import useGetTestResultsTable from "../../../hooks/apis/useGetTestResultsTable";
 import RetryButton from "../../RetryButton";
 import Spinner from "../../Spinner";
 // import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg';
@@ -28,7 +26,6 @@ const TableOfTestsInTransport = () => {
   })
 
 // eslint-disable-next-line
-  const {data: dataset, loading, error: errorMessage} = useGetTestResultsTable(query);
   // function handleSearch(e: any) {
   //   const {value} = e.target;
   //   let tmp = [...orgDataset];
@@ -81,20 +78,12 @@ const TableOfTestsInTransport = () => {
       </div>
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading && (<div className="p-40"><Spinner/></div>)}
-        {errorMessage && !loading && (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
-          </div>
-        )}
-
-        {!loading && !errorMessage && (
+     
           <Table
             // handlePageChange={handlePageChange}
             // orderMain={order}
-            loading={loading}
-            dataSet={[...dataset]}
+            loading={false}
+            dataSet={[]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[
               {
@@ -207,10 +196,9 @@ const TableOfTestsInTransport = () => {
               //   ),
               // },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={10}
           />
-        )
-        }
+       
       </div>
     </fieldset>
   );

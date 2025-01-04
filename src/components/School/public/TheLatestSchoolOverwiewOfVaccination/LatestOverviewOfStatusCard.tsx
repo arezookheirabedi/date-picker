@@ -24,7 +24,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون انها یک دوز واکسن است. "
             icon={YellowVaccine}
             count={numberOf.doses[1] || 0}
-            loading={loading}
+           
           />
 
           <Statistic
@@ -33,7 +33,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={OrangeVaccine}
             text="تعداد افراد با  دوز دوم"
             count={numberOf.doses[2] || 0}
-            loading={loading}
+           
           />
           <Statistic
             infoText="تعداد افرادی  که آخرین وضعیت واکسیناسیون انها سه دوز واکسن است."
@@ -41,7 +41,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={PurppleVaccine}
             text="تعداد افراد با  دوز سوم"
             count={numberOf.doses[3] || 0}
-            loading={loading}
+           
           />
           <Statistic
             infoText="تعداد افرادی که آخرین وضعیت واکسیناسیون انها چهاردوز واکسن است."
@@ -49,7 +49,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             text="تعداد افراد با  دوز چهارم"
             count={numberOf.doses[4] || 0}
             hasInfo
-            loading={loading}
+           
           />
         </div>
 
@@ -60,7 +60,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             text="تعداد افراد با  دوز پنجم"
             count={numberOf.doses[5] || 0}
             hasInfo
-            loading={loading}
+           
           />
 
           <Statistic
@@ -69,7 +69,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={VaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOf.totalVaccinesCount || 0}
-            loading={loading}
+           
           />
 
           <Statistic
@@ -78,7 +78,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             text="مجموع افراد واکسینه نشده"
             count={numberOf.totalNonVaccinesCount || 0}
             hasInfo
-            loading={loading}
+           
           />
           <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
@@ -94,7 +94,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             infoText="درصد  افرادی اخرین وضعیت واکسیناسیون انها یک دوز واکسن است. "
             icon={YellowVaccine}
             count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-            loading={loading}
+           
             isPercentage
           />
 
@@ -104,7 +104,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={OrangeVaccine}
             text="درصد  افراد با  دوز دوم"
             count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -113,7 +113,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={PurppleVaccine}
             text="درصد افراد با دوز سوم "
             count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -122,7 +122,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             text="درصد افراد با دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             hasInfo
-            loading={loading}
+           
             isPercentage
           />
         </div>
@@ -136,7 +136,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             text="درصد افراد با دوز پنجم"
             count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
             hasInfo
-            loading={loading}
+           
             isPercentage
           />
 
@@ -146,7 +146,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={VaccineIcon}
             text="درصد  افراد واکسینه شده"
             count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
 
@@ -156,7 +156,7 @@ const LatestOverviewOfStatusCard: React.FC<{loading: boolean; numberOf: IInitial
             icon={GrayVaccine}
             text="درصد افراد واکسینه نشده"
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
 

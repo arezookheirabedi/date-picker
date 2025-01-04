@@ -5,7 +5,6 @@ import {sideCities} from 'src/helpers/utils';
 import axios from 'axios';
 import CategoryDonut from 'src/containers/Guild/components/CategoryDonut';
 import Spinner from '../../../Spinner';
-import hcsService from '../../../../services/hcs.service';
 // import { toPersianDigit } from 'src/helpers/utils';
 import Table from '../../../TableScope';
 
@@ -46,75 +45,7 @@ const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
   const location = useLocation();
   const history = useHistory();
 
-  const getOverviewByVaccine = async (province: any) => {
-    setDatasetLoading(true);
-    try {
-      const {data} = await hcsService.tripVaccinationOverview({lang: 'fa', province});
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // eslint-disable-next-line
 
-        normalizedData.push({
-          id: `ovvac_${index}`,
-          name: item.categoryValue,
-          firstDosePercentage: item.dosesToMembersCountPercentage[1],
-          secondDosePercentage: item.dosesToMembersCountPercentage[2],
-          thirdDosePercentage: item.dosesToMembersCountPercentage[3],
-          otherDose: item.gtDosesToTotalDosesPercentage[3],
-          unknownInformation: 0,
-          allDoses: item.membersCount - item.totalNonVaccinesCount,
-          allDosesPercentage:
-            item.gtDosesToTotalDosesPercentage[0] -
-            item.totalNonVaccinesCountToMembersCountPercentage,
-          noDose: item.totalNonVaccinesCountToMembersCountPercentage,
-          // twoDoseVaccine: twoDoseVaccine ? (twoDoseVaccine * 100) / total : 0,
-          // fullDoseVaccine: fullDoseVaccine ? (fullDoseVaccine * 100) / total : 0,
-          // // eslint-disable-next-line
-          // notVaccine: item.doseCountMap
-          //   ? item.doseCountMap[0]
-          //     ? (item.doseCountMap[0] * 100) / total
-          //     : 0
-          //   : 0,
-        });
-      });
-
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'پیشفرض', enName: ''});
-    } catch (e: any) {
-      console.log(e);
-    } finally {
-      setDatasetLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getOverviewByVaccine(provinceName);
-      // getOverviewByVaccine({
-      //   organization: 'education',
-      //   tags: `#province# استان ${provinceName}`,
-      // });
-      // getOverviewByVaccinePercent({
-      //   organization: 'education',
-      //   tags: `^(((?=.*#grade#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))|((?=.*#type#)(?=.*استان ${provinceName})((^[^_]*_[^_]*$)))).*$`,
-      // });
-    } else {
-      history.push('/dashboard/school/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-      }
-    };
-  }, [location.search]);
 
   useEffect(() => {
     return () => {

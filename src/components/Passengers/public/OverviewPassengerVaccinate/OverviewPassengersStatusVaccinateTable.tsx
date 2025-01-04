@@ -4,7 +4,6 @@ import Spinner from 'src/components/Spinner';
 import CategoryDonut from 'src/containers/Guild/components/CategoryDonut';
 // import { toPersianDigit } from 'src/helpers/utils';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
-import passengerService from 'src/services/passenger.service';
 // import moment from 'moment-jalaali';
 import Table from '../../../TableScopeSort';
 // import DatePickerModal from '../../../DatePickerModal';
@@ -33,40 +32,7 @@ const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
   }
 
   // eslint-disable-next-line
-  async function getOverviewByVaccineCount(params: any) {
-    setLoading(true);
-    try {
-      const {data} = await passengerService.passengerOverViewByCategory(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovvactrip_${index}`,
-          name: item.categoryValue || 'نامشخص',
-          firstDosePercentage: Number(item.dosesToMembersCountPercentage[1] || 0),
-          secondDosePercentage: Number(item.dosesToMembersCountPercentage[2] || 0),
-          thirdDosePercentage: Number(item.dosesToMembersCountPercentage[3] || 0),
-          allDosesPercentage:
-            item.gtDosesToTotalDosesPercentage[0] -
-            item.totalNonVaccinesCountToMembersCountPercentage,
-          allDoses: Number(item.gtDoses[0] || 0),
-          noDose: Number(item.totalNonVaccinesCountToMembersCountPercentage || 0),
-          otherDoses: Number(item.gtDosesToTotalDosesPercentage[3] || 0),
-          noData: '-',
-        });
-      });
 
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'پیشفرض', enName: ''});
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   // useEffect(() => {
   //   if (selectedDayRange.from && selectedDayRange.to) {
@@ -86,21 +52,7 @@ const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
   //   }
   // }, [selectedDayRange]);
 
-  useEffect(() => {
-    getOverviewByVaccineCount({
-      lang: 'fa',
-      from: null,
-      to: null,
-    });
 
-    return () => {
-      cancelRequest();
-
-      setDataset([]);
-      setOrgDataset([]);
-      setFilterType({name: 'پیشفرض', enName: ''});
-    };
-  }, []);
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
@@ -135,7 +87,7 @@ const OverviewPassengersStatusVacsinateTable: React.FC<{}> = () => {
         <>
           <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
             <Table
-              loading={loading}
+             
               dataSet={[...dataset]}
               pagination={{pageSize: 10, maxPages: 3}}
               columns={[

@@ -13,7 +13,6 @@ import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg'
 import ExportFile from '../ExportFile'
 
 // hooks
-import useOverviewOfInvalidGuildCodeDetail from "../../../hooks/apis/bakery/useOverviewOfInvalidGuildCodeDetail";
 
 const OverviewInvalidGuildCode: React.FC<{}> = () => {
 
@@ -36,14 +35,14 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
    // const [showDatePicker, setShowDatePicker] = useState(false);
 
   // call bakery hook
-  const {
-    loading, 
-    list: dataset, 
-    count,
-    setCount,
-    filteredDataset,
-    setFilteredDataset
-  } = useOverviewOfInvalidGuildCodeDetail();
+  const loading = false;
+  const count = 0; // Initial count value
+  const setCount = (newCount: number) => {
+    console.log('setCount called with:', newCount);
+  };
+  const setFilteredDataset = (newFilteredDataset: any[]) => {
+    console.log('setFilteredDataset called with:', newFilteredDataset);
+  };
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
@@ -71,43 +70,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
   // }, [selectedDayRange]);
 
 
-  const filteredList = useCallback(() => {
-    let temp = [...dataset];
 
-      if (query && query !== "همه") temp = temp.filter(item => item.province.trim() === query);
-
-      setFilteredDataset(temp);
-
-      // set count of inspection need bakeries
-      setCount(temp.length)
-
-  }, 
-    [query]);
-
-  useEffect(() => {
-      filteredList();
-  },[filteredList]);
-
-  useEffect(()=> {
-    if(isEmpty(filteredDataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[filteredDataset])
-
-  const mapFilteredData = () => {
-    return filteredDataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "شهر": data.city === "NULL" ? "" : data.city,
-        "شناسه پروانه سیما": data.simaId,
-        "شناسه پروانه کسبی صمت": data.guildCode,
-        "وضعیت عدم انطباق": data.buyerAsnafStatus,
-        "شماره ملی": data.nationalId,
-        "آدرس": data.address,
-      };
-    });
-  };
-  const finalData = mapFilteredData();
   
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -161,7 +124,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
               </Menu>
               <ExportFile 
                 fileName="invalid-guildcode-list"
-                data={finalData}
+                data={[]}
                 loading={loading}
                 isDisabled={isOnPrint}
               />
@@ -210,7 +173,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            dataSet={[...filteredDataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -258,7 +221,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(filteredDataset || []).length}
+            totalItems={10}
           />
         )}
       </div>

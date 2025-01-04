@@ -27,12 +27,10 @@ import unusualTransactionIcon from '../../../assets/images/icons/unusualTransact
 import unusualTransactionEnableIcon from '../../../assets/images/icons/unusualTransaction-enable.svg';
 
 // hooks
-import useOverviewOfAudit from "../../../hooks/apis/bakery/useOverviewOfAudit";
 
 const OverviewAudit: React.FC<{}> = () => {
 
   // call bakery hook
-  const {loading, list: dataset, count, setCount, filteredDataset, setFilteredDataset} = useOverviewOfAudit();
 
   // states
   const [flourQuota, setFlourQuota] = useState<any>(false);
@@ -83,55 +81,8 @@ const OverviewAudit: React.FC<{}> = () => {
   // }, [selectedDayRange]);
 
 
-  const filteredList = useCallback(() => {
-    let temp = [...dataset];
-      
-      if (isExtortion) temp = temp.filter(item => item.isExtortion === isExtortion);
-      if (workTime) temp = temp.filter(item => item.workTime === workTime);
-      if (flourQuota) temp = temp.filter(item => item.flourQuota === flourQuota);
-      if (bakeryWithoutTransaction) temp = temp.filter(item => item.bakeryWithoutTransaction === bakeryWithoutTransaction);
-      if (unusualTransaction) temp = temp.filter(item => item.unusualTransaction === unusualTransaction);
-      if (query && query !== "همه") temp = temp.filter(item => item.province.trim() === query);
 
-      setFilteredDataset(temp);
 
-      // set count of inspection need bakeries
-      setCount(temp.length)
-
-  }, 
-    [isExtortion, workTime, flourQuota, 
-    bakeryWithoutTransaction, unusualTransaction, query
-    ]);
-
-  useEffect(() => {
-      filteredList();
-  },[filteredList]);
-  
-  useEffect(()=> {
-    if(isEmpty(filteredDataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[filteredDataset])
-
-  const mapFilteredData = () => {
-    return filteredDataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "شهر": data.city === "NULL" ? "" : data.city,
-        "شناسه پروانه سیما" : data.simaId,
-        "شماره ملی" : data.nationalId,
-        "دفعات نیاز بازرسی" : "",
-        "مشکوک به تخلف از ساعت فعالیت" : data.workTime ? "بله" : "خیر",
-        "مشکوک به عدم استفاده‌ مجاز از سهمیه آرد" : data.flourQuota ? "بله" : "خیر",
-        "مشکوک به گران فروشی" : data.isExtortion ? "بله" : "خیر",
-        "مشکوک به عدم فعالیت" : data.bakeryWithoutTransaction ? "بله" : "خیر",
-        "مشکوک به تراکنش‌های غیر عادی": data.UnusualTransaction ? "بله" : "خیر",
-        "آدرس" : data.address
-      };
-    });
-  };
-
-  const finalData = mapFilteredData();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -144,7 +95,7 @@ const OverviewAudit: React.FC<{}> = () => {
           name="overTime"
           title="مشکوک به تخلف از ساعت فعالیت"
           selected={workTime}
-          disabled={loading}
+          disabled={false}     
           onChange={setworkTime}
           defaultIcon={clockIcon}
           activeIcon={clockActiveIcon}
@@ -154,7 +105,7 @@ const OverviewAudit: React.FC<{}> = () => {
           name="flourQuota"
           title="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
           selected={flourQuota}
-          disabled={loading}
+          disabled={false}     
           onChange={setFlourQuota}
           defaultIcon={chartBoxIcon}
           activeIcon={chartBoxActiveIcon}
@@ -164,7 +115,7 @@ const OverviewAudit: React.FC<{}> = () => {
           name="isExtortion"
           title="مشکوک به گران فروشی"
           selected={isExtortion}
-          disabled={loading}
+          disabled={false}     
           onChange={setIsExtortion}
           defaultIcon={extortionIcon}
           activeIcon={extortionActiveIcon}
@@ -240,8 +191,8 @@ const OverviewAudit: React.FC<{}> = () => {
               </Menu>
               <ExportFile 
                 fileName="audit-list"
-                data={finalData}
-                loading={loading}
+                data={[]}
+                loading={false}     
                 isDisabled={isOnPrint}
               />
         </div>
@@ -267,7 +218,7 @@ const OverviewAudit: React.FC<{}> = () => {
                 <span className="mx-3 whitespace-nowrap truncate">
                   <span className="text-gray-500">
                     تعداد ردیف :
-                  </span> {count}
+                  </span> 0
                 </span>
               </div>
             </div>
@@ -283,13 +234,9 @@ const OverviewAudit: React.FC<{}> = () => {
           </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+    
           <Table
-            dataSet={[...filteredDataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -393,9 +340,9 @@ const OverviewAudit: React.FC<{}> = () => {
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(filteredDataset || []).length}
+            totalItems={10}
           />
-        )}
+      
       </div>
     </fieldset>
   );

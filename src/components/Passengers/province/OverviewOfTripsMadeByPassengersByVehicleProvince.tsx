@@ -3,14 +3,12 @@ import {useHistory, useLocation} from "react-router-dom";
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
-// import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 
 import Charts from '../../Charts';
 import {cancelTokenSource, sideCities, toPersianDigit} from '../../../helpers/utils';
-import hcsService from "../../../services/hcs.service";
 import Spinner from "../../Spinner";
 import {EERRORS} from "../../../constants/errors.enum";
 import RetryButton from "../../RetryButton";
@@ -197,78 +195,9 @@ const OverviewOfTripsMadeByPassengersByVehicleProvince: React.FC<OverviewOfTrips
   };
 
 
-  const getTripsCountCategoryBased = async ({retry , ...params}: any, province: any) => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.getTripsCountCategoryBased(
-        {
-          ...params,
-          province
-        },
-        {cancelToken: cancelToken.token}
-      );
 
-      const categories: any = [];
-      const newData: any = [];
 
-      data.forEach((item: any) => {
-        categories.push(item.categoryValue)
-        newData.push({
-          name: item.categories,
-          y: item.count
-        })
-      })
 
-      setDataset({
-        categories,
-        series: [
-          {
-            name: 'واکسیناسیون',
-            color: {
-              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-              stops: [
-                [0, '#175A76'], // start
-                [1, '#7DA6B8'], // end
-              ],
-            },
-            data: [...newData],
-          },
-        ]
-      })
-
-      setErrorMessage(false);
-      setLoading(false);
-    } catch (err : any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
-
-  const location = useLocation();
-  const history = useHistory();
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      getTripsCountCategoryBased(queryParams, provinceName);
-    } else {
-      history.push('/dashboard/passenger/province');
-    }
-
-    // getPcrResult();
-    return () => {
-      setDataset(initialData)
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [queryParams, location.search]);
 
 
   useEffect(() => {

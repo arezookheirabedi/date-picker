@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
-import passengerService from 'src/services/passenger.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import DatePickerModal from '../../DatePickerModal';
 // import RangeDateSliderFilter from '../../RangeDateSliderFilter';
@@ -9,7 +8,6 @@ import Charts from '../../Charts';
 import Spinner from '../../Spinner';
 // import TagsSelect from '../../TagsSelect';
 import Calendar from '../../Calendar';
-// import hcsService from '../../../services/hcs.service';
 
 const {Line} = Charts;
 
@@ -40,35 +38,8 @@ const OverviewPatients : React.FC<{}> = () => {
     to: null,
   });
 
-  const getColumnChartTestResult = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await passengerService.columnChartTestResultService(params, {
-        cancelToken: cancelToken.token,
-      });
-      console.log(response.data);
-      setData(response.data);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
 
-    return () => {
-      setData([]);
-      cancelRequest();
-      clearTimeout(idSetTimeOut);
-    };
-  }, [query]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

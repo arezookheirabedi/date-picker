@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers/utils';
 import Spinner from 'src/components/Spinner';
 import {isEmpty} from 'lodash';
-import guildService from 'src/services/guild.service';
 import FilterInterceptors from './FilterInterceptors';
 import ExpandedForm from './ExpandedForm';
 
@@ -30,52 +29,6 @@ const BakeryMonitoringList: React.FC<{}> = () => {
   }
   const pageSize = 10;
 
-  async function fetcher(params: any) {
-    setLoading(true);
-    try {
-      const {data} = await guildService.bakeryInspections(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `bakery${index}`,
-          inspectionDateTime: item.inspectionDateTime,
-          lastInspectionDateTime: item.lastInspectionDateTime,
-          inspectorId: item.inspectors ? item.inspectors[0].inspectorId : '-',
-          qrCode: item.qrCode,
-          unitNumber: item.unitNumber,
-          allData: item,
-        });
-      });
-
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetcher({
-      sort: 'DESC',
-      //   sortKey: ['reportStatus'].join(','),
-      from: query.from,
-      to: query.to,
-      pageNumber: query.currentPage - 1,
-      pageSize,
-      inspectorId: query.inspectorId,
-      inspectorNationalId: query.inspectorNationalId,
-      qrCode: query.qrCode,
-    });
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-    };
-  }, [query]);
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});

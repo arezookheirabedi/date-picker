@@ -216,9 +216,7 @@ const BakeryStatus: React.FC<any> = ({...record}) => {
       <div className="flex">
         <div className="flex w-1/2 justify-start px-4 py-1">
           <span className="text-sm font-bold">سرویس بهداشتی :</span>
-          <span className="pr-1">
-            {getBooleanValue(record.allData.parameters.serviceBehdashtiDarad)}
-          </span>
+          
         </div>
         <div className="flex w-1/2 justify-start px-4 py-1">
           {' '}

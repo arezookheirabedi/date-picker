@@ -25,10 +25,10 @@ const TheLatestOverwiewOfVaccination: React.FC<ITheLatestOverwiewOfVaccination> 
         نگاه کلی به آخرین وضعیت واکسیناسیون اصناف استان {cityTitle}
       </legend>
 
-      <LatestOverviewOfStatusCard loading={loading} numberOf={cartData} />
+      <LatestOverviewOfStatusCard numberOf={cartData} />
 
       <OverviewOfTheLatestPublicGuildVaccinationStatus
-        loading={loading}
+       
         numberOf={chartData}
         setQueryParams={setQueryParams}
         queryParams={queryParams}

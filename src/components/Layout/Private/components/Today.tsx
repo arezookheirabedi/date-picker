@@ -2,39 +2,12 @@ import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import jalaliday from 'jalaliday';
 import event from 'src/assets/images/icons/event.svg';
-import publicService from '../../../../services/public.service';
 
 dayjs.extend(jalaliday);
 
 const Today: React.FC<{}> = () => {
   const [date, setDate] = useState<any>(null);
 
-  const getTime = async () => {
-    try {
-      const {data} = await publicService.getTime();
-      setDate(new Date(data.dateTime));
-    } catch (e) {
-      setDate(null);
-    }
-  };
-
-  useEffect(() => {
-    let id: any = null;
-    id = setInterval(() => {
-      if (date) {
-        setDate((prev: any) => {
-          return new Date(prev.setTime(prev.getTime() + 30000));
-        });
-      }
-
-    }, 60000);
-
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    getTime();
-  }, []);
 
   return (
     <div className="relative z-20 inline-block text-left shadow-xl rounded-full px-5 py-1">

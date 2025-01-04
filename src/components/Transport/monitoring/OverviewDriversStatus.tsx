@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import transportService from 'src/services/transport.service';
 import dayjs from 'dayjs';
 import RetryButton from 'src/components/RetryButton';
 import {EERRORS} from 'src/constants/errors.enum';
@@ -38,49 +37,6 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getOverviewTransportReport = async ({retry, currentPage, ...params}: any = {}) => {
-    const newData = {...params, pageNumber: Number(query.currentPage) - 1};
-    setErrorMessage(null);
-    setLoading(true);
-    try {
-      const {data}: any = await transportService.overviewReport(newData, {
-        cancelToken: cancelToken.token,
-      });
-
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          serviceType: item.serviceType || 'نامشخص',
-          plaque: item.plaque || 'نامشخص',
-          nationalId: item.nationalId || 'نامشخص',
-          province: item.province || 'نامشخص',
-          date: item.receiptDate,
-          personHealthStatus: item.personHealthStatus,
-          numberOfReceivedDoses: item.numberOfReceivedDoses || 'نامشخص',
-        });
-      });
-      setDataSet([...normalizedData]);
-
-      setTotalItems(data.totalElements);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getOverviewTransportReport({...query, province: cityTitle});
-    return () => {
-      cancelRequest();
-      setDataSet([]);
-    };
-  }, [query]);
 
   useEffect(() => {
     setQuery({...query, currentPage: 1, province: cityTitle});
@@ -119,7 +75,7 @@ const OverviewDriverStatus: React.FC<OverviewDriverStatusProps> = ({cityTitle}) 
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             handlePageChange={handlePageChange}
             dataSet={[...dataSet]}
             pagination={{pageSize, currentPage: query.currentPage}}

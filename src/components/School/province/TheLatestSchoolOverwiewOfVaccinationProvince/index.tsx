@@ -26,10 +26,10 @@ const TheLatestOverwiewOfVaccination: React.FC<OverviewCategoriesProvinceProps> 
         نگاه کلی به آخرین وضعیت واکسیناسیون آموزش و پرورش در استان {cityTitle}
       </legend>
 
-      <LatestOverviewOfStatusCard loading={loading} numberOf={cartData} />
+      <LatestOverviewOfStatusCard numberOf={cartData}  loading={false}/>
 
       <OverviewOfTheLatestPublicSchoolVaccinationStatus
-        loading={loading}
+       loading={false}
         numberOf={chartData}
         setQueryParams={setQueryParams}
         queryParams={queryParams}

@@ -52,7 +52,7 @@ const OverviewOfVaccination: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[

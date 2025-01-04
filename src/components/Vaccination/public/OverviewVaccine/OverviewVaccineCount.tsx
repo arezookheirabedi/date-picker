@@ -28,7 +28,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText="تعداد افرادی که حداقل یک دوز واکسن را دریافت کرده اند."
           text="تعداد کل واکسیناسیون"
           count={numberOf.totalVaccinesCount || 0}
-          loading={loading}
+         
         />
         <Statistic
           hasInfo
@@ -36,7 +36,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={YellowVaccine}
           text="تعداد واکسیناسیون دوز اول"
           count={numberOf.doses[1] || 0}
-          loading={loading}
+         
         />
         <Statistic
           hasInfo
@@ -44,7 +44,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={OrangeVaccine}
           text="تعداد واکسیناسیون دوز دوم"
           count={numberOf.doses[2] || 0}
-          loading={loading}
+         
         />
         <Statistic
           hasInfo
@@ -52,7 +52,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={PurppleVaccine}
           text="تعداد واکسیناسیون دوز سوم"
           count={numberOf.doses[3] || 0}
-          loading={loading}
+         
         />
       </div>
       <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -62,7 +62,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={DarkgreenVaccine}
           text="تعداد واکسیناسیون دوز چهارم"
           count={numberOf.doses[4] || 0}
-          loading={loading}
+         
         />
         <Statistic
           icon={NavyVaccine}
@@ -70,7 +70,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
           text="تعداد واکسیناسیون دوز پنجم و بیشتر"
           count={numberOf.gtDoses[4] || 0}
-          loading={loading}
+         
         />
         <Statistic
           hasInfo
@@ -78,7 +78,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={personGrayVaccine}
           text="مجموع افراد واکسینه نشده"
           count={numberOf.totalNonVaccinesCount || 0}
-          loading={loading}
+         
         />
         <Statistic
           hasInfo
@@ -86,7 +86,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={personGrayVaccine}
           text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
           count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || 0}
-          loading={loading}
+         
         />
       </div>
       <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -95,7 +95,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           infoText="تعداد افرادی که حداقل یک دوز واکسن را دریافت کرده بوداند و بر اثر بیماری کرونا فوت کردند."
           icon={greenVaccineBlackVirus}
           text="تعداد فوتی هایی که واکسینه شده"
-          count="-"
+          
         />
         <Statistic
           hasInfo
@@ -103,15 +103,15 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={blueVaccine}
           text="مجموع تعداد دوز واکسن تزریقی"
           count={numberOf.gtDoses[0] || 0}
-          loading={loading}
+         
         />
         <Statistic
           hasInfo
           infoText="تعداد افرادی که اطلاعات آنها به درستی در سامانه ثبت نشده است."
           icon={greyVaccine}
           text="تعداد اطلاعات مخدوش"
-          loading={loading}
-          count="-"
+         
+          
         />
         <Statistic
           hasInfo
@@ -119,7 +119,7 @@ const OverviewVaccinationStatus: React.FC<IVaccineStatus> = ({loading, numberOf}
           icon={totalVacsinateStart}
           text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
           count={numberOf.totalVaccinesCountAfterStartOfSystem || 0}
-          loading={loading}
+         
         />{' '}
       </div>
     </div>

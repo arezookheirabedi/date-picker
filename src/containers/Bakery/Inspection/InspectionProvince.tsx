@@ -24,7 +24,6 @@ import OverviewNumberOfInspectedUnitsProvince
 import OverviewBakeryInspectionMap from '../../../components/Bakery/Inspection/province/OverviewBakeryInspectionMap';
 import AccessDenied from "../../../components/Access/AccessDenied";
 import useHasProvinceResource from "../../../hooks/useHasProvinceResource";
-import useGetOverviewInspectionStatus from "../../../hooks/apis/inspection/useGetOverviewInspectionStatus";
 
 const InspectionProvince = () => {
     const location = useLocation()
@@ -45,17 +44,7 @@ const InspectionProvince = () => {
       retry: false
     })
 
-    const {
-      loading,
-      error: errorMessage,
-      data: inspection,
-      overviewOfTheReportOfInspectedUnitsInTheWholeCountry,
-      overviewOfTheNumberOfActiveAndInactiveInspectedUnitsOfTheEntireCountry,
-      overviewOfTheReportOfInspectedUnitsInTheWholeCountryColumnChart,
-      statusOfThePriceLetterAndTheSupplyPriceOfBreadOfTheInspectedUnitsInTheWholeCountry,
-      statusOfBakingVarietyInTheInspectedUnitsInTheWholeCountry,
-      overviewOfTheQualityAndHealthInTheInspectedUnitsInTheWholeCountry
-    } = useGetOverviewInspectionStatus(query, true);
+
 
     return (
       <div className="space-y-16 mb-8">
@@ -68,29 +57,29 @@ const InspectionProvince = () => {
         {!hasProvinceResources && <AccessDenied id="bakery-inspection-overview"/>}
         {hasProvinceResources && (<>
 
-          <OverviewInspectionStatusProvince cityTitle={cityTitle} data={inspection} loading={loading}/>
+          <OverviewInspectionStatusProvince cityTitle={cityTitle} data={[]} loading={false}     />
 
           <OverviewListOfInspectionsProvince cityTitle={cityTitle}/>
 
           <div className='flex w-full gap-x-6'>
             <OverviewReportOfInspectedUnitsProvince cityTitle={cityTitle}
-                                                    data={overviewOfTheReportOfInspectedUnitsInTheWholeCountry}
-                                                    loading={loading}
-                                                    error={errorMessage}
+                                                    data={[]}
+                                                    loading={false}     
+                                                    error="cv"
                                                     setQuery={setQuery}/>
 
             <OverviewNumberOfInspectedUnitsProvince cityTitle={cityTitle}
-                                                    data={overviewOfTheNumberOfActiveAndInactiveInspectedUnitsOfTheEntireCountry}
-                                                    loading={loading}
-                                                    error={errorMessage}
+                                                    data={[]}
+                                                    loading={false}     
+                                                    error="cv"
                                                     setQuery={setQuery}/>
           </div>
 
 
           <OverviewReportOfInspectedUnitProvince cityTitle={cityTitle}
-                                                 data={overviewOfTheReportOfInspectedUnitsInTheWholeCountryColumnChart}
-                                                 loading={loading}
-                                                 error={errorMessage}
+                                                 data={[]}
+                                                 loading={false}     
+                                                 error="cv"
                                                  setQuery={setQuery}/>
 
 
@@ -99,38 +88,38 @@ const InspectionProvince = () => {
 
           <div className='flex w-full gap-x-6'>
             <OverviewStatusOfListPriceProvince cityTitle={cityTitle}
-                                               data={statusOfThePriceLetterAndTheSupplyPriceOfBreadOfTheInspectedUnitsInTheWholeCountry}
-                                               loading={loading}
-                                               error={errorMessage}
+                                               data={[]}
+                                               loading={false}     
+                                               error="cv"
                                                setQuery={setQuery}
             />
             <OverviewStatusOfBreadSupplyPriceProvince cityTitle={cityTitle}
-                                                      data={statusOfThePriceLetterAndTheSupplyPriceOfBreadOfTheInspectedUnitsInTheWholeCountry}
-                                                      loading={loading}
-                                                      error={errorMessage}
+                                                      data={[]}
+                                                      loading={false}     
+                                                      error="cv"
                                                       setQuery={setQuery}
             />
           </div>
 
           <OverviewStatusOfCookingVarietyProvince cityTitle={cityTitle}
-                                                  data={statusOfBakingVarietyInTheInspectedUnitsInTheWholeCountry}
-                                                  loading={loading}
-                                                  error={errorMessage}
+                                                  data={[]}
+                                                  loading={false}     
+                                                  error="cv"
                                                   setQuery={setQuery}
           />
 
 
           <div className='flex w-full gap-x-6'>
             <OverviewBreadQualityInInspectedUnitsProvince cityTitle={cityTitle}
-                                                          data={overviewOfTheQualityAndHealthInTheInspectedUnitsInTheWholeCountry}
-                                                          loading={loading}
-                                                          error={errorMessage}
+                                                          data={[]}
+                                                          loading={false}     
+                                                          error="cv"
                                                           setQuery={setQuery}
             />
             <OverviewPublicHealthOfInspectedUnitsProvince cityTitle={cityTitle}
-                                                          data={overviewOfTheQualityAndHealthInTheInspectedUnitsInTheWholeCountry}
-                                                          loading={loading}
-                                                          error={errorMessage}
+                                                          data={[]}
+                                                          loading={false}     
+                                                          error="cv"
                                                           setQuery={setQuery}
             />
           </div>

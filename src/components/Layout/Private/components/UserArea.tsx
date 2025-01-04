@@ -4,7 +4,6 @@ import avatar from 'src/assets/images/logos/avatar.svg';
 import React, {Fragment, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import IconWrapper from 'src/components/IconWrapper';
-import authenticateService from 'src/services/authentication.service';
 import useLocalStorage from 'src/hooks/useLocalStorage';
 import {IProfile} from 'src/models/authentication.model';
 import ResetPasswordModal from './ResetPasswordModal';
@@ -37,10 +36,6 @@ const UserArea: React.FC<any> = () => {
   };
   const openResetModal: () => void = () => {
     setResetIsOpen(true);
-  };
-  const handleLogout: (e: React.MouseEvent<HTMLElement>) => void = e => {
-    e.stopPropagation();
-    authenticateService.logout(history);
   };
 
   return (
@@ -161,7 +156,6 @@ const UserArea: React.FC<any> = () => {
                   <div className="mb-6 flex justify-center space-x-2 rtl:space-x-reverse">
                     <button
                       type="button"
-                      onClick={handleLogout}
                       className="flex items-center justify-center rounded bg-gray-900 px-12 py-2 text-sm text-white shadow-xl"
                     >
                       <span>بله</span>

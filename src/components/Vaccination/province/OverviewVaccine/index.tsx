@@ -1,11 +1,45 @@
 import React, {useEffect, useState} from 'react';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import {useHistory, useLocation} from 'react-router-dom';
-import hcsService from 'src/services/hcs.service';
-import {IInitialVacinatelInfo, initialVacinatelInfo} from 'src/hooks/apis/useGetNumberOf';
 import OverViewVaccinationPercentageStatus from './OverviewVaccinePercentage';
 import OverviewVaccinationStatus from './OverviewVaccineCount';
 
+
+export const initialDoses = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, null: 0};
+
+export const initialVacinatelInfo = {
+  doses: {...initialDoses},
+  dosesToTotalPopulationPercentage: {...initialDoses},
+  gtDoses: {...initialDoses},
+  totalPopulation: 0,
+  totalNonVaccinesCount: 0,
+  totalNonVaccinesCountToTotalPopulationPercentage: 0,
+  totalVaccinesCountToTotalPopulationPercentage: 0,
+  totalNonVaccinesCountBeforeStartOfSystemToTotalPopulationPercentage: 0,
+  totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: 0,
+  totalNonVaccinesCountBeforeStartOfSystem: 0,
+  totalVaccinesCountAfterStartOfSystem: 0,
+  totalVaccinesCount: 0,
+};
+
+export interface IObjectOption {
+  [key: number]: number;
+}
+
+export interface IInitialVacinatelInfo {
+  totalPopulation: number;
+  totalNonVaccinesCount: number;
+  totalNonVaccinesCountToTotalPopulationPercentage: number;
+  totalVaccinesCountToTotalPopulationPercentage: number;
+  gtDoses: IObjectOption;
+  doses: IObjectOption;
+  dosesToTotalPopulationPercentage: IObjectOption;
+  totalNonVaccinesCountBeforeStartOfSystem: number;
+  totalVaccinesCountAfterStartOfSystem: number;
+  totalVaccinesCount: number;
+  totalNonVaccinesCountBeforeStartOfSystemToTotalPopulationPercentage: number;
+  totalVaccinesCountAfterStartOfSystemToTotalPopulationPercentage: number;
+}
 const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
   const location = useLocation();
   const history = useHistory();
@@ -21,60 +55,7 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getNumberOf = async (provinceName: string) => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.numberOf(
-        {province: provinceName},
-        {cancelToken: cancelToken.token}
-      );
-
-      setNumberOf((prev: any) => {
-        return {
-          ...prev,
-          ...data,
-        };
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const getTheLatestNumber = async (params: any) => {
-    setTheLatestLoading(true);
-    try {
-      const res = await hcsService.peopleLatestVaccinationOverview(params, {
-        cancelToken: cancelToken.token,
-      });
-      const finalResponse: any = {...res.data};
-      setThelatestNumberOf(finalResponse);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setTheLatestLoading(false);
-    }
-  };
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      getNumberOf(provinceName);
-      getTheLatestNumber({province: provinceName});
-    } else {
-      history.go(-1);
-    }
-    return () => {
-      cancelRequest();
-      setNumberOf(initialVacinatelInfo);
-      setThelatestNumberOf(initialVacinatelInfo);
-    };
-  }, [location.search]);
+ 
 
   return (
     <div id="vaccination-overview">
@@ -82,16 +63,17 @@ const OverviewVaccine: React.FC<{cityTitle: string}> = ({cityTitle}) => {
         <legend className="mx-auto px-3 text-black">
           نگاه کلی به وضعیت واکسیناسیون در استان {cityTitle}
         </legend>
-        <OverviewVaccinationStatus loading={loading} numberOf={numberOf} />
+        <OverviewVaccinationStatus numberOf={numberOf}  loading={false}/>
       </fieldset>
       <fieldset className="mb-16 rounded-xl border p-4 text-center">
         <legend className="mx-auto px-3 text-black">
           نگاه کلی به درصد واکسیناسیون در استان {cityTitle}
         </legend>
         <OverViewVaccinationPercentageStatus
+        loading={false}
           theLatestloading={theLatestloading}
           thelatestNumberOf={thelatestNumberOf}
-          loading={loading}
+         
           numberOf={numberOf}
         />
       </fieldset>

@@ -53,7 +53,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={totalStudent}
             text="مجموع دانش آموزان"
             count={numberOf.totalPopulation || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -61,7 +61,6 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={testResultInfo.positiveMembersCount || 0}
-            loading={testResultLoading}
           />
           <Statistic
             hasInfo
@@ -69,14 +68,13 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={testResultInfo.recoveredMembersCount || 0}
-            loading={testResultLoading}
           />
           <Statistic
             hasInfo
             infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
             icon={deadIcon}
             text="مجموع فوت‌ شدگان"
-            count="-"
+          
             loading={false}
           />
         </div>
@@ -87,7 +85,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOf.totalVaccinesCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -95,7 +93,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
             count={numberOf.totalNonVaccinesCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -103,7 +101,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
             count={numberOf.totalVaccinesCountAfterStartOfSystem || 0}
-            loading={loading}
+           
           />{' '}
           <Statistic
             hasInfo
@@ -111,7 +109,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || 0}
-            loading={loading}
+           
           />
         </div>
         <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -121,7 +119,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={testIcon}
             text="تعداد آزمایش های دانش آموزان"
             count={testResultInfo.testResultsCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -129,7 +127,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -138,7 +136,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
             count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -147,7 +145,7 @@ const OverviewSchoolStudents: React.FC<OverviewSchoolStudentsProps> = ({cityTitl
             icon={studentPositiveTest}
             text="درصد ابتلا به کل"
             count={testResultInfo.positiveMembersCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
         </div>

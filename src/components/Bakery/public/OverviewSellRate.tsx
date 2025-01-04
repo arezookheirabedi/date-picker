@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 // import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-// import bakeryService from 'src/services/bakery.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import DatePickerModal from '../../DatePickerModal';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
 // import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
-// import hcsService from '../../../services/hcs.service';
 
 const optionChart = {
   chart: {

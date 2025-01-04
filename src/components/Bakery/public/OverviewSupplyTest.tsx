@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import {isEmpty} from 'lodash';
-import bakeryService from 'src/services/bakery/mock/bakery.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import DatePickerModal from '../../DatePickerModal';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
 import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
-// import hcsService from '../../../services/hcs.service';
 
 const optionChart = {
   chart: {
@@ -122,54 +120,11 @@ const OverviewSupplyFlour: React.FC<{}> = () => {
     to: null,
   });
 
-  const getColumnChartTestResult = async (params: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await bakeryService.bakerySupplyFlour(params, {
-        cancelToken: cancelToken.token,
-      });
 
-      const province: any[] = [];
-      const sellCount: any[] = [];
-      response.data.forEach((item: any) => {
-        province.push(item.province);
-        sellCount.push(item.sellCount);
-      });
-      // setCategories([...province]);
-      const newData = [
-        {
-          name: 'نرخ فروش',
-          dataLabels: {
-            // enabled: true,
-          },
-          showInLegend: false,
-          data: [...sellCount],
-          
-        },
-      ];
-      // setDataset([...newData]);
-      setData({categories: [...province], series: [...newData]});
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
 
-    return () => {
-      setData([]);
-      cancelRequest();
-      clearTimeout(idSetTimeOut);
-    };
-  }, [query]);
+
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 import axios from "axios";
-import transportService from "../../services/transport.service";
 import {sideCities} from "../../helpers/utils";
 
 export default function useGetNationalTravelInformationSystem(hasProvince: boolean = false) {
@@ -22,50 +21,13 @@ export default function useGetNationalTravelInformationSystem(hasProvince: boole
     source.cancel('Operation canceled by the user.');
   }
 
-  const getIt = async (param: any = null) => {
-    setLoading(true);
-    setError(false);
-    try {
-      const {data: result} = await transportService.getSamasInfo(param, {cancelToken: source.token});
-      setData(result);
-    } catch (err) {
-      // eslint-disable-next-line
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    if (hasProvince) {
-      return;
-    }
-    getIt();
-    // eslint-disable-next-line consistent-return
-    return clear;
-  }, []);
 
   const location = useLocation();
   const history = useHistory();
 
 
-  useEffect(() => {
-    if (!hasProvince) {
-      return;
-    }
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getIt({'province': provinceName});
-    } else {
-      history.push('/dashboard/health/transport/province');
-    }
-    // eslint-disable-next-line consistent-return
-    return clear;
-  }, [location.search]);
+
 
 
   return {loading, error, data};

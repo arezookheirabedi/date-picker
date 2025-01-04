@@ -4,15 +4,14 @@ import driverInfectedIcon from '../../../assets/images/icons/driver-infected.svg
 import deactiveFuelCardIcon from '../../../assets/images/icons/deactive-fuel-card.svg';
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
 import deactivateInquiryIcon from '../../../assets/images/icons/deactivate-inquiry.svg';
-import useGetNationalTravelInformationSystem from "../../../hooks/apis/useGetNationalTravelInformationSystem";
-// import transportService from '../../services/transport.service';
+
+
 interface OverviewSamasProvinceProps {
   cityTitle: any;
 }
 
 const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}) => {
   // eslint-disable-next-line
-  const {data, loading, error} = useGetNationalTravelInformationSystem(true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -27,8 +26,8 @@ const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}
             icon={driverInfectedIcon}
             text="موارد مثبت اعلامی به سماس"
             // count={numberOfDrivers}
-            count={data.healthStatusCalls}
-            loading={loading}
+            count={0}
+            loading={false}
             hasInfo
             infoText="مجموع موارد مبتلایان مثبت و اعلام شده به سماس در رسته‌های مختلف."
           />
@@ -36,7 +35,7 @@ const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}
             icon={deactivateInquiryIcon}
             text="غیر فعالسازی‌های انجام شده"
             // count={numberOfPositiveDrivers}
-            count="-"
+         
             loading={false}
             hasInfo
             infoText="غیرفعال‌سازی انجام شده رانندگان مبتلا توسط سماس."
@@ -45,7 +44,7 @@ const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}
             icon={informationUpdatedIcon}
             text="اطلاعات به روز رسانی شده"
             // count={numberOfPlaqueVisited}
-            count="-"
+         
             loading={false}
             hasInfo
             infoText="مجموع اطلاعات به روزرسانی شده توسط سماس."
@@ -53,7 +52,7 @@ const OverviewSamasProvince: React.FC<OverviewSamasProvinceProps> = ({cityTitle}
           <Statistic
             icon={deactiveFuelCardIcon}
             text="مجموع تعلیق‌های کارت سوخت"
-            count="-"
+         
             loading={false}
             hasInfo
             infoText="مجموع کارت سوخت تعیلق شده افراد مختلف توسط سماس."

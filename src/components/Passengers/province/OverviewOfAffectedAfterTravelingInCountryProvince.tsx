@@ -10,10 +10,8 @@ import DatePickerModal from '../../DatePickerModal';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 // import {transportationTypes} from '../../../helpers/utils';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 import {sideCities} from "../../../helpers/utils";
 import {EERRORS} from "../../../constants/errors.enum";
 import RetryButton from "../../RetryButton";
@@ -53,25 +51,7 @@ const OverviewOfAffectedAfterTravelingInCountryProvince: React.FC<OverviewOfAffe
     retry : false
   });
 
-  const getColumnChartTestResult = async ({retry , ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(false);
-    try {
-      const response = await hcsService.patientsAfterTrip(params, {
-        cancelToken: source.token,
-      });
-      setData(response.data);
-      setErrorMessage(false);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
+  
 
   // const getLinearOverviewPublicTransport = async (params: any) => {
   //   setLoading(true);
@@ -92,29 +72,6 @@ const OverviewOfAffectedAfterTravelingInCountryProvince: React.FC<OverviewOfAffe
 
   const location = useLocation();
   const history = useHistory();
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        getColumnChartTestResult({...query, province : provinceName});
-      }, 500);
-    } else {
-      history.push('/dashboard/passenger/province');
-    }
-
-    return () => {
-      setData([]);
-      source.cancel('Operation canceled by the user.');
-      clearTimeout(idSetTimeOut);
-    };
-  }, [query,location.search]);
 
 
   useEffect(() => {

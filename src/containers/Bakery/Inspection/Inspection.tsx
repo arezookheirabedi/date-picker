@@ -17,7 +17,6 @@ import OverviewStatusOfCookingVariety from 'src/components/Bakery/Inspection/pub
 import OverviewBreadQualityInInspectedUnits from 'src/components/Bakery/Inspection/public/OverviewBreadQualityInInspectedUnits';
 import OverviewPublicHealthOfInspectedUnits from 'src/components/Bakery/Inspection/public/OverviewPublicHealthOfInspectedUnits';
 
-import useGetOverviewInspectionStatus from "../../../hooks/apis/inspection/useGetOverviewInspectionStatus";
 
 
 const Inspection = () => {
@@ -26,40 +25,29 @@ const Inspection = () => {
     retry: false
   })
 
-  const {
-    loading,
-    error: errorMessage,
-    data: inspection,
-    overviewOfTheReportOfInspectedUnitsInTheWholeCountry,
-    overviewOfTheNumberOfActiveAndInactiveInspectedUnitsOfTheEntireCountry,
-    overviewOfTheReportOfInspectedUnitsInTheWholeCountryColumnChart,
-    statusOfThePriceLetterAndTheSupplyPriceOfBreadOfTheInspectedUnitsInTheWholeCountry,
-    statusOfBakingVarietyInTheInspectedUnitsInTheWholeCountry,
-    overviewOfTheQualityAndHealthInTheInspectedUnitsInTheWholeCountry
-  } = useGetOverviewInspectionStatus(query);
 
   return (
     <div className="space-y-16 mb-8">
-      <OverviewInspectionStatus data={inspection} loading={loading}/>
+      <OverviewInspectionStatus data={[]} loading={false}     />
       <OverviewListOfInspections />
 
       <div className='flex w-full gap-x-6'>
-        <OverviewReportOfInspectedUnitsInCountry data={overviewOfTheReportOfInspectedUnitsInTheWholeCountry}
-                                                 loading={loading}
-                                                 error={errorMessage}
+        <OverviewReportOfInspectedUnitsInCountry data={[]}
+                                                 loading={false}     
+                                                 error={"errorMessage"}
                                                  setQuery={setQuery}
         />
 
-        <OverviewNumberOfInspectedUnits data={overviewOfTheNumberOfActiveAndInactiveInspectedUnitsOfTheEntireCountry}
-                                        loading={loading}
-                                        error={errorMessage}
+        <OverviewNumberOfInspectedUnits data={[]}
+                                        loading={false}     
+                                        error={"errorMessage"}
                                         setQuery={setQuery}
         />
       </div>
 
-      <OverviewReportOfInspectedUnit data={overviewOfTheReportOfInspectedUnitsInTheWholeCountryColumnChart}
-                                     loading={loading}
-                                     error={errorMessage}
+      <OverviewReportOfInspectedUnit data={[]}
+                                     loading={false}     
+                                     error={"errorMessage"}
                                      setQuery={setQuery}
       />
 
@@ -71,32 +59,32 @@ const Inspection = () => {
        <OverviewRatioOfInspection />
 
       <div className='flex w-full gap-x-6'>
-        <OverviewStatusOfListPrice data={statusOfThePriceLetterAndTheSupplyPriceOfBreadOfTheInspectedUnitsInTheWholeCountry}
-                                   loading={loading}
-                                   error={errorMessage}
+        <OverviewStatusOfListPrice data={[]}
+                                   loading={false}     
+                                   error={"errorMessage"}
                                    setQuery={setQuery} />
-        <OverviewStatusOfBreadSupplyPrice data={statusOfThePriceLetterAndTheSupplyPriceOfBreadOfTheInspectedUnitsInTheWholeCountry}
-                                          loading={loading}
-                                          error={errorMessage}
+        <OverviewStatusOfBreadSupplyPrice data={[]}
+                                          loading={false}     
+                                          error={"errorMessage"}
                                           setQuery={setQuery} />
       </div>
 
       <OverviewAverageFlourOfInspectedUnits />
 
-      <OverviewStatusOfCookingVariety  data={statusOfBakingVarietyInTheInspectedUnitsInTheWholeCountry}
-                                       loading={loading}
-                                       error={errorMessage}
+      <OverviewStatusOfCookingVariety  data={[]}
+                                       loading={false}     
+                                       error={"errorMessage"}
                                        setQuery={setQuery}  />
 
 
       <div className='flex w-full gap-x-6'>
-        <OverviewBreadQualityInInspectedUnits data={overviewOfTheQualityAndHealthInTheInspectedUnitsInTheWholeCountry}
-                                              loading={loading}
-                                              error={errorMessage}
+        <OverviewBreadQualityInInspectedUnits data={[]}
+                                              loading={false}     
+                                              error={"errorMessage"}
                                               setQuery={setQuery} />
-        <OverviewPublicHealthOfInspectedUnits data={overviewOfTheQualityAndHealthInTheInspectedUnitsInTheWholeCountry}
-                                              loading={loading}
-                                              error={errorMessage}
+        <OverviewPublicHealthOfInspectedUnits data={[]}
+                                              loading={false}     
+                                              error={"errorMessage"}
                                               setQuery={setQuery} />
       </div>
 

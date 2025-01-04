@@ -4,7 +4,6 @@ import axios from 'axios';
 import Charts from '../Charts';
 import Spinner from '../Spinner';
 
-import dataExchangePortService from '../../services/data-exchange-port.service';
 
 const {HeadlessChart} = Charts;
 
@@ -144,48 +143,9 @@ const CallChart: React.FC<any> = () => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getColumnChartTestResult = async () => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data: responseDate} = await dataExchangePortService.getServicesStatistic();
-      const categories: any[] = [];
-      const series: any[] = [];
 
-      const sortData = responseDate.sort((a: any, b: any) =>
-        a.totalCalls > b.totalCalls ? 1 : -1
-      );
 
-      sortData.forEach((item: any) => {
-        categories.push(item.endPoint || 'نامشخص');
-        series.push(item.totalCalls || 0);
-      });
 
-      setDataset(() => {
-        return {
-          categories,
-          series: {
-            data: [...series],
-            name: 'نمودار فراخوانی',
-            showInLegend: false,
-          },
-        };
-      });
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getColumnChartTestResult();
-    return () => {
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
   useEffect(() => {
     return () => {

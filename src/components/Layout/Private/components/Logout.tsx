@@ -1,6 +1,5 @@
 import React, {HTMLProps, Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
-import authenticateService from 'src/services/authentication.service';
 import {useHistory} from 'react-router-dom';
 import {IconWrapperStyle} from '../../../IconWrapper';
 import MenuItem from './MenuItem';
@@ -22,10 +21,6 @@ const Logout: React.FC<IProps> = () => {
     setIsOpen(true);
   };
 
-  const handleLogout: (e: React.MouseEvent<HTMLElement>) => void = e => {
-    e.stopPropagation();
-    authenticateService.logout(history);
-  };
 
   return (
     <>
@@ -94,7 +89,6 @@ const Logout: React.FC<IProps> = () => {
                   <div className="mb-6 flex justify-center space-x-2 rtl:space-x-reverse">
                     <button
                       type="button"
-                      onClick={handleLogout}
                       className="flex items-center justify-center bg-gray-900 shadow-xl rounded px-12 text-sm py-2 text-white"
                     >
                       <span>بله</span>

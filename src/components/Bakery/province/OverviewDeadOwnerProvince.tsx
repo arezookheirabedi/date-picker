@@ -12,7 +12,6 @@ import ExportFile from '../ExportFile'
 import {sidesCities} from '../../../helpers/utils';
 
 // hooks
-import useOverviewOfRegisteredProvince from "../../../hooks/apis/bakery/useOverviewOfRegisteredProvince";
 
 interface OverviewCategoriesProvinceProps {
     cityTitle?: any;
@@ -38,36 +37,9 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
 
    // const [showDatePicker, setShowDatePicker] = useState(false);
 
-   const {
-    loading, 
-    list: dataset, 
-    count,
-    setProvinceName
-   } = useOverviewOfRegisteredProvince();
+
   // } = useOverviewOfRegisteredProvince({reportName: "deadOwnerdetail"});
-  
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sidesCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      setProvinceName(provinceName);
-      // getOverviewByCategory({
-      //   resultStatus: 'POSITIVE',
-      //   recoveredCount: true,
-      //   total: true,
-      //   count: true,
-      //   province: provinceName,
-      // });
-      //
-    } else {
-      history.push('/dashboard/bakery/province');
-    }
-    
-  }, [cityTitle]);
+ 
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
@@ -94,25 +66,7 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
   //   }
   // }, [selectedDayRange]);
 
-  useEffect(()=> {
-    if(isEmpty(dataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[dataset])
-
-  const mapFilteredData = () => {
-    return dataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "شهر": data.city === "NULL" ? "" : data.city,
-        "نام و نام‌ خانوادگی" : data.fullName,
-        "شناسه پروانه سیما" : data.simaId,
-        "شماره ملی" : data.nationalId,
-        "آدرس" : data.address
-      };
-    });
-  };
-  const finalData = mapFilteredData();
+;
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -125,8 +79,8 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
             <ExportFile 
                 fileName="dead-owner-province-list"
-                data={finalData}
-                loading={loading}
+                data={[]}
+                loading={false}     
                 isDisabled={isOnPrint}
               />
           {/* {showDatePicker ? (
@@ -152,7 +106,7 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
                   <span className="mx-3 whitespace-nowrap truncate">
                     <span className="text-gray-500">
                       تعداد ردیف :
-                    </span> {count}
+                    </span> {0}
                   </span>
                 </div>
               </div>
@@ -169,13 +123,9 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
           
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+     
           <Table
-            dataSet={[...dataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -218,9 +168,9 @@ const OverviewDeadOwnerProvince: React.FC<OverviewCategoriesProvinceProps> = ({c
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={10}
           />
-        )}
+     
       </div>
     </fieldset>
   );

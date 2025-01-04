@@ -57,7 +57,7 @@ const OverviewGuildsPerCategory: React.FC<IProps> = ({cityTitle}) => {
           </div>
         ) : (
           <Table
-            loading={loading}
+          loading={loading}
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[

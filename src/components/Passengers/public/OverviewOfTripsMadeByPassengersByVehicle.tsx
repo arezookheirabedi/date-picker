@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 import moment from 'moment-jalaali';
 import Highcharts from "highcharts/highstock";
-// import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 import DatePickerModal from '../../DatePickerModal';
 import calendar from '../../../assets/images/icons/calendar.svg';
 
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from '../../../helpers/utils';
-import hcsService from "../../../services/hcs.service";
 import Spinner from "../../Spinner";
 import {EERRORS} from "../../../constants/errors.enum";
 import RetryButton from "../../RetryButton";
@@ -213,63 +211,9 @@ const OverviewOfTripsMadeByPassengersByVehicle = () => {
   };
 
 
-  const getTripsCountCategoryBased = async ({retry, ...params}: any) => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.getTripsCountCategoryBased(
-        params,
-        {cancelToken: cancelToken.token}
-      );
 
-      const categories: any = [];
-      const newData: any = [];
 
-      data.forEach((item: any) => {
-        categories.push(item.categoryValue)
-        newData.push({
-          name: item.categories,
-          y: item.count
-        })
-      })
-
-      setDataset({
-        categories,
-        series: [
-          {
-            name: 'واکسیناسیون',
-            color: {
-              linearGradient: {x1: 0, x2: 0, y1: 0, y2: 1},
-              stops: [
-                [0, '#175A76'], // start
-                [1, '#7DA6B8'], // end
-              ],
-            },
-            data: [...newData],
-          },
-        ]
-      })
-      setErrorMessage(false);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-
-  }
-
-  useEffect(() => {
-    getTripsCountCategoryBased(queryParams);
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setDataset(initialData)
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [queryParams]);
+ 
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

@@ -12,7 +12,6 @@ import {sidesCities} from '../../../helpers/utils';
 import ExportFile from '../ExportFile'
 
 // hooks
-import useOverviewOfPermissionProvince from "../../../hooks/apis/bakery/useOverviewOfPermissionProvince";
 
 interface OverviewCategoriesProvinceProps {
     cityTitle?: any;
@@ -21,11 +20,7 @@ interface OverviewCategoriesProvinceProps {
 const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({cityTitle}) => {
 
   // call bakery hook
-  const {
-    loading, 
-    list: dataset, 
-    setProvinceName
-  } = useOverviewOfPermissionProvince();
+
   
   const location = useLocation();
   const history = useHistory();
@@ -52,7 +47,6 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     });
     if (existsCity) {
       // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      setProvinceName(provinceName);
       // getOverviewByCategory({
       //   resultStatus: 'POSITIVE',
       //   recoveredCount: true,
@@ -91,24 +85,7 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   //   }
   // }, [selectedDayRange]);
 
-  useEffect(()=> {
-    if(isEmpty(dataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[dataset])
 
-  const mapData = () => {
-    return dataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "خریداران مشترک سیما و صمت": data.joint,
-        "خریداران فعال صمت": data.samt,
-        "خریداران فعال سیما" : data.sima
-      };
-    });
-  };
-  
-  const finalData = mapData();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -121,8 +98,8 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
             <ExportFile 
                 fileName="licenses-province-list"
-                data={finalData}
-                loading={loading}
+                data={[]}
+                loading={false}     
                 isDisabled={isOnPrint}
               />
           {/* {showDatePicker ? (
@@ -143,13 +120,9 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
           </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+    
           <Table
-            dataSet={[...dataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -181,9 +154,9 @@ const OverviewPermissionProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={10}
           />
-        )}
+        
       </div>
     </fieldset>
   );

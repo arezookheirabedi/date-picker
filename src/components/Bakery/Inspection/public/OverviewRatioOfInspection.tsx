@@ -4,11 +4,9 @@ import {isEmpty} from 'lodash';
 //
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import Highcharts from 'highcharts';
-import useGetPilgrimGenderByProvinceOfStackChart from 'src/hooks/apis/useGetPilgrimGenderByProvinceOfStackChart';
 import RetryButton from 'src/components/RetryButton';
 import Spinner from '../../../Spinner';
 import HeadlessChart from '../HeadlessChart';
-import useGetRatioOfInspection from '../../../../hooks/apis/inspection/useGetRatioOfInspection';
 
 const OverviewRatioOfInspection: React.FC<{}> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,7 +14,6 @@ const OverviewRatioOfInspection: React.FC<{}> = () => {
     retry: false,
   });
 
-  const {data: dataset, loading, error: errorMessage} = useGetRatioOfInspection(query);
 
   const optionChart = {
     chart: {
@@ -144,23 +141,9 @@ const OverviewRatioOfInspection: React.FC<{}> = () => {
           </div>
         </div>
 
-        {loading && (
-          <div className="p-40">
-            <Spinner />
-          </div>
-        )}
-        {errorMessage && (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery} />
-          </div>
-        )}
-        {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
-        )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+       
+          <HeadlessChart data={[]} optionsProp={optionChart} />
+     
       </div>
     </fieldset>
   );

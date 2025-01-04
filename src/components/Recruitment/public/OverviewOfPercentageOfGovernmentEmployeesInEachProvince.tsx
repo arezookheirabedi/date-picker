@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 // @ts-ignore
 // eslint-disable-next-line
 import moment from 'moment-jalaali';
-import recruitmentServices from 'src/services/recruitment.service';
 import Calendar from 'src/components/Calendar';
 import DatePickerModal from '../../DatePickerModal';
 import Charts from '../../Charts';
@@ -47,30 +46,8 @@ const OverviewOfPercentageOfGovernmentEmployeesInEachProvince = () => {
     retry: false
   }) as any;
 
-  const getLinearOverview = async ({retry, ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await recruitmentServices.testResultTimeBased(params);
-      setData(response.data);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getLinearOverview({
-        ...queryParams,
-      });
-    }, 500);
 
-    return () => clearTimeout(idSetTimeOut);
-  }, [queryParams]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
-import hcsService from '../../services/hcs.service';
 import {getProvinceParam} from '../../helpers/utils';
 
 export interface IInitialTestResults {
@@ -32,62 +31,9 @@ export default function useGetTestResults(query: any, hasProvince: boolean = fal
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getTestResults = async (params: any) => {
-    setLoading(true);
-    setError(false);
-    try {
-      const {data: result} = await hcsService.testResults(params, {cancelToken: source.token});
-      setData((prev: any) => {
-        return {
-          ...prev,
-          ...result,
-        };
-      });
-      setError(false)
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setError(err.message || '');
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    if (hasProvince) {
-      return;
-    }
-    getTestResults(query);
-    // eslint-disable-next-line consistent-return
-    return () => {
-      setData(initialTestResults);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
-  // province logics
 
-  const location = useLocation();
-
-  function doProvinceActions() {
-    if (getProvinceParam()) {
-      getTestResults({...query, province: getProvinceParam()})
-    }
-  }
-
-  useEffect(() => {
-    if (!hasProvince) return;
-
-    doProvinceActions();
-
-    // eslint-disable-next-line consistent-return
-    return () => {
-      setData(initialTestResults);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search]);
 
   return {loading, error, data};
 }

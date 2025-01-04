@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
-import guildService from 'src/services/guild.service';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
 import {isEmpty} from 'lodash';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
@@ -31,72 +30,9 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartRegisterNumber = async ({retry, ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await guildService.numberOfRegisteredGuilds(params, {
-        cancelToken: cancelToken.token,
-      });
-      const sortData = data.sort((a: any, b: any) => (a.allCount > b.allCount ? 1 : -1));
-      const province: any[] = [];
-      const registered: any[] = [];
-      const allCount: any[] = [];
-      sortData.forEach((item: any) => {
-        province.push(item.province);
-        allCount.push(item.allCount);
-        registered.push(item.registeredCount);
-      });
-      const newData = [
-        {
-          name: 'کل',
-          dataLabels: {
-            // enabled: true,
-          },
-          pointWidth: 8,
-          data: [...allCount],
-        },
-        {
-          name: 'ثبت نام شده',
-          dataLabels: {
-            // enabled: true,
-          },
-          pointWidth: 8,
 
-          data: [...registered],
-          linearGradient: {
-            x1: 0,
-            x2: 0,
-            y1: 0,
-            y2: 1,
-          },
-          stops: [
-            [0, '#5F5B97'],
-            [1, '#DDDCE9'],
-          ],
-        },
-      ];
-      if (data.length > 0) {
-        setDataset({categories: [...province], series: [...newData]});
-      }
-      setLoading(false);
-    } catch (error: any) {
-      if (error.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(error.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    getColumnChartRegisterNumber(queryParams);
-    return () => {
-      cancelRequest();
-      setDataset({});
-    };
-  }, [queryParams]);
+
 
   const optionChart = {
     chart: {
@@ -205,7 +141,7 @@ const OverviewGuildRegisterNumber: React.FC<{}> = () => {
           <div className="align-center flex space-x-5 rtl:space-x-reverse">
             <div className="flex items-center">
               <SearchableSingleSelect
-                endPoint={guildService.getRegisterList}
+                endPoint="guildService.getRegisterList"
                 placeholder="کل اصناف"
                 objectKey="categoryId"
                 setQueryParams={setQueryParams}

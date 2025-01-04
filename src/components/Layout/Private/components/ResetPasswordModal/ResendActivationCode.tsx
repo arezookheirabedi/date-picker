@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import authenticateService from 'src/services/authentication.service';
 import toast from 'cogo-toast';
 import {EERRORS} from 'src/constants/errors.enum';
 
@@ -73,21 +72,6 @@ const ResendActivationCode: React.FC<IProps> = ({formData, setOtp}) => {
   }, [waitTime]);
   const {min, sec} = getDifferentTime(waitTime);
 
-  const handleClick = async () => {
-    try {
-      const res = await authenticateService.resetPassword(formData);
-      if (res.status === 204) {
-        toast.success('کد به شماره همراه ارسال شد');
-        localStorage.setItem('waiting-sms', new Date().toString());
-        setWaitTime(2000 * 60);
-        setDisabled(true);
-      } else {
-        throw new Error('خطایی در عملیات');
-      }
-    } catch (error: any) {
-      toast.error(error.message || EERRORS.ERROR_500);
-    }
-  };
 
   return (
     <div>
@@ -95,7 +79,6 @@ const ResendActivationCode: React.FC<IProps> = ({formData, setOtp}) => {
       <div className="mt-6 flex flex-col ">
         <button
           type="button"
-          onClick={handleClick}
           style={disabled ? isDisabled : {}}
           disabled={disabled}
           className="flex items-center justify-center rounded border border-gray-300 bg-white px-12 py-2 text-sm text-gray-900  hover:bg-gray-100   disabled:border-gray-100 disabled:bg-gray-50  "
