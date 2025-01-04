@@ -30,7 +30,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={YellowVaccine}
             text="تعداد افراد با دوز اول"
             count={numberOf.doses[1] || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -38,7 +38,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={OrangeVaccine}
             text="تعداد افراد با دوز دوم"
             count={numberOf.doses[2] || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -46,7 +46,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={PurpleVaccine}
             text="تعداد افراد با دوز سوم"
             count={numberOf.doses[3] || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -54,7 +54,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={DarkgreenVaccine}
             text="تعداد افراد با دوز چهارم"
             count={numberOf.doses[4] || 0}
-            loading={loading}
+           
           />
         </div>
 
@@ -69,7 +69,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               icon={VaccineIcon}
               text="تعداد افراد با دوز پنجم"
               count={numberOf.doses[5] || 0}
-              loading={loading}
+             
             />
           </div>
           <div className="w-1/4">
@@ -79,7 +79,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               icon={VaccineIcon}
               text="مجموع افراد واکسینه شده"
               count={numberOf.totalVaccinesCount || 0}
-              loading={loading}
+             
             />
           </div>
           <div className="w-1/4">
@@ -89,7 +89,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               icon={GreyVaccine}
               text="مجموع افراد واکسینه نشده"
               count={numberOf.totalNonVaccinesCount || 0}
-              loading={loading}
+             
             />
           </div>
         </div>
@@ -105,7 +105,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={YellowVaccine}
             text="درصد افراد با دوز اول"
             count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -114,7 +114,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={OrangeVaccine}
             text="درصد افراد با دوز دوم"
             count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -123,7 +123,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={PurpleVaccine}
             text="درصد افراد با دوز سوم"
             count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -132,7 +132,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
             icon={DarkgreenVaccine}
             text="درصد افراد با دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
-            loading={loading}
+           
             isPercentage
           />
         </div>
@@ -148,7 +148,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               icon={VaccineIcon}
               text="درصد افراد با دوز پنجم"
               count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-              loading={loading}
+             
               isPercentage
             />
           </div>
@@ -159,7 +159,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               icon={VaccineIcon}
               text="درصد افراد واکسینه شده"
               count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-              loading={loading}
+             
               isPercentage
             />
           </div>
@@ -170,7 +170,7 @@ const OverviewOfTheLatestPublicTransportVaccinationStatusCard = () => {
               icon={GreyVaccine}
               text="درصد افراد واکسینه نشده"
               count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-              loading={loading}
+             
               isPercentage
             />
           </div>

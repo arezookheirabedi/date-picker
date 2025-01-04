@@ -13,7 +13,6 @@ import wheatIcon from '../../../../assets/images/icons/wheat.svg';
 import breadIcon from '../../../../assets/images/icons/bread.svg';
 import ovenInspectionIcon from '../../../../assets/images/icons/oven-inspection.svg';
 
-// import useGetOverviewInspectionStatus from '../../../../hooks/apis/inspection/useGetOverviewInspectionStatus'
 
 interface IOverviewInspectionStatus {
   data: any,
@@ -33,7 +32,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={flourInspectionIcon}
             text="تعداد کل بازرسی‌های انجام شده"
             count={data.inspectionCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -41,7 +40,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={groupIcon}
             text="تعداد کل بازرسان"
             count={data.inspectorCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -49,7 +48,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={ovenIcon}
             text="تعداد واحدهای بازرسی شده دارای پروانه کسب"
             count={data.unitsHavingBusinessLicense || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -57,7 +56,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={ovenDeactiveIcon}
             text="تعداد واحدهای بازرسی شده فاقد پروانه کسب"
             count={data.unitsNotHavingBusinessLicense || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -68,7 +67,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={bakeryWorkerIcon}
             text="تعداد کل کارگران خبازی‌های بازرسی شده"
             count={data.workersCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -76,7 +75,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={wheatIcon}
             text="میانگین آرد مشاهده شده در واحدهای بازرسی شده"
             count={Math.floor(data.averageOfFlour) || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -84,7 +83,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={breadIcon}
             text="مجموع نانهای پخت شده در واحدهای بازرسی شده"
             count={data.bakedBreadsCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />
@@ -92,7 +91,7 @@ const OverviewInspectionStatus: React.FC<IOverviewInspectionStatus> = ({data, lo
             icon={ovenInspectionIcon}
             text="مجموع واحد‌هایی که نیاز به بازرسی دارند"
             count={data.neededToInspectionCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="لورم اپیسوم"
           />

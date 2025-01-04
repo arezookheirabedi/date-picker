@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import toast from 'cogo-toast';
 import {changeDigitToEnglish} from 'src/helpers/utils';
 import AppRegex from 'src/helpers/regex';
-import authenticateService from 'src/services/authentication.service';
 import DotLoading from 'src/components/DotLoading';
 import eyes from 'src/assets/images/icons/eye_icon.svg';
 import {EERRORS} from 'src/constants/errors.enum';
@@ -67,36 +66,9 @@ const RequestOtpForm: React.FC<IProps> = ({
   };
 
   // eslint-disable-next-line consistent-return
-  const sendOtpRequest = async ({confirmPassword, ...e}: any = {}) => {
-    setLoading(true);
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const res = await authenticateService.resetPassword(e);
-      toast.success('کد به شماره همراه ارسال شد');
-      localStorage.setItem('waiting-sms', new Date().toString());
-      setConfirmOtpModal(true);
-      setFormData(e);
-      setLoading(false);
-      closeModal();
-    } catch (error: any) {
-      const {message} = error;
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const {errors} = error;
-      if (message) {
-        toast.error(message || EERRORS.ERROR_500);
-      }
-      if (errors && errors.length) {
-        errors.map((item: any) => {
-          return setError(item.field, {
-            message: item.message,
-          });
-        });
-      }
-      setLoading(false);
-    }
-  };
+
   const onSubmit = (e: any) => {
-    sendOtpRequest(e);
+  console.log("dfd")
   };
 
   return (

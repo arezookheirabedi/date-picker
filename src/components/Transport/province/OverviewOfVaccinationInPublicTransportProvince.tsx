@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import useGetNumberOf from "../../../hooks/apis/useGetNumberOf";
-import useGetOverviewOfVaccinationTable from "../../../hooks/apis/useGetOverviewOfVaccinationTable";
+
 import Statistic from '../../../containers/Guild/components/Statistic';
 import totalDriver from '../../../assets/images/icons/transport-color.svg';
 import GreenVaccine from '../../../assets/images/icons/green-vaccine-lg.svg';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
-// import transportService from '../../../services/transport.service';
 import YellowVaccineMd from '../../../assets/images/icons/yellow-vaccine-lg.svg';
 import PurppleVaccineMd from '../../../assets/images/icons/purpple-vaccine-lg.svg';
 import NavyVaccineMd from '../../../assets/images/icons/navy-vaccine-lg.svg';
@@ -31,9 +29,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
       retry : false
     })
     // eslint-disable-next-line
-    const {data: numberOf, loading, error} = useGetNumberOf({tag: 'transport'}, true);
     // eslint-disable-next-line
-    const {data: dataset, loading: datasetLoading, error: errorMessage} = useGetOverviewOfVaccinationTable(query, true)
 
     return (
       <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -47,32 +43,31 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           <Statistic
             icon={totalDriver}
             text="مجموع رانندگان فعال"
-            count={numberOf.totalPopulation}
-            loading={loading}
+            
             hasInfo
             infoText="مجموع رانندگانی که در حمل ‌و نقل عمومی فعالیت دارند."
           />
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={numberOf.totalVaccinesCount || 0}
-            loading={loading}
+            count={0}
+            loading={false}
             hasInfo
             infoText="تعداد کل دوز های تزریق شده در حمل‌ونقل "
           />
           <Statistic
             icon={YellowVaccineMd}
             text="تعداد واکسیناسیون دوز اول"
-            count={numberOf.doses[1] || 0}
-            loading={loading}
+            count={0}
+            loading={false}
             hasInfo
             infoText="تعداد افرادی که دوز اول واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={OrangeVaccine}
             text="تعداد واکسیناسیون دوز دوم"
-            count={numberOf.doses[2] || 0}
-            loading={loading}
+            count={0}
+            loading={false}
             hasInfo
             infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           />
@@ -82,32 +77,26 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           <Statistic
             icon={PurppleVaccineMd}
             text="تعداد واکسیناسیون دوز سوم"
-            count={numberOf.doses[3] || 0}
-            loading={loading}
+
             hasInfo
             infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={DarkgreenVaccine}
             text="تعداد واکسیناسیون دوز چهارم"
-            count={numberOf.doses[4] || 0}
-            loading={loading}
             hasInfo
             infoText="تعداد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={NavyVaccineMd}
             text="تعداد واکسیناسیون دوز پنجم"
-            count={numberOf.doses[5] || 0}
-            loading={loading}
+        
             hasInfo
             infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={GrayVaccine2}
             text="تعداد واکسیناسیون انجام نشده"
-            count={numberOf.totalNonVaccinesCount || 0}
-            loading={loading}
             hasInfo
             infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
@@ -117,8 +106,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
-            count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
             isPercentage
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
@@ -126,8 +113,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           <Statistic
             icon={YellowVaccineMd}
             text="درصد واکسیناسیون دوز اول"
-            count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-            loading={loading}
             isPercentage
             hasInfo
             infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
@@ -135,8 +120,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           <Statistic
             icon={OrangeVaccine}
             text="درصد واکسیناسیون دوز دوم"
-            count={numberOf.dosesToTotalPopulationPercentage[2]}
-            loading={loading}
             isPercentage
             hasInfo
             infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
@@ -144,8 +127,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           <Statistic
             icon={PurppleVaccineMd}
             text="درصد واکسیناسیون دوز سوم"
-            count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-            loading={loading}
             isPercentage
             hasInfo
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
@@ -158,8 +139,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             <Statistic
               icon={DarkgreenVaccine}
               text="درصد واکسیناسیون دوز چهارم"
-              count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
-              loading={loading}
               isPercentage
               hasInfo
               infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
@@ -169,8 +148,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             <Statistic
               icon={NavyVaccineMd}
               text="درصد واکسیناسیون دوز پنجم"
-              count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-              loading={loading}
               isPercentage
               hasInfo
               infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
@@ -181,8 +158,6 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
             <Statistic
               icon={GrayVaccine2}
               text="درصد واکسیناسیون انجام نشده"
-              count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-              loading={loading}
               isPercentage
               hasInfo
               infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
@@ -196,24 +171,13 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
           </div>
         </div>
 
-        {errorMessage && (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
-          </div>
-        )}
+    
 
-        {datasetLoading && (
-          <div className="p-20">
-            <Spinner/>
-          </div>
-        )}
-
-        {!datasetLoading && !errorMessage && (
+    
           <>
             <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
               <Table
-                dataSet={[...dataset]}
+                dataSet={[]}
                 pagination={{pageSize: 20, maxPages: 3}}
                 columns={[
                   {
@@ -328,7 +292,7 @@ const OverviewOfVaccinationInPublicTransportProvince: React.FC<OverviewOfVaccina
               />
             </div>
           </>
-        )}
+        
       </fieldset>
     );
   };

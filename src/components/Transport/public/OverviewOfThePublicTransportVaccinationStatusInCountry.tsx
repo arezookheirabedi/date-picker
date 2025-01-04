@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import Highcharts from "highcharts/highstock";
-// import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
-import useGetOverviewOfVaccinationStackChart from "../../../hooks/apis/useGetOverviewOfVaccinationStackChart";
 import SingleDatepickerQuery from "../../SingleDatepickerQuery";
 import RetryButton from "../../RetryButton";
 
@@ -124,7 +122,6 @@ const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
     retry : false
   }) as any;
 
-  const {data: dataset, loading, error: errorMessage} = useGetOverviewOfVaccinationStackChart(query);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -172,20 +169,9 @@ const OverviewOfThePublicTransportVaccinationStatusInCountry = () => {
         {/* <Stacked data={dataset} categories={categories} /> */}
 
 
-        {loading && (
-          <div className="p-40">
-            <Spinner/>
-          </div>
-        )}
-        {errorMessage && (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
-          </div>
-        )}
-        {!loading && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart}/>
-        )}
+        
+          <HeadlessChart data={[]} optionsProp={optionChart}/>
+        
         {/* {dataset.length === 0 && !loading && !errorMessage && ( */}
         {/*  <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div> */}
         {/* )} */}

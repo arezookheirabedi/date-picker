@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 
 import Highcharts from "highcharts/highstock";
-// import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 
 import Charts from '../../Charts';
 import {cancelTokenSource, msgRequestCanceled} from '../../../helpers/utils';
-import hcsService from "../../../services/hcs.service";
 
 import Spinner from '../../Spinner';
 import RetryButton from "../../RetryButton";
@@ -138,63 +136,13 @@ const OverviewOfLatestPassengersVaccinationStatus = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getTransportVaccinateInfo = async () => {
-    setLoading(true);
-    try {
-      const {data} = await hcsService.getPeopleVaccinesTripGeneralReport(
-        {},
-        {cancelToken: cancelToken.token}
-      );
 
-      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-      const dosesToTotalPopulationPercentage = {...initialDoses, ...data.dosesToTotalPopulationPercentage}
-      const dataTemp = {
-        categories: ['دوز اول', 'دوز دوم', 'دوز سوم', 'دوز چهارم', 'دوز پنجم', 'واکسن نزده ها'],
-        series: [
-          {
-            name: 'واکسیناسیون',
-            data: [
-              {name: 'دوز اول', y: dosesToTotalPopulationPercentage['1'], color: '#F3BC06'},
-              {name: 'دوز دوم', y: dosesToTotalPopulationPercentage['2'], color: '#209F92'},
-              {name: 'دوز سوم', y: dosesToTotalPopulationPercentage['3'], color: '#004D65'},
-              {name: 'دوز چهارم', y: dosesToTotalPopulationPercentage['4'], color: '#BFDDE7'},
-              {name: 'دوز پنجم', y: dosesToTotalPopulationPercentage['5'], color: '#716DE3'},
-              {
-                name: 'واکسن نزده ها',
-                y: data.totalNonVaccinesCountToTotalPopulationPercentage || 0,
-                color: '#FF0060'
-              },
-            ],
-          },
-        ]
-      } as any;
-
-      setDataset(dataTemp)
-      setErrorMessage(false);
-      setLoading(false);
-    } catch (err : any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
 
   const [query, setQuery] = useState({
     retry: false
   })
 
-  useEffect(() => {
-    getTransportVaccinateInfo();
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setDataset(initialData)
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, [query]);
+
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

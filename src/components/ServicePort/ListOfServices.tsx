@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Menu} from "@headlessui/react";
-import dataExchangePortService from "../../services/data-exchange-port.service";
 import {ReactComponent as DownIcon} from "../../assets/images/icons/down.svg";
 import Table from "../TableScope";
 import CategoryDonut from "../../containers/Guild/components/CategoryDonut";
@@ -77,50 +76,6 @@ const ListOfServices = () => {
   const [dataset, setDataset] = useState<any>([]);
   // eslint-disable-next-line
   const [orgDataset, setOrgDataset] = useState<any>([]);
-
-  const getListOfServices =async ()=>{
-    setLoading(true);
-    try {
-      const {data} = await dataExchangePortService.getServicesStatistic();
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.endPoint || 'نامشخص',
-          receivingDevice: item.consumer || 0,
-          serviceGroup: item.gateway || 0,
-          launchDate: item.startDate || 0,
-          provider: item.provider || 0,
-          numberOfCalls: item.totalCalls || 0,
-          successfulCalling: item.successCalls || 0,
-          failedCall: item.failCalls || 0
-        });
-      });
-
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({
-        name: 'براساس بیشترین فراخوانی',
-        enName: 'HIGHEST',
-      });
-      // setServicesTotalStatistic({...data})
-      // setProfileNumber(data.count);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-  useEffect(() => {
-    getListOfServices();
-    // getOverviewByCategory1();
-    return () => {
-      // cancelRequest();
-      setDataset([]);
-      setOrgDataset([]);
-    };
-  }, []);
 
 
   useEffect(() => {
@@ -256,7 +211,7 @@ const ListOfServices = () => {
 
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
         <Table
-          loading={loading}
+         
           dataSet={[...dataset]}
           pagination={{pageSize: 10, maxPages: 3}}
           columns={[

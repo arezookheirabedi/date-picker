@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Charts from 'src/components/Charts';
 import Highcharts from 'highcharts';
 import SearchableSingleSelect from 'src/components/SearchableSingleSelect';
-import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
 import RetryButton from 'src/components/RetryButton';
@@ -30,51 +29,9 @@ const OverviewGuildPositivePcrPercentage: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getColumnChartPositivePcrPercentage = async ({retry, ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await hcsService.positivePcrPercentageProvinceBased(params, {
-        cancelToken: cancelToken.token,
-      });
-      const province: any[] = [];
-      const positiveMembersCountToTotalMembersPercentag: any[] = [];
-      data.forEach((item: any) => {
-        province.push(item.province);
-        positiveMembersCountToTotalMembersPercentag.push(
-          item.positiveMembersCountToTotalMembersPercentage
-        );
-      });
-      const sortPositiveMembersCountToTotalMembersPercentag =
-        positiveMembersCountToTotalMembersPercentag.sort((a, b) => (a > b ? 1 : -1));
-      const newData = [
-        {
-          showInLegend: false,
-          name: 'درصد ابتلا',
-          data: [...sortPositiveMembersCountToTotalMembersPercentag],
-        },
-      ];
-      if (data.length > 0) {
-        setDataset({categories: [...province], series: [...newData]});
-      }
-      setLoading(false);
-    } catch (error: any) {
-      if (error.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(error.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    getColumnChartPositivePcrPercentage({...queryParams, tag: 'guild', category: 'categoryDesc'});
-    return () => {
-      cancelRequest();
-      setDataset({});
-    };
-  }, [queryParams]);
+
+
 
   const optionChart = {
     chart: {

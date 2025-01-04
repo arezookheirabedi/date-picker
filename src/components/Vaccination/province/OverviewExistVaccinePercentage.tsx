@@ -24,16 +24,16 @@ const OverviewExistVaccinePercentage: React.FC<OverviewExistVaccinePercentagePro
 
       <div className="flex flex-col justify-between space-y-8">
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={astrazeneca} text="درصد واکسن آسترازنکا" count="-" loading={false} isPercentage />
-          <Statistic icon={sinopharm} text="درصد واکسن سینوفارم" count="-" loading={false} isPercentage/>
-          <Statistic icon={covaxin} text="درصد واکسن کوواکسین" count="-" loading={false} isPercentage/>
-          <Statistic icon={barekat} text="درصد واکسن برکت" count="-" loading={false} isPercentage/>
+          <Statistic icon={astrazeneca} text="درصد واکسن آسترازنکا"  loading={false} isPercentage />
+          <Statistic icon={sinopharm} text="درصد واکسن سینوفارم"  loading={false} isPercentage/>
+          <Statistic icon={covaxin} text="درصد واکسن کوواکسین"  loading={false} isPercentage/>
+          <Statistic icon={barekat} text="درصد واکسن برکت"  loading={false} isPercentage/>
         </div>
         <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-          <Statistic icon={sputnik} text="درصد واکسن اسپوتینک" count="-" loading={false} isPercentage/>
-          <Statistic icon={spikogen} text="درصد واکسن اسپایکوژن" count="-" loading={false} isPercentage/>
-          <Statistic icon={NavyVaccine} text="" count="-" loading={false} />
-          <Statistic icon={NavyVaccine} text="" count="-" />
+          <Statistic icon={sputnik} text="درصد واکسن اسپوتینک"  loading={false} isPercentage/>
+          <Statistic icon={spikogen} text="درصد واکسن اسپایکوژن"  loading={false} isPercentage/>
+          <Statistic icon={NavyVaccine} text=""  loading={false} />
+          <Statistic icon={NavyVaccine} text=""  />
         </div>
       </div>
     </fieldset>

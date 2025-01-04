@@ -178,42 +178,8 @@ export const toPersianDigit = (str: any) => {
 };
 
 export function isLogin() {
-  const profileStr = localStorage.getItem('ministers-userinfo');
-  const tokenStr = localStorage.getItem('ministers-token');
-  const firstLogin = localStorage.getItem('ministers-first-login');
-  if (tokenStr && firstLogin) {
-    if (new Date().getTime() > Number(firstLogin) + 24 * 60 * 60 * 1000) {
-      removeToken();
-      // eslint-disable-next-line
-      console.log('on day finished');
-      return false;
-    }
-    const token: ILogin = JSON.parse(tokenStr);
-
-    if (token.access_token) {
-      const profile = JSON.parse(profileStr || '{}');
-      // eslint-disable-next-line
-      const payload = parseJwt(token.access_token);
-      localStorage.setItem(
-        'ministers-userinfo',
-        JSON.stringify({
-          ...profile,
-          roles: payload.authorities || [],
-          resources: payload.resources,
-          permissions: (payload.authorities || []).reduce((result: any[], role: string) => {
-            const prems = getRolePermissions[role];
-            const r = result.concat(prems);
-            return r;
-          }, []),
-        })
-      );
-    }
-
-    if (token && token.access_token.length > 0) {
-      return true;
-    }
-  }
-  return false;
+ 
+  return true;
 }
 
 export const getBgColorGradientByStatus = (status: string) => {

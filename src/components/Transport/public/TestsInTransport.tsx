@@ -6,10 +6,8 @@ import Charts from '../../Charts';
 import DatePickerModal from '../../DatePickerModal';
 // eslint-disable-next-line
 import {getColorByServiceTypeName} from '../../../helpers/utils';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 
 const {Pyramid} = Charts;
 
@@ -33,40 +31,7 @@ const TestsInTransport = () => {
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const overviewTestResults = async (from: any = null, to: any = null) => {
-    try {
-      setLoading(true);
-      setErrorMessage(null);
-      const {data} = await hcsService.testResultsCategory('transport', 'serviceType', {
-        lang: 'fa',
-        from,
-        to,
-      });
-      // console.log(data);
 
-      let normalizedData = [] as any;
-      data.map((item: any) => {
-        if (item.total !== 0) {
-          return normalizedData.push({
-            title: item.categoryValue,
-            percentage: item.testResultsCountToTotalTestResultsCountPercentage,
-            color: getColorByServiceTypeName(item.categoryValue),
-          });
-        }
-        return null;
-      });
-
-      normalizedData = normalizedData.sort((a: any, b: any) => {
-        return b.percentage - a.percentage;
-      });
-
-      setPyramidData(normalizedData);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const focusFromDate = () => {
     setShowDatePicker(true);
@@ -105,14 +70,7 @@ const TestsInTransport = () => {
   //     setLoading(false);
   //   }
   // };
-  useEffect(() => {
-    // getTestInTransport({count: true, total: true, testResultStatusList: 'POSITIVE,NEGATIVE'});
-    overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setPyramidData([]);
-    };
-  }, [query]);
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

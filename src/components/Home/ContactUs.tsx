@@ -3,8 +3,7 @@ import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import toast from 'cogo-toast';
-import authenticationService from 'src/services/authentication.service';
-import publicService from 'src/services/public.service';
+
 import Svg from '../Svg';
 import DotLoading from '../DotLoading';
 
@@ -49,39 +48,11 @@ const ContactUs: React.FC<{}> = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const handleCaptcha = async () => {
-    try {
-      const {data} = await authenticationService.captcha();
-      setCaptchaImage(data.captchaBase64);
-      setCaptchaId(data.id);
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    }
-  };
 
-  // eslint-disable-next-line
-  const onSubmit = async (data: any) => {
-    setLoading(true);
-    try {
-      await publicService.sendMessage({...data, captchaId});
-      toast.success('پیام با موفقیت ارسال شد');
-    } catch (error: any) {
-      console.log(error);
-      toast.error('خطایی در عملیات');
-    } finally {
-      setLoading(false);
-    }
-  };
+const onSubmit=()=>{
+  console.log("k")
+}
 
-  useEffect(() => {
-    handleCaptcha();
-
-    return () => {
-      setCaptchaImage('');
-      setCaptchaId('');
-    };
-  }, []);
 
   return (
     <div className="contact-us-form" id="contact-us-form">
@@ -170,9 +141,6 @@ const ContactUs: React.FC<{}> = () => {
               <div className="absolute left-0 top-1/2 transform -translate-y-1/2 flex items-stretch space-x-3 rtl:space-x-reverse mb-12 sm:mb-0">
                 <div className="overflow-hidden flex items-center">
                   <img className="w-56" src={`data:image/png;base64, ${captchaImage}`} alt="" />
-                </div>
-                <div className="flex justify-center p-4 items-center">
-                  <RefreshLogo onHandleRefreshLogo={handleCaptcha} />
                 </div>
               </div>
             </div>

@@ -15,8 +15,8 @@ const OverviewOfTheLatestPublicGuildVaccinationStatus: React.FC<{
   errorMessage: string | null;
   numberOf: any;
 
-  loading: boolean;
-}> = ({setQueryParams, queryParams, numberOf, errorMessage, loading}) => {
+  loading?: boolean;
+}> = ({setQueryParams, queryParams, numberOf, errorMessage, loading=false}) => {
   const optionChart = {
     chart: {
       renderTo: 'container',

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import guildService from 'src/services/guild.service';
 import {useHistory, useLocation} from 'react-router-dom';
 import {cancelTokenSource, msgRequestCanceled, sideCities} from 'src/helpers/utils';
 import DatepickerQuery from 'src/components/DatepickerQuery';
@@ -28,53 +27,9 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  async function getTestResultByCategory({retry, ...params}: any) {
-    setLoading(true);
-    try {
-      const {data} = await guildService.getRegisterCount(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryName || 'نامشخص',
-          registeredCount: item.count || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setLoading(false);
-    } catch (errors: any) {
-      if (errors.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setError(errors.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
+ 
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      getTestResultByCategory({
-        ...queryParams,
-        province: provinceName,
-      });
-    } else {
-      history.go(-1);
-    }
-    return () => {
-      cancelRequest();
-      setDataset([]);
-      setOrgDataset([]);
-    };
-  }, [queryParams, location.search]);
+
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -110,7 +65,7 @@ const RegisterGuild: React.FC<IRegisterGuildProps> = ({cityTitle}) => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[

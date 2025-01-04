@@ -10,13 +10,11 @@ import Spinner from '../../Spinner';
 import ExportFile from '../ExportFile'
 
 // hooks
-import useOverviewOfPermission from "../../../hooks/apis/bakery/useOverviewOfPermission";
 
 
 const OverviewPermission: React.FC<{}> = () => {
 
   // call bakery hook
-  const { loading, list: dataset } = useOverviewOfPermission();
   const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
 
   // const tableRef = useRef<any>();
@@ -58,24 +56,10 @@ const OverviewPermission: React.FC<{}> = () => {
   //   }
   // }, [selectedDayRange]);
 
-  useEffect(()=> {
-    if(isEmpty(dataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[dataset])
 
-  const mapData = () => {
-    return dataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "خریداران مشترک سیما و صمت": data.joint,
-        "خریداران فعال صمت": data.samt,
-        "خریداران فعال سیما" : data.sima
-      };
-    });
-  };
+
+
   
-  const finalData = mapData();
  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -88,8 +72,8 @@ const OverviewPermission: React.FC<{}> = () => {
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
            <ExportFile 
               fileName="licenses-country-list"
-              data={finalData}
-              loading={loading}
+              data={[]}
+              loading={false}     
               isDisabled={isOnPrint}
            />
           {/* {showDatePicker ? (
@@ -110,13 +94,9 @@ const OverviewPermission: React.FC<{}> = () => {
           </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+    
           <Table
-            dataSet={[...dataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -148,9 +128,8 @@ const OverviewPermission: React.FC<{}> = () => {
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={10}
           />
-        )}
       </div>
     </fieldset>
   );

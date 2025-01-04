@@ -4,7 +4,6 @@ import {isEmpty} from 'lodash';
 import RangeDateSliderFilter from '../../../RangeDateSliderFilter';
 import Spinner from '../../../Spinner';
 import HeadlessChart from '../../HeadlessChart';
-import useGetOverviewOfInspectionsDone from '../../../../hooks/apis/inspection/useGetOverviewOfInspectionsDone';
 import RetryButton from "../../../RetryButton";
 
 interface OverviewInspectionsDoneProvinceProps {
@@ -18,12 +17,6 @@ const OverviewInspectionsDoneProvince: React.FC<OverviewInspectionsDoneProvinceP
     retry: false
   });
 
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-    optionChart: options
-  } = useGetOverviewOfInspectionsDone(query, true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -45,23 +38,9 @@ const OverviewInspectionsDoneProvince: React.FC<OverviewInspectionsDoneProvinceP
           />
         </div>
 
-        {loading && (
-          <div className="p-40">
-            <Spinner/>
-          </div>
-        )}
-        {errorMessage && !loading && (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery}/>
-          </div>
-        )}
-        {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={options}/>
-        )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+ 
+          <HeadlessChart data={[]} />
+       
       </div>
     </fieldset>
   );

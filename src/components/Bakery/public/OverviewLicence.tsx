@@ -10,10 +10,8 @@ import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
 // import TagsSelect from '../TagsSelect';
 import HeadlessChart from '../HeadlessChart';
-// import hcsService from '../../../services/hcs.service';
 
 // hooks
-import useOverviewOfLicence from "../../../hooks/apis/bakery/useOverviewOfLicence";
 
 const optionChart = {
   chart: {
@@ -125,11 +123,7 @@ const optionChart = {
 const OverviewLicence: React.FC<{}> = () => {
  
    // call bakery hook
-   const {
-    loading, 
-    list: dataset,
-    error: errorMessage
-  } = useOverviewOfLicence();
+
 
   // const [serviceType, setServiceType] = useState(null) as any;
   // const [showDatePicker, setShowDatePicker] = useState(false);
@@ -219,18 +213,9 @@ const OverviewLicence: React.FC<{}> = () => {
           />  */}
         </div> 
 
-        {loading && (
-          <div className="p-40">
-            <Spinner />
-          </div>
-        )}
-        {errorMessage && <div className="p-40 text-red-500">{errorMessage}</div>}
-        {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
-        )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        
+          <HeadlessChart data={[]} optionsProp={optionChart} />
+        
       </div>
     </fieldset>
   );

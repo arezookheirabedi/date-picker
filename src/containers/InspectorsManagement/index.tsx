@@ -5,8 +5,7 @@ import {cancelTokenSource, msgRequestCanceled, toPersianDigit} from 'src/helpers
 import HiddenMobileNumber from 'src/components/Form/HiddenMobileNumber';
 import {EERRORS} from 'src/constants/errors.enum';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
-import inspectorServices from 'src/services/inspector.service';
-import fsServices from 'src/services/fs.service';
+
 import Filter from 'src/components/UserManagment/Filter';
 import plusIcon from '../../assets/images/icons/plus.svg';
 import ConfirmIcon from '../../assets/images/icons/confirm.svg';
@@ -68,28 +67,6 @@ export default function Inspectors() {
     pageSize,
   });
 
-  const getProvince = async () => {
-    try {
-      const normalizedData: any[] = [];
-      const {data} = (await fsServices.getProvince()) as any;
-      data.forEach((item: any) => {
-        normalizedData.push({
-          label: item.province,
-          value: item.province,
-          id: item.provinceCode,
-        });
-      });
-      setProvinceOptions((prev: any) => {
-        return [...prev, ...normalizedData];
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getProvince();
-  }, []);
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -103,57 +80,9 @@ export default function Inspectors() {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, currentPage, locked, ...params}: any) {
-    const newData = {
-      ...params,
-      pageNumber: Number(query.currentPage) - 1,
-      activityStatus: query.locked,
-    };
 
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const {data} = await inspectorServices.getInspector(newData, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any) => {
-        normalizedData.push({
-          id: item.id,
-          name: `${item.firstName || '-'} ${item.lastName || '-'}`,
-          province: item.province || '-',
-          role: item.role || '-',
-          nationalId: item.nationalId || '-',
-          mobileNumber: item.mobileNumber || '-',
-          activityStatus: item.activityStatus || false,
-          city: item.city || '-',
-          username: item.username || '-',
-          organization: item.organization || '-',
-          inspectorStatus: item.inspectorStatus || '-',
-          inspectorId: item.inspectorId || '-',
-          totalData: item,
-        });
-      });
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
 
-  useEffect(() => {
-    fetchReports({...query});
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-    };
-  }, [query, refresh]);
+
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -196,7 +125,7 @@ export default function Inspectors() {
             <div ref={wrapperRef}>
               <Table
                 handlePageChange={handlePageChange}
-                loading={loading}
+               
                 dataSet={[...dataSet]}
                 pagination={{pageSize, currentPage: query.currentPage}}
                 totalItems={totalItems}

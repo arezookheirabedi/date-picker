@@ -9,17 +9,8 @@ dayjs.extend(jalaliday);
 interface IProps {}
 
 const GuildInfo: React.FC<IProps> = () => {
-  const {data: guildInfo} = useSelector(state => state.fetchGuildInfo);
 
-  let issueDate = guildInfo.issueDate || '-';
-  if (issueDate !== '-') {
-    issueDate = dayjs(issueDate).calendar('jalali').format('YYYY/MM/DD');
-  }
-
-  let expireDate = guildInfo.expireDate || '-';
-  if (expireDate !== '-') {
-    expireDate = dayjs(expireDate).calendar('jalali').format('YYYY/MM/DD');
-  }
+ 
 
   return (
     <div className="p-5 space-y-5">
@@ -37,49 +28,41 @@ const GuildInfo: React.FC<IProps> = () => {
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">رسته واحد صنفی:</span>
               <span className="text-white text-sm font-bold">
-                {guildInfo.category?.name || '-'}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">شناسه واحد صنفی:</span>
               <span className="text-white text-sm font-bold">
-                {(guildInfo.guildCode || '-').replace(/\d/g, (d: any) => '۰۱۲۳۴۵۶۷۸۹'[d])}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">کد ملی صاحب پروانه:</span>
               <span className="text-white text-sm font-bold">
-                {(guildInfo.ownerNationalId || '-').replace(/\d/g, (d: any) => '۰۱۲۳۴۵۶۷۸۹'[d])}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">وضعیت اعتبار پروانه کسب:</span>
               <span className="text-white text-sm font-bold">
-                {guildInfo.licStatus ? 'معتبر' : 'نامعتبر'}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">تاریخ صدور:</span>
               <span className="text-white text-sm font-bold">
-                {issueDate.replace(/\d/g, (d: any) => '۰۱۲۳۴۵۶۷۸۹'[d])}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">تاریخ اعتبار پروانه:</span>
               <span className="text-white text-sm font-bold">
-                {expireDate.replace(/\d/g, (d: any) => '۰۱۲۳۴۵۶۷۸۹'[d])}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse">
               <span className="text-gray-200 text-xs">کد پستی:</span>
               <span className="text-white text-sm font-bold">
-                {(guildInfo.postalCode || '-').replace(/\d/g, (d: any) => '۰۱۲۳۴۵۶۷۸۹'[d])}
               </span>
             </div>
             <div className="space-x-2 rtl:space-x-reverse truncate">
               <span className="text-gray-200 text-xs">آدرس واحد صنفی:</span>
               <span className="text-white text-sm font-bold truncate">
-                {(guildInfo.address || '-').replace(/\d/g, (d: any) => '۰۱۲۳۴۵۶۷۸۹'[d])}
               </span>
             </div>
           </div>

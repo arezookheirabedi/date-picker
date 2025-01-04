@@ -39,7 +39,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={guildIcon}
             text="مجموع کارفرمایان صنفی"
             count={numberOf.totalPopulation}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -47,7 +47,6 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={testResultInfo.positiveMembersCount}
-            loading={testResultLoading}
           />
           <Statistic
             hasInfo
@@ -55,14 +54,13 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={testResultInfo.recoveredMembersCount}
-            loading={testResultLoading}
           />
           <Statistic
             hasInfo
             infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
             icon={deadIcon}
             text="مجموع فوت‌ شدگان"
-            count="-"
+         
           />
         </div>
         <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -72,7 +70,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={numberOf.totalVaccinesCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -80,7 +78,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
             count={numberOf.totalNonVaccinesCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -88,7 +86,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
             count={numberOf.totalVaccinesCountAfterStartOfSystem || 0}
-            loading={loading}
+           
           />{' '}
           <Statistic
             hasInfo
@@ -96,7 +94,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || 0}
-            loading={loading}
+           
           />
         </div>
         <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -106,7 +104,6 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={testIcon}
             text="تعداد آزمایش های کارفرمایان صنفی"
             count={testResultInfo.testResultsCount}
-            loading={testResultLoading}
           />
           <Statistic
             hasInfo
@@ -114,7 +111,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -123,7 +120,7 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
             count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -132,7 +129,6 @@ const OverviewGuilds: React.FC<{}> = () => {
             icon={guildPositiveIcon}
             text="درصد ابتلا به کل"
             count={testResultInfo.positiveMembersCountToTotalPopulationPercentage || 0}
-            loading={testResultLoading}
             isPercentage
           />
         </div>

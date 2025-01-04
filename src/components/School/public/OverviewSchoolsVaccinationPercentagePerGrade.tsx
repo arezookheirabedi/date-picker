@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import hcsService from 'src/services/hcs.service';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
 import {chartNumberConverters as converters} from 'src/helpers/utils';
@@ -27,69 +26,7 @@ const OverviewSchoolsVaccinationPercentagePerGrade: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getLinearOverview = async ({retry, ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      // eslint-disable-next-line
-      const {data} = await hcsService.peopleVaccinationOverview(params, {
-        cancelToken: cancelToken.token,
-      });
-      const grade: any[] = [];
-
-      // eslint-disable-next-line
-      let nonVaccinesPercentage: any[] = [];
-      // eslint-disable-next-line
-      let vaccinesPercentage: any[] = [];
-
-      const sortData = data.sort((a: any, b: any) =>
-        a.nonVaccinesCountToMembersCountPercentage > b.nonVaccinesCountToMembersCountPercentage
-          ? 1
-          : -1
-      );
-
-      sortData.forEach((item: any) => {
-        vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
-        nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
-
-        grade.push(item.categoryValue);
-      });
-
-      const newData = [
-        {
-          name: 'واکسن نزده',
-          data: [...nonVaccinesPercentage],
-          color: '#e21416',
-        },
-        {
-          name: 'واکسن زده',
-          data: [...vaccinesPercentage],
-          color: '#04b086',
-        },
-      ];
-      setDataset({categories: [...grade], series: [...newData]});
-      setLoading(false);
-    } catch (error: any) {
-      if (error.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(error.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    getLinearOverview({
-      ...queryParams,
-      tag: 'edu',
-      category: 'grade',
-    });
-    return () => {
-      cancelRequest();
-      setDataset({});
-      setErrorMessage(null);
-    };
-  }, [queryParams]);
+  
 
   const optionChart = {
     chart: {

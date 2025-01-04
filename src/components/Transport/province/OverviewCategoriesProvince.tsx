@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-// import transportService from 'src/services/transport.service';
 import Table from '../../Table';
 import CategoryDonut from '../../../containers/Guild/components/CategoryDonut';
 import Spinner from '../../Spinner';
-import useGetOverviewOfCategories from "../../../hooks/apis/useGetOverviewOfCategories";
 import DatepickerQuery from "../../DatepickerQuery";
 import RetryButton from "../../RetryButton";
 
@@ -21,7 +19,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   }) as any;
 
 // eslint-disable-next-line
-  const {data: dataset, loading, error} = useGetOverviewOfCategories(query, true);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16" id="province-overview">
@@ -36,17 +33,11 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
 
-        {loading && (<div className="p-40"><Spinner/></div>)}
-        {error && !loading && (
-          <div className="p-40">
-            <div className="text-red-500">{error}</div>
-            <RetryButton setQuery={setQuery}/>
-          </div>
-        )}
+    
 
-        {!error && !loading && (
+
           <Table
-            dataSet={[...dataset]}
+            dataSet={[]}
             pagination={{pageSize: 20, maxPages: 3}}
             columns={[
               {
@@ -142,9 +133,9 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
                 ),
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={10}
           />
-        )}
+   
       </div>
     </fieldset>
   );

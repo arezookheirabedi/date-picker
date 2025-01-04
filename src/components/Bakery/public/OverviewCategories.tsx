@@ -6,7 +6,6 @@ import axios from 'axios';
 import Table from '../../TableScope';
 import Spinner from '../../Spinner';
 // import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery/custom/bakery.service';
 
 const OverviewCategories: React.FC<{}> = () => {
   
@@ -26,46 +25,7 @@ const OverviewCategories: React.FC<{}> = () => {
   // }) as any;
 
   // const overviewTestResults = async (from: any = null, to: any = null) => {
-  const overviewTestResults = async () => {
-    try {
-      setLoading(true);
-      const { data } = await bakeryService.bakeryReport(
-        { reportName: "category" },
-        { cancelToken: source.token }
-      );
-      // const {data} = await bakeryService.bakeryPerCategory({
-      //   lang: 'fa',
-      //   from,
-      //   to,
-      // });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.category,
-          total: item.total || 0,
-          samt: item.samt || 0,
-          sima: item.sima || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo);
-    overviewTestResults();
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, [])
   // }, [query]);
 
   // const focusFromDate = () => {

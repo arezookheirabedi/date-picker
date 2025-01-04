@@ -9,7 +9,6 @@ import SingleSelectInModal from '../Select2/SingleSelectInModal';
 // import {addInspectorValidation} from '../../../validations/index';
 import DotLoading from '../../components/DotLoading';
 
-import fsServices from '../../services/fs.service';
 import {addInspectorValidation} from 'src/validations';
 import DatePicker from '../Form/DatePicker';
 import {
@@ -91,63 +90,11 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({
     },
   });
 
-  const getProvince = async () => {
-    const normalizedData: any[] = [];
-    const {data} = (await fsServices.getProvince()) as any;
-    data.forEach((item: any) => {
-      normalizedData.push({
-        title: item.province,
-        value: item.provinceCode,
-      });
-    });
-    setProvinceOptions((prev: any) => {
-      return [...prev, ...normalizedData];
-    });
-  };
+ 
 
-  const getCities = async (provinceCode: any) => {
-    try {
-      const normalizedData: any[] = [];
-      const {data} = (await fsServices.getCities(provinceCode)) as any;
-      data[0] &&
-        data[0].cities?.forEach((item: any) => {
-          normalizedData.push({
-            title: item.name,
-            value: item.cityCode,
-          });
-        });
-      setCityOptions(() => {
-        return [
-          {
-            title: 'انتخاب شهر',
-            value: null,
-          },
-          ...normalizedData,
-        ];
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    if (userData && userData.provinceCode) {
-      getCities(userData?.provinceCode);
-    }
-  }, []);
 
-  useEffect(() => {
-    if (provinceTitleInput && provinceTitleInput.value) {
-      getCities(provinceTitleInput?.value);
-    } else {
-      setCityOptions(initialCityOptions);
-      setCityTitleInput(null);
-    }
-  }, [provinceTitleInput]);
 
-  useEffect(() => {
-    getProvince();
-  }, []);
 
   const validations = (values: any) => {
     if (!values.birthDate && !userData) {
@@ -166,85 +113,9 @@ const AddOrUpdateInspector: React.FC<IAddOrUpdateInspector> = ({
     return true;
   };
 
-  const onSubmit = async (values: any) => {
-    console.log('province title inside => ', provinceTitleInput);
-    console.log('city title inside => ', cityTitleInput);
-
-    if (!validations(values)) return;
-
-    let birthDate = values.birthDate && new Date(values.birthDate);
-
-    const jalaliDate = convertGregorianDateToJalaliDate(birthDate);
-    const finalJalaliDate = fixNumbers({
-      value: jalaliDate?.replace(/\//g, ''),
-    });
-
-    const extraData = {
-      province: provinceTitleInput.title,
-      city: cityTitleInput.title,
-      activityStatus: activityStatusValue?.value,
-      birthDate: finalJalaliDate ? finalJalaliDate : userData ? userData.birthDate : null,
-      firstName: values.firstName ? values.firstName : null,
-      lastName: values.lastName ? values.lastName : null,
-      role: values.role ? values.role : null,
-      inspectorId: values.inspectorId ? values.inspectorId : null,
-      provinceCode: provinceTitleInput.value,
-      cityCode: cityTitleInput.value,
-      // mobileSet: [values.mobileSet],
-      // roles: valuesOfRole,
-      // resources: [tagResources, provinceResources],
-    };
-    const finalData = {
-      ...values,
-      ...extraData,
-    };
-    console.log('final data => ', finalData);
-    setIsLoading(true);
-    try {
-      if (actionType === 'add') {
-        const {data} = await fsServices.addInspector(finalData);
-      } else if (actionType === 'update') {
-        const {data} = await fsServices.updateInspector({...finalData, id: userData.id});
-      }
-
-      cogoToast.success('عملیات با موفقیت انجام شد!');
-      setShowModal(false);
-      shouldRefresh((prev: boolean) => !prev);
-      // handleUpdateVisitList((prev: any) => !prev)
-    } catch (error: any) {
-      if (error.errors && error.errors.length) {
-        cogoToast.error('خطا در ارسال اطلاعات');
-        error.errors.map((item: any) => {
-          setError(item.field, {
-            message: item.message,
-          });
-        });
-        return;
-      }
-      if (error.hasOwnProperty('fingerPrint') && error.fingerPrint) {
-        cogoToast.error('خطا در سرور');
-      }
-      if (error.message) {
-        cogoToast.error(error.message);
-      } else if (error.request) {
-        console.log('The request was made but no response was received');
-      } else {
-        console.log('Error', error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-    // try {
-    //   setTimeout(() => {
-    //     throw { message: "خطا در ثبت" };
-    //   }, 2000);
-    // } catch (error: any) {
-    //   cogoToast.error(error.message);
-    //   console.log(error);
-    // } finally {
-    //   setSubmitted(false);
-    // }
-  };
+  const onSubmit =()=>{
+    console.log("ppp")
+  }
   const addDash = (str: any) => {
     return str.slice(0, 4) + '-' + str.slice(4, 6) + '-' + str.slice(6);
   };

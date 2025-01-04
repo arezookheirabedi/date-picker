@@ -31,7 +31,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={totalEducationalRecritment}
             text="مجموع کارمندان آموزشی"
             count={totalEmploye || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -39,7 +39,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={totalDepartmentRecritment}
             text="مجموع کارمندان اداری"
             count={totalEmploye || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -47,7 +47,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={totalStudent}
             text="مجموع  دانش آموزان"
             count={totalMembers || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -55,7 +55,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
             count={numberOf.gtDoses[0]}
-            loading={loading}
+           
           />
         </div>
 
@@ -68,7 +68,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={YellowVaccine}
             text="تعداد واکسیناسیون دوز اول"
             count={numberOf.doses[1]}
-            loading={loading}
+           
           />
 
           <Statistic
@@ -77,7 +77,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             text="تعداد واکسیناسیون دوز دوم"
             count={numberOf.doses[2]}
             hasInfo
-            loading={loading}
+           
           />
           <Statistic
             text="تعداد واکسیناسیون دوز سوم"
@@ -85,7 +85,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
             icon={PurppleVaccine}
             count={numberOf.doses[3]}
-            loading={loading}
+           
           />
 
           <Statistic
@@ -94,7 +94,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             text="تعداد واکسیناسیون دوز چهارم"
             count={numberOf.doses[4]}
             hasInfo
-            loading={loading}
+           
           />
         </div>
       </div>
@@ -105,7 +105,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
           icon={BlueVaccine}
           text="تعداد واکسیناسیون دوز پنجم و بیشتر"
           count={numberOf.gtDoses[4]}
-          loading={loading}
+         
         />
 
         <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
@@ -130,7 +130,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             infoText=" درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
             icon={GreenVaccine}
             count={numberOf.totalVaccinesCountToTotalPopulationPercentage}
-            loading={loading}
+           
             isPercentage
           />
 
@@ -140,7 +140,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={YellowVaccine}
             text="درصد افراد با دوز یک "
             count={numberOf.dosesToTotalPopulationPercentage[1]}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -149,7 +149,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={OrangeVaccine}
             text="درصد افراد با دوز دوم "
             count={numberOf.dosesToTotalPopulationPercentage[2]}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -158,7 +158,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             text="درصد افراد با دوز سوم"
             count={numberOf.dosesToTotalPopulationPercentage[3]}
             hasInfo
-            loading={loading}
+           
             isPercentage
           />
         </div>
@@ -172,7 +172,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             text="درصد افراد با دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4]}
             hasInfo
-            loading={loading}
+           
             isPercentage
           />
 
@@ -182,7 +182,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={BlueVaccine}
             text="درصد افراد با دوز پنجم"
             count={numberOf.dosesToTotalPopulationPercentage[5]}
-            loading={loading}
+           
             isPercentage
           />
 
@@ -192,7 +192,7 @@ const OverviewOfStatusCard: React.FC<{}> = () => {
             icon={GrayVaccine}
             text="درصد واکسیناسیون انجام نشده"
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage}
-            loading={loading}
+           
             isPercentage
           /> */}
 

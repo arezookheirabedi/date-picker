@@ -33,7 +33,7 @@ const OverviewDrivers = () => {
             icon={totalDriver}
             text="مجموع رانندگان فعال"
             count={numberOf.totalPopulation}
-            loading={loading}
+           
             hasInfo
             infoText="مجموع رانندگانی که در حمل‌ و نقل عمومی فعالیت دارند."
           />
@@ -41,7 +41,6 @@ const OverviewDrivers = () => {
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={testResultInfo.positiveMembersCount}
-            loading={testResultLoading}
             hasInfo
             infoText="مجموع افراد مبتلا شده به بیماری کوید."
           />
@@ -49,11 +48,10 @@ const OverviewDrivers = () => {
             icon={saveIcon}
             text="مجموع بهبودیافتگان"
             count={testResultInfo.recoveredMembersCount}
-            loading={testResultLoading}
             hasInfo
             infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
           />
-          <Statistic icon={deadIcon} text="مجموع فوت‌شدگان" count="-" loading={false} hasInfo
+          <Statistic icon={deadIcon} text="مجموع فوت‌شدگان"  loading={false} hasInfo
                      infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."/>
         </div>
         <div
@@ -62,7 +60,7 @@ const OverviewDrivers = () => {
             icon={vaccineIcon}
             text="مجموع واکسن زده‌ها"
             count={numberOf.totalVaccinesCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
           />
@@ -70,7 +68,7 @@ const OverviewDrivers = () => {
             icon={grayVaccineIcon}
             text="مجموع واکسن نزده‌ها"
             count={numberOf.totalNonVaccinesCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده‌اند."
           />
@@ -78,7 +76,7 @@ const OverviewDrivers = () => {
             icon={vaccineIcon}
             text="درصد واکسن زده‌ها"
             count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن زده اند."
@@ -87,7 +85,7 @@ const OverviewDrivers = () => {
             icon={grayVaccineIcon}
             text="درصد واکسن نزده‌ها"
             count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
             hasInfo
             infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده‌اند."
@@ -99,7 +97,6 @@ const OverviewDrivers = () => {
             icon={driverInfectedIcon}
             text="درصد ابتلا به کل"
             count={testResultInfo.positiveMembersCountToTotalPopulationPercentage || 0}
-            loading={testResultLoading}
             isPercentage
             hasInfo
             infoText="نسبت مبتلایان به بیماری کرونا به کل جمعیت رانندگان."
@@ -107,16 +104,14 @@ const OverviewDrivers = () => {
           <Statistic
             icon={totalVaccinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count={numberOf.totalVaccinesCountAfterStartOfSystem || '-'}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که بعد از شروع به کار به سامانه دوز اول واکسن را دریافت کرده اند."
           />
           <Statistic
             icon={noneVaccinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count={numberOf.totalNonVaccinesCountBeforeStartOfSystem || '-'}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که در زمان شروع سامانه در طرح واکسیناسیون شرکت نکرده‌ بوداند."
           />
@@ -124,7 +119,6 @@ const OverviewDrivers = () => {
             icon={testIcon}
             text="تعداد آزمایش های رانندگان"
             count={testResultInfo.testResultsCount}
-            loading={testResultLoading}
             hasInfo
             infoText="تعداد کل تست های PCR که رانندگان انجام داده‌اند."
           />

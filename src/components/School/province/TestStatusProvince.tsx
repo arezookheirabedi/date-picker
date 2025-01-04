@@ -40,7 +40,7 @@ const TestStatusProvince: React.FC<TestStatusProvinceProps> = ({cityTitle}) => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             dataSet={[...dataset]}
             pagination={{pageSize: PageSize, maxPages: 3}}
             columns={[

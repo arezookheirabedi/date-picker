@@ -7,10 +7,8 @@ import moment from 'moment-jalaali';
 import Charts from '../../Charts';
 import DatePickerModal from '../../DatePickerModal';
 import {sideCities, getColorByServiceTypeName} from '../../../helpers/utils';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 
 const {Pyramid} = Charts;
 
@@ -53,41 +51,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
     setShowDatePicker(true);
   };
 
-  const overviewTestResults = async (from: any = null, to: any = null, province: any) => {
-    try {
-      setLoading(true);
-      setErrorMessage(null);
-      const {data} = await hcsService.testResultsCategory('transport', 'serviceType', {
-        lang: 'fa',
-        from,
-        to,
-        province,
-      });
-      // console.log(data);
-
-      let normalizedData = [] as any;
-      data.map((item: any) => {
-        if (item.total !== 0) {
-          return normalizedData.push({
-            title: item.categoryValue,
-            percentage: item.testResultsCountToTotalTestResultsCountPercentage,
-            color: getColorByServiceTypeName(item.categoryValue),
-          });
-        }
-        return null;
-      });
-
-      normalizedData = normalizedData.sort((a: any, b: any) => {
-        return b.percentage - a.percentage;
-      });
-
-      setPyramidData(normalizedData);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   // const getTestInTransport = async (params: any) => {
   //   setLoading(true);
@@ -121,29 +85,7 @@ const TestsInTransportProvince: React.FC<TestsInTransportProvinceProps> = ({city
   //   }
   // };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    let idSetTimeOut: any;
-    if (existsCity) {
-      idSetTimeOut = setTimeout(() => {
-        // getTestInTransport({...queryParams, province: provinceName});
-        overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      }, 500);
-    } else {
-      history.push('/dashboard/transport/province');
-    }
-    return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        setPyramidData([]);
-        clearTimeout(idSetTimeOut);
-      }
-    };
-  }, [query, location.search]);
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

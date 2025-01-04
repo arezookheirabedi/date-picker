@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import Highcharts from "highcharts/highstock";
 import axios from 'axios';
-import inspectionService from '../../../services/inspection.service';
 import {sideCities} from '../../../helpers/utils';
 import {EERRORS} from "../../../constants/errors.enum";
 
@@ -118,70 +117,11 @@ export default function useGetOverviewStatusOfCookingVariety(
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getListOfInspections = async (province: any) => {
-    setLoading(true);
-    try {
-      const {data: result} = await inspectionService.inspectionStatusOfCookingVariety(
-        {tag: 'transport', province},
-        {cancelToken: source.token}
-      );
-      const {y1, y2, y3, y4, y5, y6, y7} = result[0];
-      setList(() => {
-          return {
-            categories: [ 'نان سنتی', 'نان خراسانی', 'نان گردان', 'نان تافتون', 'نان بربری', 'نان سنگک' , 'نان لواش'],
-              series: [
-                {
-                  name: 'گزارش',
-                  data: [
-                    {name: 'نان سنتی', y: y1, color: '#7DA6B8'},
-                    {name: 'نان خراسانی', y: y2, color: '#F3BC06'},
-                    {name: 'نان گردان', y: y3, color: '#209F92'},
-                    {name: 'نان تافتون', y: y4, color: '#004D65'},
-                    {name: 'نان بربری', y: y5, color: '#BFDDE7'},
-                    {name: 'نان سنگک', y: y6, color: '#716DE3'},
-                    {name: 'نان لواش', y: y7, color: '#FF0060'},
-                  ]
-              }
-            ],
-          };
-      }); 
-      setError(false);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setError(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    // eslint-disable-next-line consistent-return
-    return () => {
-      setList([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
   const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity && hasProvince) {
-      getListOfInspections(provinceName);
-    }
-    // eslint-disable-next-line consistent-return
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setList([]);
-    };
-  }, [location.search]);
+
 
   return {list, optionChart, error, loading};
 }

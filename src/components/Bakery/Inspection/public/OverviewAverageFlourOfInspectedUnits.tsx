@@ -6,7 +6,6 @@ import {useState} from 'react';
 import RetryButton from 'src/components/RetryButton';
 import Spinner from '../../../Spinner';
 import HeadlessChart from '../../HeadlessChart';
-import useGetOverviewAverageFlourOfInspectedUnits from '../../../../hooks/apis/inspection/useGetOverviewAverageFlourOfInspectedUnits';
 
 const optionChart = {
   chart: {
@@ -80,11 +79,7 @@ const optionChart = {
 const OverviewAverageFlourOfInspectedUnits: React.FC<{}> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [query, setQuery] = useState({retry: false});
-  const {
-    data: dataset,
-    loading,
-    error: errorMessage,
-  } = useGetOverviewAverageFlourOfInspectedUnits(query);
+  
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -97,23 +92,9 @@ const OverviewAverageFlourOfInspectedUnits: React.FC<{}> = () => {
             <div className="flex align-center justify-between">{/* dfd */}</div>
           </div>
         </div>
-        {loading && (
-          <div className="p-40">
-            <Spinner />
-          </div>
-        )}
-        {errorMessage && (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery} />
-          </div>
-        )}
-        {!loading && !isEmpty(dataset) && !errorMessage && (
-          <HeadlessChart data={dataset} optionsProp={optionChart} />
-        )}
-        {isEmpty(dataset) && !loading && !errorMessage && (
-          <div className="p-40 text-red-500">موردی برای نمایش وجود ندارد.</div>
-        )}
+        
+          <HeadlessChart data={[]} optionsProp={optionChart} />
+     
       </div>
     </fieldset>
   );

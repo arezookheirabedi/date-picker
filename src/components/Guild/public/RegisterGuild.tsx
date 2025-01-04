@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import guildService from 'src/services/guild.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import DatepickerQuery from 'src/components/DatepickerQuery';
 import LocalTableSearch from 'src/components/LocalTableSearch';
@@ -23,44 +22,9 @@ const RegisterGuild: React.FC<{}> = () => {
   function cancelRequest() {
     cancelToken.cancel(msgRequestCanceled);
   }
-  async function getTestResultByCategory({retry, ...params}: any) {
-    setLoading(true);
-    try {
-      const {data} = await guildService.getRegisterCount(params, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryName || 'نامشخص',
-          registeredCount: item.count || 0,
-        });
-      });
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setLoading(false);
-    } catch (errors: any) {
-      if (errors.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setError(errors.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
 
-  useEffect(() => {
-    getTestResultByCategory({
-      ...queryParams,
-    });
 
-    return () => {
-      cancelRequest();
-      setDataset([]);
-      setOrgDataset([]);
-    };
-  }, [queryParams]);
+
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
@@ -93,7 +57,7 @@ const RegisterGuild: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[

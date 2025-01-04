@@ -34,7 +34,7 @@ const TestStatus: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            loading={loading}
+           
             dataSet={[...dataset]}
             pagination={{pageSize: PageSize, maxPages: 3}}
             columns={[

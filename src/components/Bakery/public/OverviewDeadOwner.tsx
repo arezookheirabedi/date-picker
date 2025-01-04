@@ -14,11 +14,9 @@ import {ReactComponent as DownIcon} from '../../../assets/images/icons/down.svg'
 import ExportFile from '../ExportFile'
 
 // hooks
-import useOverviewOfRegistered from "../../../hooks/apis/bakery/useOverviewOfRegistered";
 
 const OverviewInvalidGuildCode: React.FC<{}> = () => {
 
-  // states
   const [serviceType, setServiceType] = useState(null) as any;
   const [query, setQuery] = useState<string>("");
   const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
@@ -33,49 +31,18 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
   //   resultReceiptDateFrom: null,
   //   resultReceiptDateTo: null,
   // }) as any;
-  // const [showDatePicker, setShowDatePicker] = useState(false);
+
+   // const [showDatePicker, setShowDatePicker] = useState(false);
 
   // call bakery hook
-  const {
-    loading, 
-    list: dataset, 
-    count,
-    setCount,
-    filteredDataset,
-    setFilteredDataset
-  } = useOverviewOfRegistered();
-
-  // const overviewTestResults = async (from: any = null, to: any = null) => {
-  // const overviewTestResults = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const { data } = await bakeryService.bakeryReport(
-  //       { reportName: "deadOwnerdetail" },
-  //       { cancelToken: source.token }
-  //     );
-  //     // const {data} = await bakeryService.bakeryAudit({
-  //     //   lang: 'fa',
-  //     //   // from,
-  //     //   // to,
-  //     // });
-  //     const normalizedData: any[] = [];
-  //     data.forEach((item: any, index: number) => {
-  //       // if (item.total !== 0) {
-  //       normalizedData.push({
-  //         id: `ovca_${index}`,
-  //         ...item
-  //       });
-  //     });
-  //     setCount(normalizedData.length);
-  //     setDataset([...normalizedData]);
-  //     setFilteredDataset([...normalizedData]);
-  //   } catch (e) {
-  //     // eslint-disable-next-line
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const loading = false;
+  const count = 0; // Initial count value
+  const setCount = (newCount: number) => {
+    console.log('setCount called with:', newCount);
+  };
+  const setFilteredDataset = (newFilteredDataset: any[]) => {
+    console.log('setFilteredDataset called with:', newFilteredDataset);
+  };
 
   // const focusFromDate = () => {
   //   setShowDatePicker(true);
@@ -103,47 +70,12 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
   // }, [selectedDayRange]);
 
 
-  const filteredList = useCallback(() => {
-    let temp = [...dataset];
 
-      if (query && query !== "همه") temp = temp.filter(item => item.province.trim() === query);
-
-      setFilteredDataset(temp);
-
-      // set count of inspection need bakeries
-      setCount(temp.length)
-
-  }, 
-    [query]);
-
-  useEffect(() => {
-      filteredList();
-  },[filteredList]);
-
-  useEffect(()=> {
-    if(isEmpty(filteredDataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[filteredDataset])
-
-  const mapFilteredData = () => {
-    return filteredDataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "شهر": data.city === "NULL" ? "" : data.city,
-        "نام و نام‌ خانوادگی" : data.fullName,
-        "شناسه پروانه سیما" : data.simaId,
-        "شماره ملی" : data.nationalId,
-        "آدرس" : data.address
-      };
-    });
-  };
-  const finalData = mapFilteredData();
-
+  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
-      لیست واحدهای ثبت شده در سیما که مالک آن ها فوت شده است
+      لیست واحدهای ثبت شده در سیما که پروانه کسبی معتبر ندارند
       </legend>
 
       {/* <div className="flex flex-grow items-center justify-start space-x-5 rtl:space-x-reverse mb-8"> */}
@@ -191,9 +123,9 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                 </Menu.Items>
               </Menu>
               <ExportFile 
-                fileName="dead-owner-list"
-                data={finalData}
-                loading={loading}
+                fileName="invalid-guildcode-list"
+                data={[]}
+               loading={false}
                 isDisabled={isOnPrint}
               />
         </div>
@@ -241,7 +173,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
           </div>
         ) : (
           <Table
-            dataSet={[...filteredDataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -263,13 +195,18 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                 render: (v: any) => <span>{v === "NULL" ? '-' : v}</span>,
               },
               {
-                name: 'نام و نام‌ خانوادگی',
-                key: 'fullName',
-                render: (v: any) => <span>{v || '-'}</span>,
-              },
-              {
                 name: 'شناسه پروانه سیما',
                 key: 'simaId',
+                render: (v: any) => <span>{v}</span>,
+              },
+              {
+                name: 'شناسه پروانه کسبی صمت',
+                key: 'guildCode',
+                render: (v: any) => <span>{v}</span>,
+              },
+              {
+                name: 'وضعیت عدم انطباق',
+                key: 'buyerAsnafStatus',
                 render: (v: any) => <span>{v}</span>,
               },
               {
@@ -284,7 +221,7 @@ const OverviewInvalidGuildCode: React.FC<{}> = () => {
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(filteredDataset || []).length}
+            totalItems={10}
           />
         )}
       </div>

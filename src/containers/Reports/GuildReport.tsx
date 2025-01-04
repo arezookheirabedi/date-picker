@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import guildService from 'src/services/guild.service';
 import Table from 'src/components/TableXHR';
 import dayjs from 'dayjs';
 import DatepickerQuery from 'src/components/DatepickerQuery';
@@ -30,50 +29,7 @@ const GuildReport: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  async function fetchReports({retry, from, to, ...params}: any) {
-    const newData = {
-      ...params,
-      pageNumber: Number(query.currentPage) - 1,
-      fromReportDate: query.from,
-      toReportDate: query.to,
-    };
-    setLoading(true);
-    try {
-      const {data} = await guildService.guildReportoverviewStatus(newData, {
-        cancelToken: cancelToken.token,
-      });
-      const normalizedData: any[] = [];
-      data.content.forEach((item: any) => {
-        normalizedData.push({
-          id: item.id,
-          reportName: item.reportName,
-          requestDateTime: item.requestDateTime,
-          lastModifiedDate: item.lastModifiedDate,
-          trackingCode: item.trackingCode,
-          reportStatus: item.reportStatus,
-        });
-      });
 
-      setDataSet([...normalizedData]);
-      setTotalItems(data.totalElements);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchReports({...query});
-    return () => {
-      setDataSet([]);
-      cancelRequest();
-    };
-  }, [query, refresh]);
 
   function handlePageChange(page: number = 1) {
     setQuery({...query, currentPage: page});
@@ -101,7 +57,7 @@ const GuildReport: React.FC<{}> = () => {
           ) : (
             <Table
               handlePageChange={handlePageChange}
-              loading={loading}
+             
               dataSet={[...dataSet]}
               pagination={{pageSize, currentPage: query.currentPage}}
               totalItems={totalItems}

@@ -33,18 +33,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
     retry: false
   });
 
-  const {
-    data: numberOf,
-    loading,
-    // eslint-disable-next-line
-    error,
-  } = useGetNumberOf(
-    {
-      tag: 'employee',
-      category: 'heName',
-    },
-    true
-  );
+ 
   // eslint-disable-next-line
   const {
     data: dataset,
@@ -68,32 +57,28 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={totalEmployee}
             text="مجموع کارکنان دولت"
-            count={numberOf.totalPopulation}
-            loading={loading}
+           
             hasInfo
             infoText="مجموع رانندگانی که در حمل ‌و نقل عمومی فعالیت دارند."
           />
           <Statistic
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
-            count={numberOf.gtDoses[0] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد کل دوز های تزریق شده در حمل‌ونقل عمومی"
           />
           <Statistic
             icon={YellowVaccineMd}
             text="تعداد واکسیناسیون دوز اول"
-            count={numberOf.doses[1] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که دوز اول واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={OrangeVaccine}
             text="تعداد واکسیناسیون دوز دوم"
-            count={numberOf.doses[2] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
           />
@@ -103,32 +88,28 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={PurppleVaccineMd}
             text="تعداد واکسیناسیون دوز سوم"
-            count={numberOf.doses[3] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={DarkgreenVaccine}
             text="تعداد واکسیناسیون دوز چهارم"
-            count={numberOf.doses[4] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={NavyVaccineMd}
             text="تعداد واکسیناسیون دوز پنجم و بیشتر"
-            count={numberOf.gtDoses[4] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
           />
           <Statistic
             icon={GrayVaccine2}
             text="تعداد واکسیناسیون انجام نشده"
-            count={numberOf.totalNonVaccinesCount || 0}
-            loading={loading}
+           
             hasInfo
             infoText="تعداد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
           />
@@ -138,8 +119,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={GreenVaccine}
             text="درصد واکسیناسیون"
-            count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             hasInfo
             infoText="درصد افرادی که حداقل یک دوز واکسن را دریافت کرده‌اند."
             isPercentage
@@ -147,8 +127,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={YellowVaccineMd}
             text="درصد واکسیناسیون دوز اول"
-            count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="درصد افرادی که دوز اول واکسن را دریافت کرده‌اند."
             isPercentage
@@ -156,8 +135,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={OrangeVaccine}
             text="درصد واکسیناسیون دوز دوم"
-            count={numberOf.dosesToTotalPopulationPercentage[2]}
-            loading={loading}
+           
             hasInfo
             infoText="درصد افرادی که دوز دوم واکسن را دریافت کرده‌اند."
             isPercentage
@@ -165,8 +143,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
           <Statistic
             icon={PurppleVaccineMd}
             text="درصد واکسیناسیون دوز سوم"
-            count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-            loading={loading}
+           
             hasInfo
             infoText="درصد افرادی که دوز سوم واکسن را دریافت کرده‌اند."
             isPercentage
@@ -178,8 +155,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             <Statistic
               icon={DarkgreenVaccine}
               text="درصد واکسیناسیون دوز چهارم"
-              count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
-              loading={loading}
+             
               hasInfo
               infoText="درصد افرادی که دوز چهارم  واکسن را دریافت کرده‌اند."
               isPercentage
@@ -189,8 +165,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             <Statistic
               icon={NavyVaccineMd}
               text="درصد واکسیناسیون دوز پنجم"
-              count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
-              loading={loading}
+             
               hasInfo
               infoText="درصد افرادی که دوز پنجم واکسن را دریافت کرده‌اند."
               isPercentage
@@ -201,8 +176,7 @@ const OverviewOfVaccinationProvince: React.FC<OverviewOfVaccinationProvinceProps
             <Statistic
               icon={GrayVaccine2}
               text="درصد واکسیناسیون انجام نشده"
-              count={numberOf.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-              loading={loading}
+             
               hasInfo
               infoText="درصد افرادی که در طرح واکسیناسیون شرکت نکرده‌اند."
               isPercentage

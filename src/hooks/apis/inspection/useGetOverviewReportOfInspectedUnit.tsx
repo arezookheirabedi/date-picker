@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import Highcharts from "highcharts/highstock";
 import axios from 'axios';
-import inspectionService from '../../../services/inspection.service';
 import {sideCities} from '../../../helpers/utils';
 import {EERRORS} from "../../../constants/errors.enum";
 
@@ -111,65 +110,7 @@ export default function useGetOverviewReportOfInspectedUnit(hasProvince: boolean
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getListOfInspections = async (province: any = null) => {
-    setLoading(true);
-    try {
-      const {data: result} = await inspectionService.inspectionReport(
-        {tag: 'transport', province},
-        {cancelToken: source.token}
-      );
-      const {y1, y2, y3} = result[0];
-      setList(() => {
-          return {
-            categories: ['بازرسی های ادواری', 'بازرسی های مردمی' , 'بازرسی های دستوری'],
-            series: [
-              {
-                name: 'گزارش',
-                data: [
-                  {name: 'بازرسی های ادواری', y: y1, color: '#F3BC06'},
-                  {name: 'بازرسی های مردمی', y: y2, color: '#209F92'},
-                  {name: 'بازرسی های دستوری', y: y3, color: '#004D65'},
-                ]
-              }
-            ],
-          };
-      });  
-      setError(false);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setError(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    return () => {
-      setList([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  },[]);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity && hasProvince) {
-      getListOfInspections(provinceName);
-    }
-    // eslint-disable-next-line consistent-return
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setList([]);
-    };
-  }, [location.search]);
 
   return {list, optionChart, error, loading};
 }

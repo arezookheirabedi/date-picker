@@ -11,7 +11,6 @@ import deadIcon from 'src/assets/images/icons/dead-color.svg';
 import vaccineIcon from 'src/assets/images/icons/vaccine-color.svg';
 import passengerPositiveTest from 'src/assets/images/icons/passenger-positive-test.svg';
 import testIcon from 'src/assets/images/icons/test-color.svg';
-// import hcsService from 'src/services/hcs.service';
 import noneVacsinateStart from 'src/assets/images/icons/none-vaccinate-start-wok-panel.svg';
 import Statistic from '../../../containers/Guild/components/Statistic';
 
@@ -88,7 +87,7 @@ const OverviewEducationalEmploye = () => {
             infoText="مجموع کارمندان آموزشی که در آموزش و پرورش فعالیت دارند."
             icon={totalRecritment}
             text="مجموع کارمندان آموزشی "
-            count="-"
+             
             loading={false}
           />
           <Statistic
@@ -96,7 +95,7 @@ const OverviewEducationalEmploye = () => {
             infoText="مجموع افراد مبتلا شده به بیماری کوید"
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count="-"
+             
             loading={false}
           />
           <Statistic
@@ -104,7 +103,7 @@ const OverviewEducationalEmploye = () => {
             infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count="-"
+             
             loading={false}
           />
           <Statistic
@@ -112,7 +111,7 @@ const OverviewEducationalEmploye = () => {
             infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
             icon={deadIcon}
             text="مجموع فوت‌ شدگان"
-            count="-"
+             
             loading={false}
           />
         </div>
@@ -122,7 +121,7 @@ const OverviewEducationalEmploye = () => {
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count="-"
+             
             loading={false}
           />
           <Statistic
@@ -130,7 +129,7 @@ const OverviewEducationalEmploye = () => {
             infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
-            count="-"
+             
             loading={false}
           />
           <Statistic
@@ -138,7 +137,7 @@ const OverviewEducationalEmploye = () => {
             infoText="تعداد افرادی که بعد از شروع به کار سامانه دوز اول را دریافت کرده اند."
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count="-"
+             
             loading={false}
           />{' '}
           <Statistic
@@ -146,7 +145,7 @@ const OverviewEducationalEmploye = () => {
             infoText="تعداد افرادی که در زمان شروع به کار سامانه در طرح واکسیناسیون شرکت نکرده بودند."
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count="-"
+             
             loading={false}
           />
         </div>
@@ -156,7 +155,7 @@ const OverviewEducationalEmploye = () => {
             infoText="تعداد کل تست های pcr که  کارمندان انجام داده اند."
             icon={testIcon}
             text="تعداد آزمایش های کارمندان"
-            count="-"
+             
             loading={false}
           />
           <Statistic
@@ -164,7 +163,7 @@ const OverviewEducationalEmploye = () => {
             infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
-            count="-"
+             
             loading={false}
             isPercentage
           />
@@ -173,7 +172,7 @@ const OverviewEducationalEmploye = () => {
             infoText="درصد افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
-            count="-"
+             
             loading={false}
             isPercentage
           />
@@ -182,7 +181,7 @@ const OverviewEducationalEmploye = () => {
             infoText="نسبت مبتلایان کارمندان آموزشی به بیماری کرونا به کل جمعیت  کارمندان آموزشی"
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
-            count="-"
+             
             loading={false}
             isPercentage
           />

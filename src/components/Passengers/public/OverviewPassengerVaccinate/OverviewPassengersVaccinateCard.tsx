@@ -7,7 +7,6 @@ import DarkgreenVaccine from 'src/assets/images/icons/darkgreen-vaccine.svg';
 import PurppleVaccine from 'src/assets/images/icons/big-purpule-vaccine.svg';
 import GreyVaccine from 'src/assets/images/icons/big-gray-vaccine.svg';
 import OrangeVaccine from 'src/assets/images/icons/orange-vaccine.svg';
-import passengerService from 'src/services/passenger.service';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 import Statistic from '../../../../containers/Guild/components/Statistic';
 import {IInitialNumberOfDoses, initialNumberOfDoses} from '../constant';
@@ -24,31 +23,9 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getPassengerVaccinateInfo = async () => {
-    setLoading(true);
-    try {
-      const res = await passengerService.getDoses({}, {cancelToken: cancelToken.token});
-      if (res.status === 200) {
-        const newData = {...initialNumberOfDoses, ...res.data};
-        setNumberOf(newData);
-      }
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    getPassengerVaccinateInfo();
-    // getPcrResult();
-    return () => {
-      cancelRequest();
-      setNumberOf(initialNumberOfDoses);
-      // setGuildPcrInfo(initialPcrInfo);
-    };
-  }, []);
+
+
 
   return (
     <>
@@ -58,8 +35,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
           <Statistic
             icon={GreenTotlaPassenger}
             text="مجموع مسافران کل کشور"
-            count={numberOf.totalPopulation || 0}
-            loading={loading}
+        
           />
           <Statistic
             hasInfo
@@ -67,7 +43,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={GreenVaccine}
             text="تعداد واکسیناسیون کل دوز"
             count={numberOf.gtDoses[0] || 0}
-            loading={loading}
           />
           <Statistic
             hasInfo
@@ -75,7 +50,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={YellowVaccine}
             text="تعداد واکسیناسیون دوز اول"
             count={numberOf.doses[1] || 0}
-            loading={loading}
           />
           <Statistic
             hasInfo
@@ -83,7 +57,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={OrangeVaccine}
             text="تعداد واکسیناسیون دوز دوم"
             count={numberOf.doses[2] || 0}
-            loading={loading}
           />
         </div>
 
@@ -96,7 +69,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={PurppleVaccine}
             text="تعداد واکسیناسیون دوز سوم"
             count={numberOf.doses[3] || 0}
-            loading={loading}
           />
           <Statistic
             hasInfo
@@ -104,7 +76,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={DarkgreenVaccine}
             text="تعداد واکسیناسیون دوز چهارم"
             count={numberOf.doses[4] || 0}
-            loading={loading}
           />
           <Statistic
             hasInfo
@@ -112,15 +83,13 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={VaccineIcon}
             text="تعداد واکسیناسیون دوز پنجم و بیشتر"
             count={numberOf.gtDoses[4] || 0}
-            loading={loading}
           />
           <Statistic
             hasInfo
             infoText=" تعداد افرادی که اطلاعات آن‌ها در سامانه به درستی ثبت نشده است."
             icon={GreyVaccine}
             text="تعداد اطلاعات مخدوش"
-            count="-"
-            // loading={loading}
+            //
           />
         </div>
 
@@ -132,8 +101,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             hasInfo
             icon={GreyVaccine}
             text="تعداد واکسیناسیون انجام نشده   "
-            count={numberOf.totalNonVaccinesCount || 0}
-            loading={loading}
+        
           />
           <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">
             {/* cvxdvcv */}
@@ -155,8 +123,7 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             hasInfo
             icon={GreenVaccine}
             text="درصد واکسیناسیون کل کشور"
-            count={numberOf.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+ 
             isPercentage
           />
           <Statistic
@@ -165,7 +132,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             infoText="مجموع درصد افرادی که  دوز اول را در سطح کشور دریافت کرده‌اند."
             icon={YellowVaccine}
             count={numberOf.dosesToTotalPopulationPercentage[1] || 0}
-            loading={loading}
             isPercentage
           />
           <Statistic
@@ -174,7 +140,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={OrangeVaccine}
             text="درصد افراد با دوز دوم "
             count={numberOf.dosesToTotalPopulationPercentage[2] || 0}
-            loading={loading}
             isPercentage
           />
           <Statistic
@@ -183,7 +148,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             icon={PurppleVaccine}
             text="درصد افراد با دوز سوم "
             count={numberOf.dosesToTotalPopulationPercentage[3] || 0}
-            loading={loading}
             isPercentage
           />
         </div>
@@ -197,7 +161,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             text="درصد افراد با دوز چهارم"
             count={numberOf.dosesToTotalPopulationPercentage[4] || 0}
             hasInfo
-            loading={loading}
             isPercentage
           />
 
@@ -207,7 +170,6 @@ const OverviewPassengerVaccinateCard: React.FC<{}> = () => {
             text="درصد افراد با دوز پنجم"
             count={numberOf.dosesToTotalPopulationPercentage[5] || 0}
             hasInfo
-            loading={loading}
             isPercentage
           />
           <div className="align-center relative hidden w-full flex-col justify-center  p-4 md:flex">

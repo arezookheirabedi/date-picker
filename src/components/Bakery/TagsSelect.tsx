@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import {Menu} from '@headlessui/react';
-// import recruitmentServices from 'src/services/recruitment.service';
 import {ReactComponent as DownIcon} from '../../assets/images/icons/down.svg';
 
 interface ITagsSelect {

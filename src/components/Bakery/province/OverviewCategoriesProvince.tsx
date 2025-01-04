@@ -8,7 +8,6 @@ import Table from '../../TableScope';
 import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
-import bakeryService from '../../../services/bakery/mock/bakery.service';
 
 interface OverviewCategoriesProvinceProps {
   cityTitle?: any;
@@ -37,39 +36,6 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const overviewTestResults = async (from: any = null, to: any = null, province: any) => {
-    try {
-      setLoading(true);
-      const {data} = await bakeryService.bakeryPerCategory({
-        lang: 'fa',
-        from,
-        to,
-        province,
-      });
-      // console.log(data);
-      const normalizedData: any[] = [];
-      data.forEach((item: any, index: number) => {
-        // if (item.total !== 0) {
-        normalizedData.push({
-          id: `ovca_${index}`,
-          name: item.categoryValue,
-          total: item.total || 0,
-          samt: item.samt || 0,
-          sima: item.sima || 0,
-          // deadCount: 120,
-        });
-        // }
-      });
-      setDataset([...normalizedData]);
-      setOrgDataset([...normalizedData]);
-      setFilterType({name: 'بیشترین', enName: 'HIGHEST'});
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // async function getOverviewByCategory(params: any) {
   //   try {
@@ -108,30 +74,7 @@ const OverviewCategoriesProvince: React.FC<OverviewCategoriesProvinceProps> = ({
     setShowDatePicker(true);
   };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      // getOverviewByCategory({
-      //   resultStatus: 'POSITIVE',
-      //   recoveredCount: true,
-      //   total: true,
-      //   count: true,
-      //   province: provinceName,
-      // });
-      //
-    } else {
-      history.push('/dashboard/transport/province');
-    }
-    return () => {
-      setDataset([]);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, [location.search, query]);
+
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import arbaeenService from 'src/services/arbaeen.service';
 import {sideCities} from 'src/helpers/utils';
 import {useLocation} from 'react-router-dom';
 
@@ -103,46 +102,7 @@ export default function useGetArbaeenCountDataOnRegisterTime(
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const getIt = async (params: any) => {
-    setLoading(true);
-    setError(false);
-    try {
-      const {data: result} = await arbaeenService.getPilgrimCount(params, {
-        cancelToken: source.token,
-      });
-      setData((prev: any) => {
-        return {
-          ...prev,
-          ...result,
-        };
-      });
-      setError(false);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setError(err.message || '');
-      setLoading(false);
-    }
-  };
 
-  // ((60000 * 5) + Math.floor(Math.random() * 120000) + 1)
-  useEffect(() => {
-    if (hasProvince) {
-      return;
-    }
-    getIt(query);
-    setInterval(() => {
-      getIt(query);
-    }, 60000 * 5);
-    // eslint-disable-next-line consistent-return
-    return () => {
-      setData(initialCount);
-      source.cancel('Operation canceled by the user.');
-    };
-  }, []);
 
   const location = useLocation();
   useEffect(() => {
@@ -155,12 +115,7 @@ export default function useGetArbaeenCountDataOnRegisterTime(
       return item.name === provinceName;
     });
 
-    if (existsCity) {
-      setInterval(() => {
-        getIt({...query, province: provinceName});
-      }, 60000 * 5);
-      getIt({...query, province: provinceName});
-    }
+
     // eslint-disable-next-line consistent-return
     return () => {
       setData(initialCount);

@@ -7,7 +7,6 @@ import AppRegex from 'src/helpers/regex';
 import DotLoading from 'src/components/DotLoading';
 import eyes from 'src/assets/images/icons/eye_icon.svg';
 // import {EERRORS} from 'src/constants/errors.enum';
-import fsServices from 'src/services/fs.service';
 import Modal from '../../Modal';
 
 interface IProps {
@@ -47,34 +46,9 @@ const RestPassModal: React.FC<IProps> = ({isOpen, closeModal, item}) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = async ({confirmPassword, ...e}: any = {}) => {
-    setLoading(true);
-    const formData = {...item, password: e.password};
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const res = await fsServices.updateUser(formData);
-      setLoading(false);
-      toast.success('عملیات با موفقیت انجام شد.');
-      closeModal();
-      reset();
-    } catch (error: any) {
-      if (error.errors && error.errors.length) {
-        toast.error('خطا در ارسال اطلاعات');
-        // eslint-disable-next-line array-callback-return
-        error.errors.map((err: any) => {
-          setError(err.field, {
-            message: err.message,
-          });
-        });
-        return;
-      }
-      if (error.message) {
-        toast.error(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+ const onSubmit=()=>{
+  console.log("kk")
+ }
 
   return (
     <Modal showModal={isOpen} setShowModal={closeModal}>

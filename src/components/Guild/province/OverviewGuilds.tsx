@@ -44,7 +44,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={guildIcon}
             text="مجموع کارفرمایان صنفی"
             count={guildVacinateInfo.totalPopulation}
-            loading={loading}
           />
           <Statistic
             hasInfo
@@ -52,7 +51,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={sufferingIcon}
             text="مجموع مبتلایان"
             count={guildPcrInfo.positiveMembersCount}
-            loading={pcrLoading}
           />
           <Statistic
             hasInfo
@@ -60,14 +58,12 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
             count={guildPcrInfo.recoveredMembersCount}
-            loading={pcrLoading}
           />
           <Statistic
             hasInfo
             infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
             icon={deadIcon}
             text="مجموع فوت‌ شدگان"
-            count="-"
           />
         </div>
         <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -77,7 +73,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
             count={guildVacinateInfo.totalVaccinesCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -85,7 +81,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
             count={guildVacinateInfo.totalNonVaccinesCount || 0}
-            loading={loading}
+           
           />
           <Statistic
             hasInfo
@@ -93,7 +89,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
             count={guildVacinateInfo.totalVaccinesCountAfterStartOfSystem || 0}
-            loading={loading}
+           
           />{' '}
           <Statistic
             hasInfo
@@ -101,7 +97,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
             count={guildVacinateInfo.totalNonVaccinesCountBeforeStartOfSystem || 0}
-            loading={loading}
           />
         </div>
         <div className="flex flex-col justify-between space-y-5 space-x-0 rtl:space-x-reverse md:flex-row md:space-y-0 md:space-x-5">
@@ -111,7 +106,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={testIcon}
             text="تعداد آزمایش های کارفرمایان صنفی"
             count={guildPcrInfo.testResultsCount}
-            loading={pcrLoading}
           />
           <Statistic
             hasInfo
@@ -119,7 +113,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
             count={guildVacinateInfo.totalNonVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
             isPercentage
           />
           <Statistic
@@ -128,7 +121,7 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
             count={guildVacinateInfo.totalVaccinesCountToTotalPopulationPercentage || 0}
-            loading={loading}
+           
             isPercentage
           />
           <Statistic
@@ -137,7 +130,6 @@ const OverviewGuildsProvince: React.FC<OverviewGuildsProvinceProps> = ({cityTitl
             icon={guildPositiveIcon}
             text="درصد ابتلا به کل"
             count={guildPcrInfo.positiveMembersCountToTotalPopulationPercentage || 0}
-            loading={pcrLoading}
             isPercentage
           />
         </div>

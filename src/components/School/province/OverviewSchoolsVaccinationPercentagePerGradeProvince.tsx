@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import hcsService from 'src/services/hcs.service';
 import {useHistory, useLocation} from 'react-router-dom';
 import {isEmpty} from 'lodash';
 import Highcharts from 'highcharts';
@@ -40,56 +39,6 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     cancelToken.cancel(msgRequestCanceled);
   }
 
-  const getLinearOverview = async ({retry, ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      // eslint-disable-next-line
-      const {data} = await hcsService.peopleVaccinationOverview(params, {
-        cancelToken: cancelToken.token,
-      });
-
-      const grade: any[] = [];
-
-      // eslint-disable-next-line
-      let nonVaccinesPercentage: any[] = [];
-      // eslint-disable-next-line
-      let vaccinesPercentage: any[] = [];
-      const sortData = data.sort((a: any, b: any) =>
-        a.nonVaccinesCountToMembersCountPercentage > b.nonVaccinesCountToMembersCountPercentage
-          ? 1
-          : -1
-      );
-      sortData.forEach((item: any) => {
-        vaccinesPercentage.push(Number(item.vaccinesCountToMembersCountPercentage));
-        nonVaccinesPercentage.push(Number(item.nonVaccinesCountToMembersCountPercentage));
-
-        grade.push(item.categoryValue);
-      });
-
-      const newData = [
-        {
-          name: 'واکسن نزده',
-          color: '#e21416',
-          data: [...nonVaccinesPercentage],
-        },
-        {
-          name: 'واکسن زده',
-          color: '#04b086',
-          data: [...vaccinesPercentage],
-        },
-      ];
-      setDataset({categories: [...grade], series: [...newData]});
-      setLoading(false);
-    } catch (error: any) {
-      if (error.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(error.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  };
 
   const optionChart = {
     chart: {
@@ -177,24 +126,6 @@ const OverviewSchoolsVaccinationPercentagePerGradeProvince: React.FC<OverviewPer
     series: [],
   };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    if (existsCity) {
-      getLinearOverview({...queryParams, tag: 'edu', category: 'grade', province: provinceName});
-    } else {
-      history.go(-1);
-    }
-
-    return () => {
-      cancelRequest();
-      setDataset({});
-    };
-  }, [queryParams, location.search]);
 
   return (
     <fieldset className="mb-16 rounded-xl border p-4 text-center">

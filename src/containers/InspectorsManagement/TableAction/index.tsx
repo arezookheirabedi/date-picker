@@ -7,7 +7,6 @@ import ActionIcon from 'src/assets/images/icons/table-action.svg';
 import {EACTIONTABLE} from 'src/constants/acctionTable.enum';
 import {toPersianDigit} from 'src/helpers/utils';
 import EINSPECTORSTATUS from 'src/constants/incpectorStatus.enum';
-import fsServices from 'src/services/fs.service';
 import ActionButton from './ActionButton';
 import Confirm from '../../../components/Modal/ConfirmModal';
 import {ActionList, IActionList} from './ActionList';
@@ -150,7 +149,7 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh, refresh}) => {
         }
         isOpen={modals.DELETE}
         closeModal={() => closeModal(EACTIONTABLE.DELETE)}
-        endPoint={fsServices.updateInspector}
+        endPoint={()=>console.log("fff")}
         shouldRefresh={shouldRefresh}
         refresh={refresh}
       />
@@ -177,7 +176,7 @@ const Actions: React.FC<IProps> = ({item, shouldRefresh, refresh}) => {
         }
         isOpen={modals.CONFIRM_INSPECTOR}
         closeModal={() => closeModal(EACTIONTABLE.CONFIRM_INSPECTOR)}
-        endPoint={fsServices.updateInspector}
+        endPoint={() => closeModal(EACTIONTABLE.EDIT)}
         item={{...item, activityStatus: 'CONFIRMED'}}
       />
     </>

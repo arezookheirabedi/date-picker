@@ -87,7 +87,7 @@ const TableOfTestsInTransportProvince: React.FC<TableOfTestsInTransportProvinceP
           <Table
             // handlePageChange={handlePageChange}
             // orderMain={order}
-            loading={loading}
+           
             dataSet={[...dataset]}
             pagination={{pageSize: 10, maxPages: 3}}
             columns={[

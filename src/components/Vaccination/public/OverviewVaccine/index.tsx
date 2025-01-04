@@ -20,15 +20,15 @@ const OverviewVaccine: React.FC<{}> = () => {
     <>
       <fieldset className="mb-16 rounded-xl border p-4 text-center">
         <legend className="mx-auto px-3 text-black">نگاه کلی به وضعیت واکسیناسیون کل کشور</legend>
-        <OverviewVaccinationStatus loading={loading} numberOf={numberOf} />
+        <OverviewVaccinationStatus numberOf={numberOf}  loading={false}/>
       </fieldset>
       <fieldset className="mb-16 rounded-xl border p-4 text-center">
         <legend className="mx-auto px-3 text-black">نگاه کلی به درصد واکسیناسیون کل کشور</legend>
         <OverViewVaccinationPercentageStatus
           theLatestloading={theLatestloading}
-          thelatestNumberOf={thelatestNumberOf}
-          loading={loading}
-          numberOf={numberOf}
+          thelatestNumberOf={100}
+          loading={false}
+          numberOf={100}
         />
       </fieldset>
     </>

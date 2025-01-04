@@ -20,10 +20,10 @@ const TheLatestOverwiewOfVaccination: React.FC<{}> = () => {
     <fieldset className="mb-16 rounded-xl border p-4 text-center">
       <legend className="mx-auto px-3 text-black">نگاه کلی به آخرین وضعیت واکسیناسیون اصناف</legend>
 
-      <LatestOverviewOfStatusCard loading={loading} numberOf={cartData} />
+      <LatestOverviewOfStatusCard numberOf={cartData} />
 
       <OverviewOfTheLatestPublicGuildVaccinationStatus
-        loading={loading}
+       
         numberOf={chartData}
         setQueryParams={setQueryParams}
         queryParams={queryParams}

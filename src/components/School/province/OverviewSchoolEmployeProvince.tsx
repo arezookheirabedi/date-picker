@@ -12,7 +12,6 @@ import saveIcon from '../../../assets/images/icons/save-color.svg';
 import deadIcon from '../../../assets/images/icons/dead-color.svg';
 import vaccineIcon from '../../../assets/images/icons/vaccine-color.svg';
 import testIcon from '../../../assets/images/icons/test-color.svg';
-// import hcsService from '../../../services/hcs.service';
 
 interface OverviewSchoolEmployeProps {
   cityTitle: any;
@@ -93,7 +92,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع کارمندان اداری که در آموزش و پرورش فعالیت دارند."
             icon={totalRecritment}
             text="مجموع کارمندان اداری "
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -101,7 +100,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افراد مبتلا شده به بیماری کوید"
             icon={sufferingIcon}
             text="مجموع مبتلایان"
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -109,7 +108,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افرادی که پس از ابتلا به بیماری کرونا بهبود یافتند."
             icon={saveIcon}
             text="مجموع بهبود یافتگان"
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -117,7 +116,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افرادی که در اثر ابتلا به بیماری کرونا فوت کرده اند."
             icon={deadIcon}
             text="مجموع فوت‌ شدگان"
-            count="-"
+                    
             loading={false}
           />
         </div>
@@ -127,7 +126,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="مجموع افراد واکسینه شده"
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -135,7 +134,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="مجموع افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="مجموع افراد واکسینه نشده"
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -143,7 +142,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="تعداد افرادی که بعد از شروع به کار سامانه دوز اول را دریافت کرده اند."
             icon={totalVacsinateStart}
             text="تعداد مراجعات واکسیناسیون بعد از شروع سامانه"
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -151,7 +150,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="تعداد افرادی که در زمان شروع به کار سامانه در طرح واکسیناسیون شرکت نکرده بودند."
             icon={noneVacsinateStart}
             text="مجموع افراد واکسینه نشده در زمان شروع سامانه"
-            count="-"
+                    
             loading={false}
           />
         </div>
@@ -163,7 +162,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="تعداد کل تست های pcr که  کارمندان انجام داده اند."
             icon={testIcon}
             text="تعداد آزمایش های کارمندان"
-            count="-"
+                    
             loading={false}
           />
           <Statistic
@@ -171,7 +170,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="درصد افرادی که در طرح ملی واکسیناسیون شرکت نکرده اند."
             icon={GreyVaccine}
             text="درصد افراد واکسینه نشده"
-            count="-"
+                    
             loading={false}
             isPercentage
           />
@@ -180,7 +179,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="درصد افرادی که حداقل یک دوز واکسن زده اند."
             icon={vaccineIcon}
             text="درصد افراد واکسینه شده"
-            count="-"
+                    
             loading={false}
             isPercentage
           />
@@ -189,7 +188,7 @@ const OverviewSchoolEmploye: React.FC<OverviewSchoolEmployeProps> = ({cityTitle}
             infoText="نسبت مبتلایان کارمندان اداری به بیماری کرونا به کل جمعیت  کارمندان اداری"
             icon={passengerPositiveTest}
             text="درصد ابتلا به کل"
-            count="-"
+                    
             loading={false}
             isPercentage
           />

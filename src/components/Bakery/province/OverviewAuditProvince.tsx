@@ -25,7 +25,6 @@ import inactivityEnableIcon from '../../../assets/images/icons/inactivity-enable
 import unusualTransactionEnableIcon from '../../../assets/images/icons/unusualTransaction-enable.svg';
 
 // hooks
-import useOverviewOfAuditProvince from "../../../hooks/apis/bakery/useOverviewOfAuditProvince";
 
 interface OverviewAuditProvinceProps {
   cityTitle?: any;
@@ -34,15 +33,7 @@ interface OverviewAuditProvinceProps {
 const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}) => {
 
   // call bakery hook
-  const {
-    loading, 
-    list: dataset, 
-    count, 
-    setCount, 
-    filteredDataset, 
-    setFilteredDataset,
-    setProvinceName
-  } = useOverviewOfAuditProvince();
+
 
   // states
   const location = useLocation();
@@ -70,27 +61,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
   //   setShowDatePicker(true);
   // };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sidesCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      setProvinceName(provinceName);
-      // getOverviewByCategory({
-      //   resultStatus: 'POSITIVE',
-      //   recoveredCount: true,
-      //   total: true,
-      //   count: true,
-      //   province: provinceName,
-      // });
-      //
-    } else {
-      history.push('/dashboard/bakery/province');
-    }
-  }, [cityTitle]);
+ 
 
  
   // useEffect(() => {
@@ -114,55 +85,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
   //   }
   // }, [selectedDayRange]);
 
-  const filteredList = useCallback(() => {
-    let temp = [...dataset];
-    
-      if (isExtortion) temp = temp.filter(item => item.isExtortion === isExtortion);
-      if (workTime) temp = temp.filter(item => item.workTime === workTime);
-      if (flourQuota) temp = temp.filter(item => item.flourQuota === flourQuota);
-      if (bakeryWithoutTransaction) temp = temp.filter(item => item.bakeryWithoutTransaction === bakeryWithoutTransaction);
-      if (unusualTransaction) temp = temp.filter(item => item.unusualTransaction === unusualTransaction);
-
-      setFilteredDataset(temp);
-
-      // set count of inspection need bakeries
-      setCount(temp.length)
-
-  }, 
-    [isExtortion, workTime, flourQuota, 
-    bakeryWithoutTransaction, unusualTransaction
-    ]);
-
-  useEffect(() => {
-      filteredList();
-  },[filteredList]);
-
-  useEffect(()=> {
-    if(isEmpty(filteredDataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[filteredDataset])
-
-  const mapFilteredData = () => {
-    return filteredDataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "شهر": data.city === "NULL" ? "" : data.city,
-        "شناسه پروانه سیما" : data.simaId,
-        "شماره ملی" : data.nationalId,
-        "دفعات نیاز بازرسی" : "",
-        "مشکوک به تخلف از ساعت فعالیت" : data.workTime ? "بله" : "خیر",
-        "مشکوک به عدم استفاده‌ مجاز از سهمیه آرد" : data.flourQuota ? "بله" : "خیر",
-        "مشکوک به گران فروشی" : data.isExtortion ? "بله" : "خیر",
-        "مشکوک به عدم فعالیت" : data.bakeryWithoutTransaction ? "بله" : "خیر",
-        "مشکوک به تراکنش‌های غیر عادی": data.UnusualTransaction ? "بله" : "خیر",
-        "آدرس" : data.address
-      };
-    });
-  };
-
-  const finalData = mapFilteredData();
-
+  
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
       <legend className="text-black mx-auto px-3">
@@ -174,7 +97,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
           name="overTime"
           title="مشکوک به تخلف از ساعت فعالیت"
           selected={workTime}
-          disabled={loading}
+          disabled={false}     
           onChange={setworkTime}
           defaultIcon={clockIcon}
           activeIcon={clockActiveIcon}
@@ -184,7 +107,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
           name="flourQuota"
           title="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
           selected={flourQuota}
-          disabled={loading}
+          disabled={false}     
           onChange={setFlourQuota}
           defaultIcon={chartBoxIcon}
           activeIcon={chartBoxActiveIcon}
@@ -194,7 +117,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
           name="isExtortion"
           title="مشکوک به گران فروشی"
           selected={isExtortion}
-          disabled={loading}
+          disabled={false}     
           onChange={setIsExtortion}
           defaultIcon={extortionIcon}
           activeIcon={extortionActiveIcon}
@@ -229,8 +152,8 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
           <ExportFile 
               fileName="audit-province-list"
-              data={finalData}
-              loading={loading}
+              data={[]}
+              loading={false}     
               isDisabled={isOnPrint}
           />
           {/* {showDatePicker ? (
@@ -255,7 +178,7 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
                 <span className="mx-3 whitespace-nowrap truncate">
                   <span className="text-gray-500">
                     تعداد ردیف :
-                  </span> {count}
+                  </span> {0}
                 </span>
               </div>
             </div>
@@ -271,13 +194,9 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+  
           <Table
-            dataSet={[...filteredDataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -381,9 +300,8 @@ const OverviewAuditProvince: React.FC<OverviewAuditProvinceProps> = ({cityTitle}
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(filteredDataset || []).length}
+            totalItems={10}
           />
-        )}
       </div>
     </fieldset>
   );

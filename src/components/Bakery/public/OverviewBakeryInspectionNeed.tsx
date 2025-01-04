@@ -2,7 +2,6 @@
 import Statistic from '../../../containers/Guild/components/Statistic';
 
 // hooks
-import useOverviewOfInspectionNeed from "../../../hooks/apis/bakery/useOverviewOfInspectionNeed";
 
 // images
 import tpsIcon from '../../../assets/images/icons/tps.svg';
@@ -14,8 +13,7 @@ import bakeryWithoutTransactionIcon from '../../../assets/images/icons/bakery-Wi
 const OverviewBakeryInspectionNeed = () => {
   
   // call bakery hook
-  const {loading, list: bakeries} = useOverviewOfInspectionNeed();
- 
+  const loading = false;
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
         <legend className="text-black mx-auto px-3">
@@ -26,32 +24,32 @@ const OverviewBakeryInspectionNeed = () => {
             <Statistic
               icon={tpsIcon}
               text="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
-              count={bakeries.bakery[0] || 0}
-              loading={loading}
+              count={ 0}
+             
               hasInfo
               infoText="واحد هایی که مجموع تعداد تراکنش های تمام دستگاه های کارت خوان آنها در یک روز 40 درصد کمتر از میانگین تعداد تراکنش هایشان در 3 ماه گذشته در روز مشابه است."
             />
             <Statistic
               icon={transactionsIcon}
               text="مشکوک به گران فروشی"
-              count={bakeries.bakery[1] || 0}
-              loading={loading}
+              count={ 0}
+             
               hasInfo
               infoText="واحد هایی که  مجموع مبلغ تراکنش های تمام دستگاه های کارت خوان آنها در یک روز 40 درصد بیشتر از مجموع میانگین مبلغ تراکنش هایشان در 3 ماه گذشته در روز مشابه است."
             />
             <Statistic
               icon={activeTimeIcon}
               text="مشکوک به تخلف از ساعت فعالیت"
-              count={bakeries.bakery[2] || 0}
-              loading={loading}
+              count={0}
+             
               hasInfo
               infoText="واحد هایی که ساعت کاری بر اساس زمان تراکنش های آنها در یک روز 30 درصد کمتر از میانگین ساعت کاری آنها در 3 ماه گذشته در روز مشابه است."
             />
             <Statistic
               icon={unusualTransactionIcon}
               text="مشکوک به تراکنش‌های غیر عادی"
-              count={bakeries.bakery[3] || 0}
-              loading={loading}
+              count={ 0}
+             
               hasInfo
               infoText="واحد هایی که حداقل یک مبلغ تراکنش بالای 10 میلیون تومان دارند."
             />
@@ -60,8 +58,8 @@ const OverviewBakeryInspectionNeed = () => {
             <Statistic
               icon={bakeryWithoutTransactionIcon}
               text="مشکوک به عدم فعالیت"
-              count={bakeries.bakery[4] || 0}
-              loading={loading}
+              count={ 0}
+             
               hasInfo
               infoText="واحدهایی که در 3 ماه گذشته سهمیه آرد دریافت کرده اند و هیچ تراکنشی از هیچ کدام از کارت خوان های واحد نانوایی ثبت نشده است. "
             />

@@ -2,7 +2,6 @@
 
 import React, {Fragment, useEffect, useState} from 'react';
 import {Combobox, Transition} from '@headlessui/react';
-import recruitmentServices from 'src/services/recruitment.service';
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid';
 import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
 // import {cancelTokenSource, msgRequestCanceled} from 'src/helpers/utils';
@@ -53,40 +52,8 @@ const SearchableSingleSelect: React.FC<IProps> = ({
       console.log(error);
     }
   };
-  const otherFetcher = async () => {
-    try {
-      const res = await recruitmentServices.tags(
-        {tag, category},
-        {cancelToken: cancelTokenTag.token}
-      );
-      const newData = [...tags, ...res.data];
-      setTags([...newData]);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-  const fetcher = () => {
-    // eslint-disable-next-line no-new
-    new Promise((resolve, reject) => {
-      if (endPoint)
-        enpointFetcher()
-          .then(response => resolve(response))
-          .catch(error => reject(error));
-      else
-        otherFetcher()
-          .then(response => resolve(response))
-          .catch(error => reject(error));
-    });
-  };
 
-  useEffect(() => {
-    fetcher();
-    return () => {
-      cancelRequestTag();
-      cancelRequestEndPoint();
-      setTags([]);
-    };
-  }, []);
+
   const filteredTags =
     query === ''
       ? tags

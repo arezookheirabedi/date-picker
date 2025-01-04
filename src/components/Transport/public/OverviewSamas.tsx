@@ -3,11 +3,9 @@ import deactiveFuelCardIcon from '../../../assets/images/icons/deactive-fuel-car
 import informationUpdatedIcon from '../../../assets/images/icons/information-updated.svg';
 import deactivateInquiryIcon from '../../../assets/images/icons/deactivate-inquiry.svg';
 import Statistic from '../../../containers/Guild/components/Statistic';
-import useGetNationalTravelInformationSystem from "../../../hooks/apis/useGetNationalTravelInformationSystem";
 
 const OverviewSamas = () => {
   // eslint-disable-next-line
-  const {data, loading, error} = useGetNationalTravelInformationSystem();
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -20,8 +18,6 @@ const OverviewSamas = () => {
             icon={driverInfectedIcon}
             text="موارد مثبت اعلامی به سماس"
             // count={numberOfDrivers}
-            count={data.healthStatusCalls}
-            loading={loading}
             hasInfo
             infoText="مجموع موارد مبتلایان مثبت و اعلام شده به سماس در رسته‌های مختلف."
           />
@@ -29,7 +25,7 @@ const OverviewSamas = () => {
             icon={deactivateInquiryIcon}
             text="غیر فعالسازی‌های انجام شده"
             // count={numberOfPositiveDrivers}
-            count="-"
+            
             loading={false}
             hasInfo
             infoText="غیرفعال‌سازی انجام شده رانندگان مبتلا توسط سماس."
@@ -38,7 +34,7 @@ const OverviewSamas = () => {
             icon={informationUpdatedIcon}
             text="اطلاعات به روز رسانی شده"
             // count={numberOfPlaqueVisited}
-            count="-"
+            
             loading={false}
             hasInfo
             infoText="مجموع اطلاعات به روزرسانی شده توسط سماس."
@@ -46,7 +42,7 @@ const OverviewSamas = () => {
           <Statistic
             icon={deactiveFuelCardIcon}
             text="مجموع تعلیق‌های کارت سوخت"
-            count="-"
+            
             loading={false}
             hasInfo
             infoText="مجموع کارت سوخت تعیلق شده افراد مختلف توسط سماس."

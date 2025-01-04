@@ -9,10 +9,8 @@ import DatePickerModal from '../../DatePickerModal';
 import RangeDateSliderFilter from '../../RangeDateSliderFilter';
 import Charts from '../../Charts';
 // import {transportationTypes} from '../../../helpers/utils';
-// import transportService from '../../../services/transport.service';
 import Spinner from '../../Spinner';
 import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 import {EERRORS} from "../../../constants/errors.enum";
 import RetryButton from "../../RetryButton";
 
@@ -46,26 +44,6 @@ const OverviewOfAffectedAfterTravelingInCountry = () => {
     retry: false
   });
 
-  const getColumnChartTestResult = async ({retry, ...params}: any) => {
-    setLoading(true);
-    setErrorMessage(false);
-    try {
-      const response = await hcsService.patientsAfterTrip(params, {
-        cancelToken: source.token,
-      });
-      console.log("++++++", response)
-      setData(response.data);
-      setErrorMessage(false);
-      setLoading(false);
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
 
 
   // const getLinearOverviewPublicTransport = async (params: any) => {
@@ -85,17 +63,7 @@ const OverviewOfAffectedAfterTravelingInCountry = () => {
   //   }
   // };
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getColumnChartTestResult(query);
-    }, 500);
 
-    return () => {
-      setData([]);
-      source.cancel('Operation canceled by the user.');
-      clearTimeout(idSetTimeOut);
-    };
-  }, [query]);
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {

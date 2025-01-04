@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import Highcharts from "highcharts/highstock";
-// import vaccineService from 'src/services/vaccine.service';
 // import axios from 'axios';
 
 import Spinner from '../../Spinner';
 import Charts from '../../Charts';
-import hcsService from "../../../services/hcs.service";
 import {EERRORS} from "../../../constants/errors.enum";
 import RetryButton from "../../RetryButton";
 
@@ -168,117 +166,11 @@ const OverViewPassengerStatusVaccinateChart = () => {
   const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line
-  const getVaccinesGroupedByProvinceReport = async () => {
-    setLoading(true);
-    setErrorMessage(false);
-    try {
-      const {data} = await hcsService.getVaccinesTripGroupedByProvinceReport({}, {cancelToken: source.token});
 
-      const provinces: any[] = [];
-
-      // eslint-disable-next-line
-      let firstDose: any[] = [];
-      // eslint-disable-next-line
-      let secondDose: any[] = [];
-      // eslint-disable-next-line
-      let thirdDose: any[] = [];
-      // eslint-disable-next-line
-      // eslint-disable-next-line
-      let forthDose: any[] = [];
-      // eslint-disable-next-line
-      let fifthDose: any[] = [];
-      const initialDoses = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-      // eslint-disable-next-line
-      let noDose: any[] = [];
-
-      data.forEach((item: any) => {
-
-        // eslint-disable-next-line
-        for (const [key, value] of Object.entries({...initialDoses, ...item.doses})) {
-          if (Number(key) === 1) {
-            firstDose.push(Number(value));
-          }
-
-          if (Number(key) === 2) {
-            secondDose.push(Number(value));
-          }
-
-          if (Number(key) === 3) {
-            thirdDose.push(Number(value));
-          }
-
-          if (Number(key) === 4) {
-            forthDose.push(Number(value));
-          }
-
-          if (Number(key) === 5) {
-            fifthDose.push(Number(value));
-          }
-        }
-
-        noDose.push(Number(item.totalNonVaccinesCount || 0));
-        provinces.push(item.province);
-      });
-
-      setDataset(() => {
-        return {
-          categories: provinces,
-          series: [
-            {
-              name: 'واکسن نزده',
-              color: '#FF0060',
-              data: [...noDose],
-            },
-            {
-              name: 'دوز اول',
-              color: '#F3BC06',
-              data: [...firstDose]
-            }, {
-              name: 'دوز دوم',
-              color: '#209F92',
-              data: [...secondDose]
-            }, {
-              name: 'دوز سوم',
-              color: '#004D65',
-              data: [...thirdDose]
-            }, {
-              name: 'دوز چهارم',
-              color: '#BFDDE7',
-              data: [...forthDose]
-            }, {
-              name: 'دوز پنجم',
-              color: '#716DE3',
-              data: [...fifthDose]
-            }]
-        }
-      })
-      setErrorMessage(false);
-      setLoading(false);
-
-    } catch (err: any) {
-      if (err.message === 'cancel') {
-        setLoading(true);
-        return;
-      }
-      setErrorMessage(err.message || EERRORS.ERROR_500);
-      setLoading(false);
-    }
-  }
 
 
   const [query, setQuery] = useState(false);
 
-  useEffect(() => {
-    const idSetTimeOut = setTimeout(() => {
-      getVaccinesGroupedByProvinceReport();
-    }, 500);
-
-    return () => {
-      clearTimeout(idSetTimeOut);
-      source.cancel('Operation canceled by the user.');
-      setDataset([]);
-    };
-  }, [query]);
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">

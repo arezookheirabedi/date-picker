@@ -3,7 +3,6 @@ import React, {Fragment, useState} from 'react';
 import OtpInput from 'react-otp-input';
 import toast from 'cogo-toast';
 import {useHistory} from 'react-router-dom';
-import transportService from 'src/services/transport.service';
 import download from '../../../assets/images/icons/download.svg';
 import DotLoading from '../../DotLoading';
 
@@ -27,21 +26,7 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
     //  add should refresh shouldRefresh(true)
   };
 
-  const requestExport = async () => {
-    setOtp('');
-    setFetchCode(true);
-    // const newParams = {...params, healthStatusSet: params.healthStatusSet.join(',')};
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const res = await transportService.requestOtpReport({...params});
-      toast.success('کد به شماره همراه ارسال شد');
-    } catch (error: any) {
-      toast.error(error.message || 'خطایی در عملیات');
-      closeModal();
-    } finally {
-      setFetchCode(false);
-    }
-  };
+ 
 
   const openModal: () => void = () => {
     // if (params.from !== null && params.to !== null) {
@@ -50,7 +35,6 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
     // } else {
     //   toast.warn('مقدار تاریخ انتخاب نشده است');
     // }
-    requestExport();
     setIsOpen(true);
     setOtp('');
   };
@@ -59,32 +43,10 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
     setOtp(otpValue);
   };
 
-  async function handelConfirm(data: string) {
-    setSubmitted(true);
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const response = await transportService.confirmOtpReport({
-        reportType: params.reportType,
-        verificationCode: data,
-      });
-      if (response.status === 200) {
-        history.push('/dashboard/health/reports/requested');
-      } else {
-        throw new Error('خطایی در عملیات');
-      }
-    } catch (error: any) {
-      // eslint-disable-next-line
-      toast.error(error.message || 'خطایی در عملیات');
-    } finally {
-      setSubmitted(false);
-      setOtp('');
-      // closeModal();
-    }
-  }
+
 
   const handleSubmit: (e: React.MouseEvent<HTMLElement>) => void = e => {
     e.stopPropagation();
-    handelConfirm(otp);
     // setSubmitted(true);
 
     // transportService
@@ -177,7 +139,6 @@ const ExportButton: React.FC<{params: IReportRequestParams}> = ({params}) => {
                   <button
                     type="button"
                     disabled={submitted || fetchCode}
-                    onClick={requestExport}
                     className="mt-4 flex items-center justify-center border-b border-primary-500 text-xs text-primary-500"
                   >
                     <span>ارسال مجدد کد</span>

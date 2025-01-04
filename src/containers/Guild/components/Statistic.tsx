@@ -4,17 +4,17 @@ import Information from '../../../assets/images/icons/information.svg';
 interface IStatistic {
   icon: any;
   text: string;
-  count: any;
+  count?: number;
   hasInfo?: boolean;
   isPercentage?: boolean;
   infoText?: string;
-  loading?: any;
+  loading?: false;
 }
 
 const Statistic: React.FC<IStatistic> = ({
                                            icon,
                                            text,
-                                           count,
+                                           count=0,
                                            isPercentage,
                                            hasInfo,
                                            infoText,
@@ -45,11 +45,6 @@ const Statistic: React.FC<IStatistic> = ({
             }}
           />
         )}
-        {!loading && count === 0 && '۰'}
-        {!loading && count === '-' && '-'}
-        {!loading &&
-        count > 0 &&
-        `${(count || 'بدون داده') % 1 === 0 ? count?.commaSeprator().toPersianDigits() : count?.toPersianDigits()}${isPercentage ? '%' : ''}`}
       </div>
       <div className="flex text-gray-500 text-sm  mx-auto pb-3">{text || ''}</div>
     </fieldset>

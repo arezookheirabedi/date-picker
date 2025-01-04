@@ -12,7 +12,6 @@ import {sideCities} from '../../../helpers/utils';
 import Spinner from '../../Spinner';
 
 import Calendar from '../../Calendar';
-import hcsService from '../../../services/hcs.service';
 // import TagsSelect from 'src/components/TagsSelect';
 
 const {Line} = Charts;
@@ -55,51 +54,7 @@ const OverviewPatientsPassengersProvince: React.FC<OverviewPatientsPassengersPro
     setShowDatePicker(true);
   };
 
-  const getColumnChartTestResult = async (params: any, province: any) => {
-    setLoading(true);
-    setErrorMessage(null);
-    try {
-      const response = await hcsService.patientsAfterTrip(
-        {...params, province},
-        {
-          cancelToken: source.token,
-        }
-      );
-      setData(response.data);
-    } catch (error: any) {
-      setErrorMessage(error.message);
-      // eslint-disable-next-line
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-
-    let idSetTimeOut: any;
-    if (existsCity) {
-      setProvinceTitle(provinceName);
-      idSetTimeOut = setTimeout(() => {
-        getColumnChartTestResult(query, provinceName);
-      }, 500);
-    } else {
-      history.push('/dashboard/passenger/province');
-    }
-
-    return () => {
-      if (existsCity) {
-        source.cancel('Operation canceled by the user.');
-        clearTimeout(idSetTimeOut);
-      }
-    };
-  }, [query, location.search]);
 
   useEffect(() => {
     return () => {

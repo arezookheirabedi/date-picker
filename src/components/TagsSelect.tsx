@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import {Menu} from '@headlessui/react';
-import recruitmentServices from 'src/services/recruitment.service';
 import {ReactComponent as DownIcon} from '../assets/images/icons/down.svg';
 
 interface ITagsSelect {
@@ -26,24 +25,8 @@ const TagsSelect = ({
   const {CancelToken} = axios;
   const source = CancelToken.source();
 
-  const fetcher = async () => {
-    try {
-      const res = await recruitmentServices.tags({tag, category}, {cancelToken: source.token});
-      setTags([...res.data]);
-    } catch (error: any) {
-      // eslint-disable-next-line
-      console.log(error);
-    }
-  };
 
-  React.useEffect(() => {
-    fetcher();
 
-    return () => {
-      source.cancel('Operation canceled by the user.');
-      setTags([]);
-    };
-  }, []);
 
   React.useEffect(() => {
     let params = {...queryParams};

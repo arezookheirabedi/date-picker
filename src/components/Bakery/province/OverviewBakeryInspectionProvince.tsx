@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
 // hooks
-import useOverviewOfInspectionNeedProvince from "../../../hooks/apis/bakery/useOverviewOfInspectionNeedProvince";
 
 // components
 import Statistic from '../../../containers/Guild/components/Statistic';
@@ -22,81 +21,14 @@ interface OverviewBakeryProvinceProps {
 const OverviewBakeryInspectionProvince: React.FC<OverviewBakeryProvinceProps> = ({cityTitle}) => {
   
   // call bakery hook
-  const {loading, list: bakeries, setProvinceName} = useOverviewOfInspectionNeedProvince(cityTitle);
 
   const location = useLocation();
   const history = useHistory();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sideCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      setProvinceName(provinceName);
-    } else {
-      history.push('/dashboard/bakery/province');
-    }
-  }, [cityTitle]);
 
   return (
     <>
-      <fieldset className="text-center border rounded-xl p-4 mb-16">
-        <legend className="text-black mx-auto px-3">
-          تعداد واحدهایی که نیاز به بازرسی دارند در استان {cityTitle} بر اساس
-        </legend>
-
-        <div className="flex flex-col justify-between space-y-8">
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-            <Statistic
-              icon={tpsIcon}
-              text="مشکوک به عدم استفاده‌ مجاز از سهمیه آرد"
-              count={bakeries.dailyTransactionAverage || 0}
-              loading={loading}
-              hasInfo
-              infoText="واحد هایی که مجموع تعداد تراکنش های تمام دستگاه های کارت خوان آنها در یک روز 40 درصد کمتر از میانگین تعداد تراکنش هایشان در 3 ماه گذشته در روز مشابه است."
-            />
-            <Statistic
-              icon={transactionsIcon}
-              text="مشکوک به گران فروشی"
-              count={bakeries.transactionAmout || 0}
-              loading={loading}
-              hasInfo
-              infoText="واحد هایی که  مجموع مبلغ تراکنش های تمام دستگاه های کارت خوان آنها در یک روز 40 درصد بیشتر از مجموع میانگین مبلغ تراکنش هایشان در 3 ماه گذشته در روز مشابه است."
-            />
-            <Statistic
-              icon={activeTimeIcon}
-              text="مشکوک به تخلف از ساعت فعالیت"
-              count={bakeries.posActiveTime || 0}
-              loading={loading}
-              hasInfo
-              infoText="واحد هایی که ساعت کاری بر اساس زمان تراکنش های آنها در یک روز 30 درصد کمتر از میانگین ساعت کاری آنها در 3 ماه گذشته در روز مشابه است."
-            />
-            <Statistic
-              icon={unusualTransactionIcon}
-              text="مشکوک به تراکنش‌های غیر عادی"
-              count={bakeries.unsualTransaction === "0" ? 0 : bakeries.unsualTransaction || 0}
-              loading={loading}
-              hasInfo
-              infoText="واحد هایی که حداقل یک مبلغ تراکنش بالای 10 میلیون تومان دارند."
-            />
-          </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-5 md:space-y-0 space-x-0 md:space-x-5 rtl:space-x-reverse">
-            <Statistic
-              icon={bakeryWithoutTransactionIcon}
-              text="مشکوک به عدم فعالیت"
-              count={bakeries.bakeryWithoutTransaction || 0}
-              loading={loading}
-              hasInfo
-              infoText="واحدهایی که در 3 ماه گذشته سهمیه آرد دریافت کرده اند و هیچ تراکنشی از هیچ کدام از کارت خوان های واحد نانوایی ثبت نشده است. "
-            />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-            <div className="flex flex-col align-center justify-center w-full rounded-xl p-4 relative" />
-          </div>
-        </div>
-      </fieldset>
+    dddd
     </>
   );
 };

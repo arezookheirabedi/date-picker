@@ -13,7 +13,6 @@ import businessLicenseIcon from '../../../../assets/images/icons/business-licens
 
 import unapprovedPriceDeactiveIcon from '../../../../assets/images/icons/unapproved-price-deactive.svg';
 import unapprovedPriceIcon from '../../../../assets/images/icons/unapproved-price.svg';
-import useGetOverviewListOfInspections from '../../../../hooks/apis/inspection/useGetOverviewListOfInspections';
 
 const pageSize = 10;
 const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityTitle}) => {
@@ -27,12 +26,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
     // registeredPosDevice: false,
     unapprovedPrice: false,
   });
-  const {
-    dataSet,
-    loading,
-    error: errorMessage,
-    totalItems,
-  } = useGetOverviewListOfInspections(query, true);
+
   const filterChange = (event: any, objectKey: string) => {
     const modifiedQuery = {...query, [`${objectKey}`]: event};
     setQuery({...modifiedQuery});
@@ -51,7 +45,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
           name="inactivity"
           title="عدم فعالیت"
           selected={query.inactivity || false}
-          disabled={loading}
+          disabled={false}
           onChange={(e: any) => {
             filterChange(e, 'inactivity');
           }}
@@ -63,7 +57,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
           name="noListPrice"
           title="عدم نصب نرخ نامه"
           selected={query.noListPrice || false}
-          disabled={loading}
+          disabled={false}
           onChange={(e: any) => {
             filterChange(e, 'noListPrice');
           }}
@@ -75,7 +69,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
           name="noBusinessLicense"
           title="عدم نصب پروانه کسب"
           selected={query.noBusinessLicense || false}
-          disabled={loading}
+          disabled={false}
           onChange={(e: any) => {
             filterChange(e, 'noBusinessLicense');
           }}
@@ -123,18 +117,13 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
         </div> */}
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {errorMessage && !loading ? (
-          <div className="p-40">
-            <div className="text-red-500">{errorMessage}</div>
-            <RetryButton setQuery={setQuery} />
-          </div>
-        ) : (
+     
           <Table
             handlePageChange={handlePageChange}
-            loading={loading}
-            dataSet={[...dataSet]}
+            loading={false}
+            dataSet={[]}
             pagination={{pageSize, currentPage: query.currentPage}}
-            totalItems={totalItems}
+            totalItems={10}
             columns={[
               {
                 name: 'شماره خبازی',
@@ -233,7 +222,7 @@ const OverviewListOfInspectionsProvince: React.FC<{cityTitle: string}> = ({cityT
               },
             ]}
           />
-        )}
+       
       </div>
     </fieldset>
   );

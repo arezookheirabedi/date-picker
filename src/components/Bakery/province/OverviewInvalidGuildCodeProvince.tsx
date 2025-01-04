@@ -11,7 +11,6 @@ import {sidesCities} from '../../../helpers/utils';
 import ExportFile from '../ExportFile'
 
 // hooks
-import useOverviewOfInvalidGuildCodeDetailProvince from "../../../hooks/apis/bakery/useOverviewOfInvalidGuildCodeDetailProvince";
 
 interface OverviewCategoriesProvinceProps {
     cityTitle?: any;
@@ -24,12 +23,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
   const [isOnPrint, setIsOnPrint] = useState<boolean>(false);
 
   // call bakery hook
-  const {
-    loading, 
-    list: dataset, 
-    count,
-    setProvinceName
-  } = useOverviewOfInvalidGuildCodeDetailProvince();
+
 
   // const [selectedDayRange, setSelectedDayRange] = useState({
   //   from: null,
@@ -69,49 +63,10 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
   //   }
   // }, [selectedDayRange]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const provinceName = params.get('provinceName') || ('تهران' as any);
-    const existsCity = sidesCities.some((item: any) => {
-      return item.name === provinceName;
-    });
-    if (existsCity) {
-      // overviewTestResults(query.resultReceiptDateFrom, query.resultReceiptDateTo, provinceName);
-      setProvinceName(provinceName);
-      // getOverviewByCategory({
-      //   resultStatus: 'POSITIVE',
-      //   recoveredCount: true,
-      //   total: true,
-      //   count: true,
-      //   province: provinceName,
-      // });
-      //
-    } else {
-      history.push('/dashboard/bakery/province');
-    }
-  }, [cityTitle]);
 
-  useEffect(()=> {
-    if(isEmpty(dataset)) setIsOnPrint(false)
-    else setIsOnPrint(true)
-  },[dataset])
 
-  const mapFilteredData = () => {
-    return dataset.map((data:any, index:any) => {
-      return {
-        "شناسه": index + 1,
-        "استان": data.province,
-        "شهر": data.city === "NULL" ? "" : data.city,
-        "شناسه پروانه سیما": data.simaId,
-        "شناسه پروانه کسبی صمت": data.guildCode,
-        "وضعیت عدم انطباق": data.buyerAsnafStatus,
-        "شماره ملی": data.nationalId,
-        "آدرس": data.address,
-      };
-    });
-  };
 
-  const finalData = mapFilteredData();
+ 
 
   return (
     <fieldset className="text-center border rounded-xl p-4 mb-16">
@@ -124,8 +79,8 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
         <div className="flex align-center space-x-4 rtl:space-x-reverse">
           <ExportFile 
               fileName="invalid-guildcode-province-list"
-              data={finalData}
-              loading={loading}
+              data={[]}
+              loading={false}     
               isDisabled={isOnPrint}
           />
           {/* {showDatePicker ? (
@@ -150,7 +105,7 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
                 <span className="mx-3 whitespace-nowrap truncate">
                   <span className="text-gray-500">
                     تعداد ردیف :
-                  </span> {count}
+                  </span> {0}
                 </span>
               </div>
             </div>
@@ -166,13 +121,9 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
         </div>
       </div>
       <div className="flex flex-col align-center justify-center w-full rounded-xl bg-white p-4 shadow">
-        {loading ? (
-          <div className="p-20">
-            <Spinner />
-          </div>
-        ) : (
+    
           <Table
-            dataSet={[...dataset]}
+            dataSet={[]}
             pagination={{ pageSize: 10, maxPages: 3 }}
             columns={[
               {
@@ -220,9 +171,9 @@ const OverviewInvalidGuildCodeProvince: React.FC<OverviewCategoriesProvinceProps
                 render: (v: any) => <span>{v}</span>,
               },
             ]}
-            totalItems={(dataset || []).length}
+            totalItems={10}
           />
-        )}
+      
       </div>
     </fieldset>
   );
