@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import DatePicker from "src/shared/datepicker";
+import DatePicker from "../shared/datepicker";
 import { unixToDateObject } from "../helpers/utils";
 
 interface IFormInput {
