@@ -1,22 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {Provider} from 'react-redux';
-import {store} from './store/index';
-
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
-import './mocks';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
       <Router basename={process.env.PUBLIC_URL}>
         <Route path="/" component={App} />
       </Router>
-    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

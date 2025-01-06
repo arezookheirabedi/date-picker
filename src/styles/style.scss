@@ -10,84 +10,10 @@
 @import 'base/utilities';
 
 //// component folders
-@import './components/button';
 @import './components/calendar-modal';
-@import './components/dot-loading';
-@import './components/filter-calendar';
-@import './components/filter-map';
-@import './components/filter-range-slider';
-@import './components/form-group';
-@import './components/gauge-sub-info';
-@import './components/guild-gauge-chart';
-@import './components/guild-column-chart';
-@import './components/guild-overview-unVaccinated';
-@import './components/guild-map-chart';
-@import './components/input-wrapper';
-@import './components/marker';
-@import './components/pyramid-chart';
-@import './components/select-radio';
-@import './components/side-bar-filter';
-@import './components/sign';
-@import './components/simple-select';
-@import './components/single-select-in-modal';
-@import './components/multi-select-in-modal';
-@import './components/single-select';
-@import './components/skeleton';
-@import './components/spinner';
-@import './components/timer-count-up';
-@import './components/tooltip';
-@import './components/transport-line-chart';
-@import './components/otp';
-@import './components/plaque';
 
-// home-components folders
-@import 'home-components/authentication';
-@import 'home-components/button';
-@import 'home-components/contact-us-form';
-@import 'home-components/icon';
-@import 'home-components/line';
-@import 'home-components/slider';
-@import 'home-components/circle-progress-bar';
-@import 'home-components/progress-box';
-@import 'home-components/message';
-@import 'home-components/checkbox';
-@import 'home-components/contributors-slider';
-@import 'home-components/dots';
-@import 'home-components/faq-box';
-@import 'home-components/go-to-top';
-@import 'home-components/input-holder';
-@import 'home-components/input-captcha';
-//@import "home-components/authentication";
-//@import "components/authenticationcopy";
-@import 'home-components/go-to-bottom-logo';
-@import 'home-components/login';
 
-// layout folders
-@import 'layouts/grid';
-@import 'layouts/navigation';
-@import 'layouts/header';
-@import 'layouts/map-wrapper';
-@import 'layouts/footer';
 
 // pages folder
 @import 'pages/home';
 
-// third party packages
-@import './toast';
-
-fieldset {
-  min-width: -webkit-min-content;
-  min-width: 0;
-}
-
-.scrollbar.overflow-x-scroll,
-.scrollbar-thin.overflow-x-scroll {
-  overflow: hidden;
-  overflow-x: scroll;
-}
-
-.mapboxgl-popup-content{
-  box-shadow: #00000059 0 5px 15px !important;
-  min-width: 14rem !important;
-  border-radius: 10px !important;
-}

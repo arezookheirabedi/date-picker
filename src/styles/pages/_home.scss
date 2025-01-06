@@ -42,7 +42,6 @@
   @include respond(r415) {
     padding: 7rem 0;
   }
-  background-image: url('./../../assets/images/repeat-grid-1.png');
   min-height: 69.2rem;
 }
 
@@ -54,7 +53,6 @@
 
 .faq-section {
   padding: 7rem 0;
-  background-image: url('./../../assets/images/faq.png');
   background-repeat: no-repeat;
   position: relative;
   height: 104vh;
