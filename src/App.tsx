@@ -10,7 +10,6 @@ const App: React.FC<any> = () => {
   const [query, setQuery] = useState({
     from: null,
     to: null,
-   
   });
   const minimumDate = {
     year: 2025,
