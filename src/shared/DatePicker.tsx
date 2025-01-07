@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable consistent-return */
 import React, { useState} from 'react';
  import {Calendar, Day} from "react-modern-calendar-datepicker";

@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, {useEffect, useState} from "react";
 // @ts-ignore
 import moment from 'moment-jalaali';
