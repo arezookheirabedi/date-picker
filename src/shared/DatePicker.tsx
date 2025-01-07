@@ -2,14 +2,14 @@
 import React, { useState} from 'react';
  import {Calendar, Day} from "react-modern-calendar-datepicker";
 
- interface DatePickerModelProps {
+ interface DatePickerProps {
   setSelectedDayRange: (range: { from: Day | null; to: Day | null }) => void;
   selectedDayRange: { from: Day | null; to: Day | null };
   handelCancel: () => void;
   minDate?: any;
   maxDate?: any;
 }
-const DatePickerModel: React.FC<DatePickerModelProps> = ({
+ export const DatePicker: React.FC<DatePickerProps> = ({
   setSelectedDayRange,
   selectedDayRange,
   handelCancel,
@@ -89,4 +89,3 @@ const DatePickerModel: React.FC<DatePickerModelProps> = ({
   );
 };
 
-export default DatePickerModel;
