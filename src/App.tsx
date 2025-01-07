@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import './styles/style.scss';
 import React, { useState } from 'react';
 import "src/helpers/prototypes"
