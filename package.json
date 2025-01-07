@@ -78,7 +78,6 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.2.0",
-    "@storybook/addon-links": "^6.3.5",
     "@storybook/node-logger": "^6.3.5",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@types/react-portal": "^4.0.4",
