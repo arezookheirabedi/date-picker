@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
 

@@ -64,6 +64,6 @@ module.exports = {
       strategy: 'class',
     }),
     require('tailwindcss-dir')(),
-    require('tailwind-scrollbar'),
+   
   ],
 };

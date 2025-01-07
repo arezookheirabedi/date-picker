@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 // @ts-ignore
 import moment from 'moment-jalaali';
 
-import DatePickerModal from "./DatePickerModal";
+import {DatePicker} from "./DatePicker";
 
 interface DatepickerProps {
   query: any,
@@ -49,7 +49,7 @@ const handelCancel=()=>{
 
   return (
     <>
-        <DatePickerModal
+        <DatePicker
           setSelectedDayRange={setSelectedDayRange}
           selectedDayRange={selectedDayRange}
           handelCancel={handelCancel}

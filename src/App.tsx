@@ -1,9 +1,7 @@
 import './styles/style.scss';
-import './App.css';
 import React, { useState } from 'react';
 import "src/helpers/prototypes"
 import { utils } from 'react-modern-calendar-datepicker';
-import { Form } from './components/form';
 import DatepickerQuery from './shared/DatepickerQuery';
 
 const App: React.FC<any> = () => {
@@ -23,12 +21,13 @@ const App: React.FC<any> = () => {
     month: 1,
     day: 21
   }
-  console.log(query,"iiiiiiiiiiiiiiiiiiiii")
+  console.log(query,"the query object is here")
   return(
     <div className="flex space-x-3 rtl:space-x-reverse">
           <div className="w-32">
       <div >
-   
+   {JSON.stringify(query, null, 2)
+   }
      <div >
               <DatepickerQuery query={query} setQuery={setQuery} minDate={utils("fa").getToday()}
      // maxDate={maximumDate}
