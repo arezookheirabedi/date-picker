@@ -1,6 +1,6 @@
 import React from "react";
-import {toPersianDigit} from "../../../helpers/utils";
-import calendar from "../../assets/images/icons/calendar.svg";
+import {toPersianDigit} from "../helpers/utils";
+import calendar from "../assets/images/icons/calendar.svg";
 
 
 const Calendar: React.FC<any> = ({action, from, to, setSelectedDayRange}) => {

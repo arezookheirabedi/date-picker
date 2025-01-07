@@ -12,13 +12,7 @@ interface IFormInput {
 }
 
 
-
-
-
-
 export const Form: React.FC<{}> = () => {
-  const [submitted, setSubmitted] = useState<boolean>(false);
-
   const validationSchema = Yup.object().shape({
     visitDate: Yup.string().nullable(),
   });
@@ -53,7 +47,7 @@ export const Form: React.FC<{}> = () => {
                   onBlur={onBlur}
                   selected={value}
                   error={errors.visitDate}
-                  placeholder="تاریخ ملاقات"
+                  placeholder="تاریخ "
                   name={name}
                   max={unixToDateObject(new Date().getTime())}
                   iClass={`ltr  relative block w-full rounded-full  bg-white px-5 py-2 placeholder-gray-400 shadow-lg        focus:outline-none disabled:bg-gray-50 sm:text-sm ${
@@ -64,32 +58,8 @@ export const Form: React.FC<{}> = () => {
               )}
             />
 
-            <p
-              className={`${
-                errors.visitDate ? "visible" : "invisible"
-              } mt-1 text-xs text-red-600`}
-            >
-              {errors.visitDate?.message}
-            </p>
           </div>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
-            <button
-              type="button"
-              onClick={() => {
-                reset({ visitDate: null });
-              }}
-              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-[#175A76] bg-white px-4 py-1.5 text-sm text-[#175A76] rtl:space-x-reverse"
-            >
-              <span>حذف فیلتر</span>
-            </button>
-            <button
-              type="submit"
-              disabled={submitted}
-              className="flex w-full items-center justify-center whitespace-nowrap rounded-full bg-[#175A76] px-4 py-1.5 text-sm text-white rtl:space-x-reverse"
-            >
-              show data
-            </button>
-          </div>
+ 
         </div>
       </form>
     </>

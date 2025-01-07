@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
+import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
 
 ReactDOM.render(
   <React.StrictMode>
