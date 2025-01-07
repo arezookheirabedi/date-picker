@@ -1,0 +1,528 @@
+[
+  {
+    "province": "اردبیل",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 56},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },  
+  {
+    "province": "اصفهان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 57},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 76},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 34},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 78},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 23},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 54},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 43},
+      {"date": "دی ۱۴۰۰","inspectionDone": 23},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 57},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 87}
+    ]
+  },
+  {
+    "province": "البرز",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 23},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 73},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 87},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 45},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 64},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 34},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 65},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 54},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 34},
+      {"date": "دی ۱۴۰۰","inspectionDone": 40},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 23},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 56}
+    ]
+  },
+  {
+    "province": "ایلام",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 78},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 45},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 24},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 87},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 34},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 65},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "آذربایجان شرقی",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 76},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "آذربایجان غربی",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 56},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 34},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 23},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 50},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 64},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "بوشهر",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 70},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 45},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "تهران",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 45},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]},
+  {
+    "province": "چهارمحال و بختیاری",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "خراسان جنوبی",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 67},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "خراسان رضوی",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "خراسان شمالی",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "خوزستان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "زنجان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "سمنان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "سیستان و بلوچستان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "فارس", 
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "قزوین",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "قم",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "کردستان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "کرمان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "کهگیلویه و بویراحمد",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "کرمانشاه",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "گلستان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "گیلان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "لرستان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "مازندران",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "مرکزی",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "هرمزگان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "همدان",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  },
+  {
+    "province": "یزد",
+    "data" : [
+      {"date": "فروردین ۱۴۰۰","inspectionDone": 60},
+      {"date": "اردیبهشت ۱۴۰۰","inspectionDone": 57},
+      {"date": "خرداد ۱۴۰۰","inspectionDone": 23},
+      {"date": "تیر ۱۴۰۰","inspectionDone": 83},
+      {"date": "مرداد ۱۴۰۰","inspectionDone": 68},
+      {"date": "شهریور ۱۴۰۰","inspectionDone": 53},
+      {"date": "مهر ۱۴۰۰","inspectionDone": 73},
+      {"date": "آبان ۱۴۰۰","inspectionDone": 91},
+      {"date": "آذر ۱۴۰۰","inspectionDone": 90},
+      {"date": "دی ۱۴۰۰","inspectionDone": 73},
+      {"date": "بهمن ۱۴۰۰","inspectionDone": 53},
+      {"date": "اسفند ۱۴۰۰","inspectionDone": 13}
+    ]
+  }
+]

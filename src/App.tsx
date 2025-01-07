@@ -5,7 +5,6 @@ import "src/helpers/prototypes"
 import { utils } from 'react-modern-calendar-datepicker';
 import DatepickerQuery from './shared/DatepickerQuery';
 
-
 const App: React.FC<any> = () => {
   const [query, setQuery] = useState({
     from: null,
