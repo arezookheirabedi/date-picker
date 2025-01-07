@@ -2,3 +2,46 @@
   background-color: transparent !important;
   box-shadow: none !important;
 }
+/* Targeting the selected day */
+.Calendar__day.-selected {
+  background-color: black !important;
+  color: white !important;
+  border-radius: 50% !important; /* Makes the day circular */
+  margin: 0 !important; /* Removes any margin */
+  padding: 0 !important; /* Removes any padding */
+  z-index: 2 !important; /* Ensures the selected day is above other elements */
+}
+
+/* Targeting the start of a selected range */
+.Calendar__day.-selectedStart {
+  background-color: black !important;
+  color: white !important;
+  border-radius: 50% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 2 !important;
+}
+
+/* Targeting the end of a selected range */
+.Calendar__day.-selectedEnd {
+  background-color: black !important;
+  color: white !important;
+  border-radius: 50% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 2 !important;
+}
+
+/* Targeting the days between the selected range */
+.Calendar__day.-selectedBetween {
+  background-color: #E8DEF8 !important;
+  color: #4A4459 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important; /* Ensures the days between are below the start and end days */
+}
+/* Targeting weekend days that are not selected, blank, or part of a selected range */
+.Calendar__day.-weekend:not(.-selected):not(.-blank):not(.-selectedStart):not(.-selectedEnd):not(.-selectedBetween) {
+  color: #12b137 !important;
+}

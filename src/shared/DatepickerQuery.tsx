@@ -3,32 +3,28 @@ import React, {useEffect, useState} from "react";
 import moment from 'moment-jalaali';
 
 import DatePickerModal from "./DatePickerModal";
-import Calendar from '../shared/calender';
 
 interface DatepickerProps {
   query: any,
-  setQuery: any
+  setQuery: any,
+  minDate?: any,
+ maxDate ?: any
 }
 
-const DatepickerQuery: React.FC<DatepickerProps> = ({query, setQuery}) => {
+const DatepickerQuery: React.FC<DatepickerProps> = ({query, setQuery,minDate,maxDate}) => {
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDayRange, setSelectedDayRange] = useState({
     from: null,
     to: null,
     clear: false,
   }) as any;
 
-  const focusFromDate = () => {
-    setShowDatePicker(true);
-  }
+  
 
   useEffect(() => {
     if (selectedDayRange.from && selectedDayRange.to) {
       const finalFromDate = `${selectedDayRange.from.year}/${selectedDayRange.from.month}/${selectedDayRange.from.day}`;
       const finalToDate = `${selectedDayRange.to.year}/${selectedDayRange.to.month}/${selectedDayRange.to.day}`;
-      // const m = moment(finalFromDate, 'jYYYY/jM/jD'); // Parse a Jalaali date
-      // console.log(moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-M-DTHH:mm:ss'));
       setQuery({
         ...query,
         from: moment(finalFromDate, 'jYYYY/jM/jD').format('YYYY-MM-DD'),
@@ -43,24 +39,24 @@ const DatepickerQuery: React.FC<DatepickerProps> = ({query, setQuery}) => {
       });
     }
   }, [selectedDayRange]);
-
+const handelCancel=()=>{
+  setQuery({
+    ...query,
+    from: null,
+    to: null,
+  });
+}
 
   return (
     <>
-      {showDatePicker ? (
         <DatePickerModal
           setSelectedDayRange={setSelectedDayRange}
           selectedDayRange={selectedDayRange}
-          setShowDatePicker={setShowDatePicker}
-          showDatePicker
+          handelCancel={handelCancel}
+          minDate={minDate}
+          maxDate={maxDate}
         />
-      ) : null}
-      <Calendar
-        action={focusFromDate}
-        from={selectedDayRange.from}
-        to={selectedDayRange.to}
-        setSelectedDayRange={setSelectedDayRange}
-      />
+  
     </>
   )
 }

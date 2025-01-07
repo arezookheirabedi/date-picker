@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import dayjs from 'dayjs';
 import {Day} from '@hassanmojab/react-modern-calendar-datepicker';
-import Calendar from '../shared/datepicker/Calendar';
+import Calendar from '../shared/calender';
 import DatePickerModal from './DatePickerModal';
 
 interface IProps extends React.HTMLProps<HTMLInputElement> {

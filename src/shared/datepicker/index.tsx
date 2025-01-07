@@ -20,7 +20,6 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
   const ref = useRef<HTMLInputElement>(null);
 
   const [selectedDay, setSelectedDay] = useState<Day | null | undefined>(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
     // @ts-ignore
@@ -63,18 +62,11 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
     <>
       <input type="text" className="hidden" ref={ref} {...rest} />
       <div className="relative w-full">
-        <img
-          src="/images/icons/calendar-gray.svg"
-          className="absolute right-3 top-1/2 z-[2] -translate-y-1/2 transform"
-          alt="calendar"
-        />
-
         <input
           type="text"
           aria-invalid={rest.error ? true : false}
           className={iClass}
           placeholder={placeholder||"انتخاب تاریخ"}
-          onClick={() => setShowDatePicker(true)}
           // @ts-ignore
           value={
             selectedDay?`${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`.toPersianDigits():""
@@ -82,16 +74,13 @@ const DatePicker: React.FC<IProps> = ({selected, min, max, iClass, placeholder, 
         />
       </div>
 
-      {showDatePicker ? (
         <DatePickerModal
           setSelectedDay={setSelectedDay}
           selectedDay={selectedDay}
-          setShowDatePicker={setShowDatePicker}
           showDatePicker
           min={min}
           max={max}
         />
-      ) : null}
     </>
   );
 };
